@@ -78,8 +78,8 @@ export class PlatformLogin extends LitElement {
         </mwc-icon-button>
         <h2>Trace it !!!</h2>
         <div class="input layout vertical flex">
-          <mwc-textfield label="User"></mwc-textfield>
-          <mwc-textfield label="Password" type="password" iconTrailing="visibility"></mwc-textfield>
+          <mwc-textfield label="User" @keypress=${this.checkLogin}></mwc-textfield>
+          <mwc-textfield label="Password" type="password" iconTrailing="visibility" @keypress=${this.checkLogin}></mwc-textfield>
           <sp-button size="xl" @click=${this.login}>Access</sp-button>
           <mwc-select label="Role">
             ${this.userRoles.map(r => 
@@ -123,6 +123,13 @@ export class PlatformLogin extends LitElement {
     window.location.href = "/";
   }
 
+  checkLogin(e) {
+    // Allow user to send by press enter
+    if (e.which == 13) {
+      this.login();
+    }
+  }
+
   async login() {
     try {
       // requesting partial token
@@ -137,6 +144,8 @@ export class PlatformLogin extends LitElement {
       this.authorized();
     } catch (e) {
       console.log("Error: ", e)
+      alert(e.message)
+      this.logout()
     }
   }
 
