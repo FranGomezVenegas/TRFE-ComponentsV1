@@ -1,15 +1,39 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 import '../platform-login';
 
 class DemoExample extends LitElement {
+  static get styles() {
+    return css`
+    div[hidden] {
+      display: none;
+    }
+    `
+  }
+
+  static get properties() {
+    return {
+      auth: { type: Boolean }
+    }
+  }
+
+  constructor() {
+    super();
+    this.auth = false;
+  }
+
   render() {
     return html`
       <platform-login @authorized=${e=>this.auth=e.target.auth}></platform-login>
       </div>
       <div ?hidden="${!this.auth}">
-        <h1>Hi, you are authorized</h1>
+        <h1>Hi ${this.pLogin&&this.pLogin.getUser()}, you are authorized</h1>
+        <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
+  }
+
+  get pLogin() {
+    return this.shadowRoot.querySelector("platform-login")
   }
 
   /**
@@ -18,6 +42,10 @@ class DemoExample extends LitElement {
    */
   firstUpdated() {
     super.firstUpdated()
+    fetch("./config.json").then(r => r.json()).then(j => {
+      console.log(j)
+      this.pLogin.config = j
+    })
   }
 }
 customElements.define('demo-example', DemoExample);

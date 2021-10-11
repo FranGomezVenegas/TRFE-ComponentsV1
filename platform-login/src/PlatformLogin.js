@@ -143,7 +143,7 @@ export class PlatformLogin extends LitElement {
   authorized() {
     console.log("reqFinal ", JSON.parse(sessionStorage.getItem("userSession")))
     this.auth = true;
-    this.dispatchEvent(new CustomEvent("authorized"));
+    this.dispatchEvent(new CustomEvent("authorized", {bubbles: true, composed: true}));
   }
 
   reqPartialToken() {
