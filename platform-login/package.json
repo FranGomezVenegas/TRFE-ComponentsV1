@@ -7,7 +7,7 @@
   "main": "index.js",
   "module": "index.js",
   "scripts": {
-    "start": "web-dev-server"
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
