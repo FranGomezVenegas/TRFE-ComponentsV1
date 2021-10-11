@@ -52,7 +52,8 @@ export class PlatformLogin extends LitElement {
     return {
       auth: { type: Boolean, reflect: true },
       config: { type: Object },
-      userRoles: { type: Array }
+      userRoles: { type: Array },
+      hidePwd: { type: Boolean }
     };
   }
 
@@ -61,6 +62,7 @@ export class PlatformLogin extends LitElement {
     this.auth = false;
     this.config = {};
     this.userRoles = [];
+    this.hidePwd = true;
   }
 
   firstUpdated() {
@@ -82,8 +84,10 @@ export class PlatformLogin extends LitElement {
         </mwc-icon-button>
         <h2>Trace it !!!</h2>
         <div class="input layout vertical flex">
-          <mwc-textfield label="User" @keypress=${this.checkLogin}></mwc-textfield>
-          <mwc-textfield label="Password" type="password" iconTrailing="visibility" @keypress=${this.checkLogin}></mwc-textfield>
+          <mwc-textfield label="User" @keypress=${()=>this.password.focus()}></mwc-textfield>
+          <mwc-textfield label="Password" type="${this.hidePwd?'password':'text'}" iconTrailing="visibility" 
+            @keypress=${this.checkLogin}
+            @click=${this.showPwd}></mwc-textfield>
           <sp-button size="xl" @click=${this.login}>Access</sp-button>
           <mwc-select label="Role">
             ${this.userRoles.map(r => 
@@ -220,5 +224,11 @@ export class PlatformLogin extends LitElement {
   getUser() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     return userSession.header_info.first_name +" "+ userSession.header_info.last_name
+  }
+
+  showPwd(e) {
+    if (e.pointerId == -1) {
+      this.hidePwd = !this.hidePwd;
+    }
   }
 }
