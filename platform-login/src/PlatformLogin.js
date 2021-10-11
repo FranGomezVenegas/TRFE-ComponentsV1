@@ -67,6 +67,10 @@ export class PlatformLogin extends LitElement {
     if (sessionStorage.getItem("partialToken") && sessionStorage.getItem("userSession")) {
       this.authorized();
     }
+    // focusing to username once rendered
+    this.updateComplete.then(() => {
+      this.user.focus()
+    })
   }
 
   render() {
