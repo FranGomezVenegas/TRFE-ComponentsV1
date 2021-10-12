@@ -24,7 +24,6 @@ class DemoExample extends LitElement {
   render() {
     return html`
       <platform-login @authorized=${e=>this.auth=e.target.auth}></platform-login>
-      </div>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
