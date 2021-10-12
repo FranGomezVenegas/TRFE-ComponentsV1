@@ -53,6 +53,7 @@ export class PlatformLogin extends LitElement {
       auth: { type: Boolean, reflect: true },
       config: { type: Object },
       userRoles: { type: Array },
+      setRole: { type: String },
       hidePwd: { type: Boolean }
     };
   }
@@ -89,7 +90,7 @@ export class PlatformLogin extends LitElement {
             @keypress=${this.checkLogin}
             @click=${this.showPwd}></mwc-textfield>
           <sp-button size="xl" @click=${this.login}>Access</sp-button>
-          <mwc-select label="Role">
+          <mwc-select label="Role" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
             ${this.userRoles.map(r => 
               html`<mwc-list-item value="${r}">${r}</mwc-list-item>`
             )}
@@ -147,13 +148,18 @@ export class PlatformLogin extends LitElement {
       // requesting final token
       if (this.userRoles.length == 1) {
         this.role.value = this.userRoles[0];
-        await this.reqFinalToken();
       }
-      this.authorized();
     } catch (e) {
       console.log("Error: ", e)
       alert(e.message)
       this.logout()
+    }
+  }
+
+  async setRole(e) {
+    if (e.target.value) {
+      await this.reqFinalToken();
+      this.authorized();
     }
   }
 
@@ -194,8 +200,9 @@ export class PlatformLogin extends LitElement {
         let err = await r.json()
         throw err
       }
-    }).then(j => {
+    }).then(async j => {
       this.userRoles = j;
+      await this.requestUpdate();
     })
   }
 
@@ -203,7 +210,7 @@ export class PlatformLogin extends LitElement {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
     return fetch(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
-      userRole: this.userRoles[0],
+      userRole: this.role.value,
       dbName: this.config.dbName,
       actionName: 'finaltoken'
     })).then(async r => {
@@ -216,14 +223,14 @@ export class PlatformLogin extends LitElement {
     }).then(j => {
       sessionStorage.setItem("userSession", JSON.stringify({
         ...j,
-        userRole: this.userRoles[0]
+        userRole: this.role.value
       }))
     })
   }
 
   getUser() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    return userSession.header_info.first_name +" "+ userSession.header_info.last_name
+    return userSession
   }
 
   showPwd(e) {

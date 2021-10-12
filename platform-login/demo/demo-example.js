@@ -26,7 +26,7 @@ class DemoExample extends LitElement {
       <platform-login @authorized=${e=>this.auth=e.target.auth}></platform-login>
       </div>
       <div ?hidden="${!this.auth}">
-        <h1>Hi ${this.pLogin&&this.pLogin.getUser()}, you are authorized</h1>
+        <h1>Hi ${this.getUser()}, you are authorized</h1>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -41,11 +41,17 @@ class DemoExample extends LitElement {
    * Pulling the app config and waiting for the sts state
    */
   firstUpdated() {
-    super.firstUpdated()
     fetch("./config.json").then(r => r.json()).then(j => {
       console.log(j)
       this.pLogin.config = j
     })
+  }
+
+  getUser() {
+    if (this.auth) {
+      let session = this.pLogin.getUser()
+      return session.header_info.first_name +" "+ session.header_info.last_name +"(Role: "+ session.userRole +")"
+    }
   }
 }
 customElements.define('demo-example', DemoExample);
