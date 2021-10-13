@@ -6,7 +6,7 @@ yalcDir=`yalc dir`
 rm -rf $yalcDir/packages/@trazit
 
 find . \( -name 'node_modules' \) -or \( -name 'package-lock.json' \) -or \( -name 'yalc.lock' \) -or \( -name '.yalc' \) | xargs rm -rf
-requirements="platform-login procedure-management"
+requirements="platform-login procedure-management user-profile"
 for r in $requirements; do
   pushd $r;
   ./install.sh $0;
