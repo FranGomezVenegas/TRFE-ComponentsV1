@@ -1,0 +1,25 @@
+{
+  "name": "@trazit/user-profile",
+  "description": "Component user profile of trazit platform",
+  "license": "MIT",
+  "author": "Trazit Team",
+  "version": "0.0.1",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+  },
+  "dependencies": {
+    "@collaborne/lit-flexbox-literals": "^0.2.2",
+    "@material/mwc-dialog": "^0.18.0",
+    "@material/mwc-icon-button": "^0.18.0",
+    "@material/mwc-textfield": "^0.18.0",
+    "@spectrum-web-components/button": "^0.14.8",
+    "@spectrum-web-components/theme": "^0.8.14",
+    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
+    "lit": "^2.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.1.21"
+  }
+}
