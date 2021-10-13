@@ -100,11 +100,14 @@ export class UserProfile extends LitElement {
     return this.shadowRoot.querySelector("mwc-textfield[label='Note']")
   }
 
+  updated(updates) {
+    if (updates.has('config') && sessionStorage.getItem("userSession")) {
+      this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName;
+    }
+  }
+
   firstUpdated() {
     this.updateComplete.then(() => {
-      if (sessionStorage.getItem("userSession")) {
-        this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName;
-      }
       // manually backgrounding the dialog box
       this.dialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
       this.dialogSurface.style.backgroundSize = "cover";

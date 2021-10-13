@@ -24,7 +24,7 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${e=>this.auth=e.target.auth}></platform-login>
+      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.uProfile.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <user-profile></user-profile><br>
@@ -48,7 +48,6 @@ class DemoExample extends LitElement {
   firstUpdated() {
     fetch("./config.json").then(r => r.json()).then(j => {
       this.pLogin.config = j
-      this.uProfile.config = j
     })
   }
 
