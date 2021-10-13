@@ -223,6 +223,7 @@ export class PlatformLogin extends LitElement {
     }).then(j => {
       sessionStorage.setItem("userSession", JSON.stringify({
         ...j,
+        userName: this.user.value,
         userRole: this.role.value
       }))
     })
