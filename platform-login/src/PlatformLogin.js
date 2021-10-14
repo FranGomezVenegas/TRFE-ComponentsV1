@@ -12,6 +12,29 @@ export function getUserSession() {
   return userSession
 }
 
+export const langConfig = {
+  "title": {
+    "label_en": "Trace it !!!", 
+    "label_es": "¡¡ TRÁZALO !!"
+  },
+  "password": {
+    "label_en": "Password", 
+    "label_es": "Contraseña"
+  },
+  "user": {
+    "label_en": "User", 
+    "label_es": "Usuario"
+  },
+  "buttonAccess": {
+    "label_en": "Access", 
+    "label_es": "Entrar"
+  },
+  "role": {
+    "label_en": "Role", 
+    "label_es": "Rol"
+  }
+}
+
 export class PlatformLogin extends CommonCore {
   static get styles() {
     return [
@@ -89,17 +112,17 @@ export class PlatformLogin extends CommonCore {
     return html`
       <div class="login-box layout vertical flex center">
         <img class="appLoginLogoOnTop" src="/images/trazit-removebg.png" />
-        <mwc-icon-button>
-          <img src="/images/england.jpg" />
+        <mwc-icon-button @click=${this.changeLang}>
+          <img .src="/images/${this.flag}.jpg" />
         </mwc-icon-button>
-        <h2>Trace it !!!</h2>
+        <h2>${langConfig.title["label_"+this.lang]}</h2>
         <div class="input layout vertical flex">
-          <mwc-textfield label="User" @keypress=${()=>this.password.focus()}></mwc-textfield>
-          <mwc-textfield label="Password" type="password" iconTrailing="visibility" 
+          <mwc-textfield label="${langConfig.user["label_"+this.lang]}" @keypress=${()=>this.password.focus()}></mwc-textfield>
+          <mwc-textfield label="${langConfig.password["label_"+this.lang]}" type="password" iconTrailing="visibility" 
             @keypress=${this.checkLogin}
             @click=${this.showPwd}></mwc-textfield>
-          <sp-button size="xl" @click=${this.login}>Access</sp-button>
-          <mwc-select label="Role" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
+          <sp-button size="xl" @click=${this.login}>${langConfig.buttonAccess["label_"+this.lang]}</sp-button>
+          <mwc-select label="${langConfig.role["label_"+this.lang]}" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
             ${this.userRoles.map(r => 
               html`<mwc-list-item value="${r}">${r}</mwc-list-item>`
             )}
