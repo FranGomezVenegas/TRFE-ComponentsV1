@@ -59,8 +59,7 @@ export class PlatformLogin extends CommonCore {
       hidden: { type: Boolean, reflect: true },
       auth: { type: Boolean },
       userRoles: { type: Array },
-      setRole: { type: String },
-      hidePwd: { type: Boolean }
+      setRole: { type: String }
     };
   }
 
@@ -69,7 +68,6 @@ export class PlatformLogin extends CommonCore {
     this.hidden = true;
     this.auth = false;
     this.userRoles = [];
-    this.hidePwd = true;
   }
 
   firstUpdated() {
@@ -97,7 +95,7 @@ export class PlatformLogin extends CommonCore {
         <h2>Trace it !!!</h2>
         <div class="input layout vertical flex">
           <mwc-textfield label="User" @keypress=${()=>this.password.focus()}></mwc-textfield>
-          <mwc-textfield label="Password" type="${this.hidePwd?'password':'text'}" iconTrailing="visibility" 
+          <mwc-textfield label="Password" type="password" iconTrailing="visibility" 
             @keypress=${this.checkLogin}
             @click=${this.showPwd}></mwc-textfield>
           <sp-button size="xl" @click=${this.login}>Access</sp-button>
@@ -218,11 +216,5 @@ export class PlatformLogin extends CommonCore {
         userRole: this.role.value
       }))
     })
-  }
-
-  showPwd(e) {
-    if (e.pointerId == -1) {
-      this.hidePwd = !this.hidePwd;
-    }
   }
 }
