@@ -1,1 +1,1 @@
-export { PlatformLogin } from './src/PlatformLogin.js';
+export { PlatformLogin, getUserSession } from './src/PlatformLogin.js';
