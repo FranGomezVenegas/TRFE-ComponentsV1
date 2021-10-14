@@ -31,6 +31,14 @@ export class CommonCore extends LitElement {
     if (updates.has('config') && JSON.stringify(this.config) != "{}" && sessionStorage.getItem("userSession")) {
       this.authorized()
     }
+    if (updates.has("lang")) {
+      this.changeFlag()
+      this.dispatchEvent(new CustomEvent('change-lang', {
+        detail: {lang: this.lang},
+        bubbles: true,
+        composed: true
+      }))  
+    }
   }
 
   // Override this method once authorized
@@ -79,5 +87,13 @@ export class CommonCore extends LitElement {
       this.flag = "england"
     }
     return this.flag
+  }
+
+  changeFlag() {
+    if (this.lang == "en") {
+      this.flag = "spain"
+    } else {
+      this.flag = "england"
+    }
   }
 }
