@@ -11,6 +11,9 @@ export class VideoTutorial extends CommonCore {
       :host {
         display: block;
       }
+      :host([hidden]) {
+        display: none;
+      }
       sp-card {
         width: 400px;
         margin: 10px;
@@ -68,10 +71,8 @@ export class VideoTutorial extends CommonCore {
     `;
   }
 
-  updated(updates) {
-    if (updates.has('config') && JSON.stringify(this.config) != "{}" && sessionStorage.getItem("userSession")) {
-      this.getVideos();
-    }
+  authorized() {
+    this.getVideos();
   }
 
   /**

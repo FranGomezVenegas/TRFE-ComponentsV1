@@ -86,6 +86,9 @@ export class UserProfile extends CommonCore {
         display: block;
         width: 300px;
       }
+      :host([hidden]) {
+        display: none;
+      }
       div.input * {
         margin: 10px 0 5px;
       }
