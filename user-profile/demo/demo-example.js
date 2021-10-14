@@ -15,14 +15,14 @@ class DemoExample extends LitElement {
   static get properties() {
     return {
       auth: { type: Boolean },
-      lang: { type: String }
+      flag: { type: String }
     }
   }
 
   constructor() {
     super();
     this.auth = false;
-    this.lang = "spain";
+    this.flag = "spain";
   }
 
   render() {
@@ -31,7 +31,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <user-profile></user-profile><br>
-        <button @click=${this.changeLang}><img .src="/images/${this.lang}.jpg" style="width:30px"></button><br><br>
+        <button @click=${this.changeLang}><img .src="/images/${this.flag}.jpg" style="width:30px"></button><br><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -63,13 +63,7 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    if (this.lang == "england") {
-      this.uProfile.lang = "en"
-      this.lang = "spain"
-    } else {
-      this.uProfile.lang = "es"
-      this.lang = "england"
-    }
+    this.flag = this.uProfile.changeLang()
   }
 }
 customElements.define('demo-example', DemoExample);

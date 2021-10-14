@@ -15,6 +15,7 @@ export class CommonCore extends LitElement {
   static get properties() {
     return {
       config: { type: Object },
+      flag: { type: String },
       lang: { type: String }
     };
   }
@@ -22,6 +23,7 @@ export class CommonCore extends LitElement {
   constructor() {
     super();
     this.config = {};
+    this.flag = "spain";
     this.lang = "en";
   }
 
@@ -66,5 +68,16 @@ export class CommonCore extends LitElement {
     if (e.pointerId == -1) {
       e.target.type = e.target.type == "password" ? "text" : "password";
     }
+  }
+
+  changeLang() {
+    if (this.flag == "england") {
+      this.lang = "en"
+      this.flag = "spain"
+    } else {
+      this.lang = "es"
+      this.flag = "england"
+    }
+    return this.flag
   }
 }
