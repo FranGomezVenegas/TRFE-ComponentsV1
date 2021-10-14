@@ -1,11 +1,83 @@
-import { html, css, LitElement } from 'lit';
+import { html, css } from 'lit';
+import { CommonCore, commonLangConfig } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@spectrum-web-components/button/sp-button';
 
-export class UserProfile extends LitElement {
+const langConfig = {
+  "Password": {
+    "label_en": "New Password", 
+    "label_es": "Nueva Contraseña"
+  },
+  "ChangePassword": {
+    "label_en": "Confirm", 
+    "label_es": "Confirmar"
+  },
+  "Esign": {
+    "label_en": "New Esign", 
+    "label_es": "Nueva Firma Electrónica"
+  },
+  "ChangeEsign": {
+    "label_en": "Confirm", 
+    "label_es": "Confirmar"
+  },
+  "TabLogin": {
+    "label_en": "Save Open Tabs", 
+    "label_es": "Guardar Pestañas Actuales"
+  },
+  "pwdWindowTitle": {
+    "label_en": "Please confirm your credentials (user & password)",
+    "label_es": "Por favor confirma tu identidad (usuario y contraseña)"
+  },
+  "pwdNotCorrectMessage": {
+    "now": {
+      "message_en": "Validation not completed, action aborted",
+      "message_es": "Validación no completada, acción abortada"
+    },
+    "dialog_cancelled": {
+      "message_en": "dialog canceled, action aborted",
+      "message_es": "Diálogo cancelado, acción abortada"
+    },
+    "attempts_consumed": {
+      "message_en": "All attempts consumed, action aborted",
+      "message_es": "Todos los intentos consumidos, acción abortada"
+    }
+  },
+  "userToCheck": {
+    "label_en": "User", 
+    "label_es": "Usuario"
+  },
+  "pwToCheck": {
+    "label_en": "Current Password", 
+    "label_es": "Contraseña Actual"
+  },
+  "confirmUserNote": {
+    "label_en": "Note", 
+    "label_es": "Nota"
+  },
+  "esignWindowTitle": {
+    "label_en": "Please enter your eSign",
+    "label_es": "Por favor entra tu frase de Firma Electrónica"
+  },
+  "esignNotCorrectMessage": {
+    "now": {
+      "message_en": "Validation not completed, action aborted",
+      "message_es": "Validación no completada, acción abortada"
+    },
+    "dialog_cancelled": {
+      "message_en": "dialog canceled, action aborted",
+      "message_es": "Diálogo cancelado, acción abortada"
+    },
+    "attempts_consumed": {
+      "message_en": "All attempts consumed, action aborted",
+      "message_es": "Todos los intentos consumidos, acción abortada"
+    }
+  }
+};
+
+export class UserProfile extends CommonCore {
   static get styles() {
     return [
       Layouts,
@@ -30,14 +102,12 @@ export class UserProfile extends LitElement {
 
   static get properties() {
     return {
-      config: { type: Object },
       userName: { type: String }
     };
   }
 
   constructor() {
     super();
-    this.config = {};
     this.userName = "";
   }
 
@@ -45,43 +115,42 @@ export class UserProfile extends LitElement {
     return html`
       <div class="input">
         <div class="layout horizontal flex center">
-          <mwc-textfield label="New Password" type="password" iconTrailing="visibility"
+          <mwc-textfield id="newPwd" .label="${langConfig.Password["label_"+this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd}></mwc-textfield>
-          <mwc-icon-button icon="published_with_changes" @click=${()=>this.pwdDialog.open=true}></mwc-icon-button>
+          <mwc-icon-button icon="published_with_changes" @click=${()=>this.pwdDialog.open=true} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
-          <mwc-textfield label="New Esign" type="password" iconTrailing="visibility"
+          <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_"+this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd}></mwc-textfield>
-          <mwc-icon-button icon="published_with_changes" @click=${this.changeEsign}></mwc-icon-button>
+          <mwc-icon-button icon="published_with_changes" @click=${this.changeEsign} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
         </div>
       </div>
-      <sp-button size="xl" @click=${this.login}>Save Open Tabs</sp-button>
+      <sp-button size="xl" @click=${this.login}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
       <mwc-dialog id="pwdDialog" 
-        heading="Please confirm your credentials (user & password)"
+        heading="${langConfig.pwdWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
         escapeKeyAction="">
         <div class="layout horizontal flex center-justified" style="opacity:0.8">
           <div class="input layout vertical" style="width: 70%">
-            <mwc-textfield label="User" type="text" .value=${this.userName} disabled></mwc-textfield>
-            <mwc-textfield label="Password" type="password" iconTrailing="visibility" 
-              @keypress=${this.keyPwd}
+            <mwc-textfield id="user" label="${langConfig.userToCheck["label_"+this.lang]}" type="text" .value=${this.userName} disabled></mwc-textfield>
+            <mwc-textfield id="oldPwd" label="${langConfig.pwToCheck["label_"+this.lang]}" type="password" iconTrailing="visibility" 
               @click=${this.showPwd}></mwc-textfield>
-            <mwc-textfield label="Note" type="text" @keypress=${this.keyPwd}></mwc-textfield>
+            <mwc-textfield id="note" label="${langConfig.confirmUserNote["label_"+this.lang]}" type="text"></mwc-textfield>
           </div>
         </div>
-        <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingUser}>Accept</sp-button>
-        <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">Cancel</sp-button>
+        <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+        <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
       </mwc-dialog>
 
     `;
   }
 
   get newPwd() {
-    return this.shadowRoot.querySelector("mwc-textfield[label='New Password']")
+    return this.shadowRoot.querySelector("mwc-textfield#newPwd")
   }
 
   get newEsg() {
-    return this.shadowRoot.querySelector("mwc-textfield[label='New Esign']")
+    return this.shadowRoot.querySelector("mwc-textfield#newEsign")
   }
 
   get pwdDialog() {
@@ -93,17 +162,15 @@ export class UserProfile extends LitElement {
   }
 
   get oldPwd() {
-    return this.shadowRoot.querySelector("mwc-textfield[label='Password']")
+    return this.shadowRoot.querySelector("mwc-textfield#oldPwd")
   }
 
   get notePwd() {
-    return this.shadowRoot.querySelector("mwc-textfield[label='Note']")
+    return this.shadowRoot.querySelector("mwc-textfield#note")
   }
 
-  updated(updates) {
-    if (updates.has('config') && sessionStorage.getItem("userSession")) {
-      this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName;
-    }
+  authorized() {
+    this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName;
   }
 
   firstUpdated() {
@@ -118,36 +185,17 @@ export class UserProfile extends LitElement {
   }
 
   /**
-   * Pressing enter from password / note field
-   * @param {*} e the element that fires event
-   */
-  keyPwd(e) {
-    if (e.which == 13) {
-      this.checkingUser()
-    }
-  }
-
-  /**
    * Checking whether user exist and verified
    */
   checkingUser() {
     if (this.newPwd.value) {
-      return fetch(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
         actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         userToCheck: this.userName,
         passwordToCheck: this.oldPwd.value
-      })).then(async r => {
-        if (r.status == 200) {
-          return r.json()
-        } else {
-          let err = await r.json()
-          throw err
-        }
-      }).then(j => {
+      })).then(j => {
         this.confirmNewPassword()
-      }).catch(e => {
-        console.log(e.message_en)
       })
     }
   }
@@ -156,34 +204,19 @@ export class UserProfile extends LitElement {
    * Once user found and verified, confirm the password changing
    */
   confirmNewPassword() {
-    return fetch(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "USER_CHANGE_PSWD",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       dbName: this.config.dbName,
       newPassword: this.newPwd.value
-    })).then(async r => {
-      if (r.status == 200) {
-        return r.json()
-      } else {
-        let err = await r.json()
-        throw err
-      }
-    }).then(j => {
+    })).then(j => {
       this.newPwd.value = ""
       this.oldPwd.value = ""
       this.notePwd.value = ""
-    }).catch(e => {
-      console.log(e.message_en)
     })
   }
 
   changeEsign() {
     console.log(this.newEsg.value)
-  }
-
-  showPwd(e) {
-    if (e.pointerId == -1) {
-      e.target.type = e.target.type == "password" ? "text" : "password";
-    }
   }
 }

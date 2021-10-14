@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../user-profile';
 
@@ -13,13 +14,15 @@ class DemoExample extends LitElement {
 
   static get properties() {
     return {
-      auth: { type: Boolean }
+      auth: { type: Boolean },
+      lang: { type: String }
     }
   }
 
   constructor() {
     super();
     this.auth = false;
+    this.lang = "spain";
   }
 
   render() {
@@ -28,6 +31,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <user-profile></user-profile><br>
+        <button @click=${this.changeLang}><img .src="/images/${this.lang}.jpg" style="width:30px"></button><br><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -53,8 +57,19 @@ class DemoExample extends LitElement {
 
   getUser() {
     if (this.auth) {
-      let session = this.pLogin.getUser()
+      let session = getUserSession()
       return session.header_info.first_name +" "+ session.header_info.last_name +"("+ session.userRole +")"
+    }
+  }
+
+  changeLang() {
+    console.log(this.lang)
+    if (this.lang == "england") {
+      this.uProfile.lang = "en"
+      this.lang = "spain"
+    } else {
+      this.uProfile.lang = "es"
+      this.lang = "england"
     }
   }
 }
