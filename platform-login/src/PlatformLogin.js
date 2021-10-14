@@ -1,6 +1,7 @@
 import { html, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
+import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@material/mwc-select';
@@ -68,10 +69,18 @@ export class PlatformLogin extends CommonCore {
       mwc-icon-button#video {
         color: #6495ed;
       }
+      video {
+        width: 480px;
+        height: 480px;
+      }
       @media (max-width: 460px) {
         :host {
           display: block;
           width: 300px;
+        }
+        video {
+          width: 300px;
+          height: 300px;
         }
       }
     `];
@@ -128,16 +137,23 @@ export class PlatformLogin extends CommonCore {
             )}
           </mwc-select>
         </div>
-        <mwc-icon-button id="video">
-          <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false"
-            style="pointer-events: none; display: block; width: 100%; height: 100%;">
-            <g>
-              <path
-                d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-1l1.25-2.75L16 13l-2.75-1.25L12 9l-1.25 2.75L8 13l2.75 1.25z">
-              </path>
-            </g>
-          </svg>
-        </mwc-icon-button>
+        <mwc-icon-button id="video" icon="videocam" @click=${()=>this.shadowRoot.querySelector("#videoDialog").open=true}></mwc-icon-button>
+        <mwc-dialog id="videoDialog" 
+          heading=""
+          scrimClickAction=""
+          escapeKeyAction="">
+          <div>
+            <video controls>
+              <source 
+              src="https://public.bl.files.1drv.com/y4mLz8UF0o6QbcW2MVcx9le4afsSHgqDKGPrUHQ7QBL1RyBMhow077DNRlmWwTYqqFsHfbstKYno7TWVTuLeW72OeC7RL1-8E3PpOOY6A9Fv28Cw_-orPVE8paObv2yEv0Ku3fGMbXv1RwhkNixP9ENnU0bd9mCIwjHwBYI0o9kf_ZUQOkvBxLjY1nh-9r84LCmxNAAWwoEwiEvT59VAUTaCUDdBWfAtTS6Od_IrhMs_WI?access_token=EwAYA61DBAAU2kADSankulnKv2PwDjfenppNXFIAARIUjO3SPOOldTu%2bfRZXa/7IxRSKT/yHxi6TDPEMWi7m56Xu0ZvLeQpsnF1VAwPYbULfcnZszwb4pl0so1RzIt8xKsc024d2mqdbWqGahVJu9MBRupIJj7M7RTzV2BVzDP40EpOAn64GIBX25pFK9W8YBQncVp0IWvcRLveU4/4mwDz0xJQ51uO/EkyqGTmywDTpV4jnzpuXUpMhK3citM8h44J/BPtMOw5Vf3d%2bZAVJwzlxdcr0jniDoe6VMoEp/jcfAJOMuUVb7WdUMDX1hqnnWRVszuleV43CaAwHXFBIItUtXjQ0oEaq39%2banlUCYjox9HHNh2HwTR55XWd7XGIDZgAACONZoBMGDdAD6AF%2blO5w6UUZKxr%2b8omTC7yGYb6GOx9RIOAi/S/6luSum1yIWD0Q6XAPyxl6wTURmBFLhRejmDf/gqkMduocV%2bSeXsOyDOVjvZN0uIS9USVeyNJ5wmfVcFQGwfbwNJ7remfqXMpCdYwS%2b06m6JrM6K4mMls6ScK5TCViZGDAbO8Bxgy9hMMnJFZinAJ9YtiMk4Fvy3eLQxoIStrywz3odmfMUVpnNDzBeEFBGfxtcGjIrkdEEIUN65DCgxiByur/9HiCNEOETbTNwe8ZyTd30WJjCyfHzEJOqvuchI1pc0hR3Lkil7Eo/6Beq%2bac2PvrivbWH7SmISPJ%2b1Kz5vcxdvX4SFqrdLKroweaiPiAS4hvNKWSNmr5yusNtMUN6Fp9bc8wdc5MdSlOmAgT7dNvjd8dN40p2KRTc65IJ4c6HjaDGpmMVweJktSK1R3lxg49xpG0Cty9lPTMvgf4/JlqFZjOAiudmLLYdjuYW2u1w7BfYZjPbQqqgU5cWt06WiokHMIeEjY9zmfR0shuZQVyN/ZfGf%2boINmfPgTTOEQzY0NpiI82tcx2lNhq8Yto4PMRHgExol1iVf7r116yskiQFtPBa4hAdwTTEhBzfHQYz%2bPK1J3fMyv0qXMJ9KmMk4CqYTgLLP0ttzyDZxcC"
+              type="video/mp4">
+            </video>
+          </div>
+          <mwc-icon-button icon="close"
+              slot="secondaryAction"
+              dialogAction="cancel">
+          </mwc-icon-button>
+        </mwc-dialog>
       </div>
     `;
   }

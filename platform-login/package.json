@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
+    "@material/mwc-dialog": "^0.18.0",
     "@material/mwc-icon-button": "^0.18.0",
     "@material/mwc-list": "^0.18.0",
     "@material/mwc-select": "^0.18.0",
