@@ -22,7 +22,7 @@ class DemoExample extends LitElement {
   constructor() {
     super();
     this.auth = false;
-    this.lang = "england";
+    this.lang = "spain";
   }
 
   render() {
@@ -64,10 +64,10 @@ class DemoExample extends LitElement {
 
   changeLang() {
     if (this.lang == "england") {
-      this.vTutor.lang = "es"
+      this.vTutor.lang = "en"
       this.lang = "spain"
     } else {
-      this.vTutor.lang = "en"
+      this.vTutor.lang = "es"
       this.lang = "england"
     }
   }

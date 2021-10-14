@@ -63,7 +63,6 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    console.log(this.lang)
     if (this.lang == "england") {
       this.uProfile.lang = "en"
       this.lang = "spain"
