@@ -1,1 +1,1 @@
-export { CommonCore } from './src/CommonCore.js';
+export { CommonCore, commonLangConfig } from './src/CommonCore.js';

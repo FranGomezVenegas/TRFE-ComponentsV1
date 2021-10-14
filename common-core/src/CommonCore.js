@@ -1,5 +1,16 @@
 import { LitElement } from 'lit';
 
+export const commonLangConfig = {
+  "cancelDialogButton": {
+    "label_en": "Cancel", 
+    "label_es": "Cancelar"
+  },
+  "confirmDialogButton": {
+    "label_en": "Accept", 
+    "label_es": "Aceptar"
+  }
+}
+
 export class CommonCore extends LitElement {
   static get properties() {
     return {
@@ -49,5 +60,11 @@ export class CommonCore extends LitElement {
       bubbles: true,
       composed: true
     }))
+  }
+
+  showPwd(e) {
+    if (e.pointerId == -1) {
+      e.target.type = e.target.type == "password" ? "text" : "password";
+    }
   }
 }
