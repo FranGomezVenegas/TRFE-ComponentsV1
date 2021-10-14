@@ -66,10 +66,13 @@ export class PlatformLogin extends LitElement {
     this.hidePwd = true;
   }
 
-  firstUpdated() {
-    if (sessionStorage.getItem("partialToken") && sessionStorage.getItem("userSession")) {
+  updated(updates) {
+    if (updates.has('config') && JSON.stringify(this.config) != "{}" && sessionStorage.getItem("userSession")) {
       this.authorized();
     }
+  }
+
+  firstUpdated() {
     // focusing to username once rendered
     this.updateComplete.then(() => {
       this.user.focus()
