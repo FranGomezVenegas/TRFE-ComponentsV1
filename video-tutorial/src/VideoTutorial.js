@@ -1,8 +1,9 @@
-import { html, css, LitElement } from 'lit';
+import { html, css } from 'lit';
+import { CommonCore } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@spectrum-web-components/card/sp-card';
 
-export class VideoTutorial extends LitElement {
+export class VideoTutorial extends CommonCore {
   static get styles() {
     return [
       Layouts,
@@ -40,15 +41,12 @@ export class VideoTutorial extends LitElement {
 
   static get properties() {
     return {
-      config: { type: Object },
-      lang: { type: String },
       videos: { type: Array }
     };
   }
 
   constructor() {
     super();
-    this.lang = "en";
     this.videos = [];
   }
 
@@ -80,21 +78,12 @@ export class VideoTutorial extends LitElement {
    * Populating video items from the server
    */
   getVideos() {
-    return fetch(this.config.backendUrl + this.config.frontEndVideoTutorialsUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.frontEndVideoTutorialsUrl + '?' + new URLSearchParams({
       actionName: "ALL_ACTIVE_VIDEO_TUTORIALS",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       dbName: this.config.dbName
-    })).then(async r => {
-      if (r.status == 200) {
-        return r.json()
-      } else {
-        let err = await r.json()
-        throw err
-      }
-    }).then(j => {
+    })).then(j => {
       this.videos = j
-    }).catch(e => {
-      console.log(e.message_en)
     })
   }
 }

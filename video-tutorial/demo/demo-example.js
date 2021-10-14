@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../video-tutorial';
 
@@ -56,7 +57,7 @@ class DemoExample extends LitElement {
 
   getUser() {
     if (this.auth) {
-      let session = this.pLogin.getUser()
+      let session = getUserSession()
       return session.header_info.first_name +" "+ session.header_info.last_name +"("+ session.userRole +")"
     }
   }
