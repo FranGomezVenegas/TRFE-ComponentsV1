@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-../install.sh
+../install.sh @trazit/common-core

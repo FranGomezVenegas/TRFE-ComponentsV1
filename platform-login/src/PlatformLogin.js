@@ -1,4 +1,5 @@
-import { html, css, LitElement } from 'lit';
+import { html, css } from 'lit';
+import { CommonCore } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
@@ -6,7 +7,12 @@ import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
 import '@spectrum-web-components/button/sp-button';
 
-export class PlatformLogin extends LitElement {
+export function getUserSession() {
+  let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+  return userSession
+}
+
+export class PlatformLogin extends CommonCore {
   static get styles() {
     return [
       Layouts,
@@ -15,7 +21,7 @@ export class PlatformLogin extends LitElement {
         display: block;
         width: 400px;
       }
-      :host([auth]) {
+      :host([hidden]) {
         display: none;
       }
       div.login-box {
@@ -50,8 +56,8 @@ export class PlatformLogin extends LitElement {
 
   static get properties() {
     return {
-      auth: { type: Boolean, reflect: true },
-      config: { type: Object },
+      hidden: { type: Boolean, reflect: true },
+      auth: { type: Boolean },
       userRoles: { type: Array },
       setRole: { type: String },
       hidePwd: { type: Boolean }
@@ -60,23 +66,25 @@ export class PlatformLogin extends LitElement {
 
   constructor() {
     super();
+    this.hidden = true;
     this.auth = false;
-    this.config = {};
     this.userRoles = [];
     this.hidePwd = true;
   }
 
-  updated(updates) {
-    if (updates.has('config') && JSON.stringify(this.config) != "{}" && sessionStorage.getItem("userSession")) {
-      this.authorized();
-    }
-  }
-
   firstUpdated() {
+    super.firstUpdated()
     // focusing to username once rendered
     this.updateComplete.then(() => {
       this.user.focus()
     })
+  }
+
+  updated(updates) {
+    if (updates.has('config') && JSON.stringify(this.config) != "{}") {
+      this.hidden = false
+    }
+    super.updated(updates)
   }
 
   render() {
@@ -154,8 +162,8 @@ export class PlatformLogin extends LitElement {
       }
     } catch (e) {
       console.log("Error: ", e)
-      alert(e.message)
-      this.logout()
+      this.clearSessionStorage();
+      this.error(e);
     }
   }
 
@@ -169,41 +177,28 @@ export class PlatformLogin extends LitElement {
   authorized() {
     console.log("reqFinal ", JSON.parse(sessionStorage.getItem("userSession")))
     this.auth = true;
+    this.hidden = true;
     this.dispatchEvent(new CustomEvent("authorized", {bubbles: true, composed: true}));
   }
 
   reqPartialToken() {
-    return fetch(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       dbUserName: this.user.value,
       dbUserPassword: this.password.value,
       dbName: this.config.dbName,
       actionName: 'authenticate'
-    })).then(async r => {
-      if (r.status == 200) {
-        return r.json()
-      } else {
-        let err = await r.json()
-        throw err
-      }
-    }).then(j => {
+    })).then(j => {
       sessionStorage.setItem('partialToken', JSON.stringify(j))
     })
   }
 
   reqUserRoles() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    return fetch(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       dbName: this.config.dbName,
       actionName: 'getuserrole'
-    })).then(async r => {
-      if (r.status == 200) {
-        return r.json()
-      } else {
-        let err = await r.json()
-        throw err
-      }
-    }).then(async j => {
+    })).then(async j => {
       this.userRoles = j;
       await this.requestUpdate();
     })
@@ -211,30 +206,18 @@ export class PlatformLogin extends LitElement {
 
   reqFinalToken() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    return fetch(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       userRole: this.role.value,
       dbName: this.config.dbName,
       actionName: 'finaltoken'
-    })).then(async r => {
-      if (r.status == 200) {
-        return r.json()
-      } else {
-        let err = await r.json()
-        throw err
-      }
-    }).then(j => {
+    })).then(j => {
       sessionStorage.setItem("userSession", JSON.stringify({
         ...j,
         userName: this.user.value,
         userRole: this.role.value
       }))
     })
-  }
-
-  getUser() {
-    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    return userSession
   }
 
   showPwd(e) {

@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { getUserSession } from '../';
 import '../platform-login';
 
 class DemoExample extends LitElement {
@@ -48,7 +49,7 @@ class DemoExample extends LitElement {
 
   getUser() {
     if (this.auth) {
-      let session = this.pLogin.getUser()
+      let session = getUserSession()
       return session.header_info.first_name +" "+ session.header_info.last_name +"(Role: "+ session.userRole +")"
     }
   }

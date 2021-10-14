@@ -17,6 +17,7 @@
     "@material/mwc-textfield": "^0.18.0",
     "@spectrum-web-components/button": "^0.14.8",
     "@spectrum-web-components/theme": "^0.8.14",
+    "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "lit": "^2.0.0-rc.2"
   },
   "devDependencies": {
