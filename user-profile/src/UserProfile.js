@@ -120,12 +120,12 @@ export class UserProfile extends CommonCore {
         <div class="layout horizontal flex center">
           <mwc-textfield id="newPwd" .label="${langConfig.Password["label_"+this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd}></mwc-textfield>
-          <mwc-icon-button icon="published_with_changes" @click=${()=>this.pwdDialog.open=true} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
+          <mwc-icon-button icon="published_with_changes" @click=${this.showPwdDialog} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
           <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_"+this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd}></mwc-textfield>
-          <mwc-icon-button icon="published_with_changes" @click=${this.changeEsign} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
+          <mwc-icon-button icon="published_with_changes" @click=${this.showEsgDialog} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
         </div>
       </div>
       <sp-button size="xl" @click=${this.login}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
@@ -144,7 +144,19 @@ export class UserProfile extends CommonCore {
         <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
         <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
       </mwc-dialog>
-
+      <mwc-dialog id="esgDialog" 
+        heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
+        scrimClickAction=""
+        escapeKeyAction="">
+        <div class="layout horizontal flex center-justified" style="opacity:0.8">
+          <div class="input" style="width: 70%">
+            <mwc-textfield id="oldEsg" type="password" iconTrailing="visibility" 
+              @click=${this.showPwd}></mwc-textfield>
+          </div>
+        </div>
+        <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${()=>console.log("change esign")}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+        <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+      </mwc-dialog>
     `;
   }
 
@@ -160,8 +172,16 @@ export class UserProfile extends CommonCore {
     return this.shadowRoot.querySelector("mwc-dialog#pwdDialog")
   }
 
-  get dialogSurface() {
+  get esgDialog() {
+    return this.shadowRoot.querySelector("mwc-dialog#esgDialog")
+  }
+
+  get pwdDialogSurface() {
     return this.pwdDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
+  get esgDialogSurface() {
+    return this.esgDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
   get oldPwd() {
@@ -172,6 +192,10 @@ export class UserProfile extends CommonCore {
     return this.shadowRoot.querySelector("mwc-textfield#note")
   }
 
+  get oldEsg() {
+    return this.shadowRoot.querySelector("mwc-textfield#oldEsg")
+  }
+
   authorized() {
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName;
   }
@@ -179,12 +203,31 @@ export class UserProfile extends CommonCore {
   firstUpdated() {
     this.updateComplete.then(() => {
       // manually backgrounding the dialog box
-      this.dialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
-      this.dialogSurface.style.backgroundSize = "cover";
-      this.dialogSurface.style.backgroundRepeat = "no-repeat";
-      this.dialogSurface.style.textAlign = "center";
-      this.dialogSurface.style.padding = "20px";
+      // password dialog
+      this.pwdDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+      this.pwdDialogSurface.style.backgroundSize = "cover";
+      this.pwdDialogSurface.style.backgroundRepeat = "no-repeat";
+      this.pwdDialogSurface.style.textAlign = "center";
+      this.pwdDialogSurface.style.padding = "20px";
+      // esign dialog
+      this.esgDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+      this.esgDialogSurface.style.backgroundSize = "cover";
+      this.esgDialogSurface.style.backgroundRepeat = "no-repeat";
+      this.esgDialogSurface.style.textAlign = "center";
+      this.esgDialogSurface.style.padding = "20px";
     })
+  }
+
+  async showPwdDialog() {
+    this.pwdDialog.open = true;
+    await this.pwdDialog.updateComplete; // focus() will be processed once dialog update completed
+    this.oldPwd.focus();
+  }
+
+  async showEsgDialog() {
+    this.esgDialog.open = true;
+    await this.esgDialog.updateComplete; // focus() will be processed once dialog update completed
+    this.oldEsg.focus();
   }
 
   /**
@@ -217,9 +260,5 @@ export class UserProfile extends CommonCore {
       this.oldPwd.value = ""
       this.notePwd.value = ""
     })
-  }
-
-  changeEsign() {
-    console.log(this.newEsg.value)
   }
 }
