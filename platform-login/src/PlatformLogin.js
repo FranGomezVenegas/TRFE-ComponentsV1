@@ -106,7 +106,9 @@ export class PlatformLogin extends CommonCore {
     super.firstUpdated()
     // focusing to username once rendered
     this.updateComplete.then(() => {
-      this.user.focus()
+      setTimeout(() => {
+        this.user.focus()
+      })
     })
   }
 
