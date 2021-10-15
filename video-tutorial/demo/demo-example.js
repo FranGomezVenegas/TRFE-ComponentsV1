@@ -22,7 +22,7 @@ class DemoExample extends LitElement {
   constructor() {
     super();
     this.auth = false;
-    this.flag = "spain";
+    this.flag = "es";
   }
 
   render() {
@@ -31,7 +31,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <video-tutorial></video-tutorial><br>
-        <button @click=${this.changeLang}><img .src="/images/${this.flag}.jpg" style="width:30px"></button><br><br>
+        <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button><br><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;

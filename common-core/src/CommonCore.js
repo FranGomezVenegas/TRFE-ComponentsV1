@@ -23,7 +23,6 @@ export class CommonCore extends LitElement {
   constructor() {
     super();
     this.config = {};
-    this.flag = "spain";
     this.lang = "en";
   }
 
@@ -59,7 +58,6 @@ export class CommonCore extends LitElement {
     }).then(j => {
       return j
     }).catch(e => {
-      console.log(e.message_en)
       this.error(e)
     })
   }
@@ -79,21 +77,21 @@ export class CommonCore extends LitElement {
   }
 
   changeLang() {
-    if (this.flag == "england") {
+    if (this.flag == "en") {
       this.lang = "en"
-      this.flag = "spain"
+      this.flag = "es"
     } else {
       this.lang = "es"
-      this.flag = "england"
+      this.flag = "en"
     }
     return this.flag
   }
 
   changeFlag() {
     if (this.lang == "en") {
-      this.flag = "spain"
+      this.flag = "es"
     } else {
-      this.flag = "england"
+      this.flag = "en"
     }
   }
 }

@@ -49,7 +49,7 @@ export class PlatformLogin extends CommonCore {
         display: none;
       }
       div.login-box {
-        background-color: rgba(177, 242, 244, 25%);
+        background-color: rgba(177, 242, 244);
         border-radius: 20px;
         box-shadow: 5px 5px #888888;
         padding: 10px;
@@ -122,7 +122,7 @@ export class PlatformLogin extends CommonCore {
       <div class="login-box layout vertical flex center">
         <img class="appLoginLogoOnTop" src="/images/trazit-removebg.png" />
         <mwc-icon-button @click=${this.changeLang}>
-          <img .src="/images/${this.flag}.jpg" />
+          <img .src="/images/${this.flag}.png" />
         </mwc-icon-button>
         <h2>${langConfig.title["label_"+this.lang]}</h2>
         <div class="input layout vertical flex">
@@ -198,9 +198,7 @@ export class PlatformLogin extends CommonCore {
         this.role.value = this.userRoles[0];
       }
     } catch (e) {
-      console.log("Error: ", e)
       this.clearSessionStorage();
-      this.error(e);
     }
   }
 
