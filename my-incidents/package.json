@@ -1,0 +1,20 @@
+{
+  "name": "@trazit/my-incidents",
+  "description": "Component incidents of trazit platform",
+  "license": "MIT",
+  "author": "Trazit Team",
+  "version": "0.0.1",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+  },
+  "dependencies": {
+    "@spectrum-web-components/theme": "^0.8.14",
+    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
+    "lit": "^2.0.0-rc.2"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.1.21"
+  }
+}
