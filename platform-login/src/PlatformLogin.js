@@ -49,7 +49,7 @@ export class PlatformLogin extends CommonCore {
         display: none;
       }
       div.login-box {
-        background-color: rgba(177, 242, 244);
+        background-color:  rgba(177, 242, 244, 25%); 
         border-radius: 20px;
         box-shadow: 5px 5px #888888;
         padding: 10px;
@@ -57,6 +57,7 @@ export class PlatformLogin extends CommonCore {
       img.appLoginLogoOnTop {
         height: 4.08vmax;
         width: 17.85vmax;
+        padding-bottom:15px;
       }
       h2 {
         font-family: 'Oxygen', sans-serif;
@@ -121,42 +122,37 @@ export class PlatformLogin extends CommonCore {
 
   render() {
     return html`
-      <div class="login-box layout vertical flex center">
-        <img class="appLoginLogoOnTop" src="/images/trazit-removebg.png" />
-        <mwc-icon-button @click=${this.changeLang}>
-          <img .src="/images/${this.flag}.png" />
-        </mwc-icon-button>
-        <h2>${langConfig.title["label_"+this.lang]}</h2>
-        <div class="input layout vertical flex">
-          <mwc-textfield id="user" label="${langConfig.user["label_"+this.lang]}" @keypress=${()=>this.password.focus()}></mwc-textfield>
-          <mwc-textfield id="password" label="${langConfig.password["label_"+this.lang]}" type="password" iconTrailing="visibility" 
-            @keypress=${this.checkLogin}
-            @click=${this.showPwd}></mwc-textfield>
+    <div class="login-box layout vertical flex center">
+      <img class="appLoginLogoOnTop" src="/images/trazit-removebg.png" />
+      <div class="input layout vertical flex">
+        <mwc-textfield id="user" label="${langConfig.user["label_"+this.lang]}" @keypress=${()=>this.password.focus()}></mwc-textfield>
+        <mwc-textfield id="password" label="${langConfig.password["label_"+this.lang]}" type="password" iconTrailing="visibility" 
+          @keypress=${this.checkLogin}
+          @click=${this.showPwd}></mwc-textfield>
           <sp-button size="xl" @click=${this.login}>${langConfig.buttonAccess["label_"+this.lang]}</sp-button>
-          <mwc-select id="role" label="${langConfig.role["label_"+this.lang]}" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
-            ${this.userRoles.map(r => 
-              html`<mwc-list-item value="${r}">${r}</mwc-list-item>`
-            )}
-          </mwc-select>
-        </div>
+        <mwc-select id="role" label="${langConfig.role["label_"+this.lang]}" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
+          ${this.userRoles.map(r => 
+            html`<mwc-list-item value="${r}">${r}</mwc-list-item>`
+          )}
+        </mwc-select>
+      </div>
+      <div class="input layout flex">
         <mwc-icon-button id="video" icon="videocam" @click=${()=>this.shadowRoot.querySelector("#videoDialog").open=true}></mwc-icon-button>
         <mwc-dialog id="videoDialog" 
           heading=""
           scrimClickAction=""
-          escapeKeyAction="">
-          <div>
-            <video controls>
-              <source 
-              src="https://public.bl.files.1drv.com/y4mLz8UF0o6QbcW2MVcx9le4afsSHgqDKGPrUHQ7QBL1RyBMhow077DNRlmWwTYqqFsHfbstKYno7TWVTuLeW72OeC7RL1-8E3PpOOY6A9Fv28Cw_-orPVE8paObv2yEv0Ku3fGMbXv1RwhkNixP9ENnU0bd9mCIwjHwBYI0o9kf_ZUQOkvBxLjY1nh-9r84LCmxNAAWwoEwiEvT59VAUTaCUDdBWfAtTS6Od_IrhMs_WI?access_token=EwAYA61DBAAU2kADSankulnKv2PwDjfenppNXFIAARIUjO3SPOOldTu%2bfRZXa/7IxRSKT/yHxi6TDPEMWi7m56Xu0ZvLeQpsnF1VAwPYbULfcnZszwb4pl0so1RzIt8xKsc024d2mqdbWqGahVJu9MBRupIJj7M7RTzV2BVzDP40EpOAn64GIBX25pFK9W8YBQncVp0IWvcRLveU4/4mwDz0xJQ51uO/EkyqGTmywDTpV4jnzpuXUpMhK3citM8h44J/BPtMOw5Vf3d%2bZAVJwzlxdcr0jniDoe6VMoEp/jcfAJOMuUVb7WdUMDX1hqnnWRVszuleV43CaAwHXFBIItUtXjQ0oEaq39%2banlUCYjox9HHNh2HwTR55XWd7XGIDZgAACONZoBMGDdAD6AF%2blO5w6UUZKxr%2b8omTC7yGYb6GOx9RIOAi/S/6luSum1yIWD0Q6XAPyxl6wTURmBFLhRejmDf/gqkMduocV%2bSeXsOyDOVjvZN0uIS9USVeyNJ5wmfVcFQGwfbwNJ7remfqXMpCdYwS%2b06m6JrM6K4mMls6ScK5TCViZGDAbO8Bxgy9hMMnJFZinAJ9YtiMk4Fvy3eLQxoIStrywz3odmfMUVpnNDzBeEFBGfxtcGjIrkdEEIUN65DCgxiByur/9HiCNEOETbTNwe8ZyTd30WJjCyfHzEJOqvuchI1pc0hR3Lkil7Eo/6Beq%2bac2PvrivbWH7SmISPJ%2b1Kz5vcxdvX4SFqrdLKroweaiPiAS4hvNKWSNmr5yusNtMUN6Fp9bc8wdc5MdSlOmAgT7dNvjd8dN40p2KRTc65IJ4c6HjaDGpmMVweJktSK1R3lxg49xpG0Cty9lPTMvgf4/JlqFZjOAiudmLLYdjuYW2u1w7BfYZjPbQqqgU5cWt06WiokHMIeEjY9zmfR0shuZQVyN/ZfGf%2boINmfPgTTOEQzY0NpiI82tcx2lNhq8Yto4PMRHgExol1iVf7r116yskiQFtPBa4hAdwTTEhBzfHQYz%2bPK1J3fMyv0qXMJ9KmMk4CqYTgLLP0ttzyDZxcC"
-              type="video/mp4">
-            </video>
-          </div>
-          <mwc-icon-button icon="close"
-              slot="secondaryAction"
-              dialogAction="cancel">
+          escapeKeyAction="cancel">
+          <iframe width="420" height="345" src="https://www.youtube.com/watch?v=qzZv5e0gg9M?autoplay=1"></iframe>
+          <mwc-icon-button icon="close" 
+            slot="secondaryAction"
+            dialogAction="cancel">
           </mwc-icon-button>
         </mwc-dialog>
+        <mwc-icon-button @click=${this.changeLang}>
+          <img .src="/images/${this.flag}.png" />
+        </mwc-icon-button>
       </div>
+    </div>
     `;
   }
 
