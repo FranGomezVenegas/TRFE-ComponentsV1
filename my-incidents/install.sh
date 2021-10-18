@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-../install.sh @trazit/platform-login
+../install.sh @trazit/common-core @trazit/platform-login

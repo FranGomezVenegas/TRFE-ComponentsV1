@@ -14,18 +14,20 @@ class DemoExample extends LitElement {
 
   static get properties() {
     return {
-      auth: { type: Boolean }
+      auth: { type: Boolean },
+      flag: { type: String }
     }
   }
 
   constructor() {
     super();
     this.auth = false;
+    this.flag = "es";
   }
 
   render() {
     return html`
-      <platform-login @authorized=${e=>this.auth=e.target.auth}></platform-login>
+      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.incidents.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <my-incidents></my-incidents><br>
@@ -36,6 +38,10 @@ class DemoExample extends LitElement {
 
   get pLogin() {
     return this.shadowRoot.querySelector("platform-login")
+  }
+
+  get incidents() {
+    return this.shadowRoot.querySelector("my-incidents")
   }
 
   /**
@@ -53,6 +59,10 @@ class DemoExample extends LitElement {
       let session = getUserSession()
       return session.header_info.first_name +" "+ session.header_info.last_name +"("+ session.userRole +")"
     }
+  }
+
+  changeLang() {
+    this.flag = this.incidents.changeLang()
   }
 }
 customElements.define('demo-example', DemoExample);
