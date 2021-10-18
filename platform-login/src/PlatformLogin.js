@@ -145,7 +145,7 @@ export class PlatformLogin extends CommonCore {
           <iframe width="420" height="345" src="https://www.youtube.com/watch?v=qzZv5e0gg9M?autoplay=1"></iframe>
           <mwc-icon-button icon="close" 
             slot="secondaryAction"
-            dialogAction="cancel">
+            dialogAction="cancel"> 
           </mwc-icon-button>
         </mwc-dialog>
         <mwc-icon-button @click=${this.changeLang}>
