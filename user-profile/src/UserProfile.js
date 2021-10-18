@@ -201,6 +201,7 @@ export class UserProfile extends CommonCore {
   }
 
   firstUpdated() {
+    super.firstUpdated()
     this.updateComplete.then(() => {
       // manually backgrounding the dialog box
       // password dialog

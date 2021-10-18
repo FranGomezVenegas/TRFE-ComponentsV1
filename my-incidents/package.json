@@ -10,8 +10,13 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
+    "@material/mwc-dialog": "^0.18.0",
+    "@material/mwc-list": "^0.18.0",
+    "@spectrum-web-components/button": "^0.14.8",
     "@spectrum-web-components/theme": "^0.8.14",
+    "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
+    "@vaadin/vaadin-grid": "^6.0.2",
     "lit": "^2.0.0-rc.2"
   },
   "devDependencies": {
