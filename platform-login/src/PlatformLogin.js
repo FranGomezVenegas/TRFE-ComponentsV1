@@ -108,7 +108,7 @@ export class PlatformLogin extends CommonCore {
     this.updateComplete.then(() => {
       setTimeout(() => {
         this.user.focus()
-      })
+      }, 200)
     })
   }
 
