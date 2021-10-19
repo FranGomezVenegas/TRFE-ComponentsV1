@@ -10,9 +10,13 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
+    "@collaborne/lit-flexbox-literals": "^0.2.2",
+    "@material/mwc-button": "^0.18.0",
     "@material/mwc-dialog": "^0.18.0",
+    "@material/mwc-icon-button": "^0.18.0",
     "@material/mwc-list": "^0.18.0",
-    "@spectrum-web-components/button": "^0.14.8",
+    "@material/mwc-textarea": "^0.18.0",
+    "@material/mwc-textfield": "^0.18.0",
     "@spectrum-web-components/theme": "^0.8.14",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
