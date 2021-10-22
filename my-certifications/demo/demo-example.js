@@ -50,8 +50,8 @@ class DemoExample extends LitElement {
     this.auth = e.target.auth
     this.myCerts.config = this.pLogin.config
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    this.sops = userSession.all_my_sops[0].my_sops.filter(c => c.status != "EXPIRED")
-    this.analytics = userSession.all_my_analysis_methods[0].my_analysis_method_certifications.filter(c => c.status != "EXPIRED")
+    this.sops = userSession.all_my_sops[0].my_sops
+    this.analytics = userSession.all_my_analysis_methods[0].my_analysis_method_certifications
   }
 
   pendingSOP() {
