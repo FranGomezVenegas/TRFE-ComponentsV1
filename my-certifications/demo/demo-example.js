@@ -36,7 +36,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <sp-action-menu id="cert-menu" size="m" @mouseover=${()=> this.menuHover("cert-menu")}>
-          <span slot="label" @mouseover=${()=> this.menuHover("cert-menu")}>My Certifications ${this.sops.length+this.analytics.length}</span>
+          <span slot="label" @mouseover=${()=> this.menuHover("cert-menu")}>My Certifications ${this.allPending()}</span>
           <sp-menu-item>SOP ${this.pendingSOP()} <span style="color: blue" @click=${()=>this.myCerts.filterData="sop"}>${this.sops.length}</span></sp-menu-item>
           <sp-menu-item>Analytical Method ${this.pendingAnalytic()} <span style="color: blue" @click=${()=>this.myCerts.filterData="analytic"}>${this.analytics.length}</span></sp-menu-item>
         </sp-action-menu>
@@ -52,6 +52,16 @@ class DemoExample extends LitElement {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     this.sops = userSession.all_my_sops[0].my_sops
     this.analytics = userSession.all_my_analysis_methods[0].my_analysis_method_certifications
+  }
+
+  allPending() {
+    let s = this.sops.filter(s => s.status == "NOT_PASS")
+    let a = this.analytics.filter(s => s.status == "NOT_PASS")
+    if (s.length+a.length > 0) {
+      return html`<span style="color: red">${s.length+a.length}</span>`
+    } else {
+      return null
+    }
   }
 
   pendingSOP() {
