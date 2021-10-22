@@ -34,7 +34,7 @@ export class PlatformNotif extends CommonCore {
           <sp-accordion-item label=${n.message_en}>
             <div>
               <b>Request URL</b>
-              <p>${n.urlParams}</p>
+              <p style="overflow-wrap: break-word;">${n.urlParams}</p>
             </div>
           </sp-accordion-item>
         </sp-accordion>
