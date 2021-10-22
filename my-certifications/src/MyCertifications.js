@@ -69,11 +69,11 @@ export class MyCertifications extends CommonCore {
   populate() {
     if (this.filterData == "sop") {
       this.certSet = this.sops
-    } else if (this.filterData == "analysis") {
+    } else if (this.filterData == "analytic") {
       this.certSet = this.analytics
     } else if (this.filterData == "psop") {
       this.certSet = this.sops.filter(s => s.status == "NOT_PASS")
-    } else if (this.filterData == "panalysis") {
+    } else if (this.filterData == "panalytic") {
       this.certSet = this.analytics.filter(s => s.status == "NOT_PASS")
     }
     this.requestUpdate()

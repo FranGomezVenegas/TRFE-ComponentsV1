@@ -38,7 +38,7 @@ class DemoExample extends LitElement {
         <sp-action-menu id="cert-menu" size="m" @mouseover=${()=> this.menuHover("cert-menu")}>
           <span slot="label" @mouseover=${()=> this.menuHover("cert-menu")}>My Certifications ${this.sops.length+this.analytics.length}</span>
           <sp-menu-item>SOP ${this.pendingSOP()} <span style="color: blue" @click=${()=>this.myCerts.filterData="sop"}>${this.sops.length}</span></sp-menu-item>
-          <sp-menu-item>Analytical Method ${this.pendingAnalytic()} <span style="color: blue" @click=${()=>this.myCerts.filterData="analysis"}>${this.analytics.length}</span></sp-menu-item>
+          <sp-menu-item>Analytical Method ${this.pendingAnalytic()} <span style="color: blue" @click=${()=>this.myCerts.filterData="analytic"}>${this.analytics.length}</span></sp-menu-item>
         </sp-action-menu>
         <button @click=${()=> this.pLogin.logout()}>Logout</button>
         <my-certifications></my-certifications><br>
@@ -66,7 +66,7 @@ class DemoExample extends LitElement {
   pendingAnalytic() {
     let p = this.analytics.filter(s => s.status == "NOT_PASS")
     if (p.length) {
-      return html`<span style="color: red" @click=${()=>this.myCerts.filterData="panalysis"}>${p.length}</span>`
+      return html`<span style="color: red" @click=${()=>this.myCerts.filterData="panalytic"}>${p.length}</span>`
     } else {
       return null
     }
