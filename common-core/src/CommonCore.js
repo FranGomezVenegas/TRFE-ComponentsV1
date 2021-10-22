@@ -46,8 +46,9 @@ export class CommonCore extends LitElement {
   /**
    * Populating fetch api
    * @param {*} urlParams the url api with params
+   * @param {*} log will be logged into notifications or no? default true
    */
-  fetchApi(urlParams) {
+  fetchApi(urlParams, log=true) {
     return fetch(urlParams).then(async r => {
       if (r.status == 200) {
         return r.json()
@@ -56,19 +57,23 @@ export class CommonCore extends LitElement {
         throw err
       }
     }).then(j => {
+      this.dispatchEvent(new CustomEvent('success', {
+        detail: {...j, urlParams: urlParams, log: log},
+        bubbles: true,
+        composed: true
+      }))
       return j
     }).catch(e => {
+      this.dispatchEvent(new CustomEvent("error", {
+        detail: {...e, urlParams: urlParams, log: log},
+        bubbles: true,
+        composed: true
+      }))
       this.error(e)
     })
   }
 
-  error(e) {
-    this.dispatchEvent(new CustomEvent("error", {
-      detail: e,
-      bubbles: true,
-      composed: true
-    }))
-  }
+  error(e) { }
 
   showPwd(e) {
     if (e.pointerId == -1) {
