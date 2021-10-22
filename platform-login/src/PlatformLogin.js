@@ -220,7 +220,7 @@ export class PlatformLogin extends CommonCore {
       dbUserPassword: this.password.value,
       dbName: this.config.dbName,
       actionName: 'authenticate'
-    })).then(j => {
+    }), false).then(j => {
       sessionStorage.setItem('partialToken', JSON.stringify(j))
     })
   }
@@ -231,7 +231,7 @@ export class PlatformLogin extends CommonCore {
       myToken: partialToken.myToken,
       dbName: this.config.dbName,
       actionName: 'getuserrole'
-    })).then(async j => {
+    }), false).then(async j => {
       this.userRoles = j;
       await this.requestUpdate();
     })
@@ -244,7 +244,7 @@ export class PlatformLogin extends CommonCore {
       userRole: this.role.value,
       dbName: this.config.dbName,
       actionName: 'finaltoken'
-    })).then(j => {
+    }), false).then(j => {
       sessionStorage.setItem("userSession", JSON.stringify({
         ...j,
         userName: this.user.value,
