@@ -22,6 +22,7 @@ export class MyCertifications extends CommonCore {
 
   static get properties() {
     return {
+      filterData: { type: String }, // sop, psop, analysis, panalysis
       sops: { type: Array },
       analytics: { type: Array },
       certSet: { type: Array }
@@ -33,6 +34,13 @@ export class MyCertifications extends CommonCore {
     this.sops = [];
     this.analytics = [];
     this.certSet = [];
+  }
+
+  updated(updates) {
+    super.updated(updates)
+    if (updates.has('filterData') && this.filterData) {
+      this.populate()
+    }
   }
 
   render() {
@@ -51,19 +59,21 @@ export class MyCertifications extends CommonCore {
     this.analytics = userSession.all_my_analysis_methods[0].my_analysis_method_certifications
   }
 
-  pass(type) {
-    if (type == "sop") {
+  /**
+   * Sort out the certs data
+   * sop: all sops data
+   * psop: pending sop data
+   * analytic: all analytics data
+   * panalytic: pending analytic
+   */
+  populate() {
+    if (this.filterData == "sop") {
       this.certSet = this.sops
-    } else {
+    } else if (this.filterData == "analysis") {
       this.certSet = this.analytics
-    }
-    this.requestUpdate()
-  }
-
-  pending(type) {
-    if (type == "sop") {
+    } else if (this.filterData == "psop") {
       this.certSet = this.sops.filter(s => s.status == "NOT_PASS")
-    } else {
+    } else if (this.filterData == "panalysis") {
       this.certSet = this.analytics.filter(s => s.status == "NOT_PASS")
     }
     this.requestUpdate()

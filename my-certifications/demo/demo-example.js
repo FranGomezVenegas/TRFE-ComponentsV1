@@ -37,8 +37,8 @@ class DemoExample extends LitElement {
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <sp-action-menu id="cert-menu" size="m" @mouseover=${()=> this.menuHover("cert-menu")}>
           <span slot="label" @mouseover=${()=> this.menuHover("cert-menu")}>My Certifications ${this.sops.length+this.analytics.length}</span>
-          <sp-menu-item>SOP ${this.pendingSOP()} <span style="color: blue" @click=${()=>this.myCerts.pass("sop")}>${this.sops.length}</span></sp-menu-item>
-          <sp-menu-item>Analytical Method ${this.pendingAnalytic()} <span style="color: blue" @click=${()=>this.myCerts.pass("analysis")}>${this.analytics.length}</span></sp-menu-item>
+          <sp-menu-item>SOP ${this.pendingSOP()} <span style="color: blue" @click=${()=>this.myCerts.filterData="sop"}>${this.sops.length}</span></sp-menu-item>
+          <sp-menu-item>Analytical Method ${this.pendingAnalytic()} <span style="color: blue" @click=${()=>this.myCerts.filterData="analysis"}>${this.analytics.length}</span></sp-menu-item>
         </sp-action-menu>
         <button @click=${()=> this.pLogin.logout()}>Logout</button>
         <my-certifications></my-certifications><br>
@@ -56,12 +56,20 @@ class DemoExample extends LitElement {
 
   pendingSOP() {
     let p = this.sops.filter(s => s.status == "NOT_PASS")
-    return html`<span style="color: red" @click=${()=>this.myCerts.pending("sop")}>${p.length}</span>`
+    if (p.length) {
+      return html`<span style="color: red" @click=${()=>this.myCerts.filterData="psop"}>${p.length}</span>`
+    } else {
+      return null
+    }
   }
 
   pendingAnalytic() {
     let p = this.analytics.filter(s => s.status == "NOT_PASS")
-    return html`<span style="color: red" @click=${()=>this.myCerts.pending("analysis")}>${p.length}</span>`
+    if (p.length) {
+      return html`<span style="color: red" @click=${()=>this.myCerts.filterData="panalysis"}>${p.length}</span>`
+    } else {
+      return null
+    }
   }
 
   get pLogin() {
