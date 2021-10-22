@@ -45,7 +45,7 @@ export class CertificationItem extends LitElement {
   render() {
     return html`
       <div class="card layout vertical center">
-        <mwc-icon-button icon="picture_as_pdf" @click=${()=>window.open(this.cert.file_link, '_blank').focus()}></mwc-icon-button>
+        <mwc-icon-button icon="picture_as_pdf" @click=${()=>window.open(this.cert.file_link, '_blank').focus()} ?disabled=${!this.cert.file_link}></mwc-icon-button>
         <div><b>Procedure: </b>${this.cert.procedure_name}</div>
         <div><b>Name: </b>${this.cert.sop_name}</div>
         <div><b>Summary: </b>${this.cert.brief_summary}</div>
