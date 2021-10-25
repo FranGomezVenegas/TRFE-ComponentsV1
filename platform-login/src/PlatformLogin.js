@@ -215,7 +215,7 @@ export class PlatformLogin extends CommonCore {
   }
 
   reqPartialToken() {
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       dbUserName: this.user.value,
       dbUserPassword: this.password.value,
       dbName: this.config.dbName,
@@ -231,7 +231,7 @@ export class PlatformLogin extends CommonCore {
 
   reqUserRoles() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       dbName: this.config.dbName,
       actionName: 'getuserrole'
@@ -247,7 +247,7 @@ export class PlatformLogin extends CommonCore {
 
   reqFinalToken() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       userRole: this.role.value,
       dbName: this.config.dbName,
