@@ -55,8 +55,8 @@ export class MyCertifications extends CommonCore {
 
   authorized() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    this.sops = userSession.all_my_sops[0].my_sops
-    this.analytics = userSession.all_my_analysis_methods[0].my_analysis_method_certifications
+    this.sops = userSession.all_my_sops.length ? userSession.all_my_sops[0].my_sops : this.sops
+    this.analytics = userSession.all_my_analysis_methods.length ? userSession.all_my_analysis_methods[0].my_analysis_method_certifications : this.analytics
   }
 
   /**
