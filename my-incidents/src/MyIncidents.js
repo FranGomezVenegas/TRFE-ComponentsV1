@@ -126,12 +126,14 @@ export class MyIncidents extends CommonCore {
 
   getOpenIncidents() {
     this.histories = []
-    return this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
+    this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: 'USER_OPEN_INCIDENTS'
     })).then(j => {
-      this.grid.items = j
+      if (j) {
+        this.grid.items = j
+      }
     })
   }
 
@@ -146,13 +148,15 @@ export class MyIncidents extends CommonCore {
     }
     if (e.detail.value) {
       this.selectedItem = e.detail.value
-      return this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
+      this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         actionName: 'INCIDENT_DETAIL_FOR_GIVEN_INCIDENT',
         incidentId: this.selectedItem.id
       })).then(j => {
-        this.histories = j
+        if (j) {
+          this.histories = j
+        }
       })
     }
   }
@@ -163,11 +167,13 @@ export class MyIncidents extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       ...params
     })).then(j => {
-      this.icdTitle.value = ""
-      this.icdId.value = ""
-      this.icdDetail.value = ""
-      this.icdDialog.close()
-      this.getOpenIncidents()
+      if (j) {
+        this.icdTitle.value = ""
+        this.icdId.value = ""
+        this.icdDetail.value = ""
+        this.icdDialog.close()
+        this.getOpenIncidents()
+      }
     })
   }
 

@@ -225,7 +225,7 @@ export class UserProfile extends CommonCore {
    */
   checkingUser() {
     if (this.newPwd.value) {
-      return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
         actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         userToCheck: this.userName,
@@ -245,7 +245,7 @@ export class UserProfile extends CommonCore {
    */
   confirmNewPassword() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "USER_CHANGE_PSWD",
       finalToken: userSession.finalToken,
       dbName: this.config.dbName,
@@ -264,7 +264,7 @@ export class UserProfile extends CommonCore {
    */
   checkingPhrase() {
     if (this.newEsg.value) {
-      return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
         actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         esignPhraseToCheck: this.oldEsg.value

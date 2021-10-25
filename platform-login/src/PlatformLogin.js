@@ -215,41 +215,53 @@ export class PlatformLogin extends CommonCore {
   }
 
   reqPartialToken() {
-    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       dbUserName: this.user.value,
       dbUserPassword: this.password.value,
       dbName: this.config.dbName,
       actionName: 'authenticate'
     }), false).then(j => {
-      sessionStorage.setItem('partialToken', JSON.stringify(j))
+      if (j) {
+        sessionStorage.setItem('partialToken', JSON.stringify(j))
+      } else {
+        throw {}
+      }
     })
   }
 
   reqUserRoles() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       dbName: this.config.dbName,
       actionName: 'getuserrole'
     }), false).then(async j => {
-      this.userRoles = j;
-      await this.requestUpdate();
+      if (j) {
+        this.userRoles = j;
+        await this.requestUpdate();
+      } else {
+        throw {}
+      }
     })
   }
 
   reqFinalToken() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       userRole: this.role.value,
       dbName: this.config.dbName,
       actionName: 'finaltoken'
     }), false).then(j => {
-      sessionStorage.setItem("userSession", JSON.stringify({
-        ...j,
-        userName: this.user.value,
-        userRole: this.role.value
-      }))
+      if (j) {
+        sessionStorage.setItem("userSession", JSON.stringify({
+          ...j,
+          userName: this.user.value,
+          userRole: this.role.value
+        }))
+      } else {
+        throw {}
+      }
     })
   }
 }

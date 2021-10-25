@@ -79,12 +79,14 @@ export class VideoTutorial extends CommonCore {
    * Populating video items from the server
    */
   getVideos() {
-    return this.fetchApi(this.config.backendUrl + this.config.frontEndVideoTutorialsUrl + '?' + new URLSearchParams({
+    this.fetchApi(this.config.backendUrl + this.config.frontEndVideoTutorialsUrl + '?' + new URLSearchParams({
       actionName: "ALL_ACTIVE_VIDEO_TUTORIALS",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       dbName: this.config.dbName
     })).then(j => {
-      this.videos = j
+      if (j) {
+        this.videos = j
+      }
     })
   }
 }

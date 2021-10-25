@@ -90,7 +90,9 @@ export class MyCertifications extends CommonCore {
       sopName: e.detail.sop_name,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
     })).then(j => {
-      this.frontEndSopUserAPI(e.detail)
+      if (j) {
+        this.frontEndSopUserAPI(e.detail)
+      }
     })
   }
 
@@ -99,8 +101,10 @@ export class MyCertifications extends CommonCore {
       dbName: this.config.dbName,
       actionName: 'ALL_IN_ONE',
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-    })).then(j => {
-      this.getProcedureList(cert)
+    }), false).then(j => {
+      if (j) {
+        this.getProcedureList(cert)
+      }
     })
   }
 
@@ -108,28 +112,30 @@ export class MyCertifications extends CommonCore {
     this.fetchApi(this.config.backendUrl + this.config.frontEndSopUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-    })).then(j => {
-      let certs = JSON.stringify(this.certSet) // temp ref
-      certs = JSON.parse(certs)
-      this.certSet = []
-      // updating userSession data
-      let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-      if (cert.user_sop_id) { // sop
-        this.sops.forEach((c,i) => {
+    }), false).then(j => {
+      if (j) {
+        let certs = JSON.stringify(this.certSet) // temp ref
+        certs = JSON.parse(certs)
+        this.certSet = []
+        // updating userSession data
+        let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+        if (cert.user_sop_id) { // sop
+          this.sops.forEach((c,i) => {
+            if (c.user_sop_id == cert.user_sop_id) {
+              this.sops[i].status = "PASS"
+            }
+          })
+          userSession.all_my_sops[0].my_sops = this.sops
+        }
+        certs.forEach((c,i) => {
           if (c.user_sop_id == cert.user_sop_id) {
-            this.sops[i].status = "PASS"
+            certs[i].status = "PASS"
           }
         })
-        userSession.all_my_sops[0].my_sops = this.sops
+        sessionStorage.setItem('userSession', JSON.stringify(userSession))
+        this.certSet = certs
+        this.requestUpdate()
       }
-      certs.forEach((c,i) => {
-        if (c.user_sop_id == cert.user_sop_id) {
-          certs[i].status = "PASS"
-        }
-      })
-      sessionStorage.setItem('userSession', JSON.stringify(userSession))
-      this.certSet = certs
-      this.requestUpdate()
     })
   }
 }

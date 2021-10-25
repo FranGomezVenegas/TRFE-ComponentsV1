@@ -37,8 +37,12 @@ class DemoExample extends LitElement {
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <sp-action-menu id="cert-menu" size="m" @mouseover=${()=> this.menuHover("cert-menu")}>
           <span slot="label" @mouseover=${()=> this.menuHover("cert-menu")}>My Certifications ${this.allPending()}</span>
-          <sp-menu-item>SOP ${this.pendingSOP()} <span style="color: blue" @click=${()=>this.myCerts.filterData="sop"}>${this.sops.length}</span></sp-menu-item>
-          <sp-menu-item>Analytical Method ${this.pendingAnalytic()} <span style="color: blue" @click=${()=>this.myCerts.filterData="analytic"}>${this.analytics.length}</span></sp-menu-item>
+          <sp-menu-item>SOP ${this.pendingSOP()} ${this.sops.length ?
+            html`<span style="color: blue" @click=${()=>this.myCerts.filterData="sop"}>${this.sops.length}</span>` : null}
+          </sp-menu-item>
+          <sp-menu-item>Analytical Method ${this.pendingAnalytic()} ${this.analytics.length ?
+            html`<span style="color: blue" @click=${()=>this.myCerts.filterData="analytic"}>${this.analytics.length}</span>` : null}
+          </sp-menu-item>
         </sp-action-menu>
         <button @click=${()=> this.pLogin.logout()}>Logout</button>
         <my-certifications></my-certifications><br>
@@ -50,8 +54,8 @@ class DemoExample extends LitElement {
     this.auth = e.target.auth
     this.myCerts.config = this.pLogin.config
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    this.sops = userSession.all_my_sops[0].my_sops
-    this.analytics = userSession.all_my_analysis_methods[0].my_analysis_method_certifications
+    this.sops = userSession.all_my_sops.length ? userSession.all_my_sops[0].my_sops : this.sops
+    this.analytics = userSession.all_my_analysis_methods.length ? userSession.all_my_analysis_methods[0].my_analysis_method_certifications : this.analytics
   }
 
   allPending() {
