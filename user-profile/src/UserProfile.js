@@ -197,6 +197,7 @@ export class UserProfile extends CommonCore {
   }
 
   authorized() {
+    console.log(JSON.parse(sessionStorage.getItem("userSession")))
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName;
   }
 
@@ -229,8 +230,12 @@ export class UserProfile extends CommonCore {
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         userToCheck: this.userName,
         passwordToCheck: this.oldPwd.value
-      })).then(() => {
-        this.confirmNewPassword()
+      })).then(j => {
+        if (j) {
+          this.confirmNewPassword()
+        }
+        this.oldPwd.value = ""
+        this.notePwd.value = ""
       })
     }
   }
@@ -239,15 +244,18 @@ export class UserProfile extends CommonCore {
    * Once user found and verified, confirm the password changing
    */
   confirmNewPassword() {
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "USER_CHANGE_PSWD",
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      finalToken: userSession.finalToken,
       dbName: this.config.dbName,
       newPassword: this.newPwd.value
-    })).then(() => {
+    })).then(j => {
+      if (j) {
+        userSession.finalToken = j.finalToken
+        sessionStorage.setItem("userSession", JSON.stringify(userSession))
+      }
       this.newPwd.value = ""
-      this.oldPwd.value = ""
-      this.notePwd.value = ""
     })
   }
 
@@ -260,8 +268,11 @@ export class UserProfile extends CommonCore {
         actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         esignPhraseToCheck: this.oldEsg.value
-      })).then(() => {
-        this.confirmNewEsign()
+      })).then(j => {
+        if (j) {
+          this.confirmNewEsign()
+        }
+        this.oldEsg.value = ""
       })
     }
   }
@@ -272,5 +283,6 @@ export class UserProfile extends CommonCore {
   confirmNewEsign() {
     // waiting dummy pwd
     console.log("done")
+    this.newEsg.value = ""
   }
 }
