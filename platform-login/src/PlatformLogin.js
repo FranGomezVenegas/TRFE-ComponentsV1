@@ -288,7 +288,7 @@ export class PlatformLogin extends CommonCore {
           ...appLogin_authenticationMessage.connectedSuccess_singleRole
         }
         this.dispatchEvent(new CustomEvent('success', {
-          detail: {...j, urlParams: urlParams, log: false},
+          detail: {...j, urlParams: urlParams, log: false, waiting: true},
           bubbles: true,
           composed: true
         }))
