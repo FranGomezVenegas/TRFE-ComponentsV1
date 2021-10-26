@@ -13,7 +13,7 @@ export function getUserSession() {
   return userSession
 }
 
-export const langConfig = {
+const langConfig = {
   "title": {
     "label_en": "Trace it !!!", 
     "label_es": "¡¡ TRÁZALO !!"
@@ -33,6 +33,21 @@ export const langConfig = {
   "role": {
     "label_en": "Role", 
     "label_es": "Rol"
+  }
+}
+
+const appLogin_authenticationMessage={
+  "connectedSuccess_singleRole":{
+    "message_en":"Valid user, Starting session ... please wait",
+    "message_es":"Usuario válido, iniciando sesión ... por favor espere",
+  },
+  "connectedSuccess":{
+    "message_en":"Valid user, please proceed selecting the role",
+    "message_es":"Usuario válido, por favor escoja rol",
+  },
+  "connectedFails":{
+    "message_en":"I guess there is no user with those credentials",
+    "message_es":"Me temo que el usuario o la contraseña no son correctos.",    
   }
 }
 
@@ -91,8 +106,7 @@ export class PlatformLogin extends CommonCore {
     return {
       hidden: { type: Boolean, reflect: true },
       auth: { type: Boolean },
-      userRoles: { type: Array },
-      setRole: { type: String }
+      userRoles: { type: Array }
     };
   }
 
@@ -215,15 +229,21 @@ export class PlatformLogin extends CommonCore {
   }
 
   reqPartialToken() {
-    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    let urlParams = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       dbUserName: this.user.value,
       dbUserPassword: this.password.value,
       dbName: this.config.dbName,
       actionName: 'authenticate'
-    }), false).then(j => {
+    })
+    return this.fetchApi(urlParams, false, false).then(j => {
       if (j) {
         sessionStorage.setItem('partialToken', JSON.stringify(j))
       } else {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {...appLogin_authenticationMessage.connectedFails, urlParams: urlParams, log: false, is_error: true},
+          bubbles: true,
+          composed: true
+        }))
         throw {}
       }
     })
@@ -231,12 +251,20 @@ export class PlatformLogin extends CommonCore {
 
   reqUserRoles() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    let urlParams = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       dbName: this.config.dbName,
       actionName: 'getuserrole'
-    }), false).then(async j => {
+    })
+    return this.fetchApi(urlParams, false, false).then(async j => {
       if (j) {
+        if (j.length > 1) {
+          this.dispatchEvent(new CustomEvent('success', {
+            detail: {...appLogin_authenticationMessage.connectedSuccess, urlParams: urlParams, log: false},
+            bubbles: true,
+            composed: true
+          }))
+        }
         this.userRoles = j;
         await this.requestUpdate();
       } else {
@@ -247,13 +275,23 @@ export class PlatformLogin extends CommonCore {
 
   reqFinalToken() {
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
-    return this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+    let urlParams = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
       userRole: this.role.value,
       dbName: this.config.dbName,
       actionName: 'finaltoken'
-    }), false).then(j => {
+    })
+    return this.fetchApi(urlParams, false, false).then(j => {
       if (j) {
+        j = {
+          ...j,
+          ...appLogin_authenticationMessage.connectedSuccess_singleRole
+        }
+        this.dispatchEvent(new CustomEvent('success', {
+          detail: {...j, urlParams: urlParams, log: false},
+          bubbles: true,
+          composed: true
+        }))
         sessionStorage.setItem("userSession", JSON.stringify({
           ...j,
           userName: this.user.value,
