@@ -156,7 +156,7 @@ export class PlatformLogin extends CommonCore {
           heading=""
           scrimClickAction=""
           escapeKeyAction="cancel">
-          <iframe width="420" height="345" src="https://www.youtube.com/watch?v=qzZv5e0gg9M?autoplay=1"></iframe>
+          <iframe width="420" height="345" src="https://www.youtube.com/embed/qzZv5e0gg9M?autoplay=1"></iframe>
           <mwc-icon-button icon="close" 
             slot="secondaryAction"
             dialogAction="cancel"> 
