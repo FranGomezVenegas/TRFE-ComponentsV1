@@ -138,7 +138,6 @@ export class UserProfile extends CommonCore {
             <mwc-textfield id="user" label="${langConfig.userToCheck["label_"+this.lang]}" type="text" .value=${this.userName} disabled></mwc-textfield>
             <mwc-textfield id="oldPwd" label="${langConfig.pwToCheck["label_"+this.lang]}" type="password" iconTrailing="visibility" 
               @click=${this.showPwd}></mwc-textfield>
-            <mwc-textfield id="note" label="${langConfig.confirmUserNote["label_"+this.lang]}" type="text"></mwc-textfield>
           </div>
         </div>
         <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
@@ -186,10 +185,6 @@ export class UserProfile extends CommonCore {
 
   get oldPwd() {
     return this.shadowRoot.querySelector("mwc-textfield#oldPwd")
-  }
-
-  get notePwd() {
-    return this.shadowRoot.querySelector("mwc-textfield#note")
   }
 
   get oldEsg() {
