@@ -119,12 +119,12 @@ export class UserProfile extends CommonCore {
       <div class="input">
         <div class="layout horizontal flex center">
           <mwc-textfield id="newPwd" .label="${langConfig.Password["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd}></mwc-textfield>
+            @click=${this.showPwd} @keypress=${e=>e.keyCode==13&&this.pwdDialog.show()}></mwc-textfield>
           <mwc-icon-button icon="published_with_changes" @click=${()=>this.pwdDialog.show()} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
           <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd}></mwc-textfield>
+            @click=${this.showPwd} @keypress=${e=>e.keyCode==13&&this.esgDialog.show()}></mwc-textfield>
           <mwc-icon-button icon="published_with_changes" @click=${()=>this.esgDialog.show()} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
         </div>
       </div>
@@ -199,6 +199,11 @@ export class UserProfile extends CommonCore {
   firstUpdated() {
     super.firstUpdated()
     this.updateComplete.then(() => {
+      this.newPwd.updateComplete.then(() => {
+        setTimeout(() => {
+          this.newPwd.focus();
+        }, 100)
+      })
       // manually backgrounding the dialog box
       // password dialog
       this.pwdDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
