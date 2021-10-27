@@ -128,7 +128,7 @@ export class UserProfile extends CommonCore {
           <mwc-icon-button icon="published_with_changes" @click=${()=>this.esgDialog.show()} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
         </div>
       </div>
-      <sp-button size="xl" @click=${this.login}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
+      <sp-button size="xl" @click=${()=>this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
       <mwc-dialog id="pwdDialog" @opened=${()=>this.oldPwd.focus()}
         heading="${langConfig.pwdWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
