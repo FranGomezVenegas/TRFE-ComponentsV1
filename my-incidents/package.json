@@ -14,9 +14,9 @@
     "@material/mwc-button": "^0.18.0",
     "@material/mwc-dialog": "^0.18.0",
     "@material/mwc-icon-button": "^0.18.0",
-    "@material/mwc-list": "^0.18.0",
     "@material/mwc-textarea": "^0.18.0",
     "@material/mwc-textfield": "^0.18.0",
+    "@spectrum-web-components/tooltip": "^0.8.18",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@vaadin/vaadin-grid": "^6.0.2",
     "lit": "^2.0.0-rc.2"

@@ -1,13 +1,13 @@
 import { LitElement, html, css } from 'lit';
-import '@material/mwc-list/mwc-list';
-import '@material/mwc-list/mwc-list-item';
+import '@spectrum-web-components/tooltip/sp-tooltip.js';
+import '@material/mwc-icon';
 
 export class HistoryItem extends LitElement {
   static get styles() {
     return css`
-    mwc-list-item {
-      border: 1px solid #ccc;
+    sp-tooltip {
       margin: 10px 0;
+      --spectrum-tooltip-max-width: 300px;
     }
     `;
   }
@@ -25,11 +25,32 @@ export class HistoryItem extends LitElement {
 
   render() {
     return html`
-    <mwc-list-item twoline>
-      <span>${this.history.action_name} - ${this.history.date}</span>
-      <span slot="secondary">${this.history.note}</span>
-    </mwc-list-item>
+    <sp-tooltip open placement="" variant="${this.variant()}">
+      <mwc-icon slot="icon" style="margin-right:10px">${this.icon()}</mwc-icon>
+      <h3 style="margin-top:5px">${this.history.action_name}<br>${this.history.date}</h3>
+      <span>${this.history.note}</span>
+    </sp-tooltip>
     `;
+  }
+
+  variant() {
+    if (this.history.action_name.indexOf("NEW") > -1) {
+      return "negative"
+    } else if (this.history.action_name.indexOf("NOTE") > -1) {
+      return "info"
+    } else {
+      return "positive"
+    }
+  }
+
+  icon() {
+    if (this.history.action_name.indexOf("NEW") > -1) {
+      return "bug_report"
+    } else if (this.history.action_name.indexOf("NOTE") > -1) {
+      return "note_add"
+    } else {
+      return "check"
+    }
   }
 }
 window.customElements.define('history-item', HistoryItem);

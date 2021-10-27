@@ -4,8 +4,6 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
 import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
-import '@material/mwc-list/mwc-list';
-import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-textarea';
 import '@material/mwc-textfield';
 import '@spectrum-web-components/icon/sp-icon.js';
