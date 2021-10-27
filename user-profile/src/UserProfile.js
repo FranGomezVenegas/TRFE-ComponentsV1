@@ -211,12 +211,14 @@ export class UserProfile extends CommonCore {
       this.pwdDialogSurface.style.backgroundRepeat = "no-repeat";
       this.pwdDialogSurface.style.textAlign = "center";
       this.pwdDialogSurface.style.padding = "20px";
+      this.pwdDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
       // esign dialog
       this.esgDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
       this.esgDialogSurface.style.backgroundSize = "cover";
       this.esgDialogSurface.style.backgroundRepeat = "no-repeat";
       this.esgDialogSurface.style.textAlign = "center";
       this.esgDialogSurface.style.padding = "20px";
+      this.esgDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
     })
   }
 
