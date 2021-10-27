@@ -50,6 +50,7 @@ export class CommonCore extends LitElement {
    * @param {*} feedback will be show up the user feedback
    */
   fetchApi(urlParams, log=true, feedback=true) {
+    this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
     return fetch(urlParams).then(async r => {
       if (r.status == 200) {
         return r.json()
