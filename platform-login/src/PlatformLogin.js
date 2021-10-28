@@ -139,7 +139,8 @@ export class PlatformLogin extends CommonCore {
     <div class="login-box layout vertical flex center">
       <img class="appLoginLogoOnTop" src="/images/trazit-removebg.png" />
       <div class="input layout vertical flex">
-        <mwc-textfield id="user" label="${langConfig.user["label_"+this.lang]}" @keypress=${()=>this.password.focus()}></mwc-textfield>
+        <mwc-textfield id="user" label="${langConfig.user["label_"+this.lang]}" 
+          @keypress=${e=>e.keyCode==13&&this.password.focus()}></mwc-textfield>
         <mwc-textfield id="password" label="${langConfig.password["label_"+this.lang]}" type="password" iconTrailing="visibility" 
           @keypress=${this.checkLogin}
           @click=${this.showPwd}></mwc-textfield>
