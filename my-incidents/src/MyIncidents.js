@@ -58,7 +58,7 @@ export class MyIncidents extends CommonCore {
 
   render() {
     return html`
-    <div class="layout horizontal center">
+    <div class="layout horizontal center flex wrap">
       <mwc-icon-button icon="refresh" @click=${this.getOpenIncidents}></mwc-icon-button>
       <mwc-button outlined dense @click=${()=>this.openDialog("create")}>New</mwc-button>
       <mwc-button outlined dense ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("confirm")}>Confirm</mwc-button>
