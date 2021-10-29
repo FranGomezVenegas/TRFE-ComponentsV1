@@ -283,8 +283,20 @@ export class UserProfile extends CommonCore {
    * Confirm the esign changing
    */
   confirmNewEsign() {
-    // waiting dummy pwd
-    console.log("done")
-    this.newEsg.value = ""
+    console.log("AAAA")
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      actionName: "USER_CHANGE_ESIGN",
+      finalToken: userSession.finalToken,
+      dbName: this.config.dbName,
+      newEsign: this.newEsg.value
+    })).then(j => {
+      console.log(j)
+      if (j) {
+        userSession.finalToken = j.finalToken
+        sessionStorage.setItem("userSession", JSON.stringify(userSession))
+      }
+      this.newEsg.value = ""
+    })
   }
 }
