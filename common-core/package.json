@@ -10,6 +10,6 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "lit": "^2.0.0-rc.2"
+    "lit": "^2.0.2"
   }
 }
