@@ -237,7 +237,6 @@ export class UserProfile extends CommonCore {
           this.confirmNewPassword()
         }
         this.oldPwd.value = ""
-        this.notePwd.value = ""
       })
     }
   }
