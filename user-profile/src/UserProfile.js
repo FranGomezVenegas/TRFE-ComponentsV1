@@ -120,12 +120,12 @@ export class UserProfile extends CommonCore {
         <div class="layout horizontal flex center">
           <mwc-textfield id="newPwd" .label="${langConfig.Password["label_"+this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd} @keypress=${e=>e.keyCode==13&&this.pwdDialog.show()}></mwc-textfield>
-          <mwc-icon-button icon="published_with_changes" @click=${()=>this.pwdDialog.show()} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.pwdDialog.show()} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
           <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_"+this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd} @keypress=${e=>e.keyCode==13&&this.esgDialog.show()}></mwc-textfield>
-          <mwc-icon-button icon="published_with_changes" @click=${()=>this.esgDialog.show()} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.esgDialog.show()} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
         </div>
       </div>
       <sp-button size="xl" @click=${()=>this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
