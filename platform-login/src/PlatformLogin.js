@@ -151,8 +151,8 @@ export class PlatformLogin extends CommonCore {
           )}
         </mwc-select>
       </div>
-      <div class="input layout flex">
-        <mwc-icon-button id="video" icon="videocam" @click=${()=>this.shadowRoot.querySelector("#videoDialog").open=true}></mwc-icon-button>
+      <div>
+        <mwc-icon-button id="video" icon="videocam" title="Video" @click=${()=>this.shadowRoot.querySelector("#videoDialog").open=true}></mwc-icon-button>
         <mwc-dialog id="videoDialog" 
           heading=""
           scrimClickAction=""
@@ -163,7 +163,7 @@ export class PlatformLogin extends CommonCore {
             dialogAction="cancel"> 
           </mwc-icon-button>
         </mwc-dialog>
-        <mwc-icon-button @click=${this.changeLang}>
+        <mwc-icon-button @click=${this.changeLang} title="Language">
           <img .src="/images/${this.flag}.png" />
         </mwc-icon-button>
       </div>

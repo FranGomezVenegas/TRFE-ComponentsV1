@@ -11,17 +11,17 @@
   },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
-    "@material/mwc-dialog": "^0.18.0",
-    "@material/mwc-icon-button": "^0.18.0",
-    "@material/mwc-list": "^0.18.0",
-    "@material/mwc-select": "^0.18.0",
-    "@material/mwc-textfield": "^0.18.0",
-    "@spectrum-web-components/button": "^0.14.8",
+    "@material/mwc-dialog": "^0.25.3",
+    "@material/mwc-icon-button": "^0.25.3",
+    "@material/mwc-list": "^0.25.3",
+    "@material/mwc-select": "^0.25.3",
+    "@material/mwc-textfield": "^0.25.3",
+    "@spectrum-web-components/button": "^0.14.9",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
-    "lit": "^2.0.0-rc.2"
+    "lit": "^2.0.2"
   },
   "devDependencies": {
     "@spectrum-web-components/theme": "^0.8.14",
-    "@web/dev-server": "^0.1.21"
+    "@web/dev-server": "^0.1.25"
   }
 }
