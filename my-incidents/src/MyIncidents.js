@@ -60,11 +60,11 @@ export class MyIncidents extends CommonCore {
     return html`
     <div class="layout horizontal center flex wrap">
       <mwc-icon-button icon="refresh" @click=${this.getOpenIncidents}></mwc-icon-button>
-      <mwc-button outlined dense @click=${()=>this.openDialog("create")}>New</mwc-button>
-      <mwc-button outlined dense ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("confirm")}>Confirm</mwc-button>
-      <mwc-button outlined dense ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("note")}>Add Note</mwc-button>
-      <mwc-button outlined dense ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("close")}>Close</mwc-button>
-      <mwc-button outlined dense @click=${()=>this.openDialog("reopen")}>Reopen</mwc-button>
+      <mwc-icon-button title="New" icon="add" @click=${()=>this.openDialog("create")}></mwc-icon-button>
+      <mwc-icon-button title="Confirm" icon="check" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("confirm")}></mwc-icon-button>
+      <mwc-icon-button title="Add Note" icon="note_add" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("note")}></mwc-icon-button>
+      <mwc-icon-button title="Close" icon="close" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("close")}></mwc-icon-button>
+      <mwc-icon-button title="Reopen" icon="lock_open" @click=${()=>this.openDialog("reopen")}></mwc-icon-button>
     </div>
     <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort>
       <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
