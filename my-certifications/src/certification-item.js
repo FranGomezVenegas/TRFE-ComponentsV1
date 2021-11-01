@@ -49,10 +49,13 @@ export class CertificationItem extends LitElement {
         <div><b>Procedure: </b>${this.cert.procedure_name}</div>
         <div><b>Name: </b>${this.cert.sop_name}</div>
         <div><b>Summary: </b>${this.cert.brief_summary}</div>
-        <div><b>My Certification Status: </b>${this.cert.status}</div>
-        <div><mwc-icon icon="${this.cert.status=="PASS"?'bookmark':'warning'}"></mwc-icon></div>
+        <div class="layout horizontal center">
+          <span><b>My Certification Status: </span>
+          <mwc-icon style="color:${this.cert.status=="PASS"?'green':'red'}">${this.cert.status=="PASS"?'bookmark':'warning'}</mwc-icon>
+        </div>
         <div>${this.cert.status=="NOT_PASS" ? 
-          html`<mwc-icon-button icon="replay" @click=${()=>this.dispatchEvent(new CustomEvent('mark-complete', {
+          html`<mwc-icon-button title="Mark Completed" icon="replay" 
+            @click=${()=>this.dispatchEvent(new CustomEvent('mark-complete', {
             detail: this.cert,
             bubbles: true,
             composed: true

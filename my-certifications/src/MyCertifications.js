@@ -1,7 +1,6 @@
 import { html, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-icon-button';
 import './certification-item';
 
 export class MyCertifications extends CommonCore {
@@ -45,7 +44,7 @@ export class MyCertifications extends CommonCore {
 
   render() {
     return html`
-      <div class="layout horizontal flex wrap">
+      <div class="layout horizontal flex center-center wrap">
       ${this.certSet.map(c=>
         html`<certification-item .cert=${c} @mark-complete=${this.markComplete}></certification-item>`
       )}
