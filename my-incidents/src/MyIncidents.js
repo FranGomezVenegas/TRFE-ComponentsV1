@@ -42,7 +42,8 @@ export class MyIncidents extends CommonCore {
     return {
       selectedItem: { type: Object },
       histories: { type: Array },
-      dialogType: { type: String }
+      dialogType: { type: String },
+      fieldErrMsg: { type: Object }
     };
   }
 
@@ -50,6 +51,11 @@ export class MyIncidents extends CommonCore {
     super();
     this.histories = [];
     this.dialogType = "";
+    this.fieldErrMsg = {
+      title: "Title is required",
+      id: "Id is required",
+      detail: "Detail is required"
+    };
   }
 
   authorized() {
@@ -85,9 +91,9 @@ export class MyIncidents extends CommonCore {
       escapeKeyAction="">
       <div class="layout vertical flex center-justified">
         <mwc-button dense slot="secondaryAction" dialogAction="close">Close</mwc-button>
-        <mwc-textfield id="title" label="Title" ?hidden=${this.dialogType!="create"}></mwc-textfield>
-        <mwc-textfield id="icdId" label="Incident ID" ?hidden=${this.dialogType!="reopen"}></mwc-textfield>
-        <mwc-textarea id="detail" rows=10 cols=100></mwc-textarea>
+        <mwc-textfield id="title" label="Title" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg.title} required></mwc-textfield>
+        <mwc-textfield id="icdId" label="Incident ID" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg.id} required></mwc-textfield>
+        <mwc-textarea id="detail" label="Detail" rows=10 cols=100 .validationMessage=${this.fieldErrMsg.detail} required></mwc-textarea>
         <mwc-button raised dense @click=${this.createIncident} ?hidden=${this.dialogType!="create"}>Create</mwc-button>
         <mwc-button raised dense @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"}>Confirm</mwc-button>
         <mwc-button raised dense @click=${this.addNote} ?hidden=${this.dialogType!="note"}>Accept</mwc-button>
@@ -176,16 +182,23 @@ export class MyIncidents extends CommonCore {
   }
 
   createIncident() {
-    if (this.icdTitle.value && this.icdDetail.value) {
-      this.incidentAPI({
-        actionName: 'NEW_INCIDENT',
-        incidentTitle: this.icdTitle.value,
-        incidentDetail: this.icdDetail.value
-      })
+    if (!this.icdTitle.validity.valid) {
+      return this.icdTitle.focus()
     }
+    if (!this.icdDetail.validity.valid) {
+      return this.icdDetail.focus()
+    }
+    this.incidentAPI({
+      actionName: 'NEW_INCIDENT',
+      incidentTitle: this.icdTitle.value,
+      incidentDetail: this.icdDetail.value
+    })
   }
 
   confirmIncident() {
+    if (!this.icdDetail.validity.valid) {
+      return this.icdDetail.focus()
+    }
     this.incidentAPI({
       actionName: 'CONFIRM_INCIDENT',
       incidentId: this.selectedItem.id,
@@ -194,6 +207,9 @@ export class MyIncidents extends CommonCore {
   }
 
   addNote() {
+    if (!this.icdDetail.validity.valid) {
+      return this.icdDetail.focus()
+    }
     this.incidentAPI({
       actionName: 'ADD_NOTE_INCIDENT',
       incidentId: this.selectedItem.id,
@@ -202,6 +218,9 @@ export class MyIncidents extends CommonCore {
   }
 
   closeIncident() {
+    if (!this.icdDetail.validity.valid) {
+      return this.icdDetail.focus()
+    }
     this.incidentAPI({
       actionName: 'CLOSE_INCIDENT',
       incidentId: this.selectedItem.id,
@@ -210,13 +229,17 @@ export class MyIncidents extends CommonCore {
   }
 
   reopenIncident() {
-    if (this.icdId.value) {
-      this.incidentAPI({
-        actionName: 'REOPEN_INCIDENT',
-        incidentId: this.icdId.value,
-        note: this.icdDetail.value
-      })
+    if (!this.icdId.validity.valid) {
+      return this.icdId.focus()
     }
+    if (!this.icdDetail.validity.valid) {
+      return this.icdDetail.focus()
+    }
+    this.incidentAPI({
+      actionName: 'REOPEN_INCIDENT',
+      incidentId: this.icdId.value,
+      note: this.icdDetail.value
+    })
   }
 
   openDialog(type) {
