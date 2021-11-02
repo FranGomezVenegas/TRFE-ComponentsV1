@@ -7,6 +7,7 @@ import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
+import './audit-dialog';
 
 const langConfig = {
   "userToCheck": {
@@ -146,7 +147,12 @@ export class SamplesPending extends CommonCore {
       <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
         ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
     </mwc-dialog>
+    <audit-dialog></audit-dialog>
     `;
+  }
+
+  get audit() {
+    return this.shadowRoot.querySelector("audit-dialog")
   }
 
   get grid() {
@@ -219,6 +225,7 @@ export class SamplesPending extends CommonCore {
       sampleAuditFieldToRetrieve: ""
     })).then(j => {
       console.log(j)
+      this.audit.audits = j
     })
   }
 
