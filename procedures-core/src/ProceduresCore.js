@@ -28,7 +28,7 @@ const langConfig = {
   }
 };
 
-export class SamplesPending extends CommonCore {
+export class ProceduresCore extends CommonCore {
   static get styles() {
     return [
       Layouts,

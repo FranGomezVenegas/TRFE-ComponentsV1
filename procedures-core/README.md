@@ -1,20 +1,20 @@
-# \<samples-pending>
-Component samples pending procs of trazit platform
+# \<procedures-core>
+Component core for procedures elements of trazit platform
 
 ## Installation
 
 ```bash
-npm i samples-pending
+npm i procedures-core
 ```
 
 ## Usage
 
 ```html
 <script type="module">
-  import 'samples-pending/samples-pending.js';
+  import 'procedures-core/procedures-core.js';
 </script>
 
-<samples-pending></samples-pending>
+<procedures-core></procedures-core>
 ```
 
 

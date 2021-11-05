@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../samples-pending';
+import '../procedures-core';
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -27,10 +27,10 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.samples.config=this.pLogin.config}}></platform-login>
+      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.procCore.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <samples-pending></samples-pending><br>
+        <procedures-core></procedures-core><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -40,8 +40,8 @@ class DemoExample extends LitElement {
     return this.shadowRoot.querySelector("platform-login")
   }
 
-  get samples() {
-    return this.shadowRoot.querySelector("samples-pending")
+  get procCore() {
+    return this.shadowRoot.querySelector("procedures-core")
   }
 
   /**
@@ -62,7 +62,7 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    this.flag = this.samples.changeLang()
+    this.flag = this.procCore.changeLang()
   }
 }
 customElements.define('demo-example', DemoExample);

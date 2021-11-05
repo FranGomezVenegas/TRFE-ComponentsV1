@@ -1,6 +1,6 @@
 {
-  "name": "@trazit/samples-pending",
-  "description": "Component samples pending procs of trazit platform",
+  "name": "@trazit/procedures-core",
+  "description": "Component core for procedures elements of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
   "version": "0.0.1",
