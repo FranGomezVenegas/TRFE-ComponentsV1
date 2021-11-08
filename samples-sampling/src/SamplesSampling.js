@@ -25,6 +25,10 @@ const langConfig = {
   "pwdWindowTitle": {
     "label_en": "Please confirm your credentials (user & password)",
     "label_es": "Por favor confirma tu identidad (usuario y contraseña)"
+  },
+  "esignWindowTitle": {
+    "label_en": "Please enter your eSign",
+    "label_es": "Por favor entra tu frase de Firma Electrónica"
   }
 };
 
@@ -90,6 +94,14 @@ export class SamplesSampling extends CommonCore {
       this.pwdDialogSurface.style.padding = "20px";
       this.pwdDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
 
+      // esign dialog
+      this.esgDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+      this.esgDialogSurface.style.backgroundSize = "cover";
+      this.esgDialogSurface.style.backgroundRepeat = "no-repeat";
+      this.esgDialogSurface.style.textAlign = "center";
+      this.esgDialogSurface.style.padding = "20px";
+      this.esgDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
+
       this.cmnDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
       this.cmnDialogSurface.style.backgroundSize = "cover";
       this.cmnDialogSurface.style.backgroundRepeat = "no-repeat";
@@ -129,6 +141,19 @@ export class SamplesSampling extends CommonCore {
       <vaadin-grid-filter-column auto-width path="spec_code" header="Spec"></vaadin-grid-filter-column>
       <vaadin-grid-filter-column auto-width path="spec_variation_name" header="Variation"></vaadin-grid-filter-column>
     </vaadin-grid>
+    <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()}
+      heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
+      scrimClickAction=""
+      escapeKeyAction="">
+      <div class="layout horizontal flex center-justified" style="opacity:0.8">
+        <div class="input" style="width: 70%">
+          <mwc-textfield id="esg" type="password" iconTrailing="visibility" 
+            @click=${this.showPwd}></mwc-textfield>
+        </div>
+      </div>
+      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+    </mwc-dialog>
     <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
@@ -184,6 +209,18 @@ export class SamplesSampling extends CommonCore {
     return this.pwdDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
+  get esgDialog() {
+    return this.shadowRoot.querySelector("mwc-dialog#esgDialog")
+  }
+
+  get esg() {
+    return this.shadowRoot.querySelector("mwc-textfield#esg")
+  }
+
+  get esgDialogSurface() {
+    return this.esgDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
   get cmnDialog() {
     return this.shadowRoot.querySelector("mwc-dialog#cmnDialog")
   }
@@ -228,7 +265,34 @@ export class SamplesSampling extends CommonCore {
     }
   }
 
+
+  /**
+   * Checking whether phrase matched
+   */
+  checkingPhrase() {
+    if (this.esg.value) {
+      this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+        actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
+        finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+        esignPhraseToCheck: this.esg.value
+      })).then(j => {
+        if (j) {
+          this.pullAudit()
+        }
+        this.esg.value = ""
+      })
+    }
+  }
+
   sampleAudit() {
+    if (this.personel) {
+      this.esgDialog.show()
+    } else {
+      this.pullAudit()
+    }
+  }
+
+  pullAudit() {
     this.fetchApi(this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       dbName: this.config.dbName,
