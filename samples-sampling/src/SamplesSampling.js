@@ -141,19 +141,6 @@ export class SamplesSampling extends CommonCore {
       <vaadin-grid-filter-column auto-width path="spec_code" header="Spec"></vaadin-grid-filter-column>
       <vaadin-grid-filter-column auto-width path="spec_variation_name" header="Variation"></vaadin-grid-filter-column>
     </vaadin-grid>
-    <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()}
-      heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
-      scrimClickAction=""
-      escapeKeyAction="">
-      <div class="layout horizontal flex center-justified" style="opacity:0.8">
-        <div class="input" style="width: 70%">
-          <mwc-textfield id="esg" type="password" iconTrailing="visibility" 
-            @click=${this.showPwd}></mwc-textfield>
-        </div>
-      </div>
-      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
-      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
-    </mwc-dialog>
     <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
@@ -185,7 +172,20 @@ export class SamplesSampling extends CommonCore {
       <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
         ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
     </mwc-dialog>
-    <audit-dialog></audit-dialog>
+    <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
+    <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()}
+      heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
+      scrimClickAction=""
+      escapeKeyAction="">
+      <div class="layout horizontal flex center-justified" style="opacity:0.8">
+        <div class="input" style="width: 70%">
+          <mwc-textfield id="esg" type="password" iconTrailing="visibility" 
+            @click=${this.showPwd}></mwc-textfield>
+        </div>
+      </div>
+      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+    </mwc-dialog>
     `;
   }
 
@@ -265,6 +265,14 @@ export class SamplesSampling extends CommonCore {
     }
   }
 
+  /**
+   * when sign button click on the audit dialog
+   * @param {*} e 
+   */
+  signAudit(e) {
+    this.selectedAuditId = e.detail.audit_id
+    this.esgDialog.show()
+  }
 
   /**
    * Checking whether phrase matched
@@ -277,11 +285,37 @@ export class SamplesSampling extends CommonCore {
         esignPhraseToCheck: this.esg.value
       })).then(j => {
         if (j) {
-          this.pullAudit()
+          if (this.selectedAuditId) { // esign to review the selected audit id
+            this.auditReview()
+          } else { // when select sample id on personel
+            this.pullAudit()
+            this.esg.value = ""
+          }
+        } else {
+          this.esg.value = ""
         }
-        this.esg.value = ""
       })
     }
+  }
+
+  /**
+   * Request audit review api
+   */
+  auditReview() {
+    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      dbName: this.config.dbName,
+      procInstanceName: this.procName,
+      actionName: "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+      sampleId: this.selectedItem.sample_id,
+      auditId: this.selectedAuditId,
+      esignPhraseToCheck: this.esg.value
+    })).then(j => {
+      console.log(j)
+      this.esg.value = ""
+      this.selectedAuditId = null
+      this.pullAudit()
+    })
   }
 
   sampleAudit() {
@@ -303,6 +337,7 @@ export class SamplesSampling extends CommonCore {
     })).then(j => {
       console.log(j)
       this.audit.audits = j
+      this.audit.requestUpdate()
     })
   }
 
