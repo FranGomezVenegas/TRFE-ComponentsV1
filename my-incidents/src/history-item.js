@@ -38,14 +38,16 @@ export class HistoryItem extends LitElement {
       return "negative"
     } else if (this.history.action_name.indexOf("NOTE") > -1) {
       return "info"
-    } else {
+    } else if (this.history.action_name.indexOf("CONFIRMED") > -1) {
       return "positive"
+    } else {
+      return
     }
   }
 
   icon() {
     if (this.history.action_name.indexOf("NEW") > -1) {
-      return "bug_report"
+      return "add"
     } else if (this.history.action_name.indexOf("NOTE") > -1) {
       return "note_add"
     } else {
