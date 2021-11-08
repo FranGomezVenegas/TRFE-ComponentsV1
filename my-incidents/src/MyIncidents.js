@@ -16,6 +16,71 @@ import '@vaadin/vaadin-grid/vaadin-grid-filter';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import './history-item';
 
+const langConfig = {
+  field: {
+    title: {
+      "label_en": "Title", "label_es": "Titulo"
+    },
+    detail: {
+      "label_en": "Detail", "label_es": "Detalle"
+    },
+    id:  {
+      "label_en": "Incident Id", "label_es": "Id de Incidencia"
+    }
+  },
+  dialog_button: {
+    new: {
+      "label_en": "Create", "label_es": "Crear"
+    },
+    confirm: {
+      "label_en": "Confirm", "label_es": "Confirmar"
+    },
+    close: {
+      "label_en": "Close", "label_es": "Cerrar"
+    },
+    cancel: {
+      "label_en": "Cancel", "label_es": "Cancelar"
+    },
+    accept: {
+      "label_en": "Accept", "label_es": "Aceptar"
+    }
+  },
+  grid: {
+    id: {
+      "label_en": "Id", "label_es": "Id"
+    },
+    last_update: {
+      "label_en": "Last Update", "label_es": "Último cambio"
+    },
+    creation: {
+      "label_en":"Creation", "label_es": "Creación"
+    },
+    title: {
+      "label_en": "Title", "label_es": "Titulo"
+    },
+    detail: {
+      "label_en": "Detail", "label_es": "Detalle"
+    }
+  },
+  button: {
+    new: {
+    "label_en": "New", "label_es": "Crear"
+    },
+    confirm: {
+      "label_en": "Confirm", "label_es": "Confirmar"
+    },
+    note: {
+      "label_en": "Add Note", "label_es": "Añadir Nota"
+    },
+    close: {
+      "label_en": "Close it!", "label_es": "¡Zanjarla!"
+    },
+    reopen: {
+      "label_en": "ReOpen it!", "label_es": "¡Reabrirla!"
+    }
+  }
+};
+
 export class MyIncidents extends CommonCore {
   static get styles() {
     return [
@@ -66,19 +131,19 @@ export class MyIncidents extends CommonCore {
     return html`
     <div class="layout horizontal center flex wrap">
       <mwc-icon-button icon="refresh" @click=${this.getOpenIncidents}></mwc-icon-button>
-      <mwc-icon-button title="New" icon="add" @click=${()=>this.openDialog("create")}></mwc-icon-button>
-      <mwc-icon-button title="Confirm" icon="check" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("confirm")}></mwc-icon-button>
-      <mwc-icon-button title="Add Note" icon="note_add" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("note")}></mwc-icon-button>
-      <mwc-icon-button title="Close" icon="close" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("close")}></mwc-icon-button>
-      <mwc-icon-button title="Reopen" icon="lock_open" @click=${()=>this.openDialog("reopen")}></mwc-icon-button>
+      <mwc-icon-button .title="${langConfig.button.new["label_"+this.lang]}" icon="add" @click=${()=>this.openDialog("create")}></mwc-icon-button>
+      <mwc-icon-button .title="${langConfig.button.confirm["label_"+this.lang]}" icon="check" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("confirm")}></mwc-icon-button>
+      <mwc-icon-button .title="${langConfig.button.note["label_"+this.lang]}" icon="note_add" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("note")}></mwc-icon-button>
+      <mwc-icon-button .title="${langConfig.button.close["label_"+this.lang]}" icon="close" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("close")}></mwc-icon-button>
+      <mwc-icon-button .title="${langConfig.button.reopen["label_"+this.lang]}" icon="lock_open" @click=${()=>this.openDialog("reopen")}></mwc-icon-button>
     </div>
     <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort>
       <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-      <vaadin-grid-sort-column path="id" header="Id"></vaadin-grid-sort-column>
-      <vaadin-grid-filter-column path="date_last_update"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column path="date_creation"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column path="item_title"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column path="item_detail"></vaadin-grid-filter-column>
+      <vaadin-grid-sort-column path="id" .header="${langConfig.grid.id["label_"+this.lang]}"></vaadin-grid-sort-column>
+      <vaadin-grid-filter-column path="date_last_update" .header="${langConfig.grid.last_update["label_"+this.lang]}"></vaadin-grid-filter-column>
+      <vaadin-grid-filter-column path="date_creation" .header="${langConfig.grid.creation["label_"+this.lang]}"></vaadin-grid-filter-column>
+      <vaadin-grid-filter-column path="item_title" .header="${langConfig.grid.title["label_"+this.lang]}"></vaadin-grid-filter-column>
+      <vaadin-grid-filter-column path="item_detail" .header="${langConfig.grid.detail["label_"+this.lang]}"></vaadin-grid-filter-column>
     </vaadin-grid>
     <div ?hidden=${this.hideList}>
       ${this.histories.map(h=>
@@ -90,15 +155,15 @@ export class MyIncidents extends CommonCore {
       scrimClickAction=""
       escapeKeyAction="">
       <div class="layout vertical flex center-justified">
-        <mwc-button dense slot="secondaryAction" dialogAction="close">Close</mwc-button>
-        <mwc-textfield id="title" label="Title" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg.title} required></mwc-textfield>
-        <mwc-textfield id="icdId" label="Incident ID" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg.id} required></mwc-textfield>
-        <mwc-textarea id="detail" label="Detail" rows=10 cols=100 .validationMessage=${this.fieldErrMsg.detail} required></mwc-textarea>
-        <mwc-button raised dense @click=${this.createIncident} ?hidden=${this.dialogType!="create"}>Create</mwc-button>
-        <mwc-button raised dense @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"}>Confirm</mwc-button>
-        <mwc-button raised dense @click=${this.addNote} ?hidden=${this.dialogType!="note"}>Accept</mwc-button>
-        <mwc-button raised dense @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>Accept</mwc-button>
-        <mwc-button raised dense @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"}>Accept</mwc-button>
+        <mwc-button dense slot="secondaryAction" dialogAction="close">${langConfig.dialog_button.close["label_"+this.lang]}</mwc-button>
+        <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg.title} required></mwc-textfield>
+        <mwc-textfield id="icdId" label="${langConfig.field.id["label_"+this.lang]}" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg.id} required></mwc-textfield>
+        <mwc-textarea id="detail" label="${langConfig.field.detail["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg.detail} required></mwc-textarea>
+        <mwc-button raised dense @click=${this.createIncident} ?hidden=${this.dialogType!="create"} .label="${langConfig.dialog_button.new["label_"+this.lang]}"></mwc-button>
+        <mwc-button raised dense @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"} .label="${langConfig.dialog_button.confirm["label_"+this.lang]}"></mwc-button>
+        <mwc-button raised dense @click=${this.addNote} ?hidden=${this.dialogType!="note"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
+        <mwc-button raised dense @click=${this.closeIncident} ?hidden=${this.dialogType!="close"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
+        <mwc-button raised dense @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
       </div>
     </mwc-dialog>
     `;
