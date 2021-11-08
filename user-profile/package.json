@@ -14,7 +14,7 @@
     "@material/mwc-dialog": "^0.25.3",
     "@material/mwc-icon-button": "^0.25.3",
     "@material/mwc-textfield": "^0.25.3",
-    "@spectrum-web-components/button": "^0.14.9",
+    "@spectrum-web-components/button": "^0.15.0",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "lit": "^2.0.2"
   },
