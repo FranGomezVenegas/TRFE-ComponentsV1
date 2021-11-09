@@ -242,7 +242,7 @@ export class SamplesSampling extends CommonCore {
       sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
       whereFieldsName: "current_stage|sample_config_code"+ (this.personel?'':' not') +" in*",
       whereFieldsValue: "Sampling|prog_pers_template"
-    })).then(j => {
+    }), false, false).then(j => {
       if (j) {
         this.grid.items = j
       }
@@ -283,7 +283,7 @@ export class SamplesSampling extends CommonCore {
         actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         esignPhraseToCheck: this.esg.value
-      })).then(j => {
+      }), false, false).then(j => {
         if (j) {
           if (this.selectedAuditId) { // esign to review the selected audit id
             this.auditReview()
@@ -334,7 +334,7 @@ export class SamplesSampling extends CommonCore {
       actionName: "GET_SAMPLE_AUDIT",
       sampleId: this.selectedItem.sample_id,
       sampleAuditFieldToRetrieve: ""
-    })).then(j => {
+    }), false, false).then(j => {
       console.log(j)
       this.audit.audits = j
       this.audit.requestUpdate()
@@ -365,7 +365,7 @@ export class SamplesSampling extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       userToCheck: this.userName,
       passwordToCheck: this.pwd.value
-    })).then(j => {
+    }), false, false).then(j => {
       if (j) {
         this.setSamplingDate()
       }

@@ -100,7 +100,7 @@ export class MyCertifications extends CommonCore {
       dbName: this.config.dbName,
       actionName: 'ALL_IN_ONE',
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-    }), false).then(j => {
+    }), false, false).then(j => {
       if (j) {
         this.getProcedureList(cert)
       }
@@ -111,7 +111,7 @@ export class MyCertifications extends CommonCore {
     this.fetchApi(this.config.backendUrl + this.config.frontEndSopUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-    }), false).then(j => {
+    }), false, false).then(j => {
       if (j) {
         let certs = JSON.stringify(this.certSet) // temp ref
         certs = JSON.parse(certs)

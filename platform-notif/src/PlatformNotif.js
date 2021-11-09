@@ -33,13 +33,19 @@ export class PlatformNotif extends CommonCore {
         <sp-accordion allow-multiple style="--spectrum-accordion-text-color: ${n.is_error?'red':'green'}; --spectrum-accordion-text-color-hover: ${n.is_error?'red':'green'}">
           <sp-accordion-item label=${n.message_en}>
             <div>
-              <b>Request URL</b>
-              <p style="overflow-wrap: break-word;">${n.urlParams}</p>
+              <b>Response API</b>
+              <p style="overflow-wrap: break-word;">${this.notifDetail(n)}</p>
             </div>
           </sp-accordion-item>
         </sp-accordion>
         `
       )}
     `;
+  }
+
+  notifDetail(n) {
+    return Object.entries(n).map(
+      ([key, value]) => html`${key}: ${JSON.stringify(value)}<br />`
+    )
   }
 }

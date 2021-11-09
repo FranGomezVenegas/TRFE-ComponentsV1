@@ -232,7 +232,7 @@ export class UserProfile extends CommonCore {
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         userToCheck: this.userName,
         passwordToCheck: this.oldPwd.value
-      })).then(j => {
+      }), false).then(j => {
         if (j) {
           this.confirmNewPassword()
         }
@@ -269,7 +269,7 @@ export class UserProfile extends CommonCore {
         actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         esignPhraseToCheck: this.oldEsg.value
-      })).then(j => {
+      }), false).then(j => {
         if (j) {
           this.confirmNewEsign()
         }

@@ -83,7 +83,7 @@ export class VideoTutorial extends CommonCore {
       actionName: "ALL_ACTIVE_VIDEO_TUTORIALS",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       dbName: this.config.dbName
-    })).then(j => {
+    }), false, false).then(j => {
       if (j) {
         this.videos = j
       }

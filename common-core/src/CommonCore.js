@@ -61,7 +61,7 @@ export class CommonCore extends LitElement {
     }).then(j => {
       if (feedback) {
         this.dispatchEvent(new CustomEvent('success', {
-          detail: {...j, urlParams: urlParams, log: log},
+          detail: {...j, log: log},
           bubbles: true,
           composed: true
         }))
@@ -70,7 +70,7 @@ export class CommonCore extends LitElement {
     }).catch(e => {
       if (feedback) {
         this.dispatchEvent(new CustomEvent("error", {
-          detail: {...e, urlParams: urlParams, log: log},
+          detail: {...e, log: true},
           bubbles: true,
           composed: true
         }))

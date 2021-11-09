@@ -199,7 +199,7 @@ export class MyIncidents extends CommonCore {
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: 'USER_OPEN_INCIDENTS'
-    })).then(j => {
+    }), false, false).then(j => {
       if (j) {
         this.grid.items = j
       }
@@ -222,7 +222,7 @@ export class MyIncidents extends CommonCore {
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         actionName: 'INCIDENT_DETAIL_FOR_GIVEN_INCIDENT',
         incidentId: this.selectedItem.id
-      })).then(j => {
+      }), false, false).then(j => {
         if (j) {
           this.histories = j
         }
