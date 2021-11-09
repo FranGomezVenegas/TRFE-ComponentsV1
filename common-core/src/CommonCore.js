@@ -68,13 +68,11 @@ export class CommonCore extends LitElement {
       }
       return j
     }).catch(e => {
-      if (feedback) {
-        this.dispatchEvent(new CustomEvent("error", {
-          detail: {...e, log: true},
-          bubbles: true,
-          composed: true
-        }))
-      }
+      this.dispatchEvent(new CustomEvent("error", {
+        detail: {...e, log: true},
+        bubbles: true,
+        composed: true
+      }))
       this.error(e)
     })
   }
