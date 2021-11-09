@@ -122,10 +122,9 @@ export class SamplesSampling extends CommonCore {
       <mwc-icon-button icon="refresh" @click=${this.getSamplesPending}></mwc-icon-button>
       <mwc-icon-button title="Sample Audit" icon="rule" ?disabled=${!this.selectedItem} @click=${this.sampleAudit}>
       </mwc-icon-button>
+      <mwc-icon-button title="Set Sample Date" icon="date_range" ?disabled=${!this.selectedItem} @click=${this.setDate}></mwc-icon-button>
       <mwc-icon-button title="Next" icon="next_week" ?disabled=${!this.selectedItem} @click=${this.moveToNext}>
       </mwc-icon-button>
-      <mwc-icon-button title="Set Sample Date" icon="date_range" ?disabled=${!this.selectedItem} @click=${() =>
-        this.pwdDialog.show()}></mwc-icon-button>
       <mwc-icon-button title="Add Sampling Comment" icon="add_comment" ?disabled=${!this.selectedItem} @click=${() => 
         this.cmnDialog.show()}></mwc-icon-button>
       <mwc-icon-button title="Remove Sampling Comment" icon="speaker_notes_off" ?disabled=${!this.selectedItem} @click=${this.removeComment}>
@@ -274,6 +273,22 @@ export class SamplesSampling extends CommonCore {
     this.esgDialog.show()
   }
 
+  sampleAudit() {
+    if (this.personel) {
+      this.esgDialog.show()
+    } else {
+      this.pullAudit()
+    }
+  }
+
+  setDate() {
+    if (this.personel) {
+      this.setSamplingDate()
+    } else {
+      this.pwdDialog.show()
+    }
+  }
+
   /**
    * Checking whether phrase matched
    */
@@ -316,14 +331,6 @@ export class SamplesSampling extends CommonCore {
       this.selectedAuditId = null
       this.pullAudit()
     })
-  }
-
-  sampleAudit() {
-    if (this.personel) {
-      this.esgDialog.show()
-    } else {
-      this.pullAudit()
-    }
   }
 
   pullAudit() {
