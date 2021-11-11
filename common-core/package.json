@@ -6,9 +6,6 @@
   "version": "0.0.1",
   "main": "index.js",
   "module": "index.js",
-  "scripts": {
-    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
-  },
   "dependencies": {
     "lit": "^2.0.2"
   }
