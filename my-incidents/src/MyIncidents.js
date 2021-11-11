@@ -7,7 +7,6 @@ import '@material/mwc-icon-button';
 import '@material/mwc-textarea';
 import '@material/mwc-textfield';
 import '@spectrum-web-components/icon/sp-icon.js';
-import '@spectrum-web-components/button/sp-button';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
@@ -107,8 +106,7 @@ export class MyIncidents extends CommonCore {
     return {
       selectedItem: { type: Object },
       histories: { type: Array },
-      dialogType: { type: String },
-      fieldErrMsg: { type: Object }
+      dialogType: { type: String }
     };
   }
 
@@ -117,9 +115,16 @@ export class MyIncidents extends CommonCore {
     this.histories = [];
     this.dialogType = "";
     this.fieldErrMsg = {
-      title: "Title is required",
-      id: "Id is required",
-      detail: "Detail is required"
+      en: {
+        title: "Title is required",
+        id: "Id is required",
+        detail: "Detail is required"
+      },
+      es: {
+        title: "El título es obligatorio",
+        id: "Se requiere identificación",
+        detail: "Se requiere detalle"
+      }
     };
   }
 
@@ -156,9 +161,9 @@ export class MyIncidents extends CommonCore {
       escapeKeyAction="">
       <div class="layout vertical flex center-justified">
         <mwc-button dense slot="secondaryAction" dialogAction="close">${langConfig.dialog_button.close["label_"+this.lang]}</mwc-button>
-        <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg.title} required></mwc-textfield>
-        <mwc-textfield id="icdId" label="${langConfig.field.id["label_"+this.lang]}" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg.id} required></mwc-textfield>
-        <mwc-textarea id="detail" label="${langConfig.field.detail["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg.detail} required></mwc-textarea>
+        <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg[this.lang].title} required></mwc-textfield>
+        <mwc-textfield id="icdId" label="${langConfig.field.id["label_"+this.lang]}" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg[this.lang].id} required></mwc-textfield>
+        <mwc-textarea id="detail" label="${langConfig.field.detail["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg[this.lang].detail} required></mwc-textarea>
         <mwc-button raised dense @click=${this.createIncident} ?hidden=${this.dialogType!="create"} .label="${langConfig.dialog_button.new["label_"+this.lang]}"></mwc-button>
         <mwc-button raised dense @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"} .label="${langConfig.dialog_button.confirm["label_"+this.lang]}"></mwc-button>
         <mwc-button raised dense @click=${this.addNote} ?hidden=${this.dialogType!="note"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
