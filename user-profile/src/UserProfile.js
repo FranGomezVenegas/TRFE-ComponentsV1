@@ -273,6 +273,7 @@ export class UserProfile extends CommonCore {
         userSession.finalToken = j.finalToken
         sessionStorage.setItem("userSession", JSON.stringify(userSession))
       }
+      this.pwdDialog.close()
       this.newPwd.value = ""
     })
   }
@@ -316,6 +317,7 @@ export class UserProfile extends CommonCore {
         userSession.finalToken = j.finalToken
         sessionStorage.setItem("userSession", JSON.stringify(userSession))
       }
+      this.esgDialog.close()
       this.newEsg.value = ""
     })
   }
