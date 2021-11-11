@@ -81,6 +81,7 @@ export class UserProfile extends CommonCore {
   static get styles() {
     return [
       Layouts,
+      super.styles,
       css`
       :host {
         display: block;
@@ -119,42 +120,52 @@ export class UserProfile extends CommonCore {
       <div class="input">
         <div class="layout horizontal flex center">
           <mwc-textfield id="newPwd" .label="${langConfig.Password["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e=>e.keyCode==13&&this.pwdDialog.show()}></mwc-textfield>
+            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newPwd.value)this.pwdDialog.show() }}></mwc-textfield>
           <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.pwdDialog.show()} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
           <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e=>e.keyCode==13&&this.esgDialog.show()}></mwc-textfield>
+            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newEsg.value)this.esgDialog.show() }}></mwc-textfield>
           <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.esgDialog.show()} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
         </div>
       </div>
       <sp-button size="xl" @click=${()=>this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
-      <mwc-dialog id="pwdDialog" @opened=${()=>this.oldPwd.focus()}
+      <mwc-dialog id="pwdDialog" @opened=${()=>this.oldPwd.focus()} @closed=${()=>this.attempt=0}
         heading="${langConfig.pwdWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
-        escapeKeyAction="">
+        escapeKeyAction=""
+        hideActions="">
         <div class="layout horizontal flex center-justified" style="opacity:0.8">
           <div class="input layout vertical" style="width: 70%">
             <mwc-textfield id="user" label="${langConfig.userToCheck["label_"+this.lang]}" type="text" .value=${this.userName} disabled></mwc-textfield>
             <mwc-textfield id="oldPwd" label="${langConfig.pwToCheck["label_"+this.lang]}" type="password" iconTrailing="visibility" 
-              @click=${this.showPwd}></mwc-textfield>
+              @click=${this.showPwd}
+              @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
           </div>
         </div>
-        <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
-        <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+        <div style="margin-top:30px">
+          <sp-button size="xl" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+          <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+        </div>
+        ${this.setAttempts()}
       </mwc-dialog>
-      <mwc-dialog id="esgDialog" @opened=${()=>this.oldEsg.focus()}
+      <mwc-dialog id="esgDialog" @opened=${()=>this.oldEsg.focus()} @closed=${()=>this.attempt=0}
         heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
-        escapeKeyAction="">
+        escapeKeyAction=""
+        hideActions="">
         <div class="layout horizontal flex center-justified" style="opacity:0.8">
           <div class="input" style="width: 70%">
             <mwc-textfield id="oldEsg" type="password" iconTrailing="visibility" 
-              @click=${this.showPwd}></mwc-textfield>
+              @click=${this.showPwd}
+              @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
           </div>
         </div>
-        <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
-        <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+        <div style="margin-top:30px">
+          <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+          <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+        </div>
+        ${this.setAttempts()}
       </mwc-dialog>
     `;
   }
@@ -212,6 +223,7 @@ export class UserProfile extends CommonCore {
       this.pwdDialogSurface.style.textAlign = "center";
       this.pwdDialogSurface.style.padding = "20px";
       this.pwdDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
+      this.pwdDialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
       // esign dialog
       this.esgDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
       this.esgDialogSurface.style.backgroundSize = "cover";
@@ -219,6 +231,7 @@ export class UserProfile extends CommonCore {
       this.esgDialogSurface.style.textAlign = "center";
       this.esgDialogSurface.style.padding = "20px";
       this.esgDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
+      this.esgDialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
     })
   }
 
@@ -226,19 +239,23 @@ export class UserProfile extends CommonCore {
    * Checking whether user exist and verified
    */
   checkingUser() {
-    if (this.newPwd.value) {
-      this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
-        actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
-        finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-        userToCheck: this.userName,
-        passwordToCheck: this.oldPwd.value
-      }), false).then(j => {
-        if (j) {
-          this.confirmNewPassword()
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      userToCheck: this.userName,
+      passwordToCheck: this.oldPwd.value
+    }), false).then(j => {
+      if (j) {
+        this.confirmNewPassword()
+      } else {
+        if (this.attempt > 1) {
+          this.pwdDialog.close()
+        } else {
+          this.attempt++
         }
-        this.oldPwd.value = ""
-      })
-    }
+      }
+      this.oldPwd.value = ""
+    })
   }
 
   /**
@@ -264,18 +281,22 @@ export class UserProfile extends CommonCore {
    * Checking whether phrase matched
    */
   checkingPhrase() {
-    if (this.newEsg.value) {
-      this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
-        actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
-        finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-        esignPhraseToCheck: this.oldEsg.value
-      }), false).then(j => {
-        if (j) {
-          this.confirmNewEsign()
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      esignPhraseToCheck: this.oldEsg.value
+    }), false).then(j => {
+      if (j) {
+        this.confirmNewEsign()
+      } else {
+        if (this.attempt > 1) {
+          this.esgDialog.close()
+        } else {
+          this.attempt++
         }
-        this.oldEsg.value = ""
-      })
-    }
+      }
+      this.oldEsg.value = ""
+    })
   }
 
   /**
