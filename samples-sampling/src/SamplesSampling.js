@@ -1,5 +1,5 @@
 import { html, css } from 'lit';
-import { ProceduresCore } from '@trazit/procedures-core';
+import { ProceduresCore, commonLangConfig } from '@trazit/procedures-core';
 
 let langConfig = {
   "title": {
@@ -11,6 +11,14 @@ let langConfig = {
       "label_en": "Samples Pending Sampling Date", 
       "label_es": "Muestras pendientes de la fecha de muestreo"
     }
+  },
+  "newDate":  {
+    "label_en": "New Date",
+    "label_es": "Nueva Fecha"
+  },
+  "auditReason": {
+    "label_en": "Audit Reason",
+    "label_es": "Motivo de la auditoría"
   },
   "userToCheck": {
     "label_en": "User",
@@ -50,6 +58,7 @@ export class SamplesSampling extends ProceduresCore {
       <mwc-icon-button title="Sample Audit" icon="rule" ?disabled=${!this.selectedItem} @click=${this.sampleAudit}>
       </mwc-icon-button>
       <mwc-icon-button title="Set Sample Date" icon="date_range" ?disabled=${!this.selectedItem} @click=${this.setDate}></mwc-icon-button>
+      <mwc-icon-button title="Change Sample Date" icon="event" ?disabled=${!this.selectedItem} @click=${()=>this.dateDialog.show()}></mwc-icon-button>
       <mwc-icon-button title="Next" icon="next_week" ?disabled=${!this.selectedItem} @click=${this.moveToNext}>
       </mwc-icon-button>
       <mwc-icon-button title="Add Sampling Comment" icon="add_comment" ?disabled=${!this.selectedItem} @click=${() => 
@@ -57,6 +66,38 @@ export class SamplesSampling extends ProceduresCore {
       <mwc-icon-button title="Remove Sampling Comment" icon="speaker_notes_off" ?disabled=${!this.selectedItem} @click=${this.removeComment}>
       </mwc-icon-button>
     `
+  }
+
+  dateTemplate() {
+    return html`
+    <mwc-dialog id="dateDialog" @opened=${() => this.dateTxt.focus()}
+      heading=""
+      scrimClickAction=""
+      escapeKeyAction="">
+      <div class="layout horizontal flex center-justified">
+        <div class="input layout vertical">
+          <input id="dateTxt" placeholder="${langConfig.newDate["label_"+ this.lang]}" type="datetime-local">
+          <mwc-textfield id="auditReason" label="${langConfig.auditReason["label_" + this.lang]}" type="text"></mwc-textfield>
+        </div>
+      </div>
+      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.setNewDate}>
+        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+    </mwc-dialog>
+    `
+  }
+
+  get dateDialog() {
+    return this.shadowRoot.querySelector("mwc-dialog#dateDialog")
+  }
+
+  get dateTxt() {
+    return this.shadowRoot.querySelector("input#dateTxt")
+  }
+
+  get auditReasonTxt() {
+    return this.shadowRoot.querySelector("mwc-textfield#auditReason")
   }
 
   constructor() {
@@ -116,6 +157,14 @@ export class SamplesSampling extends ProceduresCore {
     if (this.personel) {
       this.setSamplingDate()
     } else {
+      this.pwdDialog.show()
+    }
+  }
+
+  setNewDate() {
+    if (this.dateTxt.value) {
+      // tell state for new date change event
+      this.newDate = true
       this.pwdDialog.show()
     }
   }
@@ -243,12 +292,17 @@ export class SamplesSampling extends ProceduresCore {
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       procInstanceName: this.procName,
-      actionName: "SETSAMPLINGDATE",
+      actionName: this.newDate ? "CHANGESAMPLINGDATE" : "SETSAMPLINGDATE",
       sampleId: this.selectedItem.sample_id,
       userToCheck: this.userName,
-      passwordToCheck: ""
+      newDateTime: this.newDate ? this.dateTxt.value : "",
+      passwordToCheck: this.pwd.value,
+      auditReasonPhrase: this.auditReasonTxt.value
     })).then(j => {
       console.log(j)
+      this.newDate = null
+      this.dateTxt.value = ""
+      this.auditReasonTxt.value = ""
       this.pwdDialog.close()
       if (j) {
         this.getSamplesPending()

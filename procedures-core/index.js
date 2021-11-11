@@ -1,1 +1,1 @@
-export { ProceduresCore } from './src/ProceduresCore.js';
+export { ProceduresCore, commonLangConfig } from './src/ProceduresCore.js';

@@ -8,7 +8,7 @@ import '@material/mwc-textfield';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import './audit-dialog';
-
+export { commonLangConfig };
 let langConfig = {};
 
 export class ProceduresCore extends CommonCore {
@@ -104,6 +104,7 @@ export class ProceduresCore extends CommonCore {
       <vaadin-grid-filter-column auto-width path="spec_code" header="Spec"></vaadin-grid-filter-column>
       <vaadin-grid-filter-column auto-width path="spec_variation_name" header="Variation"></vaadin-grid-filter-column>
     </vaadin-grid>
+    ${this.dateTemplate()}
     <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>this.attempt=0}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
@@ -164,6 +165,7 @@ export class ProceduresCore extends CommonCore {
 
   getTitle() {}
   getButton() {}
+  dateTemplate() {}
 
   get audit() {
     return this.shadowRoot.querySelector("audit-dialog")
