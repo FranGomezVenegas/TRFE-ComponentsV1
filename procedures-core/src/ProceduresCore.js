@@ -9,29 +9,13 @@ import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import './audit-dialog';
 
-const langConfig = {
-  "userToCheck": {
-    "label_en": "User",
-    "label_es": "Usuario"
-  },
-  "pwToCheck": {
-    "label_en": "Current Password",
-    "label_es": "Contraseña Actual"
-  },
-  "confirmUserNote": {
-    "label_en": "Note",
-    "label_es": "Nota"
-  },
-  "pwdWindowTitle": {
-    "label_en": "Please confirm your credentials (user & password)",
-    "label_es": "Por favor confirma tu identidad (usuario y contraseña)"
-  }
-};
+let langConfig = {};
 
 export class ProceduresCore extends CommonCore {
   static get styles() {
     return [
       Layouts,
+      super.styles,
       css`
         mwc-button {
           --mdc-typography-button-text-transform: none;
@@ -57,13 +41,19 @@ export class ProceduresCore extends CommonCore {
   static get properties() {
     return {
       selectedItem: { type: Object },
-      userName: { type: String }
+      userName: { type: String },
+      procName: { type: String },
+      personel: { type: Boolean }
     };
   }
 
   constructor() {
     super();
     this.userName = "";
+  }
+
+  initLang(data) {
+    langConfig = data
   }
 
   firstUpdated() {
@@ -78,6 +68,14 @@ export class ProceduresCore extends CommonCore {
       this.pwdDialogSurface.style.padding = "20px";
       this.pwdDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
 
+      // esign dialog
+      this.esgDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+      this.esgDialogSurface.style.backgroundSize = "cover";
+      this.esgDialogSurface.style.backgroundRepeat = "no-repeat";
+      this.esgDialogSurface.style.textAlign = "center";
+      this.esgDialogSurface.style.padding = "20px";
+      this.esgDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
+
       this.cmnDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
       this.cmnDialogSurface.style.backgroundSize = "cover";
       this.cmnDialogSurface.style.backgroundRepeat = "no-repeat";
@@ -87,24 +85,14 @@ export class ProceduresCore extends CommonCore {
   }
 
   authorized() {
-    this.getSamplesPending()
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
   }
 
   render() {
     return html`
+    ${this.getTitle()}
     <div class="layout horizontal center flex wrap">
-      <mwc-icon-button icon="refresh" @click=${this.getSamplesPending}></mwc-icon-button>
-      <mwc-icon-button title="Sample Audit" icon="rule" ?disabled=${!this.selectedItem} @click=${this.sampleAudit}>
-      </mwc-icon-button>
-      <mwc-icon-button title="Next" icon="next_week" ?disabled=${!this.selectedItem} @click=${this.moveToNext}>
-      </mwc-icon-button>
-      <mwc-icon-button title="Set Sample Date" icon="date_range" ?disabled=${!this.selectedItem} @click=${() =>
-        this.pwdDialog.show()}></mwc-icon-button>
-      <mwc-icon-button title="Add Sampling Comment" icon="add_comment" ?disabled=${!this.selectedItem} @click=${() => 
-        this.cmnDialog.show()}></mwc-icon-button>
-      <mwc-icon-button title="Remove Sampling Comment" icon="speaker_notes_off" ?disabled=${!this.selectedItem} @click=${this.removeComment}>
-      </mwc-icon-button>
+      ${this.getButton()}
     </div>
     <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort>
       <vaadin-grid-filter-column flex-grow="0" text-align="end" path="sample_id" header="Sample ID">
@@ -116,22 +104,27 @@ export class ProceduresCore extends CommonCore {
       <vaadin-grid-filter-column auto-width path="spec_code" header="Spec"></vaadin-grid-filter-column>
       <vaadin-grid-filter-column auto-width path="spec_variation_name" header="Variation"></vaadin-grid-filter-column>
     </vaadin-grid>
-    <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()}
+    <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>this.attempt=0}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
-      escapeKeyAction="">
+      escapeKeyAction=""
+      hideActions="">
       <div class="layout horizontal flex center-justified" style="opacity:0.8">
         <div class="input layout vertical" style="width: 70%">
           <mwc-textfield id="user" label="${langConfig.userToCheck[" label_" + this.lang]}" type="text"
             .value=${this.userName} disabled></mwc-textfield>
           <mwc-textfield id="pwd" label="${langConfig.pwToCheck[" label_" + this.lang]}" type="password"
-            iconTrailing="visibility" @click=${this.showPwd}></mwc-textfield>
+            iconTrailing="visibility" @click=${this.showPwd}
+            @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
         </div>
       </div>
-      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.checkingUser}>
-        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+      <div style="margin-top:30px">
+        <sp-button size="xl" @click=${this.checkingUser}>
+          ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+        <sp-button size="xl" variant="secondary" dialogAction="decline">
+          ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+      </div>
+      ${this.setAttempts()}
     </mwc-dialog>
     <mwc-dialog id="cmnDialog" @opened=${() => this.cmn.focus()}
       heading=""
@@ -147,9 +140,30 @@ export class ProceduresCore extends CommonCore {
       <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
         ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
     </mwc-dialog>
-    <audit-dialog></audit-dialog>
+    <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
+    <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()} @closed=${()=>this.attempt=0}
+      heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
+      scrimClickAction=""
+      escapeKeyAction=""
+      hideActions="">
+      <div class="layout horizontal flex center-justified" style="opacity:0.8">
+        <div class="input" style="width: 70%">
+          <mwc-textfield id="esg" type="password" iconTrailing="visibility" 
+            @click=${this.showPwd}
+            @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
+        </div>
+      </div>
+      <div style="margin-top:30px">
+        <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+        <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+      </div>
+      ${this.setAttempts()}
+    </mwc-dialog>
     `;
   }
+
+  getTitle() {}
+  getButton() {}
 
   get audit() {
     return this.shadowRoot.querySelector("audit-dialog")
@@ -171,6 +185,18 @@ export class ProceduresCore extends CommonCore {
     return this.pwdDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
+  get esgDialog() {
+    return this.shadowRoot.querySelector("mwc-dialog#esgDialog")
+  }
+
+  get esg() {
+    return this.shadowRoot.querySelector("mwc-textfield#esg")
+  }
+
+  get esgDialogSurface() {
+    return this.esgDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
   get cmnDialog() {
     return this.shadowRoot.querySelector("mwc-dialog#cmnDialog")
   }
@@ -181,132 +207,5 @@ export class ProceduresCore extends CommonCore {
 
   get cmnDialogSurface() {
     return this.cmnDialog.shadowRoot.querySelector(".mdc-dialog__surface")
-  }
-
-  getSamplesPending() {
-    this.fetchApi(this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
-      procInstanceName: "em-demo-a",
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      actionName: "SAMPLES_BY_STAGE",
-      sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
-      whereFieldsName: "current_stage|sample_config_code not in*",
-      whereFieldsValue: "Sampling|prog_pers_template"
-    })).then(j => {
-      if (j) {
-        this.grid.items = j
-      }
-    })
-  }
-
-  /**
-   * Once an incident item selected
-   * @param {*} e the grid
-   */
-  selectItem(e) {
-    // deselect old selected item if found
-    if (this.selectedItem) {
-      e.target.deselectItem(this.selectedItem)
-      this.selectedItem = null
-    }
-    if (e.detail.value) {
-      e.target.selectedItems = [e.detail.value]
-      this.selectedItem = e.detail.value
-    }
-  }
-
-  sampleAudit() {
-    this.fetchApi(this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      dbName: this.config.dbName,
-      procInstanceName: "em-demo-a",
-      actionName: "GET_SAMPLE_AUDIT",
-      sampleId: this.selectedItem.sample_id,
-      sampleAuditFieldToRetrieve: ""
-    })).then(j => {
-      console.log(j)
-      this.audit.audits = j
-    })
-  }
-
-  moveToNext() {
-    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      procInstanceName: "em-demo-a",
-      actionName: "SAMPLESTAGE_MOVETONEXT",
-      sampleId: this.selectedItem.sample_id
-    })).then(j => {
-      console.log(j)
-      if (j) {
-        this.getSamplesPending()
-      }
-    })
-  }
-
-  /**
-   * Checking whether user exist and verified
-   */
-  checkingUser() {
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
-      actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      userToCheck: this.userName,
-      passwordToCheck: this.pwd.value
-    })).then(j => {
-      if (j) {
-        this.setSamplingDate()
-      }
-      this.pwd.value = ""
-    })
-  }
-
-  setSamplingDate() {
-    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      procInstanceName: "em-demo-a",
-      actionName: "SETSAMPLINGDATE",
-      sampleId: this.selectedItem.sample_id,
-      userToCheck: this.userName,
-      passwordToCheck: ""
-    })).then(j => {
-      console.log(j)
-      if (j) {
-        this.getSamplesPending()
-      }
-    })
-  }
-
-  addComment() {
-    if (this.cmn.value) {
-      this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-        actionName: "SAMPLINGCOMMENTADD",
-        finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-        sampleId: this.selectedItem.sample_id,
-        sampleComment: this.cmn.value,
-        dbName: this.config.dbName,
-        procInstanceName: "em-demo-a"  
-      })).then(j => {
-        if (j) {
-          this.getSamplesPending()
-        }
-        this.cmn.value = ""
-      })
-    }
-  }
-
-  removeComment() {
-    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      actionName: "SAMPLINGCOMMENTREMOVE",
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      sampleId: this.selectedItem.sample_id,
-      dbName: this.config.dbName,
-      procInstanceName: "em-demo-a"  
-    })).then(j => {
-      if (j) {
-        this.getSamplesPending()
-      }
-    })
   }
 }

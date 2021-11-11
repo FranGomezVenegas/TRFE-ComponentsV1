@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
 import '@material/mwc-dialog';
+import '@material/mwc-icon';
 import '@spectrum-web-components/tooltip/sp-tooltip.js';
 
 export class AuditDialog extends LitElement {
@@ -65,13 +66,22 @@ export class AuditDialog extends LitElement {
         <div class="layout horizontal flex center" style="margin:0;border-left:3px solid #ccc">
           <mwc-icon style="margin-left:-13px;color:#3f51b5;background:white">radio_button_checked</mwc-icon>
           <sp-tooltip open placement="right" variant="info">
-            <mwc-button class="sign" dense unelevated label="Sign"></mwc-button>
+            ${a.reviewed?
+              html`
+              <mwc-icon title="reviewed_on: ${a.reviewed_on}">grading</mwc-icon>
+              `:
+              html`
+              <mwc-button class="sign" dense unelevated label="Sign"
+                @click=${()=>this.signAudit(a.audit_id)}></mwc-button>
+              `
+            }
             <div class="layout horizontal flex">
               <input type="checkbox" @click=${e=>this.showItem(e,a)}>
               <div>action_name: ${a.action_name}</div>
             </div>
             <div id="audit-${a.audit_id}" hidden=true>
               *performed_on: ${a.date}
+              ${a.reviewed?html`<br>*reviewed_on: ${a.reviewed_on}`:null}
               <li>audit_id: ${a.audit_id}</li>
               fields_updated: ${a.fields_updated}<br><br>
               ${a.sublevel.length&&a.sublevel[0].date?
@@ -80,13 +90,22 @@ export class AuditDialog extends LitElement {
                   <div class="layout horizontal flex center" style="margin:5px">
                     <mwc-icon style="color:#3f51b5">radio_button_checked</mwc-icon>
                     <sp-tooltip class="sub" open placement="right" variant="info">
-                      <mwc-button class="sign" dense unelevated label="Sign"></mwc-button>
+                      ${s.reviewed?
+                        html`
+                        <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
+                        `:
+                        html`
+                        <mwc-button class="sign" dense unelevated label="Sign"
+                          @click=${()=>this.signAudit(s.audit_id)}></mwc-button>
+                        `
+                      }
                       <div class="layout horizontal flex">
                         <input type="checkbox" checked @click=${e=>this.showSubItem(e,s)}>
                         <div>action_name: ${s.action_name}</div>
                       </div>
                       <div id="audit-${s.audit_id}">
                         *performed_on: ${s.date}<br>
+                        ${s.reviewed?html`*reviewed_on: ${s.reviewed_on}<br>`:null}
                         fields_updated: ${s.fields_updated}
                       </div>
                     </sp-tooltip>
@@ -101,6 +120,13 @@ export class AuditDialog extends LitElement {
       <mwc-button slot="secondaryAction" label="close" @click=${()=>this.audits=[]}></mwc-button>
     </mwc-dialog>
     `;
+  }
+
+  signAudit(id) {
+    alert(`Audit ID: ${id}`)
+    this.dispatchEvent(new CustomEvent('sign-audit', {
+      detail: { audit_id: id }
+    }))
   }
 
   get dialog() {
