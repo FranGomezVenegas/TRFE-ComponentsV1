@@ -2,6 +2,16 @@ import { html, css } from 'lit';
 import { ProceduresCore } from '@trazit/procedures-core';
 
 let langConfig = {
+  "title": {
+    "personel": {
+      "label_en": "Personnel Samples Pending Sampling Date", 
+      "label_es": "Muestras de personal pendientes de la fecha de muestreo"
+    },
+    "non": {
+      "label_en": "Samples Pending Sampling Date", 
+      "label_es": "Muestras pendientes de la fecha de muestreo"
+    }
+  },
   "userToCheck": {
     "label_en": "User",
     "label_es": "Usuario"
@@ -26,7 +36,12 @@ let langConfig = {
 
 export class SamplesSampling extends ProceduresCore {
   getTitle() {
-    return html`<h1>${this.personel?'Personnel ':''}Samples Pending Sampling Date</h1>`
+    return html`
+      <h1>${this.personel?
+        html`${langConfig.title.personel["label_"+this.lang]}`:
+        html`${langConfig.title.non["label_"+this.lang]}`}
+      </h1>
+    `
   }
 
   getButton() {
