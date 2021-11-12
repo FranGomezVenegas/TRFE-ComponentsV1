@@ -1,0 +1,21 @@
+{
+  "name": "@trazit/plate-reading",
+  "description": "Component air proc samples plate reading of trazit platform",
+  "license": "MIT",
+  "author": "Trazit Team",
+  "version": "0.0.1",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+  },
+  "dependencies": {
+    "@trazit/procedures-core": "file:.yalc/@trazit/procedures-core",
+    "lit": "^2.0.2"
+  },
+  "devDependencies": {
+    "@spectrum-web-components/theme": "^0.8.15",
+    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
+    "@web/dev-server": "^0.1.26"
+  }
+}
