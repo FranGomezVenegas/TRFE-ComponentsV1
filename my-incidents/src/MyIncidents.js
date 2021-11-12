@@ -155,10 +155,9 @@ export class MyIncidents extends CommonCore {
         html`<history-item .history=${h}></history-item>`
       )}
     </div>
-    <mwc-dialog id="icdDialog" @opened=${this.dialogOpened}
+    <mwc-dialog id="icdDialog" @opened=${this.dialogOpened} @closed=${()=>{this.icdTitle.value="";this.icdId.value="";this.icdDetail.value=""}}
       heading=""
-      scrimClickAction=""
-      escapeKeyAction="">
+      scrimClickAction="">
       <div class="layout vertical flex center-justified">
         <mwc-button dense slot="secondaryAction" dialogAction="close">${langConfig.dialog_button.close["label_"+this.lang]}</mwc-button>
         <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg[this.lang].title} required></mwc-textfield>
@@ -250,9 +249,6 @@ export class MyIncidents extends CommonCore {
       ...params
     })).then(j => {
       if (j) {
-        this.icdTitle.value = ""
-        this.icdId.value = ""
-        this.icdDetail.value = ""
         this.icdDialog.close()
         this.getOpenIncidents()
       }

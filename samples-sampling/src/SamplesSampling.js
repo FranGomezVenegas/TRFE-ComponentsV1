@@ -70,10 +70,9 @@ export class SamplesSampling extends ProceduresCore {
 
   dateTemplate() {
     return html`
-    <mwc-dialog id="dateDialog" @opened=${() => this.dateTxt.focus()}
+    <mwc-dialog id="dateDialog" @opened=${() => this.dateTxt.focus()} @closed=${()=>{this.dateTxt.value="";this.auditReasonTxt.value=""}}
       heading=""
-      scrimClickAction=""
-      escapeKeyAction="">
+      scrimClickAction="">
       <div class="layout horizontal flex center-justified">
         <div class="input layout vertical">
           <input id="dateTxt" placeholder="${langConfig.newDate["label_"+ this.lang]}" type="datetime-local">
@@ -199,7 +198,6 @@ export class SamplesSampling extends ProceduresCore {
           this.auditReview()
         } else { // when select sample id on personel
           this.pullAudit()
-          this.esg.value = ""
         }
       } else {
         if (this.attempt > 1) {
@@ -207,7 +205,6 @@ export class SamplesSampling extends ProceduresCore {
         } else {
           this.attempt++
         }
-        this.esg.value = ""
       }
     })
   }
@@ -227,7 +224,6 @@ export class SamplesSampling extends ProceduresCore {
     })).then(j => {
       console.log(j)
       this.esgDialog.close()
-      this.esg.value = ""
       this.selectedAuditId = null
       this.pullAudit()
     })
@@ -283,7 +279,6 @@ export class SamplesSampling extends ProceduresCore {
           this.attempt++
         }
       }
-      this.pwd.value = ""
     })
   }
 
@@ -301,8 +296,6 @@ export class SamplesSampling extends ProceduresCore {
     })).then(j => {
       console.log(j)
       this.newDate = null
-      this.dateTxt.value = ""
-      this.auditReasonTxt.value = ""
       this.pwdDialog.close()
       if (j) {
         this.getSamplesPending()
@@ -323,7 +316,6 @@ export class SamplesSampling extends ProceduresCore {
         if (j) {
           this.getSamplesPending()
         }
-        this.cmn.value = ""
       })
     }
   }

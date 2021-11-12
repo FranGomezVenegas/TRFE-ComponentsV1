@@ -130,10 +130,9 @@ export class UserProfile extends CommonCore {
         </div>
       </div>
       <sp-button size="xl" @click=${()=>this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
-      <mwc-dialog id="pwdDialog" @opened=${()=>this.oldPwd.focus()} @closed=${()=>this.attempt=0}
+      <mwc-dialog id="pwdDialog" @opened=${()=>this.oldPwd.focus()} @closed=${()=>{this.attempt=0;this.oldPwd.value=""}}
         heading="${langConfig.pwdWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
-        escapeKeyAction=""
         hideActions="">
         <div class="layout horizontal flex center-justified" style="opacity:0.8">
           <div class="input layout vertical" style="width: 70%">
@@ -149,10 +148,9 @@ export class UserProfile extends CommonCore {
         </div>
         ${this.setAttempts()}
       </mwc-dialog>
-      <mwc-dialog id="esgDialog" @opened=${()=>this.oldEsg.focus()} @closed=${()=>this.attempt=0}
+      <mwc-dialog id="esgDialog" @opened=${()=>this.oldEsg.focus()} @closed=${()=>{this.attempt=0;this.oldEsg.value=""}}
         heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
-        escapeKeyAction=""
         hideActions="">
         <div class="layout horizontal flex center-justified" style="opacity:0.8">
           <div class="input" style="width: 70%">
@@ -254,7 +252,6 @@ export class UserProfile extends CommonCore {
           this.attempt++
         }
       }
-      this.oldPwd.value = ""
     })
   }
 
@@ -296,7 +293,6 @@ export class UserProfile extends CommonCore {
           this.attempt++
         }
       }
-      this.oldEsg.value = ""
     })
   }
 

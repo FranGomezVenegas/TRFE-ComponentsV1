@@ -59,8 +59,7 @@ export class AuditDialog extends LitElement {
     return html`
     <mwc-dialog ?open=${this.audits.length} class="layout vertical"
       heading=""
-      scrimClickAction=""
-      escapeKeyAction="">
+      scrimClickAction="">
       ${this.audits.map(a=>
         html`
         <div class="layout horizontal flex center" style="margin:0;border-left:3px solid #ccc">

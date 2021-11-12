@@ -153,11 +153,10 @@ export class PlatformLogin extends CommonCore {
       </div>
       <div>
         <mwc-icon-button id="video" icon="videocam" title="Video" @click=${()=>this.shadowRoot.querySelector("#videoDialog").open=true}></mwc-icon-button>
-        <mwc-dialog id="videoDialog" 
+        <mwc-dialog id="videoDialog" @closed=${this.closeVideo}
           heading=""
-          scrimClickAction=""
-          escapeKeyAction="cancel">
-          <iframe width="420" height="345" src="https://www.youtube.com/embed/qzZv5e0gg9M"></iframe>
+          scrimClickAction="">
+          <iframe id="ytube" width="420" height="345" src="https://www.youtube.com/embed/qzZv5e0gg9M?enablejsapi=1"></iframe>
           <mwc-icon-button icon="close" 
             slot="secondaryAction"
             dialogAction="cancel"> 
@@ -181,6 +180,13 @@ export class PlatformLogin extends CommonCore {
 
   get role() {
     return this.shadowRoot.querySelector("mwc-select#role")
+  }
+
+  closeVideo() {
+    this.shadowRoot.querySelector("#ytube").contentWindow.postMessage(JSON.stringify({
+      event: 'command',
+      func: 'stopVideo' 
+    }), '*');
   }
 
   clearSessionStorage() {

@@ -105,10 +105,9 @@ export class ProceduresCore extends CommonCore {
       <vaadin-grid-filter-column auto-width path="spec_variation_name" header="Variation"></vaadin-grid-filter-column>
     </vaadin-grid>
     ${this.dateTemplate()}
-    <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>this.attempt=0}
+    <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>{this.attempt=0;this.pwd.value=""}}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
-      escapeKeyAction=""
       hideActions="">
       <div class="layout horizontal flex center-justified" style="opacity:0.8">
         <div class="input layout vertical" style="width: 70%">
@@ -127,10 +126,9 @@ export class ProceduresCore extends CommonCore {
       </div>
       ${this.setAttempts()}
     </mwc-dialog>
-    <mwc-dialog id="cmnDialog" @opened=${() => this.cmn.focus()}
+    <mwc-dialog id="cmnDialog" @opened=${() => this.cmn.focus()} @closed=${()=>this.cmn.value=""}
       heading=""
-      scrimClickAction=""
-      escapeKeyAction="">
+      scrimClickAction="">
       <div class="layout horizontal flex center-justified">
         <div class="input">
           <mwc-textfield id="cmn" label="Add Comment"></mwc-textfield>
@@ -142,10 +140,9 @@ export class ProceduresCore extends CommonCore {
         ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
     </mwc-dialog>
     <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
-    <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()} @closed=${()=>this.attempt=0}
+    <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()} @closed=${()=>{this.attempt=0;this.esg.value=""}}
       heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
       scrimClickAction=""
-      escapeKeyAction=""
       hideActions="">
       <div class="layout horizontal flex center-justified" style="opacity:0.8">
         <div class="input" style="width: 70%">
