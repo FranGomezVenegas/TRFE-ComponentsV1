@@ -207,6 +207,9 @@ export class MyIncidents extends CommonCore {
     }), false, false).then(j => {
       if (j) {
         this.grid.items = j
+        this.grid.querySelectorAll("vaadin-checkbox").forEach(c => {
+          c.disabled = true
+        })
       }
     })
   }
@@ -216,6 +219,11 @@ export class MyIncidents extends CommonCore {
    * @param {*} e the grid
    */
   selectItem(e) {
+    if (!e.detail.value) {
+      this.selectedItem = null
+      this.histories = []
+      return
+    }
     // deselect old selected item if found
     if (this.selectedItem) {
       e.target.deselectItem(this.selectedItem)
