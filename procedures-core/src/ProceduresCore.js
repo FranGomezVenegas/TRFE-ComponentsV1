@@ -34,6 +34,12 @@ export class ProceduresCore extends CommonCore {
           --mdc-dialog-heading-ink-color: blue;
           --mdc-typography-headline6-font-size: 35px;
         }
+        mwc-icon-button#prev {
+          -webkit-transform:rotateY(180deg);
+          -moz-transform:rotateY(180deg);
+          -o-transform:rotateY(180deg);
+          -ms-transform:rotateY(180deg);
+        }
       `
     ];
   }
@@ -51,6 +57,17 @@ export class ProceduresCore extends CommonCore {
     super();
     this.userName = "";
   }
+
+  updated(updates) {
+    super.updated(updates)
+    if (updates.has('personel')) {
+      if ((this.personel == false || this.personel == true) && this.userName) {
+        this.getSamples()
+      }
+    }
+  }
+
+  getSamples() {}
 
   initLang(data) {
     langConfig = data
@@ -85,6 +102,7 @@ export class ProceduresCore extends CommonCore {
   }
 
   authorized() {
+    this.getSamples()
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
   }
 
@@ -95,14 +113,7 @@ export class ProceduresCore extends CommonCore {
       ${this.getButton()}
     </div>
     <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort>
-      <vaadin-grid-filter-column flex-grow="0" text-align="end" path="sample_id" header="Sample ID">
-      </vaadin-grid-filter-column>
-      <vaadin-grid-filter-column auto-width path="program_name" header="Project"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column flex-grow="0" path="location_name" header="Location"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column auto-width path="sampling_date" header="Sampling Date"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column auto-width path="sampling_comment" header="Sampling Comment"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column auto-width path="spec_code" header="Spec"></vaadin-grid-filter-column>
-      <vaadin-grid-filter-column auto-width path="spec_variation_name" header="Variation"></vaadin-grid-filter-column>
+      ${this.gridList()}
     </vaadin-grid>
     ${this.dateTemplate()}
     <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>{this.attempt=0;this.pwd.value=""}}
@@ -160,9 +171,26 @@ export class ProceduresCore extends CommonCore {
     `;
   }
 
-  getTitle() {}
+  getTitle() {
+    return html`
+      <h1>${this.personel?
+        html`${langConfig.title.personel["label_"+this.lang]}`:
+        html`${langConfig.title.non["label_"+this.lang]}`}
+      </h1>
+    `
+  }
   getButton() {}
   dateTemplate() {}
+  gridList() {
+    return Object.entries(langConfig.gridHeader).map(
+      ([key, value], i) => html`
+        ${i==0 ?
+          html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+          html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+        }
+      `
+    )
+  }
 
   get audit() {
     return this.shadowRoot.querySelector("audit-dialog")

@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html } from 'lit';
 import { ProceduresCore, commonLangConfig } from '@trazit/procedures-core';
 
 let langConfig = {
@@ -39,22 +39,36 @@ let langConfig = {
   "esignWindowTitle": {
     "label_en": "Please enter your eSign",
     "label_es": "Por favor entra tu frase de Firma Electrónica"
+  },
+  "gridHeader": {
+    "sample_id": {
+      label_en:"Sample ID", label_es: "ID Muestra"
+    },
+    "program_name": {
+      label_en:"Project", label_es: "Programa"
+    },
+    "location_name": {
+      label_en:"Location", label_es: "Ubicación"
+    },
+    "sampling_date": {
+      label_en:"sampling Date", label_es: "ID Fecha de Muestreo"
+    },
+    "sampling_comment": {
+      label_en:"sampling Comment", label_es: "Comentario Muestreo"
+    },
+    "spec_code": {
+      label_en:"Spec", label_es: "Especificación"
+    },
+    "spec_variation_name": {
+      label_en:"Variation", label_es: "Variación"
+    }
   }
 }
 
 export class SamplesSampling extends ProceduresCore {
-  getTitle() {
-    return html`
-      <h1>${this.personel?
-        html`${langConfig.title.personel["label_"+this.lang]}`:
-        html`${langConfig.title.non["label_"+this.lang]}`}
-      </h1>
-    `
-  }
-
   getButton() {
     return html`
-      <mwc-icon-button icon="refresh" @click=${this.getSamplesPending}></mwc-icon-button>
+      <mwc-icon-button icon="refresh" @click=${this.getSamples}></mwc-icon-button>
       <mwc-icon-button title="Sample Audit" icon="rule" ?disabled=${!this.selectedItem} @click=${this.sampleAudit}>
       </mwc-icon-button>
       <mwc-icon-button title="Set Sample Date" icon="date_range" ?disabled=${!this.selectedItem} @click=${this.setDate}></mwc-icon-button>
@@ -103,20 +117,6 @@ export class SamplesSampling extends ProceduresCore {
     super()
     this.procName = "em-demo-a"
     this.initLang(langConfig)
-  }
-
-  updated(updates) {
-    super.updated(updates)
-    if (updates.has('personel')) {
-      if ((this.personel == false || this.personel == true) && this.userName) {
-        this.getSamplesPending()
-      }
-    }
-  }
-
-  authorized() {
-    this.getSamplesPending()
-    super.authorized()
   }
 
   /**
@@ -168,7 +168,7 @@ export class SamplesSampling extends ProceduresCore {
     }
   }
 
-  getSamplesPending() {
+  getSamples() {
     this.fetchApi(this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
       procInstanceName: this.procName,
       dbName: this.config.dbName,
@@ -255,7 +255,7 @@ export class SamplesSampling extends ProceduresCore {
     })).then(j => {
       console.log(j)
       if (j) {
-        this.getSamplesPending()
+        this.getSamples()
       }
     })
   }
@@ -298,7 +298,7 @@ export class SamplesSampling extends ProceduresCore {
       this.newDate = null
       this.pwdDialog.close()
       if (j) {
-        this.getSamplesPending()
+        this.getSamples()
       }
     })
   }
@@ -314,7 +314,7 @@ export class SamplesSampling extends ProceduresCore {
         procInstanceName: this.procName  
       })).then(j => {
         if (j) {
-          this.getSamplesPending()
+          this.getSamples()
         }
       })
     }
@@ -329,7 +329,7 @@ export class SamplesSampling extends ProceduresCore {
       procInstanceName: this.procName  
     })).then(j => {
       if (j) {
-        this.getSamplesPending()
+        this.getSamples()
       }
     })
   }
