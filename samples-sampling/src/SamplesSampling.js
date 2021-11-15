@@ -82,6 +82,24 @@ export class SamplesSampling extends ProceduresCore {
     `
   }
 
+  commentDialog() {
+    return html`
+    <mwc-dialog id="cmnDialog" @opened=${() => this.cmn.focus()} @closed=${()=>this.cmn.value=""}
+      heading=""
+      scrimClickAction="">
+      <div class="layout horizontal flex center-justified">
+        <div class="input">
+          <mwc-textfield id="cmn" label="Add Comment"></mwc-textfield>
+        </div>
+      </div>
+      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.addComment}>
+        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+    </mwc-dialog>
+    `
+  }
+
   dateTemplate() {
     return html`
     <mwc-dialog id="dateDialog" @opened=${() => this.dateTxt.focus()} @closed=${()=>{this.dateTxt.value="";this.auditReasonTxt.value=""}}
@@ -113,10 +131,30 @@ export class SamplesSampling extends ProceduresCore {
     return this.shadowRoot.querySelector("mwc-textfield#auditReason")
   }
 
+  get cmnDialog() {
+    return this.shadowRoot.querySelector("mwc-dialog#cmnDialog")
+  }
+
+  get cmn() {
+    return this.shadowRoot.querySelector("mwc-textfield#cmn")
+  }
+
+  get cmnDialogSurface() {
+    return this.cmnDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
   constructor() {
     super()
     this.procName = "em-demo-a"
     this.initLang(langConfig)
+  }
+
+  adjustAnotherDialog() {
+    this.cmnDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+    this.cmnDialogSurface.style.backgroundSize = "cover";
+    this.cmnDialogSurface.style.backgroundRepeat = "no-repeat";
+    this.cmnDialogSurface.style.textAlign = "center";
+    this.cmnDialogSurface.style.padding = "20px";
   }
 
   /**
@@ -260,26 +298,8 @@ export class SamplesSampling extends ProceduresCore {
     })
   }
 
-  /**
-   * Checking whether user exist and verified
-   */
-  checkingUser() {
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
-      actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      userToCheck: this.userName,
-      passwordToCheck: this.pwd.value
-    }), false).then(j => {
-      if (j) {
-        this.setSamplingDate()
-      } else {
-        if (this.attempt > 1) {
-          this.pwdDialog.close()
-        } else {
-          this.attempt++
-        }
-      }
-    })
+  needConfirmUser() {
+    this.setSamplingDate()
   }
 
   setSamplingDate() {
