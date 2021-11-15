@@ -1,7 +1,10 @@
-import { html } from 'lit';
+import { html, css, render } from 'lit';
 import { ProceduresCore, commonLangConfig } from '@trazit/procedures-core';
 
 let langConfig = {
+  "close": {
+    "label_en": "Close", "label_es": "Cerrar"
+  },
   "title": {
     "personel": {
       "label_en": "Personnel Samples Pending Plate Reading", 
@@ -81,17 +84,48 @@ let langConfig = {
     "incubation2_end": {
       label_en:"incubation 2 end", label_es: "Fin 2a Incubacion"
     }
+  },
+  "resultHeader": {
+    "spec_eval": {
+      label_en:"spec_eval", label_es:"Eval Espec"
+    },
+    "result_id": {
+      label_en:"Result Id", label_es:"Id Resultado"
+    },
+    "analysis": {
+      label_en:"Analysis", label_es:"Análísis"
+    },
+    "param_name": {
+      label_en:"Parameter", label_es:"Parámetro"
+    },
+    "raw_value": {
+      label_en:"Value", label_es:"Valor"
+    }
   }
 }
 
 export class PlateReading extends ProceduresCore {
+  static get styles() {
+    return [
+      super.styles,
+      css`
+      #rslDialog {
+        --mdc-dialog-min-width: 800px;
+      }
+      #rGrid {
+        font-size: 10px;
+      }
+      `
+    ]
+  }
+
   getButton() {
     return html`
       <mwc-icon-button icon="refresh" @click=${this.getSamples}></mwc-icon-button>
       <mwc-icon-button id="prev" title="Previous" icon="next_week" ?disabled=${!this.selectedItem} @click=${()=>this.rsnDialog.show()}></mwc-icon-button>
       <mwc-icon-button title="Next" icon="next_week" ?disabled=${!this.selectedItem} @click=${()=>this.move("next")}></mwc-icon-button>
       <mwc-icon-button title="Sample Audit" icon="rule" ?disabled=${!this.selectedItem} @click=${this.sampleAudit}></mwc-icon-button>
-      <mwc-icon-button title="Enter Result" icon="document_scanner" ?disabled=${!this.selectedItem} @click=${this.enterResult}></mwc-icon-button>
+      <mwc-icon-button title="Enter Result" icon="document_scanner" ?disabled=${!this.selectedItem} @click=${()=>this.rslDialog.show()}></mwc-icon-button>
     `
   }
 
@@ -112,6 +146,92 @@ export class PlateReading extends ProceduresCore {
     `
   }
 
+  resultDialog() {
+    return html`
+    <mwc-dialog id="rslDialog" @opening=${this.getResult}
+      heading=""
+      scrimClickAction="">
+      <div class="layout horizontal flex center-justified">
+        <vaadin-grid id="rGrid" theme="row-dividers">
+          ${this.resultList()}
+        </vaadin-grid>
+      </div>
+      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+        ${langConfig.close["label_" + this.lang]}</sp-button>
+    </mwc-dialog>
+    `
+  }
+  resultList() {
+    return Object.entries(langConfig.resultHeader).map(
+      ([key, value], i) => html`
+        ${i==0 ?
+          html`
+            <vaadin-grid-column .renderer=${this.checkRenderer}></vaadin-grid-column>
+            <vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"
+            .renderer=${e=>this.bulletRenderer(e, this)}></vaadin-grid-column>
+          `:
+          html`
+          ${i==Object.entries(langConfig.resultHeader).length-1 ? 
+            html`
+            <vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"
+              .renderer="${e=>this.fieldRenderer(e, this)}"></vaadin-grid-column>
+            `: 
+            html`<vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+          }
+          `
+        }
+      `
+    )
+  }
+
+  resDetail(root) {
+
+  }
+  bulletRenderer(root) {
+    render(html`${this.rGrid.items[0].spec_eval?html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`:null}`, root)
+  }
+  checkRenderer(root) {
+    render(html`<input type="checkbox">`, root)
+  }
+  fieldRenderer(root, me) {
+    render(html`<mwc-textfield style="--mdc-text-field-fill-color: green"
+      @keydown=${e=>{if(e.keyCode==13&&e.target.value)me.enterResult(e)}}
+      ?disabled=${this.rGrid.items[0].raw_value_num?true:false}></mwc-textfield>`, root)
+  }
+  enterResult(e) {
+    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
+      procInstanceName: this.procName,
+      dbName: this.config.dbName,
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      actionName: "ENTERRESULT",
+      sampleId: this.selectedItem.sample_id,
+      resultId: this.rGrid.items[0].result_id,
+      rawValueResult: e.target.value
+    }), false, false).then(j => {
+      if (j) {
+        this.getResult()
+      }
+    })
+  }
+  getResult() {
+    this.fetchApi(this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
+      procInstanceName: this.procName,
+      dbName: this.config.dbName,
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      actionName: "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+      sampleId: this.selectedItem.sample_id,
+      sampleAnalysisResultFieldToRetrieve: "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict",
+      sortFieldsName: "test_id|result_id"
+    }), false, false).then(j => {
+      if (j) {
+        this.rGrid.items = j
+      }
+    })
+  }
+  get rGrid() {
+    return this.shadowRoot.querySelector("vaadin-grid#rGrid")
+  }
+
   get rsnDialog() {
     return this.shadowRoot.querySelector("mwc-dialog#rsnDialog")
   }
@@ -122,6 +242,14 @@ export class PlateReading extends ProceduresCore {
 
   get rsnDialogSurface() {
     return this.rsnDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
+  get rslDialog() {
+    return this.shadowRoot.querySelector("mwc-dialog#rslDialog")
+  }
+
+  get rslDialogSurface() {
+    return this.rslDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
   constructor() {
@@ -136,6 +264,8 @@ export class PlateReading extends ProceduresCore {
     this.rsnDialogSurface.style.backgroundRepeat = "no-repeat";
     this.rsnDialogSurface.style.textAlign = "center";
     this.rsnDialogSurface.style.padding = "20px";
+
+    this.rslDialogSurface.style.padding = "20px";
   }
 
   /**

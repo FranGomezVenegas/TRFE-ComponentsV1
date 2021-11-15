@@ -5,6 +5,7 @@ import '@material/mwc-button';
 import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
+import '@material/mwc-icon';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import './audit-dialog';
@@ -109,7 +110,7 @@ export class ProceduresCore extends CommonCore {
     <div class="layout horizontal center flex wrap">
       ${this.getButton()}
     </div>
-    <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort>
+    <vaadin-grid id="mainGrid" @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort>
       ${this.gridList()}
     </vaadin-grid>
     ${this.dateTemplate()}
@@ -154,6 +155,7 @@ export class ProceduresCore extends CommonCore {
       </div>
       ${this.setAttempts()}
     </mwc-dialog>
+    ${this.resultDialog()}
     `;
   }
 
@@ -181,7 +183,7 @@ export class ProceduresCore extends CommonCore {
   }
 
   get grid() {
-    return this.shadowRoot.querySelector("vaadin-grid")
+    return this.shadowRoot.querySelector("vaadin-grid#mainGrid")
   }
 
   get pwdDialog() {
@@ -236,5 +238,6 @@ export class ProceduresCore extends CommonCore {
   commentDialog() {}
   getButton() {}
   dateTemplate() {}
+  resultDialog() {}
   needConfirmUser() {}
 }
