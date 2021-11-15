@@ -40,6 +40,9 @@ export class ProceduresCore extends CommonCore {
           -o-transform:rotateY(180deg);
           -ms-transform:rotateY(180deg);
         }
+        div.input * {
+          margin: 10px 0 5px;
+        }
       `
     ];
   }
@@ -67,8 +70,6 @@ export class ProceduresCore extends CommonCore {
     }
   }
 
-  getSamples() {}
-
   initLang(data) {
     langConfig = data
   }
@@ -93,11 +94,7 @@ export class ProceduresCore extends CommonCore {
       this.esgDialogSurface.style.padding = "20px";
       this.esgDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
 
-      this.cmnDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
-      this.cmnDialogSurface.style.backgroundSize = "cover";
-      this.cmnDialogSurface.style.backgroundRepeat = "no-repeat";
-      this.cmnDialogSurface.style.textAlign = "center";
-      this.cmnDialogSurface.style.padding = "20px";
+      this.adjustAnotherDialog();
     })
   }
 
@@ -116,6 +113,7 @@ export class ProceduresCore extends CommonCore {
       ${this.gridList()}
     </vaadin-grid>
     ${this.dateTemplate()}
+    ${this.reasonDialog()}
     <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>{this.attempt=0;this.pwd.value=""}}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
@@ -137,19 +135,7 @@ export class ProceduresCore extends CommonCore {
       </div>
       ${this.setAttempts()}
     </mwc-dialog>
-    <mwc-dialog id="cmnDialog" @opened=${() => this.cmn.focus()} @closed=${()=>this.cmn.value=""}
-      heading=""
-      scrimClickAction="">
-      <div class="layout horizontal flex center-justified">
-        <div class="input">
-          <mwc-textfield id="cmn" label="Add Comment"></mwc-textfield>
-        </div>
-      </div>
-      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.addComment}>
-        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-    </mwc-dialog>
+    ${this.commentDialog()}
     <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
     <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()} @closed=${()=>{this.attempt=0;this.esg.value=""}}
       heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
@@ -179,8 +165,6 @@ export class ProceduresCore extends CommonCore {
       </h1>
     `
   }
-  getButton() {}
-  dateTemplate() {}
   gridList() {
     return Object.entries(langConfig.gridHeader).map(
       ([key, value], i) => html`
@@ -224,15 +208,33 @@ export class ProceduresCore extends CommonCore {
     return this.esgDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
-  get cmnDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#cmnDialog")
+  /**
+   * Checking whether user exist and verified
+   */
+  checkingUser() {
+    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      userToCheck: this.userName,
+      passwordToCheck: this.pwd.value
+    }), false).then(j => {
+      if (j) {
+        this.needConfirmUser()
+      } else {
+        if (this.attempt > 1) {
+          this.pwdDialog.close()
+        } else {
+          this.attempt++
+        }
+      }
+    })
   }
 
-  get cmn() {
-    return this.shadowRoot.querySelector("mwc-textfield#cmn")
-  }
-
-  get cmnDialogSurface() {
-    return this.cmnDialog.shadowRoot.querySelector(".mdc-dialog__surface")
-  }
+  getSamples() {}
+  adjustAnotherDialog() {}
+  reasonDialog() {}
+  commentDialog() {}
+  getButton() {}
+  dateTemplate() {}
+  needConfirmUser() {}
 }
