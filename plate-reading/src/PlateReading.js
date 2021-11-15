@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { ProceduresCore } from '@trazit/procedures-core';
+import { ProceduresCore, commonLangConfig } from '@trazit/procedures-core';
 
 let langConfig = {
   "title": {
@@ -88,17 +88,54 @@ export class PlateReading extends ProceduresCore {
   getButton() {
     return html`
       <mwc-icon-button icon="refresh" @click=${this.getSamples}></mwc-icon-button>
-      <mwc-icon-button id="prev" title="Previous" icon="next_week" ?disabled=${!this.selectedItem} @click=${()=>this.move("prev")}></mwc-icon-button>
+      <mwc-icon-button id="prev" title="Previous" icon="next_week" ?disabled=${!this.selectedItem} @click=${()=>this.rsnDialog.show()}></mwc-icon-button>
       <mwc-icon-button title="Next" icon="next_week" ?disabled=${!this.selectedItem} @click=${()=>this.move("next")}></mwc-icon-button>
       <mwc-icon-button title="Sample Audit" icon="rule" ?disabled=${!this.selectedItem} @click=${this.sampleAudit}></mwc-icon-button>
       <mwc-icon-button title="Enter Result" icon="document_scanner" ?disabled=${!this.selectedItem} @click=${this.enterResult}></mwc-icon-button>
     `
   }
 
+  reasonDialog() {
+    return html`
+    <mwc-dialog id="rsnDialog" @opened=${() => this.rsn.focus()} @closed=${()=>this.rsn.value=""}
+      heading=""
+      scrimClickAction="">
+      <div class="layout horizontal flex center-justified" style="opacity:0.8">
+        <mwc-textfield id="rsn" label="Audit Reason"
+          @keypress=${e=>{if(e.keyCode==13&&this.rsn.value)this.pwdDialog.show()}}></mwc-textfield>
+      </div>
+      <sp-button size="xl" slot="primaryAction">
+        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+    </mwc-dialog>
+    `
+  }
+
+  get rsnDialog() {
+    return this.shadowRoot.querySelector("mwc-dialog#rsnDialog")
+  }
+
+  get rsn() {
+    return this.shadowRoot.querySelector("mwc-textfield#rsn")
+  }
+
+  get rsnDialogSurface() {
+    return this.rsnDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
   constructor() {
     super()
     this.procName = "em-demo-a"
     this.initLang(langConfig)
+  }
+
+  adjustAnotherDialog() {
+    this.rsnDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+    this.rsnDialogSurface.style.backgroundSize = "cover";
+    this.rsnDialogSurface.style.backgroundRepeat = "no-repeat";
+    this.rsnDialogSurface.style.textAlign = "center";
+    this.rsnDialogSurface.style.padding = "20px";
   }
 
   /**
@@ -217,90 +254,24 @@ export class PlateReading extends ProceduresCore {
    */
   move(to="next") {
     this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      procInstanceName: this.procName,
       actionName: to=="next" ? "SAMPLESTAGE_MOVETONEXT" : "SAMPLESTAGE_MOVETOPREVIOUS",
-      sampleId: this.selectedItem.sample_id
-    })).then(j => {
-      console.log(j)
-      if (j) {
-        this.getSamples()
-      }
-    })
-  }
-
-  /**
-   * Checking whether user exist and verified
-   */
-  checkingUser() {
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
-      actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      sampleId: this.selectedItem.sample_id,
+      dbName: this.config.dbName,
+      procInstanceName: this.procName,
+      auditReasonPhrase: this.rsn.value,
       userToCheck: this.userName,
       passwordToCheck: this.pwd.value
-    }), false).then(j => {
-      if (j) {
-        this.setSamplingDate()
-      } else {
-        if (this.attempt > 1) {
-          this.pwdDialog.close()
-        } else {
-          this.attempt++
-        }
-      }
-    })
-  }
-
-  setSamplingDate() {
-    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      procInstanceName: this.procName,
-      actionName: this.newDate ? "CHANGESAMPLINGDATE" : "SETSAMPLINGDATE",
-      sampleId: this.selectedItem.sample_id,
-      userToCheck: this.userName,
-      newDateTime: this.newDate ? this.dateTxt.value : "",
-      passwordToCheck: this.pwd.value,
-      auditReasonPhrase: this.auditReasonTxt.value
     })).then(j => {
-      console.log(j)
-      this.newDate = null
-      this.pwdDialog.close()
       if (j) {
+        this.pwdDialog.close()
+        this.rsnDialog.close()
         this.getSamples()
       }
     })
   }
 
-  addComment() {
-    if (this.cmn.value) {
-      this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-        actionName: "SAMPLINGCOMMENTADD",
-        finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-        sampleId: this.selectedItem.sample_id,
-        sampleComment: this.cmn.value,
-        dbName: this.config.dbName,
-        procInstanceName: this.procName  
-      })).then(j => {
-        if (j) {
-          this.getSamples()
-        }
-      })
-    }
-  }
-
-  removeComment() {
-    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      actionName: "SAMPLINGCOMMENTREMOVE",
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      sampleId: this.selectedItem.sample_id,
-      dbName: this.config.dbName,
-      procInstanceName: this.procName  
-    })).then(j => {
-      if (j) {
-        this.getSamples()
-      }
-    })
+  needConfirmUser() {
+    this.move("prev")
   }
 }
