@@ -119,9 +119,6 @@ export class PlateReading extends ProceduresCore {
       th {
         text-align: center !important;
       }
-      td {
-        cursor: pointer;
-      }
       td, th {
         border: 1px solid #ddd;
         padding: 8px;
@@ -134,6 +131,9 @@ export class PlateReading extends ProceduresCore {
         text-align: left;
         background-color: #000;
         color: white;
+      }
+      tr[hidden] {
+        display: none;
       }
       `
     ]
@@ -175,14 +175,17 @@ export class PlateReading extends ProceduresCore {
         ${this.enterResults.length ?
           html`
             <table>
+              <!-- table header -->
               <tr>
+                <th></th>
                 ${Object.entries(langConfig.resultHeader).map(([k,v])=>
                   html`<th>${v['label_'+this.lang]}</th>`
                 )}
               </tr>
+              <!-- table contents -->
               ${this.enterResults.map(item=>
-                html`<tr>${Object.entries(langConfig.resultHeader).map(([k, v])=>
-                  
+                html`<tr><td><input type="checkbox" name="rItem" @change=${e=>this.resDetail(e, item)}></td>
+                  ${Object.entries(langConfig.resultHeader).map(([k, v])=>
                     html`${k=="spec_eval" ?
                       html`<td style="text-align: center">${item[k] ?
                             html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` : null
@@ -196,8 +199,21 @@ export class PlateReading extends ProceduresCore {
                       }`
                     }`
                   )}
-                </tr>`
+                </tr>
+                `
               )}
+              ${this.selectedResult?
+              html`
+              <tr>
+                <td colspan="6" style="text-align: center">
+                  <p>${this.selectedResult.spec_eval?html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`:null}</p>
+                  <p>Range Evaluation: ${this.selectedResult.spec_eval}</p>
+                  <p>Range Rule: ${this.selectedResult.spec_eval_detail}</p>
+                  <p>Lock Reason: ${this.selectedResult.locking_reason?this.selectedResult.locking_reason["message_"+ this.lang]:null}</p>
+                </td>
+              </tr>
+              `:null
+              }
             </table>
           ` : null
         }
@@ -206,41 +222,6 @@ export class PlateReading extends ProceduresCore {
         ${langConfig.close["label_" + this.lang]}</sp-button>
     </mwc-dialog>
     `
-  }
-  enterResult(raw_value, id) {
-    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      procInstanceName: this.procName,
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      actionName: "ENTERRESULT",
-      sampleId: this.selectedItem.sample_id,
-      resultId: id,
-      rawValueResult: raw_value
-    }), false, false).then(j => {
-      if (j) {
-        this.getResult()
-      }
-    })
-  }
-  getResult() {
-    this.fetchApi(this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
-      procInstanceName: this.procName,
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      actionName: "GET_SAMPLE_ANALYSIS_RESULT_LIST",
-      sampleId: this.selectedItem.sample_id,
-      sampleAnalysisResultFieldToRetrieve: "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict",
-      sortFieldsName: "test_id|result_id"
-    }), false, false).then(j => {
-      if (j) {
-        console.log(j)
-        this.enterResults = j
-        this.requestUpdate()
-      }
-    })
-  }
-  get rGrid() {
-    return this.shadowRoot.querySelector("vaadin-grid#rGrid")
   }
 
   get rsnDialog() {
@@ -265,14 +246,13 @@ export class PlateReading extends ProceduresCore {
 
   static get properties() {
     return {
-      tHeaders: { type: Array },
-      enterResults: { type: Array }
+      enterResults: { type: Array },
+      selectedResult: { type: Object }
     };
   }
 
   constructor() {
     super()
-    this.tHeaders = []
     this.enterResults = []
     this.procName = "em-demo-a"
     this.initLang(langConfig)
@@ -423,5 +403,55 @@ export class PlateReading extends ProceduresCore {
 
   needConfirmUser() {
     this.move("prev")
+  }
+
+  enterResult(raw_value, id) {
+    this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
+      procInstanceName: this.procName,
+      dbName: this.config.dbName,
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      actionName: "ENTERRESULT",
+      sampleId: this.selectedItem.sample_id,
+      resultId: id,
+      rawValueResult: raw_value
+    }), false, false).then(j => {
+      if (j) {
+        this.getResult()
+      }
+    })
+  }
+
+  getResult() {
+    this.fetchApi(this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
+      procInstanceName: this.procName,
+      dbName: this.config.dbName,
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      actionName: "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+      sampleId: this.selectedItem.sample_id,
+      sampleAnalysisResultFieldToRetrieve: "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict",
+      sortFieldsName: "test_id|result_id"
+    }), false, false).then(j => {
+      if (j) {
+        this.enterResults = j
+        this.requestUpdate()
+      }
+    })
+  }
+
+  resDetail(e, item) {
+    // unchecked all unselected items
+    let nlist = this.shadowRoot.querySelectorAll("input[type=checkbox]")
+    nlist.forEach(n => {
+      if (e.target != n) {
+        n.checked = false
+      }
+    })
+    // set the selected item
+    if (e.target.checked) {
+      this.selectedResult = item
+    } else {
+      this.selectedResult = null
+    }
+    this.requestUpdate()
   }
 }
