@@ -112,8 +112,28 @@ export class PlateReading extends ProceduresCore {
       #rslDialog {
         --mdc-dialog-min-width: 800px;
       }
-      #rGrid {
-        font-size: 10px;
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th {
+        text-align: center !important;
+      }
+      td {
+        cursor: pointer;
+      }
+      td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      tr:nth-child(even){background-color: #f2f2f2;}
+      tr:hover {background-color: #ddd;}
+      th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #000;
+        color: white;
       }
       `
     ]
@@ -152,64 +172,42 @@ export class PlateReading extends ProceduresCore {
       heading=""
       scrimClickAction="">
       <div class="layout horizontal flex center-justified">
-        <vaadin-grid id="rGrid" theme="row-dividers">
-          ${this.resultList()}
-        </vaadin-grid>
+        ${this.enterResults.length ?
+          html`
+            <table>
+              <tr>
+                ${Object.entries(langConfig.resultHeader).map(([k,v])=>
+                  html`<th>${v['label_'+this.lang]}</th>`
+                )}
+              </tr>
+              ${this.enterResults.map(item=>
+                html`<tr>${Object.entries(langConfig.resultHeader).map(([k, v])=>
+                  
+                    html`${k=="spec_eval" ?
+                      html`<td style="text-align: center">${item[k] ?
+                            html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` : null
+                          }</td>` :
+                      html`${k=="raw_value" ?
+                        html`<td>${item[k] ?
+                              html`${item[k]}` :
+                              html`<input type="text" @keypress=${e=>{if(e.keyCode==13&&e.target.value&&!isNaN(e.target.value))this.enterResult(e.target.value, item.result_id)}}>`
+                            }</td>` :
+                        html`<td>${item[k]}</td>`
+                      }`
+                    }`
+                  )}
+                </tr>`
+              )}
+            </table>
+          ` : null
+        }
       </div>
       <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
         ${langConfig.close["label_" + this.lang]}</sp-button>
     </mwc-dialog>
     `
   }
-  resultList() {
-    return Object.entries(langConfig.resultHeader).map(
-      ([key, value], i) => html`
-        ${i==0 ?
-          html`
-            <vaadin-grid-column .renderer=${this.checkRenderer}></vaadin-grid-column>
-            <vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"
-            .renderer=${e=>this.bulletRenderer(e, this)}></vaadin-grid-column>
-          `:
-          html`
-          ${i==Object.entries(langConfig.resultHeader).length-1 ? 
-            html`
-            <vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"
-              .renderer="${e=>this.fieldRenderer(e, this)}"></vaadin-grid-column>
-            `: 
-            html`<vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-          }
-          `
-        }
-      `
-    )
-  }
-
-  resDetail(root) {
-
-  }
-  bulletRenderer(root) {
-    render(html`${this.rGrid.items[0].spec_eval?html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`:null}`, root)
-  }
-  checkRenderer(root) {
-    render(html`<input type="checkbox">`, root)
-  }
-  fieldRenderer(root, me) {
-    // i.e vaadin-grid-cell-content-23
-    let slotId = root.slot.split("-")
-    // result_id is on the 3 previous column
-    slotId[slotId.length-1] = slotId[slotId.length-1] - 3
-    slotId = slotId.join("-")
-    let cell = me.shadowRoot.querySelectorAll("vaadin-grid-cell-content[slot="+ slotId +"]")
-    // for something reason element query returns 2 NodeList where the one list with empty outerText
-    let resultId = Array.from(cell).filter(c => c.outerText)
-    resultId = Number(resultId[0].outerText)
-    // find the cell model item
-    let whichItem = this.rGrid.items.findIndex(g => g.result_id == resultId)
-    render(html`<mwc-textfield style="--mdc-text-field-fill-color: green"
-      @keydown=${e=>{if(e.keyCode==13&&e.target.value)me.enterResult(e, this.rGrid.items[whichItem].result_id)}}
-      ?disabled=${this.rGrid.items[whichItem].raw_value_num?true:false}></mwc-textfield>`, root)
-  }
-  enterResult(e, id) {
+  enterResult(raw_value, id) {
     this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
       procInstanceName: this.procName,
       dbName: this.config.dbName,
@@ -217,7 +215,7 @@ export class PlateReading extends ProceduresCore {
       actionName: "ENTERRESULT",
       sampleId: this.selectedItem.sample_id,
       resultId: id,
-      rawValueResult: e.target.value
+      rawValueResult: raw_value
     }), false, false).then(j => {
       if (j) {
         this.getResult()
@@ -236,7 +234,8 @@ export class PlateReading extends ProceduresCore {
     }), false, false).then(j => {
       if (j) {
         console.log(j)
-        this.rGrid.items = j
+        this.enterResults = j
+        this.requestUpdate()
       }
     })
   }
@@ -264,8 +263,17 @@ export class PlateReading extends ProceduresCore {
     return this.rslDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
+  static get properties() {
+    return {
+      tHeaders: { type: Array },
+      enterResults: { type: Array }
+    };
+  }
+
   constructor() {
     super()
+    this.tHeaders = []
+    this.enterResults = []
     this.procName = "em-demo-a"
     this.initLang(langConfig)
   }
