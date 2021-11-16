@@ -194,18 +194,29 @@ export class PlateReading extends ProceduresCore {
     render(html`<input type="checkbox">`, root)
   }
   fieldRenderer(root, me) {
+    // i.e vaadin-grid-cell-content-23
+    let slotId = root.slot.split("-")
+    // result_id is on the 3 previous column
+    slotId[slotId.length-1] = slotId[slotId.length-1] - 3
+    slotId = slotId.join("-")
+    let cell = me.shadowRoot.querySelectorAll("vaadin-grid-cell-content[slot="+ slotId +"]")
+    // for something reason element query returns 2 NodeList where the one list with empty outerText
+    let resultId = Array.from(cell).filter(c => c.outerText)
+    resultId = Number(resultId[0].outerText)
+    // find the cell model item
+    let whichItem = this.rGrid.items.findIndex(g => g.result_id == resultId)
     render(html`<mwc-textfield style="--mdc-text-field-fill-color: green"
-      @keydown=${e=>{if(e.keyCode==13&&e.target.value)me.enterResult(e)}}
-      ?disabled=${this.rGrid.items[0].raw_value_num?true:false}></mwc-textfield>`, root)
+      @keydown=${e=>{if(e.keyCode==13&&e.target.value)me.enterResult(e, this.rGrid.items[whichItem].result_id)}}
+      ?disabled=${this.rGrid.items[whichItem].raw_value_num?true:false}></mwc-textfield>`, root)
   }
-  enterResult(e) {
+  enterResult(e, id) {
     this.fetchApi(this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
       procInstanceName: this.procName,
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: "ENTERRESULT",
       sampleId: this.selectedItem.sample_id,
-      resultId: this.rGrid.items[0].result_id,
+      resultId: id,
       rawValueResult: e.target.value
     }), false, false).then(j => {
       if (j) {
@@ -224,6 +235,7 @@ export class PlateReading extends ProceduresCore {
       sortFieldsName: "test_id|result_id"
     }), false, false).then(j => {
       if (j) {
+        console.log(j)
         this.rGrid.items = j
       }
     })
