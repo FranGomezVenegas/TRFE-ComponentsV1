@@ -12,12 +12,12 @@
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@material/mwc-button": "^0.25.3",
-    "@material/mwc-dialog": "^0.25.3",
     "@material/mwc-icon-button": "^0.25.3",
     "@material/mwc-textarea": "^0.25.3",
     "@material/mwc-textfield": "^0.25.3",
     "@spectrum-web-components/tooltip": "^0.8.18",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
+    "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
     "@vaadin/vaadin-grid": "^21.0.3",
     "lit": "^2.0.2"
   },

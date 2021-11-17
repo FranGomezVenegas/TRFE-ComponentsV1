@@ -2,7 +2,6 @@ import { html, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
-import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
 import '@material/mwc-textarea';
 import '@material/mwc-textfield';
@@ -13,6 +12,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
+import '@trazit/tr-dialog/tr-dialog';
 import './history-item';
 
 const langConfig = {
@@ -85,12 +85,19 @@ export class MyIncidents extends CommonCore {
     return [
       Layouts, 
       css`
+        tr-dialog {
+          --mdc-dialog-heading-ink-color: blue;
+          --mdc-typography-headline6-font-size: 35px;
+        }
+        .content {
+          opacity: 0.9;
+        }
+        .content * {
+          margin: 5px 0;
+        }
         mwc-button {
           --mdc-typography-button-text-transform: none;
           margin: 0 2px;
-        }
-        mwc-dialog * {
-          margin-bottom: 5px;
         }
         mwc-textfield[hidden] {
           display: none;
@@ -98,7 +105,7 @@ export class MyIncidents extends CommonCore {
         mwc-button[hidden] {
           display: none;
         }
-      `
+        `
     ];
   }
 
@@ -155,11 +162,11 @@ export class MyIncidents extends CommonCore {
         html`<history-item .history=${h}></history-item>`
       )}
     </div>
-    <mwc-dialog id="icdDialog" @opened=${this.dialogOpened} @closed=${()=>{this.icdTitle.value="";this.icdId.value="";this.icdDetail.value=""}}
+    <tr-dialog id="icdDialog" @opened=${this.dialogOpened} @closed=${()=>{this.icdTitle.value="";this.icdId.value="";this.icdDetail.value=""}}
       heading=""
       scrimClickAction="">
-      <div class="layout vertical flex center-justified">
-        <mwc-button dense slot="secondaryAction" dialogAction="close">${langConfig.dialog_button.close["label_"+this.lang]}</mwc-button>
+      <div class="content layout vertical flex center-justified">
+        <mwc-button dense dialogAction="close">${langConfig.dialog_button.close["label_"+this.lang]}</mwc-button>
         <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg[this.lang].title} required></mwc-textfield>
         <mwc-textfield id="icdId" label="${langConfig.field.id["label_"+this.lang]}" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg[this.lang].id} required></mwc-textfield>
         <mwc-textarea id="detail" label="${langConfig.field.detail["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg[this.lang].detail} required></mwc-textarea>
@@ -169,8 +176,14 @@ export class MyIncidents extends CommonCore {
         <mwc-button raised dense @click=${this.closeIncident} ?hidden=${this.dialogType!="close"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
         <mwc-button raised dense @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
       </div>
-    </mwc-dialog>
+    </tr-dialog>
     `;
+  }
+
+  firstUpdated() {
+    this.updateComplete.then(() => {
+      this.icdDialogSurface.style.padding = "20px";
+    })
   }
 
   get grid() {
@@ -178,7 +191,7 @@ export class MyIncidents extends CommonCore {
   }
 
   get icdDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#icdDialog")
+    return this.shadowRoot.querySelector("tr-dialog#icdDialog")
   }
 
   get icdDialogSurface() {
