@@ -56,14 +56,35 @@ export class TrDialog extends LitElement {
         ${this.dialogFooter()}
       </div>
       <div style="position: absolute; top: 10px; right: 10px;">
+        <mwc-icon class="corner" @click=${this.minimize}>${this.expandLabel}</mwc-icon>
         <mwc-icon class="corner" @click=${this.zoomOut}>${this.zoomLabel}</mwc-icon>
-        <mwc-icon class="corner">close</mwc-icon>
+        <mwc-icon class="corner" dialogAction="decline">close</mwc-icon>
       </div>
     </mwc-dialog>
     `;
   }
 
+  minimize() {
+    this.dialogWidth = "auto";
+    this.dialogShape = "5px";
+    this.dialogSurface.style.height = "auto";
+    this.mdcDialog.style.height = "100%";
+    this.mdcScrim.style.height = "100%";
+    this.zoomLabel = "zoom_out_map"
+
+    if (this.expandLabel == "expand_more") {
+      this.dialogSurface.style.top = "45vh";
+      this.dialogSurface.style.height = "0";
+      this.expandLabel = "expand_less";
+    } else {
+      this.dialogSurface.style.top = "0";
+      this.dialogSurface.style.height = "auto";
+      this.expandLabel = "expand_more";
+    }
+  }
+
   zoomOut() {
+    this.dialogSurface.style.top = "0";
     if (this.zoomLabel == "zoom_out_map") {
       this.dialogWidth = "100vw";
       this.dialogShape = "0px";
@@ -71,6 +92,7 @@ export class TrDialog extends LitElement {
       this.mdcDialog.style.height = "auto";
       this.mdcScrim.style.height = "auto";
       this.zoomLabel = "zoom_in_map"
+      this.expandLabel = "expand_more";
     } else {
       this.dialogWidth = "auto";
       this.dialogShape = "5px";
@@ -110,7 +132,8 @@ export class TrDialog extends LitElement {
       cancelTitle: { type: String }, // the cancel button label
       dialogWidth: { type: String },
       dialogShape: { type: String },
-      zoomLabel: { type: String }
+      zoomLabel: { type: String },
+      expandLabel: { type: String }
     };
   }
 
@@ -125,6 +148,7 @@ export class TrDialog extends LitElement {
     this.dialogWidth = "auto"
     this.dialogShape = "5px"
     this.zoomLabel = "zoom_out_map"
+    this.expandLabel = "expand_more"
   }
 
   firstUpdated() {
