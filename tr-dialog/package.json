@@ -10,15 +10,14 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "@collaborne/lit-flexbox-literals": "^0.2.2",
-    "@material/mwc-button": "^0.25.3",
     "@material/mwc-dialog": "^0.25.3",
-    "@material/mwc-icon-button": "^0.25.3",
-    "@spectrum-web-components/button": "^0.15.0",
+    "@material/mwc-icon": "^0.25.3",
     "lit": "^2.0.2"
   },
   "devDependencies": {
+    "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@material/mwc-textfield": "^0.25.3",
+    "@spectrum-web-components/button": "^0.15.0",
     "@spectrum-web-components/theme": "^0.8.14",
     "@web/dev-server": "^0.1.26"
   }

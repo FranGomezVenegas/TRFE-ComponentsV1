@@ -1,88 +1,78 @@
 import { LitElement, html, css } from 'lit';
+import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-textfield';
+import '@spectrum-web-components/button/sp-button';
 import '../tr-dialog';
 
 class DemoExample extends LitElement {
   static get styles() {
-    return css`
-    `
-  }
-
-  static get properties() {
-    return {
-    }
-  }
-
-  constructor() {
-    super();
+    return [
+      Layouts,
+      css`
+      tr-dialog {
+        --mdc-dialog-heading-ink-color: blue;
+        --mdc-typography-headline6-font-size: 35px;
+      }
+      .content {
+        opacity: 0.9;
+      }
+      .content * {
+        margin: 5px 0;
+      }
+      `
+    ]
   }
 
   render() {
     return html`
-    <button @click=${()=>this.dialog1.show()}>Dialog with full button</button>
-    <button @click=${()=>this.dialog2.show()}>Dialog non close button</button>
-    <button @click=${()=>this.dialog3.show()}>Dialog non buttons</button>
-
-    <tr-dialog name="dialog1" title="Please confirm your credentials (user & password)"
-      .dialogContent=${this.dialog1Content.bind(this)}
-      @accept=${()=>console.log("accept")}
-      @opening=${()=>console.log("opening")}
-      @opened=${()=>console.log("opened")}
-      @closing=${()=>console.log("closing")}
-      @closed=${()=>console.log("closed")}>
-    </tr-dialog>
-    <tr-dialog name="dialog2" title="Dialog non close button" hideCancel=true
-      .dialogContent=${this.dialog2Content.bind(this)}>
-    </tr-dialog>
-    <tr-dialog name="dialog3" title="Dialog non buttons" hideAccept=true hideCancel=true
-      .dialogContent=${this.dialog3Content.bind(this)}>
+    <button @click=${() => this.dialog.show()}>Open Dialog</button>
+    
+    <tr-dialog
+      heading="Trazit Dialog"
+      scrimClickAction=""
+      hideActions=""
+      @opening=${() => console.log("opening")}
+      @opened=${() => console.log("opened")}
+      @closing=${() => console.log("closing")}
+      @closed=${() => console.log("closed")}>
+      <div class="content layout vertical flex center-justified">
+        <mwc-textfield label="User" type="text"></mwc-textfield>
+        <mwc-textfield label="Password" type="password"
+          iconTrailing="visibility" @click=${this.showPwd}>
+        </mwc-textfield>
+        <div style="margin-top:30px">
+          <sp-button size="xl" variant="secondary" dialogAction="decline">Cancel</sp-button>
+          <sp-button size="xl">Accept</sp-button>
+        </div>
+      </div>
     </tr-dialog>
     `;
   }
 
-  get dialog1() {
-    return this.shadowRoot.querySelector("tr-dialog[name=dialog1]")
+  get dialog() {
+    return this.shadowRoot.querySelector("tr-dialog")
   }
 
-  get dialog2() {
-    return this.shadowRoot.querySelector("tr-dialog[name=dialog2]")
+  get dialogSurface() {
+    return this.dialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
-  get dialog3() {
-    return this.shadowRoot.querySelector("tr-dialog[name=dialog3]")
-  }
-
-  dialog1Content() {
-    return html`
-      <mwc-textfield id="user" label="User" type="text"></mwc-textfield>
-      <mwc-textfield id="pwd" label="Password" type="password" iconTrailing="visibility" @click=${this.showPwd}></mwc-textfield>
-    `
-  }
-
-  dialog2Content() {
-    return html`
-      <mwc-textfield label="Label" type="text"></mwc-textfield>
-    `
-  }
-
-  dialog3Content() {
-    return html`
-      <table>
-        <tr><th>Column1</th><th>Column2</th><th>Column3</th></tr>
-        <tr><td>Data</td><td>Data</td><td>Data</td></tr>
-        <tr><td>Data</td><td>Data</td><td>Data</td></tr>
-      </table>
-    `
+  firstUpdated() {
+    this.updateComplete.then(() => {
+      this.dialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+      this.dialogSurface.style.backgroundSize = "cover";
+      this.dialogSurface.style.backgroundRepeat = "no-repeat";
+      this.dialogSurface.style.textAlign = "center";
+      this.dialogSurface.style.padding = "20px";
+      this.dialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
+      this.dialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
+    })
   }
 
   showPwd(e) {
     if (e.pointerId == -1) {
       e.target.type = e.target.type == "password" ? "text" : "password";
     }
-  }
-
-  checkingUser() {
-    console.log("check")
   }
 }
 customElements.define('demo-example', DemoExample);
