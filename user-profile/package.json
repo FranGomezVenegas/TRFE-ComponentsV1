@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
-    "@material/mwc-dialog": "^0.25.3",
     "@material/mwc-icon-button": "^0.25.3",
     "@material/mwc-textfield": "^0.25.3",
     "@spectrum-web-components/button": "^0.15.0",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
+    "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
     "lit": "^2.0.2"
   },
   "devDependencies": {

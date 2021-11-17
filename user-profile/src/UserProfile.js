@@ -1,10 +1,10 @@
 import { html, css } from 'lit';
 import { CommonCore, commonLangConfig } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@spectrum-web-components/button/sp-button';
+import '@trazit/tr-dialog/tr-dialog';
 
 const langConfig = {
   "Password": {
@@ -96,9 +96,15 @@ export class UserProfile extends CommonCore {
       mwc-icon-button {
         color: blue;
       }
-      mwc-dialog {
+      tr-dialog {
         --mdc-dialog-heading-ink-color: blue;
         --mdc-typography-headline6-font-size: 35px;
+      }
+      .content {
+        opacity: 0.9;
+      }
+      .content * {
+        margin: 5px 0;
       }
       `
     ];
@@ -130,41 +136,39 @@ export class UserProfile extends CommonCore {
         </div>
       </div>
       <sp-button size="xl" @click=${()=>this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
-      <mwc-dialog id="pwdDialog" @opened=${()=>this.oldPwd.focus()} @closed=${()=>{this.attempt=0;this.oldPwd.value=""}}
+      <tr-dialog id="pwdDialog" @closed=${()=>{this.attempt=0;this.oldPwd.value=""}}
         heading="${langConfig.pwdWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
         hideActions="">
-        <div class="layout horizontal flex center-justified" style="opacity:0.8">
-          <div class="input layout vertical" style="width: 70%">
-            <mwc-textfield id="user" label="${langConfig.userToCheck["label_"+this.lang]}" type="text" .value=${this.userName} disabled></mwc-textfield>
-            <mwc-textfield id="oldPwd" label="${langConfig.pwToCheck["label_"+this.lang]}" type="password" iconTrailing="visibility" 
-              @click=${this.showPwd}
-              @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
+        <div class="content layout vertical flex center-justified">
+          <mwc-textfield id="user" label="${langConfig.userToCheck["label_"+this.lang]}" type="text" .value=${this.userName} disabled></mwc-textfield>
+          <mwc-textfield  id="oldPwd" label="${langConfig.pwToCheck["label_"+this.lang]}" type="password" iconTrailing="visibility" 
+            dialogInitialFocus
+            @click=${this.showPwd}
+            @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
+          <div style="margin-top:30px">
+            <sp-button size="xl" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+            <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
           </div>
+          ${this.setAttempts()}
         </div>
-        <div style="margin-top:30px">
-          <sp-button size="xl" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
-          <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
-        </div>
-        ${this.setAttempts()}
-      </mwc-dialog>
-      <mwc-dialog id="esgDialog" @opened=${()=>this.oldEsg.focus()} @closed=${()=>{this.attempt=0;this.oldEsg.value=""}}
+      </tr-dialog>
+      <tr-dialog id="esgDialog" @closed=${()=>{this.attempt=0;this.oldEsg.value=""}}
         heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
         scrimClickAction=""
         hideActions="">
-        <div class="layout horizontal flex center-justified" style="opacity:0.8">
-          <div class="input" style="width: 70%">
-            <mwc-textfield id="oldEsg" type="password" iconTrailing="visibility" 
-              @click=${this.showPwd}
-              @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
+        <div class="content layout vertical flex center-justified">
+          <mwc-textfield id="oldEsg" type="password" iconTrailing="visibility" 
+            dialogInitialFocus
+            @click=${this.showPwd}
+            @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
+          <div style="margin-top:30px">
+            <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+            <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
           </div>
+          ${this.setAttempts()}
         </div>
-        <div style="margin-top:30px">
-          <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
-          <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
-        </div>
-        ${this.setAttempts()}
-      </mwc-dialog>
+      </tr-dialog>
     `;
   }
 
@@ -177,11 +181,11 @@ export class UserProfile extends CommonCore {
   }
 
   get pwdDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#pwdDialog")
+    return this.shadowRoot.querySelector("tr-dialog#pwdDialog")
   }
 
   get esgDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#esgDialog")
+    return this.shadowRoot.querySelector("tr-dialog#esgDialog")
   }
 
   get pwdDialogSurface() {
