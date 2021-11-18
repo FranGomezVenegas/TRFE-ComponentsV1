@@ -63,7 +63,6 @@ class DemoExample extends LitElement {
       this.dialogSurface.style.backgroundSize = "cover";
       this.dialogSurface.style.backgroundRepeat = "no-repeat";
       this.dialogSurface.style.textAlign = "center";
-      this.dialogSurface.style.padding = "20px";
       this.dialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
       this.dialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
     })

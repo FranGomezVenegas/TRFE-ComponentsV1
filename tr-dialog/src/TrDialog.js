@@ -14,6 +14,12 @@ export class TrDialog extends Dialog {
         cursor: pointer;
         --mdc-icon-size: 15px;
       }
+      mwc-icon[hidden] {
+        display: none;
+      }
+      div[hidden] {
+        display: none;
+      }
       `
     ];
   }
@@ -31,7 +37,7 @@ export class TrDialog extends Dialog {
     };
     return html`
     <style>
-      mwc-dialog {
+      :host {
         --mdc-shape-medium: ${this.dialogShape};
       }
     </style>
@@ -70,11 +76,17 @@ export class TrDialog extends Dialog {
     return this.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
+  get dialogContent() {
+    return this.shadowRoot.querySelector("#content")
+    }
+
   static get properties() {
     return {
       dialogShape: { type: String },
       zoomLabel: { type: String },
-      expandLabel: { type: String }
+      expandLabel: { type: String },
+      hideMin: { type: Boolean, reflect: true },
+      hideZoom: { type: Boolean, reflect: true }
     };
   }
 
@@ -83,13 +95,20 @@ export class TrDialog extends Dialog {
     this.dialogShape = "5px"
     this.zoomLabel = "zoom_out_map"
     this.expandLabel = "expand_more"
+    this.hideMin = false
+    this.hideZoom = false
+  }
+
+  firstUpdated() {
+    super.firstUpdated()
+    this.shadowRoot.querySelector(".mdc-dialog__surface").style.padding = "20px"
   }
 
   cornerButton() {
     return html`
       <div style="position: absolute; top: 10px; right: 10px;">
-        <mwc-icon class="corner" @click=${this.minimize}>${this.expandLabel}</mwc-icon>
-        <mwc-icon class="corner" @click=${this.zoomOut}>${this.zoomLabel}</mwc-icon>
+        <mwc-icon ?hidden=${this.hideMin} class="corner" @click=${this.minimize}>${this.expandLabel}</mwc-icon>
+        <mwc-icon ?hidden=${this.hideZoom} class="corner" @click=${this.zoomOut}>${this.zoomLabel}</mwc-icon>
         <mwc-icon class="corner" dialogAction="decline">close</mwc-icon>
       </div>
     `
@@ -105,10 +124,14 @@ export class TrDialog extends Dialog {
     this.zoomLabel = "zoom_out_map"
 
     if (this.expandLabel == "expand_more") {
+      this.dialogContent.style.overflow = "hidden";
+      this.dialogSurface.style.overflow = "hidden";
       this.dialogSurface.style.top = "45vh";
       this.dialogSurface.style.height = "0";
       this.expandLabel = "expand_less";
     } else {
+      this.dialogContent.style.overflow = "auto";
+      this.dialogSurface.style.overflow = "auto";
       this.dialogSurface.style.top = "0";
       this.dialogSurface.style.height = "auto";
       this.expandLabel = "expand_more";
@@ -118,6 +141,7 @@ export class TrDialog extends Dialog {
   zoomOut() {
     this.dialogSurface.style.top = "0";
     if (this.zoomLabel == "zoom_out_map") {
+      this.dispatchEvent(new CustomEvent("zoom-out"))
       this.dialogShape = "0px";
       this.dialogSurface.style.height = "100vh";
       this.mdcDialog.style.height = "auto";
@@ -127,6 +151,7 @@ export class TrDialog extends Dialog {
       this.zoomLabel = "zoom_in_map"
       this.expandLabel = "expand_more";
     } else {
+      this.dispatchEvent(new CustomEvent("zoom-in"))
       this.dialogSurface.style.minWidth = "auto";
       this.mdcDialog.style.minWidth = "auto";
       this.dialogShape = "5px";
