@@ -147,8 +147,8 @@ export class UserProfile extends CommonCore {
             @click=${this.showPwd}
             @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
           <div style="margin-top:30px">
-            <sp-button size="xl" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
             <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+            <sp-button size="xl" @click=${this.checkingUser}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
           </div>
           ${this.setAttempts()}
         </div>
@@ -163,8 +163,8 @@ export class UserProfile extends CommonCore {
             @click=${this.showPwd}
             @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
           <div style="margin-top:30px">
-            <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
             <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+            <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
           </div>
           ${this.setAttempts()}
         </div>
@@ -223,7 +223,6 @@ export class UserProfile extends CommonCore {
       this.pwdDialogSurface.style.backgroundSize = "cover";
       this.pwdDialogSurface.style.backgroundRepeat = "no-repeat";
       this.pwdDialogSurface.style.textAlign = "center";
-      this.pwdDialogSurface.style.padding = "20px";
       this.pwdDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
       this.pwdDialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
       // esign dialog
@@ -231,7 +230,6 @@ export class UserProfile extends CommonCore {
       this.esgDialogSurface.style.backgroundSize = "cover";
       this.esgDialogSurface.style.backgroundRepeat = "no-repeat";
       this.esgDialogSurface.style.textAlign = "center";
-      this.esgDialogSurface.style.padding = "20px";
       this.esgDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
       this.esgDialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
     })
