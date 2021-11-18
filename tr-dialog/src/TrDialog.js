@@ -114,6 +114,15 @@ export class TrDialog extends Dialog {
     `
   }
 
+  show() {
+    this.dialogContent.style.overflow = "auto";
+    this.dialogSurface.style.overflow = "auto";
+    this.dialogSurface.style.top = "0";
+    this.dialogSurface.style.height = "auto";
+    this.expandLabel = "expand_more";
+    super.show()
+  }
+
   minimize() {
     this.dialogSurface.style.minWidth = "auto";
     this.mdcDialog.style.minWidth = "auto";
