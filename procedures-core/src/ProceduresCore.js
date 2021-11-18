@@ -119,7 +119,8 @@ export class ProceduresCore extends CommonCore {
     </vaadin-grid>
     ${this.dateTemplate()}
     ${this.reasonDialog()}
-    <tr-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>{this.attempt=0;this.pwd.value=""}}
+    <tr-dialog id="pwdDialog" 
+      @closed=${()=>{this.attempt=0;this.pwd.value=""}}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
       hideActions="">
@@ -127,6 +128,7 @@ export class ProceduresCore extends CommonCore {
         <mwc-textfield id="user" label="${langConfig.userToCheck[" label_" + this.lang]}" type="text"
           .value=${this.userName} disabled></mwc-textfield>
         <mwc-textfield id="pwd" label="${langConfig.pwToCheck[" label_" + this.lang]}" type="password"
+          dialogInitialFocus
           iconTrailing="visibility" @click=${this.showPwd}
           @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
         <div style="margin-top:30px">
@@ -140,12 +142,14 @@ export class ProceduresCore extends CommonCore {
     </tr-dialog>
     ${this.commentDialog()}
     <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
-    <tr-dialog id="esgDialog" @opened=${()=>this.esg.focus()} @closed=${()=>{this.attempt=0;this.esg.value=""}}
+    <tr-dialog id="esgDialog" 
+      @closed=${()=>{this.attempt=0;this.esg.value=""}}
       heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
       scrimClickAction=""
       hideActions="">
       <div class="content layout vertical flex center-justified">
         <mwc-textfield id="esg" type="password" iconTrailing="visibility" 
+          dialogInitialFocus
           @click=${this.showPwd}
           @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
         <div style="margin-top:30px">
