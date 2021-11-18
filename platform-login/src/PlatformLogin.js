@@ -1,12 +1,12 @@
 import { html, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
 import '@spectrum-web-components/button/sp-button';
+import '@trazit/tr-dialog/tr-dialog';
 
 export function getUserSession() {
   let userSession = JSON.parse(sessionStorage.getItem("userSession"))
@@ -85,18 +85,20 @@ export class PlatformLogin extends CommonCore {
       mwc-icon-button#video {
         color: #6495ed;
       }
-      video {
+      .content {
         width: 480px;
-        height: 480px;
+        height: 100%;
+      }
+      .content * {
+        margin: 5px 0;
       }
       @media (max-width: 460px) {
         :host {
           display: block;
           width: 300px;
         }
-        video {
-          width: 300px;
-          height: 300px;
+        .content {
+          width: 100%;
         }
       }
     `];
@@ -121,6 +123,7 @@ export class PlatformLogin extends CommonCore {
     super.firstUpdated()
     // focusing to username once rendered
     this.updateComplete.then(() => {
+      this.videoDialogSurface.style.paddingTop = "20px";
       setTimeout(() => {
         this.user.focus()
       }, 200)
@@ -153,15 +156,17 @@ export class PlatformLogin extends CommonCore {
       </div>
       <div>
         <mwc-icon-button id="video" icon="videocam" title="Video" @click=${()=>this.shadowRoot.querySelector("#videoDialog").open=true}></mwc-icon-button>
-        <mwc-dialog id="videoDialog" @closed=${this.closeVideo}
+        <tr-dialog id="videoDialog" @closed=${this.closeVideo}
+          @zoom-out=${()=>this.dialogZoom(true)}
+          @zoom-in=${()=>this.dialogZoom()}
           heading=""
-          scrimClickAction="">
-          <iframe id="ytube" width="420" height="345" src="https://www.youtube.com/embed/qzZv5e0gg9M?enablejsapi=1"></iframe>
-          <mwc-icon-button icon="close" 
-            slot="secondaryAction"
-            dialogAction="cancel"> 
-          </mwc-icon-button>
-        </mwc-dialog>
+          hideActions=""
+          scrimClickAction=""
+          hideMin>
+          <div class="content layout vertical flex center-justified">
+            <iframe id="ytube" width="100%" height="345" src="https://www.youtube.com/embed/qzZv5e0gg9M?enablejsapi=1"></iframe>
+          </div>
+        </tr-dialog>
         <mwc-icon-button @click=${this.changeLang} title="Language">
           <img .src="/images/${this.flag}.png" />
         </mwc-icon-button>
@@ -180,6 +185,14 @@ export class PlatformLogin extends CommonCore {
 
   get role() {
     return this.shadowRoot.querySelector("mwc-select#role")
+  }
+
+  get videoDialog() {
+    return this.shadowRoot.querySelector("tr-dialog#videoDialog")
+  }
+
+  get videoDialogSurface() {
+    return this.videoDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
   closeVideo() {
@@ -308,5 +321,19 @@ export class PlatformLogin extends CommonCore {
         throw {}
       }
     })
+  }
+
+  dialogZoom(zoom) {
+    if (zoom) {
+      this.shadowRoot.querySelector(".content").style.width = "100%"
+      this.shadowRoot.querySelector("#ytube").height = "100%"
+    } else {
+      if (this.desktop) {
+        this.shadowRoot.querySelector(".content").style.width = "480px"
+      } else {
+        this.shadowRoot.querySelector(".content").style.width = "100%"
+      }
+      this.shadowRoot.querySelector("#ytube").height = "345"
+    }
   }
 }
