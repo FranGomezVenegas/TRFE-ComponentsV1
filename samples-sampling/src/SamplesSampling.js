@@ -84,43 +84,52 @@ export class SamplesSampling extends ProceduresCore {
 
   commentDialog() {
     return html`
-    <mwc-dialog id="cmnDialog" @opened=${() => this.cmn.focus()} @closed=${()=>this.cmn.value=""}
+    <tr-dialog id="cmnDialog" 
+      @closed=${()=>this.cmn.value=""}
       heading=""
+      hideActions=""
       scrimClickAction="">
-      <div class="layout horizontal flex center-justified">
-        <div class="input">
-          <mwc-textfield id="cmn" label="Add Comment"></mwc-textfield>
+      <div class="layout vertical flex center-justified">
+        <mwc-textfield id="cmn" label="Add Comment" dialogInitialFocus></mwc-textfield>
+        <div style="margin-top:30px">
+          <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+            ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+          <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.addComment}>
+            ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
         </div>
       </div>
-      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.addComment}>
-        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-    </mwc-dialog>
+    </tr-dialog>
     `
   }
 
   dateTemplate() {
     return html`
-    <mwc-dialog id="dateDialog" @opened=${() => this.dateTxt.focus()} @closed=${()=>{this.dateTxt.value="";this.auditReasonTxt.value=""}}
+    <tr-dialog id="dateDialog" 
+      @closed=${()=>{this.dateTxt.value="";this.auditReasonTxt.value=""}}
       heading=""
+      hideActions=""
       scrimClickAction="">
-      <div class="layout horizontal flex center-justified">
-        <div class="input layout vertical">
-          <input id="dateTxt" placeholder="${langConfig.newDate["label_"+ this.lang]}" type="datetime-local">
-          <mwc-textfield id="auditReason" label="${langConfig.auditReason["label_" + this.lang]}" type="text"></mwc-textfield>
+      <div class="layout vertical flex center-justified">
+        <input id="dateTxt" placeholder="${langConfig.newDate["label_"+ this.lang]}" 
+          type="datetime-local" dialogInitialFocus>
+        <mwc-textfield id="auditReason" label="${langConfig.auditReason["label_" + this.lang]}" type="text"></mwc-textfield>
+        <div style="margin-top:30px;text-align:center">
+          <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+            ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+          <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.setNewDate}>
+            ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
         </div>
       </div>
-      <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.setNewDate}>
-        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-    </mwc-dialog>
+    </tr-dialog>
     `
   }
 
   get dateDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#dateDialog")
+    return this.shadowRoot.querySelector("tr-dialog#dateDialog")
+  }
+
+  get dateDialogSurface() {
+    return this.dateDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
   get dateTxt() {
@@ -132,7 +141,7 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   get cmnDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#cmnDialog")
+    return this.shadowRoot.querySelector("tr-dialog#cmnDialog")
   }
 
   get cmn() {
@@ -147,14 +156,6 @@ export class SamplesSampling extends ProceduresCore {
     super()
     this.procName = "em-demo-a"
     this.initLang(langConfig)
-  }
-
-  adjustAnotherDialog() {
-    this.cmnDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
-    this.cmnDialogSurface.style.backgroundSize = "cover";
-    this.cmnDialogSurface.style.backgroundRepeat = "no-repeat";
-    this.cmnDialogSurface.style.textAlign = "center";
-    this.cmnDialogSurface.style.padding = "20px";
   }
 
   /**

@@ -1,18 +1,20 @@
 import { LitElement, html, css } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
-import '@material/mwc-dialog';
 import '@material/mwc-icon';
 import '@spectrum-web-components/tooltip/sp-tooltip.js';
+import '@trazit/tr-dialog/tr-dialog';
 
 export class AuditDialog extends LitElement {
   static get styles() {
     return [
       Layouts,
       css`
-        mwc-dialog * {
-          margin-bottom: 5px;
-          --mdc-dialog-max-width: 100vw;
+        tr-dialog {
+          --mdc-dialog-max-width: 90vw;
+        }
+        .content * {
+          margin: 5px 0;
         }
         sp-tooltip {
           max-width: 100%;
@@ -57,8 +59,9 @@ export class AuditDialog extends LitElement {
 
   render() {
     return html`
-    <mwc-dialog ?open=${this.audits.length} class="layout vertical"
+    <tr-dialog ?open=${this.audits.length} class="layout vertical"
       heading=""
+      hideActions=""
       scrimClickAction="">
       ${this.audits.map(a=>
         html`
@@ -116,8 +119,7 @@ export class AuditDialog extends LitElement {
         </div>
         `
       )}
-      <mwc-button slot="secondaryAction" label="close" @click=${()=>this.audits=[]}></mwc-button>
-    </mwc-dialog>
+    </tr-dialog>
     `;
   }
 
@@ -129,7 +131,7 @@ export class AuditDialog extends LitElement {
   }
 
   get dialog() {
-    return this.shadowRoot.querySelector('mwc-dialog')
+    return this.shadowRoot.querySelector('tr-dialog')
   }
 
   get dialogSurface() {

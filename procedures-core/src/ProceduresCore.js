@@ -2,12 +2,12 @@ import { html, css } from 'lit';
 import { CommonCore, commonLangConfig } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
-import '@material/mwc-dialog';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@material/mwc-icon';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
+import '@trazit/tr-dialog/tr-dialog';
 import './audit-dialog';
 export { commonLangConfig };
 let langConfig = {};
@@ -22,7 +22,7 @@ export class ProceduresCore extends CommonCore {
           --mdc-typography-button-text-transform: none;
           margin: 0 2px;
         }
-        mwc-dialog * {
+        tr-dialog * {
           margin-bottom: 5px;
         }
         mwc-textfield[hidden] {
@@ -31,9 +31,15 @@ export class ProceduresCore extends CommonCore {
         mwc-button[hidden] {
           display: none;
         }
-        mwc-dialog {
+        tr-dialog {
           --mdc-dialog-heading-ink-color: blue;
           --mdc-typography-headline6-font-size: 35px;
+        }
+        .content {
+          opacity: 0.9;
+        }
+        .content * {
+          margin: 5px 0;
         }
         mwc-icon-button#prev {
           -webkit-transform:rotateY(180deg);
@@ -84,7 +90,6 @@ export class ProceduresCore extends CommonCore {
       this.pwdDialogSurface.style.backgroundSize = "cover";
       this.pwdDialogSurface.style.backgroundRepeat = "no-repeat";
       this.pwdDialogSurface.style.textAlign = "center";
-      this.pwdDialogSurface.style.padding = "20px";
       this.pwdDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
 
       // esign dialog
@@ -92,7 +97,6 @@ export class ProceduresCore extends CommonCore {
       this.esgDialogSurface.style.backgroundSize = "cover";
       this.esgDialogSurface.style.backgroundRepeat = "no-repeat";
       this.esgDialogSurface.style.textAlign = "center";
-      this.esgDialogSurface.style.padding = "20px";
       this.esgDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
 
       this.adjustAnotherDialog();
@@ -115,46 +119,42 @@ export class ProceduresCore extends CommonCore {
     </vaadin-grid>
     ${this.dateTemplate()}
     ${this.reasonDialog()}
-    <mwc-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>{this.attempt=0;this.pwd.value=""}}
+    <tr-dialog id="pwdDialog" @opened=${()=> this.pwd.focus()} @closed=${()=>{this.attempt=0;this.pwd.value=""}}
       heading="${langConfig.pwdWindowTitle["label_" + this.lang]}"
       scrimClickAction=""
       hideActions="">
-      <div class="layout horizontal flex center-justified" style="opacity:0.8">
-        <div class="input layout vertical" style="width: 70%">
-          <mwc-textfield id="user" label="${langConfig.userToCheck[" label_" + this.lang]}" type="text"
-            .value=${this.userName} disabled></mwc-textfield>
-          <mwc-textfield id="pwd" label="${langConfig.pwToCheck[" label_" + this.lang]}" type="password"
-            iconTrailing="visibility" @click=${this.showPwd}
-            @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
+      <div class="content layout vertical flex center-justified">
+        <mwc-textfield id="user" label="${langConfig.userToCheck[" label_" + this.lang]}" type="text"
+          .value=${this.userName} disabled></mwc-textfield>
+        <mwc-textfield id="pwd" label="${langConfig.pwToCheck[" label_" + this.lang]}" type="password"
+          iconTrailing="visibility" @click=${this.showPwd}
+          @keypress=${e=>e.keyCode==13&&this.checkingUser()}></mwc-textfield>
+        <div style="margin-top:30px">
+          <sp-button size="xl" variant="secondary" dialogAction="decline">
+            ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+          <sp-button size="xl" @click=${this.checkingUser}>
+            ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
         </div>
       </div>
-      <div style="margin-top:30px">
-        <sp-button size="xl" @click=${this.checkingUser}>
-          ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-        <sp-button size="xl" variant="secondary" dialogAction="decline">
-          ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-      </div>
       ${this.setAttempts()}
-    </mwc-dialog>
+    </tr-dialog>
     ${this.commentDialog()}
     <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
-    <mwc-dialog id="esgDialog" @opened=${()=>this.esg.focus()} @closed=${()=>{this.attempt=0;this.esg.value=""}}
+    <tr-dialog id="esgDialog" @opened=${()=>this.esg.focus()} @closed=${()=>{this.attempt=0;this.esg.value=""}}
       heading="${langConfig.esignWindowTitle["label_"+this.lang]}"
       scrimClickAction=""
       hideActions="">
-      <div class="layout horizontal flex center-justified" style="opacity:0.8">
-        <div class="input" style="width: 70%">
-          <mwc-textfield id="esg" type="password" iconTrailing="visibility" 
-            @click=${this.showPwd}
-            @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
+      <div class="content layout vertical flex center-justified">
+        <mwc-textfield id="esg" type="password" iconTrailing="visibility" 
+          @click=${this.showPwd}
+          @keypress=${e=>e.keyCode==13&&this.checkingPhrase()}></mwc-textfield>
+        <div style="margin-top:30px">
+          <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
+          <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
         </div>
+        ${this.setAttempts()}
       </div>
-      <div style="margin-top:30px">
-        <sp-button size="xl" @click=${this.checkingPhrase}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
-        <sp-button size="xl" variant="secondary" dialogAction="decline">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>
-      </div>
-      ${this.setAttempts()}
-    </mwc-dialog>
+    </tr-dialog>
     ${this.resultDialog()}
     `;
   }
@@ -187,7 +187,7 @@ export class ProceduresCore extends CommonCore {
   }
 
   get pwdDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#pwdDialog")
+    return this.shadowRoot.querySelector("tr-dialog#pwdDialog")
   }
 
   get pwd() {
@@ -199,7 +199,7 @@ export class ProceduresCore extends CommonCore {
   }
 
   get esgDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#esgDialog")
+    return this.shadowRoot.querySelector("tr-dialog#esgDialog")
   }
 
   get esg() {
