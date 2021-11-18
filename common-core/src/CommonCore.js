@@ -1,5 +1,11 @@
 import { LitElement, html, css } from 'lit';
 
+function installMediaQueryWatcher(mediaQuery, layoutChangedCallback) {
+  let mql = window.matchMedia(mediaQuery);
+  mql.addListener((e) => layoutChangedCallback(e.matches));
+  layoutChangedCallback(mql.matches);
+}
+
 export const commonLangConfig = {
   "cancelDialogButton": {
     "label_en": "Cancel", 
@@ -40,7 +46,8 @@ export class CommonCore extends LitElement {
       lang: { type: String },
       attempt: { type: Number },
       maxFails: { type: Number },
-      fieldErrMsg: { type: Object }
+      fieldErrMsg: { type: Object },
+      desktop: { type: Boolean }
     };
   }
 
@@ -50,6 +57,10 @@ export class CommonCore extends LitElement {
     this.lang = "en";
     this.attempt = 0;
     this.maxFails = 3;
+  }
+
+  firstUpdated() {
+    installMediaQueryWatcher(`(min-width: 461px)`, desktop => this.desktop = desktop );
   }
 
   updated(updates) {
