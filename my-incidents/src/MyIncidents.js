@@ -164,9 +164,9 @@ export class MyIncidents extends CommonCore {
     </div>
     <tr-dialog id="icdDialog" @opened=${this.dialogOpened} @closed=${()=>{this.icdTitle.value="";this.icdId.value="";this.icdDetail.value=""}}
       heading=""
+      hideActions=""
       scrimClickAction="">
       <div class="content layout vertical flex center-justified">
-        <mwc-button dense dialogAction="close">${langConfig.dialog_button.close["label_"+this.lang]}</mwc-button>
         <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg[this.lang].title} required></mwc-textfield>
         <mwc-textfield id="icdId" label="${langConfig.field.id["label_"+this.lang]}" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg[this.lang].id} required></mwc-textfield>
         <mwc-textarea id="detail" label="${langConfig.field.detail["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg[this.lang].detail} required></mwc-textarea>
@@ -178,12 +178,6 @@ export class MyIncidents extends CommonCore {
       </div>
     </tr-dialog>
     `;
-  }
-
-  firstUpdated() {
-    this.updateComplete.then(() => {
-      this.icdDialogSurface.style.padding = "20px";
-    })
   }
 
   get grid() {
