@@ -1,4 +1,4 @@
-import { html, css, render } from 'lit';
+import { html, css } from 'lit';
 import { ProceduresCore, commonLangConfig } from '@trazit/procedures-core';
 
 let langConfig = {
@@ -151,27 +151,32 @@ export class PlateReading extends ProceduresCore {
 
   reasonDialog() {
     return html`
-    <mwc-dialog id="rsnDialog" @opened=${() => this.rsn.focus()} @closed=${()=>this.rsn.value=""}
+    <tr-dialog id="rsnDialog" 
+      @closed=${()=>this.rsn.value=""}
       heading=""
+      hideActions=""
       scrimClickAction="">
-      <div class="layout horizontal flex center-justified" style="opacity:0.8">
-        <mwc-textfield id="rsn" label="Audit Reason"
+      <div class="layout vertical flex center-justified">
+        <mwc-textfield id="rsn" label="Audit Reason" dialogInitialFocus
           @keypress=${e=>{if(e.keyCode==13&&this.rsn.value)this.pwdDialog.show()}}></mwc-textfield>
+        <div style="margin-top:30px;text-align:center">
+          <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+            ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+          <sp-button size="xl" slot="primaryAction">
+            ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+        </div>
       </div>
-      <sp-button size="xl" slot="primaryAction">
-        ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-        ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-    </mwc-dialog>
+    </tr-dialog>
     `
   }
 
   resultDialog() {
     return html`
-    <mwc-dialog id="rslDialog" @opening=${this.getResult}
+    <tr-dialog id="rslDialog" @opening=${this.getResult}
       heading=""
+      hideActions=""
       scrimClickAction="">
-      <div class="layout horizontal flex center-justified">
+      <div class="layout vertical flex center-justified">
         ${this.enterResults.length ?
           html`
             <table>
@@ -218,14 +223,12 @@ export class PlateReading extends ProceduresCore {
           ` : null
         }
       </div>
-      <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-        ${langConfig.close["label_" + this.lang]}</sp-button>
-    </mwc-dialog>
+    </tr-dialog>
     `
   }
 
   get rsnDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#rsnDialog")
+    return this.shadowRoot.querySelector("tr-dialog#rsnDialog")
   }
 
   get rsn() {
@@ -237,7 +240,7 @@ export class PlateReading extends ProceduresCore {
   }
 
   get rslDialog() {
-    return this.shadowRoot.querySelector("mwc-dialog#rslDialog")
+    return this.shadowRoot.querySelector("tr-dialog#rslDialog")
   }
 
   get rslDialogSurface() {
@@ -256,16 +259,6 @@ export class PlateReading extends ProceduresCore {
     this.enterResults = []
     this.procName = "em-demo-a"
     this.initLang(langConfig)
-  }
-
-  adjustAnotherDialog() {
-    this.rsnDialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
-    this.rsnDialogSurface.style.backgroundSize = "cover";
-    this.rsnDialogSurface.style.backgroundRepeat = "no-repeat";
-    this.rsnDialogSurface.style.textAlign = "center";
-    this.rsnDialogSurface.style.padding = "20px";
-
-    this.rslDialogSurface.style.padding = "20px";
   }
 
   /**
