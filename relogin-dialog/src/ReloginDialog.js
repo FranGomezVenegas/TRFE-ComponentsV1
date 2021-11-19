@@ -74,13 +74,15 @@ export class ReloginDialog extends CommonCore {
   static get properties() {
     return {
       startSession: { type: Number },
-      businessRules: { type: Boolean }
+      businessRules: { type: Boolean },
+      microConv: { type: Number } // conversion number to micros
     };
   }
 
   constructor() {
     super();
     this.businessRules = {};
+    this.microConv = 60000; // multiply to 1 minute
   }
 
   firstUpdated() {
@@ -103,6 +105,7 @@ export class ReloginDialog extends CommonCore {
     this.startSession = new Date().getTime()
     if (this.config.local) {
       this.businessRules = this.config.businessRules
+      this.microConv = 1000 // multiply to 1s for local test
     } else {
       this.businessRules = JSON.parse(sessionStorage.getItem("userSession")).platform_business_rules
     }
@@ -155,7 +158,7 @@ export class ReloginDialog extends CommonCore {
     }
     let curTime = new Date().getTime();
     let runSession = curTime - this.startSession;
-    if (runSession >= this.businessRules.minsLockSession*1000) { // session running >= minsLockSession
+    if (runSession >= this.businessRules.minsLockSession * this.microConv) { // session running >= minsLockSession
       // open relogin dialog
       this.pwdDialog.show()
       if (this.businessRules.enableLogoutSession) {
@@ -167,7 +170,7 @@ export class ReloginDialog extends CommonCore {
     }
     setTimeout(() => {
       this.checkSessionExpired()
-    }, this.businessRules.secondsNextTimeChecker*1000)
+    }, this.businessRules.secondsNextTimeChecker * this.microConv)
   }
 
   /**
@@ -177,14 +180,14 @@ export class ReloginDialog extends CommonCore {
     console.log("checkingUserRelogin")
     let curTime = new Date().getTime();
     let runSession = curTime - this.newSession;
-    if (runSession >= this.businessRules.minsLogoutSession*1000) { // session running >= minsLogoutSession
+    if (runSession >= this.businessRules.minsLogoutSession * this.microConv) { // session running >= minsLogoutSession
       // should logout
       this.logout()
     } else {
       // set the timeout object
       this.timer = setTimeout(() => {
         this.checkUserRelogin()
-      }, this.businessRules.secondsNextTimeChecker*1000)
+      }, this.businessRules.secondsNextTimeChecker * this.microConv)
     }
   }
 
