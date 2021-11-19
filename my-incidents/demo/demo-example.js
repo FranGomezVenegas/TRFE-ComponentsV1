@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
+import '@trazit/relogin-dialog/relogin-dialog';
 import '../my-incidents';
 
 class DemoExample extends LitElement {
@@ -15,7 +16,8 @@ class DemoExample extends LitElement {
   static get properties() {
     return {
       auth: { type: Boolean },
-      flag: { type: String }
+      flag: { type: String },
+      businessRules: { type: Object }
     }
   }
 
@@ -23,16 +25,31 @@ class DemoExample extends LitElement {
     super();
     this.auth = false;
     this.flag = "es";
+    this.businessRules = {
+      "enableLockSession": true,
+      "minsLockSession": 2,
+      "enableLogoutSession": false,
+      "minsLogoutSession": 20,
+      "secondsNextTimeChecker": 5
+    }
   }
 
   render() {
     return html`
-      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.incidents.config=this.pLogin.config}}></platform-login>
+      <platform-login @authorized=${e=>{
+        this.auth=e.target.auth;
+        this.incidents.config=this.pLogin.config;
+        this.rLogin.config=this.pLogin.config;
+      }}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <my-incidents></my-incidents><br>
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button><br><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
+        <relogin-dialog 
+          @logout=${()=>this.pLogin.logout()}
+          localRules=true 
+          .businessRules=${this.businessRules}></relogin-dialog>
       </div>
     `;
   }
@@ -43,6 +60,10 @@ class DemoExample extends LitElement {
 
   get incidents() {
     return this.shadowRoot.querySelector("my-incidents")
+  }
+
+  get rLogin() {
+    return this.shadowRoot.querySelector("relogin-dialog")
   }
 
   /**
