@@ -136,6 +136,7 @@ export class MyIncidents extends CommonCore {
   }
 
   authorized() {
+    super.authorized()
     this.getOpenIncidents()
   }
 
