@@ -3,5 +3,13 @@
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
   "appAuthenticateApiUrl": "/frontend/AuthenticationAPI",
   "frontEndIncidentsUrl": "/frontend/IncidentAPIfrontend",
-  "ApiIncidentsUrl": "/app/IncidentAPI"
+  "ApiIncidentsUrl": "/app/IncidentAPI",
+  "businessRules": {
+    "enableLockSession": true,
+    "minsLockSession": 2,
+    "enableLogoutSession": false,
+    "minsLogoutSession": 20,
+    "secondsNextTimeChecker": 5
+  },
+  "local": true
 }

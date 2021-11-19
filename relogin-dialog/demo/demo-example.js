@@ -15,8 +15,7 @@ class DemoExample extends LitElement {
   static get properties() {
     return {
       auth: { type: Boolean },
-      flag: { type: String },
-      businessRules: { type: Object }
+      flag: { type: String }
     }
   }
 
@@ -24,13 +23,6 @@ class DemoExample extends LitElement {
     super();
     this.auth = false;
     this.flag = "es";
-    this.businessRules = {
-      "enableLockSession": true,
-      "minsLockSession": 2,
-      "enableLogoutSession": false,
-      "minsLogoutSession": 20,
-      "secondsNextTimeChecker": 5
-    }
   }
 
   render() {
@@ -38,10 +30,7 @@ class DemoExample extends LitElement {
       <platform-login @authorized=${e=>{this.auth=e.target.auth;this.rLogin.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <relogin-dialog 
-          @logout=${()=>this.pLogin.logout()}
-          localRules=true 
-          .businessRules=${this.businessRules}></relogin-dialog><br>
+        <relogin-dialog @logout=${()=>this.pLogin.logout()}></relogin-dialog><br>
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button><br><br>
         <button @click=${()=>this.rLogin.show()}>Relogin</button>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>

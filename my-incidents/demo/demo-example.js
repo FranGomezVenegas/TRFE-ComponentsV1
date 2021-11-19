@@ -16,8 +16,7 @@ class DemoExample extends LitElement {
   static get properties() {
     return {
       auth: { type: Boolean },
-      flag: { type: String },
-      businessRules: { type: Object }
+      flag: { type: String }
     }
   }
 
@@ -25,13 +24,6 @@ class DemoExample extends LitElement {
     super();
     this.auth = false;
     this.flag = "es";
-    this.businessRules = {
-      "enableLockSession": true,
-      "minsLockSession": 2,
-      "enableLogoutSession": false,
-      "minsLogoutSession": 20,
-      "secondsNextTimeChecker": 5
-    }
   }
 
   render() {
@@ -46,10 +38,7 @@ class DemoExample extends LitElement {
         <my-incidents></my-incidents><br>
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button><br><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
-        <relogin-dialog 
-          @logout=${()=>this.pLogin.logout()}
-          localRules=true 
-          .businessRules=${this.businessRules}></relogin-dialog>
+        <relogin-dialog @logout=${()=>this.pLogin.logout()}></relogin-dialog>
       </div>
     `;
   }

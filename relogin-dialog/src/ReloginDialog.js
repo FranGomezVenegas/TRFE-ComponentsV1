@@ -74,8 +74,7 @@ export class ReloginDialog extends CommonCore {
   static get properties() {
     return {
       startSession: { type: Number },
-      businessRules: { type: Boolean },
-      localRules: { type: Boolean } // for development will reference to local env
+      businessRules: { type: Boolean }
     };
   }
 
@@ -102,7 +101,9 @@ export class ReloginDialog extends CommonCore {
   authorized() {
     super.authorized()
     this.startSession = new Date().getTime()
-    if (!this.localRules) {
+    if (this.config.local) {
+      this.businessRules = this.config.businessRules
+    } else {
       this.businessRules = JSON.parse(sessionStorage.getItem("userSession")).platform_business_rules
     }
     this.checkSessionExpired()
