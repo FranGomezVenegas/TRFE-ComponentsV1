@@ -110,17 +110,6 @@ export class UserProfile extends CommonCore {
     ];
   }
 
-  static get properties() {
-    return {
-      userName: { type: String }
-    };
-  }
-
-  constructor() {
-    super();
-    this.userName = "";
-  }
-
   render() {
     return html`
       <div class="input">
@@ -202,11 +191,6 @@ export class UserProfile extends CommonCore {
 
   get oldEsg() {
     return this.shadowRoot.querySelector("mwc-textfield#oldEsg")
-  }
-
-  authorized() {
-    console.log(JSON.parse(sessionStorage.getItem("userSession")))
-    this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName;
   }
 
   firstUpdated() {

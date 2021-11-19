@@ -57,15 +57,9 @@ export class ProceduresCore extends CommonCore {
   static get properties() {
     return {
       selectedItem: { type: Object },
-      userName: { type: String },
       procName: { type: String },
       personel: { type: Boolean }
     };
-  }
-
-  constructor() {
-    super();
-    this.userName = "";
   }
 
   updated(updates) {
@@ -104,8 +98,8 @@ export class ProceduresCore extends CommonCore {
   }
 
   authorized() {
+    super.authorized()
     this.getSamples()
-    this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
   }
 
   render() {

@@ -72,6 +72,7 @@ export class VideoTutorial extends CommonCore {
   }
 
   authorized() {
+    super.authorized();
     this.getVideos();
   }
 

@@ -242,7 +242,7 @@ export class PlatformLogin extends CommonCore {
   }
 
   authorized() {
-    console.log("reqFinal ", JSON.parse(sessionStorage.getItem("userSession")))
+    super.authorized();
     this.auth = true;
     this.hidden = true;
     this.dispatchEvent(new CustomEvent("authorized", {bubbles: true, composed: true}));

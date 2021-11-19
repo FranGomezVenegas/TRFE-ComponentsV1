@@ -13,18 +13,28 @@ class DemoExample extends LitElement {
 
   static get properties() {
     return {
-      auth: { type: Boolean }
+      auth: { type: Boolean },
+      businessRules: { type: Object }
     }
   }
 
   constructor() {
     super();
     this.auth = false;
+    this.businessRules = {
+      "enableLockSession": true,
+      "minsLockSession": 10,
+      "enableLogoutSession": true,
+      "minsLogoutSession": 15,
+      "secondsNextTimeChecker": 60
+    }
   }
 
   render() {
     return html`
-      <platform-login @authorized=${e=>this.auth=e.target.auth}></platform-login>
+      <platform-login @authorized=${e=>this.auth=e.target.auth} 
+        localBusinessRules=true
+        .businessRules=${this.businessRules}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>

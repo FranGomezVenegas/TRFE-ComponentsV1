@@ -47,13 +47,15 @@ export class CommonCore extends LitElement {
       attempt: { type: Number },
       maxFails: { type: Number },
       fieldErrMsg: { type: Object },
-      desktop: { type: Boolean }
+      desktop: { type: Boolean },
+      userName: { type: String }
     };
   }
 
   constructor() {
     super();
     this.config = {};
+    this.userName = "";
     this.lang = "en";
     this.attempt = 0;
     this.maxFails = 3;
@@ -85,7 +87,10 @@ export class CommonCore extends LitElement {
   }
 
   // Override this method once authorized
-  authorized() { }
+  authorized() {
+    console.log(JSON.parse(sessionStorage.getItem("userSession")))
+    this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
+  }
 
   /**
    * Populating fetch api
