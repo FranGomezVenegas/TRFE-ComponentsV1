@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 
 function installMediaQueryWatcher(mediaQuery, layoutChangedCallback) {
   let mql = window.matchMedia(mediaQuery);
@@ -18,34 +18,11 @@ export const commonLangConfig = {
 }
 
 export class CommonCore extends LitElement {
-  static get styles() {
-    return css`
-      p.attemptsphraseblue {
-        color: #464dbb;
-      }
-      p.attemptsphrasered {
-        color: #f3371680;
-        animation-duration: 2s;
-        animation-name: slidein;
-      }
-      @keyframes slidein {
-        from {
-          margin-left: 30%;
-        }
-        to {
-          margin-left: 0%;
-        }
-      }           
-    `
-  }
-
   static get properties() {
     return {
       config: { type: Object },
       flag: { type: String },
       lang: { type: String },
-      attempt: { type: Number },
-      maxFails: { type: Number },
       fieldErrMsg: { type: Object },
       desktop: { type: Boolean },
       userName: { type: String }
@@ -57,8 +34,6 @@ export class CommonCore extends LitElement {
     this.config = {};
     this.userName = "";
     this.lang = "en";
-    this.attempt = 0;
-    this.maxFails = 3;
   }
 
   firstUpdated() {
@@ -77,13 +52,6 @@ export class CommonCore extends LitElement {
         composed: true
       }))  
     }
-  }
-
-  setAttempts() {
-    let txt = this.lang == "en" ? 
-      `*** Attempts: ${this.attempt} of 3` : 
-      `*** Intentos: ${this.attempt} de ${this.maxFails}`
-    return html`<p class=${this.attempt==0?'attemptsphraseblue':'attemptsphrasered'}>${txt}</p>`
   }
 
   // Override this method once authorized
