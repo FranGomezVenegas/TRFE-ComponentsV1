@@ -1,4 +1,5 @@
 import { html, css } from 'lit';
+import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { CommonCore, commonLangConfig } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-textfield';
@@ -142,16 +143,13 @@ export class CredDialog extends CommonCore {
     })
   }
 
-  updated(updates) {
-    super.updated(updates)
-    if (updates.has('type')) {
-      if (this.type == "user") {
-        this.header = `${langConfig.pwdWindowTitle["label_"+this.lang]}`
-      } else if (this.type == "esign") {
-        this.header = `${langConfig.esignWindowTitle["label_"+this.lang]}`
-      } else if (this.type == "justification") {
-        this.header = `${langConfig.justificationWindowTitle["label_"+this.lang]}`
-      }
+  headerLabel() {
+    if (this.type == "user") {
+      return `${langConfig.pwdWindowTitle["label_"+this.lang]}`
+    } else if (this.type == "esign") {
+      return `${langConfig.esignWindowTitle["label_"+this.lang]}`
+    } else {
+      return `${langConfig.justificationWindowTitle["label_"+this.lang]}`
     }
   }
 
@@ -159,17 +157,16 @@ export class CredDialog extends CommonCore {
     return html`
       <tr-dialog id="credDialog" 
         @closed=${this.reset}
-        heading="${this.header}"
+        .heading="${this.headerLabel()}"
         hideActions=""
         scrimClickAction="">
+        ${this.changing||this.nonProc ?
+          null :
+          html`<div style="position:absolute;left:15px;top:8px;font-size:12px;">
+            ${this.actionName} (id: ${this.objectId})
+          </div>`
+        }
         <div class="content layout vertical flex center-justified">
-          ${this.changing||this.nonProc ?
-            null :
-            html`
-            <mwc-textfield label="${langConfig.action["label_"+this.lang]}" .value=${this.actionName} type="text" disabled></mwc-textfield>
-            <mwc-textfield label="Id" .value=${this.objectId} type="text" disabled></mwc-textfield>
-            `
-          }
           ${this.inputField()}
           ${this.changing||this.nonProc ?
             null :
@@ -375,10 +372,6 @@ export class CredDialog extends CommonCore {
       userToCheck: this.userName,
       passwordToCheck: this.pwd.value
     })
-    console.log(this.actionName)
-    console.log(this.objectId)
-    console.log(this.jst.value)
-    console.log(params)
     this.fetchApi(params, false).then(j => {
       if (j) {
         this.nextRequest()
@@ -394,10 +387,6 @@ export class CredDialog extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       esignPhraseToCheck: this.esg.value
     })
-    console.log(this.actionName)
-    console.log(this.objectId)
-    console.log(this.jst.value)
-    console.log(params)
     this.fetchApi(params, false).then(j => {
       if (j) {
         this.nextRequest()
@@ -408,6 +397,7 @@ export class CredDialog extends CommonCore {
   }
 
   nextRequest() {
+    // doing change sampling date endpont request
     console.log(this.actionName)
     console.log(this.objectId)
     console.log(this.jst.value)
