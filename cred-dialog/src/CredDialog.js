@@ -111,12 +111,14 @@ export class CredDialog extends CommonCore {
       actionName: { type: String },
       objectId: { type: String },
       justificationType: { type: String },
-      nonProc: { type: Boolean }
+      nonProc: { type: Boolean },
+      escapeKey: { type: Boolean }
     };
   }
 
   constructor() {
     super();
+    this.escapeKey = true;
     this.reset();
   }
 
@@ -159,7 +161,8 @@ export class CredDialog extends CommonCore {
         @closed=${this.closed}
         .heading="${this.headerLabel()}"
         hideActions=""
-        scrimClickAction="">
+        scrimClickAction=""
+        .escapeKeyAction="${this.escapeKey?'close':''}">
         ${this.changing||this.nonProc ?
           null :
           html`<div style="position:absolute;left:15px;top:8px;font-size:12px;">
@@ -175,7 +178,7 @@ export class CredDialog extends CommonCore {
           <div style="margin-top:30px">
             ${this.nonProc ?
               // closing dialog for non procedures i.e relogin on lock inactivity
-              html`<sp-button size="xl" variant="secondary" @click=${()=>this.dispatchEvent(new CustomEvent('cancel'))}>${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>` :
+              html`<sp-button size="xl" variant="secondary" @click=${this.failedAttempt}>${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>` :
               // for procedures
               html`<sp-button size="xl" variant="secondary" dialogAction="close">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>`
             }
@@ -314,13 +317,14 @@ export class CredDialog extends CommonCore {
 
   checkAttempt() {
     if (this.attempt > 1) {
-      this.credDialog.close()
-      if (this.nonProc) {
-        this.dispatchEvent(new CustomEvent('cancel'))
-      }
+      this.failedAttempt()
     } else {
       this.attempt++
     }
+  }
+
+  failedAttempt() {
+    this.credDialog.close()
   }
 
   /**
