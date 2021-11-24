@@ -37,6 +37,7 @@ class DemoExample extends LitElement {
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button><br><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
         <hr>
+        <input id="objId" type="text" placeholder="id"><br>
         ${this.procList.map(p => 
           html`<button @click=${()=>this.action(p)}>${p}</button>`
         )}
@@ -45,6 +46,10 @@ class DemoExample extends LitElement {
         <button @click=${this.nonProcAction}>RELOGIN (LOCK INACTIVITY)</button>
       </div>
     `;
+  }
+
+  get objId() {
+    return this.shadowRoot.querySelector("#objId")
   }
 
   credsChange() {
@@ -75,7 +80,6 @@ class DemoExample extends LitElement {
         list.push(u)
       }
     })
-    console.log(list)
     this.procList = list;
     this.auth = e.target.auth;
     this.cDialog.config = this.pLogin.config;
@@ -107,11 +111,11 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    this.flag = this.incidents.changeLang()
+    this.flag = this.cDialog.changeLang()
   }
 
   action(actionName) {
-    this.cDialog.credsChecker(actionName, 100)
+    this.cDialog.credsChecker(actionName, this.objId.value)
   }
 }
 customElements.define('demo-example', DemoExample);
