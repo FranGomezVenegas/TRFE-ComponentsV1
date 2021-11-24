@@ -156,7 +156,7 @@ export class CredDialog extends CommonCore {
   render() {
     return html`
       <tr-dialog id="credDialog" 
-        @closed=${this.reset}
+        @closed=${this.closed}
         .heading="${this.headerLabel()}"
         hideActions=""
         scrimClickAction="">
@@ -185,6 +185,13 @@ export class CredDialog extends CommonCore {
         </div>
       </tr-dialog>
     `;
+  }
+
+  closed() {
+    this.reset()
+    if (this.pwd) this.pwd.value = ""
+    if (this.esg) this.esg.value = ""
+    if (this.jst) this.jst.value = ""
   }
 
   /**
@@ -397,10 +404,7 @@ export class CredDialog extends CommonCore {
   }
 
   nextRequest() {
-    // doing change sampling date endpont request
-    console.log(this.actionName)
-    console.log(this.objectId)
-    console.log(this.jst.value)
+    this.credDialog.close()
   }
 
   setAttempts() {
