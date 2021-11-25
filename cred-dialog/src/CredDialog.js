@@ -112,22 +112,24 @@ export class CredDialog extends CommonCore {
       objectId: { type: String },
       justificationType: { type: String },
       nonProc: { type: Boolean },
-      escapeKey: { type: Boolean }
+      escapeKey: { type: Boolean },
+      reqParams: { type: Object }
     };
   }
 
   constructor() {
     super();
     this.escapeKey = true;
+    this.reqParams = {};
     this.reset();
   }
 
   reset() {
-    this.type = "user";
+    this.type = "";
     this.changing = false;
     this.attempt = 0;
     this.maxFails = 3;
-    this.justificationType = "TEXT";
+    this.justificationType = "";
     this.nonProc = false;
   }
 
@@ -369,15 +371,26 @@ export class CredDialog extends CommonCore {
     }
   }
 
-  credsChecker(actionName, objId) {
+  /**
+   * 
+   * @param {*} actionName 
+   * @param {*} objId -1 will show up the creds dialog, e.g user profile open the creds dialog. 
+   * @param {*} params ref of this.reqParams
+   */
+  credsChecker(actionName, objId, params={}) {
+    this.reqParams = params
     if (actionName) {
       this.actionName = actionName
-      this.objectId = objId
-      let noNeedCreds = this.checkProcList()
-      if (noNeedCreds) {
-        this.nextRequest()
-      } else {
+      if (objId == -1) {
         this.credDialog.show()
+      } else {
+        this.objectId = objId
+        let noNeedCreds = this.checkProcList()
+        if (noNeedCreds) {
+          this.nextRequest()
+        } else {
+          this.credDialog.show()
+        }
       }
     }
   }
