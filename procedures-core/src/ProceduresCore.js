@@ -45,14 +45,8 @@ export class ProceduresCore extends CredDialog {
     return {
       selectedItem: { type: Object },
       procName: { type: String },
-      personel: { type: Boolean },
-      selectedAuditId: { type: Number }
+      personel: { type: Boolean }
     };
-  }
-
-  constructor() {
-    super()
-    this.selectedAuditId = ""
   }
 
   updated(updates) {
@@ -106,6 +100,7 @@ export class ProceduresCore extends CredDialog {
       </h1>
     `
   }
+
   gridList() {
     return Object.entries(langConfig.gridHeader).map(
       ([key, value], i) => html`
@@ -129,7 +124,6 @@ export class ProceduresCore extends CredDialog {
     super.nextRequest()
     this.reqParams = {
       procInstanceName: this.procName,
-      auditId: this.selectedAuditId,
       ...this.reqParams
     }
   }
