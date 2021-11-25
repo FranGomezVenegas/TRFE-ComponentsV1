@@ -13,9 +13,6 @@ export class AuditDialog extends LitElement {
         tr-dialog {
           --mdc-dialog-max-width: 90vw;
         }
-        .content * {
-          margin: 5px 0;
-        }
         sp-tooltip {
           max-width: 100%;
           width: 100%;
@@ -59,7 +56,7 @@ export class AuditDialog extends LitElement {
 
   render() {
     return html`
-    <tr-dialog ?open=${this.audits.length} class="layout vertical"
+    <tr-dialog ?open=${this.audits.length} @closed=${()=>this.audits=[]} class="layout vertical"
       heading=""
       hideActions=""
       scrimClickAction="">
