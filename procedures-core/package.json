@@ -1,20 +1,27 @@
 {
   "name": "@trazit/procedures-core",
-  "description": "Component core for procedures elements of trazit platform",
+  "description": "Component core for procedures elements including air & water",
   "license": "MIT",
   "author": "Trazit Team",
   "version": "0.0.1",
   "main": "index.js",
   "module": "index.js",
+  "scripts": {
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+  },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@material/mwc-button": "^0.25.3",
     "@material/mwc-icon-button": "^0.25.3",
     "@material/mwc-textfield": "^0.25.3",
     "@spectrum-web-components/tooltip": "^0.9.0",
-    "@trazit/common-core": "file:.yalc/@trazit/common-core",
-    "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
+    "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
     "@vaadin/vaadin-grid": "^21.0.3",
     "lit": "^2.0.2"
+  },
+  "devDependencies": {
+    "@spectrum-web-components/theme": "^0.8.15",
+    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
+    "@web/dev-server": "^0.1.26"
   }
 }

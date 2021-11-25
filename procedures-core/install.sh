@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-../install.sh @trazit/common-core @trazit/tr-dialog
+../install.sh @trazit/platform-login @trazit/cred-dialog
