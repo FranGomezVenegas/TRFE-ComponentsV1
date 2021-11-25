@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@spectrum-web-components/theme": "^0.8.15",
-    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
     "@web/dev-server": "^0.1.26"
   }
 }
