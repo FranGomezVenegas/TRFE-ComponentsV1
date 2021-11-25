@@ -134,7 +134,7 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   /**
-   * Once an incident item selected
+   * Once an item selected
    * @param {*} e the grid
    */
   selectItem(e) {
@@ -150,16 +150,17 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   getSamples() {
+    this.reqParams = {
+      sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
+      whereFieldsName: "current_stage|sample_config_code"+ (this.personel?'':' not') +" in*",
+      whereFieldsValue: "Sampling|prog_pers_template"
+    }
     this.credsChecker("SAMPLES_BY_STAGE")
   }
 
   getSamplesReq() {
-    let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl + '?' + new URLSearchParams({
-      sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
-      whereFieldsName: "current_stage|sample_config_code"+ (this.personel?'':' not') +" in*",
-      whereFieldsValue: "Sampling|prog_pers_template",
-      ...this.reqParams
-    })
+    let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
+      + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params, false, false).then(j => {
       if (j) {
         this.grid.items = j
@@ -185,7 +186,9 @@ export class SamplesSampling extends ProceduresCore {
    * @param {*} e 
    */
   signAudit(e) {
-    this.selectedAuditId = e.detail.audit_id
+    this.reqParams = {
+      auditId: e.detail.audit_id
+    }
     this.credsChecker("SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED", e.detail.audit_id)
   }
 
@@ -196,7 +199,6 @@ export class SamplesSampling extends ProceduresCore {
     let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
-      this.selectedAuditId = ""
       this.sampleAudit()
     })
   }
@@ -210,6 +212,9 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   setSamplingDate() {
+    this.reqParams = {
+      newDateTime: this.newDate ? this.dateTxt.value : ""
+    }
     if (this.newDate) {
       this.credsChecker("CHANGESAMPLINGDATE", this.selectedItem.sample_id)
     } else {
@@ -218,10 +223,8 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   setSamplingDateReq() {
-    let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      newDateTime: this.newDate ? this.dateTxt.value : "",
-      ...this.reqParams
-    })
+    let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       this.newDate = false
       this.dateDialog.close()
@@ -231,8 +234,8 @@ export class SamplesSampling extends ProceduresCore {
     })
   }
 
-  moveToNext() {
-    this.credsChecker("SAMPLESTAGE_MOVETONEXT", this.selectedItem.sample_id)
+  moveToNext(isNext=true) {
+    this.credsChecker(isNext ? "SAMPLESTAGE_MOVETONEXT" : "SAMPLESTAGE_MOVETOPREVIOUS", this.selectedItem.sample_id)
   }
 
   moveToNextReq() {
@@ -246,16 +249,17 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   addComment() {
+    this.reqParams = {
+      sampleComment: this.cmn.value
+    }
     if (this.cmn.value) {
       this.credsChecker("SAMPLINGCOMMENTADD", this.selectedItem.sample_id)
     }
   }
 
   addCommentReq() {
-    let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl + '?' + new URLSearchParams({
-      sampleComment: this.cmn.value,
-      ...this.reqParams
-    })
+    let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       this.cmnDialog.close()
       if (j) {
