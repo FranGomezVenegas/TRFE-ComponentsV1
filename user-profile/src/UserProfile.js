@@ -56,13 +56,13 @@ export class UserProfile extends CredDialog {
       <div class="input">
         <div class="layout horizontal flex center">
           <mwc-textfield id="newPwd" .label="${langConfig.Password["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newPwd.value)this.credsChecker("TOKEN_VALIDATE_USER_CREDENTIALS") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.credsChecker("TOKEN_VALIDATE_USER_CREDENTIALS")} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
+            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newPwd.value)this.confirmNewVal("USER_CHANGE_PSWD") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.confirmNewVal("USER_CHANGE_PSWD")} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
           <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newEsg.value)this.credsChecker("TOKEN_VALIDATE_ESIGN_PHRASE") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.credsChecker("TOKEN_VALIDATE_ESIGN_PHRASE")} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
+            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newEsg.value)this.confirmNewVal("USER_CHANGE_ESIGN") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
         </div>
       </div>
       <sp-button size="xl" @click=${()=>this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
@@ -94,22 +94,18 @@ export class UserProfile extends CredDialog {
     })
   }
 
-  credsChecker(action) {
-    if (action == "TOKEN_VALIDATE_USER_CREDENTIALS") {
+  confirmNewVal(action) {
+    if (action == "USER_CHANGE_PSWD") {
       this.type = "user"
-    } else if (action == "TOKEN_VALIDATE_ESIGN_PHRASE") {
+      this.credsChecker(action, -1, {
+        newPassword: this.newPwd.value
+      })
+    } else if (action == "USER_CHANGE_ESIGN") {
       this.type = "esign"
+      this.credsChecker(action, -1, {
+        newEsign: this.newEsg.value
+      })
     }
-    super.credsChecker(action)
-  }
-
-  nextRequest() {
-    if (this.actionName == "TOKEN_VALIDATE_USER_CREDENTIALS") {
-      this.confirmNewPassword()
-    } else if (this.actionName == "TOKEN_VALIDATE_ESIGN_PHRASE") {
-      this.confirmNewEsign()
-    }
-    super.nextRequest()
   }
 
   /**
@@ -117,12 +113,9 @@ export class UserProfile extends CredDialog {
    */
   confirmNewPassword() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
-      actionName: "USER_CHANGE_PSWD",
-      finalToken: userSession.finalToken,
-      dbName: this.config.dbName,
-      newPassword: this.newPwd.value
-    })).then(j => {
+    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl 
+      + '?' + new URLSearchParams(this.reqParams)
+    this.fetchApi(params).then(j => {
       if (j) {
         userSession.finalToken = j.finalToken
         sessionStorage.setItem("userSession", JSON.stringify(userSession))
@@ -136,17 +129,23 @@ export class UserProfile extends CredDialog {
    */
   confirmNewEsign() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    this.fetchApi(this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
-      actionName: "USER_CHANGE_ESIGN",
-      finalToken: userSession.finalToken,
-      dbName: this.config.dbName,
-      newEsign: this.newEsg.value
-    })).then(j => {
+    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl 
+      + '?' + new URLSearchParams(this.reqParams)
+    this.fetchApi(params).then(j => {
       if (j) {
         userSession.finalToken = j.finalToken
         sessionStorage.setItem("userSession", JSON.stringify(userSession))
       }
       this.newEsg.value = ""
     })
+  }
+
+  nextRequest() {
+    super.nextRequest()
+    if (this.actionName == "USER_CHANGE_PSWD") {
+      this.confirmNewPassword()
+    } else if (this.actionName == "USER_CHANGE_ESIGN") {
+      this.confirmNewEsign()
+    }
   }
 }
