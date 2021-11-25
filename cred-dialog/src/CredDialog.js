@@ -415,6 +415,7 @@ export class CredDialog extends CommonCore {
 
   nextRequest() {
     this.reqParams = {
+      ...this.reqParams,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       dbName: this.config.dbName,
       actionName: this.actionName,
