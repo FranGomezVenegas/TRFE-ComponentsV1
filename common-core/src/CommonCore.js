@@ -25,8 +25,7 @@ export class CommonCore extends LitElement {
       lang: { type: String },
       fieldErrMsg: { type: Object },
       desktop: { type: Boolean },
-      userName: { type: String },
-      reqParams: { type: Object }
+      userName: { type: String }
     };
   }
 
@@ -35,7 +34,6 @@ export class CommonCore extends LitElement {
     this.config = {};
     this.userName = "";
     this.lang = "en";
-    this.reqParams = {};
   }
 
   firstUpdated() {
@@ -85,7 +83,6 @@ export class CommonCore extends LitElement {
           composed: true
         }))
       }
-      this.reqParams = {}
       return j
     }).catch(e => {
       this.dispatchEvent(new CustomEvent("error", {
@@ -94,7 +91,6 @@ export class CommonCore extends LitElement {
         composed: true
       }))
       this.error(e)
-      this.reqParams = {}
       return
     })
   }
