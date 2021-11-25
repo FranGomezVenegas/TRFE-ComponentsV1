@@ -364,6 +364,8 @@ export class CredDialog extends CommonCore {
         }  
       }
       this.type = "justification"
+    } else {
+      return true // bypass / no need creds process
     }
   }
 
@@ -371,8 +373,12 @@ export class CredDialog extends CommonCore {
     if (actionName) {
       this.actionName = actionName
       this.objectId = objId
-      this.checkProcList()
-      this.credDialog.show()
+      let noNeedCreds = this.checkProcList()
+      if (noNeedCreds) {
+        this.nextRequest()
+      } else {
+        this.credDialog.show()
+      }
     }
   }
 
@@ -408,6 +414,16 @@ export class CredDialog extends CommonCore {
   }
 
   nextRequest() {
+    this.reqParams = {
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      dbName: this.config.dbName,
+      actionName: this.actionName,
+      sampleId: this.objectId,
+      userToCheck: this.userName,
+      passwordToCheck: this.pwd ? this.pwd.value : "",
+      esignPhraseToCheck: this.esg ? this.esg.value : "",
+      auditReasonPhrase: this.jst ? this.jst.value: ""
+    }
     this.credDialog.close()
   }
 
