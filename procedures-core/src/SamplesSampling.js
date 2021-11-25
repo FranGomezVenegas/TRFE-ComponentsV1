@@ -150,12 +150,11 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   getSamples() {
-    this.reqParams = {
+    this.credsChecker("SAMPLES_BY_STAGE", null, {
       sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
       whereFieldsName: "current_stage|sample_config_code"+ (this.personel?'':' not') +" in*",
       whereFieldsValue: "Sampling|prog_pers_template"
-    }
-    this.credsChecker("SAMPLES_BY_STAGE")
+    })
   }
 
   getSamplesReq() {
@@ -186,10 +185,9 @@ export class SamplesSampling extends ProceduresCore {
    * @param {*} e 
    */
   signAudit(e) {
-    this.reqParams = {
+    this.credsChecker("SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED", e.detail.audit_id, {
       auditId: e.detail.audit_id
-    }
-    this.credsChecker("SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED", e.detail.audit_id)
+    })
   }
 
   /**
@@ -212,11 +210,10 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   setSamplingDate() {
-    this.reqParams = {
-      newDateTime: this.newDate ? this.dateTxt.value : ""
-    }
     if (this.newDate) {
-      this.credsChecker("CHANGESAMPLINGDATE", this.selectedItem.sample_id)
+      this.credsChecker("CHANGESAMPLINGDATE", this.selectedItem.sample_id, {
+        newDateTime: this.dateTxt.value
+      })
     } else {
       this.credsChecker("SETSAMPLINGDATE", this.selectedItem.sample_id)
     }
@@ -249,11 +246,10 @@ export class SamplesSampling extends ProceduresCore {
   }
 
   addComment() {
-    this.reqParams = {
-      sampleComment: this.cmn.value
-    }
     if (this.cmn.value) {
-      this.credsChecker("SAMPLINGCOMMENTADD", this.selectedItem.sample_id)
+      this.credsChecker("SAMPLINGCOMMENTADD", this.selectedItem.sample_id, {
+        sampleComment: this.cmn.value
+      })
     }
   }
 

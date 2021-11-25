@@ -204,20 +204,18 @@ export class PlateReading extends SamplesSampling {
   }
 
   getSamples() {
-    this.reqParams = {
+    this.credsChecker("SAMPLES_BY_STAGE", null, {
       sampleFieldToRetrieve: "sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code",
       whereFieldsName: "current_stage|sample_config_code"+ (this.personel?'':' not') +" in*",
       whereFieldsValue: "PlateReading|prog_pers_template"
-    }
-    this.credsChecker("SAMPLES_BY_STAGE")
+    })
   }
 
   enterResult(raw_value, id) {
-    this.reqParams = {
+    this.credsChecker("ENTERRESULT", this.selectedItem.sample_id, {
       rawValueResult: raw_value,
       resultId: id
-    }
-    this.credsChecker("ENTERRESULT", this.selectedItem.sample_id)
+    })
   }
 
   enterResultReq() {
@@ -231,11 +229,10 @@ export class PlateReading extends SamplesSampling {
   }
 
   getResult() {
-    this.reqParams = {
+    this.credsChecker("GET_SAMPLE_ANALYSIS_RESULT_LIST", this.selectedItem.sample_id, {
       sampleAnalysisResultFieldToRetrieve: "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict",
       sortFieldsName: "test_id|result_id"
-    }
-    this.credsChecker("GET_SAMPLE_ANALYSIS_RESULT_LIST", this.selectedItem.sample_id)
+    })
   }
 
   getResultReq() {
