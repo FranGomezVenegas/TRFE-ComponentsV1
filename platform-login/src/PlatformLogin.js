@@ -64,15 +64,16 @@ export class PlatformLogin extends CommonCore {
         display: none;
       }
       div.login-box {
-        background-color:  rgba(177, 242, 244, 25%); 
+        background-color: rgba(177, 242, 244, 0.25);
         border-radius: 20px;
-        box-shadow: 5px 5px #888888;
+        box-shadow: rgb(136, 136, 136) 5px 5px;
         padding: 10px;
+        width: 300px;
       }
       img.appLoginLogoOnTop {
-        height: 4.08vmax;
-        width: 17.85vmax;
-        padding-bottom:15px;
+        height: 3.08vmax;
+        width: 11vmax;
+        padding-bottom: 15px;
       }
       h2 {
         font-family: 'Oxygen', sans-serif;
