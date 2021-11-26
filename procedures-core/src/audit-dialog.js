@@ -78,11 +78,13 @@ export class AuditDialog extends LitElement {
               <input type="checkbox" @click=${e=>this.showItem(e,a)}>
               <div>action_name: ${a.action_name}</div>
             </div>
+            <div>
+              *performed_on: ${a.date} by ${a.person}
+            </div>
             <div id="audit-${a.audit_id}" hidden=true>
-              *performed_on: ${a.date}
               ${a.reviewed?html`<br>*reviewed_on: ${a.reviewed_on}`:null}
               <li>audit_id: ${a.audit_id}</li>
-              fields_updated: ${a.fields_updated}<br><br>
+              fields_updated: ${JSON.stringify(a.fields_updated)}<br><br>
               ${a.sublevel.length&&a.sublevel[0].date?
               html`${a.sublevel.map(s=>
                 html`
@@ -102,10 +104,12 @@ export class AuditDialog extends LitElement {
                         <input type="checkbox" checked @click=${e=>this.showSubItem(e,s)}>
                         <div>action_name: ${s.action_name}</div>
                       </div>
+                      <div>
+                        *performed_on: ${s.date} by ${s.person}
+                      </div>
                       <div id="audit-${s.audit_id}">
-                        *performed_on: ${s.date}<br>
                         ${s.reviewed?html`*reviewed_on: ${s.reviewed_on}<br>`:null}
-                        fields_updated: ${s.fields_updated}
+                        fields_updated: ${JSON.stringify(s.fields_updated)}
                       </div>
                     </sp-tooltip>
                   </div>`
