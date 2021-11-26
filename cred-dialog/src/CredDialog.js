@@ -396,6 +396,10 @@ export class CredDialog extends CommonCore {
   }
 
   checkingUser() {
+    let str = `Are you sure you want to continue doing ${this.actionName}`
+    if (this.objectId && this.objectId != -1) {
+      str += ` for ${this.objectId}`
+    }
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
@@ -404,7 +408,13 @@ export class CredDialog extends CommonCore {
     })
     this.fetchApi(params, false).then(j => {
       if (j) {
-        this.nextRequest()
+        let c = confirm(`${str} ?`)
+        console.log(c, " CCC")
+        if (c) {
+          this.nextRequest()
+        } else {
+          this.credDialog.close()
+        }
       } else {
         this.checkAttempt()
       }
@@ -412,6 +422,10 @@ export class CredDialog extends CommonCore {
   }
 
   checkingPhrase() {
+    let str = `Are you sure you want to continue doing ${this.actionName}`
+    if (this.objectId && this.objectId != -1) {
+      str += ` for ${this.objectId}`
+    }
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
@@ -419,7 +433,13 @@ export class CredDialog extends CommonCore {
     })
     this.fetchApi(params, false).then(j => {
       if (j) {
-        this.nextRequest()
+        let c = confirm(`${str} ?`)
+        console.log(c, " HHH")
+        if (c) {
+          this.nextRequest()
+        } else {
+          this.credDialog.close()
+        }
       } else {
         this.checkAttempt()
       }
