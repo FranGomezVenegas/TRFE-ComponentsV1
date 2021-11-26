@@ -56,12 +56,13 @@ export class VideoTutorial extends CommonCore {
   render() {
     return html`
       <div class="layout horizontal flex center-center wrap">
-        ${this.videos.map(v=>
+        ${this.videos.map((v,i)=>
           html`
             <sp-card>
               <h1 slot="heading">${v["label_"+this.lang]}</h1>
               <h2 slot="subheading">${v["summary_"+this.lang]}</h2>
-              <video controls slot="cover-photo">
+              <video id="${v["label_"+this.lang]}-${i}" controls slot="cover-photo"
+                @play=${()=>this.stopOthers(`${v["label_"+this.lang]}-${i}`)}>
                 <source type="video/mp4" src="${v.source}">
               </video>
             </sp-card>
@@ -87,6 +88,19 @@ export class VideoTutorial extends CommonCore {
     }), false, false).then(j => {
       if (j) {
         this.videos = j
+      }
+    })
+  }
+
+  /**
+   * Stop other videos when playing one video
+   * @param {*} v the playing video element
+   */
+  stopOthers(v) {
+    let allVids = this.shadowRoot.querySelectorAll("video")
+    allVids.forEach(vid => {
+      if (vid.id != v) {
+        vid.pause()
       }
     })
   }
