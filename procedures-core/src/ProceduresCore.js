@@ -37,6 +37,9 @@ export class ProceduresCore extends CredDialog {
         div.input * {
           margin: 10px 0 5px;
         }
+        mwc-icon-button[hidden] {
+          display: none;
+        }
       `
     ];
   }
@@ -44,18 +47,8 @@ export class ProceduresCore extends CredDialog {
   static get properties() {
     return {
       selectedItem: { type: Object },
-      procName: { type: String },
-      personel: { type: Boolean }
+      procName: { type: String }
     };
-  }
-
-  updated(updates) {
-    super.updated(updates)
-    if (updates.has('personel')) {
-      if ((this.personel == false || this.personel == true) && this.userName) {
-        this.getSamples()
-      }
-    }
   }
 
   initLang(data) {
@@ -99,15 +92,6 @@ export class ProceduresCore extends CredDialog {
     `;
   }
 
-  getTitle() {
-    return html`
-      <h1>${this.personel?
-        html`${langConfig.title.personel["label_"+this.lang]}`:
-        html`${langConfig.title.non["label_"+this.lang]}`}
-      </h1>
-    `
-  }
-
   gridList() {
     return Object.entries(langConfig.gridHeader).map(
       ([key, value], i) => html`
@@ -135,6 +119,7 @@ export class ProceduresCore extends CredDialog {
     }
   }
 
+  getTitle() {}
   getSamples() {}
   adjustAnotherDialog() {}
   reasonDialog() {}

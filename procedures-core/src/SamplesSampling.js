@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html } from 'lit';
 import { ProceduresCore } from './ProceduresCore';
 import { commonLangConfig } from '@trazit/common-core';
 
@@ -8,7 +8,7 @@ export var langConfig = {
       "label_en": "Personnel Samples Pending Sampling Date", 
       "label_es": "Muestras de personal pendientes de la fecha de muestreo"
     },
-    "non": {
+    "samples": {
       "label_en": "Samples Pending Sampling Date", 
       "label_es": "Muestras pendientes de la fecha de muestreo"
     }
@@ -43,16 +43,6 @@ export var langConfig = {
 }
 
 export class SamplesSampling extends ProceduresCore {
-  static get styles() {
-    return [
-      super.styles,
-      css`
-      mwc-icon-button[hidden] {
-        display: none;
-      }
-    `]
-  }
-
   getButton() {
     return html`
       <mwc-icon-button icon="refresh" @click=${this.getSamples}></mwc-icon-button>
@@ -143,6 +133,7 @@ export class SamplesSampling extends ProceduresCore {
 
   static get properties() {
     return {
+      samplingType: { type: String },
       hideNext: { type: Boolean }
     };
   }
@@ -152,6 +143,23 @@ export class SamplesSampling extends ProceduresCore {
     this.procName = "em-demo-a"
     this.hideNext = false
     this.initLang(langConfig)
+  }
+
+  updated(updates) {
+    super.updated(updates)
+    if (updates.has('samplingType') && this.userName) {
+      this.getSamples()
+    }
+  }
+
+  getTitle() {
+    let title = ""
+    if (this.samplingType == "samples") {
+      title = `${langConfig.title.samples["label_"+this.lang]}`
+    } else if (this.samplingType == "personel") {
+      title = `${langConfig.title.personel["label_"+this.lang]}`
+    }
+    return html`<h1>${title}</h1>`
   }
 
   /**
@@ -173,7 +181,7 @@ export class SamplesSampling extends ProceduresCore {
   getSamples() {
     this.credsChecker("SAMPLES_BY_STAGE", null, {
       sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
-      whereFieldsName: "current_stage|sample_config_code"+ (this.personel?'':' not') +" in*",
+      whereFieldsName: "current_stage|sample_config_code"+ (this.samplingType=='personel'?'':' not') +" in*",
       whereFieldsValue: "Sampling|prog_pers_template"
     })
   }
