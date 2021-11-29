@@ -7,7 +7,6 @@ import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '@trazit/tr-dialog/tr-dialog';
 import './audit-dialog';
-let langConfig = {};
 
 export class ProceduresCore extends CredDialog {
   static get styles() {
@@ -46,13 +45,10 @@ export class ProceduresCore extends CredDialog {
 
   static get properties() {
     return {
+      langConfig: { type: Object },
       selectedItem: { type: Object },
       procName: { type: String }
     };
-  }
-
-  initLang(data) {
-    langConfig = data
   }
 
   firstUpdated() {
@@ -90,17 +86,6 @@ export class ProceduresCore extends CredDialog {
     ${this.resultDialog()}
     ${super.render()}
     `;
-  }
-
-  gridList() {
-    return Object.entries(langConfig.gridHeader).map(
-      ([key, value], i) => html`
-        ${i==0 ?
-          html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-          html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-        }
-      `
-    )
   }
 
   get audit() {

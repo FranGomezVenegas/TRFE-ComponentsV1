@@ -2,46 +2,6 @@ import { html } from 'lit';
 import { ProceduresCore } from './ProceduresCore';
 import { commonLangConfig } from '@trazit/common-core';
 
-export var langConfig = {
-  "title": {
-    "personel": {
-      "label_en": "Personnel Samples Pending Sampling Date", 
-      "label_es": "Muestras de personal pendientes de la fecha de muestreo"
-    },
-    "samples": {
-      "label_en": "Samples Pending Sampling Date", 
-      "label_es": "Muestras pendientes de la fecha de muestreo"
-    }
-  },
-  "newDate":  {
-    "label_en": "New Date",
-    "label_es": "Nueva Fecha"
-  },
-  "gridHeader": {
-    "sample_id": {
-      label_en:"Sample ID", label_es: "ID Muestra"
-    },
-    "program_name": {
-      label_en:"Project", label_es: "Programa"
-    },
-    "location_name": {
-      label_en:"Location", label_es: "Ubicación"
-    },
-    "sampling_date": {
-      label_en:"sampling Date", label_es: "ID Fecha de Muestreo"
-    },
-    "sampling_comment": {
-      label_en:"sampling Comment", label_es: "Comentario Muestreo"
-    },
-    "spec_code": {
-      label_en:"Spec", label_es: "Especificación"
-    },
-    "spec_variation_name": {
-      label_en:"Variation", label_es: "Variación"
-    }
-  }
-}
-
 export class SamplesSampling extends ProceduresCore {
   getButton() {
     return html`
@@ -71,7 +31,7 @@ export class SamplesSampling extends ProceduresCore {
       hideActions=""
       scrimClickAction="">
       <div class="layout vertical flex center-justified">
-        <input id="dateTxt" placeholder="${langConfig.newDate["label_"+ this.lang]}" 
+        <input id="dateTxt" placeholder="${this.langConfig.newDate&&this.langConfig.newDate["label_"+ this.lang]}" 
           type="datetime-local" dialogInitialFocus
           @keypress=${e=>e.keyCode==13&&this.setNewDate()}>
         <div style="margin-top:30px;text-align:center">
@@ -142,7 +102,45 @@ export class SamplesSampling extends ProceduresCore {
     super()
     this.procName = "em-demo-a"
     this.hideNext = false
-    this.initLang(langConfig)
+    this.langConfig = {
+      "title": {
+        "personel": {
+          "label_en": "Personnel Samples Pending Sampling Date", 
+          "label_es": "Muestras de personal pendientes de la fecha de muestreo"
+        },
+        "samples": {
+          "label_en": "Samples Pending Sampling Date", 
+          "label_es": "Muestras pendientes de la fecha de muestreo"
+        }
+      },
+      "newDate":  {
+        "label_en": "New Date",
+        "label_es": "Nueva Fecha"
+      },
+      "gridHeader": {
+        "sample_id": {
+          label_en:"Sample ID", label_es: "ID Muestra"
+        },
+        "program_name": {
+          label_en:"Project", label_es: "Programa"
+        },
+        "location_name": {
+          label_en:"Location", label_es: "Ubicación"
+        },
+        "sampling_date": {
+          label_en:"sampling Date", label_es: "ID Fecha de Muestreo"
+        },
+        "sampling_comment": {
+          label_en:"sampling Comment", label_es: "Comentario Muestreo"
+        },
+        "spec_code": {
+          label_en:"Spec", label_es: "Especificación"
+        },
+        "spec_variation_name": {
+          label_en:"Variation", label_es: "Variación"
+        }
+      }
+    }
   }
 
   updated(updates) {
@@ -152,12 +150,23 @@ export class SamplesSampling extends ProceduresCore {
     }
   }
 
+  gridList() {
+    return Object.entries(this.langConfig.gridHeader).map(
+      ([key, value], i) => html`
+        ${i==0 ?
+          html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+          html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+        }
+      `
+    )
+  }
+
   getTitle() {
     let title = ""
     if (this.samplingType == "samples") {
-      title = `${langConfig.title.samples["label_"+this.lang]}`
+      title = `${this.langConfig.title.samples["label_"+this.lang]}`
     } else if (this.samplingType == "personel") {
-      title = `${langConfig.title.personel["label_"+this.lang]}`
+      title = `${this.langConfig.title.personel["label_"+this.lang]}`
     }
     return html`<h1>${title}</h1>`
   }
@@ -191,6 +200,7 @@ export class SamplesSampling extends ProceduresCore {
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params, false, false).then(j => {
       if (j) {
+        console.log(j)
         this.grid.items = j
       }
     })

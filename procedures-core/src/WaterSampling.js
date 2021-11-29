@@ -1,21 +1,20 @@
 import { html } from 'lit';
-import { SamplesSampling, langConfig } from './SamplesSampling';
-
-langConfig.title = {
-  "label_en": "Pending Sampling", 
-  "label_es": "Muestras pendiente muestreo"
-}
-delete langConfig.gridHeader.sampling_date
+import { SamplesSampling } from './SamplesSampling';
 
 export class WaterSampling extends SamplesSampling {
   constructor() {
     super()
     this.procName = "proc-deploy"
     this.hideNext = true
+    this.langConfig.title = {
+      "label_en": "Pending Sampling", 
+      "label_es": "Muestras pendiente muestreo"
+    }
+    delete this.langConfig.gridHeader.sampling_date    
   }
 
   getTitle() {
-    return html`<h1>${langConfig.title["label_"+this.lang]}</h1>`
+    return html`<h1>${this.langConfig.title["label_"+this.lang]}</h1>`
   }
 
   getSamples() {
