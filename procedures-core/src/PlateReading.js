@@ -1,6 +1,5 @@
 import { html, css } from 'lit';
 import { SamplesSampling } from './SamplesSampling';
-import { commonLangConfig } from '@trazit/common-core';
 
 let langConfig = {
   "close": {
