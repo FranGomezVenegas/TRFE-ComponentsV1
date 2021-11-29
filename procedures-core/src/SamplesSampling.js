@@ -1,8 +1,8 @@
-import { html } from 'lit';
+import { html, css } from 'lit';
 import { ProceduresCore } from './ProceduresCore';
 import { commonLangConfig } from '@trazit/common-core';
 
-let langConfig = {
+export var langConfig = {
   "title": {
     "personel": {
       "label_en": "Personnel Samples Pending Sampling Date", 
@@ -43,6 +43,16 @@ let langConfig = {
 }
 
 export class SamplesSampling extends ProceduresCore {
+  static get styles() {
+    return [
+      super.styles,
+      css`
+      mwc-icon-button[hidden] {
+        display: none;
+      }
+    `]
+  }
+
   getButton() {
     return html`
       <mwc-icon-button icon="refresh" @click=${this.getSamples}></mwc-icon-button>
@@ -50,7 +60,11 @@ export class SamplesSampling extends ProceduresCore {
       </mwc-icon-button>
       <mwc-icon-button title="Set Sample Date" icon="date_range" ?disabled=${!this.selectedItem} @click=${this.setSamplingDate}></mwc-icon-button>
       <mwc-icon-button title="Change Sample Date" icon="event" ?disabled=${!this.selectedItem} @click=${()=>this.dateDialog.show()}></mwc-icon-button>
-      <mwc-icon-button title="Next" icon="next_week" ?disabled=${!this.selectedItem} @click=${this.moveToNext}>
+      <mwc-icon-button title="Next" icon="next_week" 
+        ?disabled=${!this.selectedItem} 
+        ?hidden=${this.hideNext}
+        @click=${this.moveToNext}>
+      </mwc-icon-button>
       </mwc-icon-button>
       <mwc-icon-button title="Add Sampling Comment" icon="add_comment" ?disabled=${!this.selectedItem} @click=${() => 
         this.cmnDialog.show()}></mwc-icon-button>
@@ -127,9 +141,16 @@ export class SamplesSampling extends ProceduresCore {
     return this.cmnDialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
+  static get properties() {
+    return {
+      hideNext: { type: Boolean }
+    };
+  }
+
   constructor() {
     super()
     this.procName = "em-demo-a"
+    this.hideNext = false
     this.initLang(langConfig)
   }
 
