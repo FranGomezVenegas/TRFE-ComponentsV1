@@ -27,25 +27,13 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${this.authorized}></platform-login>
+      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.wSampling.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <water-sampling></water-sampling><hr>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
-  }
-
-  authorized(e) {
-    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-    let anyWater = procList.filter(p => p.label_en.indexOf("Water") >= 0)
-    if (anyWater.length) {
-      this.auth = e.target.auth
-      this.wSampling.config = this.pLogin.config
-    } else {
-      alert("You don't have any access to Water procedures")
-      this.pLogin.logout()
-    }
   }
 
   get pLogin() {

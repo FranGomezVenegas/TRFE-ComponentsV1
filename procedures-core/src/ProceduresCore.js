@@ -71,7 +71,14 @@ export class ProceduresCore extends CredDialog {
 
   authorized() {
     super.authorized()
-    this.getSamples()
+    // whether user has access into the selected proc
+    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
+    if (anyAccess.length) {
+      this.getSamples()
+    } else {
+      alert("You don't have any access to "+ this.procName)
+    }
   }
 
   render() {
