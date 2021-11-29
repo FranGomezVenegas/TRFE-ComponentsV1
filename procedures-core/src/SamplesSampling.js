@@ -200,7 +200,6 @@ export class SamplesSampling extends ProceduresCore {
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params, false, false).then(j => {
       if (j) {
-        console.log(j)
         this.grid.items = j
       }
     })
