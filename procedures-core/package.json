@@ -8,6 +8,7 @@
   "module": "index.js",
   "scripts": {
     "start:samples": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/samples-sampling.html",
+    "start:wsamples": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/water-sampling.html",
     "start:plate": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/plate-reading.html"
   },
   "dependencies": {
