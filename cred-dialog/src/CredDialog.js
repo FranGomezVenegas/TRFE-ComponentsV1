@@ -113,7 +113,8 @@ export class CredDialog extends CommonCore {
       justificationType: { type: String },
       nonProc: { type: Boolean },
       escapeKey: { type: Boolean },
-      reqParams: { type: Object }
+      reqParams: { type: Object },
+      needConfirm: { type: Boolean } // need confirm dialog
     };
   }
 
@@ -131,6 +132,7 @@ export class CredDialog extends CommonCore {
     this.maxFails = 3;
     this.justificationType = "";
     this.nonProc = false;
+    this.needConfirm = false;
   }
 
   firstUpdated() {
@@ -335,40 +337,49 @@ export class CredDialog extends CommonCore {
   checkProcList() {
     this.justificationType = null
     this.justificationList = null
-    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures[0]
-    if (procList.actions_with_confirm_user.indexOf(this.actionName) >= 0) {
-      let idx = procList.actions_with_confirm_user.findIndex(p => p == this.actionName)
-      --idx // the object is on the previous index
-      if (procList.actions_with_confirm_user[idx][this.actionName].type) {
-        this.justificationType = procList.actions_with_confirm_user[idx][this.actionName].type
-        if (this.justificationType != "TEXT") {
-          this.justificationList = procList.actions_with_confirm_user[idx][this.actionName].list_entries
+    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    let bypass = true
+    procList.forEach(p => {
+      if (p.actions_with_confirm_user.indexOf(this.actionName) >= 0) {
+        let idx = p.actions_with_confirm_user.findIndex(p => p == this.actionName)
+        --idx // the object is on the previous index
+        if (p.actions_with_confirm_user[idx][this.actionName].type) {
+          this.justificationType = p.actions_with_confirm_user[idx][this.actionName].type
+          if (this.justificationType != "TEXT") {
+            this.justificationList = p.actions_with_confirm_user[idx][this.actionName].list_entries
+          }
         }
-      }
-      this.type = "user"
-    } else if (procList.actions_with_esign.indexOf(this.actionName) >= 0) {
-      let idx = procList.actions_with_esign.findIndex(p => p == this.actionName)
-      --idx // the object is on the previous index
-      if (procList.actions_with_esign[idx][this.actionName].type) {
-        this.justificationType = procList.actions_with_esign[idx][this.actionName].type
-        if (this.justificationType != "TEXT") {
-          this.justificationList = procList.actions_with_esign[idx][this.actionName].list_entries
+        this.type = "user"
+        bypass = false
+      } else if (p.actions_with_esign.indexOf(this.actionName) >= 0) {
+        let idx = p.actions_with_esign.findIndex(p => p == this.actionName)
+        --idx // the object is on the previous index
+        if (p.actions_with_esign[idx][this.actionName].type) {
+          this.justificationType = p.actions_with_esign[idx][this.actionName].type
+          if (this.justificationType != "TEXT") {
+            this.justificationList = p.actions_with_esign[idx][this.actionName].list_entries
+          }
         }
+        this.type = "esign"
+        bypass = false
+      } else if (p.actions_with_justification_phrase.indexOf(this.actionName) >= 0) {
+        let idx = p.actions_with_justification_phrase.findIndex(p => p == this.actionName)
+        --idx // the object is on the previous index
+        if (p.actions_with_justification_phrase[idx][this.actionName].type) {
+          this.justificationType = p.actions_with_justification_phrase[idx][this.actionName].type
+          if (this.justificationType != "TEXT") {
+            this.justificationList = p.actions_with_justification_phrase[idx][this.actionName].list_entries
+          }  
+        }
+        this.type = "justification"
+        bypass = false
       }
-      this.type = "esign"
-    } else if (procList.actions_with_justification_phrase.indexOf(this.actionName) >= 0) {
-      let idx = procList.actions_with_justification_phrase.findIndex(p => p == this.actionName)
-      --idx // the object is on the previous index
-      if (procList.actions_with_justification_phrase[idx][this.actionName].type) {
-        this.justificationType = procList.actions_with_justification_phrase[idx][this.actionName].type
-        if (this.justificationType != "TEXT") {
-          this.justificationList = procList.actions_with_justification_phrase[idx][this.actionName].list_entries
-        }  
+      if (p.actions_with_action_confirm.indexOf(this.actionName) >= 0) {
+        this.needConfirm = true
       }
-      this.type = "justification"
-    } else {
-      return true // bypass / no need creds process
-    }
+    })
+    // bypass / no need creds process
+    if (bypass) return true
   }
 
   /**
@@ -408,8 +419,10 @@ export class CredDialog extends CommonCore {
     })
     this.fetchApi(params, false).then(j => {
       if (j) {
-        let c = confirm(`${str} ?`)
-        console.log(c, " CCC")
+        let c = true
+        if (this.needConfirm) {
+          c = confirm(`${str} ?`)
+        }
         if (c) {
           this.nextRequest()
         } else {
