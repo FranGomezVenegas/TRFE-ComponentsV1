@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../plate-reading';
+import '../samples-sampling';
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -27,11 +27,11 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.sPlate.config=this.pLogin.config;this.pPlate.config=this.pLogin.config}}></platform-login>
+      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.sSampling.config=this.pLogin.config;this.pSampling.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <plate-reading id="s" samplingType="samples"></plate-reading><hr>
-        <plate-reading id="p" samplingType="personel"></plate-reading><br>
+        <samples-sampling id="s"></samples-sampling><hr>
+        <samples-sampling id="p" name="personel"></samples-sampling><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -41,12 +41,12 @@ class DemoExample extends LitElement {
     return this.shadowRoot.querySelector("platform-login")
   }
 
-  get sPlate() {
-    return this.shadowRoot.querySelector("plate-reading#s")
+  get sSampling() {
+    return this.shadowRoot.querySelector("samples-sampling#s")
   }
 
-  get pPlate() {
-    return this.shadowRoot.querySelector("plate-reading#p")
+  get pSampling() {
+    return this.shadowRoot.querySelector("samples-sampling#p")
   }
 
   /**
@@ -67,7 +67,7 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    this.flag = this.sPlate.changeLang()
+    this.flag = this.sSampling.changeLang()
   }
 }
 customElements.define('demo-example', DemoExample);

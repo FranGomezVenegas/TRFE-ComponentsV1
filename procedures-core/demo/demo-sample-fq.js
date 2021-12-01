@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../water-plate';
+import '../sample-fq';
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -27,11 +27,11 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.fPlate.config=this.pLogin.config;this.mPlate.config=this.pLogin.config}}></platform-login>
+      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.fqSample.config=this.pLogin.config;this.mbSample.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <water-plate id="s" samplingType="fq"></water-plate><hr>
-        <water-plate id="p" samplingType="mb"></water-plate><br>
+        <sample-fq id="s"></sample-fq><hr>
+        <sample-fq id="p" name="mb"></sample-fq><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -41,12 +41,12 @@ class DemoExample extends LitElement {
     return this.shadowRoot.querySelector("platform-login")
   }
 
-  get fPlate() {
-    return this.shadowRoot.querySelector("water-plate#s")
+  get fqSample() {
+    return this.shadowRoot.querySelector("sample-fq#s")
   }
 
-  get mPlate() {
-    return this.shadowRoot.querySelector("water-plate#p")
+  get mbSample() {
+    return this.shadowRoot.querySelector("sample-fq#p")
   }
 
   /**
@@ -67,7 +67,7 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    this.flag = this.fPlate.changeLang()
+    this.flag = this.fqSample.changeLang()
   }
 }
 customElements.define('demo-example', DemoExample);
