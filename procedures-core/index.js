@@ -1,4 +1,3 @@
-export { PendingSampling } from './src/PendingSampling';
-export { SamplesSampling } from './src/SamplesSampling';
-export { SampleFq } from './src/SampleFq1';
-export { PlateReading } from './src/SampleFq';
+export { SamplePendingSampling } from './src/SamplePendingSampling';
+export { SampleEnterResult } from './src/SampleEnterResult';
+export { SamplePlateReading } from './src/SamplePlateReading';

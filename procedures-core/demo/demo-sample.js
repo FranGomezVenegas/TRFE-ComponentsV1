@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../sample-fq';
+import '../sample-pending-sampling';
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -27,11 +27,13 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${e=>{this.auth=e.target.auth;this.fqSample.config=this.pLogin.config;this.mbSample.config=this.pLogin.config}}></platform-login>
+      <platform-login @authorized=${e=>{
+        this.auth=e.target.auth;
+        this.sSampling.config=this.pLogin.config;
+      }}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <sample-fq id="s"></sample-fq><hr>
-        <sample-fq id="p" name="mb"></sample-fq><br>
+        <sample-pending-sampling id="s" name="sampling"></sample-pending-sampling><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -41,12 +43,8 @@ class DemoExample extends LitElement {
     return this.shadowRoot.querySelector("platform-login")
   }
 
-  get fqSample() {
-    return this.shadowRoot.querySelector("sample-fq#s")
-  }
-
-  get mbSample() {
-    return this.shadowRoot.querySelector("sample-fq#p")
+  get sSampling() {
+    return this.shadowRoot.querySelector("sample-pending-sampling#s")
   }
 
   /**
@@ -67,7 +65,7 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    this.flag = this.fqSample.changeLang()
+    this.flag = this.sSampling.changeLang()
   }
 }
 customElements.define('demo-example', DemoExample);

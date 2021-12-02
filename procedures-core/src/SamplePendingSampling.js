@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { ProceduresCore } from './ProceduresCore';
 import { commonLangConfig } from '@trazit/common-core';
 
-export class PendingSampling extends ProceduresCore {
+export class SamplePendingSampling extends ProceduresCore {
   getButton() {
     return html`
       <mwc-icon-button icon="refresh" @click=${this.getSamples}></mwc-icon-button>
@@ -100,11 +100,19 @@ export class PendingSampling extends ProceduresCore {
 
   constructor() {
     super()
-    this.procName = "proc-deploy"
-    this.hideNext = true
-    this.name = "sampling"
+    this.procName = "em-demo-a"
+    this.hideNext = false
+    this.name = "samples"
     this.langConfig = {
       "title": {
+        "samples": {
+          "label_en": "Samples Pending Sampling Date", 
+          "label_es": "Muestras pendientes de la fecha de muestreo"
+        },
+        "personel": {
+          "label_en": "Personnel Samples Pending Sampling Date", 
+          "label_es": "Muestras de personal pendientes de la fecha de muestreo"
+        },
         "sampling": {
           "label_en": "Pending Sampling", 
           "label_es": "Muestras pendiente muestreo"
@@ -124,6 +132,9 @@ export class PendingSampling extends ProceduresCore {
         "location_name": {
           label_en:"Location", label_es: "Ubicación"
         },
+        "sampling_date": {
+          label_en:"Sampling Date", label_es: "ID Fecha de Muestreo"
+        },
         "sampling_comment": {
           label_en:"sampling Comment", label_es: "Comentario Muestreo"
         },
@@ -139,8 +150,18 @@ export class PendingSampling extends ProceduresCore {
 
   updated(updates) {
     super.updated(updates)
+    console.log(this.name, this.userName, " WWW")
     if (updates.has('name') && this.userName) {
+      this.changeEnv()
       this.getSamples()
+    }
+  }
+
+  changeEnv() {
+    if (this.name == "sampling") {
+      this.procName = "proc-deploy"
+      this.hideNext = true
+      delete this.langConfig.gridHeader.sampling_date
     }
   }
 
@@ -156,7 +177,9 @@ export class PendingSampling extends ProceduresCore {
   }
 
   getTitle() {
-    return html`<h1>${this.langConfig.title[this.name]["label_"+this.lang]}</h1>`
+    if (this.langConfig.title[this.name]) {
+      return html`<h1>${this.langConfig.title[this.name]["label_"+this.lang]}</h1>`
+    }
   }
 
   /**
@@ -176,15 +199,23 @@ export class PendingSampling extends ProceduresCore {
   }
 
   getSamples() {
-    this.credsChecker("SAMPLES_INPROGRESS_LIST", null, {
-      sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
-      whereFieldsName: "sampling_date is null",
-      whereFieldsValue: "-",
-      addSampleAnalysis: false,
-      addSampleAnalysisFieldToRetrieve: "method_name|testing_group",
-      sampleAnalysisWhereFieldsName: "FQ*String",
-      addSampleAnalysisResult: false
-    })
+    if (this.name == "sampling") {
+      this.credsChecker("SAMPLES_INPROGRESS_LIST", null, {
+        sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
+        whereFieldsName: "sampling_date is null",
+        whereFieldsValue: "-",
+        addSampleAnalysis: false,
+        addSampleAnalysisFieldToRetrieve: "method_name|testing_group",
+        sampleAnalysisWhereFieldsName: "FQ*String",
+        addSampleAnalysisResult: false
+      })
+    } else {
+      this.credsChecker("SAMPLES_BY_STAGE", null, {
+        sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
+        whereFieldsName: "current_stage|sample_config_code"+ (this.name=='personel'?'':' not') +" in*",
+        whereFieldsValue: "Sampling|prog_pers_template"
+      })
+    }
   }
 
   getSamplesReq() {
@@ -228,6 +259,20 @@ export class PendingSampling extends ProceduresCore {
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       this.sampleAudit()
+    })
+  }
+  
+  moveToNext(isNext=true) {
+    this.credsChecker(isNext ? "SAMPLESTAGE_MOVETONEXT" : "SAMPLESTAGE_MOVETOPREVIOUS", this.selectedItem.sample_id)
+  }
+
+  moveToNextReq() {
+    let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      + '?' + new URLSearchParams(this.reqParams)
+    this.fetchApi(params).then(j => {
+      if (j) {
+        this.getSamples()
+      }
     })
   }
 

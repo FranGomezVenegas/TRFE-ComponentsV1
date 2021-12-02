@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../plate-reading';
+import '../sample-plate-reading';
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -30,8 +30,8 @@ class DemoExample extends LitElement {
       <platform-login @authorized=${e=>{this.auth=e.target.auth;this.sPlate.config=this.pLogin.config;this.pPlate.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <plate-reading id="s"></plate-reading><hr>
-        <plate-reading id="p" name="personel"></plate-reading><br>
+        <sample-plate-reading id="s"></sample-plate-reading><hr>
+        <sample-plate-reading id="p" name="personel"></sample-plate-reading><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -42,11 +42,11 @@ class DemoExample extends LitElement {
   }
 
   get sPlate() {
-    return this.shadowRoot.querySelector("plate-reading#s")
+    return this.shadowRoot.querySelector("sample-plate-reading#s")
   }
 
   get pPlate() {
-    return this.shadowRoot.querySelector("plate-reading#p")
+    return this.shadowRoot.querySelector("sample-plate-reading#p")
   }
 
   /**

@@ -7,10 +7,10 @@
   "main": "index.js",
   "module": "index.js",
   "scripts": {
-    "start:sampling": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/pending-sampling.html",
-    "start:samples": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/samples-sampling.html",
-    "start:samplefq": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-fq.html",
-    "start:plate": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/plate-reading.html"
+    "start:sample": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-pending.html",
+    "start:sampling": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-pending-sampling.html",
+    "start:enterresult": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-enter-result.html",
+    "start:plate": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-plate-reading.html"
   },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
