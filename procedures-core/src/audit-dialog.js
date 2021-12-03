@@ -36,13 +36,17 @@ export class AuditDialog extends LitElement {
 
   static get properties() {
     return {
-      audits: { type: Array }
+      audits: { type: Array },
+      sampleAuditRevisionMode: { type: Boolean },
+      sampleAuditChildRevisionRequired: { type: Boolean }
     };
   }
 
   constructor() {
     super();
     this.audits = [];
+    this.sampleAuditRevisionMode = true;
+    this.sampleAuditChildRevisionRequired = true;
   }
 
   firstUpdated() {
@@ -71,7 +75,7 @@ export class AuditDialog extends LitElement {
               `:
               html`
               <mwc-button class="sign" dense unelevated label="Sign"
-                @click=${()=>this.signAudit(a.audit_id)}></mwc-button>
+                @click=${()=>this.signAudit(a.audit_id)} ?disabled=${!this.sampleAuditRevisionMode}></mwc-button>
               `
             }
             <div class="layout horizontal flex">
@@ -97,7 +101,7 @@ export class AuditDialog extends LitElement {
                         `:
                         html`
                         <mwc-button class="sign" dense unelevated label="Sign"
-                          @click=${()=>this.signAudit(s.audit_id)}></mwc-button>
+                          @click=${()=>this.signAudit(s.audit_id)} ?disabled=${!this.sampleAuditChildRevisionRequired}></mwc-button>
                         `
                       }
                       <div class="layout horizontal flex">

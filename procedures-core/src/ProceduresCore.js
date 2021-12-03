@@ -62,6 +62,13 @@ export class ProceduresCore extends CredDialog {
     super.authorized()
     // whether user has access into the selected proc
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    this.audit.updateComplete.then(() => {
+      let whichProc = procList.filter(p => p.procInstanceName == this.procName)
+      if (whichProc.length) {
+        this.audit.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
+        this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
+      }
+    })
     let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
     if (anyAccess.length) {
       this.getSamples()
