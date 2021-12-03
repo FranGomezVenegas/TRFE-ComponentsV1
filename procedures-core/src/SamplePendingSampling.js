@@ -224,6 +224,7 @@ export class SamplePendingSampling extends ProceduresCore {
     this.fetchApi(params, false, false).then(j => {
       if (j) {
         this.grid.items = j
+        this.requestUpdate()
       }
     })
   }
