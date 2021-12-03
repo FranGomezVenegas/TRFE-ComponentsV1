@@ -58,7 +58,6 @@ export class PlatformLogin extends CommonCore {
       css`
       :host {
         display: block;
-        width: 400px;
       }
       :host([hidden]) {
         display: none;
