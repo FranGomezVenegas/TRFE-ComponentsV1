@@ -78,7 +78,7 @@ export class AuditDialog extends LitElement {
               `:
               html`
               <mwc-button class="sign" dense unelevated label="Sign"
-                @click=${()=>this.signAudit(a.audit_id)} ?disabled=${!this.sampleAuditRevisionMode}></mwc-button>
+                @click=${()=>this.signAudit(a.audit_id)} ?hidden=${!this.sampleAuditRevisionMode}></mwc-button>
               `
             }
             <div class="layout horizontal flex">
@@ -104,7 +104,7 @@ export class AuditDialog extends LitElement {
                         `:
                         html`
                         <mwc-button class="sign" dense unelevated label="Sign"
-                          @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditChildRevisionRequired}></mwc-button>
+                          @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}></mwc-button>
                         `
                       }
                       <div class="layout horizontal flex">
