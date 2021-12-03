@@ -67,6 +67,9 @@ export class AuditDialog extends LitElement {
       heading=""
       hideActions=""
       scrimClickAction="">
+      <div style="position:absolute;left:15px;top:8px;font-size:12px;">
+        ${this.countInfo()}
+      </div>
       ${this.audits.map(a=>
         html`
         <div class="layout horizontal flex center" style="margin:0;border-left:3px solid #ccc">
@@ -152,6 +155,17 @@ export class AuditDialog extends LitElement {
 
   showSubItem(event, item) {
     this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = !event.target.checked
+  }
+
+  countInfo() {
+    let unSigned = this.audits.filter(a => !a.reviewed)
+    let str = ''
+    if (unSigned.length) {
+      str = html`<label style="color: red">${unSigned.length}/${this.audits.length}</label>`
+    } else {
+      str = html`<label style="color: green">${this.audits.length}/${this.audits.length}</label>`
+    }
+    return str
   }
 }
 window.customElements.define('audit-dialog', AuditDialog);
