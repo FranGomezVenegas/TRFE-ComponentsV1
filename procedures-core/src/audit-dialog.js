@@ -27,6 +27,9 @@ export class AuditDialog extends LitElement {
           --mdc-theme-primary: #efefef;
           --mdc-theme-on-primary: #3f51b5;
         }
+        mwc-button[hidden] {
+          display: none;
+        }
         div[hidden] {
           display: none;
         }
@@ -101,7 +104,7 @@ export class AuditDialog extends LitElement {
                         `:
                         html`
                         <mwc-button class="sign" dense unelevated label="Sign"
-                          @click=${()=>this.signAudit(s.audit_id)} ?disabled=${!this.sampleAuditChildRevisionRequired}></mwc-button>
+                          @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditChildRevisionRequired}></mwc-button>
                         `
                       }
                       <div class="layout horizontal flex">
