@@ -13,7 +13,7 @@ export class SamplePendingSampling extends ProceduresCore {
       <mwc-icon-button title="Next" icon="next_week" 
         ?disabled=${!this.selectedItem} 
         ?hidden=${this.hideNext}
-        @click=${this.moveToNext}>
+        @click=${()=>this.moveToNext()}>
       </mwc-icon-button>
       </mwc-icon-button>
       <mwc-icon-button title="Add Sampling Comment" icon="add_comment" ?disabled=${!this.selectedItem} @click=${() => 
@@ -150,7 +150,6 @@ export class SamplePendingSampling extends ProceduresCore {
 
   updated(updates) {
     super.updated(updates)
-    console.log(this.name, this.userName, " WWW")
     if (updates.has('name') && this.userName) {
       this.changeEnv()
       this.getSamples()
@@ -224,7 +223,6 @@ export class SamplePendingSampling extends ProceduresCore {
     this.fetchApi(params, false, false).then(j => {
       if (j) {
         this.grid.items = j
-        this.requestUpdate()
       }
     })
   }
@@ -239,6 +237,7 @@ export class SamplePendingSampling extends ProceduresCore {
     this.fetchApi(params, false, false).then(j => {
       this.audit.audits = j
       this.audit.requestUpdate()
+      this.getSamples()
     })
   }
 
@@ -271,9 +270,7 @@ export class SamplePendingSampling extends ProceduresCore {
     let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
-      if (j) {
-        this.getSamples()
-      }
+      this.getSamples()
     })
   }
 
@@ -301,9 +298,7 @@ export class SamplePendingSampling extends ProceduresCore {
     this.fetchApi(params).then(j => {
       this.newDate = false
       this.dateDialog.close()
-      if (j) {
-        this.getSamples()
-      }
+      this.getSamples()
     })
   }
 
@@ -320,9 +315,7 @@ export class SamplePendingSampling extends ProceduresCore {
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       this.cmnDialog.close()
-      if (j) {
-        this.getSamples()
-      }
+      this.getSamples()
     })
   }
 
@@ -334,9 +327,7 @@ export class SamplePendingSampling extends ProceduresCore {
     let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
-      if (j) {
-        this.getSamples()
-      }
+      this.getSamples()
     })
   }
 
@@ -348,6 +339,8 @@ export class SamplePendingSampling extends ProceduresCore {
       this.sampleAuditReq()
     } else if (this.actionName == "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED") {
       this.signAuditReq()
+    } else if (this.actionName == "SAMPLESTAGE_MOVETOPREVIOUS" || this.actionName == "SAMPLESTAGE_MOVETONEXT") {
+      this.moveToNextReq()
     } else if (this.actionName == "SETSAMPLINGDATE" || this.actionName == "CHANGESAMPLINGDATE") {
       this.setSamplingDateReq()
     } else if (this.actionName == "SAMPLINGCOMMENTADD") {

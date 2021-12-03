@@ -235,9 +235,7 @@ export class SamplePlateReading extends SamplePendingSampling {
     let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params, false, false).then(j => {
-      if (j) {
-        this.getResult()
-      }
+      this.getResult()
     })
   }
 
@@ -261,9 +259,7 @@ export class SamplePlateReading extends SamplePendingSampling {
 
   nextRequest() {
     super.nextRequest()
-    if (this.actionName == "SAMPLESTAGE_MOVETOPREVIOUS") {
-      this.moveToNextReq()
-    } else if (this.actionName == "ENTERRESULT") {
+    if (this.actionName == "ENTERRESULT") {
       this.enterResultReq()
     } else if (this.actionName == "GET_SAMPLE_ANALYSIS_RESULT_LIST") {
       this.getResultReq()
