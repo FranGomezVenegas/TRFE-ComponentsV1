@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../sample-pending-sampling';
+import '../sample-pending';
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -33,7 +33,7 @@ class DemoExample extends LitElement {
       }}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <sample-pending-sampling id="s" name="sampling"></sample-pending-sampling><br>
+        <sample-pending id="s"></sample-pending><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
@@ -44,7 +44,7 @@ class DemoExample extends LitElement {
   }
 
   get sSampling() {
-    return this.shadowRoot.querySelector("sample-pending-sampling#s")
+    return this.shadowRoot.querySelector("sample-pending#s")
   }
 
   /**

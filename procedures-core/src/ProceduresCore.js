@@ -72,8 +72,6 @@ export class ProceduresCore extends CredDialog {
     let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
     if (anyAccess.length) {
       this.getSamples()
-    } else {
-      alert("You don't have any access to "+ this.procName)
     }
   }
 

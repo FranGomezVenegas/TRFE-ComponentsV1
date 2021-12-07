@@ -151,16 +151,7 @@ export class SamplePendingSampling extends ProceduresCore {
   updated(updates) {
     super.updated(updates)
     if (updates.has('name') && this.userName) {
-      this.changeEnv()
       this.getSamples()
-    }
-  }
-
-  changeEnv() {
-    if (this.name == "sampling") {
-      this.procName = "proc-deploy"
-      this.hideNext = true
-      delete this.langConfig.gridHeader.sampling_date
     }
   }
 
