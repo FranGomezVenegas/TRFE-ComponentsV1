@@ -14,6 +14,10 @@ export class TrDialog extends Dialog {
         cursor: pointer;
         --mdc-icon-size: 15px;
       }
+      ::slotted(mwc-icon) {
+        cursor: pointer;
+        --mdc-icon-size: 15px;
+      }
       mwc-icon[hidden] {
         display: none;
       }
@@ -106,7 +110,11 @@ export class TrDialog extends Dialog {
 
   cornerButton() {
     return html`
+      <div style="position: absolute; top: 10px; left: 10px;">
+        <slot name="topLeft"></slot>
+      </div>
       <div style="position: absolute; top: 10px; right: 10px;">
+        <slot name="icon1"></slot>
         <mwc-icon ?hidden=${this.hideMin} class="corner" @click=${this.minimize}>${this.expandLabel}</mwc-icon>
         <mwc-icon ?hidden=${this.hideZoom} class="corner" @click=${this.zoomOut}>${this.zoomLabel}</mwc-icon>
         <mwc-icon class="corner" dialogAction="decline">close</mwc-icon>
