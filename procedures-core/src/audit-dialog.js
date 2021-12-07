@@ -52,6 +52,56 @@ export class AuditDialog extends LitElement {
     this.sampleAuditChildRevisionRequired = true;
   }
 
+  updated(updates) {
+    if (updates.has('audits') && this.audits.length) {
+      this.setPrintContent()
+    }
+  }
+
+  setPrintContent() {
+    this.printObj = {
+      header: `Sample Audit for ${this.audits[0].sample_id}`,
+      content: this.setContent()
+    }
+  }
+
+  setContent() {
+    let str = ''
+    this.audits.forEach(a => {
+      str += `<div>action_name: ${a.action_name}</div>`
+      str += `*performed_on: ${a.date} by ${a.person}`
+      str += `<br>*reviewed_on: ${a.reviewed ? a.reviewed_on : ''}`
+      str += `<li>audit_id: ${a.audit_id}</li>`
+      str += `fields_updated: ${a.fields_updated ? JSON.stringify(a.fields_updated) : ''}`
+      if (a.sublevel.length&&a.sublevel[0].date) {
+        str += `<div style="margin-left: 20px;">`
+        a.sublevel.forEach(s=> {
+          str += `<p><div>action_name: ${s.action_name}</div>`
+          str += `*performed_on: ${s.date} by ${s.person}`
+          str += `<br>*reviewed_on: ${s.reviewed ? s.reviewed_on : ''}`
+          str += `<br>fields_updated: ${s.fields_updated ? JSON.stringify(s.fields_updated) : ''}</p>`
+        })
+        str += `</div>`
+      }
+      str += `<hr>`
+    })
+    return str
+  }
+
+  auditPrint() {
+    var printWindow = window.open('', '', 'fullscreen=yes');
+    let style = `<style type="text/css" media="print">
+      @page { size: portrait; }
+    </style>`
+    printWindow.document.write(style);
+    printWindow.document.write(this.printObj.content);
+    setTimeout(()=>{
+      printWindow.document.title = this.printObj.header;
+      printWindow.document.close();
+      printWindow.print();
+    }, 100)
+  }
+
   firstUpdated() {
     this.updateComplete.then(() => {
       // manually backgrounding the dialog box
@@ -67,9 +117,8 @@ export class AuditDialog extends LitElement {
       heading=""
       hideActions=""
       scrimClickAction="">
-      <div style="position:absolute;left:15px;top:8px;font-size:12px;">
-        ${this.countInfo()}
-      </div>
+      ${this.countInfo()}
+      <mwc-icon slot="icon1" @click=${this.auditPrint}>print</mwc-icon>
       ${this.audits.map(a=>
         html`
         <div class="layout horizontal flex center" style="margin:0;border-left:3px solid #ccc">
@@ -161,9 +210,9 @@ export class AuditDialog extends LitElement {
     let unSigned = this.audits.filter(a => !a.reviewed)
     let str = ''
     if (unSigned.length) {
-      str = html`<label style="color: red">${unSigned.length}/${this.audits.length}</label>`
+      str = html`<label slot="topLeft" style="font-size:12px;color: red">${unSigned.length}/${this.audits.length}</label>`
     } else {
-      str = html`<label style="color: green">${this.audits.length}/${this.audits.length}</label>`
+      str = html`<label slot="topLeft" style="font-size:12px;color: green">${this.audits.length}/${this.audits.length}</label>`
     }
     return str
   }
