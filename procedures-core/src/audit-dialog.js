@@ -66,40 +66,110 @@ export class AuditDialog extends LitElement {
   }
 
   setContent() {
-    let str = ''
+    let session = JSON.parse(sessionStorage.getItem("userSession"))
+    let sessionDate = session.appSessionStartDate
+    let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"
+    let strContent = ``
     this.audits.forEach(a => {
-      str += `<div>action_name: ${a.action_name}</div>`
-      str += `*performed_on: ${a.date} by ${a.person}`
-      str += `<br>*reviewed_on: ${a.reviewed ? a.reviewed_on : ''}`
-      str += `<li>audit_id: ${a.audit_id}</li>`
-      str += `fields_updated: ${a.fields_updated ? JSON.stringify(a.fields_updated) : ''}`
+      strContent += `<div>action_name: ${a.action_name}</div>`
+      strContent += `*performed_on: ${a.date} by ${a.person}`
+      strContent += `<br>*reviewed_on: ${a.reviewed ? a.reviewed_on : ''}`
+      strContent += `<li>audit_id: ${a.audit_id}</li>`
+      strContent += `fields_updated: ${a.fields_updated ? JSON.stringify(a.fields_updated) : ''}`
       if (a.sublevel.length&&a.sublevel[0].date) {
-        str += `<div style="margin-left: 20px;">`
+        strContent += `<div style="margin-left: 20px;">`
         a.sublevel.forEach(s=> {
-          str += `<p><div>action_name: ${s.action_name}</div>`
-          str += `*performed_on: ${s.date} by ${s.person}`
-          str += `<br>*reviewed_on: ${s.reviewed ? s.reviewed_on : ''}`
-          str += `<br>fields_updated: ${s.fields_updated ? JSON.stringify(s.fields_updated) : ''}</p>`
+          strContent += `<p><div>action_name: ${s.action_name}</div>`
+          strContent += `*performed_on: ${s.date} by ${s.person}`
+          strContent += `<br>*reviewed_on: ${s.reviewed ? s.reviewed_on : ''}`
+          strContent += `<br>fields_updated: ${s.fields_updated ? JSON.stringify(s.fields_updated) : ''}</p>`
         })
-        str += `</div>`
+        strContent += `</div>`
       }
-      str += `<hr>`
+      strContent += `<hr>`
     })
+
+    let str = `
+      <style type="text/css">
+      .page-header, .page-header-space {
+        height: 75px;
+        padding-top: 50px;
+      }
+      .page-header {
+        position: fixed;
+        top: 0mm;
+        width: 100%;
+        border-bottom: 1px solid black; /* for demo */
+      }
+      .page-footer, .page-footer-space {
+        height: 30px;
+        padding-top: 10px;
+      }
+      .page-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid black; /* for demo */
+      }
+      .page {
+        page-break-after: always;
+      }
+      @page {
+        margin: 0mm 10mm 10mm;
+      }
+      @media print {
+        thead {display: table-header-group;} 
+        tfoot {display: table-footer-group;}
+      }
+      </style>
+
+      <div class="page-header" style="text-align: center; font-weight: bold;">
+        Sample Audit for ${this.audits[0].sample_id} on ${sessionDate}
+      </div>
+
+      <div class="page-footer">
+        ${sessionUser} on ${sessionDate} 
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <td>
+              <!--place holder for the fixed-position header-->
+              <div class="page-header-space"></div>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <!--*** CONTENT GOES HERE ***-->
+              <div class="page">${strContent}</div>
+            </td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <td>
+              <!--place holder for the fixed-position footer-->
+              <div class="page-footer-space"></div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    `
     return str
   }
 
   auditPrint() {
     var printWindow = window.open('', '', 'fullscreen=yes');
-    let style = `<style type="text/css" media="print">
-      @page { size: portrait; }
-    </style>`
-    printWindow.document.write(style);
     printWindow.document.write(this.printObj.content);
-    setTimeout(()=>{
-      printWindow.document.title = this.printObj.header;
-      printWindow.document.close();
+    printWindow.document.title = this.printObj.header;
+    printWindow.document.close();
+    setTimeout(function () {
       printWindow.print();
-    }, 100)
+      printWindow.close();
+    }, 500);
   }
 
   firstUpdated() {
