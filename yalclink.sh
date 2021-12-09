@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# stops script if any simple command fails
+set -e
 # make sure we have fresh link
 npm cache clean --force
 yalcDir=`yalc dir`
