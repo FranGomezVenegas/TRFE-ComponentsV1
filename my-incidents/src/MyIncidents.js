@@ -236,7 +236,6 @@ export class MyIncidents extends CommonCore {
   }
 
   getOpenIncidents() {
-    this.getClosedIds()
     this.histories = []
     this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
@@ -244,6 +243,7 @@ export class MyIncidents extends CommonCore {
       actionName: 'USER_OPEN_INCIDENTS'
     }), false, false).then(j => {
       if (j && !j.is_error) {
+        this.getClosedIds()
         this.grid.items = j
         this.grid.querySelectorAll("vaadin-checkbox").forEach(c => {
           c.disabled = true
