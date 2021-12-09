@@ -1,5 +1,4 @@
 import { html, css } from 'lit';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { CommonCore, commonLangConfig } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-textfield';
