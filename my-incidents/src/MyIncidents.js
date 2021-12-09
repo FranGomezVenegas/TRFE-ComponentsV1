@@ -1,10 +1,12 @@
-import { html, css } from 'lit';
+import { html, css, unsafeCSS } from 'lit';
 import { CommonCore } from '@trazit/common-core';
-import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-button';
+import { displayFlex, horizontal, wrap, Layouts, vertical } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
+import '@material/mwc-list/mwc-list-item';
+import '@material/mwc-select';
 import '@material/mwc-textarea';
 import '@material/mwc-textfield';
+import '@spectrum-web-components/button/sp-button';
 import '@spectrum-web-components/icon/sp-icon.js';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
@@ -22,6 +24,9 @@ const langConfig = {
     },
     detail: {
       "label_en": "Detail", "label_es": "Detalle"
+    },
+    days: {
+      "label_en": "Number of Days", "label_es": "Número de Días"
     },
     id:  {
       "label_en": "Incident Id", "label_es": "Id de Incidencia"
@@ -95,15 +100,21 @@ export class MyIncidents extends CommonCore {
         .content * {
           margin: 5px 0;
         }
-        mwc-button {
-          --mdc-typography-button-text-transform: none;
+        div[hidden] {
+          display: none;
+        }
+        sp-button {
           margin: 0 2px;
+        }
+        sp-button[hidden] {
+          display: none;
         }
         mwc-textfield[hidden] {
           display: none;
         }
-        mwc-button[hidden] {
-          display: none;
+        .reopenPart {
+          ${unsafeCSS(displayFlex)}
+          ${unsafeCSS(vertical)}
         }
         `
     ];
@@ -113,7 +124,9 @@ export class MyIncidents extends CommonCore {
     return {
       selectedItem: { type: Object },
       histories: { type: Array },
-      dialogType: { type: String }
+      dialogType: { type: String },
+      numDays: { type: Number },
+      closedIds: { type: Array }
     };
   }
 
@@ -121,6 +134,8 @@ export class MyIncidents extends CommonCore {
     super();
     this.histories = [];
     this.dialogType = "";
+    this.numDays = 7;
+    this.closedIds = [];
     this.fieldErrMsg = {
       en: {
         title: "Title is required",
@@ -148,7 +163,7 @@ export class MyIncidents extends CommonCore {
       <mwc-icon-button style="color:#12805c" .title="${langConfig.button.confirm["label_"+this.lang]}" icon="check" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("confirm")}></mwc-icon-button>
       <mwc-icon-button style="color:#0d66d0" .title="${langConfig.button.note["label_"+this.lang]}" icon="note_add" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("note")}></mwc-icon-button>
       <mwc-icon-button style="color:#747474" .title="${langConfig.button.close["label_"+this.lang]}" icon="close" ?disabled=${!this.selectedItem} @click=${()=>this.openDialog("close")}></mwc-icon-button>
-      <mwc-icon-button .title="${langConfig.button.reopen["label_"+this.lang]}" icon="lock_open" @click=${()=>this.openDialog("reopen")}></mwc-icon-button>
+      <mwc-icon-button .title="${langConfig.button.reopen["label_"+this.lang]}" icon="lock_open" @click=${()=>this.openDialog("reopen")} ?disabled=${!this.closedIds.length}></mwc-icon-button>
     </div>
     <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort>
       <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
@@ -163,19 +178,34 @@ export class MyIncidents extends CommonCore {
         html`<history-item .history=${h}></history-item>`
       )}
     </div>
-    <tr-dialog id="icdDialog" @opened=${this.dialogOpened} @closed=${()=>{this.icdTitle.value="";this.icdId.value="";this.icdDetail.value=""}}
+    <tr-dialog id="icdDialog" 
+      @opened=${e=>{if(e.target===this.icdDialog)this.dialogOpened()}} 
+      @closed=${e=>{if(e.target===this.icdDialog){this.icdTitle.value="";this.icdDetail.value=""}}}
       heading=""
       hideActions=""
       scrimClickAction="">
       <div class="content layout vertical flex center-justified">
         <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg[this.lang].title} required></mwc-textfield>
-        <mwc-textfield id="icdId" label="${langConfig.field.id["label_"+this.lang]}" ?hidden=${this.dialogType!="reopen"} .validationMessage=${this.fieldErrMsg[this.lang].id} required></mwc-textfield>
+        <div class="reopenPart" ?hidden=${this.dialogType!="reopen"}>
+          <div class="layout horizontal flex center-center">
+            <mwc-textfield class="layout flex" id="numDays" type="number" 
+              .value=${this.numDays} 
+              label="${langConfig.field.days["label_"+this.lang]}"></mwc-textfield>
+            <mwc-icon-button icon="refresh" @click=${this.getClosedIds}></mwc-icon-button>
+          </div>
+          <mwc-select id="icdId" label="${langConfig.field.id["label_"+this.lang]}" 
+            ?disabled=${!this.closedIds.length}>
+            ${this.closedIds.map((c,i) => 
+              html`<mwc-list-item value="${c.id}" ?selected=${i==0}>${c.id}</mwc-list-item>`
+            )}
+          </mwc-select>
+        </div>
         <mwc-textarea id="detail" label="${langConfig.field.detail["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg[this.lang].detail} required></mwc-textarea>
-        <mwc-button raised dense @click=${this.createIncident} ?hidden=${this.dialogType!="create"} .label="${langConfig.dialog_button.new["label_"+this.lang]}"></mwc-button>
-        <mwc-button raised dense @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"} .label="${langConfig.dialog_button.confirm["label_"+this.lang]}"></mwc-button>
-        <mwc-button raised dense @click=${this.addNote} ?hidden=${this.dialogType!="note"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
-        <mwc-button raised dense @click=${this.closeIncident} ?hidden=${this.dialogType!="close"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
-        <mwc-button raised dense @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} .label="${langConfig.dialog_button.accept["label_"+this.lang]}"></mwc-button>
+        <sp-button size="m" @click=${this.createIncident} ?hidden=${this.dialogType!="create"}>${langConfig.dialog_button.new["label_"+this.lang]}</sp-button>
+        <sp-button size="m" @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"}>${langConfig.dialog_button.confirm["label_"+this.lang]}</sp-button>
+        <sp-button size="m" @click=${this.addNote} ?hidden=${this.dialogType!="note"}>${langConfig.dialog_button.accept["label_"+this.lang]}</sp-button>
+        <sp-button size="m" @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>${langConfig.dialog_button.accept["label_"+this.lang]}</sp-button>
+        <sp-button size="m" @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} ?disabled=${!this.closedIds.length}>${langConfig.dialog_button.accept["label_"+this.lang]}</sp-button>
       </div>
     </tr-dialog>
     `;
@@ -206,6 +236,7 @@ export class MyIncidents extends CommonCore {
   }
 
   getOpenIncidents() {
+    this.getClosedIds()
     this.histories = []
     this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
@@ -218,6 +249,18 @@ export class MyIncidents extends CommonCore {
           c.disabled = true
         })
       }
+    })
+  }
+
+  getClosedIds() {
+    this.closedIds = []
+    this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
+      dbName: this.config.dbName,
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      actionName: 'CLOSED_INCIDENTS_LAST_N_DAYS',
+      numDays: this.numDays
+    }), false, false).then(j => {
+      this.closedIds =j
     })
   }
 
@@ -256,10 +299,8 @@ export class MyIncidents extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       ...params
     })).then(j => {
-      if (j) {
-        this.icdDialog.close()
-        this.getOpenIncidents()
-      }
+      this.icdDialog.close()
+      this.getOpenIncidents()
     })
   }
 
@@ -311,9 +352,6 @@ export class MyIncidents extends CommonCore {
   }
 
   reopenIncident() {
-    if (!this.icdId.validity.valid) {
-      return this.icdId.focus()
-    }
     if (!this.icdDetail.validity.valid) {
       return this.icdDetail.focus()
     }
