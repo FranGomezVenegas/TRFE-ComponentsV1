@@ -91,7 +91,7 @@ export class CommonCore extends LitElement {
         composed: true
       }))
       this.error(e)
-      return
+      return e
     })
   }
 

@@ -250,7 +250,7 @@ export class SamplePlateReading extends SamplePendingSampling {
     let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params, false, false).then(j => {
-      if (j) {
+      if (j && !j.is_error) {
         this.enterResults = j
         this.requestUpdate()
       }

@@ -256,7 +256,7 @@ export class PlatformLogin extends CommonCore {
       actionName: 'authenticate'
     })
     return this.fetchApi(urlParams, false, false).then(j => {
-      if (j) {
+      if (j && !j.is_error) {
         sessionStorage.setItem('partialToken', JSON.stringify(j))
       } else {
         this.dispatchEvent(new CustomEvent("error", {
@@ -277,7 +277,7 @@ export class PlatformLogin extends CommonCore {
       actionName: 'getuserrole'
     })
     return this.fetchApi(urlParams, false, false).then(async j => {
-      if (j) {
+      if (j && !j.is_error) {
         if (j.length > 1) {
           this.dispatchEvent(new CustomEvent('success', {
             detail: {...appLogin_authenticationMessage.connectedSuccess, urlParams: urlParams, log: false},
@@ -302,7 +302,7 @@ export class PlatformLogin extends CommonCore {
       actionName: 'finaltoken'
     })
     return this.fetchApi(urlParams, false, false).then(j => {
-      if (j) {
+      if (j && !j.is_error) {
         j = {
           ...j,
           ...appLogin_authenticationMessage.connectedSuccess_singleRole

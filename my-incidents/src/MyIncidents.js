@@ -243,7 +243,7 @@ export class MyIncidents extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: 'USER_OPEN_INCIDENTS'
     }), false, false).then(j => {
-      if (j) {
+      if (j && !j.is_error) {
         this.grid.items = j
         this.grid.querySelectorAll("vaadin-checkbox").forEach(c => {
           c.disabled = true
@@ -260,7 +260,9 @@ export class MyIncidents extends CommonCore {
       actionName: 'CLOSED_INCIDENTS_LAST_N_DAYS',
       numDays: this.numDays
     }), false, false).then(j => {
-      this.closedIds =j
+      if (j && !j.is_error) {
+        this.closedIds = j
+      }
     })
   }
 
@@ -286,7 +288,7 @@ export class MyIncidents extends CommonCore {
         actionName: 'INCIDENT_DETAIL_FOR_GIVEN_INCIDENT',
         incidentId: this.selectedItem.id
       }), false, false).then(j => {
-        if (j) {
+        if (j && !j.is_error) {
           this.histories = j
         }
       })

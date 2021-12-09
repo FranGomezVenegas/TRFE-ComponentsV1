@@ -90,7 +90,7 @@ export class MyCertifications extends CommonCore {
       sopName: e.detail.sop_name,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
     })).then(j => {
-      if (j) {
+      if (j && !j.is_error) {
         this.frontEndSopUserAPI(e.detail)
       }
     })
@@ -102,9 +102,7 @@ export class MyCertifications extends CommonCore {
       actionName: 'ALL_IN_ONE',
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
     }), false, false).then(j => {
-      if (j) {
-        this.getProcedureList(cert)
-      }
+      this.getProcedureList(cert)
     })
   }
 
@@ -113,7 +111,7 @@ export class MyCertifications extends CommonCore {
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
     }), false, false).then(j => {
-      if (j) {
+      if (j && !j.is_error) {
         let certs = JSON.stringify(this.certSet) // temp ref
         certs = JSON.parse(certs)
         this.certSet = []
