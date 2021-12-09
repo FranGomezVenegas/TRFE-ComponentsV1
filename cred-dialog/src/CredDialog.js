@@ -113,8 +113,7 @@ export class CredDialog extends CommonCore {
       justificationType: { type: String },
       nonProc: { type: Boolean },
       escapeKey: { type: Boolean },
-      reqParams: { type: Object },
-      needConfirm: { type: Boolean } // need confirm dialog
+      reqParams: { type: Object }
     };
   }
 
@@ -132,7 +131,6 @@ export class CredDialog extends CommonCore {
     this.maxFails = 3;
     this.justificationType = "";
     this.nonProc = false;
-    this.needConfirm = false;
   }
 
   firstUpdated() {
@@ -340,18 +338,7 @@ export class CredDialog extends CommonCore {
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
     let bypass = true
     procList.forEach(p => {
-      if (p.actions_with_confirm_user.indexOf(this.actionName) >= 0) {
-        let idx = p.actions_with_confirm_user.findIndex(p => p == this.actionName)
-        --idx // the object is on the previous index
-        if (p.actions_with_confirm_user[idx][this.actionName].type) {
-          this.justificationType = p.actions_with_confirm_user[idx][this.actionName].type
-          if (this.justificationType != "TEXT") {
-            this.justificationList = p.actions_with_confirm_user[idx][this.actionName].list_entries
-          }
-        }
-        this.type = "user"
-        bypass = false
-      } else if (p.actions_with_esign.indexOf(this.actionName) >= 0) {
+      if (p.actions_with_esign.indexOf(this.actionName) >= 0) {
         let idx = p.actions_with_esign.findIndex(p => p == this.actionName)
         --idx // the object is on the previous index
         if (p.actions_with_esign[idx][this.actionName].type) {
@@ -361,6 +348,17 @@ export class CredDialog extends CommonCore {
           }
         }
         this.type = "esign"
+        bypass = false
+      } else if (p.actions_with_confirm_user.indexOf(this.actionName) >= 0) {
+        let idx = p.actions_with_confirm_user.findIndex(p => p == this.actionName)
+        --idx // the object is on the previous index
+        if (p.actions_with_confirm_user[idx][this.actionName].type) {
+          this.justificationType = p.actions_with_confirm_user[idx][this.actionName].type
+          if (this.justificationType != "TEXT") {
+            this.justificationList = p.actions_with_confirm_user[idx][this.actionName].list_entries
+          }
+        }
+        this.type = "user"
         bypass = false
       } else if (p.actions_with_justification_phrase.indexOf(this.actionName) >= 0) {
         let idx = p.actions_with_justification_phrase.findIndex(p => p == this.actionName)
@@ -373,9 +371,9 @@ export class CredDialog extends CommonCore {
         }
         this.type = "justification"
         bypass = false
-      }
-      if (p.actions_with_action_confirm.indexOf(this.actionName) >= 0) {
-        this.needConfirm = true
+      } else if (p.actions_with_action_confirm.indexOf(this.actionName) >= 0) {
+        this.type = "confirm"
+        bypass = false
       }
     })
     // bypass / no need creds process
@@ -400,7 +398,18 @@ export class CredDialog extends CommonCore {
         if (noNeedCreds) {
           this.nextRequest()
         } else {
-          this.credDialog.show()
+          if (this.type == "confirm") {
+            let str = `Are you sure you want to continue doing ${this.actionName}`
+            if (this.objectId && this.objectId != -1) {
+              str += ` for ${this.objectId}`
+            }
+            let c = confirm(`${str} ?`)
+            if (c) {
+              this.nextRequest()
+            }
+          } else {
+            this.credDialog.show()
+          }
         }
       }
     }
@@ -419,15 +428,7 @@ export class CredDialog extends CommonCore {
     })
     this.fetchApi(params, false).then(j => {
       if (j) {
-        let c = true
-        if (this.needConfirm) {
-          c = confirm(`${str} ?`)
-        }
-        if (c) {
-          this.nextRequest()
-        } else {
-          this.credDialog.close()
-        }
+        this.nextRequest()
       } else {
         this.checkAttempt()
       }
@@ -446,13 +447,7 @@ export class CredDialog extends CommonCore {
     })
     this.fetchApi(params, false).then(j => {
       if (j) {
-        let c = confirm(`${str} ?`)
-        console.log(c, " HHH")
-        if (c) {
-          this.nextRequest()
-        } else {
-          this.credDialog.close()
-        }
+        this.nextRequest()
       } else {
         this.checkAttempt()
       }
