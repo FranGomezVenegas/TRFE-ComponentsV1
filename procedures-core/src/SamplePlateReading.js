@@ -81,9 +81,10 @@ export class SamplePlateReading extends SamplePendingSampling {
                             }` : null
                           }</td>` :
                       html`${k=="raw_value" ?
-                        html`<td>${item[k] ?
-                              html`${item[k]}` :
-                              html`<input type="text" @keypress=${e=>{if(e.keyCode==13&&e.target.value&&!isNaN(e.target.value))this.enterResult(e.target.value, item.result_id)}}>`
+                        html`<td>${!item[k]||item.spec_eval=="IN" ?
+                              html`<input type="number" min=0.00 max=1.00 step=0.01 .value=${item[k]?item[k]:0.00}
+                                @keypress=${e=>{if(e.keyCode==13&&e.target.value&&!isNaN(e.target.value))this.enterResult(e.target.value, item)}}>` :
+                              html`${item[k]}`
                             }</td>` :
                         html`<td>${item[k]}</td>`
                       }`
@@ -224,10 +225,14 @@ export class SamplePlateReading extends SamplePendingSampling {
     })
   }
 
-  enterResult(raw_value, id) {
-    this.credsChecker("ENTERRESULT", this.selectedItem.sample_id, {
+  enterResult(raw_value, item) {
+    let actionName = "ENTERRESULT"
+    if (item.raw_value) {
+      actionName = "REENTERRESULT"
+    }
+    this.credsChecker(actionName, this.selectedItem.sample_id, {
       rawValueResult: raw_value,
-      resultId: id
+      resultId: item.result_id
     })
   }
 
@@ -259,7 +264,7 @@ export class SamplePlateReading extends SamplePendingSampling {
 
   nextRequest() {
     super.nextRequest()
-    if (this.actionName == "ENTERRESULT") {
+    if (this.actionName == "ENTERRESULT" || this.actionName == "REENTERRESULT") {
       this.enterResultReq()
     } else if (this.actionName == "GET_SAMPLE_ANALYSIS_RESULT_LIST") {
       this.getResultReq()
