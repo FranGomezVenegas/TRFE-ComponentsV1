@@ -1,6 +1,7 @@
-import { html, render } from 'lit';
-import { ProceduresCore } from './ProceduresCore';
+import { html } from 'lit';
+import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { commonLangConfig } from '@trazit/common-core';
+import { ProceduresCore } from './ProceduresCore';
 
 export class SamplePendingSampling extends ProceduresCore {
   getButton() {
@@ -171,7 +172,7 @@ export class SamplePendingSampling extends ProceduresCore {
       html`
       <vaadin-grid-column
         header="${value['label_'+this.lang]}"
-        .renderer="${this.iconRenderer}"
+        ${columnBodyRenderer(this.iconRenderer)}
         text-align="center"
         flex-grow="0"
       ></vaadin-grid-column>
@@ -179,7 +180,7 @@ export class SamplePendingSampling extends ProceduresCore {
       html`
       <vaadin-grid-column
         header="${value['label_'+this.lang]}"
-        .renderer="${this.iconRenderer}"
+        ${columnBodyRenderer(this.iconRenderer)}
         text-align="center"
         auto-width
       ></vaadin-grid-column>
@@ -187,13 +188,9 @@ export class SamplePendingSampling extends ProceduresCore {
     }`
   }
 
-  iconRenderer(root, _, model) {
-    if (this.getRootNode().host.name) {
-      const sample = model.item;
-      render(
-        html`<img src="/images/${this.getRootNode().host.name}_${sample.status.toLowerCase()}.png" style="width:20px">`,
-        root
-      );
+  iconRenderer(sample) {
+    if (this.name) {
+      return html`<img src="/images/${this.name}_${sample.status.toLowerCase()}.png" style="width:20px">`
     }
   }
 

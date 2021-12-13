@@ -20,7 +20,8 @@
     "@spectrum-web-components/tooltip": "^0.9.0",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
     "@vaadin/vaadin-grid": "^21.0.3",
-    "lit": "^2.0.2"
+    "lit": "^2.0.2",
+    "lit-vaadin-helpers": "^0.2.1"
   },
   "devDependencies": {
     "@spectrum-web-components/theme": "^0.8.15",
