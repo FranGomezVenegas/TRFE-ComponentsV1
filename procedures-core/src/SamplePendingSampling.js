@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, render } from 'lit';
 import { ProceduresCore } from './ProceduresCore';
 import { commonLangConfig } from '@trazit/common-core';
 
@@ -124,25 +124,25 @@ export class SamplePendingSampling extends ProceduresCore {
       },
       "gridHeader": {
         "sample_id": {
-          label_en:"Sample ID", label_es: "ID Muestra"
+          label_en:"Sample ID", label_es: "ID Muestra", sort: false, filter: true
         },
         "program_name": {
-          label_en:"Project", label_es: "Programa"
+          label_en:"Project", label_es: "Programa", sort: false, filter: true
         },
         "location_name": {
-          label_en:"Location", label_es: "Ubicación"
+          label_en:"Location", label_es: "Ubicación", sort: false, filter: true
         },
         "sampling_date": {
-          label_en:"Sampling Date", label_es: "ID Fecha de Muestreo"
+          label_en:"Sampling Date", label_es: "ID Fecha de Muestreo", sort: false, filter: true
         },
         "sampling_comment": {
-          label_en:"sampling Comment", label_es: "Comentario Muestreo"
+          label_en:"sampling Comment", label_es: "Comentario Muestreo", sort: false, filter: true
         },
         "spec_code": {
-          label_en:"Spec", label_es: "Especificación"
+          label_en:"Spec", label_es: "Especificación", sort: false, filter: true
         },
         "spec_variation_name": {
-          label_en:"Variation", label_es: "Variación"
+          label_en:"Variation", label_es: "Variación", sort: false, filter: true
         }
       }
     }
@@ -158,12 +158,64 @@ export class SamplePendingSampling extends ProceduresCore {
   gridList() {
     return Object.entries(this.langConfig.gridHeader).map(
       ([key, value], i) => html`
-        ${i==0 ?
-          html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-          html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+        ${this.langConfig.gridHeader[key].is_icon ?
+          this.iconColumn(key, value, i) :
+          this.nonIconColumn(key, value, i)
         }
       `
     )
+  }
+
+  iconColumn(key, value, i) {
+    return html`${i==0 ?
+      html`
+      <vaadin-grid-column
+        header="${value['label_'+this.lang]}"
+        .renderer="${this.iconRenderer}"
+        text-align="center"
+        flex-grow="0"
+      ></vaadin-grid-column>
+      ` :
+      html`
+      <vaadin-grid-column
+        header="${value['label_'+this.lang]}"
+        .renderer="${this.iconRenderer}"
+        text-align="center"
+        auto-width
+      ></vaadin-grid-column>
+      `
+    }`
+  }
+
+  iconRenderer(root, _, model) {
+    if (this.getRootNode().host.name) {
+      const sample = model.item;
+      render(
+        html`<img src="/images/${this.getRootNode().host.name}_${sample.status.toLowerCase()}.png" style="width:20px">`,
+        root
+      );
+    }
+  }
+
+  nonIconColumn(key, value, i) {
+    return html`${this.langConfig.gridHeader[key].sort ?
+      this.sortColumn(key, value, i) :
+      this.filterColumn(key, value, i)
+    }`
+  }
+
+  sortColumn(key, value, i) {
+    return html`${i==0 ?
+      html`<vaadin-grid-sort-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
+      html`<vaadin-grid-sort-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+    }`
+  }
+
+  filterColumn(key, value, i) {
+    return html`${i==0 ?
+      html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+      html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+    }`
   }
 
   getTitle() {

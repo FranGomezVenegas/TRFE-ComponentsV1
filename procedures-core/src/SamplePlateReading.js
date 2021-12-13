@@ -162,44 +162,43 @@ export class SamplePlateReading extends SamplePendingSampling {
       },
       "gridHeader": {
         "sample_id": {
-          label_en: "Sample ID", 
-          label_es: "ID Muestra"
+          label_en: "Sample ID", label_es: "ID Muestra", sort: false, filter: true
         },
         "status": {
-          label_en:"Status", label_es: "Estado"
+          label_en:"Status", label_es: "Estado", is_icon:true
         },
         "program_name": {
-          label_en:"Project", label_es: "Programa"
+          label_en:"Project", label_es: "Programa", sort: false, filter: true
         },
         "location_name": {
-          label_en:"Location", label_es: "Ubicación"
+          label_en:"Location", label_es: "Ubicación", sort: false, filter: true
         },
         "sampling_date": {
-          label_en:"sampling Date", label_es: "ID Fecha de Muestreo"
+          label_en:"sampling Date", label_es: "ID Fecha de Muestreo", sort: false, filter: true
         },
         "incubation_batch": {
-          label_en:"Batch incub 1", label_es: "Tanda 1a Incubacion"
+          label_en:"Batch incub 1", label_es: "Tanda 1a Incubacion", sort: false, filter: true
         },
         "incubation_incubator": {
-          label_en:"Incubator incub 1", label_es: "Incubadora 1a Incubacion"
+          label_en:"Incubator incub 1", label_es: "Incubadora 1a Incubacion", sort: false, filter: true
         },
         "incubation_start": {
-          label_en:"incubation 1 start", label_es: "Inicio 1a Incubacion"
+          label_en:"incubation 1 start", label_es: "Inicio 1a Incubacion", sort: false, filter: true
         },
         "incubation_end": {
-          label_en:"incubation 1 end", label_es: "Fin 1a Incubacion"
+          label_en:"incubation 1 end", label_es: "Fin 1a Incubacion", sort: false, filter: true
         },
         "incubation2_batch": {
-          label_en:"Batch incub 2", label_es: "Tanda 2a Incubacion"
+          label_en:"Batch incub 2", label_es: "Tanda 2a Incubacion", sort: false, filter: true
         },
         "incubation2_incubator": {
-          label_en:"Incubator incub 2", label_es: "Incubadora 2a Incubacion"
+          label_en:"Incubator incub 2", label_es: "Incubadora 2a Incubacion", sort: false, filter: true
         },
         "incubation2_start": {
-          label_en:"incubation 2 start", label_es: "Inicio 2a Incubacion"
+          label_en:"incubation 2 start", label_es: "Inicio 2a Incubacion", sort: false, filter: true
         },
         "incubation2_end": {
-          label_en:"incubation 2 end", label_es: "Fin 2a Incubacion"
+          label_en:"incubation 2 end", label_es: "Fin 2a Incubacion", sort: false, filter: true
         }
       },
       "resultHeader": {

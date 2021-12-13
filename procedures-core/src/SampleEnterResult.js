@@ -9,23 +9,22 @@ export class SampleEnterResult extends SamplePlateReading {
     this.name = "fq"
     this.langConfig.gridHeader = {
       "status": {
-        label_en:"Status", label_es: "Estado"
+        label_en:"Status", label_es: "Estado", is_icon: true
       },
       "sample_id": {
-        label_en: "Sample ID", 
-        label_es: "ID Muestra"
+        label_en: "Sample ID", label_es: "ID Muestra", sort: true, filter: false
       },
       "program_name": {
-        label_en:"Project", label_es: "Programa"
+        label_en:"Project", label_es: "Programa", sort: true, filter: false
       },
       "location_name": {
-        label_en:"Location", label_es: "Ubicación"
+        label_en:"Location", label_es: "Ubicación", sort: true, filter: false
       },
       "sampling_date": {
-        label_en:"sampling Date", label_es: "ID Fecha de Muestreo"
+        label_en:"sampling Date", label_es: "ID Fecha de Muestreo", sort: true, filter: false
       },
       "spec_code": {
-        label_en:"Spec", label_es: "Especificación"
+        label_en:"Spec", label_es: "Especificación", sort: true, filter: false
       }
     }
   }
@@ -35,11 +34,13 @@ export class SampleEnterResult extends SamplePlateReading {
       sampleFieldToRetrieve: "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name",
       whereFieldsName: "status in-|sample_config_code not in*|sampling_date is not null",
       whereFieldsValue: "RECEIVED-INCOMPLETE-COMPLETE*String|prog_pers_template|-",
-      addSampleAnalysis: this.name == "fq" ? true : false,
       addSampleAnalysisFieldToRetrieve: "method_name|testing_group",
       sampleAnalysisWhereFieldsName: "testing_group|status not in",
       sampleAnalysisWhereFieldsValue: (this.name == "fq" ? "FQ" : "MB") + "*String|REVIEWED*String",
-      addSampleAnalysisResult: true
+      addSampleAnalysis: false,
+      addSampleAnalysisResult: false
+      // addSampleAnalysis: this.name == "fq" ? true : false,
+      // addSampleAnalysisResult: true
     })
   }
 

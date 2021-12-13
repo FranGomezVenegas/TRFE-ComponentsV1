@@ -4,6 +4,8 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@vaadin/vaadin-grid/vaadin-grid';
+import '@vaadin/vaadin-grid/vaadin-grid-column';
+import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '@trazit/tr-dialog/tr-dialog';
 import './audit-dialog';
