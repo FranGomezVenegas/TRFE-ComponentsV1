@@ -143,11 +143,11 @@ export class SamplePlateReading extends SamplePendingSampling {
         "label_en": "Close", "label_es": "Cerrar"
       },
       "title": {
-        "samples": {
+        "PlateReadingSMP": {
           "label_en": "Samples Pending Plate Reading", 
           "label_es": "Muestras pendientes de la lectura de placa"
         },
-        "personel": {
+        "PlateReadingPERS": {
           "label_en": "Personnel Samples Pending Plate Reading", 
           "label_es": "Muestras de personal pendientes de la lectura de placa"
         },
