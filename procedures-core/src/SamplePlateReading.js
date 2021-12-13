@@ -75,10 +75,8 @@ export class SamplePlateReading extends SamplePendingSampling {
                   ${Object.entries(this.langConfig.resultHeader).map(([k, v])=>
                     html`${k=="spec_eval" ?
                       html`<td style="text-align: center">${item[k] ?
-                            html`${item[k]=="IN" ?
-                              html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` : 
-                              html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
-                            }` : null
+                            html`<mwc-icon style="color:${item[k]=='IN'?'green':'red'}">radio_button_checked</mwc-icon>` : 
+                            html`<mwc-icon style="color:grey">radio_button_checked</mwc-icon>`
                           }</td>` :
                       html`${k=="raw_value" ?
                         html`<td>${!item[k]||item.spec_eval=="IN" ?
@@ -97,7 +95,10 @@ export class SamplePlateReading extends SamplePendingSampling {
               html`
               <tr>
                 <td colspan="6" style="text-align: center">
-                  <p>${this.selectedResult.spec_eval?html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`:null}</p>
+                  <p>${this.selectedResult.spec_eval ?
+                    html`<mwc-icon style="color:${this.selectedResult.spec_eval=='IN'?'green':'red'}">radio_button_checked</mwc-icon>` :
+                    html`<mwc-icon style="color:grey">radio_button_checked</mwc-icon>`
+                  }</p>
                   <p>Range Evaluation: ${this.selectedResult.spec_eval}</p>
                   <p>Range Rule: ${this.selectedResult.spec_eval_detail}</p>
                   <p>Lock Reason: ${this.selectedResult.locking_reason?this.selectedResult.locking_reason["message_"+ this.lang]:null}</p>
@@ -119,6 +120,10 @@ export class SamplePlateReading extends SamplePendingSampling {
 
   get rslDialogSurface() {
     return this.rslDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
+  get rItem() {
+    return this.shadowRoot.querySelector("input[name=rItem]")
   }
 
   static get properties() {
@@ -245,6 +250,12 @@ export class SamplePlateReading extends SamplePendingSampling {
   }
 
   getResult() {
+    this.selectedResult = null
+    this.enterResults = []
+    this.getResultCmd()
+  }
+
+  getResultCmd() {
     this.credsChecker("GET_SAMPLE_ANALYSIS_RESULT_LIST", this.selectedItem.sample_id, {
       sampleAnalysisResultFieldToRetrieve: "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict",
       sortFieldsName: "test_id|result_id"

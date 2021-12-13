@@ -43,7 +43,7 @@ export class SampleEnterResult extends SamplePlateReading {
     })
   }
 
-  getResult() {
+  getResultCmd() {
     this.credsChecker("GET_SAMPLE_ANALYSIS_RESULT_LIST", this.selectedItem.sample_id, {
       sampleAnalysisResultFieldToRetrieve: "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict",
       sortFieldsName: "test_id|result_id",
