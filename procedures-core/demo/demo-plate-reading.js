@@ -30,8 +30,8 @@ class DemoExample extends LitElement {
       <platform-login @authorized=${e=>{this.auth=e.target.auth;this.sPlate.config=this.pLogin.config;this.pPlate.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <sample-plate-reading id="s"></sample-plate-reading><hr>
-        <sample-plate-reading id="p" name="personel"></sample-plate-reading><br>
+        <sample-plate-reading id="s" name="PlateReadingSMP"></sample-plate-reading><hr>
+        <sample-plate-reading id="p" name="PlateReadingPERS"></sample-plate-reading><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
     `;
