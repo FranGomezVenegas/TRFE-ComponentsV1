@@ -1,5 +1,6 @@
-import { html, css } from 'lit';
+import { html, css, nothing } from 'lit';
 import { SamplePendingSampling } from './SamplePendingSampling';
+import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 
 export class SamplePlateReading extends SamplePendingSampling {
   static get styles() {
@@ -58,60 +59,24 @@ export class SamplePlateReading extends SamplePendingSampling {
       heading=""
       hideActions=""
       scrimClickAction="">
-      <div class="layout vertical flex center-justified">
-        ${this.enterResults.length ?
-          html`
-            <table>
-              <!-- table header -->
-              <tr>
-                <th></th>
-                ${Object.entries(this.langConfig.resultHeader).map(([k,v])=>
-                  html`<th>${v['label_'+this.lang]}</th>`
-                )}
-              </tr>
-              <!-- table contents -->
-              ${this.enterResults.map(item=>
-                html`<tr><td><input type="checkbox" name="rItem" @change=${e=>this.resDetail(e, item)}></td>
-                  ${Object.entries(this.langConfig.resultHeader).map(([k, v])=>
-                    html`${k=="spec_eval" ?
-                      html`<td style="text-align: center">${item[k] ?
-                            html`<mwc-icon style="color:${item[k]=='IN'?'green':'red'}">radio_button_checked</mwc-icon>` : 
-                            html`<mwc-icon style="color:grey">radio_button_checked</mwc-icon>`
-                          }</td>` :
-                      html`${k=="raw_value" ?
-                        html`<td>${!item[k]||item.spec_eval=="IN" ?
-                              html`<input type="number" min=0.00 max=1.00 step=0.01 .value=${item[k]?item[k]:0.00}
-                                @keypress=${e=>{if(e.keyCode==13&&e.target.value&&!isNaN(e.target.value))this.enterResult(e.target.value, item)}}>` :
-                              html`${item[k]}`
-                            }</td>` :
-                        html`<td>${item[k]}</td>`
-                      }`
-                    }`
-                  )}
-                </tr>
-                `
-              )}
-              ${this.selectedResult?
-              html`
-              <tr>
-                <td colspan="6" style="text-align: center">
-                  <p>${this.selectedResult.spec_eval ?
-                    html`<mwc-icon style="color:${this.selectedResult.spec_eval=='IN'?'green':'red'}">radio_button_checked</mwc-icon>` :
-                    html`<mwc-icon style="color:grey">radio_button_checked</mwc-icon>`
-                  }</p>
-                  <p>Range Evaluation: ${this.selectedResult.spec_eval}</p>
-                  <p>Range Rule: ${this.selectedResult.spec_eval_detail}</p>
-                  <p>Lock Reason: ${this.selectedResult.locking_reason?this.selectedResult.locking_reason["message_"+ this.lang]:null}</p>
-                </td>
-              </tr>
-              `:null
-              }
-            </table>
-          ` : null
-        }
-      </div>
+      ${this.selectedItem ?
+        html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedItem.sample_id}</label>` : nothing
+      }
+      <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
+        @selected-items-changed=${e => {
+          this.selectedResults = e.detail.value
+        }}
+        .detailsOpenedItems=${this.selectedResults}
+        ${gridRowDetailsRenderer(this.detailRenderer)}>
+        <vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>
+        ${this.erList()}
+      </vaadin-grid>
     </tr-dialog>
     `
+  }
+
+  get erGrid() {
+    return this.shadowRoot.querySelector("vaadin-grid#erGrid")
   }
 
   get rslDialog() {
@@ -128,15 +93,13 @@ export class SamplePlateReading extends SamplePendingSampling {
 
   static get properties() {
     return {
-      enterResults: { type: Array },
-      selectedResult: { type: Object },
+      selectedResults: { type: Array },
       hidePrev: { type: Boolean }
     };
   }
 
   constructor() {
     super()
-    this.enterResults = []
     this.hidePrev = false
     this.langConfig = {
       "close": {
@@ -221,6 +184,88 @@ export class SamplePlateReading extends SamplePendingSampling {
     }
   }
 
+  detailRenderer(result) {
+    return html`
+      <div style="text-align:center;font-size:12px">
+        <p>${result.spec_eval ?
+          html`${result.spec_eval=='IN' ?
+            html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
+            html`${result.is_locked ?
+              html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
+              html`<mwc-icon style="color:yellow">radio_button_checked</mwc-icon>`
+            }`
+          }` :
+          html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
+        }</p>
+        <p>Range Evaluation: ${result.spec_eval}</p>
+        <p>Range Rule: ${result.spec_eval_detail}</p>
+        <p>Lock Reason: ${result.is_locked?result.is_locked["message_"+ this.lang]:null}</p>
+      </div>
+    `
+  }
+
+  specRenderer(result) {
+    if (result.spec_eval) {
+      if (result.spec_eval == 'IN') {
+        return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
+      } else {
+        if (result.is_locked) {
+          return html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
+        } else {
+          return html`<mwc-icon style="color:yellow">radio_button_checked</mwc-icon>`
+        }
+      }
+    } else {
+      return html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
+    }
+  }
+
+  valRenderer(result) {
+    if (!result.raw_value || result.spec_eval == "IN") {
+      if (result.param_type == "TEXT" || result.param_type == "qualitative") {
+        return html`<mwc-textfield type="text" .value=${result.raw_value}></mwc-textfield>`
+      } else {
+        return html`<mwc-textfield type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00}></mwc-textfield>`
+      }
+    } else {
+      if (result.is_locked) {
+        return html`
+          <div style="width: 100%;height: 55px;position: relative;">
+            <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
+          </div>
+        `
+      } else {
+        if (result.param_type == "TEXT" || result.param_type == "qualitative") {
+          return html`<mwc-textfield type="text" .value=${result.raw_value}></mwc-textfield>`
+        } else {
+          return html`<mwc-textfield type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00}></mwc-textfield>`
+        }
+      }
+    }
+  }
+
+  erList() {
+    return Object.entries(this.langConfig.resultHeader).map(([key, value], i) => 
+      html`${i==0 ?
+        html`<vaadin-grid-column 
+          ${columnBodyRenderer(this.specRenderer)}
+          text-align="center" 
+          flex-grow="0"
+          path="${key}" 
+          header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+        html`${key=="raw_value" ?
+          html`<vaadin-grid-column 
+            ${columnBodyRenderer(this.valRenderer)}
+            text-align="center" 
+            flex-grow="1"
+            path="${key}" 
+            header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+          html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+        }`
+      }`
+    )
+  }
+
   getSamples() {
     this.credsChecker("SAMPLES_BY_STAGE", null, {
       sampleFieldToRetrieve: "sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code",
@@ -249,8 +294,8 @@ export class SamplePlateReading extends SamplePendingSampling {
   }
 
   getResult() {
-    this.selectedResult = null
-    this.enterResults = []
+    this.selectedResults = []
+    this.erGrid.items = []
     this.getResultCmd()
   }
 
@@ -266,7 +311,9 @@ export class SamplePlateReading extends SamplePendingSampling {
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params, false, false).then(j => {
       if (j && !j.is_error) {
-        this.enterResults = j
+        this.resetCheck = false
+        this.selectedResults = []
+        this.erGrid.items = j
         this.requestUpdate()
       }
     })
@@ -279,22 +326,5 @@ export class SamplePlateReading extends SamplePendingSampling {
     } else if (this.actionName == "GET_SAMPLE_ANALYSIS_RESULT_LIST") {
       this.getResultReq()
     }
-  }
-
-  resDetail(e, item) {
-    // unchecked all unselected items
-    let nlist = this.shadowRoot.querySelectorAll("input[type=checkbox]")
-    nlist.forEach(n => {
-      if (e.target != n) {
-        n.checked = false
-      }
-    })
-    // set the selected item
-    if (e.target.checked) {
-      this.selectedResult = item
-    } else {
-      this.selectedResult = null
-    }
-    this.requestUpdate()
   }
 }
