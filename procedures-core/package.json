@@ -10,7 +10,8 @@
     "start:sample": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-pending.html",
     "start:sampling": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-pending-sampling.html",
     "start:enterresult": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-enter-result.html",
-    "start:plate": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-plate-reading.html"
+    "start:plate": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-plate-reading.html",
+    "start:incubation": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/sample-incubation.html"
   },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
