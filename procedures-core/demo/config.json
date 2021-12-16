@@ -3,5 +3,7 @@
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
   "appAuthenticateApiUrl": "/frontend/AuthenticationAPI",
   "frontEndEnvMonitSampleUrl": "/moduleenvmon/frontend/EnvMonSampleAPIfrontend",
-  "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPI"
+  "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPI",
+  "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPI",
+  "frontEndEnvMonitIncubationUrl": "/moduleenvmon/frontend/EnvMonIncubationAPIfrontend"
 }

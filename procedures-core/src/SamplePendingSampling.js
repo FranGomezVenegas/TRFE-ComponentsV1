@@ -256,10 +256,10 @@ export class SamplePendingSampling extends ProceduresCore {
     }
   }
 
-  getSamplesReq() {
+  async getSamplesReq() {
     let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
-    this.fetchApi(params, false, false).then(j => {
+    await this.fetchApi(params, false, false).then(j => {
       if (j && !j.is_error) {
         this.setGrid(j)
       }
