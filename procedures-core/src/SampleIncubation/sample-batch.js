@@ -1,8 +1,62 @@
-import { html } from 'lit';
+import { html, css, nothing } from 'lit';
 import { SamplePendingSampling } from '../SamplePendingSampling';
 import { commonLangConfig } from '@trazit/common-core';
+import { Factors } from '@collaborne/lit-flexbox-literals';
 
 class SampleBatch extends SamplePendingSampling {
+  static get styles() {
+    return [
+      super.styles,
+      Factors,
+      css`
+      #batchDetail {
+        margin: 0 20px;
+        padding-top: 20px;
+      }
+      #batchDetail h1 {
+        color: blue;
+      }
+      #samplesArr {
+        border-radius: 2px;
+        box-shadow: rgb(136, 136, 136) 2px 2px;
+        padding: 5px;
+        background: #c2f2ff;
+      }
+      #samplesArr div {
+        margin: 5px 0;
+      }
+      `
+    ]
+  }
+
+  render() {
+    return html`
+      <div class="layout horizontal flex wrap">
+        <div class="layout flex">${super.render()}</div>
+        <div id="batchDetail" class="layout horizontal flex-2">
+          ${this.selectedItem ?
+            html`
+              <div>
+                <h1>
+                  The selected batch is: ${this.selectedItem.name}. 
+                  Incubator: ${this.selectedItem.incubation_incubator}. 
+                  #Samples: ${this.selectedItem.SAMPLES_ARRAY.length}
+                </h1>
+                ${this.selectedItem.SAMPLES_ARRAY.length ?
+                  html`<div id="samplesArr">${this.selectedItem.SAMPLES_ARRAY.map(s =>
+                    html`<div>${s.sample_id} Incub ${s.incubation_moment}</div>`
+                  )}</div>` :
+                  nothing
+                }
+              </div>
+            ` :
+            nothing
+          }
+        </div>
+      </div>
+    `
+  }
+
   getButton() {
     return html`
       <mwc-icon-button icon="refresh" @click=${this.getSamples}></mwc-icon-button>
@@ -63,7 +117,7 @@ class SampleBatch extends SamplePendingSampling {
     }
     this.langConfig.gridHeader = {
       'iconCol': {
-        label_en:'', label_es: ''
+        label_en:'', label_es: '', is_icon: true
       },
       'name': {
         label_en:'Name', label_es: 'Nombre', sort: true, filter: false
@@ -87,6 +141,10 @@ class SampleBatch extends SamplePendingSampling {
         label_en:'Start Date', label_es: 'Fecha Inicio', sort: false, filter: false
       }
     }
+  }
+
+  iconRenderer(sample) {
+    return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
   }
 
   getSamples() {

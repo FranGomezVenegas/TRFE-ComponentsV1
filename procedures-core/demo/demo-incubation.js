@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../src/SampleIncubation/sample-batch';
+import '../sample-incubation';
 
 class DemoExample extends LitElement {
   static get styles() {
