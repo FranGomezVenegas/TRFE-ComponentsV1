@@ -16,7 +16,6 @@ export class SamplePendingSampling extends ProceduresCore {
         ?hidden=${this.hideNext}
         @click=${()=>this.moveToNext()}>
       </mwc-icon-button>
-      </mwc-icon-button>
       <mwc-icon-button title="Add Sampling Comment" icon="add_comment" ?disabled=${!this.selectedItem} @click=${() => 
         this.cmnDialog.show()}></mwc-icon-button>
       <mwc-icon-button title="Remove Sampling Comment" icon="speaker_notes_off" ?disabled=${!this.selectedItem} @click=${this.removeComment}>
@@ -262,9 +261,13 @@ export class SamplePendingSampling extends ProceduresCore {
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params, false, false).then(j => {
       if (j && !j.is_error) {
-        this.grid.items = j
+        this.setGrid(j)
       }
     })
+  }
+
+  setGrid(j) {
+    this.grid.items = j
   }
 
   sampleAudit() {
