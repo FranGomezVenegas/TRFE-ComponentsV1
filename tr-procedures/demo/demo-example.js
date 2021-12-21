@@ -35,6 +35,8 @@ class DemoExample extends LitElement {
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "samples")}>Sample Sampling </button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "personel")}>Personel Sampling</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingSMP")}>Sample Plate Reading</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingPERS")}>Personel Plate Reading</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
         <tr-procedures></tr-procedures><hr>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>

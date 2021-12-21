@@ -57,5 +57,26 @@ export function ClientMethod(base) {
         this.reload()
       })
     }
+
+    getResult() {
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params, false, false).then(j => {
+        if (j && !j.is_error) {
+          this.selectedResults = []
+          this.enterResults = j
+          this.erGrid.items = j
+          this.requestUpdate()
+        }
+      })
+    }
+
+    enterResult() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params, false, false).then(() => {
+        this.reloadResult()
+      })
+    }
   }
 }

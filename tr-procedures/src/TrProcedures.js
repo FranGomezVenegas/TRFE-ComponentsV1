@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
@@ -46,6 +46,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         mwc-icon-button[hidden] {
           display: none;
         }
+        #resultDialog {
+          --mdc-dialog-min-width: 800px;
+        }
       `
     ];
   }
@@ -59,7 +62,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       actions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
-      selectedAction: { type: Object }
+      selectedAction: { type: Object },
+      selectedResults: { type: Array },
+      enterResults: { type: Array },
+      targetValue: { type: Object }
     };
   }
 
@@ -72,6 +78,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   resetView() {
+    this.enterResults = []
     this.selectedSamples = []
     this.langConfig = ProceduresModel[this.procName][this.sampleName].langConfig
     this.actions = ProceduresModel[this.procName][this.sampleName].actions
@@ -92,6 +99,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
     ${this.dateTemplate()}
     ${this.commentTemplate()}
+    ${this.langConfig.resultHeader ? 
+      html`${this.resultTemplate()}` :
+      nothing
+    }
     ${super.render()}
     `;
   }
@@ -126,11 +137,21 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.actionMethod(this.selectedAction)
   }
 
-  actionMethod(action) {
-    this.selectedAction = action
+  reloadResult() {
+    this.targetValue = {}
+    this.selectedResults = []
+    this.erGrid.items = []
+    this.selectedDialogAction = null
+    this.actionMethod(this.selectedAction)
+  }
+
+  actionMethod(action, replace = true) {
+    if (replace) {
+      this.selectedAction = action
+    }
     if (action.dialogInfo) {
       if (action.dialogInfo.automatic) {
-        this.credsChecker(action.actionName, this.selectedSamples[0].sample_id)
+        this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
       } else {
         this[action.dialogInfo.name].show()
       }
@@ -146,13 +167,17 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   getButton() {
     return html`
       ${this.actions.map(action =>
-        html`${action.button.icon ?
-          html`<mwc-icon-button 
-            icon="${action.button.icon}" 
-            title="${action.button.title['label_'+this.lang]}" 
-            ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
-            @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
-          html`<mwc-button raised label="${action.button.title['label_'+this.lang]}"></mwc-button>`
+        html`${action.button ?
+          html`${action.button.icon ?
+            html`<mwc-icon-button 
+              id="${action.button.id}"
+              icon="${action.button.icon}" 
+              title="${action.button.title['label_'+this.lang]}" 
+              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
+              @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
+            html`<mwc-button raised label="${action.button.title['label_'+this.lang]}"></mwc-button>`
+          }` :
+          nothing
         }`
       )}
     `
@@ -164,26 +189,30 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       procInstanceName: this.procName,
       ...this.reqParams
     }
-    this[this.selectedAction.clientMethod]()
+    let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
+    this[action.clientMethod]()
   }
 
   dialogAccept() {
-    this.credsChecker(this.selectedAction.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
+    this.credsChecker(this.selectedAction.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction))
   }
 
   jsonParam() {
     let jsonParam = {}
-    if (this.selectedAction.apiParams) {
-      this.selectedAction.apiParams.forEach(p => {
+    let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
+    if (action.apiParams) {
+      action.apiParams.forEach(p => {
         if (p.element) {
           jsonParam[p.query] = this[p.element].value // get value from field input
+        } else if (p.targetValue) {
+          jsonParam[p.query] = this.targetValue[p.query] // get value from target element passed
         } else {
           jsonParam[p.query] = p.value
         }
       })
     }
-    if (this.selectedAction.paramFilter) {
-      jsonParam[this.selectedAction.paramFilter[this.filterName].query] = this.selectedAction.paramFilter[this.filterName].value
+    if (action.paramFilter) {
+      jsonParam[action.paramFilter[this.filterName].query] = action.paramFilter[this.filterName].value
     }
     return jsonParam
   }

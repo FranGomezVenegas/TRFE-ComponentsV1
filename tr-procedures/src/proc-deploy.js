@@ -7,6 +7,9 @@ export const ProcDeploy = {
           "label_es": "Muestras pendiente muestreo"
         }
       },
+      "fieldText": {
+        "newDate": { "label_en": "New Date", "label_es": "Nueva Fecha" }
+      },
       "gridHeader": {
         "sample_id": {
           "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
