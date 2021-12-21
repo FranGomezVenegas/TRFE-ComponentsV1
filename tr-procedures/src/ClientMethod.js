@@ -23,11 +23,19 @@ export function ClientMethod(base) {
         }
       })
     }
+
+    signAudit() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.reloadAudit()
+      })
+    }
   
     setSamplingDate() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
+      this.fetchApi(params).then(() => {
         this.dateDialog.close()
         this.reload()
       })
@@ -36,7 +44,7 @@ export function ClientMethod(base) {
     moveToNext() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
+      this.fetchApi(params).then(() => {
         this.reload()
       })
     }
@@ -44,7 +52,7 @@ export function ClientMethod(base) {
     addSamplingComment() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
+      this.fetchApi(params).then(() => {
         this.commentDialog.close()
         this.reload()
       })
@@ -53,7 +61,7 @@ export function ClientMethod(base) {
     removeSamplingComment() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
+      this.fetchApi(params).then(() => {
         this.reload()
       })
     }

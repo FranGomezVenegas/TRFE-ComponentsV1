@@ -96,7 +96,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       .selectedItems="${this.selectedSamples}">
       ${this.gridList()}
     </vaadin-grid>
-    <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
+    <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
     ${this.dateTemplate()}
     ${this.commentTemplate()}
     ${this.langConfig.resultHeader ? 
@@ -109,6 +109,15 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   get audit() {
     return this.shadowRoot.querySelector("audit-dialog")
+  }
+    
+  setAudit(e) {
+    this.targetValue = {
+      auditId: e.detail.audit_id
+    }
+    this.itemId = e.detail.audit_id
+    this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+    this.actionMethod(this.selectedDialogAction, false)
   }
 
   get grid() {
@@ -137,10 +146,16 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.actionMethod(this.selectedAction)
   }
 
+  reloadAudit() {
+    this.itemId = null
+    this.targetValue = {}
+    this.selectedDialogAction = null
+    this.actionMethod(this.selectedAction)
+  }
+
   reloadResult() {
     this.targetValue = {}
     this.selectedResults = []
-    this.erGrid.items = []
     this.selectedDialogAction = null
     this.actionMethod(this.selectedAction)
   }
@@ -151,7 +166,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     }
     if (action.dialogInfo) {
       if (action.dialogInfo.automatic) {
-        this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
+        if (this.itemId) {
+          this.credsChecker(action.actionName, this.itemId, this.jsonParam())
+        } else {
+          this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
+        }
       } else {
         this[action.dialogInfo.name].show()
       }
