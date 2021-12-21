@@ -2,6 +2,7 @@ export function ClientMethod(base) {
   return class extends base {
     async samplesByStage() {
       this.samplesReload = true
+      this.selectedSamples = []
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       await this.fetchApi(params, false, false).then(j => {

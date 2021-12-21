@@ -68,6 +68,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.procName = "em-demo-a"
     this.sampleName = "SamplePendingSampling"
     this.filterName = "samples"
+    this.resetView()
+  }
+
+  resetView() {
     this.selectedSamples = []
     this.langConfig = ProceduresModel[this.procName][this.sampleName].langConfig
     this.actions = ProceduresModel[this.procName][this.sampleName].actions
@@ -113,7 +117,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     })
     let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
     if (anyAccess.length) {
-      this.actionMethod(this.selectedAction)
+      this.reload()
     }
   }
 
@@ -132,7 +136,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
     } else {
       if (this.selectedSamples.length) {
-        console.log(this.selectedSamples[0].sample_id, " SSS")
         this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
       } else {
         this.credsChecker(action.actionName, null, this.jsonParam())
