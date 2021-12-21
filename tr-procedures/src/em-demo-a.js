@@ -153,7 +153,7 @@ export const EmDemoA = {
         "PlateReadingPERS": {
           "label_en": "Personnel Samples Pending Plate Reading", 
           "label_es": "Muestras de personal pendientes de la lectura de placa"
-        },
+        }
       },
       "gridHeader": {
         "sample_id": {
@@ -297,14 +297,6 @@ export const EmDemoA = {
         "apiParams": [
           { "query": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
           { "query": "sortFieldsName", "value": "test_id|result_id" }
-        ]
-      },
-      {
-        "actionName": "ENTERRESULT",
-        "clientMethod": "enterResult",
-        "apiParams": [
-          { "query": "rawValueResult", "targetValue": true },
-          { "query": "resultId", "targetValue": true }
         ]
       }
     ]
