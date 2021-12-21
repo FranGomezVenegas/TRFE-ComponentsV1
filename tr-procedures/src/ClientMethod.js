@@ -20,7 +20,6 @@ export function ClientMethod(base) {
           this.audit.audits = j
           this.audit.requestUpdate()
         }
-        this[this.selectedAction.clientMethod]()
       })
     }
   
@@ -29,7 +28,32 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         this.dateDialog.close()
-        this[this.selectedAction.clientMethod]()
+        this.reload()
+      })
+    }
+
+    moveToNext() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        this.reload()
+      })
+    }
+
+    addSamplingComment() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        this.commentDialog.close()
+        this.reload()
+      })
+    }
+
+    removeSamplingComment() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        this.reload()
       })
     }
   }

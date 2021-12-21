@@ -86,9 +86,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       ${this.gridList()}
     </vaadin-grid>
     <audit-dialog @sign-audit=${this.signAudit}></audit-dialog>
-    ${super.render()}
     ${this.dateTemplate()}
     ${this.commentTemplate()}
+    ${super.render()}
     `;
   }
 
@@ -117,6 +117,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     }
   }
 
+  reload() {
+    this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[0]
+    this.actionMethod(this.selectedAction)
+  }
+
   actionMethod(action) {
     this.selectedAction = action
     if (action.dialogInfo) {
@@ -126,7 +131,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         this[action.dialogInfo.name].show()
       }
     } else {
-      this.credsChecker(action.actionName, null, this.jsonParam())
+      if (this.selectedSamples.length) {
+        console.log(this.selectedSamples[0].sample_id, " SSS")
+        this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
+      } else {
+        this.credsChecker(action.actionName, null, this.jsonParam())
+      }
     }
   }
 

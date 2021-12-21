@@ -13,25 +13,25 @@ export const EmDemoA = {
       },
       "gridHeader": {
         "sample_id": {
-          "label_en":"Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
+          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
         },
         "program_name": {
-          "label_en":"Project", "label_es": "Programa", "sort": false, "filter": true
+          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true
         },
         "location_name": {
-          "label_en":"Location", "label_es": "Ubicación", "sort": false, "filter": true
+          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true
         },
         "sampling_date": {
-          "label_en":"Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true
+          "label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true
         },
         "sampling_comment": {
-          "label_en":"sampling Comment", "label_es": "Comentario Muestreo", "sort": false, "filter": true
+          "label_en": "sampling Comment", "label_es": "Comentario Muestreo", "sort": false, "filter": true
         },
         "spec_code": {
-          "label_en":"Spec", "label_es": "Especificación", "sort": false, "filter": true
+          "label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true
         },
         "spec_variation_name": {
-          "label_en":"Variation", "label_es": "Variación", "sort": false, "filter": true
+          "label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true
         }
       }
     },
@@ -42,7 +42,7 @@ export const EmDemoA = {
         "button": {
           "icon": "refresh",
           "title": {
-            "label_en":"Reload", "label_es": "Recargar"
+            "label_en": "Reload", "label_es": "Recargar"
           },
           "whenDisabled": "samplesReload"
         },
@@ -61,7 +61,7 @@ export const EmDemoA = {
         "button": {
           "icon": "rule",
           "title": {
-            "label_en":"Sample Audit", "label_es": "Auditoría de Muestra"
+            "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
           "whenDisabled": "selectedSamples"
         },
@@ -75,7 +75,7 @@ export const EmDemoA = {
         "button": {
           "icon": "date_range",
           "title": {
-            "label_en":"Set Sample Date", "label_es": "Establecer Fecha Muestra"
+            "label_en": "Set Sample Date", "label_es": "Establecer Fecha Muestra"
           },
           "whenDisabled": "selectedSamples"
         }
@@ -86,7 +86,7 @@ export const EmDemoA = {
         "button": {
           "icon": "event",
           "title": {
-            "label_en":"Change Sample Date", "label_es": "Cambiar Fecha Muestra"
+            "label_en": "Change Sample Date", "label_es": "Cambiar Fecha Muestra"
           },
           "whenDisabled": "selectedSamples"
         },
@@ -97,6 +97,46 @@ export const EmDemoA = {
         "apiParams": [
           { "query": "newDateTime", "element": "dateInput", "defaultValue": "" }
         ]
+      },
+      {
+        "actionName": "SAMPLESTAGE_MOVETONEXT",
+        "clientMethod": "moveToNext",
+        "button": {
+          "icon": "next_week",
+          "title": {
+            "label_en": "Next", "label_es": "Siguiente"
+          },
+          "whenDisabled": "selectedSamples"
+        }
+      },
+      {
+        "actionName": "SAMPLINGCOMMENTADD",
+        "clientMethod": "addSamplingComment",
+        "button": {
+          "icon": "add_comment",
+          "title": {
+            "label_en": "Add Sampling Comment", "label_es": "Agregar Comentario de Muestra"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "dialogInfo": { 
+          "requiresDialog": true,
+          "name": "commentDialog"
+        },
+        "apiParams": [
+          { "query": "sampleComment", "element": "commentInput", "defaultValue": "" }
+        ]
+      },
+      {
+        "actionName": "SAMPLINGCOMMENTREMOVE",
+        "clientMethod": "removeSamplingComment",
+        "button": {
+          "icon": "speaker_notes_off",
+          "title": {
+            "label_en": "Remove Sampling Comment", "label_es": "Eliminar Comentario de Muestra"
+          },
+          "whenDisabled": "selectedSamples"
+        }
       }
     ]
   }

@@ -73,13 +73,10 @@ export function DialogTemplate(base) {
       }
     }
 
-    setSamplingDate() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        this.dateDialog.close()
-        this.getSamples()
-      })
+    addComment() {
+      if (this.commentInput.value) {
+        this.dialogAccept()
+      }
     }
   }
 }
