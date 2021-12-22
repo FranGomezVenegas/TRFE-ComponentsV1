@@ -40,7 +40,7 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "fq")}>FQ</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "mb")}>MB</button>
-        <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "incubation")}>Sample Incubation</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "active_batches")}>Sample Incubation</button>
         <tr-procedures></tr-procedures><hr>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
