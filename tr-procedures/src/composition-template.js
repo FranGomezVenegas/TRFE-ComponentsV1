@@ -2,21 +2,10 @@ import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
-import { ProceduresModel } from './ProceduresModel';
 import { ClientMethod } from './ClientMethod';
 import { DialogTemplate } from './DialogTemplate';
-import '@material/mwc-icon-button';
-import '@material/mwc-textfield';
-import '@vaadin/vaadin-grid/vaadin-grid';
-import '@vaadin/vaadin-grid/vaadin-grid-column';
-import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
-import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
-import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
-import '@trazit/tr-dialog/tr-dialog';
-import './audit-dialog';
-import './composition-template';
 
-export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
+export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)) {
   static get styles() {
     return [
       Layouts,
@@ -76,38 +65,37 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   static get properties() {
     return {
+      model: { type: Object },
+      config: { type: Object },
       procName: { type: String },
       sampleName: { type: String },
       filterName: { type: String },
       langConfig: { type: Object },
       actions: { type: Array },
-      compositions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
       selectedAction: { type: Object }
     };
   }
 
-  constructor() {
-    super()
-    this.procName = "em-demo-a"
-    this.sampleName = "SamplePendingSampling"
-    this.filterName = "samples"
-    this.resetView()
+  updated(updates) {
+    if (updates.has('model')) {
+      this.filterName = this.model.filter
+      this.resetView()
+      this.authorized()
+    }
   }
 
   resetView() {
-    this.enterResults = []
-    this.assignList = []
     this.selectedSamples = []
-    this.langConfig = ProceduresModel[this.procName][this.sampleName].langConfig
-    this.actions = ProceduresModel[this.procName][this.sampleName].actions
-    this.compositions = ProceduresModel[this.procName][this.sampleName].compositions
-    this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[0]
+    this.langConfig = this.model.langConfig
+    this.actions = this.model.actions
+    this.selectedAction = this.model.actions[0]
   }
 
   render() {
-    return html`
+    return html`${this.model ? 
+      html`
       <div class="layout horizontal flex wrap">
         <div class="layout flex">
           ${this.getTitle()}
@@ -120,59 +108,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
             ${this.gridList()}
           </vaadin-grid>
         </div>
-        ${this.sampleName=="SampleIncubation" ? 
-          html`
-            <div id="batchDetail">
-              ${this.selectedSamples.length ?
-                html`
-                  <div>
-                    <h1>
-                      The selected batch is: ${this.selectedSamples[0].name}. 
-                      Incubator: ${this.selectedSamples[0].incubation_incubator}. 
-                      #Samples: ${this.selectedSamples[0].SAMPLES_ARRAY.length}
-                    </h1>
-                    ${this.selectedSamples[0].SAMPLES_ARRAY.length ?
-                      html`<div id="samplesArr">${this.selectedSamples[0].SAMPLES_ARRAY.map(s =>
-                        html`<div>${s.sample_id} Incub ${s.incubation_moment}</div>`
-                      )}</div>` :
-                      nothing
-                    }
-                  </div>
-                ` :
-                nothing
-              }
-            </div>
-          ` :
-          nothing
-        }
         <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
-        ${this.dateTemplate()}
-        ${this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
-          html`${this.commentTemplate()}` : nothing
-        }
-        ${this.langConfig.resultHeader ? 
-          html`${this.resultTemplate()}` :
-          nothing
-        }
-        ${this.sampleName=="SampleIncubation" ? 
-          html`
-            ${this.newBatchTemplate()}
-            ${this.assignTemplate()}
-          ` :
-          nothing
-        }
         ${super.render()}
       </div>
-      ${this.compositions&&this.sampleName=="SampleIncubation" ?
-        html`${this.compositions.map(c => 
-          html`<div class="layout flex">
-            <composition-template .procName=${this.procName} .sampleName=${this.sampleName}
-              .model=${c} .config=${this.config}
-              @set-grid=${e=>this.setGrid(e.detail)}></composition-template>
-          </div>`
-        )}` :
-        nothing
-      }
+      ` : 
+      nothing
+    }
     `;
   }
 
@@ -204,15 +145,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
       }
     })
-    let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
-    if (anyAccess.length) {
-      this.reload()
-    }
   }
 
   reload() {
     this.resetDialogThings()
-    this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[0]
+    this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
   }
 
@@ -260,7 +197,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   getButton() {
     return html`
-      ${this.actions.map(action =>
+      ${this.actions&&this.actions.map(action =>
         html`${action.button ?
           html`${action.button.icon ?
             html`<mwc-icon-button 
@@ -325,25 +262,20 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   setGrid(j) {
-    if (this.selectedAction.sortItem) {
-      this.grid.items = j[this.selectedAction.sortItem]
-      this.shadowRoot.querySelectorAll("composition-template").forEach(c => {
-        c.grid.items = j[c.model.filter][0]
-      })
-    } else {
-      this.grid.items = j
-    }
+    this.dispatchEvent(new CustomEvent('set-grid', { detail: j }))
   }
 
   gridList() {
-    return Object.entries(this.langConfig.gridHeader).map(
-      ([key, value], i) => html`
-        ${this.langConfig.gridHeader[key].is_icon ?
-          this.iconColumn(key, value, i) :
-          this.nonIconColumn(key, value, i)
-        }
-      `
-    )
+    if (this.langConfig) {
+      return Object.entries(this.langConfig.gridHeader).map(
+        ([key, value], i) => html`
+          ${this.langConfig.gridHeader[key].is_icon ?
+            this.iconColumn(key, value, i) :
+            this.nonIconColumn(key, value, i)
+          }
+        `
+      )
+    }
   }
 
   iconColumn(key, value, i) {
@@ -369,10 +301,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   iconRenderer(sample) {
     if (this.filterName) {
-      if (this.filterName == "active_batches") {
+      if (this.filterName == "incub1") {
         return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
-      } else {
-        return html`<img src="/images/${this.filterName}_${sample.status.toLowerCase()}.png" style="width:20px">`
+      } else if (this.filterName == "incub2") {
+        return html`<img src="/images/incubators/${sample.incubation2_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
       }
     }
   }
@@ -399,8 +331,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   getTitle() {
-    if (this.langConfig.title[this.filterName]) {
+    if (this.langConfig&&this.langConfig.title[this.filterName]) {
       return html`<h1>${this.langConfig.title[this.filterName]["label_"+this.lang]}</h1>`
     }
   }
 }
+window.customElements.define('composition-template', CompositionTemplate);
