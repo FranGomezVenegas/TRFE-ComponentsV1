@@ -6,6 +6,11 @@ export function DialogTemplate(base) {
   return class extends base {
     static get properties() {
       return {
+        selectedResults: { type: Array },
+        enterResults: { type: Array },
+        selectedAssigns: { type: Array },
+        assignList: { type: Array },
+        targetValue: { type: Object },
         selectedDialogAction: { type: Object }
       }
     }
@@ -31,6 +36,20 @@ export function DialogTemplate(base) {
       </tr-dialog>
       `
     }
+        
+    get dateDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#dateDialog")
+    }
+
+    get dateInput() {
+      return this.shadowRoot.querySelector("input#dateInput")
+    }
+  
+    setNewDate() {
+      if (this.dateInput.value) {
+        this.dialogAccept()
+      }
+    }
 
     commentTemplate() {
       return html`
@@ -54,6 +73,20 @@ export function DialogTemplate(base) {
       `
     }
 
+    get commentDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#commentDialog")
+    }
+
+    get commentInput() {
+      return this.shadowRoot.querySelector("mwc-textfield#commentInput")
+    }
+
+    addComment() {
+      if (this.commentInput.value) {
+        this.dialogAccept()
+      }
+    }
+
     resultTemplate() {
       return html`
       <tr-dialog id="resultDialog" ?open=${this.enterResults.length}
@@ -61,8 +94,8 @@ export function DialogTemplate(base) {
         heading=""
         hideActions=""
         scrimClickAction="">
-        ${this.selectedItem ?
-          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedItem.sample_id}</label>` : nothing
+        ${this.selectedSamples.length ?
+          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id}</label>` : nothing
         }
         <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
           @selected-items-changed=${e => {
@@ -75,46 +108,6 @@ export function DialogTemplate(base) {
         </vaadin-grid>
       </tr-dialog>
       `
-    }
-  
-    get dateDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#dateDialog")
-    }
-
-    get dateInput() {
-      return this.shadowRoot.querySelector("input#dateInput")
-    }
-
-    get commentDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#commentDialog")
-    }
-
-    get commentInput() {
-      return this.shadowRoot.querySelector("mwc-textfield#commentInput")
-    }
-
-    get erGrid() {
-      return this.shadowRoot.querySelector("vaadin-grid#erGrid")
-    }
-  
-    get resultDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#resultDialog")
-    }
-  
-    get rItem() {
-      return this.shadowRoot.querySelector("input[name=rItem]")
-    }
-  
-    setNewDate() {
-      if (this.dateInput.value) {
-        this.dialogAccept()
-      }
-    }
-
-    addComment() {
-      if (this.commentInput.value) {
-        this.dialogAccept()
-      }
     }
 
     detailRenderer(result) {
@@ -135,6 +128,28 @@ export function DialogTemplate(base) {
           <p>Lock Reason: ${result.is_locked?result.is_locked["message_"+ this.lang]:null}</p>
         </div>
       `
+    }
+
+    erList() {
+      return Object.entries(this.langConfig.resultHeader).map(([key, value], i) => 
+        html`${i==0 ?
+          html`<vaadin-grid-column 
+            ${columnBodyRenderer(this.specRenderer)}
+            text-align="center" 
+            flex-grow="0"
+            path="${key}" 
+            header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+          html`${key=="raw_value" ?
+            html`<vaadin-grid-column 
+              ${columnBodyRenderer(this.valRenderer)}
+              text-align="center" 
+              flex-grow="1"
+              path="${key}" 
+              header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+            html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+          }`
+        }`
+      )
     }
 
     specRenderer(result) {
@@ -183,26 +198,16 @@ export function DialogTemplate(base) {
       }
     }
 
-    erList() {
-      return Object.entries(this.langConfig.resultHeader).map(([key, value], i) => 
-        html`${i==0 ?
-          html`<vaadin-grid-column 
-            ${columnBodyRenderer(this.specRenderer)}
-            text-align="center" 
-            flex-grow="0"
-            path="${key}" 
-            header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-          html`${key=="raw_value" ?
-            html`<vaadin-grid-column 
-              ${columnBodyRenderer(this.valRenderer)}
-              text-align="center" 
-              flex-grow="1"
-              path="${key}" 
-              header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-            html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-          }`
-        }`
-      )
+    get erGrid() {
+      return this.shadowRoot.querySelector("vaadin-grid#erGrid")
+    }
+  
+    get resultDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#resultDialog")
+    }
+  
+    get rItem() {
+      return this.shadowRoot.querySelector("input[name=rItem]")
     }
 
     setResult(result, e) {
@@ -217,6 +222,91 @@ export function DialogTemplate(base) {
       } else {
         this.actionMethod(this.selectedDialogAction, false)
       }
+    }
+
+    newBatchTemplate() {
+      return html`
+      <tr-dialog id="newBatchDialog" 
+        @closed=${()=>this.batchInput.value=""}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <mwc-textfield id="batchInput" label="${this.langConfig.fieldText&&this.langConfig.fieldText.newBatch["label_"+ this.lang]}" 
+            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newBatch()}></mwc-textfield>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" @click=${this.newBatch}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    get newBatchDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#newBatchDialog")
+    }
+  
+    get batchInput() {
+      return this.shadowRoot.querySelector("mwc-textfield#batchInput")
+    }
+  
+    newBatch() {
+      if (this.batchInput.value) {
+        this.dialogAccept(false)
+      }
+    }
+
+    assignTemplate() {
+      return html`
+      <tr-dialog id="assignDialog" ?open=${this.assignList.length}
+        @closing=${()=>this.assignList=[]}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <vaadin-grid id="asGrid" theme="row-dividers"
+            @active-item-changed=${e=>this.selectedAssigns=e.detail.value ? [e.detail.value] : []}
+            .selectedItems="${this.selectedAssigns}">
+            ${this.asList()}
+          </vaadin-grid>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" @click=${this.setAssign}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    asList() {
+      return Object.entries(this.langConfig.assignHeader).map(([key, value], i) => 
+        html`${i==0 ?
+          html`<vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+          html`<vaadin-grid-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+        }`
+      )
+    }
+  
+    get assignDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#assignDialog")
+    }
+  
+    get asGrid() {
+      return this.shadowRoot.querySelector("vaadin-grid#asGrid")
+    }
+  
+    setAssign() {
+      this.targetValue = {
+        incubatorName: this.selectedAssigns[0].name,
+        incubStage: this.selectedAssigns[0].stage
+      }
+      this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+      this.actionMethod(this.selectedDialogAction, false)
     }
   }
 }

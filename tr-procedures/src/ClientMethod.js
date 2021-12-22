@@ -1,6 +1,6 @@
 export function ClientMethod(base) {
   return class extends base {
-    async samplesByStage() {
+    async getSamples() {
       this.samplesReload = true
       this.selectedSamples = []
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
@@ -84,6 +84,29 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params, false, false).then(() => {
         this.reloadResult()
+      })
+    }
+    
+    setIncubator() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        this.newBatchDialog.close()
+        this.assignDialog.close()
+        this.reload()
+      })
+    }
+
+    getAssign() {
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitIncubationUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          this.selectedAssigns = []
+          this.assignList = j
+          this.asGrid.items = j
+          this.requestUpdate()
+        }
       })
     }
   }

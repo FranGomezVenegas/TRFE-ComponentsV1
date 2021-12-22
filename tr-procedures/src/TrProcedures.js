@@ -49,6 +49,26 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         #resultDialog {
           --mdc-dialog-min-width: 800px;
         }
+        #batchDetail {
+          width: 200px;
+          margin: 0 20px;
+          padding-top: 20px;
+        }
+        #batchDetail h1 {
+          color: blue;
+        }
+        #samplesArr {
+          border-radius: 2px;
+          box-shadow: rgb(136, 136, 136) 2px 2px;
+          padding: 5px;
+          background: #c2f2ff;
+        }
+        #samplesArr div {
+          margin: 5px 0;
+        }
+        #assignDialog {
+          --mdc-dialog-min-width: 500px;
+        }
       `
     ];
   }
@@ -62,10 +82,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       actions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
-      selectedAction: { type: Object },
-      selectedResults: { type: Array },
-      enterResults: { type: Array },
-      targetValue: { type: Object }
+      selectedAction: { type: Object }
     };
   }
 
@@ -79,6 +96,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   resetView() {
     this.enterResults = []
+    this.assignList = []
     this.selectedSamples = []
     this.langConfig = ProceduresModel[this.procName][this.sampleName].langConfig
     this.actions = ProceduresModel[this.procName][this.sampleName].actions
@@ -87,23 +105,61 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   render() {
     return html`
-    ${this.getTitle()}
-    <div class="layout horizontal center flex wrap">
-      ${this.getButton()}
-    </div>
-    <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-      @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
-      .selectedItems="${this.selectedSamples}">
-      ${this.gridList()}
-    </vaadin-grid>
-    <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
-    ${this.dateTemplate()}
-    ${this.commentTemplate()}
-    ${this.langConfig.resultHeader ? 
-      html`${this.resultTemplate()}` :
-      nothing
-    }
-    ${super.render()}
+      <div class="layout horizontal flex wrap">
+        <div class="layout flex">
+          ${this.getTitle()}
+          <div class="layout horizontal center flex wrap">
+            ${this.getButton()}
+          </div>
+          <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+            @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
+            .selectedItems="${this.selectedSamples}">
+            ${this.gridList()}
+          </vaadin-grid>
+        </div>
+        ${this.sampleName=="SampleIncubation" ? 
+          html`
+            <div id="batchDetail">
+              ${this.selectedSamples.length ?
+                html`
+                  <div>
+                    <h1>
+                      The selected batch is: ${this.selectedSamples[0].name}. 
+                      Incubator: ${this.selectedSamples[0].incubation_incubator}. 
+                      #Samples: ${this.selectedSamples[0].SAMPLES_ARRAY.length}
+                    </h1>
+                    ${this.selectedSamples[0].SAMPLES_ARRAY.length ?
+                      html`<div id="samplesArr">${this.selectedSamples[0].SAMPLES_ARRAY.map(s =>
+                        html`<div>${s.sample_id} Incub ${s.incubation_moment}</div>`
+                      )}</div>` :
+                      nothing
+                    }
+                  </div>
+                ` :
+                nothing
+              }
+            </div>
+          ` :
+          nothing
+        }
+        <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
+        ${this.dateTemplate()}
+        ${this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
+          html`${this.commentTemplate()}` : nothing
+        }
+        ${this.langConfig.resultHeader ? 
+          html`${this.resultTemplate()}` :
+          nothing
+        }
+        ${this.sampleName=="SampleIncubation" ? 
+          html`
+            ${this.newBatchTemplate()}
+            ${this.assignTemplate()}
+          ` :
+          nothing
+        }
+        ${super.render()}
+      </div>
     `;
   }
 
@@ -142,21 +198,26 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   reload() {
+    this.resetDialogThings()
     this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[0]
     this.actionMethod(this.selectedAction)
   }
 
-  reloadAudit() {
+  resetDialogThings() {
     this.itemId = null
     this.targetValue = {}
+    this.selectedResults = []
+    this.selectedAssigns = []
     this.selectedDialogAction = null
+  }
+
+  reloadAudit() {
+    this.resetDialogThings()
     this.actionMethod(this.selectedAction)
   }
 
   reloadResult() {
-    this.targetValue = {}
-    this.selectedResults = []
-    this.selectedDialogAction = null
+    this.resetDialogThings()
     this.actionMethod(this.selectedAction)
   }
 
@@ -176,6 +237,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
     } else {
       if (this.selectedSamples.length) {
+        console.log(this.selectedSamples, " object")
         this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
       } else {
         this.credsChecker(action.actionName, null, this.jsonParam())
@@ -194,7 +256,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
               title="${action.button.title['label_'+this.lang]}" 
               ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
               @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
-            html`<mwc-button raised label="${action.button.title['label_'+this.lang]}"></mwc-button>`
+            html`<mwc-button dense raised 
+              id="${action.button.id}"
+              icon="${action.button.icon}" 
+              label="${action.button.title['label_'+this.lang]}" 
+              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
+              @click=${()=>this.actionMethod(action)}></mwc-button>`
           }` :
           nothing
         }`
@@ -212,8 +279,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this[action.clientMethod]()
   }
 
-  dialogAccept() {
-    this.credsChecker(this.selectedAction.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction))
+  dialogAccept(selected=true) {
+    if (selected) {
+      this.credsChecker(this.selectedAction.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction))
+    } else {
+      this.credsChecker(this.selectedAction.actionName, null, this.jsonParam(this.selectedAction))
+    }
   }
 
   jsonParam() {
@@ -223,6 +294,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       action.apiParams.forEach(p => {
         if (p.element) {
           jsonParam[p.query] = this[p.element].value // get value from field input
+        } else if (p.defaultValue) {
+          jsonParam[p.query] = p.defaultValue // get value from default value (i.e incubator)
+        } else if (p.beItem) {
+          jsonParam[p.query] = this.selectedSamples[0][p.beItem] // get value from selected item
         } else if (p.targetValue) {
           jsonParam[p.query] = this.targetValue[p.query] // get value from target element passed
         } else {
@@ -237,7 +312,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   setGrid(j) {
-    this.grid.items = j
+    if (this.selectedAction.mainItem) {
+      this.grid.items = j.active_batches
+    } else {
+      this.grid.items = j
+    }
   }
 
   gridList() {
@@ -274,7 +353,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   iconRenderer(sample) {
     if (this.filterName) {
-      return html`<img src="/images/${this.filterName}_${sample.status.toLowerCase()}.png" style="width:20px">`
+      if (this.filterName == "incubation") {
+        return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
+      } else {
+        return html`<img src="/images/${this.filterName}_${sample.status.toLowerCase()}.png" style="width:20px">`
+      }
     }
   }
 

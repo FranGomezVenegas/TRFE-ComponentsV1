@@ -34,7 +34,7 @@ export const ProcDeploy = {
     "actions": [
       {
         "actionName": "SAMPLES_INPROGRESS_LIST",
-        "clientMethod": "samplesByStage",
+        "clientMethod": "getSamples",
         "button": {
           "icon": "refresh",
           "title": {
@@ -181,7 +181,7 @@ export const ProcDeploy = {
     "actions": [
       {
         "actionName": "SAMPLES_INPROGRESS_LIST",
-        "clientMethod": "samplesByStage",
+        "clientMethod": "getSamples",
         "button": {
           "icon": "refresh",
           "title": {
