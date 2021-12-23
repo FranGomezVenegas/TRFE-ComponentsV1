@@ -91,8 +91,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   constructor() {
     super()
     this.procName = "em-demo-a"
-    this.sampleName = "SamplePendingSampling"
-    this.filterName = "samples"
+    this.sampleName = "SampleIncubation"
+    this.filterName = "active_batches"
     this.resetView()
   }
 
@@ -167,7 +167,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         html`${this.compositions.map(c => 
           html`<div class="layout flex">
             <composition-template .procName=${this.procName} .sampleName=${this.sampleName}
-              .model=${c} .config=${this.config}
+              .model=${c} .config=${this.config} .selectedBatch=${this.selectedSamples.length?this.selectedSamples[0]:{}}
               @set-grid=${e=>this.setGrid(e.detail)}></composition-template>
           </div>`
         )}` :
@@ -325,6 +325,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   setGrid(j) {
+    this.selectedSamples = []
     if (this.selectedAction.sortItem) {
       this.grid.items = j[this.selectedAction.sortItem]
       this.shadowRoot.querySelectorAll("composition-template").forEach(c => {

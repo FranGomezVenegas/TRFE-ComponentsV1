@@ -511,6 +511,55 @@ export const EmDemoA = {
               { "query": "incub2_whereFieldsValue", "value": "Incubation|true" },
               { "query": "incub2_sortFieldsName", "value": "sample_id desc" }
             ]
+          },
+          {
+            "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
+            "clientMethod": "moveToNext",
+            "button": {
+              "id": "prev",
+              "icon": "next_week",
+              "title": {
+                "label_en": "Previous", "label_es": "Previo"
+              },
+              "whenDisabled": "selectedSamples"
+            }
+          },
+          {
+            "actionName": "GET_SAMPLE_AUDIT",
+            "clientMethod": "getSampleAudit",
+            "button": {
+              "title": {
+                "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "dialogInfo": { 
+              "automatic": true
+            }
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_ADD_SMP",
+            "clientMethod": "addRemoveBatch",
+            "button": {
+              "title": {
+                "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "apiParams": [
+              { "query": "batchTemplateId", "defaultValue": 1 },
+              { "query": "batchTemplateVersion", "defaultValue": 1 }
+            ]
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_REMOVE_SMP",
+            "clientMethod": "addRemoveBatch",
+            "button": {
+              "title": {
+                "label_en": "Remove from Batch", "label_es": "Quitar de Tanda"
+              },
+              "whenDisabled": "selectedSamples"
+            }
           }
         ]
       },
@@ -569,6 +618,43 @@ export const EmDemoA = {
               { "query": "incub2_whereFieldsValue", "value": "Incubation|true" },
               { "query": "incub2_sortFieldsName", "value": "sample_id desc" }
             ]
+          },
+          {
+            "actionName": "GET_SAMPLE_AUDIT",
+            "clientMethod": "getSampleAudit",
+            "button": {
+              "title": {
+                "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "dialogInfo": { 
+              "automatic": true
+            }
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_ADD_SMP",
+            "clientMethod": "addRemoveBatch",
+            "button": {
+              "title": {
+                "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "apiParams": [
+              { "query": "batchTemplateId", "defaultValue": 1 },
+              { "query": "batchTemplateVersion", "defaultValue": 1 }
+            ]
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_REMOVE_SMP",
+            "clientMethod": "addRemoveBatch",
+            "button": {
+              "title": {
+                "label_en": "Remove from Batch", "label_es": "Quitar de Tanda"
+              },
+              "whenDisabled": "selectedSamples"
+            }
           }
         ]
       }

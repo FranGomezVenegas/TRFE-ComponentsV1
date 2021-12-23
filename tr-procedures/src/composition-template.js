@@ -74,7 +74,8 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
       actions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
-      selectedAction: { type: Object }
+      selectedAction: { type: Object },
+      selectedBatch: { type: Object }
     };
   }
 
@@ -289,7 +290,7 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
       ></vaadin-grid-column>
       ` :
       html`
-      <vaadin-grid-column
+      <vaadin-grid-column class=${key}
         header="${value['label_'+this.lang]}"
         ${columnBodyRenderer(this.iconRenderer)}
         text-align="center"
@@ -299,11 +300,15 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
     }`
   }
 
-  iconRenderer(sample) {
+  iconRenderer(sample, model, col) {
     if (this.filterName) {
-      if (this.filterName == "incub1") {
-        return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
-      } else if (this.filterName == "incub2") {
+      if (this.filterName == "incub_1") {
+        if (col.getAttribute("class") == "sampleType") {
+          return html`<img src="/images/incubators/${sample.sample_config_code=='program_smp_template'?'samplesIcon.png':'samplePerson.png'}" style="width:20px">`
+        } else {
+          return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
+        }
+      } else if (this.filterName == "incub_2") {
         return html`<img src="/images/incubators/${sample.incubation2_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
       }
     }

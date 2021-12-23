@@ -109,5 +109,17 @@ export function ClientMethod(base) {
         }
       })
     }
+
+    addRemoveBatch() {
+      this.reqParams = {
+        ...this.reqParams,
+        batchName: this.selectedBatch.name
+      }
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.reload()
+      })
+    }
   }
 }
