@@ -88,14 +88,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     };
   }
 
-  constructor() {
-    super()
-    this.procName = "em-demo-a"
-    this.sampleName = "SampleIncubation"
-    this.filterName = "active_batches"
-    this.resetView()
-  }
-
   resetView() {
     this.enterResults = []
     this.assignList = []
@@ -120,7 +112,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
             ${this.gridList()}
           </vaadin-grid>
         </div>
-        ${this.sampleName=="SampleIncubation" ? 
+        ${this.langConfig&&this.sampleName=="SampleIncubation" ? 
           html`
             <div id="batchDetail">
               ${this.selectedSamples.length ?
@@ -147,10 +139,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
         <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
         ${this.dateTemplate()}
-        ${this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
+        ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
           html`${this.commentTemplate()}` : nothing
         }
-        ${this.langConfig.resultHeader ? 
+        ${this.langConfig&&this.langConfig.resultHeader ? 
           html`${this.resultTemplate()}` :
           nothing
         }
@@ -260,7 +252,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   getButton() {
     return html`
-      ${this.actions.map(action =>
+      ${this.actions&&this.actions.map(action =>
         html`${action.button ?
           html`${action.button.icon ?
             html`<mwc-icon-button 
@@ -337,14 +329,16 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   gridList() {
-    return Object.entries(this.langConfig.gridHeader).map(
-      ([key, value], i) => html`
-        ${this.langConfig.gridHeader[key].is_icon ?
-          this.iconColumn(key, value, i) :
-          this.nonIconColumn(key, value, i)
-        }
-      `
-    )
+    if (this.langConfig) {
+      return Object.entries(this.langConfig.gridHeader).map(
+        ([key, value], i) => html`
+          ${this.langConfig.gridHeader[key].is_icon ?
+            this.iconColumn(key, value, i) :
+            this.nonIconColumn(key, value, i)
+          }
+        `
+      )
+    }
   }
 
   iconColumn(key, value, i) {
@@ -400,7 +394,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   getTitle() {
-    if (this.langConfig.title[this.filterName]) {
+    if (this.langConfig&&this.langConfig.title[this.filterName]) {
       return html`<h1>${this.langConfig.title[this.filterName]["label_"+this.lang]}</h1>`
     }
   }

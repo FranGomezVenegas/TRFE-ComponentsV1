@@ -232,7 +232,7 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="batchInput" label="${this.langConfig.fieldText&&this.langConfig.fieldText.newBatch["label_"+ this.lang]}" 
+          <mwc-textfield id="batchInput" label="${this.langConfig&&this.langConfig.fieldText.newBatch["label_"+ this.lang]}" 
             dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newBatch()}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
@@ -284,12 +284,14 @@ export function DialogTemplate(base) {
     }
 
     asList() {
-      return Object.entries(this.langConfig.assignHeader).map(([key, value], i) => 
-        html`${i==0 ?
-          html`<vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-          html`<vaadin-grid-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-        }`
-      )
+      if (this.langConfig) {
+        return Object.entries(this.langConfig.assignHeader).map(([key, value], i) => 
+          html`${i==0 ?
+            html`<vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+            html`<vaadin-grid-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+          }`
+        )
+      }
     }
   
     get assignDialog() {
