@@ -230,7 +230,7 @@ export class CredDialog extends CommonCore {
    */
   auditField() {
     // adjust the placeholder label for changing purpose
-    if (this.justificationType == "TEXT") {
+    if (this.justificationType == "TEXT" || this.justificationType == "LABPLANET_FALSE") {
       return html`
         <mwc-textfield id="jst" label="${this.adjustLbl(`${langConfig.jstToCheck["label_"+this.lang]}`)}" type="text" 
           ?dialogInitialFocus=${this.justificationType?true:false} 
