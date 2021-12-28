@@ -162,12 +162,7 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
     this.selectedDialogAction = null
   }
 
-  reloadAudit() {
-    this.resetDialogThings()
-    this.actionMethod(this.selectedAction)
-  }
-
-  reloadResult() {
+  reloadDialog() {
     this.resetDialogThings()
     this.actionMethod(this.selectedAction)
   }
@@ -286,7 +281,7 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
         header="${value['label_'+this.lang]}"
         ${columnBodyRenderer(this.iconRenderer)}
         text-align="center"
-        flex-grow="0"
+        width="${this.langConfig.gridHeader[key].width}" resizable 
       ></vaadin-grid-column>
       ` :
       html`
@@ -294,7 +289,7 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
         header="${value['label_'+this.lang]}"
         ${columnBodyRenderer(this.iconRenderer)}
         text-align="center"
-        auto-width
+        width="${this.langConfig.gridHeader[key].width}" resizable 
       ></vaadin-grid-column>
       `
     }`
@@ -302,14 +297,10 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
 
   iconRenderer(sample, model, col) {
     if (this.filterName) {
-      if (this.filterName == "incub_1") {
-        if (col.getAttribute("class") == "sampleType") {
-          return html`<img src="/images/incubators/${sample.sample_config_code=='program_smp_template'?'samplesIcon.png':'samplePerson.png'}" style="width:20px">`
-        } else {
-          return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
-        }
-      } else if (this.filterName == "incub_2") {
-        return html`<img src="/images/incubators/${sample.incubation2_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
+      if (col.getAttribute("class") == "sampleType") {
+        return html`<img src="/images/incubators/${sample.sample_config_code=='program_smp_template'?'samplesIcon.png':'samplePerson.png'}" style="width:20px">`
+      } else {
+        return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
       }
     }
   }
@@ -323,15 +314,15 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
 
   sortColumn(key, value, i) {
     return html`${i==0 ?
-      html`<vaadin-grid-sort-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
-      html`<vaadin-grid-sort-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
+      html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
     }`
   }
 
   filterColumn(key, value, i) {
     return html`${i==0 ?
-      html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-      html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+      html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
     }`
   }
 

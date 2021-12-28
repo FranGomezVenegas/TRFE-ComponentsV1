@@ -329,25 +329,25 @@ export const EmDemoA = {
       },
       "gridHeader": {
         "sample_id": {
-          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true 
+          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, width: "12px"
         },
         "program_name": {
-          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true 
+          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true, width:'20px'
         },
         "location_name": {
-          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true 
+          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, width:'30px'
         },
         "sampling_date": {
-          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true 
+          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true, width:'20px'
         },
         "raw_value": {
-          "label_en": "Reading Result", "label_es": "Recuento", "sort": false, "filter": true 
+          "label_en": "Reading Result", "label_es": "Recuento", "sort": false, "filter": true, width:'20px'
         },
         "microorganism_count": {
-          "label_en": "# Organism Ident.", "label_es": "Num. MicroOrg. Detectados", "sort": false, "filter": true 
+          "label_en": "# Organism Ident.", "label_es": "Num. MicroOrg. Detectados", "sort": false, "filter": true, width:'20px'
         },
         "microorganism_list": {
-          "label_en": "Microorganisms", "label_es": "Microorganismos", "sort": false, "filter": true 
+          "label_en": "Microorganisms", "label_es": "Microorganismos", "sort": false, "filter": true, width:'20px'
         }
       },
       "microorganismHeader": {
@@ -531,7 +531,9 @@ export const EmDemoA = {
           { "query": "incub1_sortFieldsName", "value": "sample_id desc" },
           { "query": "incub2_whereFieldsName", "value": "current_stage|incubation_passed" },
           { "query": "incub2_whereFieldsValue", "value": "Incubation|true" },
-          { "query": "incub2_sortFieldsName", "value": "sample_id desc" }
+          { "query": "incub2_sortFieldsName", "value": "sample_id desc" },
+          { "query": "includeAllWithAnyPendingIncubation", "value": true },
+          { "query": "samplesWithAnyPendingIncubation", "value": true}
         ],
         "sortItem": "active_batches"
       },
@@ -624,47 +626,47 @@ export const EmDemoA = {
     ],
     "compositions": [
       {
-        "filter": "incubators",
+        "filter": "samplesWithAnyPendingIncubation",
         "langConfig": {
           "title": {
-            "incubators": {
-              "label_en": "Samples Pending Incubation", 
-              "label_es": "Muestras pendientes de incubación"
+            "samplesWithAnyPendingIncubation": {
+              "label_en": "All Samples Pending Incubation", 
+              "label_es": "Todas las muestras pendientes de incubación"
             }
           },
           "gridHeader": {
             "iconCol": {
-              "label_en": "", "label_es": "", "is_icon": true
+              "label_en": "", "label_es": "", "is_icon": true, "width": "7%"
             },
             "sampleType": {
-              "label_en": "", "label_es": "", "is_icon": true
+              "label_en": "", "label_es": "", "is_icon": true, "width": "7%"
             },
             "sample_id": {
-              "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
+              "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, "width": "9%"
             },
             "incubation_batch": {
-              "label_en": "Batch 1", "label_es": "Tanda", "sort": true, "filter": false
+              "label_en": "Batch 1", "label_es": "Tanda", "sort": true, "filter": false, "width": "9%"
             },
             "incubation2_batch": {
-              "label_en": "Batch 2", "label_es": "Tanda", "sort": false, "filter": false
+              "label_en": "Batch 2", "label_es": "Tanda", "sort": false, "filter": false, "width": "9%"
             },
             "incubation2_start": {
-              "label_en": "Incubation 2 Start", "label_es": "Inicio 2a Incubacion", "sort": false, "filter": true
+              "label_en": "Incubation 2 Start", "label_es": "Inicio 2a Incubacion", "sort": false, "filter": true, "width": "9%"
             },
             "sampling_date": {
-              "label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true
+              "label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true, "width": "9%"
             },
             "sampling_comment": {
-              "label_en": "Sampling Commment", "label_es": "Comentario Muestreo", "sort": false, "filter": true
+              "label_en": "Sampling Commment", "label_es": "Comentario Muestreo", "sort": false, "filter": true, "width": "9%"
             },
             "incubation_incubator": {
-              "label_en": "Incubator incub 1", "label_es": "Incubadora 1a Incubacion", "sort": false, "filter": true
+              "label_en": "Incubator incub 1", "label_es": "Incubadora 1a Incubacion", "sort": false, "filter": true, "width": "9%"
             },
             "incubation_start": {
-              "label_en": "incubation 1 start", "label_es": "Inicio 1a Incubacion", "sort": false, "filter": true
+              "label_en": "incubation 1 start", "label_es": "Inicio 1a Incubacion", "sort": false, "filter": true, "width": "9%"
             },
             "incubation_end": {
-              "label_en": "incubation 1 end", "label_es": "Fin 1a Incubacion", "sort": false, "filter": true
+              "label_en": "incubation 1 end", "label_es": "Fin 1a Incubacion", "sort": false, "filter": true, "width": "9%"
             }
           }
         },
@@ -685,7 +687,9 @@ export const EmDemoA = {
               { "query": "incub1_sortFieldsName", "value": "sample_id desc" },
               { "query": "incub2_whereFieldsName", "value": "current_stage|incubation_passed" },
               { "query": "incub2_whereFieldsValue", "value": "Incubation|true" },
-              { "query": "incub2_sortFieldsName", "value": "sample_id desc" }
+              { "query": "incub2_sortFieldsName", "value": "sample_id desc" },
+              { "query": "includeAllWithAnyPendingIncubation", "value": true },
+              { "query": "samplesWithAnyPendingIncubation", "value": true}
             ]
           },
           {

@@ -327,9 +327,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     if (this.selectedAction.sortItem) {
       this.grid.items = j[this.selectedAction.sortItem]
       this.shadowRoot.querySelectorAll("composition-template").forEach(c => {
-        console.log(j, " JJJ")
-        console.log(c.model.filter, " CCC")
-        c.grid.items = j[c.model.filter][0]
+        console.log(j)
+        console.log(c.model.filter)
+        c.grid.items = j[c.model.filter]
       })
     } else {
       this.grid.items = j
@@ -351,22 +351,40 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   iconColumn(key, value, i) {
     return html`${i==0 ?
-      html`
-      <vaadin-grid-column
-        header="${value['label_'+this.lang]}"
-        ${columnBodyRenderer(this.iconRenderer)}
-        text-align="center"
-        flex-grow="0"
-      ></vaadin-grid-column>
-      ` :
-      html`
-      <vaadin-grid-column
-        header="${value['label_'+this.lang]}"
-        ${columnBodyRenderer(this.iconRenderer)}
-        text-align="center"
-        auto-width
-      ></vaadin-grid-column>
-      `
+      html`${this.langConfig.gridHeader[key].width ?
+        html`
+        <vaadin-grid-column
+          header="${value['label_'+this.lang]}"
+          ${columnBodyRenderer(this.iconRenderer)}
+          text-align="center"
+          width="${this.langConfig.gridHeader[key].width}" resizable
+        ></vaadin-grid-column>
+        ` :
+        html`
+        <vaadin-grid-column
+          header="${value['label_'+this.lang]}"
+          ${columnBodyRenderer(this.iconRenderer)}
+          text-align="center"
+          flex-grow="0"
+        ></vaadin-grid-column>
+        `
+      }` :
+      html`${this.langConfig.gridHeader[key].width ?
+        html`
+        <vaadin-grid-column
+          header="${value['label_'+this.lang]}"
+          ${columnBodyRenderer(this.iconRenderer)}
+          text-align="center"
+          width="${this.langConfig.gridHeader[key].width}" resizable
+        ></vaadin-grid-column>
+        ` :
+        html`<vaadin-grid-column
+          header="${value['label_'+this.lang]}"
+          ${columnBodyRenderer(this.iconRenderer)}
+          text-align="center"
+          auto-width
+        ></vaadin-grid-column>`
+      }`
     }`
   }
 
@@ -389,15 +407,27 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   sortColumn(key, value, i) {
     return html`${i==0 ?
-      html`<vaadin-grid-sort-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
-      html`<vaadin-grid-sort-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
+        html`<vaadin-grid-sort-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      }` :
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
+        html`<vaadin-grid-sort-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      }`
     }`
   }
 
   filterColumn(key, value, i) {
     return html`${i==0 ?
-      html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-      html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+        html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      }` :
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+        html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      }`
     }`
   }
 
