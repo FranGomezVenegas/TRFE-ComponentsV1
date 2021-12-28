@@ -310,6 +310,167 @@ export const EmDemoA = {
       }
     ]
   },
+  "SampleMicroorganism": {
+    "langConfig": {
+      "title": {
+        "samples": {
+          "label_en": "Samples Pending Microorganism Identification", 
+          "label_es": "Muestras pendientes de la identificación de microorganismos"
+        },
+        "personel": {
+          "label_en": "Personnel Samples Pending Microorganism Identification", 
+          "label_es": "Muestras de personal pendientes de la identificación de microorganismos"
+        }
+      },
+      "fieldText": {
+        "addhocInput": { "label_en": "Ad-hoc microorganism name", "label_es": "Nombre Ad-hoc" },
+        "addhocBtn": { "label_en": "Add Addhoc", "label_es": "Añadir Nuevo" },
+        "addBtn": { "label_en": "Add", "label_es": "Añadir" }
+      },
+      "gridHeader": {
+        "sample_id": {
+          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true 
+        },
+        "program_name": {
+          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true 
+        },
+        "location_name": {
+          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true 
+        },
+        "sampling_date": {
+          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true 
+        },
+        "raw_value": {
+          "label_en": "Reading Result", "label_es": "Recuento", "sort": false, "filter": true 
+        },
+        "microorganism_count": {
+          "label_en": "# Organism Ident.", "label_es": "Num. MicroOrg. Detectados", "sort": false, "filter": true 
+        },
+        "microorganism_list": {
+          "label_en": "Microorganisms", "label_es": "Microorganismos", "sort": false, "filter": true 
+        }
+      },
+      "microorganismHeader": {
+        "name": {
+          "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
+        }
+      }
+    },
+    "actions": [
+      {
+        "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
+        "clientMethod": "getSamples",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "apiParams": [
+          { "query": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
+          { "query": "whereFieldsValue", "value": "MicroorganismIdentification|prog_pers_template" }
+        ],
+        "paramFilter": {
+          "samples": { "query": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
+          "personel": { "query": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
+        }
+      },
+      {
+        "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
+        "clientMethod": "moveToNext",
+        "button": {
+          "id": "prev",
+          "icon": "next_week",
+          "title": {
+            "label_en": "Previous", "label_es": "Previo"
+          },
+          "whenDisabled": "selectedSamples"
+        }
+      },
+      {
+        "actionName": "SAMPLESTAGE_MOVETONEXT",
+        "clientMethod": "moveToNext",
+        "button": {
+          "icon": "next_week",
+          "title": {
+            "label_en": "Next", "label_es": "Siguiente"
+          },
+          "whenDisabled": "selectedSamples"
+        }
+      },
+      {
+        "actionName": "GET_SAMPLE_AUDIT",
+        "clientMethod": "getSampleAudit",
+        "button": {
+          "title": {
+            "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "dialogInfo": { 
+          "automatic": true
+        }
+      },
+      {
+        "actionName": "GET_MICROORGANISM_LIST",
+        "clientMethod": "getMicroorganism",
+        "button": {
+          "icon": "add",
+          "title": {
+            "label_en": "Add Microorganism", "label_es": "Añadir Microorganismo"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "dialogInfo": { 
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "ADD_SAMPLE_MICROORGANISM",
+              "clientMethod": "addSampleMicroorganism",
+              "apiParams": [
+                { "query": "microorganismName", "targetValue": true }
+              ]
+            },
+            {
+              "actionName": "ADD_ADHOC_SAMPLE_MICROORGANISM",
+              "clientMethod": "addSampleMicroorganism",
+              "apiParams": [
+                { "query": "microorganismName", "targetValue": true }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
+        "clientMethod": "getMicroorganismItem",
+        "button": {
+          "icon": "remove",
+          "title": {
+            "label_en": "Remove Microorganism", "label_es": "Borrar Microorganismo"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "apiParams": [
+          { "query": "whereFieldsName", "value": "sample_id" },
+          { "query": "whereFieldsValue", "targetValue": true }
+        ],
+        "dialogInfo": { 
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "REMOVE_SAMPLE_MICROORGANISM",
+              "clientMethod": "removeSampleMicroorganism",
+              "apiParams": [
+                { "query": "microorganismName", "targetValue": true }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
   "SampleIncubation": {
     "langConfig": {
       "title": {
@@ -463,16 +624,16 @@ export const EmDemoA = {
     ],
     "compositions": [
       {
-        "filter": "incub_1",
+        "filter": "incubators",
         "langConfig": {
           "title": {
-            "incub_1": {
-              "label_en": "Samples Pending 1st Incubation", 
-              "label_es": "Muestras pendientes de la primera incubación"
+            "incubators": {
+              "label_en": "Samples Pending Incubation", 
+              "label_es": "Muestras pendientes de incubación"
             }
           },
           "gridHeader": {
-            "BatchStartedIcon": {
+            "iconCol": {
               "label_en": "", "label_es": "", "is_icon": true
             },
             "sampleType": {
@@ -482,13 +643,28 @@ export const EmDemoA = {
               "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
             },
             "incubation_batch": {
-              "label_en": "Batch", "label_es": "Tanda", "sort": true, "filter": false
+              "label_en": "Batch 1", "label_es": "Tanda", "sort": true, "filter": false
+            },
+            "incubation2_batch": {
+              "label_en": "Batch 2", "label_es": "Tanda", "sort": false, "filter": false
+            },
+            "incubation2_start": {
+              "label_en": "Incubation 2 Start", "label_es": "Inicio 2a Incubacion", "sort": false, "filter": true
             },
             "sampling_date": {
               "label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true
             },
             "sampling_comment": {
               "label_en": "Sampling Commment", "label_es": "Comentario Muestreo", "sort": false, "filter": true
+            },
+            "incubation_incubator": {
+              "label_en": "Incubator incub 1", "label_es": "Incubadora 1a Incubacion", "sort": false, "filter": true
+            },
+            "incubation_start": {
+              "label_en": "incubation 1 start", "label_es": "Inicio 1a Incubacion", "sort": false, "filter": true
+            },
+            "incubation_end": {
+              "label_en": "incubation 1 end", "label_es": "Fin 1a Incubacion", "sort": false, "filter": true
             }
           }
         },
@@ -523,101 +699,6 @@ export const EmDemoA = {
               },
               "whenDisabled": "selectedSamples"
             }
-          },
-          {
-            "actionName": "GET_SAMPLE_AUDIT",
-            "clientMethod": "getSampleAudit",
-            "button": {
-              "title": {
-                "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
-              },
-              "whenDisabled": "selectedSamples"
-            },
-            "dialogInfo": { 
-              "automatic": true
-            }
-          },
-          {
-            "actionName": "EM_BATCH_INCUB_ADD_SMP",
-            "clientMethod": "addRemoveBatch",
-            "button": {
-              "title": {
-                "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
-              },
-              "whenDisabled": "selectedSamples"
-            },
-            "apiParams": [
-              { "query": "batchTemplateId", "defaultValue": 1 },
-              { "query": "batchTemplateVersion", "defaultValue": 1 }
-            ]
-          },
-          {
-            "actionName": "EM_BATCH_INCUB_REMOVE_SMP",
-            "clientMethod": "addRemoveBatch",
-            "button": {
-              "title": {
-                "label_en": "Remove from Batch", "label_es": "Quitar de Tanda"
-              },
-              "whenDisabled": "selectedSamples"
-            }
-          }
-        ]
-      },
-      {
-        "filter": "incub_2",
-        "langConfig": {
-          "title": {
-            "incub_2": {
-              "label_en": "Samples Pending 2nd Incubation", 
-              "label_es": "Muestras pendientes de la segunda incubación"
-            }
-          },
-          "gridHeader": {
-            "iconCol": {
-              "label_en": "", "label_es": "", "is_icon": true
-            },
-            "sample_id": {
-              "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
-            },
-            "incubation2_batch": {
-              "label_en": "Batch", "label_es": "Tanda", "sort": false, "filter": false
-            },
-            "incubation2_start": {
-              "label_en": "Incubation 2 Start", "label_es": "Inicio 2a Incubacion", "sort": false, "filter": true
-            },
-            "sampling_date": {
-              "label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true
-            },
-            "incubation_incubator": {
-              "label_en": "Incubator incub 1", "label_es": "Incubadora 1a Incubacion", "sort": false, "filter": true
-            },
-            "incubation_start": {
-              "label_en": "incubation 1 start", "label_es": "Inicio 1a Incubacion", "sort": false, "filter": true
-            },
-            "incubation_end": {
-              "label_en": "incubation 1 end", "label_es": "Fin 1a Incubacion", "sort": false, "filter": true
-            }
-          }
-        },
-        "actions": [
-          {
-            "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
-            "clientMethod": "getSamples",
-            "button": {
-              "icon": "refresh",
-              "title": {
-                "label_en": "Reload", "label_es": "Recargar"
-              },
-              "whenDisabled": "samplesReload"
-            },
-            "apiParams": [
-              { "query": "incub1_whereFieldsName", "value": "current_stage|incubation_passed" },
-              { "query": "incub1_whereFieldsValue", "value": "Incubation|false" },
-              { "query": "incub1_sortFieldsName", "value": "sample_id desc" },
-              { "query": "incub2_whereFieldsName", "value": "current_stage|incubation_passed" },
-              { "query": "incub2_whereFieldsValue", "value": "Incubation|true" },
-              { "query": "incub2_sortFieldsName", "value": "sample_id desc" }
-            ]
           },
           {
             "actionName": "GET_SAMPLE_AUDIT",

@@ -8,13 +8,16 @@ export function DialogTemplate(base) {
       return {
         selectedResults: { type: Array },
         enterResults: { type: Array },
+        selectedMicroorganisms: { type: Array },
+        microorganismList: { type: Array },
         selectedAssigns: { type: Array },
         assignList: { type: Array },
         targetValue: { type: Object },
         selectedDialogAction: { type: Object }
       }
     }
-  
+
+    /** Date Template Dialog part */
     dateTemplate() {
       return html`
       <tr-dialog id="dateDialog" 
@@ -51,6 +54,7 @@ export function DialogTemplate(base) {
       }
     }
 
+    /** Comment Template Dialog part */
     commentTemplate() {
       return html`
       <tr-dialog id="commentDialog" 
@@ -87,6 +91,7 @@ export function DialogTemplate(base) {
       }
     }
 
+    /** Enter Result Template Dialog part */
     resultTemplate() {
       return html`
       <tr-dialog id="resultDialog" ?open=${this.enterResults.length}
@@ -221,6 +226,123 @@ export function DialogTemplate(base) {
         this.actionMethod(this.selectedDialogAction, false)
       } else {
         this.actionMethod(this.selectedDialogAction, false)
+      }
+    }
+
+    /** Microorganism Template Dialog part */
+    microorganismTemplate() {
+      return html`
+      <tr-dialog id="microorganismDialog" ?open=${this.microorganismList.length}
+        @closing=${()=>{this.microorganismList=[];this.reload()}}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        ${this.selectedSamples.length ?
+          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id}</label>` : nothing
+        }
+        <div class="layout vertical flex">
+          ${this.selectedAction.clientMethod!="getMicroorganismItem" ?
+            html`
+              <mwc-textfield id="mAddHoc" label="${this.langConfig.fieldText.addhocInput['label_'+this.lang]}"></mwc-textfield>
+              <sp-button size="xl" variant="secondary" @click=${()=>this.setMicroorganism(true)}>
+                ${this.langConfig.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
+            ` : nothing
+          }
+          <vaadin-grid id="moGrid" theme="row-dividers" all-rows-visible multi-sort
+            .selectedItems="${this.selectedMicroorganisms}"
+            @active-item-changed="${e => {
+              const item = e.detail.value;
+              this.selectedMicroorganisms = item ? [item] : [];
+            }}">
+            <vaadin-grid-sort-column resizable flex-grow=1 path="name" header="${this.langConfig.microorganismHeader.name['label_'+this.lang]}"></vaadin-grid-sort-column>
+          </vaadin-grid>
+          ${this.selectedAction.clientMethod=="getMicroorganismItem" ?
+            html`
+              <sp-button size="xl" variant="cta" @click=${this.unsetMicroorganism}>
+                ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+            ` :
+            html`
+              <sp-button size="xl" variant="cta" @click=${()=>this.setMicroorganism()}>
+                ${this.langConfig.fieldText.addBtn["label_" + this.lang]}</sp-button>
+            `
+          }
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    get moGrid() {
+      return this.shadowRoot.querySelector("vaadin-grid#moGrid")
+    }
+  
+    get microorganismDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#microorganismDialog")
+    }
+  
+    get mAddHoc() {
+      return this.shadowRoot.querySelector("mwc-textfield#mAddHoc")
+    }
+
+    setMicroorganism(addhoc=false) {
+      if (Number(this.selectedSamples[0].raw_value) == this.selectedSamples[0].microorganism_count) {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {
+            message_en: "This addition would be "+ (this.selectedSamples[0].microorganism_count+1) +" what is greater than the reading "+ this.selectedSamples[0].microorganism_count +" what is not allowed.",
+            message_es: "Está adición sumaría un total de "+ (this.selectedSamples[0].microorganism_count+1) +", mayor a la lectura identificada, "+ this.selectedSamples[0].microorganism_count +", lo que no es permitido."
+          },
+          bubbles: true,
+          composed: true
+        }))
+        return console.log("This addition would be "+ (this.selectedSamples[0].microorganism_list_array.length+1) +" what is greater than the reading "+ this.selectedSamples[0].microorganism_list_array.length +" what is not allowed.")
+      }
+      // get value from selected item
+      if (!addhoc) {
+        if (!this.selectedMicroorganisms.length) return
+        this.targetValue = {
+          microorganismName: this.selectedMicroorganisms[0].name
+        }
+        let checkMicroItems = this.checkMicroItems(this.selectedMicroorganisms[0].name)
+        console.log(checkMicroItems)
+        if (!checkMicroItems) {
+          this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+          this.actionMethod(this.selectedDialogAction, false)
+        }
+      // get value from text input
+      } else {
+        if (!this.mAddHoc.value) return
+        this.targetValue = {
+          microorganismName: this.mAddHoc.value
+        }
+        let checkMicroItems = this.checkMicroItems(this.mAddHoc.value)
+        console.log(checkMicroItems)
+        if (!checkMicroItems) {
+          this.selectedDialogAction = this.selectedAction.dialogInfo.action[1]
+          this.actionMethod(this.selectedDialogAction, false)
+        }
+      }
+    }
+
+    unsetMicroorganism() {
+      if (!this.selectedMicroorganisms.length) return
+      this.targetValue = {
+        microorganismName: this.selectedMicroorganisms[0].name
+      }
+      this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+      this.actionMethod(this.selectedDialogAction, false)
+    }
+
+    checkMicroItems(name) {
+      let existItem = this.selectedSamples[0].microorganism_list_array.filter(m => m.name == name)
+      if (existItem.length) {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {
+            message_en: "The microorganism is already set, please select or input another name",
+            message_es: "El microorganismo ya está configurado, seleccione o ingrese otro nombre"
+          },
+          bubbles: true,
+          composed: true
+        }))
+        return "The microorganism is already set, please select or input another name"
       }
     }
 

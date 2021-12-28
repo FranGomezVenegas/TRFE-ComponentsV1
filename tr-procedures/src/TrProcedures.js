@@ -89,7 +89,14 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   resetView() {
+    if (!this.config.local) {
+      let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.name == this.procName)
+      if (findProc.length) {
+        ProceduresModel[this.procName] = findProc[0].procModel
+      }
+    }
     this.enterResults = []
+    this.microorganismList = []
     this.assignList = []
     this.selectedSamples = []
     this.langConfig = ProceduresModel[this.procName][this.sampleName].langConfig
@@ -144,6 +151,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
         ${this.langConfig&&this.langConfig.resultHeader ? 
           html`${this.resultTemplate()}` :
+          nothing
+        }
+        ${this.langConfig&&this.langConfig.microorganismHeader ? 
+          html`${this.microorganismTemplate()}` :
           nothing
         }
         ${this.sampleName=="SampleIncubation" ? 
@@ -212,16 +223,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.itemId = null
     this.targetValue = {}
     this.selectedResults = []
+    this.selectedMicroorganisms = []
     this.selectedAssigns = []
     this.selectedDialogAction = null
   }
 
-  reloadAudit() {
-    this.resetDialogThings()
-    this.actionMethod(this.selectedAction)
-  }
-
-  reloadResult() {
+  reloadDialog() {
     this.resetDialogThings()
     this.actionMethod(this.selectedAction)
   }
@@ -242,7 +249,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
     } else {
       if (this.selectedSamples.length) {
-        console.log(this.selectedSamples, " object")
         this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
       } else {
         this.credsChecker(action.actionName, null, this.jsonParam())
@@ -321,6 +327,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     if (this.selectedAction.sortItem) {
       this.grid.items = j[this.selectedAction.sortItem]
       this.shadowRoot.querySelectorAll("composition-template").forEach(c => {
+        console.log(j, " JJJ")
+        console.log(c.model.filter, " CCC")
         c.grid.items = j[c.model.filter][0]
       })
     } else {

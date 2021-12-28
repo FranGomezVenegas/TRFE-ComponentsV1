@@ -37,10 +37,12 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "personel")}>Personel Sampling</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingSMP")}>Sample Plate Reading</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingPERS")}>Personel Plate Reading</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "active_batches")}>Sample Incubation</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "samples")}>Sample Microorganism </button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "personel")}>Personel Microorganism</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "fq")}>FQ</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "mb")}>MB</button>
-        <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "active_batches")}>Sample Incubation</button>
         <tr-procedures></tr-procedures><hr>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
