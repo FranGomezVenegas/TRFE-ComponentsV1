@@ -457,6 +457,13 @@ export class CredDialog extends CommonCore {
       esignPhraseToCheck: this.esg ? this.esg.value : "",
       auditReasonPhrase: this.jst ? this.jst.value: ""
     }
+    let cleanParams = {}
+    Object.entries(this.reqParams).map(([key, value]) => {
+      if (value) {
+        cleanParams[key] = value
+      }
+    })
+    this.reqParams = cleanParams
     this.credDialog.close()
   }
 
