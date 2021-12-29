@@ -33,16 +33,17 @@ class DemoExample extends LitElement {
       }}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "samples")}>Samples Sampling </button>
-        <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "personel")}>Personel Sampling</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "LogSamples", "SampleLogin")}>Log Samples</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "SamplingSMP")}>Samples Sampling </button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "SamplingPERS")}>Personel Sampling</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingSMP")}>Sample Plate Reading</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingPERS")}>Personel Plate Reading</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "active_batches")}>Sample Incubation</button>
-        <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "samples")}>Sample Microorganism </button>
-        <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "personel")}>Personel Microorganism</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismSMP")}>Sample Microorganism </button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismPERS")}>Personel Microorganism</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
-        <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "fq")}>FQ</button>
-        <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "mb")}>MB</button>
+        <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "ER-FQ")}>FQ</button>
+        <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "ER-MB")}>MB</button>
         <tr-procedures></tr-procedures><hr>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>

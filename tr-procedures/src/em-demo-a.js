@@ -1,12 +1,99 @@
 export const EmDemoA = {
+  "LogSamples": {
+    "langConfig": {
+      "title": {
+        "SampleLogin" : {
+          "label_en": "Program Sampling Points", 
+          "label_es": "Puntos de muestro del programa"
+        }
+      },
+      "fieldText": {
+        "logBtn": { "label_en": "Log Sample", "label_es": "Registrar Muestra" },
+        "shift": {
+          "items": [
+            { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+            { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+            { "keyName": "N", "keyValue_en": "Night", "keyValue_es": "Noche" }
+          ],
+          "label_en": "Shift", "label_es": "Turno"
+        },
+        "lot": {
+          "items": [],
+          "label_en": "Lot", "label_es": "Lote"
+        }
+      },
+      "gridHeader": {
+        "area": {
+          "label_en": "Area", "label_es": "Area", "sort": false, "filter": true, "is_icon": true, "width": "10%"
+        },
+        "location_name": {
+          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "20%"
+        },
+        "spec_code": {
+          "label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true, "width": "20%"
+        },
+        "spec_variation_name": {
+          "label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "20%"
+        },
+        "spec_analysis_variation": {
+          "label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "20%"
+        },
+        "person_ana_definition": {
+          "label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"
+        }
+      }
+    },
+    "actions": [
+      {
+        "actionName": "PROGRAMS_LIST",
+        "clientMethod": "getProgramList",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "subAction": {
+          "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+          "clientMethod": "getLots"
+        }
+      },
+      {
+        "actionName": "LOGSAMPLE",
+        "clientMethod": "logSample",
+        "apiParams": [
+          { "query": "programName", "element": "programInput", "defaultValue": "" },
+          { "query": "locationName", "element": "locationInput", "defaultValue": "" },
+          { "query": "sampleTemplate", "targetValue": true },
+          { "query": "sampleTemplateVersion", "targetValue": true },
+          { "query": "fieldName", "defaultValue": "shift|production_lot" },
+          { "query": "fieldValue", "targetValue": true },
+          { "query": "numSamplesToLog", "defaultValue": 1 }
+        ]
+      }
+    ],
+    "topCompositions": [
+      {
+        "templateName": "specCode",
+        "buttons": [{
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "calledActionIdx": 0
+        }]
+      }
+    ]
+  },
   "SamplePendingSampling": {
     "langConfig": {
       "title": {
-        "samples": {
+        "SamplingSMP": {
           "label_en": "Samples Pending Sampling Date", 
           "label_es": "Muestras pendientes de la fecha de muestreo"
         },
-        "personel": {
+        "SamplingPERS": {
           "label_en": "Personnel Samples Pending Sampling Date", 
           "label_es": "Muestras de personal pendientes de la fecha de muestreo"
         }
@@ -54,8 +141,8 @@ export const EmDemoA = {
           { "query": "whereFieldsValue", "value": "Sampling|prog_pers_template" }
         ],
         "paramFilter": {
-          "samples": { "query": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
-          "personel": { "query": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
+          "SamplingSMP": { "query": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
+          "SamplingPERS": { "query": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
         }
       },
       {
@@ -313,11 +400,11 @@ export const EmDemoA = {
   "SampleMicroorganism": {
     "langConfig": {
       "title": {
-        "samples": {
+        "MicroOrganismSMP": {
           "label_en": "Samples Pending Microorganism Identification", 
           "label_es": "Muestras pendientes de la identificación de microorganismos"
         },
-        "personel": {
+        "MicroOrganismPERS": {
           "label_en": "Personnel Samples Pending Microorganism Identification", 
           "label_es": "Muestras de personal pendientes de la identificación de microorganismos"
         }
@@ -329,25 +416,25 @@ export const EmDemoA = {
       },
       "gridHeader": {
         "sample_id": {
-          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, width: "12px"
+          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, "width":  "12px"
         },
         "program_name": {
-          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true, width:'20px'
+          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true, "width": "20px"
         },
         "location_name": {
-          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, width:'30px'
+          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "30px"
         },
         "sampling_date": {
-          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true, width:'20px'
+          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true, "width": "20px"
         },
         "raw_value": {
-          "label_en": "Reading Result", "label_es": "Recuento", "sort": false, "filter": true, width:'20px'
+          "label_en": "Reading Result", "label_es": "Recuento", "sort": false, "filter": true, "width": "20px"
         },
         "microorganism_count": {
-          "label_en": "# Organism Ident.", "label_es": "Num. MicroOrg. Detectados", "sort": false, "filter": true, width:'20px'
+          "label_en": "# Organism Ident.", "label_es": "Num. MicroOrg. Detectados", "sort": false, "filter": true, "width": "20px"
         },
         "microorganism_list": {
-          "label_en": "Microorganisms", "label_es": "Microorganismos", "sort": false, "filter": true, width:'20px'
+          "label_en": "Microorganisms", "label_es": "Microorganismos", "sort": false, "filter": true, "width": "20px"
         }
       },
       "microorganismHeader": {
@@ -372,8 +459,8 @@ export const EmDemoA = {
           { "query": "whereFieldsValue", "value": "MicroorganismIdentification|prog_pers_template" }
         ],
         "paramFilter": {
-          "samples": { "query": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
-          "personel": { "query": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
+          "MicroOrganismSMP": { "query": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
+          "MicroOrganismPERS": { "query": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
         }
       },
       {
@@ -624,7 +711,7 @@ export const EmDemoA = {
         ]
       }
     ],
-    "compositions": [
+    "bottomCompositions": [
       {
         "filter": "samplesWithAnyPendingIncubation",
         "langConfig": {

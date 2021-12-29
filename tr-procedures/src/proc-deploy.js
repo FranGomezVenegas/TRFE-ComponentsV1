@@ -1,4 +1,91 @@
 export const ProcDeploy = {
+  "LogSamples": {
+    "langConfig": {
+      "title": {
+        "SampleLogin" : {
+          "label_en": "Program Sampling Points", 
+          "label_es": "Puntos de muestro del programa"
+        }
+      },
+      "fieldText": {
+        "logBtn": { "label_en": "Log Sample", "label_es": "Registrar Muestra" },
+        "shift": {
+          "items": [
+            { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+            { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+            { "keyName": "N", "keyValue_en": "Night", "keyValue_es": "Noche" }
+          ],
+          "label_en": "Shift", "label_es": "Turno"
+        },
+        "lot": {
+          "items": [],
+          "label_en": "Lot", "label_es": "Lote"
+        }
+      },
+      "gridHeader": {
+        "area": {
+          "label_en": "Area", "label_es": "Area", "sort": false, "filter": true, "is_icon": true, "width": "10%"
+        },
+        "location_name": {
+          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "20%"
+        },
+        "spec_code": {
+          "label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true, "width": "20%"
+        },
+        "spec_variation_name": {
+          "label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "20%"
+        },
+        "spec_analysis_variation": {
+          "label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "20%"
+        },
+        "person_ana_definition": {
+          "label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"
+        }
+      }
+    },
+    "actions": [
+      {
+        "actionName": "PROGRAMS_LIST",
+        "clientMethod": "getProgramList",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "subAction": {
+          "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+          "clientMethod": "getLots"
+        }
+      },
+      {
+        "actionName": "LOGSAMPLE",
+        "clientMethod": "logSample",
+        "apiParams": [
+          { "query": "programName", "element": "programInput", "defaultValue": "" },
+          { "query": "locationName", "element": "locationInput", "defaultValue": "" },
+          { "query": "sampleTemplate", "targetValue": true },
+          { "query": "sampleTemplateVersion", "targetValue": true },
+          { "query": "fieldName", "defaultValue": "shift|production_lot" },
+          { "query": "fieldValue", "targetValue": true },
+          { "query": "numSamplesToLog", "defaultValue": 1 }
+        ]
+      }
+    ],
+    "topCompositions": [
+      {
+        "templateName": "specCode",
+        "buttons": [{
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "calledActionIdx": 0
+        }]
+      }
+    ]
+  },
   "SamplePending": {
     "langConfig": {
       "title": {
@@ -131,11 +218,11 @@ export const ProcDeploy = {
   "SampleEnterResult": {
     "langConfig": {
       "title": {
-        "fq": {
+        "ER-FQ": {
           "label_en": "FQ-Testing Pending Results", 
           "label_es": "FQ-Ensayos pendientes entrar resultados"
         },
-        "mb": {
+        "ER-MB": {
           "label_en": "Samples Pending Micro Testing", 
           "label_es": "Muestras pendientes de testeo Microbiológico"
         }
@@ -199,8 +286,8 @@ export const ProcDeploy = {
           { "query": "addSampleAnalysisResult", "value": false }
         ],
         "paramFilter": {
-          "fq": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ*String|REVIEWED*String" },
-          "mb": { "query": "sampleAnalysisWhereFieldsValue", "value": "MB*String|REVIEWED*String" }
+          "ER-FQ": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ*String|REVIEWED*String" },
+          "ER-MB": { "query": "sampleAnalysisWhereFieldsValue", "value": "MB*String|REVIEWED*String" }
         }
       },
       {
@@ -246,8 +333,8 @@ export const ProcDeploy = {
           { "query": "sampleAnalysisWhereFieldsName", "value": "testing_group|status not in" }
         ],
         "paramFilter": {
-          "fq": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
-          "mb": { "query": "sampleAnalysisWhereFieldsValue", "value": "MB|REVIEWED*String" }
+          "ER-FQ": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
+          "ER-MB": { "query": "sampleAnalysisWhereFieldsValue", "value": "MB|REVIEWED*String" }
         }
       }
     ]

@@ -1,6 +1,8 @@
 import { html, nothing } from 'lit';
 import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { commonLangConfig } from '@trazit/common-core';
+import '@material/mwc-list/mwc-list-item';
+import '@material/mwc-select';
 
 export function DialogTemplate(base) {
   return class extends base {
@@ -431,6 +433,67 @@ export function DialogTemplate(base) {
       }
       this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
       this.actionMethod(this.selectedDialogAction, false)
+    }
+
+    /** Point Template Dialog part */
+    pointTemplate() {
+      return html`
+      <tr-dialog id="pointDialog" .open=${this.selectedSamples&&this.selectedSamples.length}
+        @closed=${e=>{if(e.target===this.pointDialog)this.grid.activeItem=null}}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <div class="layout horizontal justified flex">
+            <sp-button size="m" variant="secondary" dialogAction="accept">
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="m" @click=${this.setLogSample}>${this.langConfig.fieldText.logBtn["label_"+this.lang]}</sp-button>
+          </div>
+          <mwc-select label="${this.langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
+            ${this.langConfig.fieldText.shift.items.map((c,i) => 
+              html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
+            )}
+          </mwc-select>
+          <mwc-select label="${this.langConfig.fieldText.lot["label_"+this.lang]}" id="lot">
+            ${this.langConfig.fieldText.lot.items.map((c,i) => 
+              html`<mwc-list-item value="${c.lot_name}" ?selected=${i==0}>${c.lot_name}</mwc-list-item>`
+            )}
+          </mwc-select>
+          ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
+            html`<mwc-textfield label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${f.value}></mwc-textfield>`
+          )}
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    get pointDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#pointDialog")
+    }
+
+    get shiftInput() {
+      return this.shadowRoot.querySelector("mwc-select#shift")
+    }
+
+    get lotInput() {
+      return this.shadowRoot.querySelector("mwc-select#lot")
+    }
+
+    get programInput() {
+      return this.shadowRoot.querySelector("mwc-textfield[name=program_name]")
+    }
+
+    get locationInput() {
+      return this.shadowRoot.querySelector("mwc-textfield[name=location_name]")
+    }
+
+    setLogSample() {
+      this.targetValue = {
+        sampleTemplate: this.templates.dataApi.sample_config_code,
+        sampleTemplateVersion: this.templates.dataApi.sample_config_code_version,
+        fieldValue: `${this.shiftInput.value}*String|${this.lotInput.value}*String`
+      }
+      this.actionMethod(null, false, 1)
     }
   }
 }

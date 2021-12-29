@@ -172,5 +172,38 @@ export function ClientMethod(base) {
         this.reload()
       })
     }
+
+    async getProgramList() {
+      this.samplesReload = true
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      await this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          if (this.selectedAction.subAction) {
+            this.actionMethod(this.selectedAction.subAction)
+            this.templates.dataApi = j.programsList[0]
+          }
+        }
+      })
+    }
+
+    getLots() {
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        this.samplesReload = false
+        this.grid.items = this.templates.dataApi.sample_points
+        this.langConfig.fieldText.lot.items = j
+        this.requestUpdate()
+      })
+    }
+
+    logSample() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.pointDialog.close()
+      })
+    }
   }
 }

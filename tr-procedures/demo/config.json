@@ -6,5 +6,6 @@
   "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPI",
   "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPI",
   "frontEndEnvMonitIncubationUrl": "/moduleenvmon/frontend/EnvMonIncubationAPIfrontend",
+  "frontEndEnvMonitUrl": "/moduleenvmon/frontend/EnvMonAPIfrontend",
   "local": true
 }

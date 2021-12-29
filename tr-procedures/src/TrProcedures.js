@@ -1,6 +1,6 @@
 import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
-import { Layouts } from '@collaborne/lit-flexbox-literals';
+import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ProceduresModel } from './ProceduresModel';
 import { ClientMethod } from './ClientMethod';
@@ -14,12 +14,13 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '@trazit/tr-dialog/tr-dialog';
 import './audit-dialog';
-import './composition-template';
+import './templates-';
+import './bottom-composition';
 
 export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   static get styles() {
     return [
-      Layouts,
+      Layouts, Alignment,
       super.styles,
       css`
         mwc-button {
@@ -101,12 +102,21 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.selectedSamples = []
     this.langConfig = ProceduresModel[this.procName][this.sampleName].langConfig
     this.actions = ProceduresModel[this.procName][this.sampleName].actions
-    this.compositions = ProceduresModel[this.procName][this.sampleName].compositions
+    this.topCompositions = ProceduresModel[this.procName][this.sampleName].topCompositions
+    this.bottomCompositions = ProceduresModel[this.procName][this.sampleName].bottomCompositions
     this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[0]
   }
 
   render() {
     return html`
+      ${this.topCompositions ?
+        html`${this.topCompositions.map(c => 
+          html`<templates- 
+            .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
+            @template-event=${this.templateEvent}></templates->`
+        )}` :
+        nothing
+      }
       <div class="layout horizontal flex wrap">
         <div class="layout flex">
           ${this.getTitle()}
@@ -164,19 +174,34 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           ` :
           nothing
         }
+        ${this.langConfig&&this.sampleName=="LogSamples" ? 
+          html`${this.pointTemplate()}` :
+          nothing
+        }
         ${super.render()}
       </div>
-      ${this.compositions&&this.sampleName=="SampleIncubation" ?
-        html`${this.compositions.map(c => 
+      ${this.bottomCompositions ?
+        html`${this.bottomCompositions.map(c => 
           html`<div class="layout flex">
-            <composition-template .procName=${this.procName} .sampleName=${this.sampleName}
+            <bottom-composition .procName=${this.procName} .sampleName=${this.sampleName}
               .model=${c} .config=${this.config} .selectedBatch=${this.selectedSamples.length?this.selectedSamples[0]:{}}
-              @set-grid=${e=>this.setGrid(e.detail)}></composition-template>
+              @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
           </div>`
         )}` :
         nothing
       }
     `;
+  }
+
+  templateEvent(e) {
+    if (e.detail.calledActionIdx >= 0) {
+      this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[e.detail.calledActionIdx]
+      this.reload()
+    }
+  }
+
+  get templates() {
+    return this.shadowRoot.querySelector("templates-")
   }
 
   get audit() {
@@ -233,9 +258,13 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.actionMethod(this.selectedAction)
   }
 
-  actionMethod(action, replace = true) {
+  actionMethod(action, replace = true, actionNumIdx) {
     if (replace) {
       this.selectedAction = action
+    }
+    if (actionNumIdx) {
+      action = ProceduresModel[this.procName][this.sampleName].actions[actionNumIdx]
+      this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[actionNumIdx]
     }
     if (action.dialogInfo) {
       if (action.dialogInfo.automatic) {
@@ -326,7 +355,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.selectedSamples = []
     if (this.selectedAction.sortItem) {
       this.grid.items = j[this.selectedAction.sortItem]
-      this.shadowRoot.querySelectorAll("composition-template").forEach(c => {
+      this.shadowRoot.querySelectorAll("bottom-composition").forEach(c => {
         console.log(j)
         console.log(c.model.filter)
         c.grid.items = j[c.model.filter]
@@ -392,6 +421,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     if (this.filterName) {
       if (this.filterName == "active_batches") {
         return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
+      } else if (this.filterName == "SampleLogin") {
+        return html`<img src="/images/labplanet.png" style="width:20px">`
       } else {
         return html`<img src="/images/${this.filterName}_${sample.status.toLowerCase()}.png" style="width:20px">`
       }

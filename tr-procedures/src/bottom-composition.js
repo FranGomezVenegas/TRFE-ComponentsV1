@@ -5,7 +5,7 @@ import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ClientMethod } from './ClientMethod';
 import { DialogTemplate } from './DialogTemplate';
 
-export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)) {
+export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   static get styles() {
     return [
       Layouts,
@@ -332,4 +332,4 @@ export class CompositionTemplate extends ClientMethod(DialogTemplate(CredDialog)
     }
   }
 }
-window.customElements.define('composition-template', CompositionTemplate);
+window.customElements.define('bottom-composition', BottomComposition);
