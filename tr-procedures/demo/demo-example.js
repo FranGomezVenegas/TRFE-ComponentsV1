@@ -38,7 +38,7 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "SamplingPERS")}>Personel Sampling</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingSMP")}>Sample Plate Reading</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingPERS")}>Personel Plate Reading</button>
-        <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "active_batches")}>Sample Incubation</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "Incubation")}>Sample Incubation</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismSMP")}>Sample Microorganism </button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismPERS")}>Personel Microorganism</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
@@ -52,7 +52,7 @@ class DemoExample extends LitElement {
 
   selectMenu(proc, sample, filter) {
     this.trProc.procName = proc
-    this.trProc.sampleName = sample
+    this.trProc.viewName = sample
     this.trProc.filterName = filter
     this.trProc.resetView()
     this.trProc.render()
