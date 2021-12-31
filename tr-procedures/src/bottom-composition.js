@@ -59,6 +59,9 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         #assignDialog {
           --mdc-dialog-min-width: 500px;
         }
+        mwc-icon-button.img[disabled] {
+          opacity: 0.5;
+        }
       `
     ];
   }
@@ -68,15 +71,25 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       model: { type: Object },
       config: { type: Object },
       procName: { type: String },
-      sampleName: { type: String },
+      viewName: { type: String },
       filterName: { type: String },
       langConfig: { type: Object },
       actions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
       selectedAction: { type: Object },
-      selectedBatch: { type: Object }
+      batchName: { type: String },
+      gridItems: { type: Array },
+      filteredItems: { type: Array }
     };
+  }
+
+  constructor() {
+    super()
+    this.samplesReload = true
+    this.assignList = []
+    this.gridItems = []
+    this.filteredItems = []
   }
 
   updated(updates) {
@@ -89,6 +102,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
 
   resetView() {
     this.selectedSamples = []
+    this.assignList = []
     this.langConfig = this.model.langConfig
     this.actions = this.model.actions
     this.selectedAction = this.model.actions[0]
@@ -103,12 +117,40 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
           <div class="layout horizontal center flex wrap">
             ${this.getButton()}
           </div>
-          <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-            @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
+          <vaadin-grid id="absractGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+            .items=${this.filteredItems}
+            @active-item-changed=${this.selectItem}
             .selectedItems="${this.selectedSamples}">
             ${this.gridList()}
           </vaadin-grid>
         </div>
+        ${this.langConfig&&this.filterName=="active_batches" ? 
+          html`
+            <div id="batchDetail">
+              ${this.selectedSamples.length ?
+                html`
+                  <div>
+                    <h1>
+                      The selected batch is: ${this.selectedSamples[0].name}. 
+                      Incubator: ${this.selectedSamples[0].incubation_incubator}. 
+                      #Samples: ${this.selectedSamples[0].SAMPLES_ARRAY.length}
+                    </h1>
+                    ${this.selectedSamples[0].SAMPLES_ARRAY.length ?
+                      html`<div id="samplesArr">${this.selectedSamples[0].SAMPLES_ARRAY.map(s =>
+                        html`<div>${s.sample_id} Incub ${s.incubation_moment}</div>`
+                      )}</div>` :
+                      nothing
+                    }
+                  </div>
+                ` :
+                nothing
+              }
+            </div>
+            ${this.newBatchTemplate()}
+            ${this.assignTemplate()}
+          ` :
+          nothing
+        }
         <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
         ${super.render()}
       </div>
@@ -116,6 +158,19 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       nothing
     }
     `;
+  }
+
+  selectItem(e) {
+    this.selectedSamples = e.detail.value ? [e.detail.value] : []
+    if (this.filterName == "active_batches") {
+      this.dispatchEvent(new CustomEvent('selected-batch', {
+        detail: { sample: e.detail.value }
+      }))
+    } else if (this.filterName == "samplesWithAnyPendingIncubation") {
+      this.dispatchEvent(new CustomEvent("selected-incub", {
+        detail: { sample: e.detail.value }
+      }))
+    }
   }
 
   get audit() {
@@ -132,7 +187,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
   }
 
   get grid() {
-    return this.shadowRoot.querySelector("vaadin-grid#mainGrid")
+    return this.shadowRoot.querySelector("vaadin-grid#absractGrid")
   }
 
   authorized() {
@@ -150,6 +205,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
 
   reload() {
     this.resetDialogThings()
+    this.batchName = null
     this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
   }
@@ -183,7 +239,6 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       }
     } else {
       if (this.selectedSamples.length) {
-        console.log(this.selectedSamples, " object")
         this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
       } else {
         this.credsChecker(action.actionName, null, this.jsonParam())
@@ -196,23 +251,67 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       ${this.actions&&this.actions.map(action =>
         html`${action.button ?
           html`${action.button.icon ?
-            html`<mwc-icon-button 
-              id="${action.button.id}"
-              icon="${action.button.icon}" 
-              title="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
-              @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
-            html`<mwc-button dense raised 
-              id="${action.button.id}"
-              icon="${action.button.icon}" 
-              label="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
-              @click=${()=>this.actionMethod(action)}></mwc-button>`
+            html`${action.button.actionName ?
+              html`<mwc-icon-button
+                id="${action.button.id}"
+                icon="${action.button.icon}" 
+                title="${action.button.title['label_'+this.lang]}" 
+                ?disabled=${action.button.whenDisabled == "samplesReload" 
+                  ? this.samplesReload : 
+                    (this.selectedSamples.length ?
+                      action.button.disabledBEState&&this.selectedSamples[0][action.button.disabledBEState] ? 
+                        true :
+                        false
+                    : true)}
+                @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
+              html`<mwc-icon-button style="color:${action.button.color}" 
+                id="${action.button.id}"
+                icon="${action.button.icon}" 
+                title="${action.button.title['label_'+this.lang]}" 
+                ?disabled=${this[action.button.whenDisabled]}
+                @click=${()=>this[action.clientMethod](action.filterState)}></mwc-icon-button>`
+            }` :
+            html`${action.button.img ?
+              html`<mwc-icon-button class="img" 
+                title="${action.button.title['label_'+this.lang]}"
+                ?disabled=${this[action.button.whenDisabled]}
+                @click=${()=>this[action.clientMethod](action.filterState)}><img src="/images/${action.button.img}" style="width:${action.button.size}"></mwc-icon-button>` :
+              html`<mwc-button dense raised 
+                id="${action.button.id}"
+                icon="${action.button.icon}" 
+                label="${action.button.title['label_'+this.lang]}" 
+                ?disabled=${action.button.whenDisabled == "samplesReload" 
+                  ? this.samplesReload : 
+                    (this.selectedSamples.length ?
+                      action.button.disabledBEState&&this.selectedSamples[0][action.button.disabledBEState] ? 
+                        true :
+                        false
+                    : true)}
+                @click=${()=>this.actionMethod(action)}></mwc-button>`
+            }`
           }` :
           nothing
         }`
       )}
     `
+  }
+
+  filterSamples(state) {
+    if (state == "not_in_batch") {
+      this.filteredItems = this.gridItems.filter(item => !item.incubation_batch)
+    } else if (state == "in_batch_1") {
+      this.filteredItems = this.gridItems.filter(item => item.incubation_batch && !item.incubation_start)
+    } else if (state == "progress_1") {
+      this.filteredItems = this.gridItems.filter(item => item.incubation_batch && item.incubation_start && !item.incubation_end)
+    } else if (state == "done") {
+      this.filteredItems = this.gridItems.filter(item => item.incubation_end && !item.incubation2_batch)
+    } else if (state == "in_batch_2") {
+      this.filteredItems = this.gridItems.filter(item => item.incubation2_batch && !item.incubation2_start)
+    } else if (state == "progress_2") {
+      this.filteredItems = this.gridItems.filter(item => item.incubation2_batch && item.incubation2_start && !item.incubation2_end)
+    } else {
+      this.filteredItems = this.gridItems
+    }
   }
 
   nextRequest() {
@@ -275,32 +374,70 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
   }
 
   iconColumn(key, value, i) {
-    return html`${i==0 ?
-      html`
-      <vaadin-grid-column
+    return html`
+      <vaadin-grid-column class="${key}"
         header="${value['label_'+this.lang]}"
         ${columnBodyRenderer(this.iconRenderer)}
         text-align="center"
         width="${this.langConfig.gridHeader[key].width}" resizable 
       ></vaadin-grid-column>
-      ` :
-      html`
-      <vaadin-grid-column class=${key}
-        header="${value['label_'+this.lang]}"
-        ${columnBodyRenderer(this.iconRenderer)}
-        text-align="center"
-        width="${this.langConfig.gridHeader[key].width}" resizable 
-      ></vaadin-grid-column>
-      `
-    }`
+    `
   }
 
   iconRenderer(sample, model, col) {
     if (this.filterName) {
       if (col.getAttribute("class") == "sampleType") {
         return html`<img src="/images/incubators/${sample.sample_config_code=='program_smp_template'?'samplesIcon.png':'samplePerson.png'}" style="width:20px">`
-      } else {
-        return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
+      } else if (col.getAttribute("class") == "batchState") {
+        // started / in progress
+        // no started / new batch
+        if (sample.incubation_start) {
+          return html`<img src="/images/incubators/IncubInProgress.gif" style="width:20px">`
+        } else {
+          return html`<mwc-icon style="color:DarkGoldenRod;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+        }
+      } else if (col.getAttribute("class") == "samplesState") {
+        // end incub1
+        // started / in progress
+        // in batch
+        // not in batch
+        if (sample.pending_incub == 2) {
+          if (sample.incubation2_start) {
+            return html`<img src="/images/incubators/IncubInProgress.gif" style="width:20px">`
+          } else if (sample.incubation2_batch) {
+            return html`<mwc-icon style="color:SlateBlue;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+          } else {
+            return html`<mwc-icon style="color:MediumSeaGreen;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+          }
+        } else {
+          if (sample.incubation_start) {
+            return html`<img src="/images/incubators/IncubInProgress.gif" style="width:20px">`
+          } else if (sample.incubation_batch) {
+            return html`<mwc-icon style="color:Tomato;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+          } else {
+            return html`<mwc-icon style="color:Orange;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+          } 
+        }
+      } else if (col.getAttribute("class") == "incubState") {
+        // inc_1
+        // inc2
+        if (this.filterName == "active_batches") {
+          if (sample.incub_stage == 1) {
+            return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+          } else if (sample.incub_stage == 2) {
+            return html`<mwc-icon style="color:Brown;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+          }
+        } else {
+          if (sample.pending_incub == 2) {
+            if (sample.incubation2_batch) {
+              return html`<mwc-icon style="color:Brown;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+            } else { // incub@1 done or first state of incub#2
+              return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+            }
+          } else if (sample.incubation_incubator && sample.pending_incub == 2) {
+            return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+          }
+        }
       }
     }
   }
@@ -308,21 +445,49 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
   nonIconColumn(key, value, i) {
     return html`${this.langConfig.gridHeader[key].sort ?
       this.sortColumn(key, value, i) :
-      this.filterColumn(key, value, i)
+      html`${this.langConfig.gridHeader[key].filter ? 
+        html`${this.filterColumn(key, value, i)}` : 
+        html`${this.commonColumn(key, value, i)}`
+      }`
     }`
   }
 
   sortColumn(key, value, i) {
     return html`${i==0 ?
-      html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
-      html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
+        html`<vaadin-grid-sort-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      }` :
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
+        html`<vaadin-grid-sort-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      }`
     }`
   }
 
   filterColumn(key, value, i) {
     return html`${i==0 ?
-      html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-      html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+        html`<vaadin-grid-filter-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      }` :
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+        html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      }`
+    }`
+  }
+
+  commonColumn(key, value, i) {
+    return html`${i==0 ?
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+        html`<vaadin-grid-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+      }` :
+      html`${this.langConfig.gridHeader[key].width ?
+        html`<vaadin-grid-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+        html`<vaadin-grid-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+      }`
     }`
   }
 

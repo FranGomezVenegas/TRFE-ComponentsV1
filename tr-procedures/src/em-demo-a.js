@@ -559,59 +559,11 @@ export const EmDemoA = {
     ]
   },
   "SampleIncubation": {
-    "langConfig": {
-      "title": {
-        "active_batches" : {
-          "label_en": "Batches", 
-          "label_es": "Tandas"
-        }
-      },
-      "fieldText": {
-        "newBatch" : { "label_en": "New Batch Name", "label_es": "Nombre para la nueva tanda" }
-      },
-      "gridHeader": {
-        "iconCol": {
-          "label_en": "", "label_es": "", "is_icon": true
-        },
-        "name": {
-          "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false
-        },
-        "incub_stage": {
-          "label_en": "#Incub", "label_es": "IncNº", "sort": true, "filter": false
-        },
-        "incubation_incubator": {
-          "label_en": "Incubator", "label_es": "Incubadora", "sort": false, "filter": true
-        },
-        "incubator_info_temperature": {
-          "label_en": "Temperature", "label_es": "Temperatura", "sort": false, "filter": false
-        },
-        "incubator_info_created_on": {
-          "label_en": "T.Date", "label_es": "Fecha T.", "sort": false, "filter": false
-        },
-        "NUM_SAMPLES": {
-          "label_en": "Num Samples", "label_es": "Nº Muestras", "sort": false, "filter": false
-        },
-        "incubation_start": {
-          "label_en": "Start Date", "label_es": "Fecha Inicio", "sort": false, "filter": false
-        }
-      },
-      "assignHeader": {
-        "stage": { "label_en": "Incub", "label_es": "Incub" },
-        "name": { "label_en": "Name", "label_es": "Nombre" },
-        "description": { "label_en": "description", "label_es": "descripción" }
-      }
-    },
+    "abstract": true,
     "actions": [
       {
         "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
         "clientMethod": "getSamples",
-        "button": {
-          "icon": "refresh",
-          "title": {
-            "label_en": "Reload", "label_es": "Recargar"
-          },
-          "whenDisabled": "samplesReload"
-        },
         "apiParams": [
           { "query": "incub1_whereFieldsName", "value": "current_stage|incubation_passed" },
           { "query": "incub1_whereFieldsValue", "value": "Incubation|false" },
@@ -621,97 +573,166 @@ export const EmDemoA = {
           { "query": "incub2_sortFieldsName", "value": "sample_id desc" },
           { "query": "includeAllWithAnyPendingIncubation", "value": true },
           { "query": "samplesWithAnyPendingIncubation", "value": true}
-        ],
-        "sortItem": "active_batches"
-      },
-      {
-        "actionName": "EM_BATCH_INCUB_CREATE",
-        "clientMethod": "setIncubator",
-        "button": {
-          "title": {
-            "label_en": "New Batch", "label_es": "Nuevo Lote"
-          },
-          "whenDisabled": "samplesReload"
-        },
-        "dialogInfo": { 
-          "requiresDialog": true,
-          "name": "newBatchDialog"
-        },
-        "apiParams": [
-          { "query": "batchName", "element": "batchInput", "defaultValue": "" },
-          { "query": "batchTemplateId", "defaultValue": 1 },
-          { "query": "batchTemplateVersion", "defaultValue": 1 }
-        ]
-      },
-      {
-        "actionName": "EM_BATCH_INCUB_REMOVE",
-        "clientMethod": "setIncubator",
-        "button": {
-          "title": {
-            "label_en": "Delete Batch", "label_es": "Eliminar Lote"
-          },
-          "whenDisabled": "selectedSamples"
-        },
-        "apiParams": [
-          { "query": "batchName", "beItem": "name" }
-        ]
-      },
-      {
-        "actionName": "INCUBATORS_LIST",
-        "clientMethod": "getAssign",
-        "button": {
-          "title": {
-            "label_en": "Assign Incubator", "label_es": "Asignar Incubadora"
-          },
-          "whenDisabled": "selectedSamples"
-        },
-        "dialogInfo": { 
-          "automatic": true,
-          "action": [
-            {
-              "actionName": "EM_BATCH_ASSIGN_INCUB",
-              "clientMethod": "setIncubator",
-              "apiParams": [
-                { "query": "batchName", "beItem": "name" },
-                { "query": "incubatorName", "targetValue": true },
-                { "query": "incubStage", "targetValue": true }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "actionName": "EM_BATCH_INCUB_START",
-        "clientMethod": "setIncubator",
-        "button": {
-          "title": {
-            "label_en": "Start Incubator", "label_es": "Iniciar Incubadora"
-          },
-          "whenDisabled": "selectedSamples"
-        },
-        "apiParams": [
-          { "query": "batchName", "beItem": "name" },
-          { "query": "batchTemplateId", "defaultValue": 1 },
-          { "query": "batchTemplateVersion", "defaultValue": 1 }
-        ]
-      },
-      {
-        "actionName": "EM_BATCH_INCUB_END",
-        "clientMethod": "setIncubator",
-        "button": {
-          "title": {
-            "label_en": "End Incubator", "label_es": "Termina incubadora"
-          },
-          "whenDisabled": "selectedSamples"
-        },
-        "apiParams": [
-          { "query": "batchName", "beItem": "name" },
-          { "query": "batchTemplateId", "defaultValue": 1 },
-          { "query": "batchTemplateVersion", "defaultValue": 1 }
         ]
       }
-    ],
+    ],    
     "bottomCompositions": [
+      {
+        "filter": "active_batches",
+        "langConfig": {
+          "title": {
+            "active_batches" : {
+              "label_en": "Batches", 
+              "label_es": "Tandas"
+            }
+          },
+          "fieldText": {
+            "newBatch" : { "label_en": "New Batch Name", "label_es": "Nombre para la nueva tanda" }
+          },
+          "gridHeader": {
+            "batchState": {
+              "label_en": "", "label_es": "", "is_icon": true, "width": "10%"
+            },
+            "incubState": {
+              "label_en": "Incubator", "label_es": "Incubadora", "is_icon": true, "width": "10%"
+            },
+            "name": {
+              "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false, "width": "15%"
+            },
+            "incub_stage": {
+              "label_en": "#Incub", "label_es": "IncNº", "sort": true, "filter": false, "width": "10%"
+            },
+            "incubator_info_temperature": {
+              "label_en": "Temperature", "label_es": "Temperatura", "sort": false, "filter": false, "width": "10%"
+            },
+            "incubator_info_created_on": {
+              "label_en": "T.Date", "label_es": "Fecha T.", "sort": false, "filter": false, "width": "20%"
+            },
+            "NUM_SAMPLES": {
+              "label_en": "Num Samples", "label_es": "Nº Muestras", "sort": false, "filter": false, "width": "10%"
+            },
+            "incubation_start": {
+              "label_en": "Start Date", "label_es": "Fecha Inicio", "sort": false, "filter": false, "width": "10%"
+            }
+          },
+          "assignHeader": {
+            "stage": { "label_en": "Incub", "label_es": "Incub" },
+            "name": { "label_en": "Name", "label_es": "Nombre" },
+            "description": { "label_en": "description", "label_es": "descripción" }
+          }
+        },
+        "actions": [
+          {
+            "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
+            "clientMethod": "getSamples",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "whenDisabled": "samplesReload"
+            },
+            "apiParams": [
+              { "query": "incub1_whereFieldsName", "value": "current_stage|incubation_passed" },
+              { "query": "incub1_whereFieldsValue", "value": "Incubation|false" },
+              { "query": "incub1_sortFieldsName", "value": "sample_id desc" },
+              { "query": "incub2_whereFieldsName", "value": "current_stage|incubation_passed" },
+              { "query": "incub2_whereFieldsValue", "value": "Incubation|true" },
+              { "query": "incub2_sortFieldsName", "value": "sample_id desc" },
+              { "query": "includeAllWithAnyPendingIncubation", "value": true },
+              { "query": "samplesWithAnyPendingIncubation", "value": true}
+            ]
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_CREATE",
+            "clientMethod": "setIncubator",
+            "button": {
+              "title": {
+                "label_en": "New Batch", "label_es": "Nuevo Lote"
+              },
+              "whenDisabled": "samplesReload"
+            },
+            "dialogInfo": { 
+              "requiresDialog": true,
+              "name": "newBatchDialog"
+            },
+            "apiParams": [
+              { "query": "batchName", "element": "batchInput", "defaultValue": "" },
+              { "query": "batchTemplateId", "defaultValue": 1 },
+              { "query": "batchTemplateVersion", "defaultValue": 1 }
+            ]
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_REMOVE",
+            "clientMethod": "setIncubator",
+            "button": {
+              "title": {
+                "label_en": "Delete Batch", "label_es": "Eliminar Lote"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "apiParams": [
+              { "query": "batchName", "beItem": "name" }
+            ]
+          },
+          {
+            "actionName": "INCUBATORS_LIST",
+            "clientMethod": "getAssign",
+            "button": {
+              "title": {
+                "label_en": "Assign Incubator", "label_es": "Asignar Incubadora"
+              },
+              "whenDisabled": "selectedSamples",
+              "disabledBEState": "incubation_start"
+            },
+            "dialogInfo": { 
+              "automatic": true,
+              "action": [
+                {
+                  "actionName": "EM_BATCH_ASSIGN_INCUB",
+                  "clientMethod": "setIncubator",
+                  "apiParams": [
+                    { "query": "batchName", "beItem": "name" },
+                    { "query": "incubatorName", "targetValue": true },
+                    { "query": "incubStage", "targetValue": true }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_START",
+            "clientMethod": "setIncubator",
+            "button": {
+              "title": {
+                "label_en": "Start Incubator", "label_es": "Iniciar Incubadora"
+              },
+              "whenDisabled": "selectedSamples",
+              "disabledBEState": "incubation_start"
+            },
+            "apiParams": [
+              { "query": "batchName", "beItem": "name" },
+              { "query": "batchTemplateId", "defaultValue": 1 },
+              { "query": "batchTemplateVersion", "defaultValue": 1 }
+            ]
+          },
+          {
+            "actionName": "EM_BATCH_INCUB_END",
+            "clientMethod": "setIncubator",
+            "button": {
+              "title": {
+                "label_en": "End Incubator", "label_es": "Termina incubadora"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "apiParams": [
+              { "query": "batchName", "beItem": "name" },
+              { "query": "batchTemplateId", "defaultValue": 1 },
+              { "query": "batchTemplateVersion", "defaultValue": 1 }
+            ]
+          }
+        ]
+      },
       {
         "filter": "samplesWithAnyPendingIncubation",
         "langConfig": {
@@ -722,38 +743,38 @@ export const EmDemoA = {
             }
           },
           "gridHeader": {
-            "iconCol": {
+            "samplesState": {
               "label_en": "", "label_es": "", "is_icon": true, "width": "7%"
             },
             "sampleType": {
               "label_en": "", "label_es": "", "is_icon": true, "width": "7%"
             },
+            "incubState": {
+              "label_en": "Incubator", "label_es": "Incubadora", "is_icon": true, "width": "9%"
+            },
+            "incubation_batch": {
+              "label_en": "Batch 1", "label_es": "Tanda", "sort": false, "filter": true, "width": "9%"
+            },
+            "incubation2_batch": {
+              "label_en": "Batch 2", "label_es": "Tanda", "sort": false, "filter": true, "width": "9%"
+            },
             "sample_id": {
               "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, "width": "9%"
             },
-            "incubation_batch": {
-              "label_en": "Batch 1", "label_es": "Tanda", "sort": true, "filter": false, "width": "9%"
+            "incubation_start": {
+              "label_en": "incubation 1 start", "label_es": "Inicio 1a Incubacion", "sort": false, "filter": true, "width": "15%"
             },
-            "incubation2_batch": {
-              "label_en": "Batch 2", "label_es": "Tanda", "sort": false, "filter": false, "width": "9%"
+            "incubation_end": {
+              "label_en": "incubation 1 end", "label_es": "Fin 1a Incubacion", "sort": false, "filter": true, "width": "15%"
             },
             "incubation2_start": {
-              "label_en": "Incubation 2 Start", "label_es": "Inicio 2a Incubacion", "sort": false, "filter": true, "width": "9%"
+              "label_en": "Incubation 2 Start", "label_es": "Inicio 2a Incubacion", "sort": false, "filter": true, "width": "15%"
             },
             "sampling_date": {
               "label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true, "width": "9%"
             },
             "sampling_comment": {
               "label_en": "Sampling Commment", "label_es": "Comentario Muestreo", "sort": false, "filter": true, "width": "9%"
-            },
-            "incubation_incubator": {
-              "label_en": "Incubator incub 1", "label_es": "Incubadora 1a Incubacion", "sort": false, "filter": true, "width": "9%"
-            },
-            "incubation_start": {
-              "label_en": "incubation 1 start", "label_es": "Inicio 1a Incubacion", "sort": false, "filter": true, "width": "9%"
-            },
-            "incubation_end": {
-              "label_en": "incubation 1 end", "label_es": "Fin 1a Incubacion", "sort": false, "filter": true, "width": "9%"
             }
           }
         },
@@ -826,6 +847,90 @@ export const EmDemoA = {
                 "label_en": "Remove from Batch", "label_es": "Quitar de Tanda"
               },
               "whenDisabled": "selectedSamples"
+            }
+          },
+          {
+            "clientMethod": "filterSamples",
+            "filterState": "not_in_batch",
+            "button": {
+              "icon": "radio_button_checked",
+              "color": "Orange",
+              "title": {
+                "label_en": "Not in batch", "label_es": "No en lote"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "clientMethod": "filterSamples",
+            "filterState": "in_batch_1",
+            "button": {
+              "icon": "radio_button_checked",
+              "color": "Tomato",
+              "title": {
+                "label_en": "In batch", "label_es": "En lote"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "clientMethod": "filterSamples",
+            "filterState": "progress_1",
+            "button": {
+              "img": "incubators/IncubInProgress.gif",
+              "size": "20px",
+              "title": {
+                "label_en": "Incub#1 in progress", "label_es": "Incub#1 en curso"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "clientMethod": "filterSamples",
+            "filterState": "done",
+            "button": {
+              "icon": "radio_button_checked",
+              "color": "MediumSeaGreen",
+              "title": {
+                "label_en": "Incub#1 done", "label_es": "Incub#1 hecho"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "clientMethod": "filterSamples",
+            "filterState": "in_batch_2",
+            "button": {
+              "icon": "radio_button_checked",
+              "color": "SlateBlue",
+              "title": {
+                "label_en": "Incub#2 in batch", "label_es": "Incub#2 en lote"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "clientMethod": "filterSamples",
+            "filterState": "progress_2",
+            "button": {
+              "img": "incubators/IncubInProgress.gif",
+              "size": "20px",
+              "title": {
+                "label_en": "Incub#2 in progress", "label_es": "Incub#2 en curso"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "clientMethod": "filterSamples",
+            "filterState": "all",
+            "button": {
+              "icon": "restart_alt",
+              "color": "black",
+              "title": {
+                "label_en": "Reset", "label_es": "Reiniciar"
+              },
+              "whenDisabled": "samplesReload"
             }
           }
         ]

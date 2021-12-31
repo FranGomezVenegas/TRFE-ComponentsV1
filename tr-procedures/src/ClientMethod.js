@@ -162,9 +162,21 @@ export function ClientMethod(base) {
     }
 
     addRemoveBatch() {
+      if (this.selectedAction.actionName == "EM_BATCH_INCUB_ADD_SMP" && !this.batchName) {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {
+            message_en: "Please select the batch should be added",
+            message_es: "Seleccione el lote que debe agregarse"
+          },
+          bubbles: true,
+          composed: true
+        }))
+        console.log("Please select the batch should be added")
+        return
+      }
       this.reqParams = {
         ...this.reqParams,
-        batchName: this.selectedBatch.name
+        batchName: this.batchName
       }
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)

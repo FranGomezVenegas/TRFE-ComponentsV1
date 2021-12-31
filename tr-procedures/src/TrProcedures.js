@@ -51,26 +51,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         #resultDialog {
           --mdc-dialog-min-width: 800px;
         }
-        #batchDetail {
-          width: 200px;
-          margin: 0 20px;
-          padding-top: 20px;
-        }
-        #batchDetail h1 {
-          color: blue;
-        }
-        #samplesArr {
-          border-radius: 2px;
-          box-shadow: rgb(136, 136, 136) 2px 2px;
-          padding: 5px;
-          background: #c2f2ff;
-        }
-        #samplesArr div {
-          margin: 5px 0;
-        }
-        #assignDialog {
-          --mdc-dialog-min-width: 500px;
-        }
       `
     ];
   }
@@ -78,14 +58,15 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   static get properties() {
     return {
       procName: { type: String },
-      sampleName: { type: String },
+      viewName: { type: String },
       filterName: { type: String },
       langConfig: { type: Object },
       actions: { type: Array },
       compositions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
-      selectedAction: { type: Object }
+      selectedAction: { type: Object },
+      batchName: { type: String }
     };
   }
 
@@ -98,13 +79,13 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     }
     this.enterResults = []
     this.microorganismList = []
-    this.assignList = []
     this.selectedSamples = []
-    this.langConfig = ProceduresModel[this.procName][this.sampleName].langConfig
-    this.actions = ProceduresModel[this.procName][this.sampleName].actions
-    this.topCompositions = ProceduresModel[this.procName][this.sampleName].topCompositions
-    this.bottomCompositions = ProceduresModel[this.procName][this.sampleName].bottomCompositions
-    this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[0]
+    this.langConfig = ProceduresModel[this.procName][this.viewName].langConfig
+    this.actions = ProceduresModel[this.procName][this.viewName].actions
+    this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
+    this.abstract = ProceduresModel[this.procName][this.viewName].abstract
+    this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
+    this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
   }
 
   render() {
@@ -117,74 +98,50 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         )}` :
         nothing
       }
-      <div class="layout horizontal flex wrap">
-        <div class="layout flex">
-          ${this.getTitle()}
-          <div class="layout horizontal center flex wrap">
-            ${this.getButton()}
-          </div>
-          <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-            @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
-            .selectedItems="${this.selectedSamples}">
-            ${this.gridList()}
-          </vaadin-grid>
-        </div>
-        ${this.langConfig&&this.sampleName=="SampleIncubation" ? 
-          html`
-            <div id="batchDetail">
-              ${this.selectedSamples.length ?
-                html`
-                  <div>
-                    <h1>
-                      The selected batch is: ${this.selectedSamples[0].name}. 
-                      Incubator: ${this.selectedSamples[0].incubation_incubator}. 
-                      #Samples: ${this.selectedSamples[0].SAMPLES_ARRAY.length}
-                    </h1>
-                    ${this.selectedSamples[0].SAMPLES_ARRAY.length ?
-                      html`<div id="samplesArr">${this.selectedSamples[0].SAMPLES_ARRAY.map(s =>
-                        html`<div>${s.sample_id} Incub ${s.incubation_moment}</div>`
-                      )}</div>` :
-                      nothing
-                    }
-                  </div>
-                ` :
-                nothing
-              }
+      ${this.abstract ? 
+        nothing :
+        html`
+          <div class="layout horizontal flex wrap">
+            <div class="layout flex">
+              ${this.getTitle()}
+              <div class="layout horizontal center flex wrap">
+                ${this.getButton()}
+              </div>
+              <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
+                .selectedItems="${this.selectedSamples}">
+                ${this.gridList()}
+              </vaadin-grid>
             </div>
-          ` :
-          nothing
-        }
-        <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
-        ${this.dateTemplate()}
-        ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
-          html`${this.commentTemplate()}` : nothing
-        }
-        ${this.langConfig&&this.langConfig.resultHeader ? 
-          html`${this.resultTemplate()}` :
-          nothing
-        }
-        ${this.langConfig&&this.langConfig.microorganismHeader ? 
-          html`${this.microorganismTemplate()}` :
-          nothing
-        }
-        ${this.sampleName=="SampleIncubation" ? 
-          html`
-            ${this.newBatchTemplate()}
-            ${this.assignTemplate()}
-          ` :
-          nothing
-        }
-        ${this.langConfig&&this.sampleName=="LogSamples" ? 
-          html`${this.pointTemplate()}` :
-          nothing
-        }
-        ${super.render()}
-      </div>
+            <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
+            ${this.dateTemplate()}
+            ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
+              html`${this.commentTemplate()}` : nothing
+            }
+            ${this.langConfig&&this.langConfig.resultHeader ? 
+              html`${this.resultTemplate()}` :
+              nothing
+            }
+            ${this.langConfig&&this.langConfig.microorganismHeader ? 
+              html`${this.microorganismTemplate()}` :
+              nothing
+            }
+            ${this.langConfig&&this.viewName=="LogSamples" ? 
+              html`${this.pointTemplate()}` :
+              nothing
+            }
+            ${super.render()}
+          </div>
+        `
+      }
       ${this.bottomCompositions ?
         html`${this.bottomCompositions.map(c => 
           html`<div class="layout flex">
-            <bottom-composition .procName=${this.procName} .sampleName=${this.sampleName}
-              .model=${c} .config=${this.config} .selectedBatch=${this.selectedSamples.length?this.selectedSamples[0]:{}}
+            <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
+              .model=${c} .config=${this.config} .batchName=${this.batchName}
+              @reload-samples=${e=>this[e.detail.method]()}
+              @selected-incub=${this.filteringBatch}
+              @selected-batch=${this.filteringIncub}
               @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
           </div>`
         )}` :
@@ -193,9 +150,133 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     `;
   }
 
+  get batchElement() {
+    return this.shadowRoot.querySelector("bottom-composition#active_batches")
+  }
+
+  get incubElement() {
+    return this.shadowRoot.querySelector("bottom-composition#samplesWithAnyPendingIncubation")
+  }
+
+  filteringIncub(e) {
+    if (e.detail.sample) {
+      this.batchName = e.detail.sample.name
+      // if select new batch item, don't show up any incub samples
+      if (!e.detail.sample.incub_stage) {
+        this.incubElement.filteredItems = []
+      // if select new assigned incub#1 (incub_stage=1) and SAMPLES_ARRAY.length=0, show up the incub samples that incubation_batch = "" (orange state)
+      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1" && !e.detail.sample.SAMPLES_ARRAY.length) {
+        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => !item.incubation_batch)
+      // if select new assigned incub#1 (incub_stage=1) and SAMPLES_ARRAY.length>0, show up the incub samples that incubation_batch != "" & pending_incub = 1 & incubation_start = "" (tomato state)
+      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1" && e.detail.sample.SAMPLES_ARRAY.length) {
+        let preFilter = this.incubElement.gridItems.filter(item => item.incubation_batch && item.pending_incub == 1 && !item.incubation_start)
+        // sort out by matched sample id
+        this.incubElement.filteredItems = preFilter.filter(p => {
+          let matched = false
+          e.detail.sample.SAMPLES_ARRAY.forEach(s => {
+            if (p.sample_id == s.sample_id) matched = true
+          })
+          if (matched) return p
+        })
+      // if select started incub#1 (incub_stage=1), show up the incub samples that pending_incub = 1 & incubation_start != "" & incubation_end = "" (gif state)
+      } else if (e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1") {
+        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation_start && !item.incubation_end && item.pending_incub == 1)
+      // if select new assigned incub#2 (incub_stage=2) and SAMPLES_ARRAY.length=0, show up the incub samples that incubation_end != "" & incubation2_batch = "" (MediumSeaGreen state)
+      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2" && !e.detail.sample.SAMPLES_ARRAY.length) {
+        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation_end && !item.incubation2_batch)
+      // if select new assigned incub#2 (incub_stage=2) and SAMPLES_ARRAY.length>0, show up the incub samples that incubation2_batch != "" & pending_incub = 2 & incubation2_start = "" (SlateBlue state)
+      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2" && e.detail.sample.SAMPLES_ARRAY.length) {
+        let preFilter = this.incubElement.gridItems.filter(item => item.incubation2_batch && item.pending_incub == 2 && !item.incubation2_start)
+        // sort out by matched sample id
+        this.incubElement.filteredItems = preFilter.filter(p => {
+          let matched = false
+          e.detail.sample.SAMPLES_ARRAY.forEach(s => {
+            if (p.sample_id == s.sample_id) matched = true
+          })
+          if (matched) return p
+        })
+      // if select started incub#2 (incub_stage=2), show up the incub samples that pending_incub = 2 & incubation2_start != "" & incubation2_end = "" (gif state)
+      } else if (e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2") {
+        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation2_start && !item.incubation2_end && item.pending_incub == 2)
+      } else {
+        this.batchElement.filteredItems = this.batchElement.gridItems
+      }
+    } else {
+      this.batchName = null
+      this.incubElement.filteredItems = this.incubElement.gridItems
+    }
+  }
+
+  filteringBatch(e) {
+    if (e.detail.sample) {
+      // sample not in batch, show the batch that incubation_start = "" & assigned incub#1 (incub_stage=1)
+      if (!e.detail.sample.incubation_batch) {
+        this.batchElement.filteredItems = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "1")
+      // sample in batch incub#1 & incubation_start="", show the batch that incubation_start = "" & assigned incub#1 (incub_stage=1) & sample_id is already put on SAMPLES_ARRAY
+      } else if (e.detail.sample.incubation_batch && !e.detail.sample.incubation_start) {
+        let preFilter = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "1" && item.SAMPLES_ARRAY.length)
+        // sort out by matched sample id
+        let matched
+        preFilter.forEach(p => {
+          if (!matched) {
+            p.SAMPLES_ARRAY.forEach(s => {
+              if (s.sample_id == e.detail.sample.sample_id) matched = p
+            })
+          }
+        })
+        this.batchElement.filteredItems = [matched]
+      // sample incub#1 incubation_start != "" & incubation_end = "", show the batch that incubation_start != "" & assigned incub#1 (incub_stage=1)
+      } else if (e.detail.sample.incubation_start && !e.detail.sample.incubation_end) {
+        let preFilter = this.batchElement.gridItems.filter(item => item.incubation_start && item.incub_stage == "1")
+        // sort out by matched sample id
+        let matched
+        preFilter.forEach(p => {
+          if (!matched) {
+            p.SAMPLES_ARRAY.forEach(s => {
+              if (s.sample_id == e.detail.sample.sample_id) matched = p
+            })
+          }
+        })
+        this.batchElement.filteredItems = [matched]
+      // sample incub#1 incubation_start != "" & incubation_end != "" & incubation2_batch = "", show the batch that incubation_start = "" & assigned incub#2 (incub_stage=2)
+      } else if (e.detail.sample.incubation_start && e.detail.sample.incubation_end && !e.detail.sample.incubation2_batch) {
+        this.batchElement.filteredItems = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "2")
+      // sample in batch incub#2 & incubation2_start="", show the batch that incubation_start = "" & assigned incub#2 (incub_stage=2) & sample_id is already put on SAMPLES_ARRAY
+      } else if (e.detail.sample.incubation2_batch && !e.detail.sample.incubation2_start) {
+        let preFilter = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "2" && item.SAMPLES_ARRAY.length)
+        console.log(preFilter)
+        // sort out by matched sample id
+        let matched
+        preFilter.forEach(p => {
+          if (!matched) {
+            p.SAMPLES_ARRAY.forEach(s => {
+              if (s.sample_id == e.detail.sample.sample_id) matched = p
+            })
+          }
+        })
+        this.batchElement.filteredItems = [matched]
+      // sample incub#2 incubation2_start != "" & incubation2_end = "", show the batch that incubation_start != "" & assigned incub#2 (incub_stage=2)
+      } else if (e.detail.sample.incubation2_start && !e.detail.sample.incubation2_end) {
+        let preFilter = this.batchElement.gridItems.filter(item => item.incubation_start && item.incub_stage == "2")
+        // sort out by matched sample id
+        let matched
+        preFilter.forEach(p => {
+          if (!matched) {
+            p.SAMPLES_ARRAY.forEach(s => {
+              if (s.sample_id == e.detail.sample.sample_id) matched = p
+            })
+          }
+        })
+        this.batchElement.filteredItems = [matched]
+      }
+    } else {
+      this.batchElement.filteredItems = this.batchElement.gridItems
+    }
+  }
+
   templateEvent(e) {
     if (e.detail.calledActionIdx >= 0) {
-      this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[e.detail.calledActionIdx]
+      this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[e.detail.calledActionIdx]
       this.reload()
     }
   }
@@ -225,13 +306,15 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     super.authorized()
     // whether user has access into the selected proc
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-    this.audit.updateComplete.then(() => {
-      let whichProc = procList.filter(p => p.procInstanceName == this.procName)
-      if (whichProc.length) {
-        this.audit.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
-        this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
-      }
-    })
+    if (!this.abstract) {
+      this.audit.updateComplete.then(() => {
+        let whichProc = procList.filter(p => p.procInstanceName == this.procName)
+        if (whichProc.length) {
+          this.audit.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
+          this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
+        }
+      })
+    }
     let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
     if (anyAccess.length) {
       this.reload()
@@ -240,7 +323,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   reload() {
     this.resetDialogThings()
-    this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[0]
+    this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
     this.actionMethod(this.selectedAction)
   }
 
@@ -249,7 +332,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.targetValue = {}
     this.selectedResults = []
     this.selectedMicroorganisms = []
-    this.selectedAssigns = []
     this.selectedDialogAction = null
   }
 
@@ -263,8 +345,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       this.selectedAction = action
     }
     if (actionNumIdx) {
-      action = ProceduresModel[this.procName][this.sampleName].actions[actionNumIdx]
-      this.selectedAction = ProceduresModel[this.procName][this.sampleName].actions[actionNumIdx]
+      action = ProceduresModel[this.procName][this.viewName].actions[actionNumIdx]
+      this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[actionNumIdx]
     }
     if (action.dialogInfo) {
       if (action.dialogInfo.automatic) {
@@ -353,12 +435,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   setGrid(j) {
     this.selectedSamples = []
-    if (this.selectedAction.sortItem) {
-      this.grid.items = j[this.selectedAction.sortItem]
+    if (this.abstract) {
       this.shadowRoot.querySelectorAll("bottom-composition").forEach(c => {
-        console.log(j)
-        console.log(c.model.filter)
-        c.grid.items = j[c.model.filter]
+        c.gridItems = c.filteredItems = j[c.model.filter]
+        c.samplesReload = false
       })
     } else {
       this.grid.items = j
@@ -419,9 +499,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   iconRenderer(sample) {
     if (this.filterName) {
-      if (this.filterName == "active_batches") {
-        return html`<img src="/images/incubators/${sample.incubation_start?'IncubInProgress.gif':'iconTercerPrograma.jpg'}" style="width:20px">`
-      } else if (this.filterName == "SampleLogin") {
+      if (this.filterName == "SampleLogin") {
         return html`<img src="/images/labplanet.png" style="width:20px">`
       } else {
         return html`<img src="/images/${this.filterName}_${sample.status.toLowerCase()}.png" style="width:20px">`
@@ -443,7 +521,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         html`<vaadin-grid-sort-column flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
       }` :
       html`${this.langConfig.gridHeader[key].width ?
-        html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
+        html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
         html`<vaadin-grid-sort-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
       }`
     }`
