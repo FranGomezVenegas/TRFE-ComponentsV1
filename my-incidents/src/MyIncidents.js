@@ -189,7 +189,7 @@ export class MyIncidents extends CommonCore {
         <div class="reopenPart" ?hidden=${this.dialogType!="reopen"}>
           <div class="layout horizontal flex center-center">
             <mwc-textfield class="layout flex" id="numDays" type="number" 
-              .value=${this.numDays} 
+              .value=${this.numDays} @change=${e=>this.numDays=e.target.value}
               label="${langConfig.field.days["label_"+this.lang]}"></mwc-textfield>
             <mwc-icon-button icon="refresh" @click=${this.getClosedIds}></mwc-icon-button>
           </div>
