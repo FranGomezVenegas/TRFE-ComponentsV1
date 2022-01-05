@@ -437,11 +437,19 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.selectedSamples = []
     if (this.abstract) {
       this.shadowRoot.querySelectorAll("bottom-composition").forEach(c => {
-        c.gridItems = c.filteredItems = j[c.model.filter]
+        if (j) {
+          c.gridItems = c.filteredItems = j[c.model.filter]
+        } else {
+          c.gridItems = c.filteredItems = []
+        }
         c.samplesReload = false
       })
     } else {
-      this.grid.items = j
+      if (j) {
+        this.grid.items = j
+      } else {
+        this.grid.items = []
+      }
     }
   }
 

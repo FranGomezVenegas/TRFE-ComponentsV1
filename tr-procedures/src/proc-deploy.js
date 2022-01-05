@@ -3,7 +3,7 @@ export const ProcDeploy = {
     "langConfig": {
       "title": {
         "ProductionLots": {
-          "label_en": "Active Production Lots", 
+          "label_en": "Active Production Lots",
           "label_es": "Lotes en producción activos"
         }
       },
@@ -65,7 +65,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "automatic": true
         }
       },
@@ -90,7 +90,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "requiresDialog": true,
           "name": "dateDialog"
         },
@@ -108,7 +108,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "requiresDialog": true,
           "name": "commentDialog"
         },
@@ -132,8 +132,8 @@ export const ProcDeploy = {
   "LogSamples": {
     "langConfig": {
       "title": {
-        "SampleLogin" : {
-          "label_en": "Program Sampling Points", 
+        "SampleLogin": {
+          "label_en": "Program Sampling Points",
           "label_es": "Puntos de muestro del programa"
         }
       },
@@ -216,11 +216,344 @@ export const ProcDeploy = {
       }
     ]
   },
+  "ReviewTesting": {
+    "langConfig": {
+      "title": {
+        "RT-FQ": {
+          "label_en": "FQ-Pending Review Testing",
+          "label_es": "FQ-Ensayos pendiente revisión"
+        },
+        "RT-MB": {
+          "label_en": "MB-Pending Review Testing",
+          "label_es": "MB-Ensayos pendiente revisión"
+        }
+      },
+      "gridHeader": {
+        "sample_id": {
+          "label_en": "Sample ID",
+          "label_es": "ID Muestra",
+          "sort": true,
+          "filter": false
+        },
+        "test_id": {
+          "label_en": "Test ID",
+          "label_es": "ID Ensayo",
+          "sort": true,
+          "filter": false
+        },
+        "analysis": {
+          "label_en": "Analysis",
+          "label_es": "Ensayo",
+          "sort": true,
+          "filter": false
+        },
+        "param_name": {
+          "label_en": "Parameter",
+          "label_es": "Parámetro"
+        },
+        "raw_value": {
+          "label_en": "Value",
+          "label_es": "Valor"
+        },
+        "spec_eval": {
+          "label_en": "Spec Eval",
+          "label_es": "Eval Especificación"
+        },
+        "program_name": {
+          "label_en": "Project",
+          "label_es": "Programa",
+          "sort": true,
+          "filter": false
+        },
+        "location_name": {
+          "label_en": "Location",
+          "label_es": "Ubicación",
+          "sort": true,
+          "filter": false
+        },
+        "sampling_date": {
+          "label_en": "sampling Date",
+          "label_es": "ID Fecha de Muestreo",
+          "sort": true,
+          "filter": false
+        },
+        "spec_code": {
+          "label_en": "Spec",
+          "label_es": "Especificación",
+          "sort": true,
+          "filter": false
+        }
+      }
+    },
+    "actions": [
+      {
+        "actionName": "SAMPLEANALYSIS_PENDING_REVISION",
+        "clientMethod": "getSamples",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload",
+            "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "apiParams": [
+          {
+            "query": "sampleAnalysisFieldToRetrieve",
+            "value": "sample_id|test_id|analysis|raw_value|spec_eval|status|status_previous|sampling_date|sample_config_code|program_name|location_name|spec_code|spec_variation_name"
+          },
+          {
+            "query": "sampleAnalysisWhereFieldsValue",
+            "value": "REVIEWED"
+          },
+          {
+            "query": "sampleAnalysisWhereFieldsName",
+            "value": "status not in*"
+          }
+        ],
+        "paramFilter": {
+          "RT-FQ": {
+            "query": "sampleAnalysisWhereFieldsValue",
+            "value": "FQ*String|REVIEWED*String"
+          },
+          "RT-MB": {
+            "query": "sampleAnalysisWhereFieldsValue",
+            "value": "MB*String|REVIEWED*String"
+          }
+        }
+      },
+      {
+        "actionName": "GET_SAMPLE_AUDIT",
+        "clientMethod": "getSampleAudit",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Sample Audit",
+            "label_es": "Auditoría de Muestra"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "dialogInfo": {
+          "automatic": true
+        }
+      },
+      {
+        "actionName": "REVIEWTEST",
+        "clientMethod": "reviewTest",
+        "button": {
+          "icon": "reviews",
+          "title": {
+            "label_en": "Review Test",
+            "label_es": "Revisar Ensayo"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "apiParams": [
+          {
+            "query": "testId",
+            "beItem": "test_id"
+          }
+        ]
+      }
+    ]
+  },
+  "ReviewTestingGroup": {
+    "langConfig": {
+      "title": {
+        "RTG-FQ": {
+          "label_en": "FQ-Pending Review Testing Group",
+          "label_es": "FQ-Grupo Analítico pendientes de revisión"
+        },
+        "RTG-MB": {
+          "label_en": "MB-Pending Review Testing",
+          "label_es": "MB-Ensayos pendiente revisión"
+        }
+      },
+      "gridHeader": {
+        "sample_id": {
+          "label_en": "Sample ID",
+          "label_es": "ID Muestra",
+          "sort": true,
+          "filter": false
+        },
+        "testing_group": {
+          "label_en": "Testing Group",
+          "label_es": "Grupo Analítico",
+          "sort": true,
+          "filter": false
+        },
+        "program_name": {
+          "label_en": "Project",
+          "label_es": "Programa",
+          "sort": true,
+          "filter": false
+        },
+        "location_name": {
+          "label_en": "Location",
+          "label_es": "Ubicación",
+          "sort": true,
+          "filter": false
+        },
+        "sampling_date": {
+          "label_en": "sampling Date",
+          "label_es": "ID Fecha de Muestreo",
+          "sort": true,
+          "filter": false
+        },
+        "spec_code": {
+          "label_en": "Spec",
+          "label_es": "Especificación",
+          "sort": true,
+          "filter": false
+        }
+      },
+      "resultHeader": {
+        "spec_eval": {
+          "label_en": "spec_eval",
+          "label_es": "Eval Espec"
+        },
+        "result_id": {
+          "label_en": "Result Id",
+          "label_es": "Id Resultado"
+        },
+        "analysis": {
+          "label_en": "Analysis",
+          "label_es": "Análísis"
+        },
+        "param_name": {
+          "label_en": "Parameter",
+          "label_es": "Parámetro"
+        },
+        "raw_value": {
+          "label_en": "Value",
+          "label_es": "Valor"
+        }
+      }
+    },
+    "actions": [
+      {
+        "actionName": "SAMPLES_PENDING_TESTINGGROUP_REVISION",
+        "clientMethod": "getSamples",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload",
+            "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "apiParams": [
+          {
+            "query": "sampleFieldToRetrieve",
+            "value": "ALL"
+          }
+        ],
+        "paramFilter": {
+          "RTG-FQ": {
+            "query": "testingGroup",
+            "value": "FQ"
+          },
+          "RTG-MB": {
+            "query": "testingGroup",
+            "value": "MB"
+          }
+        }
+      },
+      {
+        "actionName": "GET_SAMPLE_AUDIT",
+        "clientMethod": "getSampleAudit",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Sample Audit",
+            "label_es": "Auditoría de Muestra"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "dialogInfo": {
+          "automatic": true
+        }
+      },
+      {
+        "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+        "clientMethod": "getResult",
+        "button": {
+          "icon": "document_scanner",
+          "title": {
+            "label_en": "Enter Result",
+            "label_es": "Ingrese el Resultado"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "dialogInfo": {
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "ENTERRESULT",
+              "clientMethod": "enterResult",
+              "apiParams": [
+                {
+                  "query": "rawValueResult",
+                  "targetValue": true
+                },
+                {
+                  "query": "resultId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        },
+        "apiParams": [
+          {
+            "query": "sampleAnalysisResultFieldToRetrieve",
+            "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
+          },
+          {
+            "query": "sortFieldsName",
+            "value": "test_id|result_id"
+          },
+          {
+            "query": "sampleAnalysisWhereFieldsName",
+            "value": "testing_group|status in"
+          }
+        ],
+        "paramFilter": {
+          "RTG-FQ": {
+            "query": "sampleAnalysisWhereFieldsValue",
+            "value": "FQ|REVIEWED*String"
+          },
+          "RTG-MB": {
+            "query": "sampleAnalysisWhereFieldsValue",
+            "value": "MB|REVIEWED*String"
+          }
+        }
+      },
+      {
+        "actionName": "REVIEWTEST",
+        "clientMethod": "reviewTest",
+        "button": {
+          "icon": "reviews",
+          "title": {
+            "label_en": "Review Test",
+            "label_es": "Revisar Ensayo"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "apiParams": [
+          {
+            "query": "testId",
+            "beItem": "test_id"
+          }
+        ]
+      }
+    ]
+  },
   "SamplePending": {
     "langConfig": {
       "title": {
         "sampling": {
-          "label_en": "Pending Sampling", 
+          "label_en": "Pending Sampling",
           "label_es": "Muestras pendiente muestreo"
         }
       },
@@ -281,7 +614,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "automatic": true
         }
       },
@@ -306,7 +639,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "requiresDialog": true,
           "name": "dateDialog"
         },
@@ -324,7 +657,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "requiresDialog": true,
           "name": "commentDialog"
         },
@@ -349,11 +682,11 @@ export const ProcDeploy = {
     "langConfig": {
       "title": {
         "ER-FQ": {
-          "label_en": "FQ-Testing Pending Results", 
+          "label_en": "FQ-Testing Pending Results",
           "label_es": "FQ-Ensayos pendientes entrar resultados"
         },
         "ER-MB": {
-          "label_en": "Samples Pending Micro Testing", 
+          "label_en": "Samples Pending Micro Testing",
           "label_es": "Muestras pendientes de testeo Microbiológico"
         }
       },
@@ -365,16 +698,16 @@ export const ProcDeploy = {
           "label_en": "Sample ID", "label_es": "ID Muestra", "sort": true, "filter": false
         },
         "program_name": {
-          "label_en":"Project", "label_es": "Programa", "sort": true, "filter": false
+          "label_en": "Project", "label_es": "Programa", "sort": true, "filter": false
         },
         "location_name": {
-          "label_en":"Location", "label_es": "Ubicación", "sort": true, "filter": false
+          "label_en": "Location", "label_es": "Ubicación", "sort": true, "filter": false
         },
         "sampling_date": {
-          "label_en":"sampling Date", "label_es": "ID Fecha de Muestreo", "sort": true, "filter": false
+          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": true, "filter": false
         },
         "spec_code": {
-          "label_en":"Spec", "label_es": "Especificación", "sort": true, "filter": false
+          "label_en": "Spec", "label_es": "Especificación", "sort": true, "filter": false
         }
       },
       "resultHeader": {
@@ -430,7 +763,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "automatic": true
         }
       },
@@ -444,7 +777,7 @@ export const ProcDeploy = {
           },
           "whenDisabled": "selectedSamples"
         },
-        "dialogInfo": { 
+        "dialogInfo": {
           "automatic": true,
           "action": [
             {

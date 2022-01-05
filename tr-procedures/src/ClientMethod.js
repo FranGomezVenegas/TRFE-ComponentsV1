@@ -8,6 +8,8 @@ export function ClientMethod(base) {
       await this.fetchApi(params, false, false).then(j => {
         if (j && !j.is_error) {
           this.setGrid(j)
+        } else {
+          this.setGrid()
         }
       })
       this.samplesReload = false
@@ -215,6 +217,14 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.pointDialog.close()
+      })
+    }
+
+    reviewTest() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.grid.activeItem=null
       })
     }
   }
