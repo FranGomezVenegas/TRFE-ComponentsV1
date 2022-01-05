@@ -85,13 +85,22 @@ export class CommonCore extends LitElement {
       }
       return j
     }).catch(e => {
-      this.dispatchEvent(new CustomEvent("error", {
-        detail: {...e, log: true},
-        bubbles: true,
-        composed: true
-      }))
-      this.error(e)
-      return e
+      if (e.message == "Unexpected end of JSON input") {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {...e},
+          bubbles: true,
+          composed: true
+        }))
+        return
+      } else {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {...e, log: true},
+          bubbles: true,
+          composed: true
+        }))
+        this.error(e)
+        return e
+      }
     })
   }
 
