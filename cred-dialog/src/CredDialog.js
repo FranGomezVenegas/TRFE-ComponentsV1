@@ -188,7 +188,25 @@ export class CredDialog extends CommonCore {
           ${this.setAttempts()}
         </div>
       </tr-dialog>
+      <tr-dialog id="confirmDialog" 
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <div>Are you sure you want to continue doing ${this.actionName}?</div>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.nextRequest}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
     `;
+  }
+
+  get confirmDialog() {
+    return this.shadowRoot.querySelector("tr-dialog#confirmDialog")
   }
 
   closed() {
@@ -398,14 +416,7 @@ export class CredDialog extends CommonCore {
           this.nextRequest()
         } else {
           if (this.type == "confirm") {
-            let str = `Are you sure you want to continue doing ${this.actionName}`
-            if (this.objectId && this.objectId != -1) {
-              str += ` for ${this.objectId}`
-            }
-            let c = confirm(`${str} ?`)
-            if (c) {
-              this.nextRequest()
-            }
+            this.confirmDialog.show()
           } else {
             this.credDialog.show()
           }
