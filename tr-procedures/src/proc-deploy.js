@@ -395,6 +395,9 @@ export const ProcDeploy = {
       {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
+        "alertMsg": {
+          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío"}
+        },
         "button": {
           "icon": "document_scanner",
           "title": {
@@ -688,6 +691,9 @@ export const ProcDeploy = {
       {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
+        "alertMsg": {
+          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío"}
+        },
         "button": {
           "icon": "document_scanner",
           "title": {
@@ -793,6 +799,28 @@ export const ProcDeploy = {
           "sort": false, 
           "filter": true
         }
+      },
+      "resultHeader": {
+        "spec_eval": {
+          "label_en": "spec_eval",
+          "label_es": "Eval Espec"
+        },
+        "result_id": {
+          "label_en": "Result Id",
+          "label_es": "Id Resultado"
+        },
+        "analysis": {
+          "label_en": "Analysis",
+          "label_es": "Análísis"
+        },
+        "param_name": {
+          "label_en": "Parameter",
+          "label_es": "Parámetro"
+        },
+        "raw_value": {
+          "label_en": "Value",
+          "label_es": "Valor"
+        }
       }
     },
     "actions": [
@@ -839,7 +867,7 @@ export const ProcDeploy = {
       },
       {
         "actionName": "REVIEWSAMPLE",
-        "clientMethod": "Review Sample",
+        "clientMethod": "reviewSample",
         "button": {
           "icon": "view_headline",
           "title": {
@@ -852,6 +880,9 @@ export const ProcDeploy = {
       {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
+        "alertMsg": {
+          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío"}
+        },
         "button": {
           "icon": "document_scanner",
           "title": {
@@ -863,25 +894,7 @@ export const ProcDeploy = {
         "dialogInfo": {
           "automatic": true,
           "readOnly": true
-        },
-        "apiParams": [
-          {
-            "query": "sampleAnalysisResultFieldToRetrieve",
-            "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
-          },
-          {
-            "query": "sortFieldsName",
-            "value": "test_id|result_id"
-          },
-          {
-            "query": "sampleAnalysisWhereFieldsName",
-            "value": "testing_group|status in"
-          },
-          {
-            "query": "sampleAnalysisWhereFieldsValue",
-            "value": ""
-          }
-        ]
+        }
       }
     ]
   }

@@ -72,11 +72,22 @@ export function ClientMethod(base) {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params, false, false).then(j => {
+        console.log(j, " JJJ")
         if (j && !j.is_error) {
           this.selectedResults = []
           this.enterResults = j
           this.erGrid.items = j
           this.requestUpdate()
+        } else {
+          this.dispatchEvent(new CustomEvent("error", {
+            detail: { 
+              message_en: this.selectedAction.alertMsg.empty["label_en"],
+              message_es: this.selectedAction.alertMsg.empty["label_es"]
+            },
+            bubbles: true,
+            composed: true
+          }))
+          console.log(this.selectedAction.alertMsg.empty["label_en"])
         }
       })
     }
@@ -233,6 +244,14 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.lotDialog.close()
+        this.reload()
+      })
+    }
+
+    reviewSample() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
         this.reload()
       })
     }

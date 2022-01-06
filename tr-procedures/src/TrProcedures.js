@@ -431,7 +431,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
       })
     }
-    console.log(action, " AA")
     if (action.paramFilter) {
       jsonParam[action.paramFilter[this.filterName].query] = action.paramFilter[this.filterName].value
     }
