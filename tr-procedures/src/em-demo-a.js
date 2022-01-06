@@ -1,4 +1,92 @@
 export const EmDemoA = {
+  "ProductionLots": {
+    "langConfig": {
+      "title": {
+        "SampleLot": {
+          "label_en": "Active Production Lots",
+          "label_es": "Lotes en producción activos"
+        }
+      },
+      "fieldText": {
+        "newLot": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" },
+        "activateLot": { "label_en": "Production Lot Name to reactivate", "label_es": "Nombre para el lote de producción a reactivar" }
+      },
+      "gridHeader": {
+        "lot_name": {
+          "label_en": "Name", "label_es": "Nombre", "width": "80%", "sort": false, "filter": true, "align": "left"
+        },
+        "created_on": {
+          "label_en": "Created On", "label_es": "F. Creación", "width": "20%", "sort": true, "filter": false
+        }
+      }
+    },
+    "actions": [
+      {
+        "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+        "clientMethod": "getSamples",
+        "endPoint": "/moduleenvmon/frontend/EnvMonAPIfrontend",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        }
+      },
+      {
+        "actionName": "EM_NEW_PRODUCTION_LOT",
+        "clientMethod": "setLot",
+        "button": {
+          "icon": "create_new_folder",
+          "title": {
+            "label_en": "New", "label_es": "Nuevo"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "dialogInfo": {
+          "requiresDialog": true,
+          "name": "lotDialog"
+        },
+        "apiParams": [
+          { "query": "lotName", "element": "lotInput" },
+          { "query": "fieldName", "value": "active" },
+          { "query": "fieldValue", "value": "true*Boolean" }
+        ]
+      },
+      {
+        "actionName": "EM_ACTIVATE_PRODUCTION_LOT",
+        "clientMethod": "setLot",
+        "button": {
+          "icon": "alarm_add",
+          "title": {
+            "label_en": "Activate", "label_es": "Activar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "dialogInfo": {
+          "requiresDialog": true,
+          "name": "lotDialog"
+        },
+        "apiParams": [
+          { "query": "lotName", "element": "lotInput" }
+        ]
+      },
+      {
+        "actionName": "EM_DEACTIVATE_PRODUCTION_LOT",
+        "clientMethod": "setLot",
+        "button": {
+          "icon": "alarm_off",
+          "title": {
+            "label_en": "Deactivate", "label_es": "Desactivar"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "apiParams": [
+          { "query": "lotName", "beItem": "lot_name" }
+        ]
+      }
+    ]
+  },
   "LogSamples": {
     "langConfig": {
       "title": {

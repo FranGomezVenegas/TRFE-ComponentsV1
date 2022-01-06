@@ -3,7 +3,7 @@ export function ClientMethod(base) {
     async getSamples() {
       this.samplesReload = true
       this.selectedSamples = []
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
+      let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl) 
         + '?' + new URLSearchParams(this.reqParams)
       await this.fetchApi(params, false, false).then(j => {
         if (j && !j.is_error) {
@@ -225,6 +225,15 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.grid.activeItem=null
+      })
+    }
+
+    setLot() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.lotDialog.close()
+        this.reload()
       })
     }
   }

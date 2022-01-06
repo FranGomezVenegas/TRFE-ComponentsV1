@@ -178,12 +178,21 @@ export function DialogTemplate(base) {
     valRenderer(result) {
       if (!result.raw_value || result.spec_eval == "IN") {
         if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-          return html`<mwc-textfield type="text" .value=${result.raw_value} 
-            @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+          if (this.selectedAction.dialogInfo.readOnly) {
+            return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
+          } else {
+            return html`<mwc-textfield type="text" .value=${result.raw_value} 
+              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+          }
         } else {
-          return html`<mwc-textfield 
-            type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
-            @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+          if (this.selectedAction.dialogInfo.readOnly) {
+            return html`<mwc-textfield 
+              type="number" value=${result.raw_value?result.raw_value:0.00} disabled></mwc-textfield>`
+          } else {
+            return html`<mwc-textfield 
+              type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
+              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+          }
         }
       } else {
         if (result.is_locked) {
@@ -194,12 +203,21 @@ export function DialogTemplate(base) {
           `
         } else {
           if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-            return html`<mwc-textfield type="text" .value=${result.raw_value} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+            if (this.selectedAction.dialogInfo.readOnly) {
+              return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
+            } else {
+              return html`<mwc-textfield type="text" .value=${result.raw_value} 
+                @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+            }
           } else {
-            return html`<mwc-textfield 
-              type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+            if (this.selectedAction.dialogInfo.readOnly) {
+              return html`<mwc-textfield 
+                type="number" value=${result.raw_value?result.raw_value:0.00} disabled></mwc-textfield>`
+            } else {
+              return html`<mwc-textfield 
+                type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
+                @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+            }
           }
         }
       }
@@ -494,6 +512,51 @@ export function DialogTemplate(base) {
         fieldValue: `${this.shiftInput.value}*String|${this.lotInput.value}*String`
       }
       this.actionMethod(null, false, 1)
+    }
+
+    /** Lot Template Dialog part */
+    lotTemplate() {
+      return html`
+      <tr-dialog id="lotDialog"
+        @closed=${e=>{if(e.target===this.lotDialog)this.grid.activeItem=null}}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <mwc-textfield id="lotInput" 
+            label="${this.selectedAction.actionName=="EM_NEW_PRODUCTION_LOT" ?
+              this.langConfig.fieldText.newLot["label_"+ this.lang] :
+              this.langConfig.fieldText.activateLot["label_"+ this.lang]
+            }" 
+            .value=${this.selectedAction.actionName=="EM_ACTIVATE_PRODUCTION_LOT"&&this.selectedSamples.length ?
+              this.selectedSamples[0].lot_name :
+              ''
+            }
+            dialogInitialFocus
+            @keypress=${e=>e.keyCode==13&&this.lotAction()}></mwc-textfield>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.lotAction}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    get lotDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#lotDialog")
+    }
+
+    get lotInput() {
+      return this.shadowRoot.querySelector("mwc-textfield#lotInput")
+    }
+
+    lotAction() {
+      if (this.lotInput.value) {
+        this.dialogAccept(false)
+      }
     }
   }
 }
