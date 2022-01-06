@@ -704,22 +704,7 @@ export const ProcDeploy = {
         },
         "dialogInfo": {
           "automatic": true,
-          "action": [
-            {
-              "actionName": "ENTERRESULT",
-              "clientMethod": "enterResult",
-              "apiParams": [
-                {
-                  "query": "rawValueResult",
-                  "targetValue": true
-                },
-                {
-                  "query": "resultId",
-                  "targetValue": true
-                }
-              ]
-            }
-          ]
+          "readOnly": true
         },
         "apiParams": [
           {
