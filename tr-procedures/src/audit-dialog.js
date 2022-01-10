@@ -16,16 +16,14 @@ export class AuditDialog extends LitElement {
         sp-tooltip {
           max-width: 100%;
           width: 100%;
-          --spectrum-tooltip-info-background-color: #c2f2ff;
-          color: black;
+          --spectrum-tooltip-info-background-color: rgb(144 215 215 / 12%);
+          color: #3f51b5;
         }
         sp-tooltip.sub {
-          --spectrum-tooltip-info-background-color: #30b7dc;
+          --spectrum-tooltip-info-background-color: #c8f3ff;
         }
-        mwc-button.sign {
-          --mdc-typography-button-text-transform: none;
-          --mdc-theme-primary: #efefef;
-          --mdc-theme-on-primary: #3f51b5;
+        mwc-icon.sign {
+          cursor: pointer;
         }
         mwc-button[hidden] {
           display: none;
@@ -39,6 +37,7 @@ export class AuditDialog extends LitElement {
 
   static get properties() {
     return {
+      lang: { type: String },
       audits: { type: Array },
       sampleAuditRevisionMode: { type: Boolean },
       sampleAuditChildRevisionRequired: { type: Boolean }
@@ -47,6 +46,7 @@ export class AuditDialog extends LitElement {
 
   constructor() {
     super();
+    this.lang = "en";
     this.audits = [];
     this.sampleAuditRevisionMode = true;
     this.sampleAuditChildRevisionRequired = true;
@@ -71,18 +71,18 @@ export class AuditDialog extends LitElement {
     let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"
     let strContent = ``
     this.audits.forEach(a => {
-      strContent += `<div>action_name: ${a.action_name}</div>`
+      strContent += `<div>action_name: ${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</div>`
       strContent += `*performed_on: ${a.date} by ${a.person}`
       strContent += `<br>*reviewed_on: ${a.reviewed ? a.reviewed_on : ''}`
       strContent += `<li>audit_id: ${a.audit_id}</li>`
-      strContent += `fields_updated: ${a.fields_updated ? JSON.stringify(a.fields_updated) : ''}`
+      strContent += `fields_updated: ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value]) => `<li>${key}: ${value}</li>`) : ''}`
       if (a.sublevel.length&&a.sublevel[0].date) {
         strContent += `<div style="margin-left: 20px;">`
         a.sublevel.forEach(s=> {
-          strContent += `<p><div>action_name: ${s.action_name}</div>`
+          strContent += `<p><div>action_name: ${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>`
           strContent += `*performed_on: ${s.date} by ${s.person}`
           strContent += `<br>*reviewed_on: ${s.reviewed ? s.reviewed_on : ''}`
-          strContent += `<br>fields_updated: ${s.fields_updated ? JSON.stringify(s.fields_updated) : ''}</p>`
+          strContent += `<br>fields_updated: ${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value]) => `<li>${key}: ${value}</li>`) : ''}</p>`
         })
         strContent += `</div>`
       }
@@ -189,23 +189,23 @@ export class AuditDialog extends LitElement {
       scrimClickAction="">
       ${this.countInfo()}
       <mwc-icon slot="icon1" @click=${this.auditPrint}>print</mwc-icon>
-      ${this.audits.map(a=>
+      ${this.audits.map((a,i)=>
         html`
-        <div class="layout horizontal flex center" style="margin:0;border-left:3px solid #ccc">
-          <mwc-icon style="margin-left:-13px;color:#3f51b5;background:white">radio_button_checked</mwc-icon>
+        <div class="layout horizontal flex center" style="padding:2px 0 2px 0;border-left:3px solid #ccc">
+          <mwc-icon style="margin-left:-13px;color:${a.collapse?'#ccc':'#3f51b5'};background:white">radio_button_checked</mwc-icon>
           <sp-tooltip open placement="right" variant="info">
-            ${a.reviewed?
-              html`
-              <mwc-icon title="reviewed_on: ${a.reviewed_on}">grading</mwc-icon>
-              `:
-              html`
-              <mwc-button class="sign" dense unelevated label="Sign"
-                @click=${()=>this.signAudit(a.audit_id)} ?hidden=${!this.sampleAuditRevisionMode}></mwc-button>
-              `
-            }
-            <div class="layout horizontal flex">
-              <input type="checkbox" @click=${e=>this.showItem(e,a)}>
-              <div>action_name: ${a.action_name}</div>
+            <div class="layout horizontal flex center">
+              ${a.reviewed?
+                html`
+                <mwc-icon title="reviewed_on: ${a.reviewed_on}">grading</mwc-icon>
+                `:
+                html`
+                <mwc-icon class="sign" title="Sign" 
+                  @click=${()=>this.signAudit(a.audit_id)} ?hidden=${!this.sampleAuditRevisionMode}>edit_note</mwc-icon>
+                `
+              }
+              <input type="checkbox" @click=${e=>this.showItem(e,a,i)}>
+              <div>action_name: <b>${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</b></div>
             </div>
             <div>
               *performed_on: ${a.date} by ${a.person}
@@ -213,32 +213,32 @@ export class AuditDialog extends LitElement {
             <div id="audit-${a.audit_id}" hidden=true>
               ${a.reviewed?html`<br>*reviewed_on: ${a.reviewed_on}`:null}
               <li>audit_id: ${a.audit_id}</li>
-              fields_updated: ${JSON.stringify(a.fields_updated)}<br><br>
+              fields_updated: ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li>${key}: ${value}</li>`) : ''}<br><br>
               ${a.sublevel.length&&a.sublevel[0].date?
-              html`${a.sublevel.map(s=>
+              html`${a.sublevel.map((s,si)=>
                 html`
                   <div class="layout horizontal flex center" style="margin:5px">
-                    <mwc-icon style="color:#3f51b5">radio_button_checked</mwc-icon>
+                    <mwc-icon style="color:${s.collapse?'#ccc':'#3f51b5'}">radio_button_checked</mwc-icon>
                     <sp-tooltip class="sub" open placement="right" variant="info">
-                      ${s.reviewed?
-                        html`
-                        <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
-                        `:
-                        html`
-                        <mwc-button class="sign" dense unelevated label="Sign"
-                          @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}></mwc-button>
-                        `
-                      }
-                      <div class="layout horizontal flex">
-                        <input type="checkbox" checked @click=${e=>this.showSubItem(e,s)}>
-                        <div>action_name: ${s.action_name}</div>
+                      <div class="layout horizontal flex center">
+                        ${s.reviewed?
+                          html`
+                          <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
+                          `:
+                          html`
+                          <mwc-icon class="sign" title="Sign" 
+                            @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}>edit_note</mwc-icon>
+                          `
+                        }
+                        <input type="checkbox" checked @click=${e=>this.showSubItem(e,s,i,si)}>
+                        <div>action_name: ${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>
                       </div>
                       <div>
                         *performed_on: ${s.date} by ${s.person}
                       </div>
                       <div id="audit-${s.audit_id}">
                         ${s.reviewed?html`*reviewed_on: ${s.reviewed_on}<br>`:null}
-                        fields_updated: ${JSON.stringify(s.fields_updated)}
+                        fields_updated: ${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li>${key}: ${value}</li>`) : ''}
                       </div>
                     </sp-tooltip>
                   </div>`
@@ -268,11 +268,15 @@ export class AuditDialog extends LitElement {
     return this.dialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
-  showItem(event, item) {
+  showItem(event, item, i) {
+    this.audits[i].collapse = !this.audits[i].collapse
+    this.requestUpdate()
     this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = !event.target.checked
   }
 
-  showSubItem(event, item) {
+  showSubItem(event, item, i, si) {
+    this.audits[i].sublevel[si].collapse = !this.audits[i].sublevel[si].collapse
+    this.requestUpdate()
     this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = !event.target.checked
   }
 
