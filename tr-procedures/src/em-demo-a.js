@@ -663,7 +663,7 @@ export const EmDemoA = {
           { "query": "samplesWithAnyPendingIncubation", "value": true}
         ]
       }
-    ],    
+    ],
     "bottomCompositions": [
       {
         "filter": "active_batches",
@@ -1022,6 +1022,26 @@ export const EmDemoA = {
             }
           }
         ]
+      }
+    ]
+  },
+  "Programs": {
+    "component": "program-proc",
+    "actions": [
+      {
+        "actionName": "PROGRAMS_LIST",
+        "clientMethod": "getProgramList",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "subAction": {
+          "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+          "clientMethod": "getLots"
+        }
       }
     ]
   }

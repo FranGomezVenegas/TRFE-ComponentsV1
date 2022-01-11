@@ -16,6 +16,7 @@ import '@trazit/tr-dialog/tr-dialog';
 import './audit-dialog';
 import './templates-';
 import './bottom-composition';
+import './components/program-proc';
 
 export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   static get styles() {
@@ -66,7 +67,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
       selectedAction: { type: Object },
-      batchName: { type: String }
+      batchName: { type: String },
+      componentModel: { type: String }
     };
   }
 
@@ -77,79 +79,119 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         ProceduresModel[this.procName] = findProc[0].procModel
       }
     }
-    this.enterResults = []
-    this.microorganismList = []
-    this.selectedSamples = []
-    this.langConfig = ProceduresModel[this.procName][this.viewName].langConfig
-    this.actions = ProceduresModel[this.procName][this.viewName].actions
-    this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
-    this.abstract = ProceduresModel[this.procName][this.viewName].abstract
-    this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
-    this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
+    this.componentModel = null
+    if (ProceduresModel[this.procName][this.viewName].component) {
+      this.componentModel = ProceduresModel[this.procName][this.viewName]
+    } else {
+      this.enterResults = []
+      this.microorganismList = []
+      this.selectedSamples = []
+      this.langConfig = ProceduresModel[this.procName][this.viewName].langConfig
+      this.actions = ProceduresModel[this.procName][this.viewName].actions
+      this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
+      this.abstract = ProceduresModel[this.procName][this.viewName].abstract
+      this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
+      this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
+    }
+  }
+
+  authorized() {
+    super.authorized()
+    if (!this.componentModel) {
+      // whether user has access into the selected proc
+      let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+      if (!this.abstract) {
+        this.audit.updateComplete.then(() => {
+          let whichProc = procList.filter(p => p.procInstanceName == this.procName)
+          if (whichProc.length) {
+            this.audit.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
+            this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
+          }
+        })
+      }
+      let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
+      if (anyAccess.length) {
+        this.reload()
+      }
+    }
   }
 
   render() {
     return html`
-      ${this.topCompositions ?
-        html`${this.topCompositions.map(c => 
-          html`<templates- 
-            .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
-            @template-event=${this.templateEvent}></templates->`
-        )}` :
-        nothing
-      }
-      ${this.abstract ? 
-        nothing :
+      ${this.componentModel ? 
+        html`${this.viewName == "Programs" ?
+          html`<program-proc 
+            .lang=${this.lang}
+            .procName=${this.procName} 
+            .viewName=${this.viewName} 
+            .filterName=${this.filterName}
+            .model=${this.componentModel}
+            .config=${this.config}></program-proc>` :
+          nothing
+        }` :
         html`
-          <div class="layout horizontal flex wrap">
-            <div class="layout flex">
-              ${this.getTitle()}
-              <div class="layout horizontal center flex wrap">
-                ${this.getButton()}
+          ${this.topCompositions ?
+            html`${this.topCompositions.map(c => 
+              html`<templates- 
+                .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
+                @template-event=${this.templateEvent}></templates->`
+            )}` :
+            nothing
+          }
+          ${this.abstract ? 
+            nothing :
+            html`
+              <div class="layout horizontal flex wrap">
+                <div class="layout flex">
+                  ${this.getTitle()}
+                  <div class="layout horizontal center flex wrap">
+                    ${this.getButton()}
+                  </div>
+                  <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                    @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
+                    .selectedItems="${this.selectedSamples}">
+                    ${this.gridList()}
+                  </vaadin-grid>
+                </div>
+                <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
+                ${this.langConfig&&this.viewName=="ProductionLots" ? 
+                  html`${this.lotTemplate()}` :
+                  nothing
+                }
+                ${this.dateTemplate()}
+                ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
+                  html`${this.commentTemplate()}` : nothing
+                }
+                ${this.langConfig&&this.langConfig.resultHeader ? 
+                  html`${this.resultTemplate()}` :
+                  nothing
+                }
+                ${this.langConfig&&this.langConfig.microorganismHeader ? 
+                  html`${this.microorganismTemplate()}` :
+                  nothing
+                }
+                ${this.langConfig&&this.viewName=="LogSamples" ? 
+                  html`${this.pointTemplate()}` :
+                  nothing
+                }
+                ${super.render()}
               </div>
-              <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-                @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
-                .selectedItems="${this.selectedSamples}">
-                ${this.gridList()}
-              </vaadin-grid>
-            </div>
-            <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
-            ${this.langConfig&&this.viewName=="ProductionLots" ? 
-              html`${this.lotTemplate()}` :
-              nothing
-            }
-            ${this.dateTemplate()}
-            ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
-              html`${this.commentTemplate()}` : nothing
-            }
-            ${this.langConfig&&this.langConfig.resultHeader ? 
-              html`${this.resultTemplate()}` :
-              nothing
-            }
-            ${this.langConfig&&this.langConfig.microorganismHeader ? 
-              html`${this.microorganismTemplate()}` :
-              nothing
-            }
-            ${this.langConfig&&this.viewName=="LogSamples" ? 
-              html`${this.pointTemplate()}` :
-              nothing
-            }
-            ${super.render()}
-          </div>
+            `
+          }
+          ${this.bottomCompositions ?
+            html`${this.bottomCompositions.map(c => 
+              html`<div class="layout flex">
+                <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
+                  .model=${c} .config=${this.config} .batchName=${this.batchName}
+                  @reload-samples=${e=>this[e.detail.method]()}
+                  @selected-incub=${this.filteringBatch}
+                  @selected-batch=${this.filteringIncub}
+                  @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
+              </div>`
+            )}` :
+            nothing
+          }
         `
-      }
-      ${this.bottomCompositions ?
-        html`${this.bottomCompositions.map(c => 
-          html`<div class="layout flex">
-            <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
-              .model=${c} .config=${this.config} .batchName=${this.batchName}
-              @reload-samples=${e=>this[e.detail.method]()}
-              @selected-incub=${this.filteringBatch}
-              @selected-batch=${this.filteringIncub}
-              @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
-          </div>`
-        )}` :
-        nothing
       }
     `;
   }
@@ -304,25 +346,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   get grid() {
     return this.shadowRoot.querySelector("vaadin-grid#mainGrid")
-  }
-
-  authorized() {
-    super.authorized()
-    // whether user has access into the selected proc
-    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-    if (!this.abstract) {
-      this.audit.updateComplete.then(() => {
-        let whichProc = procList.filter(p => p.procInstanceName == this.procName)
-        if (whichProc.length) {
-          this.audit.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
-          this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
-        }
-      })
-    }
-    let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
-    if (anyAccess.length) {
-      this.reload()
-    }
   }
 
   reload() {
@@ -511,6 +534,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   iconRenderer(sample) {
     if (this.filterName) {
+      console.log(this.filterName, ' NNN')
       if (this.filterName == "SampleLogin") {
         return html`<img src="/images/labplanet.png" style="width:20px">`
       } else {

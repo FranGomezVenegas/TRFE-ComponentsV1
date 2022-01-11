@@ -42,6 +42,8 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "Incubation")}>Sample Incubation</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismSMP")}>Sample Microorganism </button>
         <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismPERS")}>Personel Microorganism</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "Programs", "Programs")}>Program</button>
+        <button @click=${()=>this.selectMenu("proc-deploy", "LogSamples", "SampleLogin")}>Log Samples (proc)</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "ProductionLots", "SampleLot")}>Production Lots (proc)</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "ER-FQ")}>FQ</button>
@@ -51,6 +53,7 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("proc-deploy", "ReviewTestingGroup", "RTG-FQ")}>RTG FQ</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "ReviewTestingGroup", "RTG-MB")}>RTG MB</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "ReviewSample", "Review")}>Review Sample</button>
+        <button @click=${()=>this.selectMenu("proc-deploy", "Program", "Program")}>Program</button>
         <tr-procedures></tr-procedures><hr>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>
