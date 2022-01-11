@@ -20,6 +20,14 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params, false, false).then(j => {
         if (j && !j.is_error) {
+          j.forEach(audit => {
+            audit.collapse = true
+            if (audit.sublevel && audit.sublevel.length) {
+              audit.sublevel.forEach(level => {
+                level.collapse = false
+              })
+            }
+          })
           this.audit.audits = j
           this.audit.requestUpdate()
         }
@@ -72,7 +80,6 @@ export function ClientMethod(base) {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params, false, false).then(j => {
-        console.log(j, " JJJ")
         if (j && !j.is_error) {
           this.selectedResults = []
           this.enterResults = j
@@ -81,6 +88,7 @@ export function ClientMethod(base) {
         } else {
           this.dispatchEvent(new CustomEvent("error", {
             detail: { 
+              is_error: true,
               message_en: this.selectedAction.alertMsg.empty["label_en"],
               message_es: this.selectedAction.alertMsg.empty["label_es"]
             },
@@ -178,6 +186,7 @@ export function ClientMethod(base) {
       if (this.selectedAction.actionName == "EM_BATCH_INCUB_ADD_SMP" && !this.batchName) {
         this.dispatchEvent(new CustomEvent("error", {
           detail: {
+            is_error: true,
             message_en: "Please select the batch should be added",
             message_es: "Seleccione el lote que debe agregarse"
           },
