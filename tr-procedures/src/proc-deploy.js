@@ -732,20 +732,24 @@ export const ProcDeploy = {
         }
       },
       {
-        "actionName": "REVIEWTEST",
+        "actionName": "REVIEWSAMPLE_TESTINGGROUP",
         "clientMethod": "reviewTest",
         "button": {
           "icon": "reviews",
           "title": {
-            "label_en": "Review Test",
-            "label_es": "Revisar Ensayo"
+            "label_en": "Review",
+            "label_es": "Revisar"
           },
           "whenDisabled": "selectedSamples"
         },
         "apiParams": [
           {
-            "query": "testId",
-            "beItem": "test_id"
+            "query": "sampleId",
+            "beItem": "sample_id"
+          },
+          {
+            "query": "testingGroup",
+            "beItem": "testing_group"
           }
         ]
       }
