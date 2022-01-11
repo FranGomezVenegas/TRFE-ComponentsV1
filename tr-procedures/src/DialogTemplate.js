@@ -307,6 +307,7 @@ export function DialogTemplate(base) {
       if (Number(this.selectedSamples[0].raw_value) == this.selectedSamples[0].microorganism_count) {
         this.dispatchEvent(new CustomEvent("error", {
           detail: {
+            is_error: true,
             message_en: "This addition would be "+ (this.selectedSamples[0].microorganism_count+1) +" what is greater than the reading "+ this.selectedSamples[0].microorganism_count +" what is not allowed.",
             message_es: "Está adición sumaría un total de "+ (this.selectedSamples[0].microorganism_count+1) +", mayor a la lectura identificada, "+ this.selectedSamples[0].microorganism_count +", lo que no es permitido."
           },
@@ -356,6 +357,7 @@ export function DialogTemplate(base) {
       if (existItem.length) {
         this.dispatchEvent(new CustomEvent("error", {
           detail: {
+            is_error: true,
             message_en: "The microorganism is already set, please select or input another name",
             message_es: "El microorganismo ya está configurado, seleccione o ingrese otro nombre"
           },
@@ -489,11 +491,11 @@ export function DialogTemplate(base) {
       return this.shadowRoot.querySelector("tr-dialog#pointDialog")
     }
 
-    get shiftInput() {
+    get shiftField() {
       return this.shadowRoot.querySelector("mwc-select#shift")
     }
 
-    get lotInput() {
+    get lotField() {
       return this.shadowRoot.querySelector("mwc-select#lot")
     }
 
@@ -509,7 +511,7 @@ export function DialogTemplate(base) {
       this.targetValue = {
         sampleTemplate: this.templates.dataApi.sample_config_code,
         sampleTemplateVersion: this.templates.dataApi.sample_config_code_version,
-        fieldValue: `${this.shiftInput.value}*String|${this.lotInput.value}*String`
+        fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
       }
       this.actionMethod(null, false, 1)
     }
