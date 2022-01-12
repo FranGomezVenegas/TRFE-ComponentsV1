@@ -31,7 +31,7 @@ export class CoreView extends LitElement {
   }
 
   updated(updates) {
-    if (updates.has('programList') && this.programList.length) {
+    if (updates.has('programList') && this.programList && this.programList.length) {
       this.setView()
     }
   }

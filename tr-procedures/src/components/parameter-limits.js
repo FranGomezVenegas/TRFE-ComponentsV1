@@ -118,7 +118,7 @@ export class ParameterLimits extends CoreView {
           </tr>
         </thead>
         <tbody>
-          ${this.programList.length&&this.programList[0].spec_definition.spec_limits.map(p => 
+          ${this.programList&&this.programList.length&&this.programList[0].spec_definition.spec_limits.map(p => 
             html`
             <tr>
               <td>${langConfig.configTableSpecLimits["value_"+p.variation_name]["label_"+ this.lang]}</td>

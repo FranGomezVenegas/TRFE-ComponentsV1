@@ -14,6 +14,7 @@ import './tab-program';
 import './core-view';
 import './summary-view';
 import './parameter-limits';
+import './config-calendar';
 
 let tabBtns = {
   "em-demo-a": [
@@ -24,7 +25,7 @@ let tabBtns = {
       tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"
     },
     {
-      tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config"
+      tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"
     },
     {
       tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo"
@@ -124,6 +125,7 @@ export class ProgramProc extends CredDialog {
         </div>
         <summary-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="summary"}></summary-view>
         <parameter-limits .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
+        <config-calendar .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="config-calendar"}></config-calendar>
         <core-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="core"}></core-view>
         ${super.render()}
       </div>
