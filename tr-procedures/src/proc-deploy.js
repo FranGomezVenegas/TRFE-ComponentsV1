@@ -886,5 +886,25 @@ export const ProcDeploy = {
         }
       }
     ]
+  },
+  "Programs": {
+    "component": "program-proc",
+    "actions": [
+      {
+        "actionName": "PROGRAMS_LIST",
+        "clientMethod": "getProgramList",
+        "button": {
+          "icon": "refresh",
+          "title": {
+            "label_en": "Reload", "label_es": "Recargar"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "subAction": {
+          "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+          "clientMethod": "getLots"
+        }
+      }
+    ]
   }
 }

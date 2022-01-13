@@ -1,7 +1,6 @@
-import { html, css, nothing } from 'lit';
+import { html, css } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@vaadin/vaadin-grid/vaadin-grid';
@@ -35,6 +34,23 @@ let tabBtns = {
     },
     {
       tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"
+    },
+    {
+      tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"
+    }
+  ],
+  "proc-deploy": [
+    {
+      tabLabel_en: "Home", tabLabel_es: "Inicio", view: "summary"
+    },
+    {
+      tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"
+    },
+    {
+      tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"
+    },
+    {
+      tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"
     },
     {
       tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"
@@ -126,7 +142,7 @@ export class ProgramProc extends CredDialog {
           </div>
         </div>
         <summary-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="summary"}></summary-view>
-        <parameter-limits .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
+        <parameter-limits .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
         <config-calendar .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="config-calendar"}></config-calendar>
         <sampling-points .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points"}></sampling-points>
         <sampling-points-map .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points-map"}></sampling-points-map>
