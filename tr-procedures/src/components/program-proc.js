@@ -15,6 +15,7 @@ import './core-view';
 import './summary-view';
 import './parameter-limits';
 import './config-calendar';
+import './sampling-points';
 
 let tabBtns = {
   "em-demo-a": [
@@ -28,7 +29,7 @@ let tabBtns = {
       tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"
     },
     {
-      tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo"
+      tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"
     },
     {
       tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa"
@@ -89,7 +90,6 @@ export class ProgramProc extends CredDialog {
 
   constructor() {
     super()
-    this.programList = []
     this.prev = false
     this.next = false
   }
@@ -126,6 +126,7 @@ export class ProgramProc extends CredDialog {
         <summary-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="summary"}></summary-view>
         <parameter-limits .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
         <config-calendar .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="config-calendar"}></config-calendar>
+        <sampling-points .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points"}></sampling-points>
         <core-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="core"}></core-view>
         ${super.render()}
       </div>
