@@ -1,15 +1,19 @@
-import { LitElement, html, css } from 'lit';
+import { html, css } from 'lit';
+import { CredDialog } from '@trazit/cred-dialog';
 
-export class CoreView extends LitElement {
+export class CoreView extends CredDialog {
   static get styles() {
-    return css`
-    :host {
-      display: block;
-    }
-    :host([hidden]) {
-      display: none;
-    }
-    `;
+    return [
+      super.styles,
+      css`
+      :host {
+        display: block;
+      }
+      :host([hidden]) {
+        display: none;
+      }
+      `
+    ];
   }
 
   static get properties() {
@@ -19,18 +23,24 @@ export class CoreView extends LitElement {
     };
   }
 
+  constructor() {
+    super()
+    this.programList = []
+  }
+
   render() {
+    return html`
+      ${this.tabView()}
+      ${super.render()}
+    `
+  }
+
+  tabView() {
     return html`On Going`
   }
 
-  constructor() {
-    super();
-  }
-
-  firstUpdated() {
-  }
-
   updated(updates) {
+    super.updated(updates)
     if (updates.has('programList') && this.programList && this.programList.length) {
       this.setView()
     }

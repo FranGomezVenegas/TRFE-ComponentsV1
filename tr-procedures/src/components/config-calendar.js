@@ -70,7 +70,7 @@ export class ConfigCalendar extends CoreView {
     this.selectedCalendarSamples = []
   }
 
-  render() {
+  tabView() {
     return html`
     <mp-calendar-ext 
       @chosen-changed=${this.dateChosen}

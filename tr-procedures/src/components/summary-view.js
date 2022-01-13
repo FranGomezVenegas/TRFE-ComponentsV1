@@ -30,7 +30,7 @@ export class SummaryView extends CoreView {
     ];
   }
 
-  render() {
+  tabView() {
     return html`
       <sp-tabs selected="1">
         <sp-tab label="Home" value="1"></sp-tab>

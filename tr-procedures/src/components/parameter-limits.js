@@ -99,12 +99,7 @@ export class ParameterLimits extends CoreView {
     ];
   }
 
-  constructor() {
-    super()
-    this.programList = []
-  }
-
-  render() {
+  tabView() {
     return html`
       <h2>${langConfig.limitView.header["label_"+ this.lang]} ${this.programList&&this.programList.length?this.programList[0].spec_code:''}</h2>
       <table class="styled-table">
