@@ -17,6 +17,7 @@ import './parameter-limits';
 import './config-calendar';
 import './sampling-points';
 import './sampling-points-map';
+import './corrective-actions';
 
 let tabBtns = {
   "em-demo-a": [
@@ -36,7 +37,7 @@ let tabBtns = {
       tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"
     },
     {
-      tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas"
+      tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"
     }
   ]
 }
@@ -130,6 +131,7 @@ export class ProgramProc extends CredDialog {
         <sampling-points .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points"}></sampling-points>
         <sampling-points-map .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points-map"}></sampling-points-map>
         <core-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="core"}></core-view>
+        <corrective-actions .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="corrective-actions"}></corrective-actions>
         ${super.render()}
       </div>
     `
