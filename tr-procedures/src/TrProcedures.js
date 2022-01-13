@@ -534,11 +534,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   iconRenderer(sample) {
     if (this.filterName) {
-      console.log(this.filterName, ' NNN')
       if (this.filterName == "SampleLogin") {
         return html`<img src="/images/labplanet.png" style="width:20px">`
       } else {
-        return html`<img src="/images/${this.filterName}_${sample.status.toLowerCase()}.png" style="width:20px">`
+        return html`<img src="/images/${this.filterName}_${sample.status?sample.status.toLowerCase():''}.png" style="width:20px">`
       }
     }
   }
