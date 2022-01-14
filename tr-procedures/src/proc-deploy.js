@@ -366,7 +366,7 @@ export const ProcDeploy = {
         },
         "apiParams": [
           { "query": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
-          { "query": "whereFieldsValue", "value": "RECEIVED-INCOMPLETE-COMPLETE*String|prog_pers_template|-" },
+          { "query": "whereFieldsValue", "value": "LOGGED-RECEIVED-INCOMPLETE-COMPLETE*String|prog_pers_template|-" },
           { "query": "whereFieldsName", "value": "status in-|sample_config_code not in*|sampling_date is not null" },
           { "query": "addSampleAnalysisFieldToRetrieve", "value": "method_name|testing_group" },
           { "query": "sampleAnalysisWhereFieldsName", "value": "testing_group|status not in" },
@@ -395,9 +395,6 @@ export const ProcDeploy = {
       {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
-        "alertMsg": {
-          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío"}
-        },
         "button": {
           "icon": "document_scanner",
           "title": {
@@ -517,12 +514,8 @@ export const ProcDeploy = {
             "value": "sample_id|test_id|analysis|raw_value|spec_eval|status|status_previous|sampling_date|sample_config_code|program_name|location_name|spec_code|spec_variation_name"
           },
           {
-            "query": "sampleAnalysisWhereFieldsValue",
-            "value": "REVIEWED"
-          },
-          {
             "query": "sampleAnalysisWhereFieldsName",
-            "value": "status not in*"
+            "value": "testing_group|status not in*"
           }
         ],
         "paramFilter": {
@@ -692,7 +685,7 @@ export const ProcDeploy = {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
         "alertMsg": {
-          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío"}
+          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío" }
         },
         "button": {
           "icon": "document_scanner",
@@ -783,9 +776,9 @@ export const ProcDeploy = {
           "filter": true
         },
         "sampling_date": {
-          "label_en": "Sampling Date", 
-          "label_es": "ID Fecha de Muestreo", 
-          "sort": false, 
+          "label_en": "Sampling Date",
+          "label_es": "ID Fecha de Muestreo",
+          "sort": false,
           "filter": true
         }
       },
@@ -870,7 +863,7 @@ export const ProcDeploy = {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
         "alertMsg": {
-          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío"}
+          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío" }
         },
         "button": {
           "icon": "document_scanner",
