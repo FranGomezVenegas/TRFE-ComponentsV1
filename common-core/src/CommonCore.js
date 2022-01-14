@@ -14,7 +14,11 @@ export const commonLangConfig = {
   "confirmDialogButton": {
     "label_en": "Accept", 
     "label_es": "Aceptar"
-  }
+  },
+  "closeDialogButton":{
+    "label_en": "Close", 
+    "label_es": "Cerrar"
+  }  
 }
 
 export class CommonCore extends LitElement {

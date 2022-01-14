@@ -466,7 +466,7 @@ export function DialogTemplate(base) {
         <div class="layout vertical flex center-justified">
           <div class="layout horizontal justified flex">
             <sp-button size="m" variant="secondary" dialogAction="accept">
-              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+              ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
             <sp-button size="m" @click=${this.setLogSample}>${this.langConfig.fieldText.logBtn["label_"+this.lang]}</sp-button>
           </div>
           <mwc-select label="${this.langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
