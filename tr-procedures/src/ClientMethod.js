@@ -41,6 +41,24 @@ export function ClientMethod(base) {
         this.reloadDialog()
       })
     }
+    getInstrumentAudit() {
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params, false, false).then(j => {
+        if (j && !j.is_error) {
+          j.forEach(audit => {
+            audit.collapse = true
+            if (audit.sublevel && audit.sublevel.length) {
+              audit.sublevel.forEach(level => {
+                level.collapse = false
+              })
+            }
+          })
+          this.audit.audits = j
+          this.audit.requestUpdate()
+        }
+      })
+    }
   
     setSamplingDate() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
@@ -253,6 +271,15 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.lotDialog.close()
+        this.reload()
+      })
+    }
+    setInstruments() {
+      console.log('this.reqParams', this.reqParams);
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+//        this.newInstrumentDialog.close()
         this.reload()
       })
     }

@@ -54,6 +54,8 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("proc-deploy", "ReviewTestingGroup", "RTG-MB")}>RTG MB</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "ReviewSample", "Review")}>Review Sample</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "Programs", "Programs")}>Program</button>
+        <button @click=${()=>this.selectMenu("app-proc", "PlatformInstruments", "InstrumentsList")}>Instruments List</button>
+        <button @click=${()=>this.selectMenu("app-proc", "EventsInProgress", "EventsER")}>Events In Progress</button>
         <tr-procedures></tr-procedures><hr>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
       </div>

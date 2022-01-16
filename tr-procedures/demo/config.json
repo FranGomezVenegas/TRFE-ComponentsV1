@@ -8,5 +8,7 @@
   "frontEndEnvMonitIncubationUrl": "/moduleenvmon/frontend/EnvMonIncubationAPIfrontend",
   "frontEndEnvMonitUrl": "/moduleenvmon/frontend/EnvMonAPIfrontend",
   "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPI",
+  "ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
+  "ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
   "local": true
 }

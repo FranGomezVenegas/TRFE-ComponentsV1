@@ -560,5 +560,31 @@ export function DialogTemplate(base) {
         this.dialogAccept(false)
       }
     }
+
+    newInstruments() {
+      return html`
+      <tr-dialog id="newInstrumentDialog" 
+        @closed=${()=>this.batchInput.value=""}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <mwc-textfield id="batchInput" label="${this.langConfig&&this.langConfig.fieldText.newLot["label_"+ this.lang]}" 
+            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newBatch()}></mwc-textfield>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" @click=${this.newBatch}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    get newInstrumentDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#newInstrumentDialog")
+    }
+
   }
 }
