@@ -8,8 +8,8 @@ export const AppProc = {
                 }
             },
             "fieldText": {
-                "newLot": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" },
-                "activateLot": { "label_en": "Production Lot Name to reactivate", "label_es": "Nombre para el lote de producción a reactivar" }
+                "newInstrument": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" },
+                "familyName": { "label_en": "Family", "label_es": "Familia" }
             },
             "gridHeader": {
                 name: {
@@ -59,7 +59,6 @@ export const AppProc = {
             },
             {
                 "actionName": "NEW_INSTRUMENT",
-                "endPoint": "/app/procs/InstrumentsAPIactions",
                 "clientMethod": "setInstruments",
                 "button": {
                     "icon": "create_new_folder",
@@ -73,9 +72,10 @@ export const AppProc = {
                     "name": "newInstrumentDialog"
                 },
                 "apiParams": [
-                    { "query": "lotName", "element": "lotInput" },
-                    { "query": "fieldName", "value": "active" },
-                    { "query": "fieldValue", "value": "true*Boolean" }
+                    { "query": "instrumentName", "element": "instrumentInput" },
+                    { "query": "familyName", "element": "instrumentFamilyInput" },
+                    { "query": "fieldName", "value": "description" },
+                    { "query": "fieldValue", "value": "hola*String" }
                 ]
             },
             {
@@ -90,7 +90,8 @@ export const AppProc = {
                     "whenDisabled": "selectedSamples"
                 },
                 "dialogInfo": {
-                    "automatic": true
+                    "automatic": true,
+                    "action":["asdas"]
                 }
             },
             {

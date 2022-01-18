@@ -43,6 +43,8 @@ export function ClientMethod(base) {
     }
     
     getInstrumentAudit() {
+      console.log('this.selectedSamples', this.selectedSamples);
+      this.reqParams.instrumentName=this.selectedSamples[0].name;
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params, false, false).then(j => {

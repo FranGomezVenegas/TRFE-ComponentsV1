@@ -561,20 +561,26 @@ export function DialogTemplate(base) {
       }
     }
 
-    newInstruments() {
+    cleanNewInstrumentFields(){
+      this.instrumentInput.value="";
+      this.instrumentFamilyInput.value=""
+    }
+    newInstrumentsTemplate() {
       return html`
       <tr-dialog id="newInstrumentDialog" 
-        @closed=${()=>this.batchInput.value=""}
+        @closed=${()=>this.cleanNewInstrumentFields()}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="batchInput" label="${this.langConfig&&this.langConfig.fieldText.newLot["label_"+ this.lang]}" 
-            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newBatch()}></mwc-textfield>
+          <mwc-textfield id="instrumentInput" label="${this.langConfig&&this.langConfig.fieldText.newInstrument["label_"+ this.lang]}" 
+            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newInstrument()}></mwc-textfield>
+            <mwc-textfield id="instrumentFamilyInput" label="${this.langConfig&&this.langConfig.fieldText.familyName["label_"+ this.lang]}" 
+            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newInstrument()}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" @click=${this.newBatch}>
+            <sp-button size="xl" slot="primaryAction" @click=${this.newInstrument}>
               ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
           </div>
         </div>
@@ -584,6 +590,19 @@ export function DialogTemplate(base) {
 
     get newInstrumentDialog() {
       return this.shadowRoot.querySelector("tr-dialog#newInstrumentDialog")
+    }
+
+    get instrumentInput() {
+      return this.shadowRoot.querySelector("mwc-textfield#instrumentInput")
+    }
+    get instrumentFamilyInput() {
+      return this.shadowRoot.querySelector("mwc-textfield#instrumentFamilyInput")
+    }
+  
+    newInstrument() {
+      if (this.instrumentInput.value) {
+        this.dialogAccept(false)
+      }
     }
 
   }
