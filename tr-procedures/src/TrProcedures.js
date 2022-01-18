@@ -174,6 +174,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                   html`${this.pointTemplate()}` :
                   nothing
                 }
+                ${this.langConfig&&this.viewName=="PlatformInstruments" ? 
+                  html`${this.newInstrumentsTemplate()}` :
+                  nothing
+                }
                 ${super.render()}
               </div>
             `
