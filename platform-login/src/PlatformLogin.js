@@ -299,7 +299,8 @@ export class PlatformLogin extends CommonCore {
       myToken: partialToken.myToken,
       userRole: this.role.value,
       dbName: this.config.dbName,
-      actionName: 'finaltoken'
+      actionName: 'finaltoken',
+      includeProcModelInfo: !this.config.local
     })
     return this.fetchApi(urlParams, false, false).then(j => {
       if (j && !j.is_error) {
