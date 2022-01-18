@@ -5,6 +5,7 @@ import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ProceduresModel } from './ProceduresModel';
 import { ClientMethod } from './ClientMethod';
 import { DialogTemplate } from './DialogTemplate';
+import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@vaadin/vaadin-grid/vaadin-grid';
@@ -16,6 +17,7 @@ import '@trazit/tr-dialog/tr-dialog';
 import './audit-dialog';
 import './templates-';
 import './bottom-composition';
+import './tabsComposition';
 import './components/program-proc';
 
 export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
@@ -36,6 +38,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
         mwc-button[hidden] {
           display: none;
+        }
+        mwc-button.tabBtn {
+          --mdc-theme-primary: #03a9f4;
+          --mdc-theme-on-primary: white;
+          --mdc-typography-button-font-size: 10px;
         }
         mwc-icon-button#prev {
           -webkit-transform:rotateY(180deg);
@@ -68,7 +75,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       selectedSamples: { type: Array },
       selectedAction: { type: Object },
       batchName: { type: String },
-      componentModel: { type: String }
+      componentModel: { type: String },
+      tabs: { type: Array }
     };
   }
 
@@ -80,8 +88,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
     }
     this.componentModel = null
+    this.abstract = ProceduresModel[this.procName][this.viewName].abstract
     if (ProceduresModel[this.procName][this.viewName].component) {
       this.componentModel = ProceduresModel[this.procName][this.viewName]
+    } else if (ProceduresModel[this.procName][this.viewName].tabs) {
+      this.tabs = ProceduresModel[this.procName][this.viewName].tabs
     } else {
       this.enterResults = []
       this.microorganismList = []
@@ -89,7 +100,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       this.langConfig = ProceduresModel[this.procName][this.viewName].langConfig
       this.actions = ProceduresModel[this.procName][this.viewName].actions
       this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
-      this.abstract = ProceduresModel[this.procName][this.viewName].abstract
       this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
       this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
     }
@@ -111,7 +121,15 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
       let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
       if (anyAccess.length) {
-        this.reload()
+        if (this.tabs) {
+          this.updateComplete.then(() => {
+            this.tabsComposition.updateComplete.then(() => {
+              this.tabsComposition.model = ProceduresModel[this.procName][this.viewName].tabs[0]
+            })
+          })
+        } else {
+          this.reload()
+        }
       }
     }
   }
@@ -191,9 +209,36 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
             )}` :
             nothing
           }
+          ${this.tabs ?
+            html`
+              <div class="layout vertical flex">
+                <div class="layout horizontal flex">
+                  ${this.tabs.map(t => 
+                    html`
+                      <mwc-button class="tabBtn" dense unelevated 
+                        .label=${t.langConfig.tab["label_"+ this.lang]}
+                        @click=${()=>this.selectTab(t)}></mwc-button>
+                    `
+                  )}
+                </div>
+                <tabs-composition 
+                  .procName=${this.procName} 
+                  .viewName=${this.viewName} 
+                  .config=${this.config}></tabs-composition>
+              </div>
+            ` : nothing
+          }
         `
       }
     `;
+  }
+
+  selectTab(tab) {
+    this.tabsComposition.model = tab
+  }
+
+  get tabsComposition() {
+    return this.shadowRoot.querySelector("tabs-composition")
   }
 
   get batchElement() {

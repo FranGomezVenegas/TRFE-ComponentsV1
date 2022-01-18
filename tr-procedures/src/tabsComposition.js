@@ -5,7 +5,7 @@ import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ClientMethod } from './ClientMethod';
 import { DialogTemplate } from './DialogTemplate';
 
-export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) {
+export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   static get styles() {
     return [
       Layouts,
@@ -17,50 +17,6 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         }
         tr-dialog * {
           margin-bottom: 5px;
-        }
-        mwc-textfield[hidden] {
-          display: none;
-        }
-        mwc-button[hidden] {
-          display: none;
-        }
-        mwc-icon-button#prev {
-          -webkit-transform:rotateY(180deg);
-          -moz-transform:rotateY(180deg);
-          -o-transform:rotateY(180deg);
-          -ms-transform:rotateY(180deg);
-        }
-        div.input * {
-          margin: 10px 0 5px;
-        }
-        mwc-icon-button[hidden] {
-          display: none;
-        }
-        #resultDialog {
-          --mdc-dialog-min-width: 800px;
-        }
-        #batchDetail {
-          width: 200px;
-          margin: 0 20px;
-          padding-top: 20px;
-        }
-        #batchDetail h1 {
-          color: blue;
-        }
-        #samplesArr {
-          border-radius: 2px;
-          box-shadow: rgb(136, 136, 136) 2px 2px;
-          padding: 5px;
-          background: #c2f2ff;
-        }
-        #samplesArr div {
-          margin: 5px 0;
-        }
-        #assignDialog {
-          --mdc-dialog-min-width: 500px;
-        }
-        mwc-icon-button.img[disabled] {
-          opacity: 0.5;
         }
       `
     ];
@@ -77,19 +33,13 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       actions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
-      selectedAction: { type: Object },
-      batchName: { type: String },
-      gridItems: { type: Array },
-      filteredItems: { type: Array }
+      selectedAction: { type: Object }
     };
   }
 
   constructor() {
     super()
     this.samplesReload = true
-    this.assignList = []
-    this.gridItems = []
-    this.filteredItems = []
   }
 
   updated(updates) {
@@ -97,116 +47,51 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     if (updates.has('model')) {
       this.filterName = this.model.filter
       this.resetView()
-      this.authorized()
     }
   }
 
   resetView() {
     this.selectedSamples = []
-    this.assignList = []
     this.langConfig = this.model.langConfig
     this.actions = this.model.actions
     this.selectedAction = this.model.actions[0]
+    this.reload()
   }
 
   render() {
     return html`${this.model ? 
       html`
-      <div class="layout horizontal flex wrap">
-        <div class="layout flex">
-          ${this.getTitle()}
-          <div class="layout horizontal center flex wrap">
-            ${this.getButton()}
-          </div>
-          <vaadin-grid id="absractGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-            .items=${this.filteredItems}
-            @active-item-changed=${this.selectItem}
-            .selectedItems="${this.selectedSamples}">
-            ${this.gridList()}
-          </vaadin-grid>
-        </div>
-        ${this.langConfig&&this.filterName=="active_batches" ? 
-          html`
-            <div id="batchDetail">
-              ${this.selectedSamples.length ?
-                html`
-                  <div>
-                    <h1>
-                      The selected batch is: ${this.selectedSamples[0].name}. 
-                      Incubator: ${this.selectedSamples[0].incubation_incubator}. 
-                      #Samples: ${this.selectedSamples[0].SAMPLES_ARRAY.length}
-                    </h1>
-                    ${this.selectedSamples[0].SAMPLES_ARRAY.length ?
-                      html`<div id="samplesArr">${this.selectedSamples[0].SAMPLES_ARRAY.map(s =>
-                        html`<div>${s.sample_id} Incub ${s.incubation_moment}</div>`
-                      )}</div>` :
-                      nothing
-                    }
-                  </div>
-                ` :
-                nothing
-              }
+        <div class="layout horizontal flex wrap">
+          <div class="layout flex">
+            ${this.getTitle()}
+            <div class="layout horizontal center flex wrap">
+              ${this.getButton()}
             </div>
-            ${this.newBatchTemplate()}
-            ${this.assignTemplate()}
-          ` :
-          nothing
-        }
-        <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
-        ${super.render()}
-      </div>
+            <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort 
+              @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
+              .selectedItems="${this.selectedSamples}">
+              ${this.gridList()}
+            </vaadin-grid>
+          </div>
+        </div>
       ` : 
       nothing
     }
+    ${super.render()}
     `;
   }
 
   selectItem(e) {
     this.selectedSamples = e.detail.value ? [e.detail.value] : []
-    if (this.filterName == "active_batches") {
-      this.dispatchEvent(new CustomEvent('selected-batch', {
-        detail: { sample: e.detail.value }
-      }))
-    } else if (this.filterName == "samplesWithAnyPendingIncubation") {
-      this.dispatchEvent(new CustomEvent("selected-incub", {
-        detail: { sample: e.detail.value }
-      }))
-    }
-  }
-
-  get audit() {
-    return this.shadowRoot.querySelector("audit-dialog")
-  }
-    
-  setAudit(e) {
-    this.targetValue = {
-      auditId: e.detail.audit_id
-    }
-    this.itemId = e.detail.audit_id
-    this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
-    this.actionMethod(this.selectedDialogAction, false)
   }
 
   get grid() {
-    return this.shadowRoot.querySelector("vaadin-grid#absractGrid")
-  }
-
-  authorized() {
-    super.authorized()
-    // whether user has access into the selected proc
-    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-    this.audit.updateComplete.then(() => {
-      let whichProc = procList.filter(p => p.procInstanceName == this.procName)
-      if (whichProc.length) {
-        this.audit.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
-        this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
-      }
-    })
+    return this.shadowRoot.querySelector("vaadin-grid")
   }
 
   reload() {
+    console.log(this.selectedAction, " SSS")
     this.resetDialogThings()
-    this.batchName = null
     this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
   }
@@ -214,8 +99,6 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
   resetDialogThings() {
     this.itemId = null
     this.targetValue = {}
-    this.selectedResults = []
-    this.selectedAssigns = []
     this.selectedDialogAction = null
   }
 
@@ -297,24 +180,6 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     `
   }
 
-  filterSamples(state) {
-    if (state == "not_in_batch") {
-      this.filteredItems = this.gridItems.filter(item => !item.incubation_batch)
-    } else if (state == "in_batch_1") {
-      this.filteredItems = this.gridItems.filter(item => item.incubation_batch && !item.incubation_start)
-    } else if (state == "progress_1") {
-      this.filteredItems = this.gridItems.filter(item => item.incubation_batch && item.incubation_start && !item.incubation_end)
-    } else if (state == "done") {
-      this.filteredItems = this.gridItems.filter(item => item.incubation_end && !item.incubation2_batch)
-    } else if (state == "in_batch_2") {
-      this.filteredItems = this.gridItems.filter(item => item.incubation2_batch && !item.incubation2_start)
-    } else if (state == "progress_2") {
-      this.filteredItems = this.gridItems.filter(item => item.incubation2_batch && item.incubation2_start && !item.incubation2_end)
-    } else {
-      this.filteredItems = this.gridItems
-    }
-  }
-
   nextRequest() {
     super.nextRequest()
     this.reqParams = {
@@ -339,7 +204,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     if (action.apiParams) {
       action.apiParams.forEach(p => {
         if (p.element) {
-          jsonParam[p.query] = this[p.element].value // get value from field input
+          jsonParam[p.query] = p.type == "check" ? this[p.element].checked : this[p.element].value // get value from field input
         } else if (p.defaultValue) {
           jsonParam[p.query] = p.defaultValue // get value from default value (i.e incubator)
         } else if (p.beItem) {
@@ -358,88 +223,21 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
   }
 
   setGrid(j) {
-    this.dispatchEvent(new CustomEvent('set-grid', { detail: j }))
+    this.selectedSamples = []
+    if (j) {
+      this.grid.items = j
+    } else {
+      this.grid.items = []
+    }
   }
 
   gridList() {
     if (this.langConfig) {
       return Object.entries(this.langConfig.gridHeader).map(
         ([key, value], i) => html`
-          ${this.langConfig.gridHeader[key].is_icon ?
-            this.iconColumn(key, value, i) :
-            this.nonIconColumn(key, value, i)
-          }
+          ${this.nonIconColumn(key, value, i)}
         `
       )
-    }
-  }
-
-  iconColumn(key, value, i) {
-    return html`
-      <vaadin-grid-column class="${key}"
-        header="${value['label_'+this.lang]}"
-        ${columnBodyRenderer(this.iconRenderer)}
-        text-align="center"
-        width="${this.langConfig.gridHeader[key].width}" resizable 
-      ></vaadin-grid-column>
-    `
-  }
-
-  iconRenderer(sample, model, col) {
-    if (this.filterName) {
-      if (col.getAttribute("class") == "sampleType") {
-        return html`<img src="/images/incubators/${sample.sample_config_code=='program_smp_template'?'samplesIcon.png':'samplePerson.png'}" style="width:20px">`
-      } else if (col.getAttribute("class") == "batchState") {
-        // started / in progress
-        // no started / new batch
-        if (sample.incubation_start) {
-          return html`<img src="/images/incubators/IncubInProgress.gif" style="width:20px">`
-        } else {
-          return html`<mwc-icon style="color:DarkGoldenRod;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-        }
-      } else if (col.getAttribute("class") == "samplesState") {
-        // end incub1
-        // started / in progress
-        // in batch
-        // not in batch
-        if (sample.pending_incub == 2) {
-          if (sample.incubation2_start) {
-            return html`<img src="/images/incubators/IncubInProgress.gif" style="width:20px">`
-          } else if (sample.incubation2_batch) {
-            return html`<mwc-icon style="color:SlateBlue;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-          } else {
-            return html`<mwc-icon style="color:MediumSeaGreen;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-          }
-        } else {
-          if (sample.incubation_start) {
-            return html`<img src="/images/incubators/IncubInProgress.gif" style="width:20px">`
-          } else if (sample.incubation_batch) {
-            return html`<mwc-icon style="color:Tomato;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-          } else {
-            return html`<mwc-icon style="color:Orange;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-          } 
-        }
-      } else if (col.getAttribute("class") == "incubState") {
-        // inc_1
-        // inc2
-        if (this.filterName == "active_batches") {
-          if (sample.incub_stage == 1) {
-            return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-          } else if (sample.incub_stage == 2) {
-            return html`<mwc-icon style="color:Brown;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-          }
-        } else {
-          if (sample.pending_incub == 2) {
-            if (sample.incubation2_batch) {
-              return html`<mwc-icon style="color:Brown;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-            } else { // incub@1 done or first state of incub#2
-              return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-            }
-          } else if (sample.incubation_incubator && sample.pending_incub == 2) {
-            return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
-          }
-        }
-      }
     }
   }
 
@@ -498,4 +296,4 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     }
   }
 }
-window.customElements.define('bottom-composition', BottomComposition);
+window.customElements.define('tabs-composition', TabsComposition);

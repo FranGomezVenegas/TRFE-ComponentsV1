@@ -1044,5 +1044,185 @@ export const EmDemoA = {
         }
       }
     ]
+  },
+  "Deviation": {
+    "abstract": true,
+    "tabs": [
+      {
+        "filter": "pending",
+        "langConfig": {
+          "tab": {
+            "label_en": "Pending Decision", 
+            "label_es": "Decisión pendiente"
+          },
+          "title": {
+            "pending": {
+              "label_en": "Program Active Corrective Actions", 
+              "label_es": "Acciones correctivas aún activas del programa"
+            }
+          },
+          "gridHeader": {
+            "result_id": {
+              "label_en": "Result", "label_es": "Resultado", "sort": false, "filter": true, "width": "10%"
+            },
+            "sample_id": {
+              "label_en": "Sample", "label_es": "Muestra", "sort": false, "filter": true, "width": "10%"
+            },
+            "created_on": {
+              "label_en": "Creation", "label_es": "Creada", "sort": true, "filter": false, "width": "15%"
+            },
+            "location_name": {
+              "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "15%"
+            },
+            "method_name": {
+              "label_en": "Method", "label_es": "Método", "sort": false, "filter": true, "width": "10%"
+            },
+            "spec_eval_detail": {
+              "label_en": "Problem Detail", "label_es": "Detalle del Problema", "sort": false, "filter": true, "width": "30%"
+            },
+            "spec_rule_with_detail": {
+              "label_en": "Spec Rule", "label_es": "Especificación", "sort": false, "filter": true, "width": "10%"
+            }
+          }
+        },
+        "actions": [
+          {
+            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
+            "clientMethod": "getSamples",
+            "endPoint": "/frontend/InvestigationAPIfrontend",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "actionName": "NEW_INVESTIGATION",
+            "clientMethod": "newInvestigation",
+            "endPoint": "/app/InvestigationAPI",
+            "button": {
+              "title": {
+                "label_en": "Create Investigation", "label_es": "Crear Investigación"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "apiParams": [
+              { "query": "fieldName", "value": "description" }
+            ]
+          },
+          {
+            "actionName": "ADD_INVEST_OBJECTS",
+            "clientMethod": "addInvestObjects",
+            "button": {
+              "title": {
+                "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "dialogInfo": { 
+              "requiresDialog": true,
+              "name": "investigationDialog"
+            },
+            "apiParams": [
+              { "query": "investigationId", "targetValue": true },
+              { "query": "objectsToAdd", "targetValue": true }
+            ]
+          }
+        ]
+      },
+      {
+        "filter": "open",
+        "langConfig": {
+          "tab": {
+            "label_en": "Investigations", 
+            "label_es": "Investigaciones"
+          },
+          "title": {
+            "open": {
+              "label_en": "Program Active Corrective Actions", 
+              "label_es": "Acciones correctivas aún activas del programa"
+            }
+          },
+          "fieldText": {
+            "systemName": { "label_en": "System Name", "label_es": "Nombre Sistema" },
+            "systemId": { "label_en": "System Id", "label_es": "Id Sistema" },
+            "capa": { "label_en": "CAPA Required", "label_es": "¿Requiere CAPA?" },
+            "capaName": { "label_en": "CAPA System Name", "label_es": "Nombre Sistema CAPA" },
+            "capaId": { "label_en": "CAPA Id", "label_es": "Id CAPA" }
+          },
+          "gridHeader": {
+            "id": {
+              "label_en": "ID", "label_es": "ID", "width": "12px", "sort": false, "filter": true
+            },
+            "description": {
+              "label_en": "description", "label_es": "description", "width": "20px", "sort": false, "filter": true
+            },
+            "created_on": {
+              "label_en": "Creation", "label_es": "Creación", "width": "30px", "sort": false, "filter": true
+            },
+            "external_system_name": {
+              "label_en": "External System Name", "label_es": "Nombre Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "external_system_id": {
+              "label_en": "External System Id", "label_es": "Id Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_required": {
+              "label_en": "capa_required", "label_es": "CAPA Necesario", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_name": {
+              "label_en": "CAPA System", "label_es": "Sistema para CAPAs", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_id": {
+              "label_en": "CAPA System Id", "label_es": "Id en Sistema CAPAs", "width": "20px", "sort": false, "filter": true
+            }
+          }
+        },
+        "actions": [
+          {
+            "actionName": "OPEN_INVESTIGATIONS",
+            "clientMethod": "getSamples",
+            "endPoint": "/frontend/InvestigationAPIfrontend",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "whenDisabled": "samplesReload"
+            }
+          },
+          {
+            "actionName": "INVESTIGATION_CAPA_DECISION",
+            "clientMethod": "capaDecision",
+            "button": {
+              "title": {
+                "label_en": "Decision", "label_es": "Decisión"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "apiParams": [
+              { "query": "investigationId", "beItem": "id" },
+              { "query": "capaRequired", "element": "capaCheck", "type": "check" },
+              { "query": "capaFieldName", "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id" },
+              { "query": "capaFieldValue", "targetValue": true }
+            ]
+          },
+          {
+            "actionName": "CLOSE_INVESTIGATION",
+            "clientMethod": "closeInvestigation",
+            "button": {
+              "title": {
+                "label_en": "Close", "label_es": "Cerrar"
+              },
+              "whenDisabled": "selectedSamples"
+            },
+            "apiParams": [
+              { "query": "investigationId", "beItem": "id" }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

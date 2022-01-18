@@ -41,6 +41,7 @@ export function ClientMethod(base) {
         this.reloadDialog()
       })
     }
+    
     getInstrumentAudit() {
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
         + '?' + new URLSearchParams(this.reqParams)
@@ -274,6 +275,7 @@ export function ClientMethod(base) {
         this.reload()
       })
     }
+
     setInstruments() {
       console.log('this.reqParams', this.reqParams);
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
@@ -286,6 +288,16 @@ export function ClientMethod(base) {
 
     reviewSample() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.reload()
+      })
+    }
+
+    newInvestigation() {
+      this.reqParams.fieldValue = "Investigation for "+ this.selectedSamples[0].result_id +"*String"
+      this.reqParams.objectsToAdd = "sample_analysis_result*"+ this.selectedSamples[0].result_id
+      let params = this.config.backendUrl + this.selectedAction.endPoint 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
