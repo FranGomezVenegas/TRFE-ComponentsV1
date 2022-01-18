@@ -1286,22 +1286,29 @@ export const EmDemoA = {
             ]
           },
           {
-            "actionName": "ADD_INVEST_OBJECTS",
-            "clientMethod": "addInvestObjects",
+            "actionName": "OPEN_INVESTIGATIONS",
+            "clientMethod": "getOpenInvestigations",
+            "endPoint": "/frontend/InvestigationAPIfrontend",
             "button": {
               "title": {
                 "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
               },
               "whenDisabled": "selectedSamples"
             },
-            "dialogInfo": { 
-              "requiresDialog": true,
-              "name": "investigationDialog"
-            },
-            "apiParams": [
-              { "query": "investigationId", "targetValue": true },
-              { "query": "objectsToAdd", "targetValue": true }
-            ]
+            "dialogInfo": {
+              "automatic": true,
+              "action": [
+                {
+                  "actionName": "ADD_INVEST_OBJECTS",
+                  "clientMethod": "addInvestObjects",
+                  "endPoint": "/app/InvestigationAPI",
+                  "apiParams": [
+                    { "query": "investigationId", "targetValue": true },
+                    { "query": "objectsToAdd", "targetValue": true }
+                  ]
+                }
+              ]
+            }
           }
         ]
       },
@@ -1368,11 +1375,16 @@ export const EmDemoA = {
           {
             "actionName": "INVESTIGATION_CAPA_DECISION",
             "clientMethod": "capaDecision",
+            "endPoint": "/app/InvestigationAPI",
             "button": {
               "title": {
                 "label_en": "Decision", "label_es": "Decisión"
               },
               "whenDisabled": "selectedSamples"
+            },
+            "dialogInfo": { 
+              "requiresDialog": true,
+              "name": "decisionDialog"
             },
             "apiParams": [
               { "query": "investigationId", "beItem": "id" },
@@ -1384,6 +1396,7 @@ export const EmDemoA = {
           {
             "actionName": "CLOSE_INVESTIGATION",
             "clientMethod": "closeInvestigation",
+            "endPoint": "/app/InvestigationAPI",
             "button": {
               "title": {
                 "label_en": "Close", "label_es": "Cerrar"

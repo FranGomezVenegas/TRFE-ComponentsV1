@@ -389,7 +389,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       auditId: e.detail.audit_id
     }
     this.itemId = e.detail.audit_id
+    console.log(this.selectedAction, " YYY")
     this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+    console.log(this.selectedDialogAction, " SSS")
     this.actionMethod(this.selectedDialogAction, false)
   }
 

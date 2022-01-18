@@ -3,6 +3,8 @@ import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
+import '@material/mwc-checkbox';
+import '@material/mwc-formfield';
 
 export function DialogTemplate(base) {
   return class extends base {
@@ -15,7 +17,9 @@ export function DialogTemplate(base) {
         selectedAssigns: { type: Array },
         assignList: { type: Array },
         targetValue: { type: Object },
-        selectedDialogAction: { type: Object }
+        selectedDialogAction: { type: Object },
+        openInvests: { type: Array },
+        selectedInvestigations: { type: Array }
       }
     }
 
@@ -565,6 +569,7 @@ export function DialogTemplate(base) {
       this.instrumentInput.value="";
       this.instrumentFamilyInput.value=""
     }
+
     newInstrumentsTemplate() {
       return html`
       <tr-dialog id="newInstrumentDialog" 
@@ -605,5 +610,109 @@ export function DialogTemplate(base) {
       }
     }
 
+    /** Investigation Template Dialog part */
+    investigationTemplate() {
+      return html`
+      <tr-dialog id="investigationDialog" ?open=${this.openInvests.length}
+        @closed=${e=>{if(e.target===this.investigationDialog){this.openInvests=[];this.grid.activeItem=null}}}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+            @active-item-changed=${e=>this.selectedInvestigations=e.detail.value ? [e.detail.value] : []}
+            .selectedItems="${this.selectedInvestigations}">
+            <vaadin-grid-sort-column width="100%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
+            <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.model.langConfig.gridHeader.created_on["label_"+ this.lang]}"></vaadin-grid-filter-column>
+          </vaadin-grid>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" dialogAction="accept" 
+              @click=${this.addInvestigationAction}
+              ?disabled=${!this.selectedInvestigations.length}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    get investigationDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#investigationDialog")
+    }
+
+    addInvestigationAction() {
+      this.targetValue = {
+        "investigationId": this.selectedInvestigations[0].id,
+        "objectsToAdd": "sample_analysis_result*"+ this.selectedSamples[0].result_id
+      }
+      this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+      this.actionMethod(this.selectedDialogAction, false)
+    }
+
+    /** Decision Template Dialog part */
+    decisionTemplate() {
+      return html`
+      <tr-dialog id="decisionDialog" 
+        @closed=${e=>{if(e.target===this.decisionDialog)this.grid.activeItem=null}}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <mwc-textfield id="systemName" label="${this.langConfig.fieldText.systemName["label_"+ this.lang]}" 
+            .value=${this.selectedSamples.length&&this.selectedSamples[0].capa_external_system_name}
+            dialogInitialFocus></mwc-textfield>
+          <mwc-textfield id="systemId" label="${this.langConfig.fieldText.systemId["label_"+ this.lang]}"
+            .value=${this.selectedSamples.length&&this.selectedSamples[0].capa_external_system_id}></mwc-textfield>
+          <mwc-formfield label="${this.langConfig.fieldText.capa["label_"+ this.lang]}">
+            <mwc-checkbox id="capaCheck" ?checked=${this.selectedSamples.length&&this.selectedSamples[0].capa_required}></mwc-checkbox>
+          </mwc-formfield>
+          <mwc-textfield id="capaName" label="${this.langConfig.fieldText.capaName["label_"+ this.lang]}"
+            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_name}></mwc-textfield>
+          <mwc-textfield id="capaId" label="${this.langConfig.fieldText.capa["label_"+ this.lang]}"
+            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_id}></mwc-textfield>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" dialogAction="accept" 
+              @click=${this.setDecision}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    get decisionDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#decisionDialog")
+    }
+
+    get systemName() {
+      return this.shadowRoot.querySelector("mwc-textfield#systemName")
+    }
+
+    get systemId() {
+      return this.shadowRoot.querySelector("mwc-textfield#systemId")
+    }
+
+    get capaCheck() {
+      return this.shadowRoot.querySelector("mwc-checkbox#capaCheck")
+    }
+
+    get capaName() {
+      return this.shadowRoot.querySelector("mwc-textfield#capaName")
+    }
+
+    get capaId() {
+      return this.shadowRoot.querySelector("mwc-textfield#capaId")
+    }
+
+    setDecision() {
+      this.targetValue = {
+        "capaFieldValue": "Trackwise"+ this.systemName.value +"*String|"+ this.systemId.value +"*String|"+ this.capaName.value +"*String|"+ this.capaId.value +"*String"
+      }
+      this.dialogAccept(false)
+    }
   }
 }

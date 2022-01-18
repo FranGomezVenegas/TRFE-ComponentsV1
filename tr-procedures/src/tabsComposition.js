@@ -1,7 +1,6 @@
 import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ClientMethod } from './ClientMethod';
 import { DialogTemplate } from './DialogTemplate';
 
@@ -39,6 +38,8 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
 
   constructor() {
     super()
+    this.openInvests = []
+    this.selectedInvestigations = []
     this.samplesReload = true
   }
 
@@ -51,6 +52,8 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   resetView() {
+    this.openInvests = []
+    this.selectedInvestigations = []
     this.selectedSamples = []
     this.langConfig = this.model.langConfig
     this.actions = this.model.actions
@@ -74,6 +77,10 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
             </vaadin-grid>
           </div>
         </div>
+        ${this.investigationTemplate()}
+        ${this.filterName=="open" ?
+          html`${this.decisionTemplate()}` : nothing
+        }
       ` : 
       nothing
     }
@@ -90,14 +97,12 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   reload() {
-    console.log(this.selectedAction, " SSS")
     this.resetDialogThings()
     this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
   }
 
   resetDialogThings() {
-    this.itemId = null
     this.targetValue = {}
     this.selectedDialogAction = null
   }

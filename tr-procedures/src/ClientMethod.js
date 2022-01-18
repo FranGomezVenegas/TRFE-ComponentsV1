@@ -305,5 +305,56 @@ export function ClientMethod(base) {
         this.reload()
       })
     }
+
+    getOpenInvestigations() {
+      let params = this.config.backendUrl + this.selectedAction.endPoint 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          this.openInvests = j
+          this.requestUpdate()
+        }
+      })
+    }
+
+    addInvestObjects() {
+      let params = this.config.backendUrl + this.selectedDialogAction.endPoint 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.investigationDialog.close()
+        this.resetDialogThings()
+        this.reload()
+      })
+    }
+
+    capaDecision() {
+      let params = this.config.backendUrl + this.selectedAction.endPoint 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.resetDialogThings()
+        this.reload()
+      })
+    }
+
+    closeInvestigation() {
+      // if (this.selectedSamples[0].capa_external_system_name) {
+      //   this.dispatchEvent(new CustomEvent("error", {
+      //     detail: { 
+      //       is_error: true,
+      //       message_en: "Required set decision before close",
+      //       message_es: "Decisión de conjunto requerida antes del cierre"
+      //     },
+      //     bubbles: true,
+      //     composed: true
+      //   }))
+      //   console.log("Required set decision before close")
+      //   return
+      // }
+      let params = this.config.backendUrl + this.selectedAction.endPoint 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.reload()
+      })
+    }
   }
 }
