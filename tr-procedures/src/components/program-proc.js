@@ -119,6 +119,7 @@ export class ProgramProc extends CredDialog {
   }
 
   resetView() {
+    this.programList = []
     this.actions = this.model.actions
     this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
@@ -158,7 +159,6 @@ export class ProgramProc extends CredDialog {
   }
 
   tabChanged(e) {
-    console.log(e.detail)
     if (e.detail.view) {
       this.tabView = e.detail.view
     } else {
@@ -241,6 +241,7 @@ export class ProgramProc extends CredDialog {
         if (this.selectedAction.subAction) {
           this.actionMethod(this.selectedAction.subAction)
         }
+        this.requestUpdate()
       }
     })
   }

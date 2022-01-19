@@ -325,6 +325,8 @@ export class SamplingPoints extends CoreView {
   }
 
   setView() {
+    this.selectedSamples = []
+    this.selectedAction = actions[0]
     this.actionMethod(this.selectedAction.subAction)
   }
 }

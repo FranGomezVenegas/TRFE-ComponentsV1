@@ -154,9 +154,9 @@ export class ParameterLimits extends CoreView {
               ${this.procName=="em-demo-a" ?
                 html`
                   <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.variation_name]["label_"+ this.lang]}</td>
-                  <td>${langConfig.configTableSpecLimits["value_"+p.analysis]["label_"+ this.lang]}</td>
-                  <td>${langConfig.configTableSpecLimits["value_"+p.method_name]["label_"+ this.lang]}</td>
-                  <td>${langConfig.configTableSpecLimits["value_"+p.parameter]["label_"+ this.lang]}</td>
+                  <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.analysis]["label_"+ this.lang]}</td>
+                  <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.method_name]["label_"+ this.lang]}</td>
+                  <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.parameter]["label_"+ this.lang]}</td>
                 ` :
                 html`
                   <td>${p.testing_group}</td>

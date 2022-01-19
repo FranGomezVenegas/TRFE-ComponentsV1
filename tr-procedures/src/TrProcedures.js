@@ -104,6 +104,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       this.actions = ProceduresModel[this.procName][this.viewName].actions
       this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
     }
+    this.requestUpdate()
   }
 
   authorized() {
