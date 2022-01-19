@@ -337,19 +337,19 @@ export function ClientMethod(base) {
     }
 
     closeInvestigation() {
-      // if (this.selectedSamples[0].capa_external_system_name) {
-      //   this.dispatchEvent(new CustomEvent("error", {
-      //     detail: { 
-      //       is_error: true,
-      //       message_en: "Required set decision before close",
-      //       message_es: "Decisión de conjunto requerida antes del cierre"
-      //     },
-      //     bubbles: true,
-      //     composed: true
-      //   }))
-      //   console.log("Required set decision before close")
-      //   return
-      // }
+      if (!this.selectedSamples[0].capa_external_system_name || !this.selectedSamples[0].capa_external_system_id || !this.selectedSamples[0].external_system_name || !this.selectedSamples[0].external_system_id) {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: { 
+            is_error: true,
+            message_en: "Required set decision before close",
+            message_es: "Decisión de conjunto requerida antes del cierre"
+          },
+          bubbles: true,
+          composed: true
+        }))
+        console.log("Required set decision before close")
+        return
+      }
       let params = this.config.backendUrl + this.selectedAction.endPoint 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
