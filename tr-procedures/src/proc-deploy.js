@@ -240,7 +240,16 @@ export const ProcDeploy = {
           "whenDisabled": "selectedSamples"
         },
         "dialogInfo": {
-          "automatic": true
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "clientMethod": "signAudit",
+              "apiParams": [
+                { "query": "auditId", "targetValue": true }
+              ]
+            }
+          ]
         }
       },
       {
@@ -389,7 +398,16 @@ export const ProcDeploy = {
           "whenDisabled": "selectedSamples"
         },
         "dialogInfo": {
-          "automatic": true
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "clientMethod": "signAudit",
+              "apiParams": [
+                { "query": "auditId", "targetValue": true }
+              ]
+            }
+          ]
         }
       },
       {
@@ -541,7 +559,16 @@ export const ProcDeploy = {
           "whenDisabled": "selectedSamples"
         },
         "dialogInfo": {
-          "automatic": true
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "clientMethod": "signAudit",
+              "apiParams": [
+                { "query": "auditId", "targetValue": true }
+              ]
+            }
+          ]
         }
       },
       {
@@ -678,7 +705,16 @@ export const ProcDeploy = {
           "whenDisabled": "selectedSamples"
         },
         "dialogInfo": {
-          "automatic": true
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "clientMethod": "signAudit",
+              "apiParams": [
+                { "query": "auditId", "targetValue": true }
+              ]
+            }
+          ]
         }
       },
       {
@@ -844,7 +880,16 @@ export const ProcDeploy = {
           "whenDisabled": "selectedSamples"
         },
         "dialogInfo": {
-          "automatic": true
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "clientMethod": "signAudit",
+              "apiParams": [
+                { "query": "auditId", "targetValue": true }
+              ]
+            }
+          ]
         }
       },
       {

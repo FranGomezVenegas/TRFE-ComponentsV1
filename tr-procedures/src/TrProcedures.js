@@ -112,7 +112,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     if (!this.componentModel) {
       // whether user has access into the selected proc
       let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-      if (!this.abstract) {
+      if (!this.abstract && this.audit) {
         this.audit.updateComplete.then(() => {
           let whichProc = procList.filter(p => p.procInstanceName == this.procName)
           if (whichProc.length) {
@@ -197,6 +197,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                   html`${this.newInstrumentsTemplate()}` :
                   nothing
                 }
+                <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
                 ${super.render()}
               </div>
             `
@@ -235,7 +236,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           }
         `
       }
-      <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
     `;
   }
 
@@ -391,9 +391,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       auditId: e.detail.audit_id
     }
     this.itemId = e.detail.audit_id
-    console.log(this.selectedAction, " YYY")
     this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
-    console.log(this.selectedDialogAction, " SSS")
     this.actionMethod(this.selectedDialogAction, false)
   }
 
