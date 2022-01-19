@@ -475,7 +475,9 @@ export class CredDialog extends CommonCore {
       }
     })
     this.reqParams = cleanParams
-    this.credDialog.close()
+    if (this.credDialog) {
+      this.credDialog.close()
+    }
   }
 
   setAttempts() {

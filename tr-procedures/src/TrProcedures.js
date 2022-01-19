@@ -89,18 +89,19 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     }
     this.componentModel = null
     this.abstract = ProceduresModel[this.procName][this.viewName].abstract
+    this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
+    this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
+    this.tabs = ProceduresModel[this.procName][this.viewName].tabs
+    this.enterResults = []
+    this.microorganismList = []
+    this.selectedSamples = []
     if (ProceduresModel[this.procName][this.viewName].component) {
       this.componentModel = ProceduresModel[this.procName][this.viewName]
     } else if (ProceduresModel[this.procName][this.viewName].tabs) {
-      this.tabs = ProceduresModel[this.procName][this.viewName].tabs
+      // 
     } else {
-      this.enterResults = []
-      this.microorganismList = []
-      this.selectedSamples = []
       this.langConfig = ProceduresModel[this.procName][this.viewName].langConfig
       this.actions = ProceduresModel[this.procName][this.viewName].actions
-      this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
-      this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
       this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
     }
   }
@@ -171,7 +172,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                     ${this.gridList()}
                   </vaadin-grid>
                 </div>
-                <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
                 ${this.langConfig&&this.viewName=="ProductionLots" ? 
                   html`${this.lotTemplate()}` :
                   nothing
@@ -234,6 +234,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           }
         `
       }
+      <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
     `;
   }
 
