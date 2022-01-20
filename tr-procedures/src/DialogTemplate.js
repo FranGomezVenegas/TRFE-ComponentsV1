@@ -18,9 +18,16 @@ export function DialogTemplate(base) {
         assignList: { type: Array },
         targetValue: { type: Object },
         selectedDialogAction: { type: Object },
+        deactivatedIds: { type: Array },
         openInvests: { type: Array },
-        selectedInvestigations: { type: Array }
+        selectedInvestigations: { type: Array },
+        capaRequired: { type: Boolean }
       }
+    }
+
+    constructor() {
+      super()
+      this.capaRequired = false
     }
 
     /** Date Template Dialog part */
@@ -550,13 +557,67 @@ export function DialogTemplate(base) {
       </tr-dialog>
       `
     }
-
+    /** Lot Template Dialog part */
+    // lotTemplate() {
+    //   return html`
+    //   <tr-dialog id="lotDialog"
+    //     @closed=${e=>{if(e.target===this.lotDialog)this.grid.activeItem=null}}
+    //     heading=""
+    //     hideActions=""
+    //     scrimClickAction="">
+    //     <div class="layout vertical flex center-justified">
+    //       ${this.selectedAction.actionName=="EM_NEW_PRODUCTION_LOT" ?
+    //         html`
+    //           <mwc-textfield id="lotInput" 
+    //             label="${this.langConfig.fieldText.newLot["label_"+ this.lang]}" 
+    //             dialogInitialFocus
+    //             @keypress=${e=>e.keyCode==13&&this.lotAction()}></mwc-textfield>
+    //         ` :
+    //         html`
+    //           <div class="layout vertical flex">
+    //             <div class="layout horizontal flex center-center">
+    //               <mwc-textfield class="layout flex" id="lotDays" type="number" 
+    //                 .value=${this.numDays} @change=${e=>this.numDays=e.target.value}
+    //                 label="${this.langConfig.fieldText.lotDays["label_"+this.lang]}"></mwc-textfield>
+    //               <mwc-icon-button icon="refresh" @click=${this.getDeactivatedIds}></mwc-icon-button>
+    //             </div>
+    //             <mwc-select id="lotId" label="${this.langConfig.fieldText.lotId["label_"+this.lang]}" 
+    //               ?disabled=${!this.deactivatedIds.length} @selected=${e=>console.log(e)}>
+    //               ${this.deactivatedIds.map((l,i) => 
+    //                 html`<mwc-list-item value="${l.id}" ?selected=${i==0}>${l.id}</mwc-list-item>`
+    //               )}
+    //             </mwc-select>
+    //             <mwc-textfield id="lotName" 
+    //               label="${this.langConfig.fieldText.lotName["label_"+ this.lang]}" 
+    //               .value='' disabled></mwc-textfield>
+    //           </div>
+    //         `
+    //       }
+    //       <div style="margin-top:30px;text-align:center">
+    //         <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+    //           ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+    //         <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.lotAction}>
+    //           ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+    //       </div>
+    //     </div>
+    //   </tr-dialog>
+    //   `
+    // }
+  
     get lotDialog() {
       return this.shadowRoot.querySelector("tr-dialog#lotDialog")
     }
 
     get lotInput() {
       return this.shadowRoot.querySelector("mwc-textfield#lotInput")
+    }
+
+    get lotId() {
+      return this.shadowRoot.querySelector("mwc-select#lotId")
+    }
+
+    get lotName() {
+      return this.shadowRoot.querySelector("mwc-textfield#lotName")
     }
 
     lotAction() {
@@ -655,6 +716,7 @@ export function DialogTemplate(base) {
     decisionTemplate() {
       return html`
       <tr-dialog id="decisionDialog" 
+        @opened=${()=>this.capaRequired=this.capaCheck.checked}
         @closed=${e=>{if(e.target===this.decisionDialog)this.grid.activeItem=null}}
         heading=""
         hideActions=""
@@ -666,12 +728,16 @@ export function DialogTemplate(base) {
           <mwc-textfield id="systemId" label="${this.langConfig.fieldText.systemId["label_"+ this.lang]}"
             .value=${this.selectedSamples.length&&this.selectedSamples[0].capa_external_system_id}></mwc-textfield>
           <mwc-formfield label="${this.langConfig.fieldText.capa["label_"+ this.lang]}">
-            <mwc-checkbox id="capaCheck" ?checked=${this.selectedSamples.length&&this.selectedSamples[0].capa_required}></mwc-checkbox>
+            <mwc-checkbox id="capaCheck" 
+              ?checked=${this.selectedSamples.length&&this.selectedSamples[0].capa_required}
+              @change=${e=>this.capaRequired=e.target.checked}></mwc-checkbox>
           </mwc-formfield>
           <mwc-textfield id="capaName" label="${this.langConfig.fieldText.capaName["label_"+ this.lang]}"
-            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_name}></mwc-textfield>
+            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_name}
+            ?hidden=${!this.capaRequired}></mwc-textfield>
           <mwc-textfield id="capaId" label="${this.langConfig.fieldText.capa["label_"+ this.lang]}"
-            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_id}></mwc-textfield>
+            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_id}
+            ?hidden=${!this.capaRequired}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>

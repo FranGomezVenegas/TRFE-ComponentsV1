@@ -17,6 +17,9 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
         tr-dialog * {
           margin-bottom: 5px;
         }
+        mwc-textfield[hidden] {
+          display: none;
+        }
       `
     ];
   }
@@ -224,6 +227,7 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
     if (action.paramFilter) {
       jsonParam[action.paramFilter[this.filterName].query] = action.paramFilter[this.filterName].value
     }
+    console.log(jsonParam, " JJ")
     return jsonParam
   }
 
