@@ -470,7 +470,7 @@ export class CredDialog extends CommonCore {
     }
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {
-      if (value) {
+      if (value != null || value != undefined) {
         cleanParams[key] = value
       }
     })
