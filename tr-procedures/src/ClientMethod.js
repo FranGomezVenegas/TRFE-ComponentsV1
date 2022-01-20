@@ -265,7 +265,7 @@ export function ClientMethod(base) {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
-        this.grid.activeItem=null
+        this.reload()
       })
     }
 
