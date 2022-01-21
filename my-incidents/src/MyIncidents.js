@@ -1,6 +1,6 @@
 import { html, css, unsafeCSS } from 'lit';
 import { CommonCore } from '@trazit/common-core';
-import { displayFlex, horizontal, wrap, Layouts, vertical } from '@collaborne/lit-flexbox-literals';
+import { Alignment, displayFlex, Layouts, vertical } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
@@ -29,7 +29,7 @@ const langConfig = {
       "label_en": "Number of Days", "label_es": "Número de Días"
     },
     id:  {
-      "label_en": "Incident Id", "label_es": "Id de Incidencia"
+      "label_en": "Incident Id - Date Creation - Title", "label_es": "Id de Incidencia - Creación de fecha - Título"
     }
   },
   dialog_button: {
@@ -88,7 +88,7 @@ const langConfig = {
 export class MyIncidents extends CommonCore {
   static get styles() {
     return [
-      Layouts, 
+      Layouts, Alignment,
       css`
         tr-dialog {
           --mdc-dialog-heading-ink-color: blue;
@@ -196,7 +196,7 @@ export class MyIncidents extends CommonCore {
           <mwc-select id="icdId" label="${langConfig.field.id["label_"+this.lang]}" 
             ?disabled=${!this.closedIds.length}>
             ${this.closedIds.map((c,i) => 
-              html`<mwc-list-item value="${c.id}" ?selected=${i==0}>${c.id}</mwc-list-item>`
+              html`<mwc-list-item value="${c.id}" ?selected=${i==0}>${c.id} - ${c.date_creation.slice(0,10)} - ${c.item_title.slice(0,20)}</mwc-list-item>`
             )}
           </mwc-select>
         </div>
