@@ -328,7 +328,8 @@ export function DialogTemplate(base) {
           bubbles: true,
           composed: true
         }))
-        return console.log("This addition would be "+ (this.selectedSamples[0].microorganism_list_array.length+1) +" what is greater than the reading "+ this.selectedSamples[0].microorganism_list_array.length +" what is not allowed.")
+        console.log("This addition would be "+ (this.selectedSamples[0].microorganism_list_array.length+1) +" what is greater than the reading "+ this.selectedSamples[0].microorganism_list_array.length +" what is not allowed.")
+        return
       }
       // get value from selected item
       if (!addhoc) {
@@ -752,13 +753,13 @@ export function DialogTemplate(base) {
           <mwc-textfield id="capaName" label="${this.langConfig.fieldText.capaName["label_"+ this.lang]}"
             .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_name}
             ?hidden=${!this.capaRequired}></mwc-textfield>
-          <mwc-textfield id="capaId" label="${this.langConfig.fieldText.capa["label_"+ this.lang]}"
+          <mwc-textfield id="capaId" label="${this.langConfig.fieldText.capaId["label_"+ this.lang]}"
             .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_id}
             ?hidden=${!this.capaRequired}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" dialogAction="accept" 
+            <sp-button size="xl" slot="primaryAction"
               @click=${this.setDecision}>
               ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
           </div>
@@ -792,6 +793,35 @@ export function DialogTemplate(base) {
     }
 
     setDecision() {
+      let required = []
+      if (!this.systemName.value) {
+        required.push("System Name")
+      }
+      if (!this.systemId.value) {
+        required.push("System Id")
+      }
+      if (this.capaCheck.checked) {
+        if (!this.capaName.value) {
+          required.push("CAPA Name")
+        }
+        if (!this.capaId.value) {
+          required.push("CAPA Id")
+        }
+      }
+      if (required.length) {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {
+            is_error: true,
+            message_en: "Please fill the required fields: "+ required.join(", "),
+            message_es: "Por favor, rellene los campos obligatorios: "+ required.join(", ")
+          },
+          bubbles: true,
+          composed: true
+        }))
+        console.log("Please fill the required fields: "+ required.join(", "))
+        return
+      }
+
       this.targetValue = {
         "capaFieldValue": "Trackwise"+ this.systemName.value +"*String|"+ this.systemId.value +"*String|"+ this.capaName.value +"*String|"+ this.capaId.value +"*String"
       }

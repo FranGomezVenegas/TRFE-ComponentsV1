@@ -342,6 +342,7 @@ export function ClientMethod(base) {
       let params = this.config.backendUrl + this.selectedAction.endPoint 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
+        this.decisionDialog.close()
         this.resetDialogThings()
         this.reload()
       })
