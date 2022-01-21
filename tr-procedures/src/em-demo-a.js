@@ -9,6 +9,8 @@ export const EmDemoA = {
       },
       "fieldText": {
         "newLot": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" },
+        "lotDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+        "lotName": { "label_en": "Lot Name to reactivate", "label_es": "Nombre para el lote a reactivar" },
         "activateLot": { "label_en": "Production Lot Name to reactivate", "label_es": "Nombre para el lote de producción a reactivar" }
       },
       "gridHeader": {
@@ -65,10 +67,20 @@ export const EmDemoA = {
         },
         "dialogInfo": {
           "requiresDialog": true,
-          "name": "lotDialog"
+          "name": "lotDialog",
+          "action": [
+            {
+              "actionName": "DEACTIVATED_PRODUCTION_LOTS_LAST_N_DAYS",
+              "clientMethod": "getDeactivatedLots",
+              "endPoint": "/moduleenvmon/frontend/EnvMonAPIfrontend",
+              "apiParams": [
+                { "query": "numDays", "element": "lotNumDays", "defaultValue": 7 }
+              ]
+            }
+          ]
         },
         "apiParams": [
-          { "query": "lotName", "element": "lotInput" }
+          { "query": "lotName", "element": "lotName" }
         ]
       },
       {

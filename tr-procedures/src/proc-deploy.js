@@ -65,10 +65,20 @@ export const ProcDeploy = {
         },
         "dialogInfo": {
           "requiresDialog": true,
-          "name": "lotDialog"
+          "name": "lotDialog",
+          "action": [
+            {
+              "actionName": "DEACTIVATED_PRODUCTION_LOTS_LAST_N_DAYS",
+              "clientMethod": "getDeactivatedLots",
+              "endPoint": "/moduleenvmon/frontend/EnvMonAPIfrontend",
+              "apiParams": [
+                { "query": "numDays", "element": "lotNumDays", "defaultValue": 7 }
+              ]
+            }
+          ]
         },
         "apiParams": [
-          { "query": "lotName", "element": "lotInput" }
+          { "query": "lotName", "element": "lotName" }
         ]
       },
       {

@@ -269,6 +269,17 @@ export function ClientMethod(base) {
       })
     }
 
+    getDeactivatedLots() {
+      this.deactivatedLots = []
+      let params = this.config.backendUrl + this.selectedDialogAction.endPoint
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          this.deactivatedLots = j
+        }
+      })
+    }
+
     setLot() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl 
         + '?' + new URLSearchParams(this.reqParams)
@@ -337,7 +348,7 @@ export function ClientMethod(base) {
     }
 
     closeInvestigation() {
-      if (!this.selectedSamples[0].capa_external_system_name || !this.selectedSamples[0].capa_external_system_id || !this.selectedSamples[0].external_system_name || !this.selectedSamples[0].external_system_id) {
+      if (!this.selectedSamples[0].capa_decision_on) {
         this.dispatchEvent(new CustomEvent("error", {
           detail: { 
             is_error: true,
