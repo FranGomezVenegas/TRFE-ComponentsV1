@@ -35,7 +35,9 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
       actions: { type: Array },
       samplesReload: { type: Boolean },
       selectedSamples: { type: Array },
-      selectedAction: { type: Object }
+      selectedAction: { type: Object },
+      windowOpenable: { type: String },
+      sopsPassed: { type: Boolean }
     };
   }
 
