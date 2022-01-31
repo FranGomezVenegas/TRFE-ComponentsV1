@@ -9,6 +9,8 @@ export const ProcDeploy = {
       },
       "fieldText": {
         "newLot": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" },
+        "lotDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+        "lotName": { "label_en": "Lot Name to reactivate", "label_es": "Nombre para el lote a reactivar" },
         "activateLot": { "label_en": "Production Lot Name to reactivate", "label_es": "Nombre para el lote de producción a reactivar" }
       },
       "gridHeader": {
