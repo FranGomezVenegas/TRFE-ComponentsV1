@@ -92,7 +92,9 @@ export class CorrectiveActions extends CoreView {
       selectedAction: { type: Object },
       targetValue: { type: Object },
       procName: { type: String },
-      config: { type: Object }
+      config: { type: Object },
+      windowOpenable: { type: String },
+      sopsPassed: { type: Boolean }
     };
   }
 
@@ -133,19 +135,31 @@ export class CorrectiveActions extends CoreView {
               id="${action.button.id}"
               icon="${action.button.icon}" 
               title="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
+              ?disabled=${this.btnDisabled(action)}
               @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
             html`<mwc-button dense raised 
               id="${action.button.id}"
               icon="${action.button.icon}" 
               label="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
+              ?disabled=${this.btnDisabled(action)}
               @click=${()=>this.actionMethod(action)}></mwc-button>`
           }` :
           nothing
         }`
       )}
     `
+  }
+
+  btnDisabled(action) {
+    let d = false
+    if (this.sopsPassed == false) {
+      if (this.windowOpenable == "yes") {
+        d = action.button.icon == "refresh" ? this.samplesReload : true
+      }
+    } else {
+      d = action.button.icon == "refresh" ? this.samplesReload : !this.selectedSamples.length
+    }
+    return d
   }
 
   actionMethod(action, replace = true, actionNumIdx) {

@@ -102,7 +102,9 @@ export class ProgramProc extends CredDialog {
       prev: { type: Boolean },
       next: { type: Boolean },
       programList: { type: Array },
-      tabView: { type: String }
+      tabView: { type: String },
+      windowOpenable: { type: String },
+      sopsPassed: { type: Boolean }
     };
   }
 
@@ -148,7 +150,10 @@ export class ProgramProc extends CredDialog {
         <sampling-points .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points"}></sampling-points>
         <sampling-points-map .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points-map"}></sampling-points-map>
         <core-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="core"}></core-view>
-        <corrective-actions .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="corrective-actions"}></corrective-actions>
+        <corrective-actions 
+          .windowOpenable=${this.windowOpenable}
+          .sopsPassed=${this.sopsPassed}
+          .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="corrective-actions"}></corrective-actions>
         ${super.render()}
       </div>
     `

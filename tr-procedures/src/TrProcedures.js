@@ -113,9 +113,32 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     super.authorized()
     this.windowOpenable = null
     this.sopsPassed = null
+    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
+    if (anyAccess.length) {
+      let defView = anyAccess[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
+      if (defView.length) {
+        // for fake test
+        // this.sopsPassed = false
+        this.sopsPassed = defView[0].sops_passed
+      }
+      this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
+      if (this.windowOpenable == "no") {
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: { 
+            is_error: true,
+            message_en: "Window cannot be open due to pending linked SOP certifications",
+            message_es: "La ventana no se puede abrir porque hay SOPs vinculados pendientes de certificación"
+          },
+          bubbles: true,
+          composed: true
+        }))
+        console.log("Window cannot be open due to pending linked SOP certifications")
+        return
+      }
+    }
     if (!this.componentModel) {
       // whether user has access into the selected proc
-      let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
       if (!this.abstract && this.audit) {
         this.audit.updateComplete.then(() => {
           let whichProc = procList.filter(p => p.procInstanceName == this.procName)
@@ -125,28 +148,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           }
         })
       }
-      let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
       if (anyAccess.length) {
-        let defView = anyAccess[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
-        if (defView.length) {
-          // for fake test
-          // this.sopsPassed = false
-          this.sopsPassed = defView[0].sops_passed
-        }
-        this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
-        if (this.windowOpenable == "no") {
-          this.dispatchEvent(new CustomEvent("error", {
-            detail: { 
-              is_error: true,
-              message_en: "Window cannot be open due to pending linked SOP certifications",
-              message_es: "La ventana no se puede abrir porque hay SOPs vinculados pendientes de certificación"
-            },
-            bubbles: true,
-            composed: true
-          }))
-          console.log("Window cannot be open due to pending linked SOP certifications")
-          return
-        }
         if (this.tabs) {
           this.updateComplete.then(() => {
             this.tabsComposition.updateComplete.then(() => {
