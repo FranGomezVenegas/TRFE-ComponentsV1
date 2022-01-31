@@ -71,8 +71,8 @@ class DemoExample extends LitElement {
     this.trProc.viewName = sample
     this.trProc.filterName = filter
     this.trProc.resetView()
-    this.trProc.render()
     this.trProc.authorized()
+    this.trProc.render()
   }
 
   get pLogin() {
