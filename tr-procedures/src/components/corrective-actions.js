@@ -154,10 +154,10 @@ export class CorrectiveActions extends CoreView {
     let d = false
     if (this.sopsPassed == false) {
       if (this.windowOpenable == "yes") {
-        d = action.button.icon == "refresh" ? this.samplesReload : true
+        d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : true
       }
     } else {
-      d = action.button.icon == "refresh" ? this.samplesReload : !this.selectedSamples.length
+      d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length
     }
     return d
   }

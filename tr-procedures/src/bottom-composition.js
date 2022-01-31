@@ -291,10 +291,10 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     let d = false
     if (this.sopsPassed == false) {
       if (this.windowOpenable == "yes") {
-        d = action.button.icon == "refresh" ? this.samplesReload : true
+        d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : true
       }
     } else {
-      d = action.button.icon == "refresh" ? 
+      d = action.button.whenDisabled == "samplesReload" ? 
         this.samplesReload : 
         (this.selectedSamples.length ?
           action.button.disabledBEState&&this.selectedSamples[0][action.button.disabledBEState] ? 
