@@ -80,7 +80,9 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       selectedAction: { type: Object },
       batchName: { type: String },
       gridItems: { type: Array },
-      filteredItems: { type: Array }
+      filteredItems: { type: Array },
+      windowOpenable: { type: String },
+      sopsPassed: { type: Boolean }
     };
   }
 
@@ -252,18 +254,12 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       ${this.actions&&this.actions.map(action =>
         html`${action.button ?
           html`${action.button.icon ?
-            html`${action.button.actionName ?
+            html`${action.actionName ?
               html`<mwc-icon-button
                 id="${action.button.id}"
                 icon="${action.button.icon}" 
                 title="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${action.button.whenDisabled == "samplesReload" 
-                  ? this.samplesReload : 
-                    (this.selectedSamples.length ?
-                      action.button.disabledBEState&&this.selectedSamples[0][action.button.disabledBEState] ? 
-                        true :
-                        false
-                    : true)}
+                ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
               html`<mwc-icon-button style="color:${action.button.color}" 
                 id="${action.button.id}"
@@ -281,13 +277,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
                 id="${action.button.id}"
                 icon="${action.button.icon}" 
                 label="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${action.button.whenDisabled == "samplesReload" 
-                  ? this.samplesReload : 
-                    (this.selectedSamples.length ?
-                      action.button.disabledBEState&&this.selectedSamples[0][action.button.disabledBEState] ? 
-                        true :
-                        false
-                    : true)}
+                ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this.actionMethod(action)}></mwc-button>`
             }`
           }` :
@@ -295,6 +285,24 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         }`
       )}
     `
+  }
+
+  btnDisabled(action) {
+    let d = false
+    if (this.sopsPassed == false) {
+      if (this.windowOpenable == "yes") {
+        d = action.button.icon == "refresh" ? this.samplesReload : true
+      }
+    } else {
+      d = action.button.icon == "refresh" ? 
+        this.samplesReload : 
+        (this.selectedSamples.length ?
+          action.button.disabledBEState&&this.selectedSamples[0][action.button.disabledBEState] ? 
+            true :
+            false
+          : true)
+    }
+    return d
   }
 
   filterSamples(state) {

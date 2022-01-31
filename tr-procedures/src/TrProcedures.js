@@ -17,7 +17,7 @@ import '@trazit/tr-dialog/tr-dialog';
 import './audit-dialog';
 import './templates-';
 import './bottom-composition';
-import './tabsComposition';
+import './tabs-composition';
 import './components/program-proc';
 
 export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
@@ -76,7 +76,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       selectedAction: { type: Object },
       batchName: { type: String },
       componentModel: { type: String },
-      tabs: { type: Array }
+      tabs: { type: Array },
+      windowOpenable: { type: String },
+      sopsPassed: { type: Boolean }
     };
   }
 
@@ -109,6 +111,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   authorized() {
     super.authorized()
+    this.windowOpenable = null
+    this.sopsPassed = null
     if (!this.componentModel) {
       // whether user has access into the selected proc
       let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
@@ -123,6 +127,26 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
       let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
       if (anyAccess.length) {
+        let defView = anyAccess[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
+        if (defView.length) {
+          // for fake test
+          // this.sopsPassed = false
+          this.sopsPassed = defView[0].sops_passed
+        }
+        this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
+        if (this.windowOpenable == "no") {
+          this.dispatchEvent(new CustomEvent("error", {
+            detail: { 
+              is_error: true,
+              message_en: "Window cannot be open due to pending linked SOP certifications",
+              message_es: "La ventana no se puede abrir porque hay SOPs vinculados pendientes de certificación"
+            },
+            bubbles: true,
+            composed: true
+          }))
+          console.log("Window cannot be open due to pending linked SOP certifications")
+          return
+        }
         if (this.tabs) {
           this.updateComplete.then(() => {
             this.tabsComposition.updateComplete.then(() => {
@@ -138,103 +162,116 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   render() {
     return html`
-      ${this.componentModel ? 
-        html`${this.viewName == "Programs" ?
-          html`<program-proc 
-            .lang=${this.lang}
-            .procName=${this.procName} 
-            .viewName=${this.viewName} 
-            .filterName=${this.filterName}
-            .model=${this.componentModel}
-            .config=${this.config}></program-proc>` :
-          nothing
-        }` :
+      ${this.windowOpenable=="yes" ? 
         html`
-          ${this.topCompositions ?
-            html`${this.topCompositions.map(c => 
-              html`<templates- 
-                .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
-                @template-event=${this.templateEvent}></templates->`
-            )}` :
-            nothing
-          }
-          ${this.abstract ? 
-            nothing :
+          ${this.componentModel ? 
+            html`${this.viewName == "Programs" ?
+              html`<program-proc 
+                .windowOpenable=${this.windowOpenable}
+                .sopsPassed=${this.sopsPassed}
+                .lang=${this.lang}
+                .procName=${this.procName} 
+                .viewName=${this.viewName} 
+                .filterName=${this.filterName}
+                .model=${this.componentModel}
+                .config=${this.config}></program-proc>` :
+              nothing
+            }` :
             html`
-              <div class="layout horizontal flex wrap">
-                <div class="layout flex">
-                  ${this.getTitle()}
-                  <div class="layout horizontal center flex wrap">
-                    ${this.getButton()}
+              ${this.topCompositions ?
+                html`${this.topCompositions.map(c => 
+                  html`<templates- 
+                    .windowOpenable=${this.windowOpenable}
+                    .sopsPassed=${this.sopsPassed}
+                    .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
+                    @template-event=${this.templateEvent}></templates->`
+                )}` :
+                nothing
+              }
+              ${this.abstract ? 
+                nothing :
+                html`
+                  <div class="layout horizontal flex wrap">
+                    <div class="layout flex">
+                      ${this.getTitle()}
+                      <div class="layout horizontal center flex wrap">
+                        ${this.getButton()}
+                      </div>
+                      <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                        @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
+                        .selectedItems="${this.selectedSamples}">
+                        ${this.gridList()}
+                      </vaadin-grid>
+                    </div>
+                    ${this.langConfig&&this.viewName=="ProductionLots" ? 
+                      html`${this.lotTemplate()}` :
+                      nothing
+                    }
+                    ${this.dateTemplate()}
+                    ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
+                      html`${this.commentTemplate()}` : nothing
+                    }
+                    ${this.langConfig&&this.langConfig.resultHeader ? 
+                      html`${this.resultTemplate()}` :
+                      nothing
+                    }
+                    ${this.langConfig&&this.langConfig.microorganismHeader ? 
+                      html`${this.microorganismTemplate()}` :
+                      nothing
+                    }
+                    ${this.langConfig&&this.viewName=="LogSamples" ? 
+                      html`${this.pointTemplate()}` :
+                      nothing
+                    }
+                    ${this.langConfig&&this.viewName=="PlatformInstruments" ? 
+                      html`${this.newInstrumentsTemplate()}` :
+                      nothing
+                    }
+                    <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
+                    ${super.render()}
                   </div>
-                  <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-                    @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
-                    .selectedItems="${this.selectedSamples}">
-                    ${this.gridList()}
-                  </vaadin-grid>
-                </div>
-                ${this.langConfig&&this.viewName=="ProductionLots" ? 
-                  html`${this.lotTemplate()}` :
-                  nothing
-                }
-                ${this.dateTemplate()}
-                ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
-                  html`${this.commentTemplate()}` : nothing
-                }
-                ${this.langConfig&&this.langConfig.resultHeader ? 
-                  html`${this.resultTemplate()}` :
-                  nothing
-                }
-                ${this.langConfig&&this.langConfig.microorganismHeader ? 
-                  html`${this.microorganismTemplate()}` :
-                  nothing
-                }
-                ${this.langConfig&&this.viewName=="LogSamples" ? 
-                  html`${this.pointTemplate()}` :
-                  nothing
-                }
-                ${this.langConfig&&this.viewName=="PlatformInstruments" ? 
-                  html`${this.newInstrumentsTemplate()}` :
-                  nothing
-                }
-                <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
-                ${super.render()}
-              </div>
+                `
+              }
+              ${this.bottomCompositions ?
+                html`${this.bottomCompositions.map(c => 
+                  html`<div class="layout flex">
+                    <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
+                      .windowOpenable=${this.windowOpenable}
+                      .sopsPassed=${this.sopsPassed}
+                      .model=${c} .config=${this.config} .batchName=${this.batchName}
+                      @reload-samples=${e=>this[e.detail.method]()}
+                      @selected-incub=${this.filteringBatch}
+                      @selected-batch=${this.filteringIncub}
+                      @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
+                  </div>`
+                )}` :
+                nothing
+              }
+              ${this.tabs ?
+                html`
+                  <div class="layout vertical flex">
+                    <div class="layout horizontal flex">
+                      ${this.tabs.map(t => 
+                        html`
+                          <mwc-button class="tabBtn" dense unelevated 
+                            .label=${t.langConfig.tab["label_"+ this.lang]}
+                            @click=${()=>this.selectTab(t)}></mwc-button>
+                        `
+                      )}
+                    </div>
+                    <tabs-composition 
+                      .windowOpenable=${this.windowOpenable}
+                      .sopsPassed=${this.sopsPassed}
+                      .procName=${this.procName} 
+                      .viewName=${this.viewName} 
+                      .config=${this.config}></tabs-composition>
+                  </div>
+                ` : nothing
+              }
             `
           }
-          ${this.bottomCompositions ?
-            html`${this.bottomCompositions.map(c => 
-              html`<div class="layout flex">
-                <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
-                  .model=${c} .config=${this.config} .batchName=${this.batchName}
-                  @reload-samples=${e=>this[e.detail.method]()}
-                  @selected-incub=${this.filteringBatch}
-                  @selected-batch=${this.filteringIncub}
-                  @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
-              </div>`
-            )}` :
-            nothing
-          }
-          ${this.tabs ?
-            html`
-              <div class="layout vertical flex">
-                <div class="layout horizontal flex">
-                  ${this.tabs.map(t => 
-                    html`
-                      <mwc-button class="tabBtn" dense unelevated 
-                        .label=${t.langConfig.tab["label_"+ this.lang]}
-                        @click=${()=>this.selectTab(t)}></mwc-button>
-                    `
-                  )}
-                </div>
-                <tabs-composition 
-                  .procName=${this.procName} 
-                  .viewName=${this.viewName} 
-                  .config=${this.config}></tabs-composition>
-              </div>
-            ` : nothing
-          }
-        `
+        ` :
+        html`${super.render()}`
       }
     `;
   }
@@ -454,19 +491,31 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
               id="${action.button.id}"
               icon="${action.button.icon}" 
               title="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
+              ?disabled=${this.btnDisabled(action)}
               @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
             html`<mwc-button dense raised 
               id="${action.button.id}"
               icon="${action.button.icon}" 
               label="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
+              ?disabled=${this.btnDisabled(action)}
               @click=${()=>this.actionMethod(action)}></mwc-button>`
           }` :
           nothing
         }`
       )}
     `
+  }
+
+  btnDisabled(action) {
+    let d = false
+    if (this.sopsPassed == false) {
+      if (this.windowOpenable == "yes") {
+        d = action.button.icon == "refresh" ? this.samplesReload : true
+      }
+    } else {
+      d = action.button.icon == "refresh" ? this.samplesReload : !this.selectedSamples.length
+    }
+    return d
   }
 
   nextRequest() {

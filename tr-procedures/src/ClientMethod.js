@@ -5,6 +5,7 @@ export function ClientMethod(base) {
       this.selectedSamples = []
       let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl) 
         + '?' + new URLSearchParams(this.reqParams)
+        console.log(params, " PP")
       await this.fetchApi(params, false, false).then(j => {
         if (j && !j.is_error) {
           this.setGrid(j)
