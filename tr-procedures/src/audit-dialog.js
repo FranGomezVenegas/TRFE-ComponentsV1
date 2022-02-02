@@ -75,14 +75,32 @@ export class AuditDialog extends LitElement {
       strContent += `*performed_on: ${a.date} by ${a.person}`
       strContent += `<br>*reviewed_on: ${a.reviewed ? a.reviewed_on : ''}`
       strContent += `<li>audit_id: ${a.audit_id}</li>`
-      strContent += `fields_updated: ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value]) => `<li>${key}: ${value}</li>`) : ''}`
+      let fu = a.fields_updated ? Object.entries(a.fields_updated).map(([key, value]) => { return {k: key, v: value}}) : null
+      let strFu = ''
+      if (fu) {
+        fu.forEach(d => {
+          strFu += `<li>${d.k}: ${d.v}</li>`
+        })
+      } else {
+        strFu += `<br/>`
+      }
+      strContent += `fields_updated: ${strFu}`
       if (a.sublevel.length&&a.sublevel[0].date) {
         strContent += `<div style="margin-left: 20px;">`
         a.sublevel.forEach(s=> {
           strContent += `<p><div>action_name: ${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>`
           strContent += `*performed_on: ${s.date} by ${s.person}`
           strContent += `<br>*reviewed_on: ${s.reviewed ? s.reviewed_on : ''}`
-          strContent += `<br>fields_updated: ${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value]) => `<li>${key}: ${value}</li>`) : ''}</p>`
+          fu = s.fields_updated ? Object.entries(s.fields_updated).map(([key, value]) => { return {k: key, v: value}}) : null
+          strFu = ''
+          if (fu) {
+            fu.forEach(d => {
+              strFu += `<li>${d.k}: ${d.v}</li>`
+            })
+          } else {
+            strFu += `<br/>`
+          }
+          strContent += `<br>fields_updated: ${strFu}`
         })
         strContent += `</div>`
       }
