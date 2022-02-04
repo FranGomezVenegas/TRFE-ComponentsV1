@@ -305,15 +305,17 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => !item.incubation_batch)
       // if select new assigned incub#1 (incub_stage=1) and SAMPLES_ARRAY.length>0, show up the incub samples that incubation_batch != "" & pending_incub = 1 & incubation_start = "" (tomato state)
       } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1" && e.detail.sample.SAMPLES_ARRAY.length) {
+        let pendings = this.incubElement.gridItems.filter(item => !item.incubation_batch)
         let preFilter = this.incubElement.gridItems.filter(item => item.incubation_batch && item.pending_incub == 1 && !item.incubation_start)
         // sort out by matched sample id
-        this.incubElement.filteredItems = preFilter.filter(p => {
+        let inBatches = preFilter.filter(p => {
           let matched = false
           e.detail.sample.SAMPLES_ARRAY.forEach(s => {
             if (p.sample_id == s.sample_id) matched = true
           })
           if (matched) return p
         })
+        this.incubElement.filteredItems = [...pendings, ...inBatches]
       // if select started incub#1 (incub_stage=1), show up the incub samples that pending_incub = 1 & incubation_start != "" & incubation_end = "" (gif state)
       } else if (e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1") {
         this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation_start && !item.incubation_end && item.pending_incub == 1)
@@ -341,6 +343,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       this.batchName = null
       this.incubElement.filteredItems = this.incubElement.gridItems
     }
+    this.requestUpdate()
   }
 
   filteringBatch(e) {
@@ -380,7 +383,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       // sample in batch incub#2 & incubation2_start="", show the batch that incubation_start = "" & assigned incub#2 (incub_stage=2) & sample_id is already put on SAMPLES_ARRAY
       } else if (e.detail.sample.incubation2_batch && !e.detail.sample.incubation2_start) {
         let preFilter = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "2" && item.SAMPLES_ARRAY.length)
-        console.log(preFilter)
         // sort out by matched sample id
         let matched
         preFilter.forEach(p => {
@@ -571,7 +573,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         } else {
           c.gridItems = c.filteredItems = []
         }
+        this.batchName = null
+        c.selectedSamples = []
         c.samplesReload = false
+        c.requestUpdate()
       })
     } else {
       if (j) {

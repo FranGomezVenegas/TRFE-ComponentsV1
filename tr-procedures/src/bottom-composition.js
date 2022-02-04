@@ -208,7 +208,6 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
 
   reload() {
     this.resetDialogThings()
-    this.batchName = null
     this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
   }
