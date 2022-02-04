@@ -495,7 +495,7 @@ export function DialogTemplate(base) {
             )}
           </mwc-select>
           ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
-            html`<mwc-textfield label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${f.value}></mwc-textfield>`
+            html`<mwc-textfield disabled label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${f.value}></mwc-textfield>`
           )}
         </div>
       </tr-dialog>
