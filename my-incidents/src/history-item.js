@@ -24,10 +24,10 @@ export class HistoryItem extends LitElement {
   }
 
   render() {
-    return html`
+    return html`f['label_'+this.lang]
     <sp-tooltip open placement="" variant="${this.variant()}">
       <mwc-icon slot="icon" style="margin-right:10px">${this.icon()}</mwc-icon>
-      <h3 style="margin-top:5px">${this.history.action_name}<br>${this.history.date}</h3>
+      <h3 style="margin-top:5px">${this.history.action_pretty_en ? this.history['action_pretty_'+ this.lang] : this.history.action_name}<br>${this.history.date}</h3>
       <span>${this.history.note}</span>
     </sp-tooltip>
     `;
