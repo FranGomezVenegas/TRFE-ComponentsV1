@@ -337,9 +337,6 @@ export const ProcDeploy = {
         }
       },
       "gridHeader": {
-        "status": {
-          "label_en": "Status", "label_es": "Estado", "is_icon": true
-        },
         "sample_id": {
           "label_en": "Sample ID", "label_es": "ID Muestra", "sort": true, "filter": false
         },
