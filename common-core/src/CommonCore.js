@@ -18,7 +18,11 @@ export const commonLangConfig = {
   "closeDialogButton":{
     "label_en": "Close", 
     "label_es": "Cerrar"
-  }  
+  },
+  "confirmActionPhrase":{
+    "label_en": "Are you sure you want to continue doing", 
+    "label_es": "¿Está seguro que desea continuar aplicando"
+  }
 }
 
 export class CommonCore extends LitElement {
