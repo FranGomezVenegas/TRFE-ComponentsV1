@@ -899,9 +899,6 @@ export const EmDemoA = {
             "name": {
               "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false, "width": "15%"
             },
-            "incub_stage": {
-              "label_en": "#Incub", "label_es": "IncNº", "sort": true, "filter": false, "width": "10%"
-            },
             "incubator_info_temperature": {
               "label_en": "Temperature", "label_es": "Temperatura", "sort": false, "filter": false, "width": "10%"
             },
@@ -1458,5 +1455,8 @@ export const EmDemoA = {
         ]
       }
     ]
+  },
+  "Browser": {
+    "browser": true
   }
 }
