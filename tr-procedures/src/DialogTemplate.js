@@ -428,7 +428,7 @@ export function DialogTemplate(base) {
         <div class="layout vertical flex center-justified">
           <vaadin-grid id="asGrid" theme="row-dividers"
             @active-item-changed=${e=>this.selectedAssigns=e.detail.value ? [e.detail.value] : []}
-            .selectedItems="${this.selectedAssigns}">
+            .selectedItems="${this.selectedAssigns}" all-rows-visible>
             ${this.asList()}
           </vaadin-grid>
           <div style="margin-top:30px;text-align:center">
