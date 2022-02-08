@@ -431,19 +431,19 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         // inc2
         if (this.filterName == "active_batches") {
           if (sample.incub_stage == 1) {
-            return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+            return html`<img src="/images/1.png" style="width:20px">`
           } else if (sample.incub_stage == 2) {
-            return html`<mwc-icon style="color:Brown;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+            return html`<img src="/images/2.png" style="width:20px">`
           }
         } else {
           if (sample.pending_incub == 2) {
             if (sample.incubation2_batch) {
-              return html`<mwc-icon style="color:Brown;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+              return html`<img src="/images/2.png" style="width:20px">`
             } else { // incub@1 done or first state of incub#2
-              return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+              return html`<img src="/images/1.png" style="width:20px">`
             }
           } else if (sample.incubation_incubator && sample.pending_incub == 2) {
-            return html`<mwc-icon style="color:Violet;--mdc-icon-size:20px">radio_button_checked</mwc-icon>`
+            return html`<img src="/images/1.png" style="width:20px">`
           }
         }
       }
