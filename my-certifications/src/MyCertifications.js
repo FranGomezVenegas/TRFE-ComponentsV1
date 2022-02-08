@@ -102,35 +102,25 @@ export class MyCertifications extends CommonCore {
       actionName: 'ALL_IN_ONE',
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
     }), false, false).then(j => {
-      this.getProcedureList(cert)
-    })
-  }
-
-  getProcedureList(cert) {
-    this.fetchApi(this.config.backendUrl + this.config.frontEndSopUrl + '?' + new URLSearchParams({
-      dbName: this.config.dbName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-    }), false, false).then(j => {
       if (j && !j.is_error) {
-        let certs = JSON.stringify(this.certSet) // temp ref
-        certs = JSON.parse(certs)
-        this.certSet = []
         // updating userSession data
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-        if (cert.user_sop_id) { // sop
-          this.sops.forEach((c,i) => {
-            if (c.user_sop_id == cert.user_sop_id) {
-              this.sops[i].status = "PASS"
-            }
-          })
-          userSession.all_my_sops[0].my_sops = this.sops
-        }
+        userSession.all_my_sops = j.all_my_sops
+        userSession.my_pending_sops = j.my_pending_sops
+        userSession.procedures_list = j.procedures_list
+        userSession.procedures_sops = j.procedures_sops
+        userSession.sop_tree_list_element = j.sop_tree_list_element
+        sessionStorage.setItem('userSession', JSON.stringify(userSession))
+        this.dispatchEvent(new CustomEvent('certs-updated'))
+        this.sops = userSession.all_my_sops.length ? userSession.all_my_sops[0].my_sops : this.sops
+        this.analytics = userSession.all_my_analysis_methods.length ? userSession.all_my_analysis_methods[0].my_analysis_method_certifications : this.analytics
+        let certs = JSON.stringify(this.certSet) // temp ref
+        certs = JSON.parse(certs)
         certs.forEach((c,i) => {
           if (c.user_sop_id == cert.user_sop_id) {
             certs[i].status = "PASS"
           }
         })
-        sessionStorage.setItem('userSession', JSON.stringify(userSession))
         this.certSet = certs
         this.requestUpdate()
       }
