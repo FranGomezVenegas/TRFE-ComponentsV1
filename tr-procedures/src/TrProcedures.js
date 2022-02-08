@@ -324,15 +324,17 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation_end && !item.incubation2_batch)
       // if select new assigned incub#2 (incub_stage=2) and SAMPLES_ARRAY.length>0, show up the incub samples that incubation2_batch != "" & pending_incub = 2 & incubation2_start = "" (SlateBlue state)
       } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2" && e.detail.sample.SAMPLES_ARRAY.length) {
+        let pendings = this.incubElement.gridItems.filter(item => !item.incubation2_batch && item.pending_incub == 2 && !item.incubation2_start)
         let preFilter = this.incubElement.gridItems.filter(item => item.incubation2_batch && item.pending_incub == 2 && !item.incubation2_start)
         // sort out by matched sample id
-        this.incubElement.filteredItems = preFilter.filter(p => {
+        let inBatches = preFilter.filter(p => {
           let matched = false
           e.detail.sample.SAMPLES_ARRAY.forEach(s => {
             if (p.sample_id == s.sample_id) matched = true
           })
           if (matched) return p
         })
+        this.incubElement.filteredItems = [...pendings, ...inBatches]
       // if select started incub#2 (incub_stage=2), show up the incub samples that pending_incub = 2 & incubation2_start != "" & incubation2_end = "" (gif state)
       } else if (e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2") {
         this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation2_start && !item.incubation2_end && item.pending_incub == 2)
