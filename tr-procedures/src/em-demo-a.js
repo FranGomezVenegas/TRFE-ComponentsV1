@@ -537,9 +537,6 @@ export const EmDemoA = {
         "sample_id": {
           "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
         },
-        "status": {
-          "label_en": "Status", "label_es": "Estado", "is_icon": true
-        },
         "program_name": {
           "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true
         },
@@ -1040,23 +1037,23 @@ export const EmDemoA = {
             }
           },
           "gridHeader": {
-            "samplesState": {
-              "label_en": "", "label_es": "", "is_icon": true, "width": "7%"
-            },
             "sampleType": {
-              "label_en": "", "label_es": "", "is_icon": true, "width": "7%"
+              "label_en": "", "label_es": "", "is_icon": true, "width": "3%"
             },
             "incubState": {
-              "label_en": "Incubator", "label_es": "Incubadora", "is_icon": true, "width": "9%"
+              "label_en": "", "label_es": "", "is_icon": true, "width": "3%"
+            },
+            "samplesState": {
+              "label_en": "", "label_es": "", "is_icon": true, "width": "3%"
+            },
+            "sample_id": {
+              "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, "width": "9%"
             },
             "incubation_batch": {
               "label_en": "Batch 1", "label_es": "Tanda", "sort": false, "filter": true, "width": "9%"
             },
             "incubation2_batch": {
               "label_en": "Batch 2", "label_es": "Tanda", "sort": false, "filter": true, "width": "9%"
-            },
-            "sample_id": {
-              "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, "width": "9%"
             },
             "incubation_start": {
               "label_en": "incubation 1 start", "label_es": "Inicio 1a Incubacion", "sort": false, "filter": true, "width": "15%"
