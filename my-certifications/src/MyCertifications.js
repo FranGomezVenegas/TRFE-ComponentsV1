@@ -107,7 +107,11 @@ export class MyCertifications extends CommonCore {
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
         userSession.all_my_sops = j.all_my_sops
         userSession.my_pending_sops = j.my_pending_sops
-        userSession.procedures_list = j.procedures_list
+        // adjust the new_definition only
+        j.procedures_list.procedures.forEach(pl => {
+          let uid = userSession.procedures_list.procedures.findIndex(l => l.name == pl.name)
+          userSession.procedures_list.procedures[uid].new_definition = pl.new_definition
+        })
         userSession.procedures_sops = j.procedures_sops
         userSession.sop_tree_list_element = j.sop_tree_list_element
         sessionStorage.setItem('userSession', JSON.stringify(userSession))
