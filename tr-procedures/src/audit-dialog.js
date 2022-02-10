@@ -272,7 +272,6 @@ export class AuditDialog extends LitElement {
   }
 
   signAudit(id) {
-    alert(`Audit ID: ${id}`)
     this.dispatchEvent(new CustomEvent('sign-audit', {
       detail: { audit_id: id }
     }))
