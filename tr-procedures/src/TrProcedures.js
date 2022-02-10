@@ -230,7 +230,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                       nothing
                     }
                     <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
-                    ${super.render()}
                   </div>
                 `
               }
@@ -272,9 +271,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
               }
             `
           }
-        ` :
-        html`${super.render()}`
+        ` : nothing
       }
+      ${super.render()}
     `;
   }
 
