@@ -278,25 +278,27 @@ export function DialogTemplate(base) {
           ${this.selectedAction.clientMethod!="getMicroorganismItem" ?
             html`
               <mwc-textfield id="mAddHoc" label="${this.langConfig.fieldText.addhocInput['label_'+this.lang]}"></mwc-textfield>
-              <sp-button size="xl" variant="secondary" @click=${()=>this.setMicroorganism(true)}>
+              <sp-button size="m" variant="secondary" @click=${()=>this.setMicroorganism(true)}>
                 ${this.langConfig.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
             ` : nothing
           }
-          <vaadin-grid id="moGrid" theme="row-dividers" all-rows-visible multi-sort
-            .selectedItems="${this.selectedMicroorganisms}"
-            @active-item-changed="${e => {
-              const item = e.detail.value;
-              this.selectedMicroorganisms = item ? [item] : [];
-            }}">
-            <vaadin-grid-sort-column resizable flex-grow=1 path="name" header="${this.langConfig.microorganismHeader.name['label_'+this.lang]}"></vaadin-grid-sort-column>
-          </vaadin-grid>
+          <div style="height:35vh;overflow:auto">
+            <vaadin-grid id="moGrid" theme="row-dividers" all-rows-visible multi-sort
+              .selectedItems="${this.selectedMicroorganisms}"
+              @active-item-changed="${e => {
+                const item = e.detail.value;
+                this.selectedMicroorganisms = item ? [item] : [];
+              }}">
+              <vaadin-grid-sort-column resizable flex-grow=1 path="name" header="${this.langConfig.microorganismHeader.name['label_'+this.lang]}"></vaadin-grid-sort-column>
+            </vaadin-grid>
+          </div>
           ${this.selectedAction.clientMethod=="getMicroorganismItem" ?
             html`
-              <sp-button size="xl" variant="cta" @click=${this.unsetMicroorganism}>
+              <sp-button size="m" variant="cta" @click=${this.unsetMicroorganism}>
                 ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
             ` :
             html`
-              <sp-button size="xl" variant="cta" @click=${()=>this.setMicroorganism()}>
+              <sp-button size="m" variant="cta" @click=${()=>this.setMicroorganism()}>
                 ${this.langConfig.fieldText.addBtn["label_" + this.lang]}</sp-button>
             `
           }
@@ -426,12 +428,14 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <vaadin-grid id="asGrid" theme="row-dividers"
-            @active-item-changed=${e=>this.selectedAssigns=e.detail.value ? [e.detail.value] : []}
-            .selectedItems="${this.selectedAssigns}" all-rows-visible>
-            ${this.asList()}
-          </vaadin-grid>
-          <div style="margin-top:30px;text-align:center">
+          <div style="height:50vh;overflow:auto">
+            <vaadin-grid id="asGrid" theme="row-dividers"
+              @active-item-changed=${e=>this.selectedAssigns=e.detail.value ? [e.detail.value] : []}
+              .selectedItems="${this.selectedAssigns}" all-rows-visible>
+              ${this.asList()}
+            </vaadin-grid>
+          </div>
+          <div style="margin-top:30px;text-align:center;">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
             <sp-button size="xl" slot="primaryAction" @click=${this.setAssign}>
@@ -694,13 +698,15 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-            @active-item-changed=${e=>this.selectedInvestigations=e.detail.value ? [e.detail.value] : []}
-            .selectedItems="${this.selectedInvestigations}">
-            <vaadin-grid-sort-column width="100%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
-            <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.model.langConfig.gridHeader.created_on["label_"+ this.lang]}"></vaadin-grid-filter-column>
-          </vaadin-grid>
-          <div style="margin-top:30px;text-align:center">
+          <div style="height:55vh;overflow:auto">
+            <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+              @active-item-changed=${e=>this.selectedInvestigations=e.detail.value ? [e.detail.value] : []}
+              .selectedItems="${this.selectedInvestigations}" all-rows-visible>
+              <vaadin-grid-sort-column width="100%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
+              <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.model.langConfig.gridHeader.created_on["label_"+ this.lang]}"></vaadin-grid-filter-column>
+            </vaadin-grid>
+          </div>
+          <div style="margin-top:10px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
             <sp-button size="xl" slot="primaryAction" dialogAction="accept" 
