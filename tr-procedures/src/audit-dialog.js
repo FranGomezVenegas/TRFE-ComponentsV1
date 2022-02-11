@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-button';
 import '@material/mwc-icon';
 import '@spectrum-web-components/tooltip/sp-tooltip.js';
 import '@trazit/tr-dialog/tr-dialog';
@@ -25,7 +24,7 @@ export class AuditDialog extends LitElement {
         mwc-icon.sign {
           cursor: pointer;
         }
-        mwc-button[hidden] {
+        mwc-icon[hidden] {
           display: none;
         }
         div[hidden] {

@@ -109,7 +109,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.requestUpdate()
   }
 
-  authorized() {
+  async authorized() {
     super.authorized()
     this.windowOpenable = null
     this.sopsPassed = null
@@ -137,6 +137,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         return
       }
     }
+    await this.updateComplete
     if (!this.componentModel) {
       // whether user has access into the selected proc
       if (!this.abstract && this.audit) {
@@ -150,10 +151,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
       if (anyAccess.length) {
         if (this.tabs) {
-          this.updateComplete.then(() => {
-            this.tabsComposition.updateComplete.then(() => {
-              this.tabsComposition.model = ProceduresModel[this.procName][this.viewName].tabs[0]
-            })
+          this.tabsComposition.updateComplete.then(() => {
+            this.tabsComposition.model = ProceduresModel[this.procName][this.viewName].tabs[0]
           })
         } else {
           this.reload()
