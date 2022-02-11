@@ -111,7 +111,8 @@ export function DialogTemplate(base) {
     resultTemplate() {
       return html`
       <tr-dialog id="resultDialog" ?open=${this.enterResults.length}
-        @closing=${()=>this.enterResults=[]}
+        @opened=${()=>this.setCellListener()}
+        @closing=${()=>this.removeEvents()}
         heading=""
         hideActions=""
         scrimClickAction="">
@@ -127,8 +128,48 @@ export function DialogTemplate(base) {
           <vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>
           ${this.erList()}
         </vaadin-grid>
+        <div id="rowTooltip">&nbsp;</div>
       </tr-dialog>
       `
+    }
+
+    get rowTooltip() {
+      return this.shadowRoot.querySelector("#rowTooltip")
+    }
+
+    setCellListener() {
+      this.rowTooltip.style.display = "block"
+      this.rowTooltip.style.visibility = "hidden"
+      this.rowTooltip.style.fontSize = "12px"
+      this.rowTooltip.style.color = "white"
+      this.rowTooltip.style.backgroundColor = "#0085ff"
+      let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
+      rows.forEach((r,i) => {
+        if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
+          r.addEventListener('mouseenter', () => this.showLockReason(i))
+          r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+        }
+      })
+    }
+
+    showLockReason(i) {
+      this.rowTooltip.style.visibility = "visible"
+      this.rowTooltip.textContent = "Lock Reason: "+ this.enterResults[i-1].locking_reason["message_"+ this.lang]
+    }
+
+    hideLockReason() {
+      this.rowTooltip.style.visibility = "hidden"
+    }
+
+    removeEvents() {
+      this.enterResults=[]
+      let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
+      rows.forEach((r,i) => {
+        if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
+          r.removeEventListener('mouseenter', this.showLockReason.bind(this))
+          r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+        }
+      })
     }
 
     detailRenderer(result) {
@@ -146,7 +187,9 @@ export function DialogTemplate(base) {
           }</p>
           <p>Range Evaluation: ${result.spec_eval}</p>
           <p>Range Rule: ${result.spec_eval_detail}</p>
-          <p>Lock Reason: ${result.is_locked?result.is_locked["message_"+ this.lang]:null}</p>
+          ${result.is_locked ? 
+            html`<p>Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
+          }
         </div>
       `
     }
@@ -190,32 +233,14 @@ export function DialogTemplate(base) {
     }
 
     valRenderer(result) {
-      if (!result.raw_value || result.spec_eval == "IN") {
-        if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-          if (this.selectedAction.dialogInfo.readOnly) {
-            return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
-          } else {
-            return html`<mwc-textfield type="text" .value=${result.raw_value} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-          }
-        } else {
-          if (this.selectedAction.dialogInfo.readOnly) {
-            return html`<mwc-textfield 
-              type="number" value=${result.raw_value?result.raw_value:0.00} disabled></mwc-textfield>`
-          } else {
-            return html`<mwc-textfield 
-              type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-          }
-        }
+      if (result.is_locked) {
+        return html`
+          <div style="width: 100%;height: 55px;position: relative;">
+            <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
+          </div>
+        `
       } else {
-        if (result.is_locked) {
-          return html`
-            <div style="width: 100%;height: 55px;position: relative;">
-              <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
-            </div>
-          `
-        } else {
+        if (!result.raw_value || result.spec_eval == "IN") {
           if (result.param_type == "TEXT" || result.param_type == "qualitative") {
             if (this.selectedAction.dialogInfo.readOnly) {
               return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
@@ -233,7 +258,7 @@ export function DialogTemplate(base) {
                 @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
             }
           }
-        }
+        }  
       }
     }
 
