@@ -97,6 +97,9 @@ export class PlatformLogin extends CommonCore {
           display: block;
           width: 300px;
         }
+        div.login-box {
+          padding: 10px 0;
+        }
         .content {
           width: 100%;
         }
