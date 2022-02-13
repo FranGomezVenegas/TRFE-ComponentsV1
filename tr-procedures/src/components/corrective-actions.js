@@ -171,9 +171,9 @@ export class CorrectiveActions extends CoreView {
       this.selectedAction = actions[actionNumIdx]
     }
     if (this.selectedSamples.length) {
-      this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
+      this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
     } else {
-      this.credsChecker(action.actionName, null, this.jsonParam())
+      this.credsChecker(action.actionName, null, this.jsonParam(), action)
     }
   }
 

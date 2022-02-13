@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CommonCore, commonLangConfig } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-textfield';
@@ -108,6 +108,7 @@ export class CredDialog extends CommonCore {
       attempt: { type: Number },
       maxFails: { type: Number },
       actionName: { type: String },
+      actionObj: { type: Object },
       objectId: { type: String },
       justificationType: { type: String },
       nonProc: { type: Boolean },
@@ -130,6 +131,7 @@ export class CredDialog extends CommonCore {
     this.maxFails = 3;
     this.justificationType = "";
     this.nonProc = false;
+    this.actionObj = {};
   }
 
   firstUpdated() {
@@ -165,9 +167,9 @@ export class CredDialog extends CommonCore {
         scrimClickAction=""
         .escapeKeyAction="${this.escapeKey?'close':''}">
         ${this.changing||this.nonProc ?
-          null :
+          nothing :
           html`<div style="position:absolute;left:15px;top:8px;font-size:12px;">
-            ${this.actionName} (id: ${this.objectId})
+            ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName} (id: ${this.objectId})
           </div>`
         }
         <div class="content layout vertical flex center-justified">
@@ -402,8 +404,10 @@ export class CredDialog extends CommonCore {
    * @param {*} actionName 
    * @param {*} objId -1 will show up the creds dialog, e.g user profile open the creds dialog. 
    * @param {*} params ref of this.reqParams
+   * @param {*} action ref of action object
    */
-  credsChecker(actionName, objId, params={}) {
+  credsChecker(actionName, objId, params={}, action) {
+    this.actionObj = action || {}
     this.reqParams = params
     if (actionName) {
       this.actionName = actionName

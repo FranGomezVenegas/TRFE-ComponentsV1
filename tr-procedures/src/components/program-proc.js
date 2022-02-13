@@ -263,7 +263,7 @@ export class ProgramProc extends CredDialog {
     if (replace) {
       this.selectedAction = action
     }
-    this.credsChecker(action.actionName, null, this.jsonParam())
+    this.credsChecker(action.actionName, null, this.jsonParam(), action)
   }
 }
 window.customElements.define('program-proc', ProgramProc);

@@ -422,6 +422,9 @@ export const ProcDeploy = {
       {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
+        "alertMsg": {
+          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío" }
+        },
         "button": {
           "icon": "document_scanner",
           "title": {

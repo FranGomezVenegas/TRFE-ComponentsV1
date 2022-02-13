@@ -111,7 +111,8 @@ export function DialogTemplate(base) {
     resultTemplate() {
       return html`
       <tr-dialog id="resultDialog" ?open=${this.enterResults.length}
-        @closing=${()=>this.enterResults=[]}
+        @opened=${()=>this.setCellListener()}
+        @closing=${()=>this.removeEvents()}
         heading=""
         hideActions=""
         scrimClickAction="">
@@ -127,8 +128,48 @@ export function DialogTemplate(base) {
           <vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>
           ${this.erList()}
         </vaadin-grid>
+        <div id="rowTooltip">&nbsp;</div>
       </tr-dialog>
       `
+    }
+
+    get rowTooltip() {
+      return this.shadowRoot.querySelector("#rowTooltip")
+    }
+
+    setCellListener() {
+      this.rowTooltip.style.display = "block"
+      this.rowTooltip.style.visibility = "hidden"
+      this.rowTooltip.style.fontSize = "12px"
+      this.rowTooltip.style.color = "white"
+      this.rowTooltip.style.backgroundColor = "#0085ff"
+      let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
+      rows.forEach((r,i) => {
+        if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
+          r.addEventListener('mouseenter', () => this.showLockReason(i))
+          r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+        }
+      })
+    }
+
+    showLockReason(i) {
+      this.rowTooltip.style.visibility = "visible"
+      this.rowTooltip.textContent = "Lock Reason: "+ this.enterResults[i-1].locking_reason["message_"+ this.lang]
+    }
+
+    hideLockReason() {
+      this.rowTooltip.style.visibility = "hidden"
+    }
+
+    removeEvents() {
+      this.enterResults=[]
+      let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
+      rows.forEach((r,i) => {
+        if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
+          r.removeEventListener('mouseenter', this.showLockReason.bind(this))
+          r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+        }
+      })
     }
 
     detailRenderer(result) {
@@ -146,7 +187,9 @@ export function DialogTemplate(base) {
           }</p>
           <p>Range Evaluation: ${result.spec_eval}</p>
           <p>Range Rule: ${result.spec_eval_detail}</p>
-          <p>Lock Reason: ${result.is_locked?result.is_locked["message_"+ this.lang]:null}</p>
+          ${result.is_locked ? 
+            html`<p>Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
+          }
         </div>
       `
     }
@@ -190,32 +233,14 @@ export function DialogTemplate(base) {
     }
 
     valRenderer(result) {
-      if (!result.raw_value || result.spec_eval == "IN") {
-        if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-          if (this.selectedAction.dialogInfo.readOnly) {
-            return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
-          } else {
-            return html`<mwc-textfield type="text" .value=${result.raw_value} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-          }
-        } else {
-          if (this.selectedAction.dialogInfo.readOnly) {
-            return html`<mwc-textfield 
-              type="number" value=${result.raw_value?result.raw_value:0.00} disabled></mwc-textfield>`
-          } else {
-            return html`<mwc-textfield 
-              type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-          }
-        }
+      if (result.is_locked) {
+        return html`
+          <div style="width: 100%;height: 55px;position: relative;">
+            <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
+          </div>
+        `
       } else {
-        if (result.is_locked) {
-          return html`
-            <div style="width: 100%;height: 55px;position: relative;">
-              <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
-            </div>
-          `
-        } else {
+        if (!result.raw_value || result.spec_eval == "IN") {
           if (result.param_type == "TEXT" || result.param_type == "qualitative") {
             if (this.selectedAction.dialogInfo.readOnly) {
               return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
@@ -233,7 +258,7 @@ export function DialogTemplate(base) {
                 @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
             }
           }
-        }
+        }  
       }
     }
 
@@ -278,25 +303,27 @@ export function DialogTemplate(base) {
           ${this.selectedAction.clientMethod!="getMicroorganismItem" ?
             html`
               <mwc-textfield id="mAddHoc" label="${this.langConfig.fieldText.addhocInput['label_'+this.lang]}"></mwc-textfield>
-              <sp-button size="xl" variant="secondary" @click=${()=>this.setMicroorganism(true)}>
+              <sp-button size="m" variant="secondary" @click=${()=>this.setMicroorganism(true)}>
                 ${this.langConfig.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
             ` : nothing
           }
-          <vaadin-grid id="moGrid" theme="row-dividers" all-rows-visible multi-sort
-            .selectedItems="${this.selectedMicroorganisms}"
-            @active-item-changed="${e => {
-              const item = e.detail.value;
-              this.selectedMicroorganisms = item ? [item] : [];
-            }}">
-            <vaadin-grid-sort-column resizable flex-grow=1 path="name" header="${this.langConfig.microorganismHeader.name['label_'+this.lang]}"></vaadin-grid-sort-column>
-          </vaadin-grid>
+          <div style="height:35vh;overflow:auto">
+            <vaadin-grid id="moGrid" theme="row-dividers" all-rows-visible multi-sort
+              .selectedItems="${this.selectedMicroorganisms}"
+              @active-item-changed="${e => {
+                const item = e.detail.value;
+                this.selectedMicroorganisms = item ? [item] : [];
+              }}">
+              <vaadin-grid-sort-column resizable flex-grow=1 path="name" header="${this.langConfig.microorganismHeader.name['label_'+this.lang]}"></vaadin-grid-sort-column>
+            </vaadin-grid>
+          </div>
           ${this.selectedAction.clientMethod=="getMicroorganismItem" ?
             html`
-              <sp-button size="xl" variant="cta" @click=${this.unsetMicroorganism}>
+              <sp-button size="m" variant="cta" @click=${this.unsetMicroorganism}>
                 ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
             ` :
             html`
-              <sp-button size="xl" variant="cta" @click=${()=>this.setMicroorganism()}>
+              <sp-button size="m" variant="cta" @click=${()=>this.setMicroorganism()}>
                 ${this.langConfig.fieldText.addBtn["label_" + this.lang]}</sp-button>
             `
           }
@@ -426,12 +453,14 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <vaadin-grid id="asGrid" theme="row-dividers"
-            @active-item-changed=${e=>this.selectedAssigns=e.detail.value ? [e.detail.value] : []}
-            .selectedItems="${this.selectedAssigns}" all-rows-visible>
-            ${this.asList()}
-          </vaadin-grid>
-          <div style="margin-top:30px;text-align:center">
+          <div style="height:50vh;overflow:auto">
+            <vaadin-grid id="asGrid" theme="row-dividers"
+              @active-item-changed=${e=>this.selectedAssigns=e.detail.value ? [e.detail.value] : []}
+              .selectedItems="${this.selectedAssigns}" all-rows-visible>
+              ${this.asList()}
+            </vaadin-grid>
+          </div>
+          <div style="margin-top:30px;text-align:center;">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
             <sp-button size="xl" slot="primaryAction" @click=${this.setAssign}>
@@ -694,13 +723,15 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-            @active-item-changed=${e=>this.selectedInvestigations=e.detail.value ? [e.detail.value] : []}
-            .selectedItems="${this.selectedInvestigations}">
-            <vaadin-grid-sort-column width="100%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
-            <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.model.langConfig.gridHeader.created_on["label_"+ this.lang]}"></vaadin-grid-filter-column>
-          </vaadin-grid>
-          <div style="margin-top:30px;text-align:center">
+          <div style="height:55vh;overflow:auto">
+            <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+              @active-item-changed=${e=>this.selectedInvestigations=e.detail.value ? [e.detail.value] : []}
+              .selectedItems="${this.selectedInvestigations}" all-rows-visible>
+              <vaadin-grid-sort-column width="100%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
+              <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.model.langConfig.gridHeader.created_on["label_"+ this.lang]}"></vaadin-grid-filter-column>
+            </vaadin-grid>
+          </div>
+          <div style="margin-top:10px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
             <sp-button size="xl" slot="primaryAction" dialogAction="accept" 

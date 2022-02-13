@@ -109,7 +109,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.requestUpdate()
   }
 
-  authorized() {
+  async authorized() {
     super.authorized()
     this.windowOpenable = null
     this.sopsPassed = null
@@ -137,6 +137,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         return
       }
     }
+    await this.updateComplete
     if (!this.componentModel) {
       // whether user has access into the selected proc
       if (!this.abstract && this.audit) {
@@ -150,10 +151,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
       if (anyAccess.length) {
         if (this.tabs) {
-          this.updateComplete.then(() => {
-            this.tabsComposition.updateComplete.then(() => {
-              this.tabsComposition.model = ProceduresModel[this.procName][this.viewName].tabs[0]
-            })
+          this.tabsComposition.updateComplete.then(() => {
+            this.tabsComposition.model = ProceduresModel[this.procName][this.viewName].tabs[0]
           })
         } else {
           this.reload()
@@ -230,7 +229,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                       nothing
                     }
                     <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
-                    ${super.render()}
                   </div>
                 `
               }
@@ -272,9 +270,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
               }
             `
           }
-        ` :
-        html`${super.render()}`
+        ` : nothing
       }
+      ${super.render()}
     `;
   }
 
@@ -472,18 +470,18 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     if (action.dialogInfo) {
       if (action.dialogInfo.automatic) {
         if (this.itemId) {
-          this.credsChecker(action.actionName, this.itemId, this.jsonParam())
+          this.credsChecker(action.actionName, this.itemId, this.jsonParam(), action)
         } else {
-          this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
+          this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
         }
       } else {
         this[action.dialogInfo.name].show()
       }
     } else {
       if (this.selectedSamples.length) {
-        this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam())
+        this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
       } else {
-        this.credsChecker(action.actionName, null, this.jsonParam())
+        this.credsChecker(action.actionName, null, this.jsonParam(), action)
       }
     }
   }
@@ -536,9 +534,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   dialogAccept(selected=true) {
     if (selected) {
-      this.credsChecker(this.selectedAction.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction))
+      this.credsChecker(this.selectedAction.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction), this.selectedAction)
     } else {
-      this.credsChecker(this.selectedAction.actionName, null, this.jsonParam(this.selectedAction))
+      this.credsChecker(this.selectedAction.actionName, null, this.jsonParam(this.selectedAction), this.selectedAction)
     }
   }
 
