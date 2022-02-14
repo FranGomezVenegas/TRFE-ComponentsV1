@@ -10,6 +10,8 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
+    "@alenaksu/json-viewer": "^0.3.4",
+    "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "lit": "^2.0.2"
   },
   "devDependencies": {

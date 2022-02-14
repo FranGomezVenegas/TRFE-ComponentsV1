@@ -25,7 +25,9 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${e=>this.auth=e.target.auth}></platform-login>
+      <platform-login @authorized=${e=>{
+        this.auth=e.target.auth;
+        this.proc.config=this.pLogin.config;}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <procedure-management></procedure-management><br>
@@ -36,6 +38,10 @@ class DemoExample extends LitElement {
 
   get pLogin() {
     return this.shadowRoot.querySelector("platform-login")
+  }
+
+  get proc() {
+    return this.shadowRoot.querySelector("procedure-management")
   }
 
   /**
