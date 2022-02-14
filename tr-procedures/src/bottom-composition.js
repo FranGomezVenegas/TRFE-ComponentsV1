@@ -264,13 +264,13 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
                 id="${action.button.id}"
                 icon="${action.button.icon}" 
                 title="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${this[action.button.whenDisabled]}
+                ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this[action.clientMethod](action.filterState)}></mwc-icon-button>`
             }` :
             html`${action.button.img ?
               html`<mwc-icon-button class="img" 
                 title="${action.button.title['label_'+this.lang]}"
-                ?disabled=${this[action.button.whenDisabled]}
+                ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this[action.clientMethod](action.filterState)}><img src="/images/${action.button.img}" style="width:${action.button.size}"></mwc-icon-button>` :
               html`<mwc-button dense raised 
                 id="${action.button.id}"
@@ -290,7 +290,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     let d = false
     if (this.sopsPassed == false) {
       if (this.windowOpenable == "yes") {
-        d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : true
+        d = action.button.whenDisabled == "samplesReload" && action.button.title.label_en == "Reload" ? this.samplesReload : true
       }
     } else {
       d = action.button.whenDisabled == "samplesReload" ? 

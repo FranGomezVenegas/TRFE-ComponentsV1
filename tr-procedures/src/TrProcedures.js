@@ -120,7 +120,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       if (defView.length) {
         // for fake test
         // this.sopsPassed = false
-        this.sopsPassed = defView[0].sops_passed
+        if (defView[0].icons) {
+          let sopIcon = defView[0].icons.filter(i => i.name == this.filterName)
+          this.sopsPassed = sopIcon[0].sops_passed
+        } else {
+          this.sopsPassed = defView[0].sops_passed
+        }
       }
       this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
       if (this.windowOpenable == "no") {
@@ -514,7 +519,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     let d = false
     if (this.sopsPassed == false) {
       if (this.windowOpenable == "yes") {
-        d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : true
+        d = action.button.whenDisabled == "samplesReload" && action.button.title.label_en == "Reload" ? this.samplesReload : true
       }
     } else {
       d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length
