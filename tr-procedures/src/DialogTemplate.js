@@ -142,7 +142,7 @@ export function DialogTemplate(base) {
       this.rowTooltip.style.visibility = "hidden"
       this.rowTooltip.style.fontSize = "12px"
       this.rowTooltip.style.color = "white"
-      this.rowTooltip.style.backgroundColor = "#0085ff"
+      this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
       let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
       rows.forEach((r,i) => {
         if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
@@ -185,10 +185,11 @@ export function DialogTemplate(base) {
             }` :
             html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
           }</p>
+          <p>${this.lang=="en"?"Method":"Método"}: ${result.method_name} (${result.method_version})</p>
           <p>Range Evaluation: ${result.spec_eval}</p>
           <p>Range Rule: ${result.spec_eval_detail}</p>
           ${result.is_locked ? 
-            html`<p>Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
+            html`<p style="color:rgb(255 8 8)">Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
           }
         </div>
       `
@@ -235,7 +236,7 @@ export function DialogTemplate(base) {
     valRenderer(result) {
       if (result.is_locked) {
         return html`
-          <div style="width: 100%;height: 55px;position: relative;">
+          <div style="width: 100%;height: 55px;position: relative; background-color: rgb(255 8 8 / 20%)">
             <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
           </div>
         `
