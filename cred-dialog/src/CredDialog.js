@@ -195,7 +195,7 @@ export class CredDialog extends CommonCore {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <div>${commonLangConfig.confirmActionPhrase["label_" + this.lang]} ${this.actionName}?</div>
+          <div>${commonLangConfig.confirmActionPhrase["label_" + this.lang]} ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName}?</div>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>

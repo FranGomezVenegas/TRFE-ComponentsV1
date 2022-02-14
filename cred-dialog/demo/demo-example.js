@@ -80,6 +80,11 @@ class DemoExample extends LitElement {
         list.push(u)
       }
     })
+    procList.actions_with_action_confirm.forEach(u => {
+      if (typeof u === 'string') {
+        list.push(u)
+      }
+    })
     this.procList = list;
     this.auth = e.target.auth;
     this.cDialog.config = this.pLogin.config;
