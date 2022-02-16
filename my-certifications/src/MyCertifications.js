@@ -80,40 +80,57 @@ export class MyCertifications extends CommonCore {
   }
 
   markComplete(e) {
-    // non sop
-    if (!e.detail.user_sop_id) return
-
-    this.fetchApi(this.config.backendUrl + this.config.ApiSopUserUrl + '?' + new URLSearchParams({
-      dbName: this.config.dbName,
-      actionName: 'SOP_MARK_AS_COMPLETED',
-      procInstanceName: e.detail.procedure_name,
-      sopName: e.detail.sop_name,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-    })).then(j => {
-      if (j && !j.is_error) {
-        this.frontEndSopUserAPI(e.detail)
-      }
-    })
+    // analytics cert
+    if (e.detail.method_name) {
+      this.fetchApi(this.config.backendUrl + this.config.apiAnalysisUrl + '?' + new URLSearchParams({
+        dbName: this.config.dbName,
+        actionName: 'USER_MARKIT_AS_COMPLETED',
+        procInstanceName: e.detail.procedure_name,
+        methodName: e.detail.method_name,
+        finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
+      })).then(j => {
+        if (j && !j.is_error) {
+          this.frontEndSopUserAPI(e.detail)
+        }
+      })
+    } else {
+      this.fetchApi(this.config.backendUrl + this.config.apiSopUserUrl + '?' + new URLSearchParams({
+        dbName: this.config.dbName,
+        actionName: 'SOP_MARK_AS_COMPLETED',
+        procInstanceName: e.detail.procedure_name,
+        sopName: e.detail.sop_name,
+        finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
+      })).then(j => {
+        if (j && !j.is_error) {
+          this.frontEndSopUserAPI(e.detail)
+        }
+      })
+    }
   }
 
   frontEndSopUserAPI(cert) {
-    this.fetchApi(this.config.backendUrl + this.config.frontEndSopUrl + '?' + new URLSearchParams({
+    let apiUrl = cert.method_name ? this.config.frontEndAnalysisUrl : this.config.frontEndSopUrl
+    this.fetchApi(this.config.backendUrl + apiUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
-      actionName: 'ALL_IN_ONE',
+      actionName: cert.method_name ? 'ALL_MY_ANA_METHOD_CERTIF' : 'ALL_IN_ONE',
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
     }), false, false).then(j => {
       if (j && !j.is_error) {
         // updating userSession data
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-        userSession.all_my_sops = j.all_my_sops
-        userSession.my_pending_sops = j.my_pending_sops
-        // adjust the new_definition only
-        j.procedures_list.procedures.forEach(pl => {
-          let uid = userSession.procedures_list.procedures.findIndex(l => l.name == pl.name)
-          userSession.procedures_list.procedures[uid].new_definition = pl.new_definition
-        })
-        userSession.procedures_sops = j.procedures_sops
-        userSession.sop_tree_list_element = j.sop_tree_list_element
+        if (cert.method_name) {
+          userSession.all_my_analysis_methods = j
+        } else {
+          userSession.all_my_sops = j.all_my_sops
+          userSession.my_pending_sops = j.my_pending_sops
+          // adjust the new_definition only
+          j.procedures_list.procedures.forEach(pl => {
+            let uid = userSession.procedures_list.procedures.findIndex(l => l.name == pl.name)
+            userSession.procedures_list.procedures[uid].new_definition = pl.new_definition
+            userSession.procedures_sops = j.procedures_sops
+            userSession.sop_tree_list_element = j.sop_tree_list_element
+          })
+        }
         sessionStorage.setItem('userSession', JSON.stringify(userSession))
         this.dispatchEvent(new CustomEvent('certs-updated'))
         this.sops = userSession.all_my_sops.length ? userSession.all_my_sops[0].my_sops : this.sops
@@ -121,8 +138,14 @@ export class MyCertifications extends CommonCore {
         let certs = JSON.stringify(this.certSet) // temp ref
         certs = JSON.parse(certs)
         certs.forEach((c,i) => {
-          if (c.user_sop_id == cert.user_sop_id) {
-            certs[i].status = "PASS"
+          if (cert.method_name) {
+            if (c.id == cert.id) {
+              certs[i].status = "PASS"
+            }
+          } else {
+            if (c.user_sop_id == cert.user_sop_id) {
+              certs[i].status = "PASS"
+            }  
           }
         })
         this.certSet = certs

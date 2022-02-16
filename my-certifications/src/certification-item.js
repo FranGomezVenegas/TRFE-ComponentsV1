@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon';
 import '@material/mwc-icon-button';
@@ -51,8 +51,11 @@ export class CertificationItem extends LitElement {
       <div class="card layout vertical center">
         <mwc-icon-button icon="picture_as_pdf" @click=${()=>window.open(this.cert.file_link, '_blank').focus()} ?disabled=${!this.cert.file_link}></mwc-icon-button>
         <div><b>Procedure: </b>${this.cert.procedure_name}</div>
-        <div><b>Name: </b>${this.cert.sop_name}</div>
-        <div><b>Summary: </b>${this.cert.brief_summary}</div>
+        <div><b>Name: </b>${this.cert.method_name ? this.cert.method_name : this.cert.sop_name}</div>
+        ${this.cert.brief_summary ?
+          html`<div><b>Summary: </b>${this.cert.brief_summary}</div>` :
+          nothing
+        }
         <div class="layout horizontal center">
           <span><b>My Certification Status: </span>
           <mwc-icon style="color:${this.cert.status=="PASS"?'green':'red'}">${this.cert.status=="PASS"?'bookmark':'warning'}</mwc-icon>
