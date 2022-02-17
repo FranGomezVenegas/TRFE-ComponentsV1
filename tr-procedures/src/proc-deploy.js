@@ -195,7 +195,8 @@ export const ProcDeploy = {
         }
       },
       "fieldText": {
-        "newDate": { "label_en": "New Date", "label_es": "Nueva Fecha" }
+        "newDate": { "label_en": "New Date", "label_es": "Nueva Fecha" },
+        "comment": { "label_en": "Comment", "label_es": "Comentario" }
       },
       "gridHeader": {
         "sample_id": {
