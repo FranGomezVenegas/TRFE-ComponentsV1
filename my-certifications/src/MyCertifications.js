@@ -79,36 +79,39 @@ export class MyCertifications extends CommonCore {
     this.requestUpdate()
   }
 
-  markComplete(e) {
+  async markComplete(e) {
     // analytics cert
+    let res;
     if (e.detail.method_name) {
-      this.fetchApi(this.config.backendUrl + this.config.apiAnalysisUrl + '?' + new URLSearchParams({
+      res = await this.fetchApi(this.config.backendUrl + this.config.apiAnalysisUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
         actionName: 'USER_MARKIT_AS_COMPLETED',
         procInstanceName: e.detail.procedure_name,
         methodName: e.detail.method_name,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-      })).then(j => {
-        if (j && !j.is_error) {
-          this.frontEndSopUserAPI(e.detail)
-        }
-      })
+      }))
     } else {
-      this.fetchApi(this.config.backendUrl + this.config.apiSopUserUrl + '?' + new URLSearchParams({
+      res = await this.fetchApi(this.config.backendUrl + this.config.apiSopUserUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
         actionName: 'SOP_MARK_AS_COMPLETED',
         procInstanceName: e.detail.procedure_name,
         sopName: e.detail.sop_name,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-      })).then(j => {
-        if (j && !j.is_error) {
-          this.frontEndSopUserAPI(e.detail)
-        }
-      })
+      }))
+    }
+    // enable back the button once get error
+    if (res) {
+      if (res.is_error) {
+        e.target.shadowRoot.querySelector('mwc-icon-button[title="Mark Completed"]').disabled = false
+      } else {
+        this.frontEndCertUserAPI(e.detail)
+      }
+    } else {
+      e.target.shadowRoot.querySelector('mwc-icon-button[title="Mark Completed"]').disabled = false
     }
   }
 
-  frontEndSopUserAPI(cert) {
+  frontEndCertUserAPI(cert) {
     let apiUrl = cert.method_name ? this.config.frontEndAnalysisUrl : this.config.frontEndSopUrl
     this.fetchApi(this.config.backendUrl + apiUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,

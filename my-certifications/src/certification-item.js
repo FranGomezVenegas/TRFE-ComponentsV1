@@ -62,11 +62,11 @@ export class CertificationItem extends LitElement {
         </div>
         <div>${this.cert.status=="NOT_PASS" ? 
           html`<mwc-icon-button title="Mark Completed" icon="replay" 
-            @click=${()=>this.dispatchEvent(new CustomEvent('mark-complete', {
+            @click=${e=>{e.target.disabled=true;this.dispatchEvent(new CustomEvent('mark-complete', {
             detail: this.cert,
             bubbles: true,
             composed: true
-          }))}></mwc-icon-button>` : null 
+          }))}}></mwc-icon-button>` : null 
         }</div>
       </div>
     `;
