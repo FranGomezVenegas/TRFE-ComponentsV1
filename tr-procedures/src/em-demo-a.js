@@ -1036,6 +1036,10 @@ export const EmDemoA = {
               "label_es": "Todas las muestras pendientes de incubación"
             }
           },
+          "fieldText": {
+            "topLabel": { "label_en": "Samples Incubation Stage", "label_es": "Etapa de incubación de muestras" },
+            "next": { "label_en": "Next", "label_es": "Próxima" }
+          },
           "gridHeader": {
             "sampleType": {
               "label_en": "", "label_es": "", "is_icon": true, "width": "3%"
@@ -1070,6 +1074,11 @@ export const EmDemoA = {
             "sampling_comment": {
               "label_en": "Sampling Commment", "label_es": "Comentario Muestreo", "sort": false, "filter": true, "width": "9%"
             }
+          },
+          "stuckHeader": {
+            "current_stage": { "label_en": "Current Stage", "label_es": "Etapa Actual" },
+            "incubation_passed": { "label_en": "Passed", "label_es": "Aprobado" },
+            "sample_id": { "label_en": "Sample Id", "label_es": "Muestra Id" }
           }
         },
         "actions": [
@@ -1093,6 +1102,21 @@ export const EmDemoA = {
               { "query": "includeAllWithAnyPendingIncubation", "value": true },
               { "query": "samplesWithAnyPendingIncubation", "value": true}
             ]
+          },
+          {
+            "actionName": "SAMPLESTAGE_MOVETONEXT",
+            "clientMethod": "moveToNext",
+            "button": {
+              "icon": "low_priority",
+              "title": {
+                "label_en": "Sample Stuck", "label_es": "Muestra Atascada"
+              },
+              "whenDisabled": "samplesReload"
+            },
+            "dialogInfo": { 
+              "requiresDialog": true,
+              "name": "sampleStuckDialog"
+            }
           },
           {
             "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",

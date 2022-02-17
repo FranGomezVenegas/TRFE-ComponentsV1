@@ -76,6 +76,9 @@ export function ClientMethod(base) {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
+        if (this.sampleStuckDialog) {
+          this.sampleStuckDialog.close()
+        }
         this.reload()
       })
     }

@@ -22,7 +22,8 @@ export function DialogTemplate(base) {
         deactivatedLots: { type: Array },
         openInvests: { type: Array },
         selectedInvestigations: { type: Array },
-        capaRequired: { type: Boolean }
+        capaRequired: { type: Boolean },
+        selectedStucks: { type: Array }
       }
     }
 
@@ -411,6 +412,7 @@ export function DialogTemplate(base) {
       }
     }
 
+    /** Incubation Template Dialog part */
     newBatchTemplate() {
       return html`
       <tr-dialog id="newBatchDialog" 
@@ -498,6 +500,60 @@ export function DialogTemplate(base) {
       }
       this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
       this.actionMethod(this.selectedDialogAction, false)
+    }
+
+    sampleStuckTemplate() {
+      return html`
+      <tr-dialog id="sampleStuckDialog" 
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <label slot="topLeft" style="font-size:12px">${this.langConfig&&this.langConfig.fieldText.topLabel["label_"+ this.lang]}</label>
+        <div class="layout vertical flex center-justified">
+          <div style="height:50vh;overflow:auto">
+            <vaadin-grid id="siGrid" theme="row-dividers" 
+              @active-item-changed=${e=>this.selectedStucks=e.detail.value ? [e.detail.value] : []}
+              .selectedItems="${this.selectedStucks}" all-rows-visible>
+              ${this.siList()}
+            </vaadin-grid>
+          </div>
+          <div style="margin-top:30px;text-align:center;">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" @click=${this.setToNext}>
+              ${this.langConfig&&this.langConfig.fieldText.next["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+      `
+    }
+
+    siList() {
+      if (this.langConfig) {
+        return Object.entries(this.langConfig.stuckHeader).map(([key, value], i) => 
+          html`<vaadin-grid-column resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+        )
+      }
+    }
+  
+    get sampleStuckDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#sampleStuckDialog")
+    }
+  
+    get siGrid() {
+      return this.shadowRoot.querySelector("vaadin-grid#siGrid")
+    }
+  
+    setToNext() {
+      let adjustAction = {
+        ...this.selectedAction,
+        "button": {
+          "title": {
+            "label_en": "Next", "label_es": "Siguiente"
+          }
+        }
+      }
+      this.credsChecker(this.selectedAction.actionName, this.selectedStucks[0].sample_id, this.jsonParam(), adjustAction)
     }
 
     /** Point Template Dialog part */

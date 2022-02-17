@@ -152,7 +152,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
             ${this.newBatchTemplate()}
             ${this.assignTemplate()}
           ` :
-          nothing
+          html`${this.sampleStuckTemplate()}`
         }
         <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
         ${super.render()}
@@ -217,6 +217,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     this.targetValue = {}
     this.selectedResults = []
     this.selectedAssigns = []
+    this.selectedStucks = []
     this.selectedDialogAction = null
   }
 
@@ -365,6 +366,15 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
   }
 
   setGrid(j) {
+    // updating grid of samples_stillIncubationStageAndBothIncubCompleted
+    if (this.siGrid) {
+      if (j) {
+        this.siGrid.items = j.samples_stillIncubationStageAndBothIncubCompleted
+      } else {
+        this.siGrid.items = []
+      }
+      this.selectedStucks = []
+    }
     this.dispatchEvent(new CustomEvent('set-grid', { detail: j }))
   }
 
