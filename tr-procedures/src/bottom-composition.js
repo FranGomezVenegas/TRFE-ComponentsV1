@@ -83,7 +83,8 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       filteredItems: { type: Array },
       windowOpenable: { type: String },
       sopsPassed: { type: Boolean },
-      stucksList: { type: Array }
+      stucksList: { type: Array },
+      stuckNum: { type: Number }
     };
   }
 
@@ -256,10 +257,10 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         html`${action.button ?
           html`${action.button.icon ?
             html`${action.actionName ?
-              html`<mwc-icon-button
+              html`<mwc-icon-button style="color:${action.button.color}"
                 id="${action.button.id}"
                 icon="${action.button.icon}" 
-                title="${action.button.title['label_'+this.lang]}" 
+                title="${action.button.title['label_'+this.lang]}${action.button.title.extra ? ` (${this[action.button.title.extra]})` : null}" 
                 ?disabled=${this.btnDisabled(action)}
                 ?hidden=${action.button.whenHidden&&!this[action.button.whenHidden]}
                 @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
@@ -373,6 +374,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       if (j) {
         if (j.samples_stillIncubationStageAndBothIncubCompleted && j.samples_stillIncubationStageAndBothIncubCompleted.length) {
           this.stucksList = j.samples_stillIncubationStageAndBothIncubCompleted
+          this.stuckNum = this.stucksList.length
           this.siGrid.items = j.samples_stillIncubationStageAndBothIncubCompleted
         } else {
           this.stucksList = null

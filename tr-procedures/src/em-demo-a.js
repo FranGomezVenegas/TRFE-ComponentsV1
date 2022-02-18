@@ -1108,8 +1108,9 @@ export const EmDemoA = {
             "clientMethod": "moveToNext",
             "button": {
               "icon": "low_priority",
+              "color": "red",
               "title": {
-                "label_en": "Sample Stuck", "label_es": "Muestra Atascada"
+                "label_en": "Sample Stuck", "label_es": "Muestra Atascada", "extra": "stuckNum"
               },
               "whenDisabled": "samplesReload",
               "whenHidden": "stucksList"
