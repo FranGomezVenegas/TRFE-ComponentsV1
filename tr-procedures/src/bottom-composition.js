@@ -82,7 +82,8 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
       gridItems: { type: Array },
       filteredItems: { type: Array },
       windowOpenable: { type: String },
-      sopsPassed: { type: Boolean }
+      sopsPassed: { type: Boolean },
+      stucksList: { type: Array }
     };
   }
 
@@ -260,6 +261,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
                 icon="${action.button.icon}" 
                 title="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
+                ?hidden=${action.button.whenHidden&&!this[action.button.whenHidden]}
                 @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
               html`<mwc-icon-button style="color:${action.button.color}" 
                 id="${action.button.id}"
@@ -369,8 +371,15 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
     // updating grid of samples_stillIncubationStageAndBothIncubCompleted
     if (this.siGrid) {
       if (j) {
-        this.siGrid.items = j.samples_stillIncubationStageAndBothIncubCompleted
+        if (j.samples_stillIncubationStageAndBothIncubCompleted && j.samples_stillIncubationStageAndBothIncubCompleted.length) {
+          this.stucksList = j.samples_stillIncubationStageAndBothIncubCompleted
+          this.siGrid.items = j.samples_stillIncubationStageAndBothIncubCompleted
+        } else {
+          this.stucksList = null
+          this.siGrid.items = []
+        }
       } else {
+        this.stucksList = null
         this.siGrid.items = []
       }
       this.selectedStucks = []

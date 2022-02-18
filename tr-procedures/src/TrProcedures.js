@@ -576,8 +576,15 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         // updating grid of samples_stillIncubationStageAndBothIncubCompleted
         if (c.siGrid) {
           if (j) {
-            c.siGrid.items = j.samples_stillIncubationStageAndBothIncubCompleted
+            if (j.samples_stillIncubationStageAndBothIncubCompleted && j.samples_stillIncubationStageAndBothIncubCompleted.length) {
+              c.stucksList = j.samples_stillIncubationStageAndBothIncubCompleted
+              c.siGrid.items = j.samples_stillIncubationStageAndBothIncubCompleted
+            } else {
+              c.stucksList = null
+              c.siGrid.items = []
+            }
           } else {
+            c.stucksList = null
             c.siGrid.items = []
           }
           c.selectedStucks = []

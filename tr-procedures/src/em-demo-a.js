@@ -1111,7 +1111,8 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Sample Stuck", "label_es": "Muestra Atascada"
               },
-              "whenDisabled": "samplesReload"
+              "whenDisabled": "samplesReload",
+              "whenHidden": "stucksList"
             },
             "dialogInfo": { 
               "requiresDialog": true,
