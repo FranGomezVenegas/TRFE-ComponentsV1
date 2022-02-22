@@ -128,6 +128,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
       }
       this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
+      // When sopsPassed=true then does not matter what windowOpenableWhenNotSopCertifiedUserSopCertification business rule is set
+      if (this.sopsPassed) {
+        this.windowOpenable = "yes"
+      }
       if (this.windowOpenable == "no") {
         this.dispatchEvent(new CustomEvent("error", {
           detail: { 
