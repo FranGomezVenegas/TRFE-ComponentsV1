@@ -146,6 +146,10 @@ export function DialogTemplate(base) {
       this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
       let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
       rows.forEach((r,i) => {
+        if (i > 0 && this.enterResults[i-1]) {
+          r.removeEventListener('mouseenter', () => this.showLockReason(i))
+          r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
+        }
         if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
           r.addEventListener('mouseenter', () => this.showLockReason(i))
           r.addEventListener('mouseleave', this.hideLockReason.bind(this))
@@ -154,8 +158,10 @@ export function DialogTemplate(base) {
     }
 
     showLockReason(i) {
-      this.rowTooltip.style.visibility = "visible"
-      this.rowTooltip.textContent = "Lock Reason: "+ this.enterResults[i-1].locking_reason["message_"+ this.lang]
+      if (this.enterResults[i-1].is_locked) {
+        this.rowTooltip.style.visibility = "visible"
+        this.rowTooltip.textContent = "Lock Reason: "+ this.enterResults[i-1].locking_reason["message_"+ this.lang]
+      }
     }
 
     hideLockReason() {
@@ -163,14 +169,16 @@ export function DialogTemplate(base) {
     }
 
     removeEvents() {
-      this.enterResults=[]
+      this.rowTooltip.textContent = ""
+      this.rowTooltip.style.visibility = "hidden"
       let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
       rows.forEach((r,i) => {
         if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
           r.removeEventListener('mouseenter', this.showLockReason.bind(this))
-          r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+          r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
         }
       })
+      this.enterResults = []
     }
 
     detailRenderer(result) {
@@ -367,7 +375,6 @@ export function DialogTemplate(base) {
           microorganismName: this.selectedMicroorganisms[0].name
         }
         let checkMicroItems = this.checkMicroItems(this.selectedMicroorganisms[0].name)
-        console.log(checkMicroItems)
         if (!checkMicroItems) {
           this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
           this.actionMethod(this.selectedDialogAction, false)
@@ -379,7 +386,6 @@ export function DialogTemplate(base) {
           microorganismName: this.mAddHoc.value
         }
         let checkMicroItems = this.checkMicroItems(this.mAddHoc.value)
-        console.log(checkMicroItems)
         if (!checkMicroItems) {
           this.selectedDialogAction = this.selectedAction.dialogInfo.action[1]
           this.actionMethod(this.selectedDialogAction, false)
