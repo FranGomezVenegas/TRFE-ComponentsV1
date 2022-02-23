@@ -303,6 +303,7 @@ export class PlatformLogin extends CommonCore {
       userRole: this.role.value,
       dbName: this.config.dbName,
       actionName: 'finaltoken',
+      sizeValue: window.screen.width,
       includeProcModelInfo: !this.config.local
     })
     return this.fetchApi(urlParams, false, false).then(j => {
