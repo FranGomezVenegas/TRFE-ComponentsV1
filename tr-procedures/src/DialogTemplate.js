@@ -250,25 +250,23 @@ export function DialogTemplate(base) {
           </div>
         `
       } else {
-        if (!result.raw_value || result.spec_eval == "IN") {
-          if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-            if (this.selectedAction.dialogInfo.readOnly) {
-              return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
-            } else {
-              return html`<mwc-textfield type="text" .value=${result.raw_value} 
-                @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-            }
+        if (result.param_type == "TEXT" || result.param_type == "qualitative") {
+          if (this.selectedAction.dialogInfo.readOnly) {
+            return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
           } else {
-            if (this.selectedAction.dialogInfo.readOnly) {
-              return html`<mwc-textfield 
-                type="number" value=${result.raw_value?result.raw_value:0.00} disabled></mwc-textfield>`
-            } else {
-              return html`<mwc-textfield 
-                type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
-                @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-            }
+            return html`<mwc-textfield type="text" .value=${result.raw_value} 
+              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
           }
-        }  
+        } else {
+          if (this.selectedAction.dialogInfo.readOnly) {
+            return html`<mwc-textfield 
+              type="number" value=${result.raw_value?result.raw_value:0.00} disabled></mwc-textfield>`
+          } else {
+            return html`<mwc-textfield 
+              type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
+              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
+          }
+        }
       }
     }
 
