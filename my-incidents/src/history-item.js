@@ -14,6 +14,7 @@ export class HistoryItem extends LitElement {
 
   static get properties() {
     return {
+      lang: { type: String },
       history: { type: Object }
     };
   }

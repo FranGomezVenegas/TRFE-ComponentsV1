@@ -175,7 +175,7 @@ export class MyIncidents extends CommonCore {
     </vaadin-grid>
     <div ?hidden=${this.hideList}>
       ${this.histories.map(h=>
-        html`<history-item .history=${h}></history-item>`
+        html`<history-item .history=${h} .lang=${this.lang}></history-item>`
       )}
     </div>
     <tr-dialog id="icdDialog" 
