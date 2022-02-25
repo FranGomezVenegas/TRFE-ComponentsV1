@@ -424,7 +424,7 @@ export const ProcDeploy = {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
         "alertMsg": {
-          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío" }
+          "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
         },
         "button": {
           "icon": "document_scanner",
@@ -734,7 +734,7 @@ export const ProcDeploy = {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
         "alertMsg": {
-          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío" }
+          "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
         },
         "button": {
           "icon": "document_scanner",
@@ -921,7 +921,7 @@ export const ProcDeploy = {
         "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
         "clientMethod": "getResult",
         "alertMsg": {
-          "empty": { "label_en": "Analysis Result is empty", "label_es": "El resultado del análisis está vacío" }
+          "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
         },
         "button": {
           "icon": "document_scanner",
