@@ -224,6 +224,17 @@ export class PlatformLogin extends CommonCore {
 
   async login() {
     try {
+      if (this.config.fullscreen) {
+        // set full screen mode
+        let body = document.querySelector("body")
+        if (!document.fullscreenElement) {
+          body.requestFullscreen().catch(err => {
+            console.log(err)
+            // alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+          });
+        }
+      }
+  
       // requesting partial token
       await this.reqPartialToken()
       // requesting user roles
@@ -262,6 +273,9 @@ export class PlatformLogin extends CommonCore {
       if (j && !j.is_error) {
         sessionStorage.setItem('partialToken', JSON.stringify(j))
       } else {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
         this.dispatchEvent(new CustomEvent("error", {
           detail: {...appLogin_authenticationMessage.connectedFails, urlParams: urlParams, log: false, is_error: true},
           bubbles: true,
@@ -291,6 +305,9 @@ export class PlatformLogin extends CommonCore {
         this.userRoles = j;
         await this.requestUpdate();
       } else {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
         throw {}
       }
     })
@@ -323,6 +340,9 @@ export class PlatformLogin extends CommonCore {
           userRole: this.role.value
         }))
       } else {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
         throw {}
       }
     })

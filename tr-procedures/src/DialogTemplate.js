@@ -187,9 +187,9 @@ export function DialogTemplate(base) {
           <p>${result.spec_eval ?
             html`${result.spec_eval=='IN' ?
               html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
-              html`${result.is_locked ?
+              html`${result.spec_eval.toUpperCase().includes("OUT")&&result.spec_eval.toUpperCase().includes("SPEC") ?
                 html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
-                html`<mwc-icon style="color:yellow">radio_button_checked</mwc-icon>`
+                html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
               }`
             }` :
             html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
