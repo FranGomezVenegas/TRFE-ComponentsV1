@@ -231,10 +231,10 @@ export function DialogTemplate(base) {
         if (result.spec_eval == 'IN') {
           return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
         } else {
-          if (result.is_locked) {
+          if (result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC")) {
             return html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
           } else {
-            return html`<mwc-icon style="color:yellow">radio_button_checked</mwc-icon>`
+            return html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
           }
         }
       } else {
