@@ -301,6 +301,60 @@ export function ClientMethod(base) {
         this.reload()
       })
     }
+    completeInstrumentEvent() {
+      console.log('completeInstrumentEvent this.reqParams', this.reqParams);
+      if (this.selectedSamples!==undefined && this.selectedSamples[0].event_type!==undefined){
+        this.reqParams.actionName="COMPLETE_"+this.selectedSamples[0].event_type;
+      }   
+      this.reqParams.decision = this.decisionInput.value               
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+//        this.newInstrumentDialog.close()
+        this.reload()
+      })
+    }
+    getDeactivatedInstruments() {
+      this.deactivatedLots = []
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          this.deactivatedLots = j
+        }
+      })
+    }
+    getInstEventResult() {
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params, false, false).then(j => {
+        if (j && !j.is_error) {
+          this.selectedResults = []
+          this.enterResults = j
+          this.erGrid.items = j
+          this.requestUpdate()
+        } else {
+          this.dispatchEvent(new CustomEvent("error", {
+            detail: { 
+              is_error: true,
+              message_en: this.selectedAction.alertMsg.empty["label_en"],
+              message_es: this.selectedAction.alertMsg.empty["label_es"]
+            },
+            bubbles: true,
+            composed: true
+          }))
+          console.log(this.selectedAction.alertMsg.empty["label_en"])
+        }
+      })
+    }
+
+    instEventEnterResult() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params, false, false).then(() => {
+        this.reloadDialog()
+      })
+    }
 
     reviewSample() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 

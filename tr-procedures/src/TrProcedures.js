@@ -237,6 +237,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                       html`${this.newInstrumentsTemplate()}` :
                       nothing
                     }
+                    ${this.langConfig&&this.viewName=="EventsInProgress" ? 
+                      html`${this.instrumentEventTemplate()}` :
+                      nothing
+                    }  
                     <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
                   </div>
                 `

@@ -755,20 +755,113 @@ export function DialogTemplate(base) {
           </div>
         </div>
       </tr-dialog>
+      <tr-dialog id="undecomInstrDialog"
+        @closed=${e=>{if(e.target===this.undecomInstrDialog)this.deactivatedLots=[]}}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          ${this.selectedAction.actionName=="xUNDECOMMISSION_INSTRUMENT" ?
+            html`
+              <mwc-textfield id="instrumentInput" 
+                label="${this.langConfig.fieldText.instrumentName["label_"+ this.lang]}" 
+                dialogInitialFocus
+                @keypress=${e=>e.keyCode==13&&this.undecomInstrument()}></mwc-textfield>
+            ` :
+            html`
+              <div class="layout vertical flex">
+                <div class="layout horizontal flex center-center">
+                  <mwc-textfield class="layout flex" id="lotNumDays" type="number" 
+                    .value=${this.lotDays} @change=${e=>this.lotDays=e.target.value}
+                    label="${this.langConfig.fieldText.lotDays["label_"+this.lang]}"
+                    @keypress=${e=>e.keyCode==13&&this.setDays()}></mwc-textfield>
+                  <mwc-icon-button icon="refresh" @click=${this.setDays}></mwc-icon-button>
+                </div>
+                <mwc-select id="instrumentName" label="${this.langConfig.fieldText.instrumentName["label_"+this.lang]}" 
+                  ?disabled=${!this.deactivatedLots.length}>
+                  ${this.deactivatedLots.map((l,i) => 
+                    html`<mwc-list-item value="${l.name}" ?selected=${i==0}>${l.name}</mwc-list-item>`
+                  )}
+                </mwc-select>
+              </div>
+            `
+          }
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.undecomInstrument}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
       `
+    }
+    undecomInstrument() {
+      if (this.selectedAction.actionName == "UNDECOMMISSION_INSTRUMENT") {
+        if (this.instrumentName.value) {
+          this.selectedDialogAction = null
+          this.dialogAccept(false)
+        }
+      } else {
+        if (this.instrumentInput.value) {
+          this.dialogAccept(false)
+        }
+      }
     }
 
     get newInstrumentDialog() {
       return this.shadowRoot.querySelector("tr-dialog#newInstrumentDialog")
     }
+    get undecomInstrDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#undecomInstrDialog")
+    }
+    get instrumentName() {
+      return this.shadowRoot.querySelector("mwc-select#instrumentName")
+    }
+    
 
+    instrumentEventTemplate() {
+    return html`
+      <tr-dialog id="completeInstrumentEventDialog" 
+        @closed=${()=>this.cleanNewInstrumentFields()}
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+            <mwc-select id="decisionInput" label="${this.langConfig&&this.langConfig.fieldText.decision["label_"+ this.lang]}">
+            ${this.langConfig.fieldText.decision.items.map((c,i) => 
+              html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
+            )}
+          </mwc-select>
+
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" @click=${this.instrumentEventDecision}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>      
+      `
+    }
+    get completeInstrumentEventDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#completeInstrumentEventDialog")
+    }
     get instrumentInput() {
       return this.shadowRoot.querySelector("mwc-textfield#instrumentInput")
     }
     get instrumentFamilyInput() {
       return this.shadowRoot.querySelector("mwc-textfield#instrumentFamilyInput")
     }
-  
+    get decisionInput() {
+      return this.shadowRoot.querySelector("mwc-select#decisionInput")
+    }
+        
+    instrumentEventDecision(){
+      if (this.decisionInput.value) {
+        this.dialogAccept(false)
+      }
+    }
     newInstrument() {
       if (this.instrumentInput.value) {
         this.dialogAccept(false)

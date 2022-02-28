@@ -9,7 +9,9 @@ export const AppProc = {
       },
       "fieldText": {
         "newInstrument": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" },
-        "familyName": { "label_en": "Family", "label_es": "Familia" }
+        "familyName": { "label_en": "Family", "label_es": "Familia" },
+        "instrumentName": { "label_en": "Instrument Name", "label_es": "Nombre del instrumento" },
+        "lotDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
       },
       "gridHeader": {
         "name": {
@@ -171,6 +173,47 @@ export const AppProc = {
         "apiParams": [
           { "query": "instrumentName", "beItem": "name" }
         ]
+      },
+      {
+        "actionName": "DECOMMISSION_INSTRUMENT",
+        "clientMethod": "setInstruments",
+        "button": {
+            "icon": "alarm_on",
+            "title": {
+                "label_en": "Decommission", "label_es": "Retiro definitivo"
+            },
+            "whenDisabled": "selectedSamples"
+        },
+        "apiParams": [
+            { "query": "instrumentName", "beItem": "name" }
+        ]
+    },
+    {
+        "actionName": "UNDECOMMISSION_INSTRUMENT",
+        "clientMethod": "setInstruments",
+        "button": {
+          "icon": "alarm_add",
+          "title": {
+            "label_en": "Undecommission", "label_es": "Recuperar inst. retirado"
+          },
+          "whenDisabled": "samplesReload"
+        },
+        "dialogInfo": {
+          "requiresDialog": true,
+          "name": "undecomInstrDialog",
+          "action": [
+            {
+              "actionName": "DECOMISSIONED_INSTRUMENTS_LAST_N_DAYS",
+              "clientMethod": "getDeactivatedInstruments",
+              "apiParams": [
+                { "query": "numDays", "element": "lotNumDays", "defaultValue": 7 }
+              ]
+            }
+          ]
+        },
+        "apiParams": [
+          { "query": "instrumentName", "element": "lotName" }
+        ]
       }
     ]
   },
@@ -183,8 +226,13 @@ export const AppProc = {
         }
       },
       "fieldText": {
-        "newLot": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" },
-        "activateLot": { "label_en": "Production Lot Name to reactivate", "label_es": "Nombre para el lote de producción a reactivar" }
+        "decision": { "label_en": "Decision", "label_es": "Decisión",
+            "items":[
+              {"keyName":"ACCEPTED", "keyValue_en":"Accepted", "keyValue_es":"Aceptado"},
+              {"keyName":"ACCEPTED_WITH_RESTRICTIONS", "keyValue_en":"Accepted with restrictions", "keyValue_es":"Aceptado con restricciones"},
+              {"keyName":"REJECTED", "keyValue_en":"Rejected", "keyValue_es":"Rechazado"}
+            ]}
+
       },
       "gridHeader": {
         instrument: {
@@ -215,50 +263,58 @@ export const AppProc = {
         }
       },
       {
-        "actionName": "COMPLETE_CALIBRATION",
-        "clientMethod": "setInstruments",
+        "actionName": "COMPLETE",
+        "clientMethod": "completeInstrumentEvent",
+        "dialogInfo": {
+            "name": "completeInstrumentEventDialog",
+            "requiresDialog": true
+        },
         "button": {
-          "icon": "alarm_on",
-          "title": {
-            "label_en": "Complete Calibration", "label_es": "Completar Calibración"
-          },
-          "whenDisabled": "selectedSamples"
+            "icon": "alarm_on",
+            "title": {
+                "label_en": "Complete Event", "label_es": "Completar Evento"
+            },
+            "whenDisabled": "selectedSamples"
         },
         "apiParams": [
-          { "query": "instrumentName", "beItem": "instrument" },
-          { "query": "decision", "value": "ACCEPTED" }
+            { "query": "instrumentName", "beItem": "instrument" },
+            { "query": "decision", "beItem": "decision" }
+        ]
+    },
+    {
+      "actionName": "INSTRUMENT_EVENT_VARIABLES",
+      "clientMethod": "getInstEventResult",
+      "button": {
+        "icon": "document_scanner",
+        "title": {
+          "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
+        },
+        "whenDisabled": "selectedSamples"
+      },
+      "dialogInfo": {
+        "automatic": true,
+        "action": [
+          {
+            "actionName": "ENTERRESULT",
+            "clientMethod": "enterResult",
+            "apiParams": [
+              { "query": "rawValueResult", "targetValue": true },
+              { "query": "resultId", "targetValue": true }
+            ]
+          }
         ]
       },
-      {
-        "actionName": "COMPLETE_PREV_MAINT",
-        "clientMethod": "setInstruments",
-        "button": {
-          "icon": "alarm_on",
-          "title": {
-            "label_en": "Complete Prev Maint", "label_es": "Completar Mantenimiento Prev"
-          },
-          "whenDisabled": "selectedSamples"
-        },
-        "apiParams": [
-          { "query": "instrumentName", "beItem": "instrument" },
-          { "query": "decision", "value": "ACCEPTED" }
-        ]
-      },
-      {
-        "actionName": "COMPLETE_VERIFICATION",
-        "clientMethod": "setInstruments",
-        "button": {
-          "icon": "alarm_on",
-          "title": {
-            "label_en": "Complete Verification", "label_es": "Completar Verificación"
-          },
-          "whenDisabled": "selectedSamples"
-        },
-        "apiParams": [
-          { "query": "instrumentName", "beItem": "instrument" },
-          { "query": "decision", "value": "ACCEPTED" }
-        ]
+      "apiParams": [
+        { "query": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
+        { "query": "sortFieldsName", "value": "test_id|result_id" },
+        { "query": "sampleAnalysisWhereFieldsName", "value": "testing_group|status not in" }
+      ],
+      "paramFilter": {
+          "EventsER": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
+          "ER-FQ": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
+        "ER-MB": { "query": "sampleAnalysisWhereFieldsValue", "value": "MB|REVIEWED*String" }
       }
-    ]
+    }
+  ]
   },
 }
