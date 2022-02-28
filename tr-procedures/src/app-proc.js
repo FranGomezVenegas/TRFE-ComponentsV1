@@ -11,7 +11,7 @@ export const AppProc = {
         "newInstrument": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" },
         "familyName": { "label_en": "Family", "label_es": "Familia" },
         "instrumentName": { "label_en": "Instrument Name", "label_es": "Nombre del instrumento" },
-        "lotDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+        "lotDays": { "label_en": "Number of Days", "label_es": "Número de Días" }
       },
       "gridHeader": {
         "name": {
@@ -235,18 +235,18 @@ export const AppProc = {
 
       },
       "gridHeader": {
-        instrument: {
+        "instrument": {
           "label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%"
         },
-        event_type: {
+        "event_type": {
           "label_en": "Event", "label_es": "Evento", "sort": false, "filter": true, "is_icon": false, "width": "20%"
         },
-        created_on: {
+        "created_on": {
           "label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"
         },
-        created_by: {
+        "created_by": {
           "label_en": "Creator", "label_es": "Creador", "sort": false, "filter": false, "is_icon": false, "width": "10%"
-        },
+        }
       }
     },
     "actions": [
@@ -316,5 +316,5 @@ export const AppProc = {
       }
     }
   ]
-  },
+  }
 }
