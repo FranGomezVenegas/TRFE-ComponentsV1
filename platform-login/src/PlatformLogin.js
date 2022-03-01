@@ -269,7 +269,7 @@ export class PlatformLogin extends CommonCore {
       dbName: this.config.dbName,
       actionName: 'authenticate'
     })
-    return this.fetchApi(urlParams, false, false).then(j => {
+    return this.fetchApi(urlParams, false).then(j => {
       if (j && !j.is_error) {
         sessionStorage.setItem('partialToken', JSON.stringify(j))
       } else {
@@ -293,7 +293,7 @@ export class PlatformLogin extends CommonCore {
       dbName: this.config.dbName,
       actionName: 'getuserrole'
     })
-    return this.fetchApi(urlParams, false, false).then(async j => {
+    return this.fetchApi(urlParams, false).then(async j => {
       if (j && !j.is_error) {
         if (j.length > 1) {
           this.dispatchEvent(new CustomEvent('success', {
@@ -323,7 +323,7 @@ export class PlatformLogin extends CommonCore {
       sizeValue: window.screen.width,
       includeProcModelInfo: !this.config.local
     })
-    return this.fetchApi(urlParams, false, false).then(j => {
+    return this.fetchApi(urlParams, false).then(j => {
       if (j && !j.is_error) {
         j = {
           ...j,

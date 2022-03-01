@@ -30,7 +30,7 @@ export class EndpointsList extends CommonCore {
       actionName: "GET_DOC_ENDPOINTS",
       apiName: "ALL",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken
-    }), false, false).then(j => {
+    }), false).then(j => {
       this.docs = j
     })
     this.requestUpdate()

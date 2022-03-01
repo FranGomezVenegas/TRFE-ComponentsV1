@@ -71,10 +71,13 @@ export class CommonCore extends LitElement {
   /**
    * Populating fetch api
    * @param {*} urlParams the url api with params
-   * @param {*} log will be logged into notifications or no? default true
    * @param {*} feedback will be show up the user feedback
    */
-  fetchApi(urlParams, log=true, feedback=true) {
+  fetchApi(urlParams, feedback=true) {
+    let log = true
+    if (urlParams.indexOf("/frontend/") >= 0) {
+      log = false
+    }
     urlParams += "&isForTesting="+ this.config.isForTesting
     this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
     return fetch(urlParams).then(async r => {
@@ -103,7 +106,7 @@ export class CommonCore extends LitElement {
         return
       } else {
         this.dispatchEvent(new CustomEvent("error", {
-          detail: {...e, log: true},
+          detail: {...e, log: log},
           bubbles: true,
           composed: true
         }))

@@ -31,7 +31,7 @@ export class ProcedureManagement extends CommonCore {
       actionName: "ALL_PROCEDURES_DEFINITION",
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken
-    }), false, false).then(j => {
+    }), false).then(j => {
       this.defs = j.procedures_list.procedures
     })
     this.requestUpdate()

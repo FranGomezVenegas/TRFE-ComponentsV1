@@ -118,7 +118,7 @@ export class MyCertifications extends CommonCore {
       dbName: this.config.dbName,
       actionName: cert.method_name ? 'ALL_MY_ANA_METHOD_CERTIF' : 'ALL_IN_ONE',
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
-    }), false, false).then(j => {
+    }), false).then(j => {
       if (j && !j.is_error) {
         // updating userSession data
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))

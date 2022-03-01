@@ -242,7 +242,7 @@ export class MyIncidents extends CommonCore {
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: 'USER_OPEN_INCIDENTS'
-    }), false, false).then(j => {
+    }), false).then(j => {
       if (j && !j.is_error) {
         this.getClosedIds()
         this.grid.items = j
@@ -260,7 +260,7 @@ export class MyIncidents extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: 'CLOSED_INCIDENTS_LAST_N_DAYS',
       numDays: this.numDays
-    }), false, false).then(j => {
+    }), false).then(j => {
       if (j && !j.is_error) {
         this.closedIds = j
       }
@@ -288,7 +288,7 @@ export class MyIncidents extends CommonCore {
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         actionName: 'INCIDENT_DETAIL_FOR_GIVEN_INCIDENT',
         incidentId: this.selectedItem.id
-      }), false, false).then(j => {
+      }), false).then(j => {
         if (j && !j.is_error) {
           this.histories = j
         }

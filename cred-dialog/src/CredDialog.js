@@ -436,7 +436,7 @@ export class CredDialog extends CommonCore {
       userToCheck: this.userName,
       passwordToCheck: this.pwd.value
     })
-    this.fetchApi(params, false).then(j => {
+    this.fetchApi(params).then(j => {
       if (j.is_error) {
         this.checkAttempt()
       } else {
@@ -451,7 +451,7 @@ export class CredDialog extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       esignPhraseToCheck: this.esg.value
     })
-    this.fetchApi(params, false).then(j => {
+    this.fetchApi(params).then(j => {
       if (j.is_error) {
         this.checkAttempt()
       } else {

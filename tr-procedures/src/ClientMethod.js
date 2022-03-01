@@ -5,7 +5,7 @@ export function ClientMethod(base) {
       this.selectedSamples = []
       let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl) 
         + '?' + new URLSearchParams(this.reqParams)
-      await this.fetchApi(params, false, false).then(j => {
+      await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.setGrid(j)
         } else {
@@ -18,7 +18,7 @@ export function ClientMethod(base) {
     getSampleAudit() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(j => {
+      this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           j.forEach(audit => {
             audit.collapse = true
@@ -47,7 +47,7 @@ export function ClientMethod(base) {
       this.reqParams.instrumentName=this.selectedSamples[0].name;
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(j => {
+      this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           j.forEach(audit => {
             audit.collapse = true
@@ -103,7 +103,7 @@ export function ClientMethod(base) {
     getResult() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(j => {
+      this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.selectedResults = []
           this.enterResults = j
@@ -127,7 +127,7 @@ export function ClientMethod(base) {
     enterResult() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(() => {
+      this.fetchApi(params).then(() => {
         this.reloadDialog()
       })
     }
@@ -135,7 +135,7 @@ export function ClientMethod(base) {
     getMicroorganism() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(j => {
+      this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.mAddHoc.value = ""
           this.selectedMicroorganisms = []
@@ -149,7 +149,7 @@ export function ClientMethod(base) {
     addSampleMicroorganism() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(() => {
+      this.fetchApi(params).then(() => {
         this.selectedSamples[0].microorganism_count = this.selectedSamples[0].microorganism_count + 1
         let newList = this.selectedSamples[0].microorganism_list_array.filter(m => m.name != "")
         newList.push({ name: this.targetValue.microorganismName })
@@ -162,7 +162,7 @@ export function ClientMethod(base) {
       this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id +"*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(j => {
+      this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.selectedMicroorganisms = []
           this.microorganismList = j[0].microorganism_list_array
@@ -175,7 +175,7 @@ export function ClientMethod(base) {
     removeSampleMicroorganism() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(() => {
+      this.fetchApi(params).then(() => {
         this.selectedSamples[0].microorganism_count = this.selectedSamples[0].microorganism_count - 1
         let newList = this.selectedSamples[0].microorganism_list_array.filter(m => m.name != "" && m.name != this.targetValue.microorganismName)
         this.selectedSamples[0].microorganism_list_array = newList
@@ -327,7 +327,7 @@ export function ClientMethod(base) {
     getInstEventResult() {
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(j => {
+      this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.selectedResults = []
           this.enterResults = j
@@ -351,7 +351,7 @@ export function ClientMethod(base) {
     instEventEnterResult() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params, false, false).then(() => {
+      this.fetchApi(params).then(() => {
         this.reloadDialog()
       })
     }
