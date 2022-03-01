@@ -46,7 +46,7 @@ export class MyCertifications extends CommonCore {
     return html`
       <div class="layout horizontal flex center-center wrap">
       ${this.certSet.map(c=>
-        html`<certification-item .cert=${c} @mark-complete=${this.markComplete}></certification-item>`
+        html`<certification-item .lang=${this.lang} .cert=${c} @mark-complete=${this.markComplete}></certification-item>`
       )}
       </div>
     `;
@@ -80,12 +80,13 @@ export class MyCertifications extends CommonCore {
   }
 
   async markComplete(e) {
+    // for something reason e.target will change to demo-example after call API, so keep the ref before call API
+    let elm = e.target, res;
     // analytics cert
-    let res;
     if (e.detail.method_name) {
       res = await this.fetchApi(this.config.backendUrl + this.config.apiAnalysisUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
-        actionName: 'USER_MARKIT_AS_COMPLETED',
+        actionName: e.detail.certification_level.endpoint_name,
         procInstanceName: e.detail.procedure_name,
         methodName: e.detail.method_name,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
@@ -93,7 +94,7 @@ export class MyCertifications extends CommonCore {
     } else {
       res = await this.fetchApi(this.config.backendUrl + this.config.apiSopUserUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
-        actionName: 'SOP_MARK_AS_COMPLETED',
+        actionName: e.detail.certification_level.endpoint_name,
         procInstanceName: e.detail.procedure_name,
         sopName: e.detail.sop_name,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
@@ -102,12 +103,12 @@ export class MyCertifications extends CommonCore {
     // enable back the button once get error
     if (res) {
       if (res.is_error) {
-        e.target.shadowRoot.querySelector('mwc-icon-button[title="Mark Completed"]').disabled = false
+        elm.shadowRoot.querySelector('mwc-icon-button[icon="replay"]').disabled = false
       } else {
         this.frontEndCertUserAPI(e.detail)
       }
     } else {
-      e.target.shadowRoot.querySelector('mwc-icon-button[title="Mark Completed"]').disabled = false
+      elm.shadowRoot.querySelector('mwc-icon-button[title="replay"]').disabled = false
     }
   }
 
