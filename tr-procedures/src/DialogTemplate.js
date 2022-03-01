@@ -287,7 +287,8 @@ export function DialogTemplate(base) {
         rawValueResult: e.target.value,
         resultId: result.result_id
       }
-      this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+      let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
+      this.selectedDialogAction = JSON.parse(act)
       if (result.raw_value) {
         this.selectedDialogAction.actionName = "RE"+ this.selectedDialogAction.actionName
         this.actionMethod(this.selectedDialogAction, false)
