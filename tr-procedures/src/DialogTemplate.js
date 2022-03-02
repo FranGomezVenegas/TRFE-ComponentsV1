@@ -143,14 +143,13 @@ export function DialogTemplate(base) {
       this.rowTooltip.style.visibility = "hidden"
       this.rowTooltip.style.fontSize = "12px"
       this.rowTooltip.style.color = "white"
-      this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
       let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
       rows.forEach((r,i) => {
         if (i > 0 && this.enterResults[i-1]) {
           r.removeEventListener('mouseenter', () => this.showLockReason(i))
           r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
         }
-        if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
+        if (i > 0 && this.enterResults[i-1] && (this.enterResults[i-1].is_locked || this.enterResults[i-1].warning_reason)) {
           r.addEventListener('mouseenter', () => this.showLockReason(i))
           r.addEventListener('mouseleave', this.hideLockReason.bind(this))
         }
@@ -159,8 +158,13 @@ export function DialogTemplate(base) {
 
     showLockReason(i) {
       if (this.enterResults[i-1].is_locked) {
+        this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
         this.rowTooltip.style.visibility = "visible"
         this.rowTooltip.textContent = "Lock Reason: "+ this.enterResults[i-1].locking_reason["message_"+ this.lang]
+      } else if (this.enterResults[i-1].warning_reason) {
+        this.rowTooltip.style.backgroundColor = "#0085ff"
+        this.rowTooltip.style.visibility = "visible"
+        this.rowTooltip.textContent = "Warning Reason: "+ this.enterResults[i-1].warning_reason["message_"+ this.lang]
       }
     }
 
@@ -200,6 +204,9 @@ export function DialogTemplate(base) {
           <p>Range Rule: ${result.spec_eval_detail}</p>
           ${result.is_locked ? 
             html`<p style="color:rgb(255 8 8)">Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
+          }
+          ${result.warning_reason ? 
+            html`<p style="color:#0085ff">Warning Reason: ${result.warning_reason["message_"+ this.lang]}</p>` : nothing
           }
         </div>
       `
