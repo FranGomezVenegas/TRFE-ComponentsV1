@@ -69,7 +69,7 @@ export class CertificationItem extends LitElement {
               bubbles: true,
               composed: true
             }))}}></mwc-icon-button>` :
-            html`<mwc-icon title=${this.cert.certification_level["label_"+this.lang]}>replay</mwc-icon>`
+            html`<mwc-icon-button title=${this.cert.certification_level["label_"+this.lang]} icon="replay" disabled></mwc-icon-button>`
           }` : null 
         }</div>
       </div>
