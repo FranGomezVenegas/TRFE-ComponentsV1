@@ -169,6 +169,7 @@ export function DialogTemplate(base) {
     }
 
     removeEvents() {
+      this.curResultRef = undefined
       this.rowTooltip.textContent = ""
       this.rowTooltip.style.visibility = "hidden"
       let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
@@ -260,10 +261,10 @@ export function DialogTemplate(base) {
         } else {
           if (this.selectedAction.dialogInfo.readOnly) {
             return html`<mwc-textfield 
-              type="number" value=${result.raw_value?result.raw_value:0.00} disabled></mwc-textfield>`
+              type="number" value=${result.raw_value||0.00} disabled></mwc-textfield>`
           } else {
             return html`<mwc-textfield 
-              type="number" step=0.01 .value=${result.raw_value?result.raw_value:0.00} 
+              type="number" step=0.01 .value=${result.raw_value||0.00} 
               @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
           }
         }
@@ -287,6 +288,9 @@ export function DialogTemplate(base) {
         rawValueResult: e.target.value,
         resultId: result.result_id
       }
+      // vaadin grid field rebinding doesn't work, so let's do manually
+      // ClientMethod::getResult
+      this.curResultRef = { elm: e.target, resId: result.result_id }
       let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
       if (result.raw_value) {

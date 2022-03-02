@@ -16,7 +16,7 @@ export function ClientMethod(base) {
     }
 
     getSampleAudit() {
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
+      let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -35,7 +35,7 @@ export function ClientMethod(base) {
     }
 
     signAudit() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reloadDialog()
@@ -105,6 +105,12 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
+          if (this.curResultRef) {
+            let r = j.filter(d => d.result_id == this.curResultRef.resId)
+            if (r.length) {
+              this.curResultRef.elm.value = r[0].raw_value
+            }
+          }
           this.selectedResults = []
           this.enterResults = j
           this.erGrid.items = j
@@ -127,7 +133,10 @@ export function ClientMethod(base) {
     enterResult() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
+      this.fetchApi(params).then(j => {
+        if (!j.is_error) {
+          this.curResultRef = undefined
+        }
         this.reloadDialog()
       })
     }
