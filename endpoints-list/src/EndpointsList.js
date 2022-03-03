@@ -1,26 +1,76 @@
-import { html } from 'lit';
+import { html, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import '@alenaksu/json-viewer';
+import '@spectrum-web-components/split-view/sp-split-view';
 
 export class EndpointsList extends CommonCore {
+  static get styles() {
+    return [
+      css`
+      sp-split-view {
+        height: calc(100vh - 120px);
+      }
+      #leftSplit {
+        padding: 10px;
+      }
+      #endpointName {
+        height: 100%;
+        overflow-y : auto;
+      }
+      #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar, #endpointName::-webkit-scrollbar {
+        display: none;
+      }
+      .ed {
+        cursor: pointer;
+      }
+      `
+    ]
+  }
+
   static get properties() {
     return {
-      docs: { type: Array }
+      docs: { type: Array },
+      filterDocs: { type: Array },
+      apis: { type: Array },
+      endpoints: { type: Array },
+      selectedApis: { type: Array },
+      selectedTxts: { type: Array }
     };
   }
 
   constructor() {
     super()
     this.docs = []
+    this.filterDocs = []
+    this.apis = []
+    this.selectedApis = []
+    this.selectedTxts = []
   }
 
   render() {
     return html`
-      ${this.docs.map(d =>
-        html`
-          <json-viewer>${JSON.stringify(d)}</json-viewer>
-        `
-      )}
+      <sp-split-view resizable primary-min="20" secondary-min="80" primary-size="100">
+        <div id="leftSplit">
+          <select @change=${this.apiChanged}>
+            <option value="">-- Filter by API Name --</option>
+            ${this.apis.map(a=>
+              html`<option value=${a}>${a}</option>`
+            )}
+          </select>
+          <div id="endpointName">
+          ${this.filterDocs.map(d =>
+            html`
+              <p class="ed" id="${d.id}" @click=${e=>this.endpointSelect(e, d)}>${d.endpoint_name}</p>
+            `
+          )}
+          </div>
+        </div>
+        <div id="rightSplit">
+          ${this.selectedApis.map(s =>
+            html`<json-viewer>${JSON.stringify(s)}</json-viewer>`
+          )}
+        </div>
+      </sp-split-view>
     `;
   }
 
@@ -31,8 +81,46 @@ export class EndpointsList extends CommonCore {
       apiName: "ALL",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken
     }), false).then(j => {
-      this.docs = j
+      this.docs = this.filterDocs = j
+      let apis = j.map(d => d.api_name)
+      apis.unshift("All")
+      this.apis = apis.filter((item, index) => apis.indexOf(item) === index);
     })
+    this.requestUpdate()
+  }
+
+  apiChanged(e) {
+    this.selectedTxts.forEach(t => {
+      t.style.fontWeight = "normal"
+    })
+    this.selectedApis = []
+    this.selectedTxts = []
+    if (!e.target.value) return
+    if (e.target.value == "All") {
+      this.filterDocs = this.docs
+    } else {
+      this.filterDocs = this.docs.filter(d => d.api_name == e.target.value)
+    }
+    this.requestUpdate()
+  }
+
+  endpointSelect(evt, api) {
+    if (evt.target.style.fontWeight == "bold") {
+      evt.target.style.fontWeight = "normal"
+      this.selectedApis = this.selectedApis.filter(a => a.title != `${api.endpoint_name} (${api.api_name} ${api.id})`)
+      this.selectedTxts = this.selectedTxts.filter(t => t.id != evt.target.id)
+    } else {
+      evt.target.style.fontWeight = "bold"
+      this.selectedApis.push({
+        title: `${api.endpoint_name} (${api.api_name} ${api.id})`,
+        date: `${api.creation_date} ${api.last_update}`,
+        arguments: api.arguments_array.map(arg => { 
+          return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
+        }),
+        output_object_types: api.output_object_types
+      })
+      this.selectedTxts.push(evt.target)
+    }
     this.requestUpdate()
   }
 }
