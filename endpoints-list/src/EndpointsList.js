@@ -8,7 +8,7 @@ export class EndpointsList extends CommonCore {
     return [
       css`
       sp-split-view {
-        height: calc(100vh - 120px);
+        height: calc(100vh - 150px);
       }
       #leftSplit {
         padding: 10px;
@@ -25,6 +25,14 @@ export class EndpointsList extends CommonCore {
       }
       .ed {
         cursor: pointer;
+      }
+      div[hidden] {
+        display: none;
+      }
+      @media (max-width: 460px) {
+        #endpointName {
+          height: calc(100vh - 180px);
+        }
       }
       `
     ]
@@ -52,31 +60,60 @@ export class EndpointsList extends CommonCore {
 
   render() {
     return html`
-      <sp-split-view resizable splitter-pos="300">
-        <div id="leftSplit">
-          <select @change=${this.apiChanged}>
-            <option value="">-- Filter by API Name --</option>
-            ${this.apis.map(a=>
-              html`<option value=${a}>${a}</option>`
+      ${this.desktop ?
+        html`
+        <sp-split-view resizable splitter-pos="300">
+          <div id="leftSplit">
+            <select @change=${this.apiChanged}>
+              <option value="">-- Filter by API Name --</option>
+              ${this.apis.map(a=>
+                html`<option value=${a}>${a}</option>`
+              )}
+            </select><br>
+            Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
+            <hr>
+            <label>${this.filterDocs.length} of ${this.docs.length}</label>
+            <div id="endpointName">
+            ${this.filterDocs.map(d =>
+              html`
+                <p class="ed" id="${d.id}" @click=${e=>this.endpointSelect(e, d)}>${d.endpoint_name}</p>
+              `
             )}
-          </select><br>
-          Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
-          <hr>
-          <label>${this.filterDocs.length} of ${this.docs.length}</label>
-          <div id="endpointName">
-          ${this.filterDocs.map(d =>
-            html`
-              <p class="ed" id="${d.id}" @click=${e=>this.endpointSelect(e, d)}>${d.endpoint_name}</p>
-            `
-          )}
+            </div>
+          </div>
+          <div id="rightSplit">
+            ${this.selectedApis.map(s =>
+              html`<json-viewer>${JSON.stringify(s)}</json-viewer>`
+            )}
+          </div>
+        </sp-split-view>
+        ` :
+        html`
+        <div id="mobile">
+          <div id="leftSplit">
+            <select @change=${this.apiChanged}>
+              <option value="">-- Filter by API Name --</option>
+              ${this.apis.map(a=>
+                html`<option value=${a}>${a}</option>`
+              )}
+            </select><br>
+            Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
+            <hr>
+            <label>${this.filterDocs.length} of ${this.docs.length}</label>
+            <div id="endpointName">
+            ${this.filterDocs.map(d =>
+              html`
+                <p class="ed" id="${d.id}" @click=${()=>this.shadowRoot.querySelector("#detail"+d.id).hidden=!this.shadowRoot.querySelector("#detail"+d.id).hidden}>${d.endpoint_name}</p>
+                <div id="detail${d.id}" hidden=true>
+                  <json-viewer>${this.endpointDetail(d)}</json-viewer>
+                </div>
+              `
+            )}
+            </div>
           </div>
         </div>
-        <div id="rightSplit">
-          ${this.selectedApis.map(s =>
-            html`<json-viewer>${JSON.stringify(s)}</json-viewer>`
-          )}
-        </div>
-      </sp-split-view>
+        `
+      }
     `;
   }
 
@@ -144,5 +181,16 @@ export class EndpointsList extends CommonCore {
       this.selectedTxts.push(evt.target)
     }
     this.requestUpdate()
+  }
+
+  endpointDetail(api) {
+    return JSON.stringify({
+      title: `${api.endpoint_name} (${api.api_name} ${api.id})`,
+      date: `${api.creation_date} ${api.last_update}`,
+      arguments: api.arguments_array.map(arg => { 
+        return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
+      }),
+      output_object_types: api.output_object_types
+    })
   }
 }
