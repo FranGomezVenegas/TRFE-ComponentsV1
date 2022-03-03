@@ -20,6 +20,9 @@ export class EndpointsList extends CommonCore {
       #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar, #endpointName::-webkit-scrollbar {
         display: none;
       }
+      label {
+        color: blue;
+      }
       .ed {
         cursor: pointer;
       }
@@ -49,14 +52,17 @@ export class EndpointsList extends CommonCore {
 
   render() {
     return html`
-      <sp-split-view resizable primary-min="20" secondary-min="80" primary-size="100">
+      <sp-split-view resizable splitter-pos="300">
         <div id="leftSplit">
           <select @change=${this.apiChanged}>
             <option value="">-- Filter by API Name --</option>
             ${this.apis.map(a=>
               html`<option value=${a}>${a}</option>`
             )}
-          </select>
+          </select><br>
+          Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
+          <hr>
+          <label>${this.filterDocs.length} of ${this.docs.length}</label>
           <div id="endpointName">
           ${this.filterDocs.map(d =>
             html`
@@ -95,11 +101,27 @@ export class EndpointsList extends CommonCore {
     })
     this.selectedApis = []
     this.selectedTxts = []
+    this.shadowRoot.querySelector("input#lastDate").value = ""
     if (!e.target.value) return
     if (e.target.value == "All") {
       this.filterDocs = this.docs
     } else {
       this.filterDocs = this.docs.filter(d => d.api_name == e.target.value)
+    }
+    this.requestUpdate()
+  }
+
+  dateChanged(evt) {
+    this.selectedTxts.forEach(t => {
+      t.style.fontWeight = "normal"
+    })
+    this.selectedApis = []
+    this.selectedTxts = []
+    this.shadowRoot.querySelector("select").value = ""
+    if (evt.target.value) {
+      this.filterDocs = this.docs.filter(d => new Date(d.last_update).getTime() >= new Date(evt.target.value).getTime())
+    } else {
+      this.filterDocs = this.docs      
     }
     this.requestUpdate()
   }
