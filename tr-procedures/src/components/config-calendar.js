@@ -111,16 +111,21 @@ export class ConfigCalendar extends CoreView {
     return html`${i == 0 ?
         html`${langConfig.gridHeader[key].width ?
           html`<vaadin-grid-sort-column width="${langConfig.gridHeader[key].width}" resizable
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
             text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end'}" path="${key}"
             header="${value['label_' + this.lang]}"></vaadin-grid-sort-column>` :
           html`<vaadin-grid-sort-column flex-grow="0"
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
             text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end'}" path="${key}"
             header="${value['label_' + this.lang]}"></vaadin-grid-sort-column>`
             }` :
           html`${langConfig.gridHeader[key].width ?
           html`<vaadin-grid-sort-column width="${langConfig.gridHeader[key].width}" resizable path="${key}"
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
             header="${value['label_' + this.lang]}"></vaadin-grid-sort-column>` :
-          html`<vaadin-grid-sort-column resizable auto-width path="${key}" header="${value['label_' + this.lang]}">
+          html`<vaadin-grid-sort-column 
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+            resizable auto-width path="${key}" header="${value['label_' + this.lang]}">
           </vaadin-grid-sort-column>`
       }`
     }`
@@ -130,19 +135,32 @@ export class ConfigCalendar extends CoreView {
     return html`${i == 0 ?
         html`${langConfig.gridHeader[key].width ?
           html`<vaadin-grid-filter-column width="${langConfig.gridHeader[key].width}" resizable
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
             text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end'}" path="${key}"
             header="${value['label_' + this.lang]}"></vaadin-grid-filter-column>` :
           html`<vaadin-grid-filter-column flex-grow="0"
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
             text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end'}" path="${key}"
             header="${value['label_' + this.lang]}"></vaadin-grid-filter-column>`
             }` :
           html`${langConfig.gridHeader[key].width ?
           html`<vaadin-grid-filter-column width="${langConfig.gridHeader[key].width}" resizable path="${key}"
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
             header="${value['label_' + this.lang]}"></vaadin-grid-filter-column>` :
-          html`<vaadin-grid-filter-column resizable auto-width path="${key}" header="${value['label_' + this.lang]}">
+          html`<vaadin-grid-filter-column 
+            ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+            resizable auto-width path="${key}" header="${value['label_' + this.lang]}">
           </vaadin-grid-filter-column>`
       }`
     }`
+  }
+
+  isConfidential(sample, key) {
+    if (this.langConfig.gridHeader[key].confidential&&sample[key]) {
+      return html`*****`
+    } else {
+      return html`${sample[key]}`
+    }
   }
 
   setView() {
