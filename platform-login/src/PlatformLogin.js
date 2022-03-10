@@ -167,7 +167,7 @@ export class PlatformLogin extends CommonCore {
           scrimClickAction=""
           hideMin>
           <div class="content layout vertical flex center-justified">
-            <iframe id="ytube" width="100%" height="345" src="https://www.youtube.com/embed/qzZv5e0gg9M?enablejsapi=1"></iframe>
+            <iframe id="ytube" width="100%" height="345" src="https://www.youtube.com/embed/p-C9v-jCrcM?enablejsapi=1"></iframe>
           </div>
         </tr-dialog>
         <mwc-icon-button @click=${this.changeLang} title="Language">
