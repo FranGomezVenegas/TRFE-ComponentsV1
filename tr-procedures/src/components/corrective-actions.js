@@ -132,14 +132,12 @@ export class CorrectiveActions extends CoreView {
         html`${action.button ?
           html`${action.button.icon ?
             html`<mwc-icon-button 
-              id="${action.button.id}"
+              class="${action.button.class}"
               icon="${action.button.icon}" 
               title="${action.button.title['label_'+this.lang]}" 
               ?disabled=${this.btnDisabled(action)}
               @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
             html`<mwc-button dense raised 
-              id="${action.button.id}"
-              icon="${action.button.icon}" 
               label="${action.button.title['label_'+this.lang]}" 
               ?disabled=${this.btnDisabled(action)}
               @click=${()=>this.actionMethod(action)}></mwc-button>`

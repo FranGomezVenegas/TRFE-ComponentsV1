@@ -613,7 +613,7 @@ export const EmDemoA = {
         "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
         "clientMethod": "moveToNext",
         "button": {
-          "id": "prev",
+          "class": "reverse",
           "icon": "next_week",
           "title": {
             "label_en": "Previous", "label_es": "Previo"
@@ -758,7 +758,7 @@ export const EmDemoA = {
         "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
         "clientMethod": "moveToNext",
         "button": {
-          "id": "prev",
+          "class": "reverse",
           "icon": "next_week",
           "title": {
             "label_en": "Previous", "label_es": "Previo"
@@ -1127,7 +1127,7 @@ export const EmDemoA = {
             "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
             "clientMethod": "moveToNext",
             "button": {
-              "id": "prev",
+              "class": "reverse",
               "icon": "next_week",
               "title": {
                 "label_en": "Previous", "label_es": "Previo"
@@ -1210,7 +1210,6 @@ export const EmDemoA = {
             "filterState": "progress_1",
             "button": {
               "img": "incubators/IncubInProgress.gif",
-              "size": "20px",
               "title": {
                 "label_en": "Incub#1 in progress", "label_es": "Incub#1 en curso"
               },
@@ -1246,7 +1245,6 @@ export const EmDemoA = {
             "filterState": "progress_2",
             "button": {
               "img": "incubators/IncubInProgress.gif",
-              "size": "20px",
               "title": {
                 "label_en": "Incub#2 in progress", "label_es": "Incub#2 en curso"
               },

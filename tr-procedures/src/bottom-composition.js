@@ -24,12 +24,6 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         mwc-button[hidden] {
           display: none;
         }
-        mwc-icon-button#prev {
-          -webkit-transform:rotateY(180deg);
-          -moz-transform:rotateY(180deg);
-          -o-transform:rotateY(180deg);
-          -ms-transform:rotateY(180deg);
-        }
         div.input * {
           margin: 10px 0 5px;
         }
@@ -58,9 +52,6 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         }
         #assignDialog {
           --mdc-dialog-min-width: 500px;
-        }
-        mwc-icon-button.img[disabled] {
-          opacity: 0.5;
         }
       `
     ];
@@ -258,27 +249,27 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
           html`${action.button.icon ?
             html`${action.actionName ?
               html`<mwc-icon-button style="color:${action.button.color}"
-                id="${action.button.id}"
+                class="${action.button.class}"
                 icon="${action.button.icon}" 
                 title="${action.button.title['label_'+this.lang]}${action.button.title.extra ? ` (${this[action.button.title.extra]})` : null}" 
                 ?disabled=${this.btnDisabled(action)}
                 ?hidden=${action.button.whenHidden&&!this[action.button.whenHidden]}
                 @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
               html`<mwc-icon-button style="color:${action.button.color}" 
-                id="${action.button.id}"
+                class="${action.button.class}"
                 icon="${action.button.icon}" 
                 title="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this[action.clientMethod](action.filterState)}></mwc-icon-button>`
             }` :
             html`${action.button.img ?
-              html`<mwc-icon-button class="img" 
+              html`<mwc-icon-button class="${action.button.class} img" 
                 title="${action.button.title['label_'+this.lang]}"
                 ?disabled=${this.btnDisabled(action)}
-                @click=${()=>this[action.clientMethod](action.filterState)}><img src="/images/${action.button.img}" style="width:${action.button.size}"></mwc-icon-button>` :
+                @click=${()=>this[action.clientMethod](action.filterState)}>
+                  <img class="iconBtn" src="/images/${action.button.img}">
+                </mwc-icon-button>` :
               html`<mwc-button dense raised 
-                id="${action.button.id}"
-                icon="${action.button.icon}" 
                 label="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this.actionMethod(action)}></mwc-button>`

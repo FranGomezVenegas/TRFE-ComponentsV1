@@ -108,7 +108,8 @@ export const AppProc = {
         "actionName": "TURN_OFF_LINE",
         "clientMethod": "setInstruments",
         "button": {
-          "icon": "alarm_off",
+          "class": "reverse",
+          "img": "activate.svg",
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
@@ -122,7 +123,7 @@ export const AppProc = {
         "actionName": "TURN_ON_LINE",
         "clientMethod": "setInstruments",
         "button": {
-          "icon": "alarm_on",
+          "img": "activate.svg",
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
@@ -136,7 +137,7 @@ export const AppProc = {
         "actionName": "START_CALIBRATION",
         "clientMethod": "setInstruments",
         "button": {
-          "icon": "alarm_on",
+          "img": "start_calibration.svg",
           "title": {
             "label_en": "Start Calibration", "label_es": "Iniciar Calibración"
           },
@@ -150,7 +151,7 @@ export const AppProc = {
         "actionName": "START_PREV_MAINT",
         "clientMethod": "setInstruments",
         "button": {
-          "icon": "alarm_on",
+          "img": "start_prev_maint.svg",
           "title": {
             "label_en": "Start Prev Maint", "label_es": "Iniciar Mant Prev"
           },

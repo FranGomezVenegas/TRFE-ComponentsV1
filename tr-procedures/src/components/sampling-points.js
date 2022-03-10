@@ -190,7 +190,7 @@ export class SamplingPoints extends CoreView {
       ${actions.map(action =>
         html`${action.button ?
           html`<mwc-icon-button 
-            id="${action.button.id}"
+            class="${action.button.class}"
             icon="${action.button.icon}" 
             title="${action.button.title['label_'+this.lang]}" 
             ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}

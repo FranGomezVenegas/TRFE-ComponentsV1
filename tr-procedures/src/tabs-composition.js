@@ -147,26 +147,26 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
           html`${action.button.icon ?
             html`${action.button.actionName ?
               html`<mwc-icon-button
-                id="${action.button.id}"
+                class="${action.button.class}"
                 icon="${action.button.icon}" 
                 title="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
               html`<mwc-icon-button style="color:${action.button.color}" 
-                id="${action.button.id}"
+                class="${action.button.class}"
                 icon="${action.button.icon}" 
                 title="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this[action.button.whenDisabled]}
                 @click=${()=>this[action.clientMethod](action.filterState)}></mwc-icon-button>`
             }` :
             html`${action.button.img ?
-              html`<mwc-icon-button class="img" 
+              html`<mwc-icon-button class="${action.button.class} img" 
                 title="${action.button.title['label_'+this.lang]}"
                 ?disabled=${this[action.button.whenDisabled]}
-                @click=${()=>this[action.clientMethod](action.filterState)}><img src="/images/${action.button.img}" style="width:${action.button.size}"></mwc-icon-button>` :
+                @click=${()=>this[action.clientMethod](action.filterState)}>
+                  <img class="iconBtn" src="/images/${action.button.img}">
+                </mwc-icon-button>` :
               html`<mwc-button dense raised 
-                id="${action.button.id}"
-                icon="${action.button.icon}" 
                 label="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this.actionMethod(action)}></mwc-button>`

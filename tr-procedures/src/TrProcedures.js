@@ -44,11 +44,17 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           --mdc-theme-on-primary: white;
           --mdc-typography-button-font-size: 10px;
         }
-        mwc-icon-button#prev {
+        mwc-icon-button.reverse {
           -webkit-transform:rotateY(180deg);
           -moz-transform:rotateY(180deg);
           -o-transform:rotateY(180deg);
           -ms-transform:rotateY(180deg);
+        }
+        mwc-icon-button[disabled] {
+          opacity: 0.5;
+        }
+        img.iconBtn {
+          width: 20px;
         }
         div.input * {
           margin: 10px 0 5px;
@@ -505,17 +511,24 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         html`${action.button ?
           html`${action.button.icon ?
             html`<mwc-icon-button 
-              id="${action.button.id}"
+              class="${action.button.class}"
               icon="${action.button.icon}" 
               title="${action.button.title['label_'+this.lang]}" 
               ?disabled=${this.btnDisabled(action)}
               @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
-            html`<mwc-button dense raised 
-              id="${action.button.id}"
-              icon="${action.button.icon}" 
-              label="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${this.btnDisabled(action)}
-              @click=${()=>this.actionMethod(action)}></mwc-button>`
+            html`${action.button.img ?
+              html`<mwc-icon-button 
+                class="${action.button.class} img"
+                title="${action.button.title['label_'+this.lang]}" 
+                ?disabled=${this.btnDisabled(action)}
+                @click=${()=>this.actionMethod(action)}>
+                  <img class="iconBtn" src="images/${action.button.img}">
+                </mwc-icon-button>` :
+              html`<mwc-button dense raised 
+                label="${action.button.title['label_'+this.lang]}" 
+                ?disabled=${this.btnDisabled(action)}
+                @click=${()=>this.actionMethod(action)}></mwc-button>`
+            }`
           }` :
           nothing
         }`
