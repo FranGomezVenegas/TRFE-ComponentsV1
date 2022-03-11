@@ -165,7 +165,7 @@ export const AppProc = {
         "actionName": "START_VERIFICATION",
         "clientMethod": "setInstruments",
         "button": {
-          "img": "start_verification.svg",
+          "icon": "alarm_on",
           "title": {
             "label_en": "Start Verification", "label_es": "Iniciar Verificación"
           },
@@ -300,21 +300,14 @@ export const AppProc = {
             "clientMethod": "enterResult",
             "apiParams": [
               { "query": "rawValueResult", "targetValue": true },
-              { "query": "resultId", "targetValue": true }
+              { "query": "eventtId", "beItem": "id" }
             ]
           }
         ]
       },
       "apiParams": [
-        { "query": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
-        { "query": "sortFieldsName", "value": "test_id|result_id" },
-        { "query": "sampleAnalysisWhereFieldsName", "value": "testing_group|status not in" }
-      ],
-      "paramFilter": {
-          "EventsER": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
-          "ER-FQ": { "query": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
-        "ER-MB": { "query": "sampleAnalysisWhereFieldsValue", "value": "MB|REVIEWED*String" }
-      }
+        { "query": "eventId", "beItem": "id"}
+      ]
     }
   ]
   }
