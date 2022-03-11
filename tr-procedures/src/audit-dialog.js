@@ -12,6 +12,9 @@ export class AuditDialog extends LitElement {
         tr-dialog {
           --mdc-dialog-max-width: 90vw;
         }
+        sp-tooltip[hidden] {
+          display: none;
+        }
         sp-tooltip {
           max-width: 100%;
           width: 100%;
@@ -29,6 +32,11 @@ export class AuditDialog extends LitElement {
         }
         div[hidden] {
           display: none;
+        }
+        .ball {
+          margin-left: -13px;
+          cursor: pointer;
+          background: transparent;
         }
       `
     ];
@@ -208,9 +216,11 @@ export class AuditDialog extends LitElement {
       <mwc-icon slot="icon1" @click=${this.auditPrint}>print</mwc-icon>
       ${this.audits.map((a,i)=>
         html`
-        <div class="layout horizontal flex center" style="padding:2px 0 2px 0;border-left:3px solid #ccc">
-          <mwc-icon style="margin-left:-13px;color:${a.collapse?'#ccc':'#3f51b5'};background:white">radio_button_checked</mwc-icon>
-          <sp-tooltip open placement="right" variant="info">
+        <div id="wrap-${a.audit_id}" class="layout horizontal flex center" style="padding:2px 0 2px 0;border-left:3px solid #ccc">
+          <mwc-icon class="ball"
+            @click=${()=>this.showItem(a,i)}
+            style="color:${a.ballState=="open"?'#3f51b5':a.ballState=="hide"?'#eee':'#aaa'}">radio_button_checked</mwc-icon>
+          <sp-tooltip open placement="right" variant="info" id="tooltip-${a.audit_id}">
             <div class="layout horizontal flex center">
               ${a.reviewed?
                 html`
@@ -221,7 +231,6 @@ export class AuditDialog extends LitElement {
                   @click=${()=>this.signAudit(a.audit_id)} ?hidden=${!this.sampleAuditRevisionMode}>edit_note</mwc-icon>
                 `
               }
-              <input type="checkbox" @click=${e=>this.showItem(e,a,i)}>
               <div>action_name: <b>${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</b></div>
             </div>
             <div>
@@ -234,9 +243,11 @@ export class AuditDialog extends LitElement {
               ${a.sublevel.length&&a.sublevel[0].date?
               html`${a.sublevel.map((s,si)=>
                 html`
-                  <div class="layout horizontal flex center" style="margin:5px">
-                    <mwc-icon style="color:${s.collapse?'#ccc':'#3f51b5'}">radio_button_checked</mwc-icon>
-                    <sp-tooltip class="sub" open placement="right" variant="info">
+                  <div id="wrap-${s.audit_id}" class="layout horizontal flex center" style="margin:5px">
+                    <mwc-icon class="ball"
+                      @click=${()=>this.showSubItem(s,i,si)}
+                      style="color:${s.ballState=="hide"?'#eee':s.ballState=="close"?'#aaa':'#3f51b5'}">radio_button_checked</mwc-icon>
+                    <sp-tooltip class="sub" open placement="right" variant="info" id="tooltip-${s.audit_id}">
                       <div class="layout horizontal flex center">
                         ${s.reviewed?
                           html`
@@ -247,7 +258,6 @@ export class AuditDialog extends LitElement {
                             @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}>edit_note</mwc-icon>
                           `
                         }
-                        <input type="checkbox" checked @click=${e=>this.showSubItem(e,s,i,si)}>
                         <div>action_name: ${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>
                       </div>
                       <div>
@@ -284,16 +294,44 @@ export class AuditDialog extends LitElement {
     return this.dialog.shadowRoot.querySelector(".mdc-dialog__surface")
   }
 
-  showItem(event, item, i) {
-    this.audits[i].collapse = !this.audits[i].collapse
+  showItem(item, i) {
+    if (this.audits[i].ballState == "open") {
+      this.audits[i].ballState = "hide"
+      this.shadowRoot.querySelector("#tooltip-"+item.audit_id).hidden = true
+      this.shadowRoot.querySelector("#wrap-"+item.audit_id).style.marginTop = "-11px"
+      this.shadowRoot.querySelector("#wrap-"+item.audit_id).style.marginBottom = "-11px"
+    } else if (this.audits[i].ballState == "hide") {
+      this.audits[i].ballState = "close"
+      this.shadowRoot.querySelector("#tooltip-"+item.audit_id).hidden = false
+      this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = true
+      this.shadowRoot.querySelector("#wrap-"+item.audit_id).style.marginTop = ""
+      this.shadowRoot.querySelector("#wrap-"+item.audit_id).style.marginBottom = ""
+    } else {
+      this.audits[i].ballState = "open"
+      this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = false
+    }
     this.requestUpdate()
-    this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = !event.target.checked
   }
 
-  showSubItem(event, item, i, si) {
-    this.audits[i].sublevel[si].collapse = !this.audits[i].sublevel[si].collapse
+  showSubItem(item, i, si) {
+    if (this.audits[i].sublevel[si].ballState == "hide") {
+      this.audits[i].sublevel[si].ballState = "close"
+      this.shadowRoot.querySelector("#tooltip-"+item.audit_id).hidden = false
+      this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = true
+      this.shadowRoot.querySelector("#wrap-"+item.audit_id).style.margin = "5px"
+    } else if (this.audits[i].sublevel[si].ballState == "close") {
+      this.audits[i].sublevel[si].ballState = "open"
+      this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = false
+    } else {
+      this.audits[i].sublevel[si].ballState = "hide"
+      this.shadowRoot.querySelector("#tooltip-"+item.audit_id).hidden = true
+      if (si == this.audits[i].sublevel.length - 1) { // the last item
+        this.shadowRoot.querySelector("#wrap-"+item.audit_id).style.marginBottom = "-5px"
+      } else {
+        this.shadowRoot.querySelector("#wrap-"+item.audit_id).style.marginBottom = "-11px"
+      }
+    }
     this.requestUpdate()
-    this.shadowRoot.querySelector("#audit-"+item.audit_id).hidden = !event.target.checked
   }
 
   countInfo() {
