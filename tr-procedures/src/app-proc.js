@@ -165,7 +165,7 @@ export const AppProc = {
         "actionName": "START_VERIFICATION",
         "clientMethod": "setInstruments",
         "button": {
-          "icon": "alarm_on",
+          "img": "start_verification.svg",
           "title": {
             "label_en": "Start Verification", "label_es": "Iniciar Verificación"
           },
