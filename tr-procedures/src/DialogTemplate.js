@@ -597,7 +597,7 @@ export function DialogTemplate(base) {
             )}
           </mwc-select>
           ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
-            html`<mwc-textfield ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential?true:false} label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential&&f.value?"*****":f.value}></mwc-textfield>`
+            html`<mwc-textfield ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value?true:false} label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>`
           )}
         </div>
       </tr-dialog>

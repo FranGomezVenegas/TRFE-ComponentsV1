@@ -156,7 +156,7 @@ export class ConfigCalendar extends CoreView {
   }
 
   isConfidential(sample, key) {
-    if (this.langConfig.gridHeader[key].confidential&&sample[key]) {
+    if (this.langConfig.gridHeader[key].confidential_value&&sample[key]) {
       return html`*****`
     } else {
       return html`${sample[key]}`
