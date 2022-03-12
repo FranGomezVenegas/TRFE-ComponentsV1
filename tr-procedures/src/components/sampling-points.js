@@ -65,7 +65,6 @@ let actions = [
     "actionName": "LOGSAMPLE",
     "clientMethod": "logSample",
     "apiParams": [
-      { "query": "programName", "element": "programInput", "defaultValue": "" },
       { "query": "locationName", "element": "locationInput", "defaultValue": "" },
       { "query": "sampleTemplate", "targetValue": true },
       { "query": "sampleTemplateVersion", "targetValue": true },
@@ -179,8 +178,8 @@ export class SamplingPoints extends CoreView {
 
   setLogSample() {
     this.targetValue = {
-      sampleTemplate: this.programList[0].sample_config_code,
-      sampleTemplateVersion: this.programList[0].sample_config_code_version,
+      sampleTemplate: this.selectedProgram.sample_config_code,
+      sampleTemplateVersion: this.selectedProgram.sample_config_code_version,
       fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
     }
     this.actionMethod(null, false, 1)
@@ -319,7 +318,7 @@ export class SamplingPoints extends CoreView {
       if (j && !j.is_error) {
         if (this.selectedAction.subAction) {
           this.actionMethod(this.selectedAction.subAction)
-          this.programList = j.programsList
+          this.programsList = j.programsList
         }
       }
     })
@@ -330,13 +329,14 @@ export class SamplingPoints extends CoreView {
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       this.samplesReload = false
-      this.grid.items = this.programList[0].sample_points
+      this.grid.items = this.selectedProgram.sample_points
       langConfig.fieldText.lot.items = j
       this.requestUpdate()
     })
   }
 
   logSample() {
+    this.reqParams.programName = this.selectedProgram.name
     let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(() => {

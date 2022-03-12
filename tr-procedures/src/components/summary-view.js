@@ -37,14 +37,14 @@ export class SummaryView extends CoreView {
         <sp-tab label="Area" value="2"></sp-tab>
         <sp-tab-panel value="1">
           <div class="layout vertical flex center">
-            <h2>${langConfig.homeView.header["label_"+ this.lang]} ${this.programList&&this.programList.length?this.programList[0].spec_code:''}</h2>
+            <h2>${langConfig.homeView.header["label_"+ this.lang]} ${this.selectedProgram&&this.selectedProgram.name}</h2>
             <h3>${langConfig.homeView.chartTitle["label_"+ this.lang]}</h3>
             <google-chart type='pie'></google-chart>
           </div>
         </sp-tab-panel>
         <sp-tab-panel value="2">
           <div class="layout vertical flex center">
-            <h2>${langConfig.areaView.header["label_"+ this.lang]} ${this.programList&&this.programList.length?this.programList[0].spec_code:''}</h2>
+            <h2>${langConfig.areaView.header["label_"+ this.lang]} ${this.selectedProgram&&this.selectedProgram.name}</h2>
           </div>
         </sp-tab-panel>
       </sp-tabs>
@@ -57,7 +57,7 @@ export class SummaryView extends CoreView {
 
   setView() {
     let data = [["Stage", "Counter"]]
-    this.programList[0].samples_summary_by_stage.forEach(c => {
+    this.selectedProgram.samples_summary_by_stage.forEach(c => {
       if (c.current_stage != "END") {
         data.push([c.current_stage, c.COUNTER])
       }

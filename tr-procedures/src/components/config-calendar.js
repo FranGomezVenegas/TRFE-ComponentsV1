@@ -65,7 +65,6 @@ export class ConfigCalendar extends CoreView {
 
   constructor() {
     super()
-    this.programList = []
     this.gridItems = []
     this.filteredItems = []
     this.selectedCalendarSamples = []
@@ -79,7 +78,7 @@ export class ConfigCalendar extends CoreView {
       disable-prev-days="true" disable-next-days="true" theme="light-blue"
       disabled-days='["Saturday", "Sunday"]'></mp-calendar-ext>
     <h2>${langConfig.headerTitle["label_" + this.lang]}
-      ${this.programList && this.programList.length ? this.programList[0].spec_code : ''}</h2>
+      ${this.selectedProgram&&this.selectedProgram.name}</h2>
     <vaadin-grid .items=${this.filteredItems} theme="row-dividers" column-reordering-allowed multi-sort @active-item-changed=${e =>
        this.selectedCalendarSamples = e.detail.value ? [e.detail.value] : []}
       .selectedItems="${this.selectedCalendarSamples}">
@@ -177,8 +176,8 @@ export class ConfigCalendar extends CoreView {
     this.calendar.firstDayOfWeek = this.startDayNumber
     this.calendar.daysLabels = this.daysLabels
     this.calendar.monthsLabels = this.monthsLabels
-    this.calendar.eventsObject = this.programList[0].config_scheduled_calendar
-    this.gridItems = this.filteredItems = this.programList[0].config_scheduled_calendar
+    this.calendar.eventsObject = this.selectedProgram.config_scheduled_calendar
+    this.gridItems = this.filteredItems = this.selectedProgram.config_scheduled_calendar
   }
 
   dateChosen(e) {

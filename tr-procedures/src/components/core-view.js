@@ -19,13 +19,8 @@ export class CoreView extends CredDialog {
   static get properties() {
     return {
       lang: { type: String },
-      programList: { type: Array }
+      selectedProgram: { type: Object }
     };
-  }
-
-  constructor() {
-    super()
-    this.programList = []
   }
 
   render() {
@@ -41,7 +36,7 @@ export class CoreView extends CredDialog {
 
   updated(updates) {
     super.updated(updates)
-    if (updates.has('programList') && this.programList && this.programList.length) {
+    if (updates.has('selectedProgram') && this.selectedProgram) {
       this.setView()
     }
   }

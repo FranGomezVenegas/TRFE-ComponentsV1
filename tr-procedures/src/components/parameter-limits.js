@@ -129,7 +129,7 @@ export class ParameterLimits extends CoreView {
 
   tabView() {
     return html`
-      <h2>${langConfig.limitView.header["label_"+ this.lang]} ${this.programList&&this.programList.length?this.programList[0].spec_code:''}</h2>
+      <h2>${langConfig.limitView.header["label_"+ this.lang]} ${this.selectedProgram&&this.selectedProgram.name}</h2>
       <table class="styled-table">
         <thead>
           <tr>
@@ -148,7 +148,7 @@ export class ParameterLimits extends CoreView {
           </tr>
         </thead>
         <tbody>
-          ${this.programList&&this.programList.length&&this.programList[0].spec_definition.spec_limits.map(p => 
+          ${this.selectedProgram&&this.selectedProgram.spec_definition.spec_limits.map(p => 
             html`
             <tr>
               ${this.procName=="em-demo-a" ?

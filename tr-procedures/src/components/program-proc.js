@@ -3,6 +3,8 @@ import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
+import '@material/mwc-select';
+import '@material/mwc-list/mwc-list-item';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
@@ -101,7 +103,8 @@ export class ProgramProc extends CredDialog {
       selectedAction: { type: Object },
       prev: { type: Boolean },
       next: { type: Boolean },
-      programList: { type: Array },
+      programsList: { type: Array },
+      selectedProgram: { type: Object },
       tabView: { type: String },
       windowOpenable: { type: String },
       sopsPassed: { type: Boolean }
@@ -112,6 +115,7 @@ export class ProgramProc extends CredDialog {
     super()
     this.prev = false
     this.next = false
+    this.programsList = []
   }
 
   updated(updates) {
@@ -121,7 +125,7 @@ export class ProgramProc extends CredDialog {
   }
 
   resetView() {
-    this.programList = []
+    this.programsList = []
     this.actions = this.model.actions
     this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
@@ -130,12 +134,19 @@ export class ProgramProc extends CredDialog {
   render() {
     return html`
       <div class="layout vertical flex">
+        <div class="layout horizontal center-center">
+          <mwc-select outlined label="Program Name" @change=${this.programChanged}>
+            ${this.programsList.map((p,i) => 
+              html`<mwc-list-item value="${p.name}" ?selected=${i==0}>${p.name}</mwc-list-item>`
+            )}
+          </mwc-select>
+        </div>
         <div class="layout flex">
           <div class="layout horizontal center">
             <mwc-icon-button class="slide" icon="navigate_before" @click=${this.prevTab} ?hidden=${!this.prev}>
             </mwc-icon-button>
             <div class="tabContainer layout horizontal flex center">
-              <mwc-icon-button icon="refresh" @click=${this.getProgramList} ?disabled=${this.samplesReload}></mwc-icon-button>
+              <mwc-icon-button icon="refresh" @click=${this.resetView} ?disabled=${this.samplesReload}></mwc-icon-button>
               ${tabBtns[this.procName].map(t =>
                 html`<tab-program .lang=${this.lang} .tab=${t} @tab-rendered=${this.isScroll} @tab-change=${this.tabChanged} ?disabled=${this.samplesReload}></tab-program>`
               )}
@@ -144,19 +155,28 @@ export class ProgramProc extends CredDialog {
             </mwc-icon-button>
           </div>
         </div>
-        <summary-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="summary"}></summary-view>
-        <parameter-limits .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
-        <config-calendar .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="config-calendar"}></config-calendar>
-        <sampling-points .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points"}></sampling-points>
-        <sampling-points-map .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="sampling-points-map"}></sampling-points-map>
-        <core-view .lang=${this.lang} .programList=${this.programList} ?hidden=${this.tabView!="core"}></core-view>
+        <summary-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="summary"}></summary-view>
+        <parameter-limits .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
+        <config-calendar .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="config-calendar"}></config-calendar>
+        <sampling-points .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} ?hidden=${this.tabView!="sampling-points"}></sampling-points>
+        <sampling-points-map .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} ?hidden=${this.tabView!="sampling-points-map"}></sampling-points-map>
+        <core-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="core"}></core-view>
         <corrective-actions 
           .windowOpenable=${this.windowOpenable}
           .sopsPassed=${this.sopsPassed}
-          .procName=${this.procName} .lang=${this.lang} .programList=${this.programList} .config=${this.config} ?hidden=${this.tabView!="corrective-actions"}></corrective-actions>
+         
+          .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} ?hidden=${this.tabView!="corrective-actions"}></corrective-actions>
         ${super.render()}
       </div>
     `
+  }
+
+  programChanged(e) {
+    let program = this.programsList.filter(p => p.name == e.target.value)
+    if (program.length) {
+      this.selectedProgram = program[0]
+      this.requestUpdate()
+    }
   }
 
   get tabContainer() {
@@ -242,7 +262,7 @@ export class ProgramProc extends CredDialog {
       + '?' + new URLSearchParams(this.reqParams)
     await this.fetchApi(params).then(j => {
       if (j && !j.is_error) {
-        this.programList = j.programsList
+        this.programsList = j.programsList
         if (this.selectedAction.subAction) {
           this.actionMethod(this.selectedAction.subAction)
         }

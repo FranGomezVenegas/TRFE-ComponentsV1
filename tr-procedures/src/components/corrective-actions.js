@@ -55,9 +55,6 @@ let actions = [
       },
       "whenDisabled": "samplesReload"
     },
-    "apiParams": [
-      { "query": "programName", "defaultValue": "Aguas Ejemplo" }
-    ],
     "subAction": {
       "actionName": "OPEN_INVESTIGATIONS",
       "clientMethod": "openInvestigations",
@@ -271,6 +268,7 @@ export class CorrectiveActions extends CoreView {
 
   getCorrectiveList() {
     this.samplesReload = true
+    this.reqParams.programName = this.selectedProgram.name
     let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {

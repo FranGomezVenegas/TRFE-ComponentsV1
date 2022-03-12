@@ -44,7 +44,6 @@ let actions = [
     "actionName": "LOGSAMPLE",
     "clientMethod": "logSample",
     "apiParams": [
-      { "query": "programName", "element": "programInput", "defaultValue": "" },
       { "query": "locationName", "element": "locationInput", "defaultValue": "" },
       { "query": "sampleTemplate", "targetValue": true },
       { "query": "sampleTemplateVersion", "targetValue": true },
@@ -101,7 +100,7 @@ export class SamplingPointsMap extends CoreView {
           <h1>${langConfig.title["label_"+this.lang]}</h1>
           <div class="mapWrap">
             <img class="mapImg" src="/images/clean-room-example.png">
-            ${this.samplePoints.map(point => 
+            ${this.samplePoints&&this.samplePoints.map(point => 
               html`<img class="mapIcon" 
                 src="/images/${this.mapIcon(point.map_icon)}" 
                 style="top:${point.map_icon_top};left:${point.map_icon_left};width:${point.map_icon_w}px;height:${point.map_icon_h}px"
@@ -173,8 +172,8 @@ export class SamplingPointsMap extends CoreView {
 
   setLogSample() {
     this.targetValue = {
-      sampleTemplate: this.programList[0].sample_config_code,
-      sampleTemplateVersion: this.programList[0].sample_config_code_version,
+      sampleTemplate: this.selectedProgram.sample_config_code,
+      sampleTemplateVersion: this.selectedProgram.sample_config_code_version,
       fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
     }
     this.actionMethod(null, false, 1)
@@ -226,13 +225,14 @@ export class SamplingPointsMap extends CoreView {
     let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
-      this.samplePoints = this.programList[0].sample_points
+      this.samplePoints = this.selectedProgram.sample_points
       langConfig.fieldText.lot.items = j
       this.requestUpdate()
     })
   }
 
   logSample() {
+    this.reqParams.programName = this.selectedProgram.name
     let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(() => {
