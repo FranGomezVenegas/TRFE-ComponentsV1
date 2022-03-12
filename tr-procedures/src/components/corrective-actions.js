@@ -1,7 +1,7 @@
 import { html, css, nothing } from 'lit';
 import { CoreView } from './core-view';
 import { Alignment, Layouts } from '@collaborne/lit-flexbox-literals';
-import { commonLangConfig } from '@trazit/common-core';
+import { columnBodyRenderer } from 'lit-vaadin-helpers';
 
 let langConfig = {
   "title": {
@@ -262,7 +262,7 @@ export class CorrectiveActions extends CoreView {
   }
 
   isConfidential(sample, key) {
-    if (this.langConfig.gridHeader[key].confidential_value&&sample[key]) {
+    if (langConfig.gridHeader[key].confidential_value&&sample[key]) {
       return html`*****`
     } else {
       return html`${sample[key]}`

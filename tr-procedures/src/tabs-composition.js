@@ -3,6 +3,7 @@ import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import { ClientMethod } from './ClientMethod';
 import { DialogTemplate } from './DialogTemplate';
+import { columnBodyRenderer } from 'lit-vaadin-helpers';
 
 export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   static get styles() {
@@ -57,6 +58,7 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   resetView() {
+    this.grid.items = []
     this.openInvests = []
     this.selectedInvestigations = []
     this.selectedSamples = []
@@ -248,7 +250,7 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   gridList() {
-    if (this.langConfig) {
+    if (this.langConfig && JSON.stringify(this.langConfig) == JSON.stringify(this.model.langConfig)) {
       return Object.entries(this.langConfig.gridHeader).map(
         ([key, value], i) => html`
           ${this.nonIconColumn(key, value, i)}

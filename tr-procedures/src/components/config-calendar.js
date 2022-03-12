@@ -1,6 +1,7 @@
 import { html, css } from 'lit';
 import { CoreView } from './core-view';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
+import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import './mp-calendar-ext';
 
 let langConfig = {
@@ -156,7 +157,7 @@ export class ConfigCalendar extends CoreView {
   }
 
   isConfidential(sample, key) {
-    if (this.langConfig.gridHeader[key].confidential_value&&sample[key]) {
+    if (langConfig.gridHeader[key].confidential_value&&sample[key]) {
       return html`*****`
     } else {
       return html`${sample[key]}`

@@ -381,7 +381,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
   }
 
   gridList() {
-    if (this.langConfig) {
+    if (this.langConfig && JSON.stringify(this.langConfig) == JSON.stringify(this.model.langConfig)) {
       return Object.entries(this.langConfig.gridHeader).map(
         ([key, value], i) => html`
           ${this.langConfig.gridHeader[key].is_icon ?
