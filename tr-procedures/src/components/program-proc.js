@@ -85,6 +85,9 @@ export class ProgramProc extends CredDialog {
         mwc-icon-button.slide[hidden] {
           visibility: hidden;
         }
+        mwc-select[hidden] {
+          display: none;
+        }
       `
     ];
   }
@@ -135,7 +138,7 @@ export class ProgramProc extends CredDialog {
     return html`
       <div class="layout vertical flex">
         <div class="layout horizontal center-center">
-          <mwc-select outlined label="Program Name" @change=${this.programChanged}>
+          <mwc-select outlined label="Program Name" @change=${this.programChanged} ?hidden=${this.programsList.length<2}>
             ${this.programsList.map((p,i) => 
               html`<mwc-list-item value="${p.name}" ?selected=${i==0}>${p.name}</mwc-list-item>`
             )}
