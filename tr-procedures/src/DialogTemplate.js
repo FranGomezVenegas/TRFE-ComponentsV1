@@ -126,7 +126,10 @@ export function DialogTemplate(base) {
           }}
           .detailsOpenedItems=${this.selectedResults}
           ${gridRowDetailsRenderer(this.detailRenderer)}>
-          <vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>
+          ${this.desktop ?
+            html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
+            html`<vaadin-grid-selection-column header="" width="80px" resizable ></vaadin-grid-selection-column>`
+          }
           ${this.erList()}
         </vaadin-grid>
         <div id="rowTooltip">&nbsp;</div>
@@ -214,23 +217,34 @@ export function DialogTemplate(base) {
 
     erList() {
       return Object.entries(this.langConfig.resultHeader).map(([key, value], i) => 
-        html`${i==0 ?
-          html`<vaadin-grid-column 
-            ${columnBodyRenderer(this.specRenderer)}
-            text-align="center" 
-            flex-grow="0"
-            path="${key}" 
-            header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-          html`${key=="raw_value" ?
+        html`
+          ${this.desktop ?
+            html`
+              ${i==0 ?
+                html`<vaadin-grid-column 
+                  ${columnBodyRenderer(this.specRenderer)}
+                  text-align="center" 
+                  flex-grow="0"
+                  path="${key}" 
+                  header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+                html`${key=="raw_value" ?
+                  html`<vaadin-grid-column 
+                    ${columnBodyRenderer(this.valRenderer)}
+                    text-align="center" 
+                    flex-grow="1"
+                    path="${key}" 
+                    header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+                  html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                }`
+              }
+            ` :
             html`<vaadin-grid-column 
-              ${columnBodyRenderer(this.valRenderer)}
-              text-align="center" 
-              flex-grow="1"
+              ${columnBodyRenderer(this.specRenderer)}
+              width="80px" resizable 
               path="${key}" 
-              header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-            html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-          }`
-        }`
+              header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+          }
+        `
       )
     }
 

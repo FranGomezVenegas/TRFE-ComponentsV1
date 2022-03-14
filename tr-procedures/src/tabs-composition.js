@@ -270,66 +270,95 @@ export class TabsComposition extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   sortColumn(key, value, i) {
-    return html`${i==0 ?
-      html`${this.langConfig.gridHeader[key].width ?
-        html`<vaadin-grid-sort-column 
+    return html`
+      ${this.desktop ?
+        html`
+          ${i==0 ?
+            html`${this.langConfig.gridHeader[key].width ?
+              html`<vaadin-grid-sort-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
+              html`<vaadin-grid-sort-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+            }` :
+            html`${this.langConfig.gridHeader[key].width ?
+              html`<vaadin-grid-sort-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
+              html`<vaadin-grid-sort-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+            }`
+          }
+        ` :
+        html`<vaadin-grid-sort-column width="80px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
-        html`<vaadin-grid-sort-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-      }` :
-      html`${this.langConfig.gridHeader[key].width ?
-        html`<vaadin-grid-sort-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
-        html`<vaadin-grid-sort-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-      }`
-    }`
+          text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
+          path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
+      }
+    `
   }
 
   filterColumn(key, value, i) {
-    return html`${i==0 ?
-      html`${this.langConfig.gridHeader[key].width ?
-        html`<vaadin-grid-filter-column 
+    return html`
+      ${this.desktop ?
+        html`
+          ${i==0 ?
+            html`${this.langConfig.gridHeader[key].width ?
+              html`<vaadin-grid-filter-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+              html`<vaadin-grid-filter-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+            }` :
+            html`${this.langConfig.gridHeader[key].width ?
+              html`<vaadin-grid-filter-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+              html`<vaadin-grid-filter-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+            }`
+          }
+        ` :
+        html`<vaadin-grid-filter-column width="80px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-        html`<vaadin-grid-filter-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-      }` :
-      html`${this.langConfig.gridHeader[key].width ?
-        html`<vaadin-grid-filter-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-        html`<vaadin-grid-filter-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-      }`
-    }`
+          text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
+          path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
+      }
+    `
   }
 
   commonColumn(key, value, i) {
-    return html`${i==0 ?
-      html`${this.langConfig.gridHeader[key].width ?
+    return html`
+      ${this.desktop ?
+        html`
+          ${i==0 ?
+            html`${this.langConfig.gridHeader[key].width ?
+              html`<vaadin-grid-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+              html`<vaadin-grid-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+            }` :
+            html`${this.langConfig.gridHeader[key].width ?
+              html`<vaadin-grid-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+              html`<vaadin-grid-column 
+                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
+                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+            }`
+          }
+        ` :
         html`<vaadin-grid-column 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          width="${this.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-        html`<vaadin-grid-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-      }` :
-      html`${this.langConfig.gridHeader[key].width ?
-        html`<vaadin-grid-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-        html`<vaadin-grid-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-      }`
-    }`
+          width="80px" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+      }
+    `
   }
 
   isConfidential(sample, key) {

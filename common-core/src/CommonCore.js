@@ -1,10 +1,4 @@
-import { LitElement, html } from 'lit';
-
-function installMediaQueryWatcher(mediaQuery, layoutChangedCallback) {
-  let mql = window.matchMedia(mediaQuery);
-  mql.addListener((e) => layoutChangedCallback(e.matches));
-  layoutChangedCallback(mql.matches);
-}
+import { LitElement } from 'lit';
 
 export const commonLangConfig = {
   "cancelDialogButton": {
@@ -45,7 +39,25 @@ export class CommonCore extends LitElement {
   }
 
   firstUpdated() {
-    installMediaQueryWatcher(`(min-width: 461px)`, desktop => this.desktop = desktop );
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(() => {
+        this.resizeElements()
+      }, 500)
+    }, true);
+    this.updateComplete.then(() => {
+      this.resizeElements()
+    })
+  }
+
+  resizeElements() {
+    let wScreen = document.documentElement.clientWidth;
+    if (wScreen > 460) {
+      this.desktop = true
+    } else {
+      this.desktop = false
+    }
   }
 
   updated(updates) {
