@@ -338,6 +338,12 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
+          if (this.curResultRef) {
+            let r = j.filter(d => d.event_id == this.curResultRef.evtId)
+            if (r.length) {
+              this.curResultRef.elm.value = r[0].value
+            }
+          }
           this.selectedResults = []
           this.enterResults = j
           this.erGrid.items = j

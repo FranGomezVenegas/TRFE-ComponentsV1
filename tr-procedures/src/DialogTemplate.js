@@ -118,11 +118,15 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         ${this.selectedSamples.length ?
-          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id}</label>` : nothing
+          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id||this.selectedSamples[0].id}</label>` : nothing
         }
         <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
           @selected-items-changed=${e => {
-            this.selectedResults = e.detail.value
+            if (this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES") {
+              this.selectedResults = []
+            } else {
+              this.selectedResults = e.detail.value
+            }
           }}
           .detailsOpenedItems=${this.selectedResults}
           ${gridRowDetailsRenderer(this.detailRenderer)}>
@@ -130,7 +134,10 @@ export function DialogTemplate(base) {
             html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
             html`<vaadin-grid-selection-column header="" width="80px" resizable ></vaadin-grid-selection-column>`
           }
-          ${this.erList()}
+          ${this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES" ?
+            html`${this.evList()}` :
+            html`${this.erList()}`
+          }
         </vaadin-grid>
         <div id="rowTooltip">&nbsp;</div>
       </tr-dialog>
@@ -142,21 +149,25 @@ export function DialogTemplate(base) {
     }
 
     setCellListener() {
-      this.rowTooltip.style.display = "block"
-      this.rowTooltip.style.visibility = "hidden"
-      this.rowTooltip.style.fontSize = "12px"
-      this.rowTooltip.style.color = "white"
-      let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
-      rows.forEach((r,i) => {
-        if (i > 0 && this.enterResults[i-1]) {
-          r.removeEventListener('mouseenter', () => this.showLockReason(i))
-          r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
-        }
-        if (i > 0 && this.enterResults[i-1] && (this.enterResults[i-1].is_locked || this.enterResults[i-1].warning_reason)) {
-          r.addEventListener('mouseenter', () => this.showLockReason(i))
-          r.addEventListener('mouseleave', this.hideLockReason.bind(this))
-        }
-      })
+      if (this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES") {
+        // 
+      } else {
+        this.rowTooltip.style.display = "block"
+        this.rowTooltip.style.visibility = "hidden"
+        this.rowTooltip.style.fontSize = "12px"
+        this.rowTooltip.style.color = "white"
+        let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
+        rows.forEach((r,i) => {
+          if (i > 0 && this.enterResults[i-1]) {
+            r.removeEventListener('mouseenter', () => this.showLockReason(i))
+            r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
+          }
+          if (i > 0 && this.enterResults[i-1] && (this.enterResults[i-1].is_locked || this.enterResults[i-1].warning_reason)) {
+            r.addEventListener('mouseenter', () => this.showLockReason(i))
+            r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+          }
+        })
+      }
     }
 
     showLockReason(i) {
@@ -176,16 +187,20 @@ export function DialogTemplate(base) {
     }
 
     removeEvents() {
+      if (this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES") {
+        // 
+      } else {
+        this.rowTooltip.textContent = ""
+        this.rowTooltip.style.visibility = "hidden"
+        let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
+        rows.forEach((r,i) => {
+          if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
+            r.removeEventListener('mouseenter', this.showLockReason.bind(this))
+            r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
+          }
+        })
+      }
       this.curResultRef = undefined
-      this.rowTooltip.textContent = ""
-      this.rowTooltip.style.visibility = "hidden"
-      let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
-      rows.forEach((r,i) => {
-        if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
-          r.removeEventListener('mouseenter', this.showLockReason.bind(this))
-          r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
-        }
-      })
       this.enterResults = []
     }
 
@@ -238,11 +253,53 @@ export function DialogTemplate(base) {
                 }`
               }
             ` :
-            html`<vaadin-grid-column 
-              ${columnBodyRenderer(this.specRenderer)}
-              width="80px" resizable 
-              path="${key}" 
-              header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+            html`
+              ${i==0 ?
+                html`<vaadin-grid-column 
+                  ${columnBodyRenderer(this.specRenderer)}
+                  width="80px" resizable 
+                  path="${key}" 
+                  header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
+                html`${key=="raw_value" ?
+                  html`<vaadin-grid-column 
+                    ${columnBodyRenderer(this.valRenderer)}
+                    width="80px" resizable 
+                    path="${key}" 
+                    header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+                  html`<vaadin-grid-column resizable width="80px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                }`
+              }
+            ` 
+          }
+        `
+      )
+    }
+
+    evList() {
+      return Object.entries(this.langConfig.resultHeader).map(([key, value], i) => 
+        html`
+          ${this.desktop ?
+            html`
+              ${key=="value" ?
+                html`<vaadin-grid-column 
+                  ${columnBodyRenderer(this.valRenderer)}
+                  text-align="center" 
+                  flex-grow="1"
+                  path="${key}" 
+                  header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+                html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+              }
+            ` :
+            html`
+              ${key=="value" ?
+                html`<vaadin-grid-column 
+                  ${columnBodyRenderer(this.valRenderer)}
+                  width="80px" resizable
+                  path="${key}" 
+                  header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+                html`<vaadin-grid-column resizable width="80px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+              }
+            `
           }
         `
       )
@@ -282,10 +339,10 @@ export function DialogTemplate(base) {
         } else {
           if (this.selectedAction.dialogInfo.readOnly) {
             return html`<mwc-textfield 
-              type="number" value=${result.raw_value||0.00} disabled></mwc-textfield>`
+              type="number" value=${result.raw_value||result.value||0.00} disabled></mwc-textfield>`
           } else {
             return html`<mwc-textfield 
-              type="number" step=0.01 .value=${result.raw_value||0.00} 
+              type="number" step=0.01 .value=${result.raw_value||result.value||0.00} 
               @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
           }
         }
@@ -307,11 +364,13 @@ export function DialogTemplate(base) {
     setResult(result, e) {
       this.targetValue = {
         rawValueResult: e.target.value,
-        resultId: result.result_id
+        resultId: result.result_id,
+        valueResult: e.target.value,
+        eventId: result.event_id
       }
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
-      this.curResultRef = { elm: e.target, resId: result.result_id }
+      this.curResultRef = { elm: e.target, resId: result.result_id, evtId: result.event_id }
       let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
       if (result.raw_value) {

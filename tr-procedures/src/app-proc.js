@@ -15,7 +15,7 @@ export const AppProc = {
       },
       "gridHeader": {
         "name": {
-          "label_en": "Name", "label_es": "Nombre", "sort": false, "filter": true, "is_icon": false, "width": "20%"
+          "label_en": "Name", "label_es": "Nombre", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
         },
         "family": {
           "label_en": "Family", "label_es": "Familia", "sort": false, "filter": true, "is_icon": false, "width": "20%"
@@ -237,7 +237,7 @@ export const AppProc = {
       },
       "gridHeader": {
         "instrument": {
-          "label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%"
+          "label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
         },
         "event_type": {
           "label_en": "Event", "label_es": "Evento", "sort": false, "filter": true, "is_icon": false, "width": "20%"
@@ -247,6 +247,17 @@ export const AppProc = {
         },
         "created_by": {
           "label_en": "Creator", "label_es": "Creador", "sort": false, "filter": false, "is_icon": false, "width": "10%"
+        }
+      },
+      "resultHeader": {
+        "event_id": {
+          "label_en": "Event Id", "label_es": "Id Event"
+        },
+        "param_name": {
+          "label_en": "Parameter", "label_es": "Parámetro"
+        },
+        "value": {
+          "label_en": "Value", "label_es": "Valor"
         }
       }
     },
@@ -285,6 +296,9 @@ export const AppProc = {
     {
       "actionName": "INSTRUMENT_EVENT_VARIABLES",
       "clientMethod": "getInstEventResult",
+      "alertMsg": {
+        "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
+      },
       "button": {
         "icon": "document_scanner",
         "title": {
@@ -299,8 +313,8 @@ export const AppProc = {
             "actionName": "ENTERRESULT",
             "clientMethod": "enterResult",
             "apiParams": [
-              { "query": "rawValueResult", "targetValue": true },
-              { "query": "eventtId", "beItem": "id" }
+              { "query": "valueResult", "targetValue": true },
+              { "query": "eventtId", "targetValue": true }
             ]
           }
         ]
