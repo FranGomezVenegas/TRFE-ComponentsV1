@@ -68,6 +68,7 @@ class DemoExample extends LitElement {
   }
 
   selectMenu(proc, sample, filter) {
+    this.trProc.ready = false
     this.trProc.procName = proc
     this.trProc.viewName = sample
     this.trProc.filterName = filter

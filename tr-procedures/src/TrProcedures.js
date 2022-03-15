@@ -89,7 +89,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       componentModel: { type: String },
       tabs: { type: Array },
       windowOpenable: { type: String },
-      sopsPassed: { type: Boolean }
+      sopsPassed: { type: Boolean },
+      // we will wait the updated langConfig completed
+      // fixed issue: https://github.com/FranGomezVenegas/FETR/issues/158
+      ready: { type: Boolean }
     };
   }
 
@@ -179,6 +182,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
       }
     }
+    this.ready = true
   }
 
   render() {
@@ -637,7 +641,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   gridList() {
-    if (this.langConfig) {
+    if (this.langConfig&&this.ready) {
       return Object.entries(this.langConfig.gridHeader).map(
         ([key, value], i) => html`
           ${this.langConfig.gridHeader[key].is_icon ?
@@ -786,7 +790,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   isConfidential(sample, key) {
-    if (this.langConfig.gridHeader[key]) {
+    if (this.ready)  {
       if (this.langConfig.gridHeader[key].confidential_value&&sample[key]) {
         return html`*****`
       } else {
