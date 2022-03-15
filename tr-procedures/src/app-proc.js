@@ -310,11 +310,13 @@ export const AppProc = {
         "automatic": true,
         "action": [
           {
-            "actionName": "ENTERRESULT",
-            "clientMethod": "enterResult",
+            "actionName": "ENTER_EVENT_RESULT",
+            "clientMethod": "enterEventResult",
             "apiParams": [
-              { "query": "valueResult", "targetValue": true },
-              { "query": "eventtId", "targetValue": true }
+              { "query": "newValue", "targetValue": true },
+              { "query": "eventId", "targetValue": true },
+              { "query": "instrumentName", "targetValue": true },
+              { "query": "variableName", "targetValue": true }
             ]
           }
         ]

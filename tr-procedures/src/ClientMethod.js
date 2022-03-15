@@ -133,6 +133,16 @@ export function ClientMethod(base) {
     enterResult() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
+      this.execResult(params)
+    }
+
+    enterEventResult() {
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.execResult(params)
+    }
+
+    execResult(params) {
       this.fetchApi(params).then(j => {
         if (!j.is_error) {
           this.curResultRef = undefined

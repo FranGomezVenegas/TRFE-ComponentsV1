@@ -365,8 +365,10 @@ export function DialogTemplate(base) {
       this.targetValue = {
         rawValueResult: e.target.value,
         resultId: result.result_id,
-        valueResult: e.target.value,
-        eventId: result.event_id
+        newValue: e.target.value,
+        eventId: result.event_id,
+        instrumentName: result.instrument,
+        variableName: result.param_name
       }
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
