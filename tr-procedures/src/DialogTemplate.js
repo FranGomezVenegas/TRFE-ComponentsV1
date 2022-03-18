@@ -174,7 +174,7 @@ export function DialogTemplate(base) {
       if (this.enterResults[i-1].is_locked) {
         this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
         this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = "Lock Reason: "+ (this.enterResults[i-1]["locking_reason_message_"+ this.lang] || this.enterResults[i-1].locking_reason)
+        this.rowTooltip.textContent = "Lock Reason: "+ (this.enterResults[i-1].locking_reason["message_"+ this.lang])
       } else if (this.enterResults[i-1].warning_reason) {
         this.rowTooltip.style.backgroundColor = "#0085ff"
         this.rowTooltip.style.visibility = "visible"
@@ -221,7 +221,7 @@ export function DialogTemplate(base) {
           <p>Range Evaluation: ${result.spec_eval}</p>
           <p>Range Rule: ${result.spec_eval_detail}</p>
           ${result.is_locked ? 
-            html`<p style="color:rgb(255 8 8)">Lock Reason: ${result["locking_reason_message_"+ this.lang] || result.locking_reason}</p>` : nothing
+            html`<p style="color:rgb(255 8 8)">Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
           }
           ${result.warning_reason ? 
             html`<p style="color:#0085ff">Warning Reason: ${result.warning_reason["message_"+ this.lang]}</p>` : nothing
@@ -375,7 +375,7 @@ export function DialogTemplate(base) {
       this.curResultRef = { elm: e.target, resId: result.result_id, evtId: result.event_id }
       let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
-      if (result.raw_value) {
+      if (result.raw_value || result.value) {
         this.selectedDialogAction.actionName = "RE"+ this.selectedDialogAction.actionName
         this.actionMethod(this.selectedDialogAction, false)
       } else {
