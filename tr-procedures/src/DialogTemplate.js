@@ -171,14 +171,18 @@ export function DialogTemplate(base) {
     }
 
     showLockReason(i) {
+      let labels = {
+        "warning_reason_label_en":"Warning Reason", "warning_reason_label_es":"Razón Aviso",
+        "locking_reason_label_en":"Locking Reason", "locking_reason_label_es":"Razón Bloqueo"
+      }
       if (this.enterResults[i-1].is_locked) {
         this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
         this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = "Lock Reason: "+ (this.enterResults[i-1].locking_reason["message_"+ this.lang])
+        this.rowTooltip.textContent = labels['locking_reason_label_'+ this.lang] +": "+ (this.enterResults[i-1].locking_reason["message_"+ this.lang])
       } else if (this.enterResults[i-1].warning_reason) {
         this.rowTooltip.style.backgroundColor = "#0085ff"
         this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = "Warning Reason: "+ this.enterResults[i-1].warning_reason["message_"+ this.lang]
+        this.rowTooltip.textContent = labels['warning_reason_label_'+ this.lang] +": "+ this.enterResults[i-1].warning_reason["message_"+ this.lang]
       }
     }
 
@@ -205,6 +209,10 @@ export function DialogTemplate(base) {
     }
 
     detailRenderer(result) {
+      let labels = {
+        "warning_reason_label_en":"Warning Reason", "warning_reason_label_es":"Razón Aviso",
+        "locking_reason_label_en":"Locking Reason", "locking_reason_label_es":"Razón Bloqueo"
+      }
       return html`
         <div style="text-align:center;font-size:12px">
           <p>${result.spec_eval ?
@@ -221,10 +229,10 @@ export function DialogTemplate(base) {
           <p>Range Evaluation: ${result.spec_eval}</p>
           <p>Range Rule: ${result.spec_eval_detail}</p>
           ${result.is_locked ? 
-            html`<p style="color:rgb(255 8 8)">Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
+            html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_'+ this.lang]}: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
           }
           ${result.warning_reason ? 
-            html`<p style="color:#0085ff">Warning Reason: ${result.warning_reason["message_"+ this.lang]}</p>` : nothing
+            html`<p style="color:#0085ff">${labels['warning_reason_label_'+ this.lang]}: ${result.warning_reason["message_"+ this.lang]}</p>` : nothing
           }
         </div>
       `
