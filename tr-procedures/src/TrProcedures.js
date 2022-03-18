@@ -710,6 +710,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     if (this.filterName) {
       if (this.filterName == "SampleLogin") {
         return html`<img src="/images/labplanet.png" style="width:20px">`
+      } else if (this.viewName == "PlatformInstruments") {
+        return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
+      } else if (this.viewName == "EventsInProgress") {
+        return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
       } else {
         return html`<img src="/images/${this.filterName}_${sample.status?sample.status.toLowerCase():''}.png" style="width:20px">`
       }

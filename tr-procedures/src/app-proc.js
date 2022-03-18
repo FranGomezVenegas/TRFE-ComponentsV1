@@ -21,7 +21,7 @@ export const AppProc = {
           "label_en": "Family", "label_es": "Familia", "sort": false, "filter": true, "is_icon": false, "width": "20%"
         },
         "on_line": {
-          "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": false, "width": "10%"
+          "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
         },
         "created_on": {
           "label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"
@@ -108,8 +108,7 @@ export const AppProc = {
         "actionName": "TURN_OFF_LINE",
         "clientMethod": "setInstruments",
         "button": {
-          "class": "reverse",
-          "img": "activate.svg",
+          "img": "deactivate.svg",
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
@@ -137,7 +136,7 @@ export const AppProc = {
         "actionName": "START_CALIBRATION",
         "clientMethod": "setInstruments",
         "button": {
-          "img": "start_calibration.svg",
+          "img": "inst_ev_type_calibration.svg",
           "title": {
             "label_en": "Start Calibration", "label_es": "Iniciar Calibración"
           },
@@ -151,9 +150,23 @@ export const AppProc = {
         "actionName": "START_PREV_MAINT",
         "clientMethod": "setInstruments",
         "button": {
-          "img": "start_prev_maint.svg",
+          "img": "inst_ev_type_preventive_maintenance.svg",
           "title": {
             "label_en": "Start Prev Maint", "label_es": "Iniciar Mant Prev"
+          },
+          "whenDisabled": "selectedSamples"
+        },
+        "apiParams": [
+          { "query": "instrumentName", "beItem": "name" }
+        ]
+      },
+      {
+        "actionName": "START_SERVICE",
+        "clientMethod": "setInstruments",
+        "button": {
+          "img": "inst_ev_type_service.svg",
+          "title": {
+            "label_en": "Start Service", "label_es": "Iniciar Servicio"
           },
           "whenDisabled": "selectedSamples"
         },
@@ -165,7 +178,7 @@ export const AppProc = {
         "actionName": "START_VERIFICATION",
         "clientMethod": "setInstruments",
         "button": {
-          "icon": "alarm_on",
+          "img": "inst_ev_type_verification.svg",
           "title": {
             "label_en": "Start Verification", "label_es": "Iniciar Verificación"
           },
@@ -236,11 +249,11 @@ export const AppProc = {
 
       },
       "gridHeader": {
+        "event_type": {
+          "label_en": "Event", "label_es": "Evento", "sort": false, "filter": true, "is_icon": true, "width": "20%"
+        },
         "instrument": {
           "label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
-        },
-        "event_type": {
-          "label_en": "Event", "label_es": "Evento", "sort": false, "filter": true, "is_icon": false, "width": "20%"
         },
         "created_on": {
           "label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"
