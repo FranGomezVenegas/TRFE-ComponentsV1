@@ -11,5 +11,8 @@
   "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPI",
   "ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
   "ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
+  "PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
+  "PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
+  
   "local": true
 }

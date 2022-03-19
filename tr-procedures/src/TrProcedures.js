@@ -256,6 +256,19 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                       html`${this.instrumentEventTemplate()}` :
                       nothing
                     }  
+                    ${this.langConfig&&this.viewName=="WhiteIpList" ? 
+                      html`${this.newPlatformAdminWhiteIPListsTemplate()}` :
+                      nothing
+                    }
+                    ${this.langConfig&&this.viewName=="BlackIpList" ? 
+                      html`${this.newPlatformAdminBlackIPListsTemplate()}` :
+                      nothing
+                    }
+                    ${this.langConfig&&this.viewName=="PlatformBusRules" ? 
+                      html`${this.newPlatformAdminBusinessRulesTemplate()}` :
+                      nothing
+                    }
+                    
                     <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
                   </div>
                 `
@@ -714,6 +727,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
       } else if (this.viewName == "EventsInProgress") {
         return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
+      } else if (this.viewName == "WhiteIpList") {
+        return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
+      } else if (this.viewName == "BlackIpList") {
+        return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
+      } else if (this.viewName == "PlatformBusRules") {
+        return html`<img src="/images/${sample.disabled?'activate.svg':'deactivate.svg'}" style="width:20px">`                
       } else {
         return html`<img src="/images/${this.filterName}_${sample.status?sample.status.toLowerCase():''}.png" style="width:20px">`
       }

@@ -60,6 +60,10 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("proc-deploy", "Deviation", "Deviation")}>Deviation</button>
         <button @click=${()=>this.selectMenu("app-proc", "PlatformInstruments", "InstrumentsList")}>Instruments List</button>
         <button @click=${()=>this.selectMenu("app-proc", "EventsInProgress", "EventsER")}>Events In Progress</button><br>
+        <button @click=${()=>this.selectMenu("app", "WhiteIpList", "WhiteIpList")}>White IPs List</button><br>
+        <button @click=${()=>this.selectMenu("app", "BlackIpList", "BlackIpList")}>Black IPs List</button><br>
+        <button @click=${()=>this.selectMenu("app", "PlatformBusRules", "PlatformBusRules")}>Platform Business Rules</button><br>
+        
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
         <button @click=${()=>this.pLogin.logout()}>Logout</button><hr>
         <tr-procedures></tr-procedures>

@@ -450,5 +450,24 @@ export function ClientMethod(base) {
         this.reload()
       })
     }
-  }
+    setWhiteIpsList() {
+      console.log('this.reqParams', this.reqParams);
+      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.newIPEntryDialog.close()
+        this.reload()
+      })
+    }
+    setBlackIpsList() {
+      console.log('this.reqParams', this.reqParams);
+      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(() => {
+        this.newIPEntryDialog.close()
+        this.reload()
+      })
+    }
+ 
+}
 }
