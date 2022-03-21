@@ -271,6 +271,7 @@ export function ClientMethod(base) {
         this.samplesReload = false
         this.grid.items = this.templates.dataApi.sample_points
         this.langConfig.fieldText.lot.items = j
+        this.ready = true
         this.requestUpdate()
       })
     }
