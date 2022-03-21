@@ -20,13 +20,15 @@ export class Templates extends LitElement {
       templateName: { type: String },
       buttons: { type: Array },
       lang: { type: String },
-      programsList: { type: Array }
+      programsList: { type: Array },
+      selectedProgram: { type: Object }
     };
   }
 
   constructor() {
     super()
     this.programsList = []
+    this.selectedProgram = {}
   }
 
   render() {
@@ -61,9 +63,9 @@ export class Templates extends LitElement {
 
   programChanged(e) {
     if (this.programsList.length) {
-      let program = this.programsList.filter(p => p.name == e.target.value)
+      this.selectedProgram = this.programsList.filter(p => p.name == e.target.value)
       this.dispatchEvent(new CustomEvent('program-changed', {
-        detail: program[0].sample_points || []
+        detail: this.selectedProgram[0].sample_points || []
       }))
     }
   }

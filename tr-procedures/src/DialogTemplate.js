@@ -709,8 +709,8 @@ export function DialogTemplate(base) {
 
     setLogSample() {
       this.targetValue = {
-        sampleTemplate: this.templates.dataApi.sample_config_code,
-        sampleTemplateVersion: this.templates.dataApi.sample_config_code_version,
+        sampleTemplate: this.templates.selectedProgram.sample_config_code,
+        sampleTemplateVersion: this.templates.selectedProgram.sample_config_code_version,
         fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
       }
       this.actionMethod(null, false, 1)
