@@ -53,6 +53,14 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         #assignDialog {
           --mdc-dialog-min-width: 500px;
         }
+        @media (max-width: 460px) {
+          vaadin-grid {
+            font-size: 10px;
+          }
+          vaadin-grid-cell-content {
+            padding: 5px;
+          }
+        }
       `
     ];
   }
@@ -409,7 +417,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
             header="${value['label_'+this.lang]}"
             ${columnBodyRenderer(this.iconRenderer)}
             text-align="center"
-            width="80px" resizable 
+            width="65px" resizable 
           ></vaadin-grid-column>
         `
       }
@@ -507,7 +515,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
             }`
           }
         ` :
-        html`<vaadin-grid-sort-column width="80px" resizable 
+        html`<vaadin-grid-sort-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
           text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
@@ -538,7 +546,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
             }`
           }
         ` :
-        html`<vaadin-grid-filter-column width="80px" resizable 
+        html`<vaadin-grid-filter-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
           text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
@@ -571,7 +579,7 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
         ` :
         html`<vaadin-grid-column 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          width="80px" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+          width="65px" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
       }
     `
   }

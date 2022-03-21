@@ -132,7 +132,7 @@ export function DialogTemplate(base) {
           ${gridRowDetailsRenderer(this.detailRenderer)}>
           ${this.desktop ?
             html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
-            html`<vaadin-grid-selection-column header="" width="80px" resizable ></vaadin-grid-selection-column>`
+            html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
           }
           ${this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES" ?
             html`${this.evList()}` :
@@ -171,14 +171,18 @@ export function DialogTemplate(base) {
     }
 
     showLockReason(i) {
+      let labels = {
+        "warning_reason_label_en":"Warning Reason", "warning_reason_label_es":"Razón Aviso",
+        "locking_reason_label_en":"Locking Reason", "locking_reason_label_es":"Razón Bloqueo"
+      }
       if (this.enterResults[i-1].is_locked) {
         this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
         this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = "Lock Reason: "+ (this.enterResults[i-1].locking_reason["message_"+ this.lang])
+        this.rowTooltip.textContent = labels['locking_reason_label_'+ this.lang] +": "+ (this.enterResults[i-1].locking_reason["message_"+ this.lang])
       } else if (this.enterResults[i-1].warning_reason) {
         this.rowTooltip.style.backgroundColor = "#0085ff"
         this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = "Warning Reason: "+ this.enterResults[i-1].warning_reason["message_"+ this.lang]
+        this.rowTooltip.textContent = labels['warning_reason_label_'+ this.lang] +": "+ this.enterResults[i-1].warning_reason["message_"+ this.lang]
       }
     }
 
@@ -205,6 +209,10 @@ export function DialogTemplate(base) {
     }
 
     detailRenderer(result) {
+      let labels = {
+        "warning_reason_label_en":"Warning Reason", "warning_reason_label_es":"Razón Aviso",
+        "locking_reason_label_en":"Locking Reason", "locking_reason_label_es":"Razón Bloqueo"
+      }
       return html`
         <div style="text-align:center;font-size:12px">
           <p>${result.spec_eval ?
@@ -221,10 +229,10 @@ export function DialogTemplate(base) {
           <p>Range Evaluation: ${result.spec_eval}</p>
           <p>Range Rule: ${result.spec_eval_detail}</p>
           ${result.is_locked ? 
-            html`<p style="color:rgb(255 8 8)">Lock Reason: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
+            html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_'+ this.lang]}: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
           }
           ${result.warning_reason ? 
-            html`<p style="color:#0085ff">Warning Reason: ${result.warning_reason["message_"+ this.lang]}</p>` : nothing
+            html`<p style="color:#0085ff">${labels['warning_reason_label_'+ this.lang]}: ${result.warning_reason["message_"+ this.lang]}</p>` : nothing
           }
         </div>
       `
@@ -257,16 +265,16 @@ export function DialogTemplate(base) {
               ${i==0 ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.specRenderer)}
-                  width="80px" resizable 
+                  width="65px" resizable 
                   path="${key}" 
                   header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
                 html`${key=="raw_value" ?
                   html`<vaadin-grid-column 
                     ${columnBodyRenderer(this.valRenderer)}
-                    width="80px" resizable 
+                    width="65px" resizable 
                     path="${key}" 
                     header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                  html`<vaadin-grid-column resizable width="80px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
                 }`
               }
             ` 
@@ -294,10 +302,10 @@ export function DialogTemplate(base) {
               ${key=="value" ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.valRenderer)}
-                  width="80px" resizable
+                  width="65px" resizable
                   path="${key}" 
                   header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                html`<vaadin-grid-column resizable width="80px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
               }
             `
           }
@@ -701,8 +709,8 @@ export function DialogTemplate(base) {
 
     setLogSample() {
       this.targetValue = {
-        sampleTemplate: this.templates.dataApi.sample_config_code,
-        sampleTemplateVersion: this.templates.dataApi.sample_config_code_version,
+        sampleTemplate: this.templates.selectedProgram.sample_config_code,
+        sampleTemplateVersion: this.templates.selectedProgram.sample_config_code_version,
         fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
       }
       this.actionMethod(null, false, 1)

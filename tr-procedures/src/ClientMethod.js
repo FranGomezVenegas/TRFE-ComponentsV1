@@ -252,13 +252,14 @@ export function ClientMethod(base) {
 
     async getProgramList() {
       this.samplesReload = true
+      this.templates.programsList = []
       let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
         + '?' + new URLSearchParams(this.reqParams)
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           if (this.selectedAction.subAction) {
             this.actionMethod(this.selectedAction.subAction)
-            this.templates.dataApi = j.programsList[0]
+            this.templates.programsList = j.programsList
           }
         }
       })
@@ -269,8 +270,8 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         this.samplesReload = false
-        this.grid.items = this.templates.dataApi.sample_points
         this.langConfig.fieldText.lot.items = j
+        this.ready = true
         this.requestUpdate()
       })
     }

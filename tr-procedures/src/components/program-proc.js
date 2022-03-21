@@ -116,6 +116,7 @@ export class ProgramProc extends CredDialog {
 
   constructor() {
     super()
+    this.tabView = "summary"
     this.prev = false
     this.next = false
     this.programsList = []

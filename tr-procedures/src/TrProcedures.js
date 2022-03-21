@@ -69,6 +69,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           vaadin-grid {
             font-size: 10px;
           }
+          vaadin-grid-cell-content {
+            padding: 5px;
+          }
         }
       `
     ];
@@ -182,7 +185,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
       }
     }
-    this.ready = true
   }
 
   render() {
@@ -209,6 +211,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                     .windowOpenable=${this.windowOpenable}
                     .sopsPassed=${this.sopsPassed}
                     .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
+                    @program-changed=${e=>this.grid.items=e.detail}
                     @template-event=${this.templateEvent}></templates->`
                 )}` :
                 nothing
@@ -543,6 +546,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                 class="${action.button.class} img"
                 title="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
+                ?hidden=${this.btnHidden(action)}
                 @click=${()=>this.actionMethod(action)}>
                   <img class="iconBtn" src="images/${action.button.img}">
                 </mwc-icon-button>` :
@@ -566,6 +570,16 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
     } else {
       d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length
+    }
+    return d
+  }
+
+  btnHidden(action) {
+    let d = true
+    if (action.button.hidWhenSelectedItem && this.selectedSamples.length) {
+      if (this.selectedSamples[0][action.button.hidWhenSelectedItem.column] == action.button.hidWhenSelectedItem.value) {
+        d = false
+      }
     }
     return d
   }
@@ -651,6 +665,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         this.grid.items = []
       }
     }
+    this.ready = true
   }
 
   gridList() {
@@ -712,7 +727,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
             header="${value['label_'+this.lang]}"
             ${columnBodyRenderer(this.iconRenderer)}
             text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'center' }"
-            width="80px" resizable
+            width="65px" resizable
           ></vaadin-grid-column>
         `
       }
@@ -720,7 +735,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   }
 
   iconRenderer(sample) {
-    if (this.filterName) {
+    if (this.filterName && this.ready) {
       if (this.filterName == "SampleLogin") {
         return html`<img src="/images/labplanet.png" style="width:20px">`
       } else if (this.viewName == "PlatformInstruments") {
@@ -733,6 +748,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
       } else if (this.viewName == "PlatformBusRules") {
         return html`<img src="/images/${sample.disabled?'activate.svg':'deactivate.svg'}" style="width:20px">`                
+        if (sample.event_type) {
+          return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
+        }
       } else {
         return html`<img src="/images/${this.filterName}_${sample.status?sample.status.toLowerCase():''}.png" style="width:20px">`
       }
@@ -771,7 +789,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
             }`
           }
         ` :
-        html`<vaadin-grid-sort-column width="80px" resizable 
+        html`<vaadin-grid-sort-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
           text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
@@ -804,7 +822,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
             }`
           }
         ` :
-        html`<vaadin-grid-filter-column width="80px" resizable 
+        html`<vaadin-grid-filter-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
           text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`

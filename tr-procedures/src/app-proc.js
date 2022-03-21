@@ -112,7 +112,11 @@ export const AppProc = {
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
-          "whenDisabled": "selectedSamples"
+          "whenDisabled": "selectedSamples",
+          "hidWhenSelectedItem": {
+            "column": "on_line",
+            "value": true
+          }
         },
         "apiParams": [
           { "query": "instrumentName", "beItem": "name" }
@@ -126,7 +130,11 @@ export const AppProc = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "whenDisabled": "selectedSamples"
+          "whenDisabled": "selectedSamples",
+          "hidWhenSelectedItem": {
+            "column": "on_line",
+            "value": false
+          }
         },
         "apiParams": [
           { "query": "instrumentName", "beItem": "name" }

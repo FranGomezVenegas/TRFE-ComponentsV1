@@ -48,6 +48,14 @@ export class ConfigCalendar extends CoreView {
           --today-boxshadow-color: #077599;
           --selected-day-hover-bg: rgba(6, 143, 189, 0.7);
         }
+        @media (max-width: 460px) {
+          vaadin-grid {
+            font-size: 10px;
+          }
+          vaadin-grid-cell-content {
+            padding: 5px;
+          }
+        }
       `
     ];
   }
@@ -135,7 +143,7 @@ export class ConfigCalendar extends CoreView {
         ` :
         html`<vaadin-grid-sort-column 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          resizable width="80px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-sort-column>`
+          resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-sort-column>`
       }
     `
   }
@@ -168,7 +176,7 @@ export class ConfigCalendar extends CoreView {
         ` :
         html`<vaadin-grid-filter-column 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          resizable width="80px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-filter-column>`
+          resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-filter-column>`
       }
     `
   }
