@@ -533,6 +533,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                 class="${action.button.class} img"
                 title="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
+                ?hidden=${this.btnHidden(action)}
                 @click=${()=>this.actionMethod(action)}>
                   <img class="iconBtn" src="images/${action.button.img}">
                 </mwc-icon-button>` :
@@ -556,6 +557,16 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
     } else {
       d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length
+    }
+    return d
+  }
+
+  btnHidden(action) {
+    let d = true
+    if (action.button.hidWhenSelectedItem && this.selectedSamples.length) {
+      if (this.selectedSamples[0][action.button.hidWhenSelectedItem.column] == action.button.hidWhenSelectedItem.value) {
+        d = false
+      }
     }
     return d
   }
