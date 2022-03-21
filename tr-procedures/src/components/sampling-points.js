@@ -80,6 +80,14 @@ export class SamplingPoints extends CoreView {
     return [Layouts, Alignment,
       super.styles,
       css`
+      @media (max-width: 460px) {
+        vaadin-grid {
+          font-size: 10px;
+        }
+        vaadin-grid-cell-content {
+          padding: 5px;
+        }
+      }
       `
     ];
   }
@@ -279,7 +287,7 @@ export class SamplingPoints extends CoreView {
             }`
           }
         ` :
-        html`<vaadin-grid-sort-column width="80px" resizable 
+        html`<vaadin-grid-sort-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
           text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
@@ -310,7 +318,7 @@ export class SamplingPoints extends CoreView {
             }`
           }
         ` :
-        html`<vaadin-grid-filter-column width="80px" resizable 
+        html`<vaadin-grid-filter-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
           text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`

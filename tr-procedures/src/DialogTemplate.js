@@ -132,7 +132,7 @@ export function DialogTemplate(base) {
           ${gridRowDetailsRenderer(this.detailRenderer)}>
           ${this.desktop ?
             html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
-            html`<vaadin-grid-selection-column header="" width="80px" resizable ></vaadin-grid-selection-column>`
+            html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
           }
           ${this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES" ?
             html`${this.evList()}` :
@@ -265,16 +265,16 @@ export function DialogTemplate(base) {
               ${i==0 ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.specRenderer)}
-                  width="80px" resizable 
+                  width="65px" resizable 
                   path="${key}" 
                   header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
                 html`${key=="raw_value" ?
                   html`<vaadin-grid-column 
                     ${columnBodyRenderer(this.valRenderer)}
-                    width="80px" resizable 
+                    width="65px" resizable 
                     path="${key}" 
                     header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                  html`<vaadin-grid-column resizable width="80px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
                 }`
               }
             ` 
@@ -302,10 +302,10 @@ export function DialogTemplate(base) {
               ${key=="value" ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.valRenderer)}
-                  width="80px" resizable
+                  width="65px" resizable
                   path="${key}" 
                   header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                html`<vaadin-grid-column resizable width="80px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
               }
             `
           }
