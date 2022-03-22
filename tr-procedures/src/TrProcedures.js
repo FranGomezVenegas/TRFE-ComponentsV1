@@ -101,7 +101,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   resetView() {
     if (!this.config.local) {
-      let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.name == this.procName)
+      let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procName)
       if (findProc.length) {
         ProceduresModel[this.procName] = findProc[0].procModel
       }
