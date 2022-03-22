@@ -1125,12 +1125,12 @@ export function DialogTemplate(base) {
         
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-          <sp-button size="xl" slot="primaryAction" @click=${this.newWhiteIp}>
+          <sp-button size="xl" slot="primaryAction" @click=${this.newIp}>
             ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
         </div>
       </div>
     </tr-dialog>
-    <tr-dialog id="updateIPEntryDialog" .open=${this.selectedSamples&&this.selectedSamples.length}
+    <tr-dialog id="updateIPEntryDialog"
       @closed=${()=>this.cleanIpDialogFields()}
       heading=""
       hideActions=""
@@ -1140,13 +1140,13 @@ export function DialogTemplate(base) {
         <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" 
           .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value1}        
           label="${this.langConfig.fieldText.ip_value1["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" 
+        <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" 
           .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value2}        
           label="${this.langConfig.fieldText.ip_value2["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" 
+        <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" 
           .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value3}        
           label="${this.langConfig.fieldText.ip_value3["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" 
+        <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" 
           .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value4}        
           label="${this.langConfig.fieldText.ip_value4["label_"+this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" placeholder="xxx" 
@@ -1154,7 +1154,7 @@ export function DialogTemplate(base) {
           label="${this.langConfig.fieldText.description["label_"+this.lang]}"> </mwc-textfield>      
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-          <sp-button size="xl" slot="primaryAction" @click=${this.updateWhiteIp}>
+          <sp-button size="xl" slot="primaryAction" @click=${this.updateIp}>
             ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
         </div>
       </div>
@@ -1193,7 +1193,35 @@ export function DialogTemplate(base) {
         
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-          <sp-button size="xl" slot="primaryAction" @click=${this.newWhiteIp}>
+          <sp-button size="xl" slot="primaryAction" @click=${this.newIp}>
+            ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+        </div>
+      </div>
+    </tr-dialog>
+    <tr-dialog id="updateIPEntryDialog" 
+      heading=""
+      hideActions=""
+      scrimClickAction="">
+      <div class="layout vertical flex center-justified">
+        <div style="margin-top:30px;text-align:center">
+        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" 
+          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value1}        
+          label="${this.langConfig.fieldText.ip_value1["label_"+this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" 
+          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value2}        
+          label="${this.langConfig.fieldText.ip_value2["label_"+this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" 
+          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value3}        
+          label="${this.langConfig.fieldText.ip_value3["label_"+this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" 
+          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value4}        
+          label="${this.langConfig.fieldText.ip_value4["label_"+this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" placeholder="xxx" 
+          .value=${this.selectedSamples.length&&this.selectedSamples[0].description}        
+          label="${this.langConfig.fieldText.description["label_"+this.lang]}"> </mwc-textfield>      
+          <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+            ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+          <sp-button size="xl" slot="primaryAction" @click=${this.updateIp}>
             ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
         </div>
       </div>
@@ -1213,12 +1241,12 @@ export function DialogTemplate(base) {
     this.ipValue4Input.value="";
     this.ipDescriptionInput.value="";
   }
-  newWhiteIp() {    
+  newIp() {    
     if (this.ipValue1Input.value) {
       this.dialogAccept(false)
     }
   }
-  updateWhiteIp() {    
+  updateIp() {    
     if (this.ipValue1Input.value) {
       this.dialogAccept(false)
     }
@@ -1235,7 +1263,7 @@ export function DialogTemplate(base) {
         <div style="margin-top:30px;text-align:center">
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-          <sp-button size="xl" slot="primaryAction" @click=${this.newWhiteIp}>
+          <sp-button size="xl" slot="primaryAction" @click=${this.newIp}>
             ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
         </div>
       </div>
