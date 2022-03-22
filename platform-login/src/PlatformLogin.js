@@ -226,12 +226,21 @@ export class PlatformLogin extends CommonCore {
     try {
       if (this.config.fullscreen) {
         // set full screen mode
-        let body = document.querySelector("body")
-        if (!document.fullscreenElement) {
-          body.requestFullscreen().catch(err => {
-            console.log(err)
-            // alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-          });
+        let el = document.documentElement
+        let requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
+        if (requestMethod) {
+
+          // Native full screen.
+          requestMethod.call(el);
+      
+        } else if (typeof window.ActiveXObject !== "undefined") {
+      
+          // Older IE.
+          var wscript = new ActiveXObject("WScript.Shell");
+      
+          if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+          }
         }
       }
   
