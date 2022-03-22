@@ -47,9 +47,15 @@ export class ReloginDialog extends CredDialog {
     }
     let curTime = new Date().getTime();
     let runSession = curTime - this.startSession;
+    if (this.businessRules.showTimingInConsole) {
+      console.log(runSession)
+    }
     if (runSession >= this.businessRules.minsLockSession * this.microConv) { // session running >= minsLockSession
-      // open relogin dialog
-      this.credsChecker("TOKEN_VALIDATE_USER_CREDENTIALS")
+      if (this.businessRules.enableLockSession) {
+        // open relogin dialog
+        this.type = "user"
+        this.credsChecker("TOKEN_VALIDATE_USER_CREDENTIALS", -1)
+      }
       if (this.businessRules.enableLogoutSession) {
         this.newSession = new Date().getTime()
         return this.checkUserRelogin()
@@ -69,6 +75,9 @@ export class ReloginDialog extends CredDialog {
     console.log("checkingUserRelogin")
     let curTime = new Date().getTime();
     let runSession = curTime - this.newSession;
+    if (this.businessRules.showTimingInConsole) {
+      console.log(runSession)
+    }
     if (runSession >= this.businessRules.minsLogoutSession * this.microConv) { // session running >= minsLogoutSession
       // should logout
       this.logout()
