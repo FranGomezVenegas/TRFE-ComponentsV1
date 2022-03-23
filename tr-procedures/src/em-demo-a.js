@@ -1188,7 +1188,7 @@ export const EmDemoA = {
               "icon": "radio_button_checked",
               "color": "Orange",
               "title": {
-                "label_en": "Not in batch", "label_es": "No en lote"
+                "label_en": "Incubation1, Not in Batch", "label_es": "Incubación1, Pendiente Asignar Tanda"
               },
               "whenDisabled": "samplesReload"
             }
@@ -1200,7 +1200,7 @@ export const EmDemoA = {
               "icon": "radio_button_checked",
               "color": "Tomato",
               "title": {
-                "label_en": "In batch", "label_es": "En lote"
+                "label_en": "Incubation1, In Batch", "label_es": "Incubación1, En Tanda"
               },
               "whenDisabled": "samplesReload"
             }
@@ -1211,7 +1211,7 @@ export const EmDemoA = {
             "button": {
               "img": "incubators/IncubInProgress.gif",
               "title": {
-                "label_en": "Incub#1 in progress", "label_es": "Incub#1 en curso"
+                "label_en": "Incubation1 In-Progress", "label_es": "Incubación1 en curso"
               },
               "whenDisabled": "samplesReload"
             }
@@ -1223,7 +1223,7 @@ export const EmDemoA = {
               "icon": "radio_button_checked",
               "color": "MediumSeaGreen",
               "title": {
-                "label_en": "Incub#1 done", "label_es": "Incub#1 hecho"
+                "label_en": "Incubation2, Not in Batch", "label_es": "Incubación2, Pendiente Asignar Tanda"
               },
               "whenDisabled": "samplesReload"
             }
@@ -1235,7 +1235,7 @@ export const EmDemoA = {
               "icon": "radio_button_checked",
               "color": "SlateBlue",
               "title": {
-                "label_en": "Incub#2 in batch", "label_es": "Incub#2 en lote"
+                "label_en": "Incubation2, In Batch", "label_es": "Incubación2, En Tanda"
               },
               "whenDisabled": "samplesReload"
             }
@@ -1246,7 +1246,7 @@ export const EmDemoA = {
             "button": {
               "img": "incubators/IncubInProgress.gif",
               "title": {
-                "label_en": "Incub#2 in progress", "label_es": "Incub#2 en curso"
+                "label_en": "Incubation2 In-Progress", "label_es": "Incubación2 en curso"
               },
               "whenDisabled": "samplesReload"
             }
