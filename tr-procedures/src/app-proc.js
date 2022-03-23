@@ -113,7 +113,7 @@ export const AppProc = {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
           "whenDisabled": "selectedSamples",
-          "hidWhenSelectedItem": {
+          "showWhenSelectedItem": {
             "column": "on_line",
             "value": true
           }
@@ -131,7 +131,7 @@ export const AppProc = {
             "label_en": "Activate", "label_es": "Activar"
           },
           "whenDisabled": "selectedSamples",
-          "hidWhenSelectedItem": {
+          "showWhenSelectedItem": {
             "column": "on_line",
             "value": false
           }
