@@ -280,6 +280,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                 html`${this.bottomCompositions.map(c => 
                   html`<div class="layout flex">
                     <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
+                      .lang=${this.lang}
                       .windowOpenable=${this.windowOpenable}
                       .sopsPassed=${this.sopsPassed}
                       .model=${c} .config=${this.config} .batchName=${this.batchName}
@@ -304,6 +305,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                       )}
                     </div>
                     <tabs-composition 
+                      .lang=${this.lang}
                       .windowOpenable=${this.windowOpenable}
                       .sopsPassed=${this.sopsPassed}
                       .procName=${this.procName} 
