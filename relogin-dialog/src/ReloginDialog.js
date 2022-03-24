@@ -29,11 +29,24 @@ export class ReloginDialog extends CredDialog {
     this.startSession = new Date().getTime()
     if (this.config.local) {
       this.businessRules = this.config.businessRules
-      this.microConv = 1000 // multiply to 1s for local test
     } else {
       this.businessRules = JSON.parse(sessionStorage.getItem("userSession")).platform_business_rules
     }
+    if (Number(this.businessRules.minsLockSession) > 0 || Number(this.businessRules.minsLogoutSession) > 0) {
+      this.checkTimer()
+    }
     this.checkSessionExpired()
+  }
+
+  checkTimer() {
+    let curTime = new Date().getTime();
+    let runSession = curTime - this.startSession;
+    if (this.businessRules.showTimingInConsole) {
+      console.log(`timer checker: ${Math.round(runSession/1000)}s`)
+    }
+    this.cTimer = setTimeout(() => {
+      this.checkTimer()
+    }, Number(this.businessRules.secondsNextTimeChecker) * 1000)
   }
 
   /**
@@ -41,31 +54,33 @@ export class ReloginDialog extends CredDialog {
    */
   checkSessionExpired() {
     console.log("checkingSesssionExpired")
-    // clear out the timeout if exist to stop the previous interval
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
     let curTime = new Date().getTime();
     let runSession = curTime - this.startSession;
-    if (this.businessRules.showTimingInConsole) {
-      console.log(runSession)
-    }
-    if (runSession >= this.businessRules.minsLockSession * this.microConv) { // session running >= minsLockSession
-      if (this.businessRules.enableLockSession) {
+    if (!this.businessRules.enableLockSession || Number(this.businessRules.minsLockSession) < 1) {
+      if (this.businessRules.enableLogoutSession && Number(this.businessRules.minsLogoutSession) > 0) {
+        this.newSession = new Date().getTime()
+        this.checkUserRelogin()
+      }
+    } else {
+      if (runSession >= Number(this.businessRules.minsLockSession) * this.microConv) { // session running >= minsLockSession
         // open relogin dialog
         this.type = "user"
         this.credsChecker("TOKEN_VALIDATE_USER_CREDENTIALS", -1)
-      }
-      if (this.businessRules.enableLogoutSession) {
-        this.newSession = new Date().getTime()
-        return this.checkUserRelogin()
+        if (this.businessRules.enableLogoutSession && Number(this.businessRules.minsLogoutSession) > 0) {
+          this.newSession = new Date().getTime()
+          this.checkUserRelogin()
+        } else {
+          // clear out the timeout if exist to stop the previous time checker
+          if (this.cTimer) {
+            clearTimeout(this.cTimer);
+          }
+        }
       } else {
-        return
+        setTimeout(() => {
+          this.checkSessionExpired()
+        }, Number(this.businessRules.secondsNextTimeChecker) * 1000)
       }
     }
-    setTimeout(() => {
-      this.checkSessionExpired()
-    }, this.businessRules.secondsNextTimeChecker * this.microConv)
   }
 
   /**
@@ -75,17 +90,14 @@ export class ReloginDialog extends CredDialog {
     console.log("checkingUserRelogin")
     let curTime = new Date().getTime();
     let runSession = curTime - this.newSession;
-    if (this.businessRules.showTimingInConsole) {
-      console.log(runSession)
-    }
-    if (runSession >= this.businessRules.minsLogoutSession * this.microConv) { // session running >= minsLogoutSession
+    if (runSession >= Number(this.businessRules.minsLogoutSession) * this.microConv) { // session running >= minsLogoutSession
       // should logout
       this.logout()
     } else {
       // set the timeout object
       this.timer = setTimeout(() => {
         this.checkUserRelogin()
-      }, this.businessRules.secondsNextTimeChecker * this.microConv)
+      }, Number(this.businessRules.secondsNextTimeChecker) * 1000)
     }
   }
 
@@ -93,9 +105,19 @@ export class ReloginDialog extends CredDialog {
    * once relogin succeed
    */
   reloginSucceed() {
+    // clear out the timeout if exist to stop the previous interval
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+      if (this.cTimer) {
+      clearTimeout(this.cTimer);
+    }
     this.attempt = 0
     this.startSession = new Date().getTime()
     this.newSession = new Date().getTime()
+    if (Number(this.businessRules.minsLockSession) > 0 || Number(this.businessRules.minsLogoutSession) > 0) {
+      this.checkTimer()
+    }
     this.checkSessionExpired()
   }
 
