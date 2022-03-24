@@ -468,14 +468,10 @@ export class BottomComposition extends ClientMethod(DialogTemplate(CredDialog)) 
             return html`<img src="/images/2.png" style="width:20px">`
           }
         } else {
-          if (sample.pending_incub == 2) {
-            if (sample.incubation2_batch) {
-              return html`<img src="/images/2.png" style="width:20px">`
-            } else { // incub@1 done or first state of incub#2
-              return html`<img src="/images/1.png" style="width:20px">`
-            }
-          } else if (sample.incubation_incubator && sample.pending_incub == 2) {
+          if (sample.pending_incub == 1) {
             return html`<img src="/images/1.png" style="width:20px">`
+          } else if (sample.pending_incub == 2) {
+            return html`<img src="/images/2.png" style="width:20px">`
           }
         }
       }
