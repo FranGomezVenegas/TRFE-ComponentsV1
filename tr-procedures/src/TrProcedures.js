@@ -586,10 +586,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
 
   btnHidden(action) {
     let d = true
-    if (action.button.showWhenSelectedItem && this.selectedSamples.length) {
-      if (this.selectedSamples[0][action.button.showWhenSelectedItem.column] == action.button.showWhenSelectedItem.value) {
+    if (action.button.showWhenSelectedItem) {
+      if (this.selectedSamples.length && this.selectedSamples[0][action.button.showWhenSelectedItem.column] == action.button.showWhenSelectedItem.value) {
         d = false
       }
+    } else {
+      d = false
     }
     return d
   }
