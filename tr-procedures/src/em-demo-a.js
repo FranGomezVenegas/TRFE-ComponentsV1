@@ -672,7 +672,7 @@ export const EmDemoA = {
           "automatic": true,
           "action": [
             {
-              "actionName": "ENTERRESULT",
+              "actionName": "ENTER_PLATE_READING",
               "clientMethod": "enterResult",
               "apiParams": [
                 { "query": "rawValueResult", "targetValue": true },
