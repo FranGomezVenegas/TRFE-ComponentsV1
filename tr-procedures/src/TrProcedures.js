@@ -213,7 +213,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
                     .windowOpenable=${this.windowOpenable}
                     .sopsPassed=${this.sopsPassed}
                     .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
-                    @program-changed=${e=>{if(this.grid)this.grid.items=e.detail}}
+                    @program-changed=${e=>this.gridItems=e.detail}
                     @template-event=${this.templateEvent}></templates->`
                 )}` :
                 nothing
