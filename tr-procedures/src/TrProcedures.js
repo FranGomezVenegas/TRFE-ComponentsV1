@@ -19,6 +19,7 @@ import './templates-';
 import './bottom-composition';
 import './tabs-composition';
 import './components/program-proc';
+import './components/genoma-project';
 
 export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   static get styles() {
@@ -194,17 +195,29 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       ${this.windowOpenable=="yes" ? 
         html`
           ${this.componentModel ? 
-            html`${this.viewName == "Programs" ?
-              html`<program-proc 
-                .windowOpenable=${this.windowOpenable}
-                .sopsPassed=${this.sopsPassed}
-                .lang=${this.lang}
-                .procName=${this.procName} 
-                .viewName=${this.viewName} 
-                .filterName=${this.filterName}
-                .model=${this.componentModel}
-                .config=${this.config}></program-proc>` :
-              nothing
+            html`${this.viewName == "Programs" || this.viewName == "ProjectManager" ?
+              html`
+                ${this.viewName == "Programs" ? 
+                  html`<program-proc 
+                    .windowOpenable=${this.windowOpenable}
+                    .sopsPassed=${this.sopsPassed}
+                    .lang=${this.lang}
+                    .procName=${this.procName} 
+                    .viewName=${this.viewName} 
+                    .filterName=${this.filterName}
+                    .model=${this.componentModel}
+                    .config=${this.config}></program-proc>`
+                  :
+                  html`<genoma-project 
+                    .windowOpenable=${this.windowOpenable}
+                    .sopsPassed=${this.sopsPassed}
+                    .lang=${this.lang}
+                    .procName=${this.procName} 
+                    .viewName=${this.viewName} 
+                    .filterName=${this.filterName}
+                    .model=${this.componentModel}
+                    .config=${this.config}></genoma-project>`
+              }`:html
             }` :
             html`
               ${this.topCompositions ?
