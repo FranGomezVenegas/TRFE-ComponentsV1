@@ -669,19 +669,25 @@ export function DialogTemplate(base) {
               ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
             <sp-button size="m" @click=${this.setLogSample}>${this.langConfig.fieldText.logBtn["label_"+this.lang]}</sp-button>
           </div>
-          <mwc-select label="${this.langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
-            ${this.langConfig.fieldText.shift.items.map((c,i) => 
-              html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
+          <div class="layout horizontal flex around-justified wrap" style="gap: 5px;">
+            <mwc-select label="${this.langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
+              ${this.langConfig.fieldText.shift.items.map((c,i) => 
+                html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
+              )}
+            </mwc-select>
+            <mwc-select label="${this.langConfig.fieldText.lot["label_"+this.lang]}" id="lot">
+              ${this.langConfig.fieldText.lot.items.map((c,i) => 
+                html`<mwc-list-item value="${c.lot_name}" ?selected=${i==0}>${c.lot_name}</mwc-list-item>`
+              )}
+            </mwc-select>
+            ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
+              html`${(f.name in this.langConfig.gridHeader) ?
+                html`<mwc-textfield style="width:200px" ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value?true:false} label=${this.langConfig.gridHeader[f.name]['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>` :
+                nothing
+              }
+              `
             )}
-          </mwc-select>
-          <mwc-select label="${this.langConfig.fieldText.lot["label_"+this.lang]}" id="lot">
-            ${this.langConfig.fieldText.lot.items.map((c,i) => 
-              html`<mwc-list-item value="${c.lot_name}" ?selected=${i==0}>${c.lot_name}</mwc-list-item>`
-            )}
-          </mwc-select>
-          ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
-            html`<mwc-textfield ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value?true:false} label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>`
-          )}
+          </div>
         </div>
       </tr-dialog>
       `
