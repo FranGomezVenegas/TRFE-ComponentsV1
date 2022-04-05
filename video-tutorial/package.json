@@ -12,6 +12,7 @@
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@spectrum-web-components/card": "^0.8.18",
+    "@spectrum-web-components/split-view": "^0.4.3",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "lit": "^2.0.2"
   },
