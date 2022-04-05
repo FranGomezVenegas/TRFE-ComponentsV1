@@ -469,6 +469,21 @@ export function ClientMethod(base) {
         this.reload()
       })
     }
- 
+
+    async getGenomaProjectsList() {
+      this.samplesReload = true
+      this.templates.programsList = []
+      let params = this.config.backendUrl + this.config.GenomaProjectAPIqueriesUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      await this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          if (this.selectedAction.subAction) {
+            this.actionMethod(this.selectedAction.subAction)
+            this.templates.programsList = j.programsList
+          }
+        }
+      })
+    }
+
 }
 }

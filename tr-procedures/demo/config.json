@@ -13,6 +13,9 @@
   "ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
   "PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
   "PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
+
+  "GenomaProjectAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIFrontend",
+
   
   "local": true
 }
