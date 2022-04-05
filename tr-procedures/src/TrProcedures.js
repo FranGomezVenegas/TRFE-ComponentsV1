@@ -165,6 +165,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         console.log("Window cannot be open due to pending linked SOP certifications")
         return
       }
+      if (defView.length && defView[0].mode==="readonly") {
+        this.sopsPassed = false
+        this.windowOpenable = "yes"
+        //return;
+      }
     }
     await this.updateComplete
     if (!this.componentModel) {
