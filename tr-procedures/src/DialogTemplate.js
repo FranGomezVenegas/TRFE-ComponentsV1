@@ -682,7 +682,8 @@ export function DialogTemplate(base) {
             </mwc-select>
             ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
               html`${(f.name in this.langConfig.gridHeader) ?
-                html`<mwc-textfield style="width:200px" ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value?true:false} label=${this.langConfig.gridHeader[f.name]['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>` :
+                // html`<mwc-textfield style="width:200px" ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value?true:false} label=${this.langConfig.gridHeader[f.name]['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>` :
+                html`<mwc-textfield disabled style="width:200px" label=${this.langConfig.gridHeader[f.name]['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>` :
                 nothing
               }
               `
