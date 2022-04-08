@@ -97,7 +97,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       sopsPassed: { type: Boolean },
       // we will wait the updated langConfig completed
       // fixed issue: https://github.com/FranGomezVenegas/FETR/issues/158
-      ready: { type: Boolean }
+      ready: { type: Boolean },
+      sampleState: { type: Object }
     };
   }
 
@@ -695,7 +696,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         this.gridItems = []
       }
     }
+
     this.ready = true
+    if (this.sampleState) {
+      this.reloadSampleState()
+    }
   }
 
   gridList() {

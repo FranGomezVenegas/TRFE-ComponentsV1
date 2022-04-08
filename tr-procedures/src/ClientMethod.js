@@ -156,25 +156,33 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
-          this.mAddHoc.value = ""
           this.selectedMicroorganisms = []
-          this.microorganismList = j
-          this.moGrid.items = j
+          this.microorganismList = j.map(m => {
+            let item = this.selectedSamples[0].microorganism_list_array.filter(s => s.name == m.name)
+            return {
+              name: m.name,
+              items: item.length ? item[0].items : 0
+            }
+          })
           this.requestUpdate()
         }
       })
     }
 
     addSampleMicroorganism() {
+      this.sampleState = { action: JSON.stringify(this.selectedAction), sample: this.selectedSamples[0].sample_id }
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
-        this.selectedSamples[0].microorganism_count = this.selectedSamples[0].microorganism_count + 1
-        let newList = this.selectedSamples[0].microorganism_list_array.filter(m => m.name != "")
-        newList.push({ name: this.targetValue.microorganismName })
-        this.selectedSamples[0].microorganism_list_array = newList
-        this.reloadDialog()
+        this.reload()
       })
+    }
+
+    reloadSampleState() {
+      this.selectedSamples = this.gridItems.filter(g => g.sample_id == this.sampleState.sample)
+      this.selectedAction = JSON.parse(this.sampleState.action)
+      this.reloadDialog()
+      this.sampleState = null
     }
 
     getMicroorganismItem() {
@@ -185,20 +193,17 @@ export function ClientMethod(base) {
         if (j && !j.is_error) {
           this.selectedMicroorganisms = []
           this.microorganismList = j[0].microorganism_list_array
-          this.moGrid.items = j[0].microorganism_list_array
           this.requestUpdate()
         }
       })
     }
 
     removeSampleMicroorganism() {
+      this.sampleState = { action: JSON.stringify(this.selectedAction), sample: this.selectedSamples[0].sample_id }
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
-        this.selectedSamples[0].microorganism_count = this.selectedSamples[0].microorganism_count - 1
-        let newList = this.selectedSamples[0].microorganism_list_array.filter(m => m.name != "" && m.name != this.targetValue.microorganismName)
-        this.selectedSamples[0].microorganism_list_array = newList
-        this.reloadDialog()
+        this.reload()
       })
     }
     

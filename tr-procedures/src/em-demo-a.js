@@ -731,6 +731,9 @@ export const EmDemoA = {
       "microorganismHeader": {
         "name": {
           "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
+        },
+        "items": {
+          "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
         }
       }
     },
@@ -816,14 +819,16 @@ export const EmDemoA = {
               "actionName": "ADD_SAMPLE_MICROORGANISM",
               "clientMethod": "addSampleMicroorganism",
               "apiParams": [
-                { "query": "microorganismName", "targetValue": true }
+                { "query": "microorganismName", "targetValue": true },
+                { "query": "numItems", "targetValue": true }
               ]
             },
             {
               "actionName": "ADD_ADHOC_SAMPLE_MICROORGANISM",
               "clientMethod": "addSampleMicroorganism",
               "apiParams": [
-                { "query": "microorganismName", "targetValue": true }
+                { "query": "microorganismName", "targetValue": true },
+                { "query": "numItems", "targetValue": true }
               ]
             }
           ]
@@ -850,7 +855,8 @@ export const EmDemoA = {
               "actionName": "REMOVE_SAMPLE_MICROORGANISM",
               "clientMethod": "removeSampleMicroorganism",
               "apiParams": [
-                { "query": "microorganismName", "targetValue": true }
+                { "query": "microorganismName", "targetValue": true },
+                { "query": "numItems", "targetValue": true }
               ]
             }
           ]
