@@ -746,7 +746,7 @@ export function DialogTemplate(base) {
           <div class="layout horizontal flex around-justified wrap" style="gap: 5px;">
             <mwc-select label="${this.langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
               ${this.langConfig.fieldText.shift.items.map((c,i) => 
-                html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
+                html`<mwc-list-item value="${c.keyName}" ?selected=${c.keyName==this.headerInfo.shift}>${c["keyValue_"+this.lang]}</mwc-list-item>`
               )}
             </mwc-select>
             <mwc-select label="${this.langConfig.fieldText.lot["label_"+this.lang]}" id="lot">
