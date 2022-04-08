@@ -27,7 +27,8 @@ export class CommonCore extends LitElement {
       lang: { type: String },
       fieldErrMsg: { type: Object },
       desktop: { type: Boolean },
-      userName: { type: String }
+      userName: { type: String },
+      headerInfo: { type: Object }
     };
   }
 
@@ -78,6 +79,7 @@ export class CommonCore extends LitElement {
   authorized() {
     console.log(JSON.parse(sessionStorage.getItem("userSession")))
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
+    this.headerInfo = JSON.parse(sessionStorage.getItem("userSession")).header_info
   }
 
   /**
