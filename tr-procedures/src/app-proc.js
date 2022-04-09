@@ -234,7 +234,7 @@ export const AppProc = {
           ]
         },
         "apiParams": [
-          { "query": "instrumentName", "element": "lotName" }
+          { "query": "instrumentName", "element": "instrumentName" }
         ]
       }
     ]
