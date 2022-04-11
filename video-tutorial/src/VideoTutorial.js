@@ -111,7 +111,7 @@ export class VideoTutorial extends CommonCore {
                     html`
                     <video id="${v["title_"+this.lang]}-${i}" controls slot="cover-photo"
                       @play=${()=>this.stopOthers(`${v["title_"+this.lang]}-${i}`)}>
-                      <source type="video/mp4" src="${v['url_'+ this.lang]}">
+                      <source type="video/mp4" src="https://drive.google.com/uc?export=download&id=${v['url_'+ this.lang]}">
                     </video>
                     ` :
                     html`
