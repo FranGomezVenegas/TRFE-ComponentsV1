@@ -163,8 +163,8 @@ export const ProcDeploy = {
         "actionName": "LOGSAMPLE",
         "clientMethod": "logSample",
         "apiParams": [
-          { "query": "programName", "element": "programInput", "defaultValue": "" },
-          { "query": "locationName", "element": "locationInput", "defaultValue": "" },
+          { "query": "programName", "beItem": "program_name" },
+          { "query": "locationName", "beItem": "location_name" },
           { "query": "sampleTemplate", "targetValue": true },
           { "query": "sampleTemplateVersion", "targetValue": true },
           { "query": "fieldName", "defaultValue": "shift|production_lot" },

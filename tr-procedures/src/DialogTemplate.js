@@ -780,14 +780,6 @@ export function DialogTemplate(base) {
       return this.shadowRoot.querySelector("mwc-select#lot")
     }
 
-    get programInput() {
-      return this.shadowRoot.querySelector("mwc-textfield[name=program_name]")
-    }
-
-    get locationInput() {
-      return this.shadowRoot.querySelector("mwc-textfield[name=location_name]")
-    }
-
     setLogSample() {
       this.targetValue = {
         sampleTemplate: this.templates.selectedProgram.sample_config_code,
