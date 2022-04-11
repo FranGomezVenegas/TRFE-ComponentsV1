@@ -149,6 +149,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
       }
       this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
+      console.log(this.windowOpenable, ' ooo')
+      console.log(this.sopsPassed, ' sss')
       // When sopsPassed=true then does not matter what windowOpenableWhenNotSopCertifiedUserSopCertification business rule is set
       if (this.sopsPassed) {
         this.windowOpenable = "yes"
@@ -168,8 +170,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
       if (defView.length && defView[0].mode==="readonly") {
         this.sopsPassed = false
-        this.windowOpenable = "yes"
-        //return;
+      } else if (defView.length && defView[0].mode==="edit") {
+        this.sopsPassed = this.sopsPassed == false ? false : true
       }
     }
     await this.updateComplete

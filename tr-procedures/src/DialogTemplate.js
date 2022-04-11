@@ -732,7 +732,7 @@ export function DialogTemplate(base) {
     /** Point Template Dialog part */
     pointTemplate() {
       return html`
-      <tr-dialog id="pointDialog" .open=${this.selectedSamples&&this.selectedSamples.length}
+      <tr-dialog id="pointDialog" .open=${this.selectedSamples&&this.selectedSamples.length&&this.sopsPassed}
         @closed=${e=>{if(e.target===this.pointDialog)this.grid.activeItem=null}}
         heading=""
         hideActions=""
