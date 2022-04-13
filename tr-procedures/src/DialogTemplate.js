@@ -258,7 +258,10 @@ export function DialogTemplate(base) {
                     flex-grow="1"
                     path="${key}" 
                     header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                  html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  html`${key=="uom" ?
+                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+                    html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  }`
                 }`
               }
             ` :
@@ -275,7 +278,10 @@ export function DialogTemplate(base) {
                     width="65px" resizable 
                     path="${key}" 
                     header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                  html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  html`${key=="uom" ?
+                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+                    html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  }`
                 }`
               }
             ` 
@@ -356,6 +362,29 @@ export function DialogTemplate(base) {
           }
         }
       }
+    }
+
+    uomRenderer(result) {
+      if (result.uom && result.raw_value) {
+        if (result.uom_conversion_mode) {
+          let ucm = result.uom_conversion_mode.split("|")
+          return html`
+          <select @change=${e=>this.setUOM(result.result_id, e.target.value)}>
+            ${ucm.map(u => 
+              html`<option value=${u} ?selected=${u==result.uom}>${u}</option>`
+            )}
+          </select>
+          `
+        }
+        return result.uom
+      }
+    }
+
+    setUOM(resultId, newResultUom) {
+      this.targetValue = { resultId, newResultUom }
+      let actionIdx = this.selectedAction.dialogInfo.action.findIndex(a => a.clientMethod == "changeUOM")
+      this.selectedDialogAction = this.selectedAction.dialogInfo.action[actionIdx]
+      this.actionMethod(this.selectedDialogAction, false)
     }
 
     get erGrid() {

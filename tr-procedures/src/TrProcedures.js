@@ -64,7 +64,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           display: none;
         }
         #resultDialog {
-          --mdc-dialog-min-width: 800px;
+          --mdc-dialog-min-width: 80vw;
         }
         @media (max-width: 460px) {
           vaadin-grid {
@@ -72,6 +72,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           }
           vaadin-grid-cell-content {
             padding: 5px;
+          }
+          #resultDialog {
+            --mdc-dialog-min-width: 100vw;
           }
         }
       `
@@ -149,8 +152,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         }
       }
       this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
-      console.log(this.windowOpenable, ' ooo')
-      console.log(this.sopsPassed, ' sss')
       // When sopsPassed=true then does not matter what windowOpenableWhenNotSopCertifiedUserSopCertification business rule is set
       if (this.sopsPassed) {
         this.windowOpenable = "yes"

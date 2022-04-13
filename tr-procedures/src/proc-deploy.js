@@ -356,7 +356,7 @@ export const ProcDeploy = {
       },
       "resultHeader": {
         "spec_eval": {
-          "label_en": "spec_eval", "label_es": "Eval Espec"
+          "label_en": "Spec Eval", "label_es": "Eval Espec"
         },
         "result_id": {
           "label_en": "Result Id", "label_es": "Id Resultado"
@@ -369,6 +369,9 @@ export const ProcDeploy = {
         },
         "raw_value": {
           "label_en": "Value", "label_es": "Valor"
+        },
+        "uom": {
+          "label_en": "UOM", "label_es": "UOM"
         }
       }
     },
@@ -441,6 +444,14 @@ export const ProcDeploy = {
               "clientMethod": "enterResult",
               "apiParams": [
                 { "query": "rawValueResult", "targetValue": true },
+                { "query": "resultId", "targetValue": true }
+              ]
+            },
+            {
+              "actionName": "RESULT_CHANGE_UOM",
+              "clientMethod": "changeUOM",
+              "apiParams": [
+                { "query": "newResultUom", "targetValue": true },
                 { "query": "resultId", "targetValue": true }
               ]
             }
@@ -656,7 +667,7 @@ export const ProcDeploy = {
       },
       "resultHeader": {
         "spec_eval": {
-          "label_en": "spec_eval",
+          "label_en": "Spec Eval",
           "label_es": "Eval Espec"
         },
         "result_id": {
@@ -674,6 +685,9 @@ export const ProcDeploy = {
         "raw_value": {
           "label_en": "Value",
           "label_es": "Valor"
+        },
+        "uom": {
+          "label_en": "UOM", "label_es": "UOM"
         }
       }
     },
@@ -833,7 +847,7 @@ export const ProcDeploy = {
       },
       "resultHeader": {
         "spec_eval": {
-          "label_en": "spec_eval",
+          "label_en": "Spec Eval",
           "label_es": "Eval Espec"
         },
         "result_id": {
@@ -851,6 +865,9 @@ export const ProcDeploy = {
         "raw_value": {
           "label_en": "Value",
           "label_es": "Valor"
+        },
+        "uom": {
+          "label_en": "UOM", "label_es": "UOM"
         }
       }
     },

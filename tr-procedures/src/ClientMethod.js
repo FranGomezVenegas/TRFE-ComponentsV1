@@ -136,6 +136,12 @@ export function ClientMethod(base) {
       this.execResult(params)
     }
 
+    changeUOM() {
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.execResult(params)
+    }
+
     enterEventResult() {
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
         + '?' + new URLSearchParams(this.reqParams)
