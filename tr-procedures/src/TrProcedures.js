@@ -66,6 +66,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         #resultDialog {
           --mdc-dialog-min-width: 80vw;
         }
+        vaadin-grid {
+          font-size: 12px;
+        }
         @media (max-width: 460px) {
           vaadin-grid {
             font-size: 10px;

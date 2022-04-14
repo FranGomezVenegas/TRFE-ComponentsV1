@@ -154,6 +154,7 @@ export function ClientMethod(base) {
           this.curResultRef = undefined
         }
         this.reloadDialog()
+        this.dataForDialog = null
       })
     }
 

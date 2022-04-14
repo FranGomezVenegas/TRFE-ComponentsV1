@@ -23,7 +23,8 @@ export function DialogTemplate(base) {
         openInvests: { type: Array },
         selectedInvestigations: { type: Array },
         capaRequired: { type: Boolean },
-        selectedStucks: { type: Array }
+        selectedStucks: { type: Array },
+        dataForDialog: { type: Object }
       }
     }
 
@@ -142,11 +143,31 @@ export function DialogTemplate(base) {
         </vaadin-grid>
         <div id="rowTooltip">&nbsp;</div>
       </tr-dialog>
+      <tr-dialog id="uomConvertionDialog" ?open=${this.dataForDialog}
+        heading="UOM Convertion List"
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <select @change=${e => this.setUOM(this.dataForDialog.result_id, e.target.value)}>
+            ${this.dataForDialog&&this.dataForDialog.ucm.map(u => 
+              html`<option value=${u} ?selected=${u==this.dataForDialog.uom}>${u}</option>`
+            )}
+          </select>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
       `
     }
 
     get rowTooltip() {
       return this.shadowRoot.querySelector("#rowTooltip")
+    }
+
+    get uomDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")
     }
 
     setCellListener() {
@@ -259,7 +280,7 @@ export function DialogTemplate(base) {
                     path="${key}" 
                     header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
                   html`${key=="uom" ?
-                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
+                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable flex-grow=1 text-align='center' path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
                     html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
                   }`
                 }`
@@ -365,16 +386,12 @@ export function DialogTemplate(base) {
     }
 
     uomRenderer(result) {
-      if (result.uom && result.raw_value) {
+      if (result.uom) {
         if (result.uom_conversion_mode) {
           let ucm = result.uom_conversion_mode.split("|")
-          return html`
-          <select @change=${e=>this.setUOM(result.result_id, e.target.value)}>
-            ${ucm.map(u => 
-              html`<option value=${u} ?selected=${u==result.uom}>${u}</option>`
-            )}
-          </select>
-          `
+          return html`<mwc-button 
+            @click=${()=>this.dataForDialog={ucm, uom: result.uom, result_id: result.result_id}}
+            ?disabled=${!result.raw_value} label="${result.uom}" icon="edit"></mwc-button>`
         }
         return result.uom
       }
