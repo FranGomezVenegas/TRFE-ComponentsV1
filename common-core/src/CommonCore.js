@@ -49,6 +49,19 @@ export class CommonCore extends LitElement {
     }, true);
     this.updateComplete.then(() => {
       this.resizeElements()
+      if (this.config.local != false && !window.process) {
+        this.localToast = document.createElement("div")
+        this.localToast.style.position = 'fixed'
+        this.localToast.style.bottom = '10px'
+        this.localToast.style.left = '10px'
+        this.localToast.style.padding = '5px'
+        this.localToast.style.backgroundColor = 'black'
+        this.localToast.style.color = 'white'
+        this.localToast.style.fontSize = '12px'
+        this.localToast.style.maxWidth = "98vw"
+        this.localToast.style.display = "none"
+        this.shadowRoot.appendChild(this.localToast)
+      }
     })
   }
 
@@ -111,6 +124,11 @@ export class CommonCore extends LitElement {
       }
       return j
     }).catch(e => {
+      if (this.config.local != false && !window.process) {
+        this.localToast.textContent = e.message || e['message_'+ this.lang]
+        this.localToast.style.display = 'block'
+        setTimeout(() => this.localToast.style.display = 'none', 4000)
+      }
       if (e.message == "Unexpected end of JSON input") {
         this.dispatchEvent(new CustomEvent("error", {
           detail: {...e},
