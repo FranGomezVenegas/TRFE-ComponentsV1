@@ -366,21 +366,39 @@ export function DialogTemplate(base) {
         `
       } else {
         if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-          if (this.selectedAction.dialogInfo.readOnly) {
-            return html`<mwc-textfield type="text" value=${result.raw_value} disabled></mwc-textfield>`
-          } else {
-            return html`<mwc-textfield type="text" .value=${result.raw_value} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-          }
+          return html`<mwc-textfield type="text" .value=${result.raw_value} 
+            ?disabled=${this.selectedAction.dialogInfo.readOnly}
+            @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}></mwc-textfield>`
+        } else if (result.param_type.indexOf("LIST") > -1) {
+          let lEntry = result.list_entry.split("|")
+          return html`<mwc-select @change=${e=>this.setResult(result, e.target.value)}>
+            ${lEntry.map(l => 
+              html`<mwc-list-item value=${l} ?selected=${l==result.raw_value}>${l}</mwc-list-item>`
+            )}
+            ${result.param_type == "TEXTLIST" ?
+              html`<mwc-list-item ?selected=${lEntry.indexOf(result.raw_value)<0?true:false}>
+                <input 
+                  .value=${lEntry.indexOf(result.raw_value)<0?result.raw_value:''}
+                  @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}>
+              </mwc-list-item>` :
+              nothing
+            }
+          </mwc-select>`
+        } else if (result.param_type == "REAL") {
+          return html`<mwc-textfield 
+            ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
+            .step=${result.max_dp?1/Math.pow(10,result.max_dp):0.01} 
+            .min=${result.min_allowed?result.min_allowed:0}
+            .max=${result.max_allowed&&result.max_allowed}
+            .value=${result.raw_value||result.value||0.00} 
+            @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}></mwc-textfield>`
         } else {
-          if (this.selectedAction.dialogInfo.readOnly) {
-            return html`<mwc-textfield 
-              type="number" value=${result.raw_value||result.value||0.00} disabled></mwc-textfield>`
-          } else {
-            return html`<mwc-textfield 
-              type="number" step=0.01 .value=${result.raw_value||result.value||0.00} 
-              @keydown=${e=>e.keyCode==13&&this.setResult(result, e)}></mwc-textfield>`
-          }
+          return html`<mwc-textfield 
+            ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
+            .min=${result.min_allowed?result.min_allowed:0} 
+            .max=${result.max_allowed&&result.max_allowed} 
+            .value=${result.raw_value||result.value||0.00} 
+            @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}></mwc-textfield>`
         }
       }
     }
@@ -416,11 +434,11 @@ export function DialogTemplate(base) {
       return this.shadowRoot.querySelector("input[name=rItem]")
     }
 
-    setResult(result, e) {
+    setResult(result, newValue) {
       this.targetValue = {
-        rawValueResult: e.target.value,
+        rawValueResult: result.raw_value,
         resultId: result.result_id,
-        newValue: e.target.value,
+        newValue: newValue,
         eventId: result.event_id,
         instrumentName: result.instrument,
         variableName: result.param_name
