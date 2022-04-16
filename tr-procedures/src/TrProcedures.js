@@ -69,6 +69,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         vaadin-grid {
           font-size: 12px;
         }
+        sp-button[hidden] {
+          display: none;
+        }
         @media (max-width: 460px) {
           vaadin-grid {
             font-size: 10px;
@@ -529,7 +532,6 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.itemId = null
     this.targetValue = {}
     this.selectedResults = []
-    this.selectedMicroorganisms = []
     this.selectedDialogAction = null
   }
 

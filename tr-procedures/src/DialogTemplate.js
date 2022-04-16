@@ -12,7 +12,7 @@ export function DialogTemplate(base) {
       return {
         selectedResults: { type: Array },
         enterResults: { type: Array },
-        selectedMicroorganisms: { type: Array },
+        filterGridDialog: { type: Array }, // filtered grid items on dialog view
         microorganismList: { type: Array },
         selectedAssigns: { type: Array },
         assignList: { type: Array },
@@ -40,14 +40,14 @@ export function DialogTemplate(base) {
     dateTemplate() {
       return html`
       <tr-dialog id="dateDialog" 
-        @closed=${()=>this.dateInput.value=""}
+        @closed=${() => this.dateInput.value = ""}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
           <input id="dateInput" 
             type="datetime-local" dialogInitialFocus
-            @keypress=${e=>e.keyCode==13&&this.setNewDate()}>
+            @keypress=${e => e.keyCode == 13 && this.setNewDate()}>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -58,7 +58,7 @@ export function DialogTemplate(base) {
       </tr-dialog>
       `
     }
-        
+
     get dateDialog() {
       return this.shadowRoot.querySelector("tr-dialog#dateDialog")
     }
@@ -66,7 +66,7 @@ export function DialogTemplate(base) {
     get dateInput() {
       return this.shadowRoot.querySelector("input#dateInput")
     }
-  
+
     setNewDate() {
       if (this.dateInput.value) {
         this.dialogAccept()
@@ -77,14 +77,14 @@ export function DialogTemplate(base) {
     commentTemplate() {
       return html`
       <tr-dialog id="commentDialog" 
-        @closed=${()=>this.commentInput.value=""}
+        @closed=${() => this.commentInput.value = ""}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="commentInput" label="${this.langConfig.fieldText&&this.langConfig.fieldText.comment["label_"+ this.lang]}" 
+          <mwc-textfield id="commentInput" label="${this.langConfig.fieldText && this.langConfig.fieldText.comment["label_" + this.lang]}" 
             dialogInitialFocus
-            @keypress=${e=>e.keyCode==13&&this.addComment()}></mwc-textfield>
+            @keypress=${e => e.keyCode == 13 && this.addComment()}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -114,32 +114,32 @@ export function DialogTemplate(base) {
     resultTemplate() {
       return html`
       <tr-dialog id="resultDialog" ?open=${this.enterResults.length}
-        @opened=${()=>this.setCellListener()}
-        @closing=${()=>this.removeEvents()}
+        @opened=${() => this.setCellListener()}
+        @closing=${() => this.removeEvents()}
         heading=""
         hideActions=""
         scrimClickAction="">
         ${this.selectedSamples.length ?
-          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id||this.selectedSamples[0].id}</label>` : nothing
+          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id || this.selectedSamples[0].id}</label>` : nothing
         }
         <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
           @selected-items-changed=${e => {
-            if (this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES") {
-              this.selectedResults = []
-            } else {
-              this.selectedResults = e.detail.value
-            }
-          }}
+          if (this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES") {
+            this.selectedResults = []
+          } else {
+            this.selectedResults = e.detail.value
+          }
+        }}
           .detailsOpenedItems=${this.selectedResults}
           ${gridRowDetailsRenderer(this.detailRenderer)}>
           ${this.desktop ?
-            html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
-            html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
-          }
+          html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
+          html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
+        }
           ${this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES" ?
-            html`${this.evList()}` :
-            html`${this.erList()}`
-          }
+          html`${this.evList()}` :
+          html`${this.erList()}`
+        }
         </vaadin-grid>
         <div id="rowTooltip">&nbsp;</div>
       </tr-dialog>
@@ -149,9 +149,9 @@ export function DialogTemplate(base) {
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
           <select @change=${e => this.setUOM(this.dataForDialog.result_id, e.target.value)}>
-            ${this.dataForDialog&&this.dataForDialog.ucm.map(u => 
-              html`<option value=${u} ?selected=${u==this.dataForDialog.uom}>${u}</option>`
-            )}
+            ${this.dataForDialog && this.dataForDialog.ucm.map(u =>
+          html`<option value=${u} ?selected=${u == this.dataForDialog.uom}>${u}</option>`
+        )}
           </select>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
@@ -179,12 +179,12 @@ export function DialogTemplate(base) {
         this.rowTooltip.style.fontSize = "12px"
         this.rowTooltip.style.color = "white"
         let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
-        rows.forEach((r,i) => {
-          if (i > 0 && this.enterResults[i-1]) {
+        rows.forEach((r, i) => {
+          if (i > 0 && this.enterResults[i - 1]) {
             r.removeEventListener('mouseenter', () => this.showLockReason(i))
             r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
           }
-          if (i > 0 && this.enterResults[i-1] && (this.enterResults[i-1].is_locked || this.enterResults[i-1].warning_reason)) {
+          if (i > 0 && this.enterResults[i - 1] && (this.enterResults[i - 1].is_locked || this.enterResults[i - 1].warning_reason)) {
             r.addEventListener('mouseenter', () => this.showLockReason(i))
             r.addEventListener('mouseleave', this.hideLockReason.bind(this))
           }
@@ -194,17 +194,17 @@ export function DialogTemplate(base) {
 
     showLockReason(i) {
       let labels = {
-        "warning_reason_label_en":"Warning Reason", "warning_reason_label_es":"Razón Aviso",
-        "locking_reason_label_en":"Locking Reason", "locking_reason_label_es":"Razón Bloqueo"
+        "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
+        "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
       }
-      if (this.enterResults[i-1].is_locked) {
+      if (this.enterResults[i - 1].is_locked) {
         this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
         this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = labels['locking_reason_label_'+ this.lang] +": "+ (this.enterResults[i-1].locking_reason["message_"+ this.lang])
-      } else if (this.enterResults[i-1].warning_reason) {
+        this.rowTooltip.textContent = labels['locking_reason_label_' + this.lang] + ": " + (this.enterResults[i - 1].locking_reason["message_" + this.lang])
+      } else if (this.enterResults[i - 1].warning_reason) {
         this.rowTooltip.style.backgroundColor = "#0085ff"
         this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = labels['warning_reason_label_'+ this.lang] +": "+ this.enterResults[i-1].warning_reason["message_"+ this.lang]
+        this.rowTooltip.textContent = labels['warning_reason_label_' + this.lang] + ": " + this.enterResults[i - 1].warning_reason["message_" + this.lang]
       }
     }
 
@@ -219,8 +219,8 @@ export function DialogTemplate(base) {
         this.rowTooltip.textContent = ""
         this.rowTooltip.style.visibility = "hidden"
         let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
-        rows.forEach((r,i) => {
-          if (i > 0 && this.enterResults[i-1] && this.enterResults[i-1].is_locked) {
+        rows.forEach((r, i) => {
+          if (i > 0 && this.enterResults[i - 1] && this.enterResults[i - 1].is_locked) {
             r.removeEventListener('mouseenter', this.showLockReason.bind(this))
             r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
           }
@@ -232,108 +232,108 @@ export function DialogTemplate(base) {
 
     detailRenderer(result) {
       let labels = {
-        "warning_reason_label_en":"Warning Reason", "warning_reason_label_es":"Razón Aviso",
-        "locking_reason_label_en":"Locking Reason", "locking_reason_label_es":"Razón Bloqueo"
+        "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
+        "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
       }
       return html`
         <div style="text-align:center;font-size:12px">
           <p>${result.spec_eval ?
-            html`${result.spec_eval=='IN' ?
-              html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
-              html`${result.spec_eval.toUpperCase().includes("OUT")&&result.spec_eval.toUpperCase().includes("SPEC") ?
-                html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
-                html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
+          html`${result.spec_eval == 'IN' ?
+            html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
+            html`${result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC") ?
+              html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
+              html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
               }`
             }` :
-            html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
-          }</p>
-          <p>${this.lang=="en"?"Method":"Método"}: ${result.method_name} (${result.method_version})</p>
+          html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
+        }</p>
+          <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (${result.method_version})</p>
           <p>Range Evaluation: ${result.spec_eval}</p>
           <p>Range Rule: ${result.spec_eval_detail}</p>
-          ${result.is_locked ? 
-            html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_'+ this.lang]}: ${result.locking_reason["message_"+ this.lang]}</p>` : nothing
-          }
-          ${result.warning_reason ? 
-            html`<p style="color:#0085ff">${labels['warning_reason_label_'+ this.lang]}: ${result.warning_reason["message_"+ this.lang]}</p>` : nothing
-          }
+          ${result.is_locked ?
+          html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
+        }
+          ${result.warning_reason ?
+          html`<p style="color:#0085ff">${labels['warning_reason_label_' + this.lang]}: ${result.warning_reason["message_" + this.lang]}</p>` : nothing
+        }
         </div>
       `
     }
 
     erList() {
-      return Object.entries(this.langConfig.resultHeader).map(([key, value], i) => 
+      return Object.entries(this.langConfig.resultHeader).map(([key, value], i) =>
         html`
           ${this.desktop ?
             html`
-              ${i==0 ?
+              ${i == 0 ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.specRenderer)}
                   text-align="center" 
                   flex-grow="0"
                   path="${key}" 
-                  header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-                html`${key=="raw_value" ?
+                  header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                html`${key == "raw_value" ?
                   html`<vaadin-grid-column 
                     ${columnBodyRenderer(this.valRenderer)}
                     text-align="center" 
                     flex-grow="1"
                     path="${key}" 
-                    header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                  html`${key=="uom" ?
-                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable flex-grow=1 text-align='center' path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                    html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                    header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                  html`${key == "uom" ?
+                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable flex-grow=1 text-align='center' path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                    html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
+                    }`
                   }`
-                }`
               }
             ` :
             html`
-              ${i==0 ?
+              ${i == 0 ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.specRenderer)}
                   width="65px" resizable 
                   path="${key}" 
-                  header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-                html`${key=="raw_value" ?
+                  header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                html`${key == "raw_value" ?
                   html`<vaadin-grid-column 
                     ${columnBodyRenderer(this.valRenderer)}
                     width="65px" resizable 
                     path="${key}" 
-                    header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                  html`${key=="uom" ?
-                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                    html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                    header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                  html`${key == "uom" ?
+                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                    html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
+                    }`
                   }`
-                }`
               }
-            ` 
+            `
           }
         `
       )
     }
 
     evList() {
-      return Object.entries(this.langConfig.resultHeader).map(([key, value], i) => 
+      return Object.entries(this.langConfig.resultHeader).map(([key, value], i) =>
         html`
           ${this.desktop ?
             html`
-              ${key=="value" ?
+              ${key == "value" ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.valRenderer)}
                   text-align="center" 
                   flex-grow="1"
                   path="${key}" 
-                  header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
               }
             ` :
             html`
-              ${key=="value" ?
+              ${key == "value" ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.valRenderer)}
                   width="65px" resizable
                   path="${key}" 
-                  header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-                html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+                  header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
               }
             `
           }
@@ -368,18 +368,18 @@ export function DialogTemplate(base) {
         if (result.param_type == "TEXT" || result.param_type == "qualitative") {
           return html`<mwc-textfield type="text" .value=${result.raw_value} 
             ?disabled=${this.selectedAction.dialogInfo.readOnly}
-            @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}></mwc-textfield>`
+            @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}></mwc-textfield>`
         } else if (result.param_type.indexOf("LIST") > -1) {
           let lEntry = result.list_entry.split("|")
-          return html`<mwc-select @change=${e=>this.setResult(result, e.target.value)}>
-            ${lEntry.map(l => 
-              html`<mwc-list-item value=${l} ?selected=${l==result.raw_value}>${l}</mwc-list-item>`
-            )}
+          return html`<mwc-select @change=${e => this.setResult(result, e.target.value)}>
+            ${lEntry.map(l =>
+            html`<mwc-list-item value=${l} ?selected=${l == result.raw_value}>${l}</mwc-list-item>`
+          )}
             ${result.param_type == "TEXTLIST" ?
-              html`<mwc-list-item ?selected=${lEntry.indexOf(result.raw_value)<0?true:false}>
+              html`<mwc-list-item ?selected=${lEntry.indexOf(result.raw_value) < 0 ? true : false}>
                 <input 
-                  .value=${lEntry.indexOf(result.raw_value)<0?result.raw_value:''}
-                  @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}>
+                  .value=${lEntry.indexOf(result.raw_value) < 0 ? result.raw_value : ''}
+                  @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}>
               </mwc-list-item>` :
               nothing
             }
@@ -387,18 +387,18 @@ export function DialogTemplate(base) {
         } else if (result.param_type == "REAL") {
           return html`<mwc-textfield 
             ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
-            .step=${result.max_dp?1/Math.pow(10,result.max_dp):0.01} 
-            .min=${result.min_allowed?result.min_allowed:0}
-            .max=${result.max_allowed&&result.max_allowed}
-            .value=${result.raw_value||result.value||0.00} 
-            @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}></mwc-textfield>`
+            .step=${result.max_dp ? 1 / Math.pow(10, result.max_dp) : 0.01} 
+            .min=${result.min_allowed ? result.min_allowed : 0}
+            .max=${result.max_allowed && result.max_allowed}
+            .value=${result.raw_value || result.value || 0.00} 
+            @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}></mwc-textfield>`
         } else {
           return html`<mwc-textfield 
             ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
-            .min=${result.min_allowed?result.min_allowed:0} 
-            .max=${result.max_allowed&&result.max_allowed} 
-            .value=${result.raw_value||result.value||0.00} 
-            @keydown=${e=>e.keyCode==13&&this.setResult(result, e.target.value)}></mwc-textfield>`
+            .min=${result.min_allowed ? result.min_allowed : 0} 
+            .max=${result.max_allowed && result.max_allowed} 
+            .value=${result.raw_value || result.value || 0.00} 
+            @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}></mwc-textfield>`
         }
       }
     }
@@ -408,7 +408,7 @@ export function DialogTemplate(base) {
         if (result.uom_conversion_mode) {
           let ucm = result.uom_conversion_mode.split("|")
           return html`<mwc-button 
-            @click=${()=>this.dataForDialog={ucm, uom: result.uom, result_id: result.result_id}}
+            @click=${() => this.dataForDialog = { ucm, uom: result.uom, result_id: result.result_id }}
             ?disabled=${!result.raw_value} label="${result.uom}" icon="edit"></mwc-button>`
         }
         return result.uom
@@ -425,11 +425,11 @@ export function DialogTemplate(base) {
     get erGrid() {
       return this.shadowRoot.querySelector("vaadin-grid#erGrid")
     }
-  
+
     get resultDialog() {
       return this.shadowRoot.querySelector("tr-dialog#resultDialog")
     }
-  
+
     get rItem() {
       return this.shadowRoot.querySelector("input[name=rItem]")
     }
@@ -449,7 +449,7 @@ export function DialogTemplate(base) {
       let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
       if (result.raw_value || result.value) {
-        this.selectedDialogAction.actionName = "RE"+ this.selectedDialogAction.actionName
+        this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
         this.actionMethod(this.selectedDialogAction, false)
       } else {
         this.actionMethod(this.selectedDialogAction, false)
@@ -460,7 +460,7 @@ export function DialogTemplate(base) {
     microorganismTemplate() {
       return html`
       <tr-dialog id="microorganismDialog" ?open=${this.microorganismList.length}
-        @closing=${()=>{this.microorganismList=[];this.mAddHoc.value='';this.micro1.hidden=true;this.reload()}}
+        @closing=${e => { if (e.target === this.microorganismDialog) { this.microorganismList = []; this.reload(); } }}
         heading=""
         hideActions=""
         scrimClickAction="">
@@ -468,79 +468,81 @@ export function DialogTemplate(base) {
           html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id}</label>` : nothing
         }
         <div class="layout vertical flex">
-          ${this.selectedAction.clientMethod!="getMicroorganismItem" ?
-            html`
-              <mwc-textfield id="mAddHoc" label="${this.langConfig.fieldText.addhocInput['label_'+this.lang]}"
-                @input=${this.addhocChanged}></mwc-textfield>
-              <mwc-textfield id="numMicroItems1" hidden type="number"></mwc-textfield>
-              <sp-button size="m" variant="secondary" @click=${()=>this.setMicroorganism()}>
-                ${this.langConfig.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
-            ` : nothing
-          }
-          <div style="height:35vh;overflow:auto">
-            <vaadin-grid id="moGrid" theme="row-dividers" all-rows-visible multi-sort
-              .items=${this.microorganismList}
-              .selectedItems="${this.selectedMicroorganisms}"
-              @active-item-changed="${this.selectMicroOrg}">
-              <vaadin-grid-sort-column resizable auto-width path="name" header="${this.langConfig.microorganismHeader.name['label_'+this.lang]}"></vaadin-grid-sort-column>
-              <vaadin-grid-sort-column resizable auto-width path="items" header="${this.langConfig.microorganismHeader.items['label_'+this.lang]}"></vaadin-grid-sort-column>
-            </vaadin-grid>
-          </div>
-          ${this.selectedMicroorganisms&&this.selectedMicroorganisms.length ?
-            html`${this.selectedAction.clientMethod=="getMicroorganismItem" ?
-              html`
-                <mwc-textfield id="numMicroItems2" min=0 .max=${this.getNumMicroItems()-2} label="${this.selectedMicroorganisms[0].name}" type="number" .value=${this.getNumMicroItems()-2}></mwc-textfield>
-              ` :
-              html`
-                <mwc-textfield id="numMicroItems2" .min=${this.getNumMicroItems()} label="${this.selectedMicroorganisms[0].name}" type="number" .value=${this.getNumMicroItems()}></mwc-textfield>
-              `
-            }
-            ` :
-            nothing
-          }
-          ${this.selectedAction.clientMethod=="getMicroorganismItem" ?
-            html`
-              <sp-button size="m" variant="cta" @click=${this.unsetMicroorganism}>
-                ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-            ` :
-            html`
-              <sp-button size="m" variant="cta" @click=${()=>this.setMicroorganism(false)}>
-                ${this.langConfig.fieldText.addBtn["label_" + this.lang]}</sp-button>
-            `
-          }
+          ${this.selectedAction.clientMethod == "getMicroorganism" ?
+          html`${this.viewForAdd()}` :
+          html`${this.viewForRemove()}`
+        }
         </div>
       </tr-dialog>
       `
     }
 
-    addhocChanged(e) {
-      if (this.timeout) {  
+    viewForAdd() {
+      return html`
+        <mwc-textfield id="numMicroItems" label="${this.microName}" type="number" 
+          .min=${this.getNumMicroItems()} 
+          .value=${this.getNumMicroItems()}
+          ?hidden=${!this.microName}></mwc-textfield>
+
+        <mwc-select id='mAdd' @change=${this.selectMicroItem}>
+          <mwc-list-item value=''>-- Microorganism List --</mwc-list-item>
+          ${this.microorganismList.map(m =>
+        html`<mwc-list-item value=${m.name}>${m.name}</mwc-list-item>`
+      )}
+        </mwc-select>
+        <sp-button size="m" variant="cta" @click=${()=>this.setMicroorganism(false)}>
+          ${this.langConfig.fieldText.addBtn["label_" + this.lang]}</sp-button>
+
+        <mwc-textfield id="mAddHoc" label="${this.langConfig.fieldText.addhocInput['label_' + this.lang]}"
+          @input=${this.inputAddhoc}></mwc-textfield>
+        <sp-button size="m" variant="secondary" @click=${()=>this.setMicroorganism()}>
+          ${this.langConfig.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
+
+        <div style="height:35vh;overflow:auto">
+          <vaadin-grid theme="row-dividers" multi-sort
+            .items=${this.filterGridDialog}>
+            <vaadin-grid-sort-column resizable auto-width path="name" header="${this.langConfig.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
+            <vaadin-grid-sort-column resizable auto-width path="items" header="${this.langConfig.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
+          </vaadin-grid>
+        </div>
+      `
+    }
+
+    selectMicroItem(e) {
+      this.microName = ''
+      if (e.target.value) {
+        this.filterGridMicro(e.target.value)
+        this.microName = e.target.value
+      } else {
+        this.filterGridDialog = this.gridDialogItems
+        this.mAddHoc.value = ''
+      }
+    }
+
+    inputAddhoc(e) {
+      if (this.timeout) {
         clearTimeout(this.timeout);
       }
-      let key = e.target.value
-      if (key) {
+      this.microName = ''
+      let name = e.target.value
+      if (name) {
         this.timeout = setTimeout(() => {
-          if (key) {
-            let item = this.selectedSamples[0].microorganism_list_array.filter(m => m.name == this.mAddHoc.value)
-            this.micro1.hidden = false
-            if (item.length) {
-              this.micro1.min = item[0].items + 1
-              this.micro1.value = item[0].items + 1
-            } else {
-              this.micro1.min = 1
-              this.micro1.value = 1
-            }
-          } else {
-            this.micro1.hidden = true
-          }
-        }, 500);
+          this.filterGridMicro(name)
+          this.microName = name
+        }, 300);
       } else {
-        this.micro1.hidden = true
+        this.filterGridDialog = this.gridDialogItems
+        this.mAdd.value = ''        
       }
-    }  
+    }
+
+    filterGridMicro(name) {
+      let item = this.gridDialogItems.filter(m => m.name == name)
+      this.filterGridDialog = item
+    }
 
     getNumMicroItems() {
-      let item = this.selectedSamples[0].microorganism_list_array.filter(m => m.name == this.selectedMicroorganisms[0].name)
+      let item = this.selectedSamples.length&&this.selectedSamples[0].microorganism_list_array.filter(m => m.name == this.microName)
       if (item.length) {
         return item[0].items + 1
       } else {
@@ -548,87 +550,102 @@ export function DialogTemplate(base) {
       }
     }
 
+    viewForRemove() {
+      return html`
+        <div style="height:35vh;overflow:auto">
+          <vaadin-grid theme="row-dividers" all-rows-visible multi-sort
+            .items=${this.gridDialogItems}
+            .selectedItems="${this.filterGridDialog}"
+            @active-item-changed="${this.selectMicroOrg}">
+            <vaadin-grid-sort-column resizable auto-width path="name" header="${this.langConfig.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
+            <vaadin-grid-sort-column resizable auto-width path="items" header="${this.langConfig.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
+          </vaadin-grid>
+        </div>
+        ${this.filterGridDialog && this.filterGridDialog.length ?
+          html`
+            <mwc-textfield id="numMicroItems" min=0 .max=${this.getNumMicroItems() - 2} label="${this.filterGridDialog[0].name}" type="number" .value=${this.getNumMicroItems() - 2}></mwc-textfield>
+          ` :
+          nothing
+        }
+        <sp-button size="m" variant="cta" @click=${this.unsetMicroorganism}>
+          ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+      `
+    }
+
     selectMicroOrg(e) {
       const item = e.detail.value;
-      this.selectedMicroorganisms = item ? [item] : [];
+      this.microName = item ? item.name : '';
+      this.filterGridDialog = item ? [item] : [];
     }
 
-    get moGrid() {
-      return this.shadowRoot.querySelector("vaadin-grid#moGrid")
-    }
-
-    get micro1() {
-      return this.shadowRoot.querySelector("mwc-textfield#numMicroItems1")
-    }
-
-    get micro2() {
-      return this.shadowRoot.querySelector("mwc-textfield#numMicroItems2")
-    }
-  
     get microorganismDialog() {
       return this.shadowRoot.querySelector("tr-dialog#microorganismDialog")
     }
-  
+
+    get mAdd() {
+      return this.shadowRoot.querySelector("mwc-select#mAdd")
+    }
+
     get mAddHoc() {
       return this.shadowRoot.querySelector("mwc-textfield#mAddHoc")
     }
 
-    setMicroorganism(addhoc=true) {
-      // get value from text input
-      let totalItems, microName
-      // get value from text input
-      if (addhoc) {
-        if (!this.mAddHoc.value) return
-        microName = this.mAddHoc.value
-        totalItems = Number(this.micro1.value)
-        this.selectedDialogAction = this.selectedAction.dialogInfo.action[1]
-      // get value from selected item
-      } else {
-        if (!this.selectedMicroorganisms.length) return
-        microName = this.selectedMicroorganisms[0].name
-        totalItems = Number(this.micro2.value)
-        this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
-      }
-      let item = this.selectedSamples[0].microorganism_list_array.filter(m => m.name == microName)
-      if (item.length) {
-        item = item[0].items
-      } else {
-        item = 0
-      }
-      let numItems = totalItems - item
-      this.selectedSamples[0].microorganism_list_array.forEach(m => {
-        if (m.name != microName) {
-          totalItems += Number(m.items)
-        }
-      })
+    get microItems() {
+      return this.shadowRoot.querySelector("mwc-textfield#numMicroItems")
+    }
 
-      if (Number(this.selectedSamples[0].raw_value) < totalItems) {
-        this.dispatchEvent(new CustomEvent("error", {
-          detail: {
-            is_error: true,
-            message_en: "This addition would be "+ totalItems +" what is greater than the reading "+ this.selectedSamples[0].raw_value +" what is not allowed.",
-            message_es: "Está adición sumaría un total de "+ totalItems +", mayor a la lectura identificada, "+ this.selectedSamples[0].raw_value +", lo que no es permitido."
-          },
-          bubbles: true,
-          composed: true
-        }))
-        console.log("This addition would be "+ totalItems +" what is greater than the reading "+ this.selectedSamples[0].raw_value +" what is not allowed.")
-        return
+    setMicroorganism(addhoc=true) {
+      if (this.microName) {
+        // get value from text input
+        let totalItems = Number(this.microItems.value)
+        // get value from text input
+        if (addhoc) {
+          this.selectedDialogAction = this.selectedAction.dialogInfo.action[1]
+        // get value from selected item
+        } else {
+          this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+        }
+        let item = this.gridDialogItems.filter(m => m.name == this.microName)
+        if (item.length) {
+          item = item[0].items
+        } else {
+          item = 0
+        }
+        let numItems = totalItems - item
+        this.gridDialogItems.forEach(m => {
+          if (m.name != this.microName) {
+            totalItems += Number(m.items)
+          }
+        })
+
+        if (Number(this.selectedSamples[0].raw_value) < totalItems) {
+          this.dispatchEvent(new CustomEvent("error", {
+            detail: {
+              is_error: true,
+              message_en: "This addition would be " + totalItems + " what is greater than the reading " + this.selectedSamples[0].raw_value + " what is not allowed.",
+              message_es: "Está adición sumaría un total de " + totalItems + ", mayor a la lectura identificada, " + this.selectedSamples[0].raw_value + ", lo que no es permitido."
+            },
+            bubbles: true,
+            composed: true
+          }))
+          console.log("This addition would be " + totalItems + " what is greater than the reading " + this.selectedSamples[0].raw_value + " what is not allowed.")
+          return
+        }
+        this.targetValue = {
+          microorganismName: this.microName,
+          numItems: numItems
+        }
+        this.actionMethod(this.selectedDialogAction, false)
       }
-      this.targetValue = {
-        microorganismName: microName,
-        numItems: numItems
-      }
-      console.log(this.targetValue)
-      this.actionMethod(this.selectedDialogAction, false)
     }
 
     unsetMicroorganism() {
-      if (!this.selectedMicroorganisms.length) return
+      if (!this.filterGridDialog.length) return
       this.targetValue = {
-        microorganismName: this.selectedMicroorganisms[0].name,
-        numItems: this.selectedMicroorganisms[0].items - this.micro2.value
+        microorganismName: this.filterGridDialog[0].name,
+        numItems: this.filterGridDialog[0].items - this.microItems.value
       }
+      this.microItems.hidden = true
       this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
       this.actionMethod(this.selectedDialogAction, false)
     }
@@ -653,13 +670,13 @@ export function DialogTemplate(base) {
     newBatchTemplate() {
       return html`
       <tr-dialog id="newBatchDialog" 
-        @closed=${()=>this.batchInput.value=""}
+        @closed=${() => this.batchInput.value = ""}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="batchInput" label="${this.langConfig&&this.langConfig.fieldText.newBatch["label_"+ this.lang]}" 
-            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newBatch()}></mwc-textfield>
+          <mwc-textfield id="batchInput" label="${this.langConfig && this.langConfig.fieldText.newBatch["label_" + this.lang]}" 
+            dialogInitialFocus @keypress=${e => e.keyCode == 13 && this.newBatch()}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -674,11 +691,11 @@ export function DialogTemplate(base) {
     get newBatchDialog() {
       return this.shadowRoot.querySelector("tr-dialog#newBatchDialog")
     }
-  
+
     get batchInput() {
       return this.shadowRoot.querySelector("mwc-textfield#batchInput")
     }
-  
+
     newBatch() {
       if (this.batchInput.value) {
         this.dialogAccept(false)
@@ -688,14 +705,14 @@ export function DialogTemplate(base) {
     assignTemplate() {
       return html`
       <tr-dialog id="assignDialog" ?open=${this.assignList.length}
-        @closing=${()=>this.assignList=[]}
+        @closing=${() => this.assignList = []}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
           <div style="height:50vh;overflow:auto">
             <vaadin-grid id="asGrid" theme="row-dividers"
-              @active-item-changed=${e=>this.selectedAssigns=e.detail.value ? [e.detail.value] : []}
+              @active-item-changed=${e => this.selectedAssigns = e.detail.value ? [e.detail.value] : []}
               .selectedItems="${this.selectedAssigns}" all-rows-visible>
               ${this.asList()}
             </vaadin-grid>
@@ -713,23 +730,23 @@ export function DialogTemplate(base) {
 
     asList() {
       if (this.langConfig) {
-        return Object.entries(this.langConfig.assignHeader).map(([key, value], i) => 
-          html`${i==0 ?
-            html`<vaadin-grid-column path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>` :
-            html`<vaadin-grid-column resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-          }`
+        return Object.entries(this.langConfig.assignHeader).map(([key, value], i) =>
+          html`${i == 0 ?
+            html`<vaadin-grid-column path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+            html`<vaadin-grid-column resizable auto-width path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
+            }`
         )
       }
     }
-  
+
     get assignDialog() {
       return this.shadowRoot.querySelector("tr-dialog#assignDialog")
     }
-  
+
     get asGrid() {
       return this.shadowRoot.querySelector("vaadin-grid#asGrid")
     }
-  
+
     setAssign() {
       this.targetValue = {
         incubatorName: this.selectedAssigns[0].name,
@@ -745,11 +762,11 @@ export function DialogTemplate(base) {
         heading=""
         hideActions=""
         scrimClickAction="">
-        <label slot="topLeft" style="font-size:12px">${this.langConfig&&this.langConfig.fieldText.topLabel["label_"+ this.lang]}</label>
+        <label slot="topLeft" style="font-size:12px">${this.langConfig && this.langConfig.fieldText.topLabel["label_" + this.lang]}</label>
         <div class="layout vertical flex center-justified">
           <div style="height:50vh;overflow:auto">
             <vaadin-grid id="siGrid" theme="row-dividers" 
-              @active-item-changed=${e=>this.selectedStucks=e.detail.value ? [e.detail.value] : []}
+              @active-item-changed=${e => this.selectedStucks = e.detail.value ? [e.detail.value] : []}
               .selectedItems="${this.selectedStucks}" all-rows-visible>
               ${this.siList()}
             </vaadin-grid>
@@ -758,7 +775,7 @@ export function DialogTemplate(base) {
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
             <sp-button size="xl" slot="primaryAction" @click=${this.setToNext}>
-              ${this.langConfig&&this.langConfig.fieldText.next["label_" + this.lang]}</sp-button>
+              ${this.langConfig && this.langConfig.fieldText.next["label_" + this.lang]}</sp-button>
           </div>
         </div>
       </tr-dialog>
@@ -767,20 +784,20 @@ export function DialogTemplate(base) {
 
     siList() {
       if (this.langConfig) {
-        return Object.entries(this.langConfig.stuckHeader).map(([key, value], i) => 
-          html`<vaadin-grid-column resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
+        return Object.entries(this.langConfig.stuckHeader).map(([key, value], i) =>
+          html`<vaadin-grid-column resizable path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
         )
       }
     }
-  
+
     get sampleStuckDialog() {
       return this.shadowRoot.querySelector("tr-dialog#sampleStuckDialog")
     }
-  
+
     get siGrid() {
       return this.shadowRoot.querySelector("vaadin-grid#siGrid")
     }
-  
+
     setToNext() {
       let adjustAction = {
         ...this.selectedAction,
@@ -796,8 +813,8 @@ export function DialogTemplate(base) {
     /** Point Template Dialog part */
     pointTemplate() {
       return html`
-      <tr-dialog id="pointDialog" .open=${this.selectedSamples&&this.selectedSamples.length&&this.sopsPassed}
-        @closed=${e=>{if(e.target===this.pointDialog)this.grid.activeItem=null}}
+      <tr-dialog id="pointDialog" .open=${this.selectedSamples && this.selectedSamples.length && this.sopsPassed}
+        @closed=${e => { if (e.target === this.pointDialog) this.grid.activeItem = null }}
         heading=""
         hideActions=""
         scrimClickAction="">
@@ -805,27 +822,27 @@ export function DialogTemplate(base) {
           <div class="layout horizontal justified flex">
             <sp-button size="m" variant="secondary" dialogAction="accept">
               ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="m" @click=${this.setLogSample}>${this.langConfig.fieldText.logBtn["label_"+this.lang]}</sp-button>
+            <sp-button size="m" @click=${this.setLogSample}>${this.langConfig.fieldText.logBtn["label_" + this.lang]}</sp-button>
           </div>
           <div class="layout horizontal flex around-justified wrap" style="gap: 5px;">
-            <mwc-select label="${this.langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
-              ${this.langConfig.fieldText.shift.items.map((c,i) => 
-                html`<mwc-list-item value="${c.keyName}" ?selected=${c.keyName==this.headerInfo.shift}>${c["keyValue_"+this.lang]}</mwc-list-item>`
-              )}
+            <mwc-select label="${this.langConfig.fieldText.shift["label_" + this.lang]}" id="shift">
+              ${this.langConfig.fieldText.shift.items.map((c, i) =>
+        html`<mwc-list-item value="${c.keyName}" ?selected=${c.keyName == this.headerInfo.shift}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+      )}
             </mwc-select>
-            <mwc-select label="${this.langConfig.fieldText.lot["label_"+this.lang]}" id="lot">
-              ${this.langConfig.fieldText.lot.items.map((c,i) => 
-                html`<mwc-list-item value="${c.lot_name}" ?selected=${i==0}>${c.lot_name}</mwc-list-item>`
-              )}
+            <mwc-select label="${this.langConfig.fieldText.lot["label_" + this.lang]}" id="lot">
+              ${this.langConfig.fieldText.lot.items.map((c, i) =>
+        html`<mwc-list-item value="${c.lot_name}" ?selected=${i == 0}>${c.lot_name}</mwc-list-item>`
+      )}
             </mwc-select>
-            ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
-              html`${(f.name in this.langConfig.gridHeader) ?
-                // html`<mwc-textfield style="width:200px" ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value?true:false} label=${this.langConfig.gridHeader[f.name]['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>` :
-                html`<mwc-textfield disabled style="width:200px" label=${this.langConfig.gridHeader[f.name]['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>` :
-                nothing
-              }
+            ${this.selectedSamples.length && this.selectedSamples[0].card_info.map(f =>
+        html`${(f.name in this.langConfig.gridHeader) ?
+          // html`<mwc-textfield style="width:200px" ?disabled=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value?true:false} label=${this.langConfig.gridHeader[f.name]['label_'+this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name]&&this.langConfig.gridHeader[f.name].confidential_value&&f.value?"*****":f.value}></mwc-textfield>` :
+          html`<mwc-textfield disabled style="width:200px" label=${this.langConfig.gridHeader[f.name]['label_' + this.lang]} name=${f.name} type=${f.type} value=${this.langConfig.gridHeader[f.name] && this.langConfig.gridHeader[f.name].confidential_value && f.value ? "*****" : f.value}></mwc-textfield>` :
+          nothing
+          }
               `
-            )}
+      )}
           </div>
         </div>
       </tr-dialog>
@@ -887,36 +904,36 @@ export function DialogTemplate(base) {
     lotTemplate() {
       return html`
       <tr-dialog id="lotDialog"
-        @closed=${e=>{if(e.target===this.lotDialog)this.deactivatedLots=[]}}
+        @closed=${e => { if (e.target === this.lotDialog) this.deactivatedLots = [] }}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          ${this.selectedAction.actionName=="EM_NEW_PRODUCTION_LOT" ?
-            html`
+          ${this.selectedAction.actionName == "EM_NEW_PRODUCTION_LOT" ?
+          html`
               <mwc-textfield id="lotInput" 
-                label="${this.langConfig.fieldText.newLot["label_"+ this.lang]}" 
+                label="${this.langConfig.fieldText.newLot["label_" + this.lang]}" 
                 dialogInitialFocus
-                @keypress=${e=>e.keyCode==13&&this.lotAction()}></mwc-textfield>
+                @keypress=${e => e.keyCode == 13 && this.lotAction()}></mwc-textfield>
             ` :
-            html`
+          html`
               <div class="layout vertical flex">
                 <div class="layout horizontal flex center-center">
                   <mwc-textfield class="layout flex" id="lotNumDays" type="number" 
-                    .value=${this.lotDays} @change=${e=>this.lotDays=e.target.value}
-                    label="${this.langConfig.fieldText.lotDays["label_"+this.lang]}"
-                    @keypress=${e=>e.keyCode==13&&this.setDays()}></mwc-textfield>
+                    .value=${this.lotDays} @change=${e => this.lotDays = e.target.value}
+                    label="${this.langConfig.fieldText.lotDays["label_" + this.lang]}"
+                    @keypress=${e => e.keyCode == 13 && this.setDays()}></mwc-textfield>
                   <mwc-icon-button icon="refresh" @click=${this.setDays}></mwc-icon-button>
                 </div>
-                <mwc-select id="lotName" label="${this.langConfig.fieldText.lotName["label_"+this.lang]}" 
+                <mwc-select id="lotName" label="${this.langConfig.fieldText.lotName["label_" + this.lang]}" 
                   ?disabled=${!this.deactivatedLots.length}>
-                  ${this.deactivatedLots.map((l,i) => 
-                    html`<mwc-list-item value="${l.lot_name}" ?selected=${i==0}>${l.lot_name}</mwc-list-item>`
-                  )}
+                  ${this.deactivatedLots.map((l, i) =>
+            html`<mwc-list-item value="${l.lot_name}" ?selected=${i == 0}>${l.lot_name}</mwc-list-item>`
+          )}
                 </mwc-select>
               </div>
             `
-          }
+        }
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -927,7 +944,7 @@ export function DialogTemplate(base) {
       </tr-dialog>
       `
     }
-  
+
     get lotDialog() {
       return this.shadowRoot.querySelector("tr-dialog#lotDialog")
     }
@@ -946,7 +963,7 @@ export function DialogTemplate(base) {
 
     setDays() {
       this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
-      this.actionMethod(this.selectedDialogAction, false)      
+      this.actionMethod(this.selectedDialogAction, false)
     }
 
     lotAction() {
@@ -962,23 +979,23 @@ export function DialogTemplate(base) {
       }
     }
 
-    cleanNewInstrumentFields(){
-      this.instrumentInput.value="";
-      this.instrumentFamilyInput.value=""
+    cleanNewInstrumentFields() {
+      this.instrumentInput.value = "";
+      this.instrumentFamilyInput.value = ""
     }
 
     newInstrumentsTemplate() {
       return html`
       <tr-dialog id="newInstrumentDialog" 
-        @closed=${()=>this.cleanNewInstrumentFields()}
+        @closed=${() => this.cleanNewInstrumentFields()}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="instrumentInput" label="${this.langConfig&&this.langConfig.fieldText.newInstrument["label_"+ this.lang]}" 
-            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newInstrument()}></mwc-textfield>
-            <mwc-textfield id="instrumentFamilyInput" label="${this.langConfig&&this.langConfig.fieldText.familyName["label_"+ this.lang]}" 
-            dialogInitialFocus @keypress=${e=>e.keyCode==13&&this.newInstrument()}></mwc-textfield>
+          <mwc-textfield id="instrumentInput" label="${this.langConfig && this.langConfig.fieldText.newInstrument["label_" + this.lang]}" 
+            dialogInitialFocus @keypress=${e => e.keyCode == 13 && this.newInstrument()}></mwc-textfield>
+            <mwc-textfield id="instrumentFamilyInput" label="${this.langConfig && this.langConfig.fieldText.familyName["label_" + this.lang]}" 
+            dialogInitialFocus @keypress=${e => e.keyCode == 13 && this.newInstrument()}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -988,36 +1005,36 @@ export function DialogTemplate(base) {
         </div>
       </tr-dialog>
       <tr-dialog id="undecomInstrDialog"
-        @closed=${e=>{if(e.target===this.undecomInstrDialog)this.deactivatedLots=[]}}
+        @closed=${e => { if (e.target === this.undecomInstrDialog) this.deactivatedLots = [] }}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          ${this.selectedAction.actionName=="xUNDECOMMISSION_INSTRUMENT" ?
-            html`
+          ${this.selectedAction.actionName == "xUNDECOMMISSION_INSTRUMENT" ?
+          html`
               <mwc-textfield id="instrumentInput" 
-                label="${this.langConfig.fieldText.instrumentName["label_"+ this.lang]}" 
+                label="${this.langConfig.fieldText.instrumentName["label_" + this.lang]}" 
                 dialogInitialFocus
-                @keypress=${e=>e.keyCode==13&&this.undecomInstrument()}></mwc-textfield>
+                @keypress=${e => e.keyCode == 13 && this.undecomInstrument()}></mwc-textfield>
             ` :
-            html`
+          html`
               <div class="layout vertical flex">
                 <div class="layout horizontal flex center-center">
                   <mwc-textfield class="layout flex" id="lotNumDays" type="number" 
-                    .value=${this.lotDays} @change=${e=>this.lotDays=e.target.value}
-                    label="${this.langConfig.fieldText.lotDays["label_"+this.lang]}"
-                    @keypress=${e=>e.keyCode==13&&this.setDays()}></mwc-textfield>
+                    .value=${this.lotDays} @change=${e => this.lotDays = e.target.value}
+                    label="${this.langConfig.fieldText.lotDays["label_" + this.lang]}"
+                    @keypress=${e => e.keyCode == 13 && this.setDays()}></mwc-textfield>
                   <mwc-icon-button icon="refresh" @click=${this.setDays}></mwc-icon-button>
                 </div>
-                <mwc-select id="instrumentName" label="${this.langConfig.fieldText.instrumentName["label_"+this.lang]}" 
+                <mwc-select id="instrumentName" label="${this.langConfig.fieldText.instrumentName["label_" + this.lang]}" 
                   ?disabled=${!this.deactivatedLots.length}>
-                  ${this.deactivatedLots.map((l,i) => 
-                    html`<mwc-list-item value="${l.name}" ?selected=${i==0}>${l.name}</mwc-list-item>`
-                  )}
+                  ${this.deactivatedLots.map((l, i) =>
+            html`<mwc-list-item value="${l.name}" ?selected=${i == 0}>${l.name}</mwc-list-item>`
+          )}
                 </mwc-select>
               </div>
             `
-          }
+        }
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -1050,20 +1067,20 @@ export function DialogTemplate(base) {
     get instrumentName() {
       return this.shadowRoot.querySelector("mwc-select#instrumentName")
     }
-    
+
 
     instrumentEventTemplate() {
-    return html`
+      return html`
       <tr-dialog id="completeInstrumentEventDialog" 
-        @closed=${()=>this.cleanNewInstrumentFields()}
+        @closed=${() => this.cleanNewInstrumentFields()}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-            <mwc-select id="decisionInput" label="${this.langConfig&&this.langConfig.fieldText.decision["label_"+ this.lang]}">
-            ${this.langConfig.fieldText.decision.items.map((c,i) => 
-              html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
-            )}
+            <mwc-select id="decisionInput" label="${this.langConfig && this.langConfig.fieldText.decision["label_" + this.lang]}">
+            ${this.langConfig.fieldText.decision.items.map((c, i) =>
+        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+      )}
           </mwc-select>
 
           <div style="margin-top:30px;text-align:center">
@@ -1088,8 +1105,8 @@ export function DialogTemplate(base) {
     get decisionInput() {
       return this.shadowRoot.querySelector("mwc-select#decisionInput")
     }
-        
-    instrumentEventDecision(){
+
+    instrumentEventDecision() {
       if (this.decisionInput.value) {
         this.dialogAccept(false)
       }
@@ -1104,17 +1121,17 @@ export function DialogTemplate(base) {
     investigationTemplate() {
       return html`
       <tr-dialog id="investigationDialog" ?open=${this.openInvests.length}
-        @closed=${e=>{if(e.target===this.investigationDialog){this.openInvests=[];this.grid.activeItem=null}}}
+        @closed=${e => { if (e.target === this.investigationDialog) { this.openInvests = []; this.grid.activeItem = null } }}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
           <div style="height:55vh;overflow:auto">
             <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-              @active-item-changed=${e=>this.selectedInvestigations=e.detail.value ? [e.detail.value] : []}
+              @active-item-changed=${e => this.selectedInvestigations = e.detail.value ? [e.detail.value] : []}
               .selectedItems="${this.selectedInvestigations}" all-rows-visible>
               <vaadin-grid-sort-column width="100%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
-              <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.model.langConfig.gridHeader.created_on["label_"+ this.lang]}"></vaadin-grid-filter-column>
+              <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.model.langConfig.gridHeader.created_on["label_" + this.lang]}"></vaadin-grid-filter-column>
             </vaadin-grid>
           </div>
           <div style="margin-top:10px;text-align:center">
@@ -1137,7 +1154,7 @@ export function DialogTemplate(base) {
     addInvestigationAction() {
       this.targetValue = {
         "investigationId": this.selectedInvestigations[0].id,
-        "objectsToAdd": "sample_analysis_result*"+ this.selectedSamples[0].result_id
+        "objectsToAdd": "sample_analysis_result*" + this.selectedSamples[0].result_id
       }
       this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
       this.actionMethod(this.selectedDialogAction, false)
@@ -1147,31 +1164,31 @@ export function DialogTemplate(base) {
     decisionTemplate() {
       return html`
       <tr-dialog id="decisionDialog" 
-        @opened=${()=>this.capaRequired=this.capaCheck.checked}
-        @closed=${e=>{if(e.target===this.decisionDialog)this.grid.activeItem=null}}
+        @opened=${() => this.capaRequired = this.capaCheck.checked}
+        @closed=${e => { if (e.target === this.decisionDialog) this.grid.activeItem = null }}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="systemName" label="${this.langConfig.fieldText.systemName["label_"+ this.lang]}" 
-            .value=${this.selectedSamples.length&&this.selectedSamples[0].capa_external_system_name}
+          <mwc-textfield id="systemName" label="${this.langConfig.fieldText.systemName["label_" + this.lang]}" 
+            .value=${this.selectedSamples.length && this.selectedSamples[0].capa_external_system_name}
             dialogInitialFocus></mwc-textfield>
-          <mwc-textfield id="systemId" label="${this.langConfig.fieldText.systemId["label_"+ this.lang]}"
-            .value=${this.selectedSamples.length&&this.selectedSamples[0].capa_external_system_id}></mwc-textfield>
-          <mwc-formfield label="${this.langConfig.fieldText.capa["label_"+ this.lang]}">
+          <mwc-textfield id="systemId" label="${this.langConfig.fieldText.systemId["label_" + this.lang]}"
+            .value=${this.selectedSamples.length && this.selectedSamples[0].capa_external_system_id}></mwc-textfield>
+          <mwc-formfield label="${this.langConfig.fieldText.capa["label_" + this.lang]}">
             <mwc-checkbox id="capaCheck" 
-              ?checked=${this.selectedSamples.length&&this.selectedSamples[0].capa_required}
-              @change=${e=>{
-                this.capaRequired=e.target.checked;
-                this.capaId.value="";
-                this.capaName.value="";
-              }}></mwc-checkbox>
+              ?checked=${this.selectedSamples.length && this.selectedSamples[0].capa_required}
+              @change=${e => {
+          this.capaRequired = e.target.checked;
+          this.capaId.value = "";
+          this.capaName.value = "";
+        }}></mwc-checkbox>
           </mwc-formfield>
-          <mwc-textfield id="capaName" label="${this.langConfig.fieldText.capaName["label_"+ this.lang]}"
-            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_name}
+          <mwc-textfield id="capaName" label="${this.langConfig.fieldText.capaName["label_" + this.lang]}"
+            .value=${this.selectedSamples.length && this.selectedSamples[0].external_system_name}
             ?hidden=${!this.capaRequired}></mwc-textfield>
-          <mwc-textfield id="capaId" label="${this.langConfig.fieldText.capaId["label_"+ this.lang]}"
-            .value=${this.selectedSamples.length&&this.selectedSamples[0].external_system_id}
+          <mwc-textfield id="capaId" label="${this.langConfig.fieldText.capaId["label_" + this.lang]}"
+            .value=${this.selectedSamples.length && this.selectedSamples[0].external_system_id}
             ?hidden=${!this.capaRequired}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
@@ -1229,36 +1246,36 @@ export function DialogTemplate(base) {
         this.dispatchEvent(new CustomEvent("error", {
           detail: {
             is_error: true,
-            message_en: "Please fill the required fields: "+ required.join(", "),
-            message_es: "Por favor, rellene los campos obligatorios: "+ required.join(", ")
+            message_en: "Please fill the required fields: " + required.join(", "),
+            message_es: "Por favor, rellene los campos obligatorios: " + required.join(", ")
           },
           bubbles: true,
           composed: true
         }))
-        console.log("Please fill the required fields: "+ required.join(", "))
+        console.log("Please fill the required fields: " + required.join(", "))
         return
       }
 
       this.targetValue = {
-        "capaFieldValue": "Trackwise"+ this.systemName.value +"*String|"+ this.systemId.value +"*String|"+ this.capaName.value +"*String|"+ this.capaId.value +"*String"
+        "capaFieldValue": "Trackwise" + this.systemName.value + "*String|" + this.systemId.value + "*String|" + this.capaName.value + "*String|" + this.capaId.value + "*String"
       }
       this.dialogAccept(false)
     }
-  
-  newPlatformAdminWhiteIPListsTemplate() {
-    return html`
+
+    newPlatformAdminWhiteIPListsTemplate() {
+      return html`
     <tr-dialog id="newIPEntryDialog" 
-      @closed=${()=>this.cleanIpDialogFields()}
+      @closed=${() => this.cleanIpDialogFields()}
       heading=""
       hideActions=""
       scrimClickAction="">
       <div class="layout vertical flex center-justified">
         <div style="margin-top:30px;text-align:center">
-        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" value="1" label="${this.langConfig.fieldText.ip_value1["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" value="2" label="${this.langConfig.fieldText.ip_value2["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" value="3" label="${this.langConfig.fieldText.ip_value3["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" value="4" label="${this.langConfig.fieldText.ip_value4["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" label="${this.langConfig.fieldText.description["label_"+this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" value="1" label="${this.langConfig.fieldText.ip_value1["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" value="2" label="${this.langConfig.fieldText.ip_value2["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" value="3" label="${this.langConfig.fieldText.ip_value3["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" value="4" label="${this.langConfig.fieldText.ip_value4["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" label="${this.langConfig.fieldText.description["label_" + this.lang]}"> </mwc-textfield>
         
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -1268,27 +1285,27 @@ export function DialogTemplate(base) {
       </div>
     </tr-dialog>
     <tr-dialog id="updateIPEntryDialog"
-      @closed=${()=>this.cleanIpDialogFields()}
+      @closed=${() => this.cleanIpDialogFields()}
       heading=""
       hideActions=""
       scrimClickAction="">
       <div class="layout vertical flex center-justified">
         <div style="margin-top:30px;text-align:center">
         <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value1}        
-          label="${this.langConfig.fieldText.ip_value1["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value1}        
+          label="${this.langConfig.fieldText.ip_value1["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value2}        
-          label="${this.langConfig.fieldText.ip_value2["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value2}        
+          label="${this.langConfig.fieldText.ip_value2["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value3}        
-          label="${this.langConfig.fieldText.ip_value3["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value3}        
+          label="${this.langConfig.fieldText.ip_value3["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value4}        
-          label="${this.langConfig.fieldText.ip_value4["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value4}        
+          label="${this.langConfig.fieldText.ip_value4["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].description}        
-          label="${this.langConfig.fieldText.description["label_"+this.lang]}"> </mwc-textfield>      
+          .value=${this.selectedSamples.length && this.selectedSamples[0].description}        
+          label="${this.langConfig.fieldText.description["label_" + this.lang]}"> </mwc-textfield>      
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
           <sp-button size="xl" slot="primaryAction" @click=${this.updateIp}>
@@ -1297,36 +1314,36 @@ export function DialogTemplate(base) {
       </div>
     </tr-dialog>
     `
-  }
-  get ipValue1Input() {
-    return this.shadowRoot.querySelector("mwc-textfield#ipValue1Input")
-  }
-  get ipValue2Input() {
-    return this.shadowRoot.querySelector("mwc-textfield#ipValue2Input")
-  }
-  get ipValue3Input() {
-    return this.shadowRoot.querySelector("mwc-textfield#ipValue3Input")
-  }
-  get ipValue4Input() {
-    return this.shadowRoot.querySelector("mwc-textfield#ipValue4Input")
-  }
-  get ipDescriptionInput() {
-    return this.shadowRoot.querySelector("mwc-textfield#ipDescriptionInput")
-  }
-  newPlatformAdminBlackIPListsTemplate() {
-    return html`
+    }
+    get ipValue1Input() {
+      return this.shadowRoot.querySelector("mwc-textfield#ipValue1Input")
+    }
+    get ipValue2Input() {
+      return this.shadowRoot.querySelector("mwc-textfield#ipValue2Input")
+    }
+    get ipValue3Input() {
+      return this.shadowRoot.querySelector("mwc-textfield#ipValue3Input")
+    }
+    get ipValue4Input() {
+      return this.shadowRoot.querySelector("mwc-textfield#ipValue4Input")
+    }
+    get ipDescriptionInput() {
+      return this.shadowRoot.querySelector("mwc-textfield#ipDescriptionInput")
+    }
+    newPlatformAdminBlackIPListsTemplate() {
+      return html`
     <tr-dialog id="newIPEntryDialog" 
-      @closed=${()=>this.cleanIpDialogFields()}
+      @closed=${() => this.cleanIpDialogFields()}
       heading=""
       hideActions=""
       scrimClickAction="">
       <div class="layout vertical flex center-justified">
         <div style="margin-top:30px;text-align:center">
-        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" value="1" label="${this.langConfig.fieldText.ip_value1["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" value="2" label="${this.langConfig.fieldText.ip_value2["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" value="3" label="${this.langConfig.fieldText.ip_value3["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" value="4" label="${this.langConfig.fieldText.ip_value4["label_"+this.lang]}"> </mwc-textfield>
-        <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" label="${this.langConfig.fieldText.description["label_"+this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" value="1" label="${this.langConfig.fieldText.ip_value1["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" value="2" label="${this.langConfig.fieldText.ip_value2["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" value="3" label="${this.langConfig.fieldText.ip_value3["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" value="4" label="${this.langConfig.fieldText.ip_value4["label_" + this.lang]}"> </mwc-textfield>
+        <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" label="${this.langConfig.fieldText.description["label_" + this.lang]}"> </mwc-textfield>
         
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -1342,20 +1359,20 @@ export function DialogTemplate(base) {
       <div class="layout vertical flex center-justified">
         <div style="margin-top:30px;text-align:center">
         <mwc-textfield class="layout flex" id="ipValue1Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value1}        
-          label="${this.langConfig.fieldText.ip_value1["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value1}        
+          label="${this.langConfig.fieldText.ip_value1["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipValue2Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value2}        
-          label="${this.langConfig.fieldText.ip_value2["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value2}        
+          label="${this.langConfig.fieldText.ip_value2["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipValue3Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value3}        
-          label="${this.langConfig.fieldText.ip_value3["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value3}        
+          label="${this.langConfig.fieldText.ip_value3["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipValue4Input" type="number" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].ip_value4}        
-          label="${this.langConfig.fieldText.ip_value4["label_"+this.lang]}"> </mwc-textfield>
+          .value=${this.selectedSamples.length && this.selectedSamples[0].ip_value4}        
+          label="${this.langConfig.fieldText.ip_value4["label_" + this.lang]}"> </mwc-textfield>
         <mwc-textfield class="layout flex" id="ipDescriptionInput" type="text" placeholder="xxx" 
-          .value=${this.selectedSamples.length&&this.selectedSamples[0].description}        
-          label="${this.langConfig.fieldText.description["label_"+this.lang]}"> </mwc-textfield>      
+          .value=${this.selectedSamples.length && this.selectedSamples[0].description}        
+          label="${this.langConfig.fieldText.description["label_" + this.lang]}"> </mwc-textfield>      
           <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
             ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
           <sp-button size="xl" slot="primaryAction" @click=${this.updateIp}>
@@ -1364,35 +1381,35 @@ export function DialogTemplate(base) {
       </div>
     </tr-dialog>
     `
-  }
-  get newIPEntryDialog() {
-    return this.shadowRoot.querySelector("tr-dialog#newIPEntryDialog")
-  }
-  get updateIPEntryDialog() {
-    return this.shadowRoot.querySelector("tr-dialog#updateIPEntryDialog")
-  }
-  cleanIpDialogFields(){
-    this.ipValue1Input.value="";
-    this.ipValue2Input.value="";
-    this.ipValue3Input.value="";
-    this.ipValue4Input.value="";
-    this.ipDescriptionInput.value="";
-  }
-  newIp() {    
-    if (this.ipValue1Input.value) {
-      this.dialogAccept(false)
     }
-  }
-  updateIp() {    
-    if (this.ipValue1Input.value) {
-      this.dialogAccept(false)
+    get newIPEntryDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#newIPEntryDialog")
     }
-  }
-  
-  newPlatformAdminBusinessRulesTemplate() {
-    return html`
+    get updateIPEntryDialog() {
+      return this.shadowRoot.querySelector("tr-dialog#updateIPEntryDialog")
+    }
+    cleanIpDialogFields() {
+      this.ipValue1Input.value = "";
+      this.ipValue2Input.value = "";
+      this.ipValue3Input.value = "";
+      this.ipValue4Input.value = "";
+      this.ipDescriptionInput.value = "";
+    }
+    newIp() {
+      if (this.ipValue1Input.value) {
+        this.dialogAccept(false)
+      }
+    }
+    updateIp() {
+      if (this.ipValue1Input.value) {
+        this.dialogAccept(false)
+      }
+    }
+
+    newPlatformAdminBusinessRulesTemplate() {
+      return html`
     <tr-dialog id="newIPEntryDialog" 
-      @closed=${()=>this.cleanIpDialogFields()}
+      @closed=${() => this.cleanIpDialogFields()}
       heading=""
       hideActions=""
       scrimClickAction="">
@@ -1406,6 +1423,6 @@ export function DialogTemplate(base) {
       </div>
     </tr-dialog>
     `
-  }
+    }
   }
 }

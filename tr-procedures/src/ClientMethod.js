@@ -163,14 +163,9 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
-          this.selectedMicroorganisms = []
-          this.microorganismList = j.map(m => {
-            let item = this.selectedSamples[0].microorganism_list_array.filter(s => s.name == m.name)
-            return {
-              name: m.name,
-              items: item.length ? item[0].items : 0
-            }
-          })
+          this.microName = null
+          this.microorganismList = j
+          this.filterGridDialog = this.gridDialogItems = this.selectedSamples[0].microorganism_list_array
           this.requestUpdate()
         }
       })
@@ -193,13 +188,15 @@ export function ClientMethod(base) {
     }
 
     getMicroorganismItem() {
+      this.filterGridDialog = []
       this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id +"*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
-          this.selectedMicroorganisms = []
-          this.microorganismList = j[0].microorganism_list_array
+          this.microName = null
+          this.microorganismList = j
+          this.gridDialogItems = this.selectedSamples[0].microorganism_list_array
           this.requestUpdate()
         }
       })
