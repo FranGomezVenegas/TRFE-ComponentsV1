@@ -123,6 +123,7 @@ export function DialogTemplate(base) {
           html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id || this.selectedSamples[0].id}</label>` : nothing
         }
         <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
+          .items=${this.enterResults}
           @selected-items-changed=${e => {
           if (this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES") {
             this.selectedResults = []
@@ -398,63 +399,57 @@ export function DialogTemplate(base) {
           let min = result.min_allowed ? result.min_allowed : 0
           let max = result.max_allowed && result.max_allowed
           return html`
-            ${this[`labelReal${result.result_id}`]}
-            <input class="enterResultVal" 
+            ${this[`${result.param_type+''+result.result_id}`]}
+            <input class="enterResultVal" id="${result.param_type+''+result.result_id}" 
               ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
               .step=${step} 
               .min=${min}
               .max=${max}
-              .value=${this.adjustValUndetermined(result, 'labelReal')} 
+              .value=${this.adjustValUndetermined(result)} 
               @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
           `
         } else {
           let min = result.min_allowed ? result.min_allowed : 0
           let max = result.max_allowed && result.max_allowed
           return html`
-            ${this[`labelInteger${result.result_id}`]}
-            <input class="enterResultVal" 
+            ${this[`${result.param_type+''+result.result_id}`]}
+            <input class="enterResultVal" id="${result.param_type+''+result.result_id}" 
               ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
               .min=${min}
               .max=${max}
-              .value=${this.adjustValUndetermined(result, 'labelInteger')} 
+              .value=${this.adjustValUndetermined(result)} 
               @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
           `
         }
       }
     }
 
-    adjustValUndetermined(result, label) {
+    adjustValUndetermined(result, elmSet) {
+      let lbl = "", raw = 0
       if (result.raw_value != "") {
+        raw = result.raw_value
         if (typeof result.min_undetermined == "number") {
           if (Number(result.raw_value) < result.min_undetermined) {
-            this[label+''+result.result_id] = "<"
-            return result.min_undetermined
+            lbl = "<"
+            raw = result.min_undetermined
           } else if (typeof result.max_undetermined == "number") {
             if (Number(result.raw_value) > result.max_undetermined) {
-              this[label+''+result.result_id] = ">"
-              return result.max_undetermined
-            } else {
-              this[label+''+result.result_id] = ""
-              return result.raw_value
+              lbl = ">"
+              raw = result.max_undetermined
             }
-          } else {
-            this[label+''+result.result_id] = ""
-            return result.raw_value
           }
         } else if (typeof result.max_undetermined == "number") {
           if (Number(result.raw_value) > result.max_undetermined) {
-            this[label+''+result.result_id] = ">"
-            return result.max_undetermined
-          } else {
-            this[label+''+result.result_id] = ""
-            return result.raw_value
+            lbl = ">"
+            raw = result.max_undetermined
           }
-        } else {
-          this[label+''+result.result_id] = ""
-          return result.raw_value
         }
+      }
+      this[result.param_type+''+result.result_id] = lbl
+      if (elmSet) {
+        elmSet.value = raw
       } else {
-        return 0
+        return raw
       }
     }
 

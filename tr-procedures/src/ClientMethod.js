@@ -108,12 +108,16 @@ export function ClientMethod(base) {
           if (this.curResultRef) {
             let r = j.filter(d => d.result_id == this.curResultRef.resId)
             if (r.length) {
-              this.curResultRef.elm.value = r[0].raw_value
+              if (this.curResultRef.elm.type == "number") {
+                this.adjustValUndetermined(r[0], this.curResultRef.elm)
+              } else {
+                this.curResultRef.elm.value = r[0].raw_value
+              }
             }
           }
+          this.curResultRef = undefined
           this.selectedResults = []
           this.enterResults = j
-          this.erGrid.items = j
           this.requestUpdate()
         } else {
           this.dispatchEvent(new CustomEvent("error", {
@@ -150,9 +154,6 @@ export function ClientMethod(base) {
 
     execResult(params) {
       this.fetchApi(params).then(j => {
-        if (!j.is_error) {
-          this.curResultRef = undefined
-        }
         this.reloadDialog()
         this.dataForDialog = null
       })
