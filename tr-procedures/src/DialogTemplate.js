@@ -276,7 +276,8 @@ export function DialogTemplate(base) {
                   html`<vaadin-grid-column 
                     ${columnBodyRenderer(this.valRenderer)}
                     text-align="center" 
-                    flex-grow="1"
+                    resizable 
+                    width="130px"
                     path="${key}" 
                     header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
                   html`${key == "uom" ?
@@ -296,7 +297,7 @@ export function DialogTemplate(base) {
                 html`${key == "raw_value" ?
                   html`<vaadin-grid-column 
                     ${columnBodyRenderer(this.valRenderer)}
-                    width="65px" resizable 
+                    width="130px" resizable 
                     path="${key}" 
                     header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
                   html`${key == "uom" ?
@@ -320,7 +321,7 @@ export function DialogTemplate(base) {
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.valRenderer)}
                   text-align="center" 
-                  flex-grow="1"
+                  width="130px"
                   path="${key}" 
                   header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
                 html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
@@ -330,7 +331,7 @@ export function DialogTemplate(base) {
               ${key == "value" ?
                 html`<vaadin-grid-column 
                   ${columnBodyRenderer(this.valRenderer)}
-                  width="65px" resizable
+                  width="130px" resizable
                   path="${key}" 
                   header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
                 html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
@@ -366,40 +367,94 @@ export function DialogTemplate(base) {
         `
       } else {
         if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-          return html`<mwc-textfield type="text" .value=${result.raw_value} 
+          return html`<input class="enterResultVal" type="text" .value=${result.raw_value} 
             ?disabled=${this.selectedAction.dialogInfo.readOnly}
-            @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}></mwc-textfield>`
+            @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>`
         } else if (result.param_type.indexOf("LIST") > -1) {
           let lEntry = result.list_entry.split("|")
-          return html`<mwc-select @change=${e => this.setResult(result, e.target.value)}>
-            ${lEntry.map(l =>
-            html`<mwc-list-item value=${l} ?selected=${l == result.raw_value}>${l}</mwc-list-item>`
-          )}
+          return html`
             ${result.param_type == "TEXTLIST" ?
-              html`<mwc-list-item ?selected=${lEntry.indexOf(result.raw_value) < 0 ? true : false}>
-                <input 
-                  .value=${lEntry.indexOf(result.raw_value) < 0 ? result.raw_value : ''}
-                  @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}>
-              </mwc-list-item>` :
-              nothing
+              html`
+                <input class="enterResultVal" list="listEntry${result.result_id}" 
+                  .value=${result.raw_value}
+                  @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
+                <datalist id="listEntry${result.result_id}">
+                  ${lEntry.map(l =>
+                    html`<option value="${l}">`
+                  )}
+                </datalist>
+              ` :
+              html`
+                <select class="enterResultVal" @change=${e => this.setResult(result, e.target)}>
+                  ${lEntry.map(l =>
+                    html`<option value="${l}" ?selected=${l==result.raw_value}>`
+                  )}
+                </select>
+              `
             }
-          </mwc-select>`
+          `
         } else if (result.param_type == "REAL") {
-          return html`<mwc-textfield 
-            ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
-            .step=${result.max_dp ? 1 / Math.pow(10, result.max_dp) : 0.01} 
-            .min=${result.min_allowed ? result.min_allowed : 0}
-            .max=${result.max_allowed && result.max_allowed}
-            .value=${result.raw_value || result.value || 0.00} 
-            @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}></mwc-textfield>`
+          let step = result.max_dp ? 1 / Math.pow(10, result.max_dp) : 0.01
+          let min = result.min_allowed ? result.min_allowed : 0
+          let max = result.max_allowed && result.max_allowed
+          return html`
+            ${this[`labelReal${result.result_id}`]}
+            <input class="enterResultVal" 
+              ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
+              .step=${step} 
+              .min=${min}
+              .max=${max}
+              .value=${this.adjustValUndetermined(result, 'labelReal')} 
+              @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
+          `
         } else {
-          return html`<mwc-textfield 
-            ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
-            .min=${result.min_allowed ? result.min_allowed : 0} 
-            .max=${result.max_allowed && result.max_allowed} 
-            .value=${result.raw_value || result.value || 0.00} 
-            @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target.value)}></mwc-textfield>`
+          let min = result.min_allowed ? result.min_allowed : 0
+          let max = result.max_allowed && result.max_allowed
+          return html`
+            ${this[`labelInteger${result.result_id}`]}
+            <input class="enterResultVal" 
+              ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
+              .min=${min}
+              .max=${max}
+              .value=${this.adjustValUndetermined(result, 'labelInteger')} 
+              @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
+          `
         }
+      }
+    }
+
+    adjustValUndetermined(result, label) {
+      if (result.raw_value != "") {
+        if (typeof result.min_undetermined == "number") {
+          if (Number(result.raw_value) < result.min_undetermined) {
+            this[label+''+result.result_id] = "<"
+            return result.min_undetermined
+          } else if (typeof result.max_undetermined == "number") {
+            if (Number(result.raw_value) > result.max_undetermined) {
+              this[label+''+result.result_id] = ">"
+              return result.max_undetermined
+            } else {
+              this[label+''+result.result_id] = ""
+              return result.raw_value
+            }
+          } else {
+            this[label+''+result.result_id] = ""
+            return result.raw_value
+          }
+        } else if (typeof result.max_undetermined == "number") {
+          if (Number(result.raw_value) > result.max_undetermined) {
+            this[label+''+result.result_id] = ">"
+            return result.max_undetermined
+          } else {
+            this[label+''+result.result_id] = ""
+            return result.raw_value
+          }
+        } else {
+          this[label+''+result.result_id] = ""
+          return result.raw_value
+        }
+      } else {
+        return 0
       }
     }
 
@@ -434,18 +489,18 @@ export function DialogTemplate(base) {
       return this.shadowRoot.querySelector("input[name=rItem]")
     }
 
-    setResult(result, newValue) {
+    setResult(result, target) {
+      let newValue = target.value
       this.targetValue = {
-        rawValueResult: result.raw_value,
+        rawValueResult: newValue,
         resultId: result.result_id,
-        newValue: newValue,
         eventId: result.event_id,
         instrumentName: result.instrument,
         variableName: result.param_name
       }
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
-      this.curResultRef = { elm: e.target, resId: result.result_id, evtId: result.event_id }
+      this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
       let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
       if (result.raw_value || result.value) {

@@ -72,6 +72,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         sp-button[hidden] {
           display: none;
         }
+        .enterResultVal {
+          width: 75%;
+        }
         @media (max-width: 460px) {
           vaadin-grid {
             font-size: 10px;
