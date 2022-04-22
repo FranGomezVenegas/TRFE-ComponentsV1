@@ -406,6 +406,7 @@ export function DialogTemplate(base) {
               .min=${min}
               .max=${max}
               .value=${this.adjustValUndetermined(result)} 
+              @input=${e=>this.setValidVal(e, result)}
               @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
           `
         } else {
@@ -418,14 +419,41 @@ export function DialogTemplate(base) {
               .min=${min}
               .max=${max}
               .value=${this.adjustValUndetermined(result)} 
+              @input=${e=>this.setValidVal(e, result)}
               @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
           `
         }
       }
     }
 
+    setValidVal(e, result) {
+      if (typeof result.min_allowed == 'number' && e.target.value < result.min_allowed) {
+        e.target.value = result.min_allowed
+        return
+      }
+      if (typeof result.max_allowed == 'number' && e.target.value > result.max_allowed) {
+        e.target.value = result.max_allowed
+        return
+      }
+      // make sure the decimal length <= max_dp when manual input
+      if (result.max_dp) {
+        let v = e.target.value.split(".")
+        if (v.length > 1 && v[1].length > result.max_dp) {
+          v[1] = v[1].substring(0, result.max_dp)
+          e.target.value = Number(v.join("."))
+        }
+      }
+    }
+
+    /**
+     * if min/max_undetermined defined, do this method
+     * for example max_undetermined = 10, set the value to be 10 when users input the field > 10
+     * add operator ">" or "<" to describe it
+     * @param {*} result the active result
+     * @param {*} elmSet which element field, optional for update the field value after action api
+     */
     adjustValUndetermined(result, elmSet) {
-      let lbl = "", raw = 0
+      let lbl = "", raw = ""
       if (result.raw_value != "") {
         raw = result.raw_value
         if (typeof result.min_undetermined == "number") {
@@ -493,17 +521,18 @@ export function DialogTemplate(base) {
         instrumentName: result.instrument,
         variableName: result.param_name
       }
+      console.log(this.targetValue);
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
-      this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
-      let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
-      this.selectedDialogAction = JSON.parse(act)
-      if (result.raw_value || result.value) {
-        this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethod(this.selectedDialogAction, false)
-      } else {
-        this.actionMethod(this.selectedDialogAction, false)
-      }
+      // this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
+      // let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
+      // this.selectedDialogAction = JSON.parse(act)
+      // if (result.raw_value || result.value) {
+      //   this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
+      //   this.actionMethod(this.selectedDialogAction, false)
+      // } else {
+      //   this.actionMethod(this.selectedDialogAction, false)
+      // }
     }
 
     /** Microorganism Template Dialog part */
