@@ -7,25 +7,30 @@ import '@spectrum-web-components/button/sp-button';
 
 const langConfig = {
   "Password": {
-    "label_en": "New Password", 
+    "label_en": "New Password",
     "label_es": "Nueva Contraseña"
   },
-  "ChangePassword": {
-    "label_en": "Confirm", 
-    "label_es": "Confirmar"
-  },
   "Esign": {
-    "label_en": "New Esign", 
+    "label_en": "New Esign",
     "label_es": "Nueva Firma Electrónica"
   },
-  "ChangeEsign": {
-    "label_en": "Confirm", 
+  "Shift": {
+    "label_en": "Shift",
+    "label_es": "Turno",
+    "items": [
+      { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+      { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+      { "keyName": "N", "keyValue_en": "Night", "keyValue_es": "Nocturno" }
+    ]
+  },
+  "ChangeLabel": {
+    "label_en": "Confirm",
     "label_es": "Confirmar"
   },
   "TabLogin": {
-    "label_en": "Save Open Tabs", 
+    "label_en": "Save Open Tabs",
     "label_es": "Guardar Pestañas Actuales"
-  },
+  }
 };
 
 export class UserProfile extends CredDialog {
@@ -55,17 +60,26 @@ export class UserProfile extends CredDialog {
     return html`
       <div class="input">
         <div class="layout horizontal flex center">
-          <mwc-textfield id="newPwd" .label="${langConfig.Password["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newPwd.value)this.confirmNewVal("USER_CHANGE_PSWD") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.confirmNewVal("USER_CHANGE_PSWD")} .label="${langConfig.ChangePassword["label_"+this.lang]}"></mwc-icon-button>
+          <mwc-textfield id="newPwd" .label="${langConfig.Password["label_" + this.lang]}" type="password" iconTrailing="visibility"
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newPwd.value) this.confirmNewVal("USER_CHANGE_PSWD") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_PSWD")} .label="${langConfig.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
-          <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_"+this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e=>{if (e.keyCode==13&&this.newEsg.value)this.confirmNewVal("USER_CHANGE_ESIGN") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${()=>this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${langConfig.ChangeEsign["label_"+this.lang]}"></mwc-icon-button>
+          <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_" + this.lang]}" type="password" iconTrailing="visibility"
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newEsg.value) this.confirmNewVal("USER_CHANGE_ESIGN") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${langConfig.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+        </div>
+        <div class="layout horizontal flex center">
+          <mwc-select label='${langConfig.Shift["label_" + this.lang]}' id="newShift">
+            ${langConfig.Shift.items.map(c =>
+      html`<mwc-list-item value="${c.keyName}" 
+                ?selected=${c.keyName == this.userShift}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+    )}
+          </mwc-select>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_SHIFT")} .label="${langConfig.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
       </div>
-      <sp-button size="xl" @click=${()=>this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_"+this.lang]}</sp-button>
+      <sp-button size="xl" @click=${() => this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_" + this.lang]}</sp-button>
       ${super.render()}
     `;
   }
@@ -76,6 +90,23 @@ export class UserProfile extends CredDialog {
 
   get newEsg() {
     return this.shadowRoot.querySelector("mwc-textfield#newEsign")
+  }
+
+  get newShift() {
+    return this.shadowRoot.querySelector("mwc-select#newShift")
+  }
+
+  static get properties() {
+    return {
+      userShift: { type: String }
+    }
+  }
+
+  authorized() {
+    super.authorized()
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+    console.log('userShift', 'userSession.header_info', userSession.header_info);
+    this.userShift = userSession.header_info.shift
   }
 
   reset() {
@@ -105,7 +136,27 @@ export class UserProfile extends CredDialog {
       this.credsChecker(action, -1, {
         newEsign: this.newEsg.value
       })
+    } else if (action == "UPDATE_USER_SHIFT") {
+      this.type = "user"
+      this.credsChecker(action, -1, {
+        newShift: this.newShift.value
+      })
     }
+  }
+
+  /**
+  Once user found and verified, confirm the shift changing
+  */
+  confirmNewShift() {
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+    let params = this.config.backendUrl + this.config.appPlatformAdminActions
+    '?' + new URLSearchParams(this.reqParams)
+    this.fetchApi(params).then(j => {
+      if (j) {
+        userSession.finalToken = j.finalToken
+        sessionStorage.setItem("userSession", JSON.stringify(userSession))
+      }
+    })
   }
 
   /**
@@ -113,7 +164,7 @@ export class UserProfile extends CredDialog {
    */
   confirmNewPassword() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl 
+    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       if (j) {
@@ -129,7 +180,7 @@ export class UserProfile extends CredDialog {
    */
   confirmNewEsign() {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl 
+    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       if (j) {
@@ -146,6 +197,8 @@ export class UserProfile extends CredDialog {
       this.confirmNewPassword()
     } else if (this.actionName == "USER_CHANGE_ESIGN") {
       this.confirmNewEsign()
+    } else if (this.actionName == "UPDATE_USER_SHIFT") {
+      this.confirmNewShift()
     }
   }
 }
