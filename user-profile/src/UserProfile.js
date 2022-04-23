@@ -70,7 +70,7 @@ export class UserProfile extends CredDialog {
           <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${langConfig.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
-          <mwc-select label='${langConfig.Shift["label_" + this.lang]}' id="newShift">
+          <mwc-select label='${langConfig.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
             ${langConfig.Shift.items.map(c =>
       html`<mwc-list-item value="${c.keyName}" 
                 ?selected=${c.keyName == this.userShift}>${c["keyValue_" + this.lang]}</mwc-list-item>`
@@ -148,12 +148,12 @@ export class UserProfile extends CredDialog {
   Once user found and verified, confirm the shift changing
   */
   confirmNewShift() {
-    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     let params = this.config.backendUrl + this.config.appPlatformAdminActions
-    '?' + new URLSearchParams(this.reqParams)
+      + '?' + new URLSearchParams(this.reqParams)
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     this.fetchApi(params).then(j => {
-      if (j) {
-        userSession.finalToken = j.finalToken
+      if (j && !j.is_error) {
+        userSession.header_info.shift = this.userShift
         sessionStorage.setItem("userSession", JSON.stringify(userSession))
       }
     })
@@ -162,32 +162,30 @@ export class UserProfile extends CredDialog {
   /**
    * Once user found and verified, confirm the password changing
    */
-  confirmNewPassword() {
-    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+  async confirmNewPassword() {
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl
       + '?' + new URLSearchParams(this.reqParams)
-    this.fetchApi(params).then(j => {
-      if (j) {
-        userSession.finalToken = j.finalToken
-        sessionStorage.setItem("userSession", JSON.stringify(userSession))
-      }
-      this.newPwd.value = ""
-    })
+    await this.queryApi(params)
+    this.newPwd.value = ""
   }
 
   /**
    * Confirm the esign changing
    */
-  confirmNewEsign() {
-    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+  async confirmNewEsign() {
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl
       + '?' + new URLSearchParams(this.reqParams)
-    this.fetchApi(params).then(j => {
+    await this.queryApi(params)
+    this.newEsg.value = ""
+  }
+
+  queryApi(params) {
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+    return this.fetchApi(params).then(j => {
       if (j) {
         userSession.finalToken = j.finalToken
         sessionStorage.setItem("userSession", JSON.stringify(userSession))
       }
-      this.newEsg.value = ""
     })
   }
 
