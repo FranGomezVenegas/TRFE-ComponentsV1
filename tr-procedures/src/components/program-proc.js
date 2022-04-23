@@ -21,7 +21,7 @@ import './sampling-points-map';
 import './corrective-actions';
 
 let tabBtns = {
-  "em-demo-a": [
+  "default": [
     {
       tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"
     },
@@ -151,7 +151,7 @@ export class ProgramProc extends CredDialog {
             </mwc-icon-button>
             <div class="tabContainer layout horizontal flex center">
               <mwc-icon-button icon="refresh" @click=${this.resetView} ?disabled=${this.samplesReload}></mwc-icon-button>
-              ${tabBtns[this.procName].map(t =>
+              ${(tabBtns[this.procName]||tabBtns.default).map(t =>
                 html`<tab-program .lang=${this.lang} .tab=${t} @tab-rendered=${this.isScroll} @tab-change=${this.tabChanged} ?disabled=${this.samplesReload}></tab-program>`
               )}
             </div>

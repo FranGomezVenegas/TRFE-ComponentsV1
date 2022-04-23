@@ -7,7 +7,7 @@ let langConfig = {
     header: { label_en: 'Program limits list', label_es: 'Lista de rangos límite para el programa' }
   },
   configTableSpecLimits: {
-    'em-demo-a': {
+    'default': {
       'rule': {
         'label_en': 'Rule', 'label_es': 'Regla'
       },
@@ -133,36 +133,36 @@ export class ParameterLimits extends CoreView {
       <table class="styled-table">
         <thead>
           <tr>
-            ${this.procName=="em-demo-a" ?
+            ${this.procName=="proc-deploy" ?
               html`
-                <th>${langConfig.configTableSpecLimits[this.procName].variation["label_"+ this.lang]}</th>
+                <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).testing_group["label_"+ this.lang]}</th>
               ` :
               html`
-                <th>${langConfig.configTableSpecLimits[this.procName].testing_group["label_"+ this.lang]}</th>
+                <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).variation["label_"+ this.lang]}</th>
               `
             }
-            <th>${langConfig.configTableSpecLimits[this.procName].analysis["label_"+ this.lang]}</th>
-            <th>${langConfig.configTableSpecLimits[this.procName].method_and_version["label_"+ this.lang]}</th>
-            <th>${langConfig.configTableSpecLimits[this.procName].parameter["label_"+ this.lang]}</th>
-            <th>${langConfig.configTableSpecLimits[this.procName].rule["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).analysis["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).method_and_version["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).parameter["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).rule["label_"+ this.lang]}</th>
           </tr>
         </thead>
         <tbody>
           ${this.selectedProgram&&this.selectedProgram.spec_definition.spec_limits.map(p => 
             html`
             <tr>
-              ${this.procName=="em-demo-a" ?
-                html`
-                  <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.variation_name]["label_"+ this.lang]}</td>
-                  <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.analysis]["label_"+ this.lang]}</td>
-                  <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.method_name]["label_"+ this.lang]}</td>
-                  <td>${langConfig.configTableSpecLimits[this.procName]["value_"+p.parameter]["label_"+ this.lang]}</td>
-                ` :
+              ${this.procName=="proc-deploy" ?
                 html`
                   <td>${p.testing_group}</td>
                   <td>${p.analysis}</td>
                   <td>${p.method_name}</td>
                   <td>${p.parameter}</td>
+                ` :
+                html`
+                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.variation_name]["label_"+ this.lang]}</td>
+                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.analysis]["label_"+ this.lang]}</td>
+                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.method_name]["label_"+ this.lang]}</td>
+                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.parameter]["label_"+ this.lang]}</td>
                 `
               }
               <td>
