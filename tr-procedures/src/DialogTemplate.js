@@ -521,18 +521,17 @@ export function DialogTemplate(base) {
         instrumentName: result.instrument,
         variableName: result.param_name
       }
-      console.log(this.targetValue);
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
-      // this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
-      // let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
-      // this.selectedDialogAction = JSON.parse(act)
-      // if (result.raw_value || result.value) {
-      //   this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-      //   this.actionMethod(this.selectedDialogAction, false)
-      // } else {
-      //   this.actionMethod(this.selectedDialogAction, false)
-      // }
+      this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
+      let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
+      this.selectedDialogAction = JSON.parse(act)
+      if (result.raw_value || result.value) {
+        this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
+        this.actionMethod(this.selectedDialogAction, false)
+      } else {
+        this.actionMethod(this.selectedDialogAction, false)
+      }
     }
 
     /** Microorganism Template Dialog part */
