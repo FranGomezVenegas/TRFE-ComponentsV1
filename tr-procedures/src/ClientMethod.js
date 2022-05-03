@@ -166,7 +166,7 @@ export function ClientMethod(base) {
         if (j && !j.is_error) {
           this.microName = null
           this.microorganismList = j
-          this.filterGridDialog = this.gridDialogItems = this.selectedSamples[0].microorganism_list_array
+          this.gridDialogItems = this.selectedSamples[0].microorganism_list_array
           this.requestUpdate()
         }
       })
@@ -189,7 +189,6 @@ export function ClientMethod(base) {
     }
 
     getMicroorganismItem() {
-      this.filterGridDialog = []
       this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id +"*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
         + '?' + new URLSearchParams(this.reqParams)

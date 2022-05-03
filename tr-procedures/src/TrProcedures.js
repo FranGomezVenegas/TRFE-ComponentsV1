@@ -37,6 +37,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         mwc-textfield[hidden] {
           display: none;
         }
+        div#microGrid {
+          height: 35vh;
+          overflow: auto;
+        }
         mwc-button[hidden] {
           display: none;
         }

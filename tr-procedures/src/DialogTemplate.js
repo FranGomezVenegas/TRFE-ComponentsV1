@@ -12,7 +12,6 @@ export function DialogTemplate(base) {
       return {
         selectedResults: { type: Array },
         enterResults: { type: Array },
-        filterGridDialog: { type: Array }, // filtered grid items on dialog view
         microorganismList: { type: Array },
         selectedAssigns: { type: Array },
         assignList: { type: Array },
@@ -24,7 +23,8 @@ export function DialogTemplate(base) {
         selectedInvestigations: { type: Array },
         capaRequired: { type: Boolean },
         selectedStucks: { type: Array },
-        dataForDialog: { type: Object }
+        dataForDialog: { type: Object },
+        microName: { type: String }
       }
     }
 
@@ -557,28 +557,28 @@ export function DialogTemplate(base) {
 
     viewForAdd() {
       return html`
-        <mwc-textfield id="numMicroItems" label="${this.microName}" type="number" 
+        <mwc-textfield id="numMicroItems" label="${this.microName||'Microorganism Name'}" type="number" 
           .min=${this.getNumMicroItems()} 
-          .value=${this.getNumMicroItems()}
-          ?hidden=${!this.microName}></mwc-textfield>
+          .value=${this.getNumMicroItems()}></mwc-textfield>
 
         <mwc-select id='mAdd' @change=${this.selectMicroItem}>
           <mwc-list-item value=''>-- Microorganism List --</mwc-list-item>
           ${this.microorganismList.map(m =>
-        html`<mwc-list-item value=${m.name}>${m.name}</mwc-list-item>`
-      )}
+            html`<mwc-list-item value=${m.name}>${m.name}</mwc-list-item>`
+          )}
         </mwc-select>
-        <sp-button size="m" variant="cta" @click=${()=>this.setMicroorganism(false)}>
+        <sp-button id="mAddBtn" size="m" variant="cta" @click=${()=>this.setMicroorganism(false)}>
           ${this.langConfig.fieldText.addBtn["label_" + this.lang]}</sp-button>
 
         <mwc-textfield id="mAddHoc" label="${this.langConfig.fieldText.addhocInput['label_' + this.lang]}"
           @input=${this.inputAddhoc}></mwc-textfield>
-        <sp-button size="m" variant="secondary" @click=${()=>this.setMicroorganism()}>
+        <sp-button id="mAddHocBtn" size="m" variant="secondary" @click=${()=>this.setMicroorganism()}>
           ${this.langConfig.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
 
-        <div style="height:35vh;overflow:auto">
+        <div id='microGrid'>
           <vaadin-grid theme="row-dividers" multi-sort
-            .items=${this.filterGridDialog}>
+            .items=${this.gridDialogItems}
+            @active-item-changed="${this.selectMicroOrg}">
             <vaadin-grid-sort-column resizable auto-width path="name" header="${this.langConfig.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
             <vaadin-grid-sort-column resizable auto-width path="items" header="${this.langConfig.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
           </vaadin-grid>
@@ -587,36 +587,76 @@ export function DialogTemplate(base) {
     }
 
     selectMicroItem(e) {
-      this.microName = ''
-      if (e.target.value) {
-        this.filterGridMicro(e.target.value)
+      if (!this.fromGrid) {
+        this.microGrid.activeItem = null
+        this.microGrid.selectedItems = []
         this.microName = e.target.value
-      } else {
-        this.filterGridDialog = this.gridDialogItems
-        this.mAddHoc.value = ''
+        if (this.microName) {
+          this.mAddHoc.disabled = true
+          this.mAddHocBtn.disabled = true
+          this.mAddHoc.value = ''
+        } else {
+          this.mAddHoc.disabled = false
+          this.mAddHocBtn.disabled = false
+        }
       }
+      this.fromGrid = false
     }
 
     inputAddhoc(e) {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-      }
-      this.microName = ''
-      let name = e.target.value
-      if (name) {
+      if (!this.fromGrid) {
+        this.microGrid.activeItem = null
+        this.microGrid.selectedItems = []
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        let name = e.target.value
         this.timeout = setTimeout(() => {
-          this.filterGridMicro(name)
           this.microName = name
+          if (this.microName) {
+            this.mAdd.value = ''
+            this.mAdd.disabled = true
+            this.mAddBtn.disabled = true
+          } else {
+            this.mAdd.disabled = false
+            this.mAddBtn.disabled = false
+          }
         }, 300);
-      } else {
-        this.filterGridDialog = this.gridDialogItems
-        this.mAdd.value = ''        
       }
+      this.fromGrid = false
     }
 
-    filterGridMicro(name) {
-      let item = this.gridDialogItems.filter(m => m.name == name)
-      this.filterGridDialog = item
+    selectMicroOrg(e) {
+      this.fromGrid = true
+      const item = e.detail.value;
+      // checking opened dialog, whether add or remove
+      if (this.mAdd) {
+        this.mAddHoc.disabled = false
+        this.mAddHocBtn.disabled = false
+        this.mAdd.disabled = false
+        this.mAddBtn.disabled = false
+        if (item) {
+          let existItemList = this.microorganismList.filter(m => m.name == item.name)
+          if (existItemList.length) {
+            this.mAddHoc.disabled = true
+            this.mAddHocBtn.disabled = true
+            this.mAddHoc.value = ''
+            this.mAdd.value = item.name
+            this.mAdd.disabled = true
+          } else {
+            this.mAdd.disabled = true
+            this.mAddBtn.disabled = true
+            this.mAdd.value = ''
+            this.mAddHoc.value = item.name
+            this.mAddHoc.disabled = true
+          }
+        } else {
+          this.mAdd.value = ''
+          this.mAddHoc.value = ''
+        }
+      }
+      this.microName = item ? item.name : '';
+      e.target.selectedItems = item ? [item] : [];
     }
 
     getNumMicroItems() {
@@ -630,30 +670,23 @@ export function DialogTemplate(base) {
 
     viewForRemove() {
       return html`
-        <div style="height:35vh;overflow:auto">
+        <div id='microGrid'>
           <vaadin-grid theme="row-dividers" all-rows-visible multi-sort
             .items=${this.gridDialogItems}
-            .selectedItems="${this.filterGridDialog}"
             @active-item-changed="${this.selectMicroOrg}">
             <vaadin-grid-sort-column resizable auto-width path="name" header="${this.langConfig.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
             <vaadin-grid-sort-column resizable auto-width path="items" header="${this.langConfig.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
           </vaadin-grid>
         </div>
-        ${this.filterGridDialog && this.filterGridDialog.length ?
+        ${this.microGrid && this.microGrid.selectedItems.length ?
           html`
-            <mwc-textfield id="numMicroItems" min=0 .max=${this.getNumMicroItems() - 2} label="${this.filterGridDialog[0].name}" type="number" .value=${this.getNumMicroItems() - 2}></mwc-textfield>
+            <mwc-textfield id="numMicroItems" min=0 .max=${this.getNumMicroItems() - 2} label="${this.microGrid.selectedItems[0].name}" type="number" .value=${this.getNumMicroItems() - 2}></mwc-textfield>
           ` :
           nothing
         }
         <sp-button size="m" variant="cta" @click=${this.unsetMicroorganism}>
           ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
       `
-    }
-
-    selectMicroOrg(e) {
-      const item = e.detail.value;
-      this.microName = item ? item.name : '';
-      this.filterGridDialog = item ? [item] : [];
     }
 
     get microorganismDialog() {
@@ -670,6 +703,18 @@ export function DialogTemplate(base) {
 
     get microItems() {
       return this.shadowRoot.querySelector("mwc-textfield#numMicroItems")
+    }
+
+    get microGrid() {
+      return this.shadowRoot.querySelector('div#microGrid vaadin-grid')
+    }
+
+    get mAddBtn() {
+      return this.shadowRoot.querySelector("sp-button#mAddBtn")
+    }
+
+    get mAddHocBtn() {
+      return this.shadowRoot.querySelector("sp-button#mAddHocBtn")
     }
 
     setMicroorganism(addhoc=true) {
@@ -718,10 +763,10 @@ export function DialogTemplate(base) {
     }
 
     unsetMicroorganism() {
-      if (!this.filterGridDialog.length) return
+      if (!this.microGrid.selectedItems.length) return
       this.targetValue = {
-        microorganismName: this.filterGridDialog[0].name,
-        numItems: this.filterGridDialog[0].items - this.microItems.value
+        microorganismName: this.microGrid.selectedItems[0].name,
+        numItems: this.microGrid.selectedItems[0].items - this.microItems.value
       }
       this.microItems.hidden = true
       this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
