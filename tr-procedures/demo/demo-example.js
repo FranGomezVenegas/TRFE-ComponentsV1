@@ -46,6 +46,7 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismPERS")}>Personel Microorganism</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "Programs", "Programs")}>Program</button>
         <button @click=${()=>this.selectMenu("em-demo-a", "Deviation", "Deviation")}>Deviation</button>
+        <button @click=${()=>this.selectMenu("em-demo-a", "Browser", "Browser")}>Browser</button><br>
         <button @click=${()=>this.selectMenu("proc-deploy", "LogSamples", "SampleLogin")}>Log Samples (proc)</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "ProductionLots", "SampleLot")}>Production Lots (proc)</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
@@ -58,12 +59,13 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.selectMenu("proc-deploy", "ReviewSample", "Review")}>Review Sample</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "Programs", "Programs")}>Program</button>
         <button @click=${()=>this.selectMenu("proc-deploy", "Deviation", "Deviation")}>Deviation</button>
+        <button @click=${()=>this.selectMenu("proc-deploy", "Browser", "Browser")}>Browser</button><br>
         <button @click=${()=>this.selectMenu("app-proc", "PlatformInstruments", "InstrumentsList")}>Instruments List</button>
         <button @click=${()=>this.selectMenu("app-proc", "EventsInProgress", "EventsER")}>Events In Progress</button><br>
-        <button @click=${()=>this.selectMenu("app", "WhiteIpList", "WhiteIpList")}>White IPs List</button><br>
-        <button @click=${()=>this.selectMenu("app", "BlackIpList", "BlackIpList")}>Black IPs List</button><br>
+        <button @click=${()=>this.selectMenu("app", "WhiteIpList", "WhiteIpList")}>White IPs List</button>
+        <button @click=${()=>this.selectMenu("app", "BlackIpList", "BlackIpList")}>Black IPs List</button>
         <button @click=${()=>this.selectMenu("app", "PlatformBusRules", "PlatformBusRules")}>Platform Business Rules</button><br>
-        <button @click=${()=>this.selectMenu("genoma-1", "ProjectManager", "ProjectManager")}>Genoma-ProjectManager</button><br>
+        <button @click=${()=>this.selectMenu("genoma-1", "ProjectManager", "ProjectManager")}>Genoma-ProjectManager</button>
         <button @click=${()=>this.selectMenu("genoma-1", "StudyVariableValues", "StudyVariableValues")}>Genoma-StudyVariableValues</button><br>
         
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>

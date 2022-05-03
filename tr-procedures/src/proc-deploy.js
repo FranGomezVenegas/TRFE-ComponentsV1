@@ -1167,5 +1167,6 @@ export const ProcDeploy = {
         ]
       }
     ]
-  }
+  },
+  "Browser": {}
 }

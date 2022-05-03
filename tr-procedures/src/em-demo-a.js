@@ -1497,7 +1497,5 @@ export const EmDemoA = {
       }
     ]
   },
-  "Browser": {
-    "browser": true
-  }
+  "Browser": {}
 }

@@ -121,6 +121,11 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         ProceduresModel[this.procName] = findProc[0].procModel
       }
     }
+    // experimental for browser view
+    if (this.viewName == "Browser") {
+      import('./browser-')
+      return
+    }
     this.gridItems = []
     this.componentModel = null
     this.abstract = ProceduresModel[this.procName][this.viewName].abstract
@@ -185,6 +190,8 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       }
     }
     await this.updateComplete
+    // experimental for browser view
+    if (this.viewName == "Browser") return
     if (!this.componentModel) {
       // whether user has access into the selected proc
       if (!this.abstract && this.audit) {
@@ -212,146 +219,152 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     return html`
       ${this.windowOpenable=="yes" ? 
         html`
-          ${this.componentModel ? 
-            html`${this.viewName == "Programs" || this.viewName == "ProjectManager" ?
-              html`
-                ${this.viewName == "Programs" ? 
-                  html`<program-proc 
-                    .windowOpenable=${this.windowOpenable}
-                    .sopsPassed=${this.sopsPassed}
-                    .lang=${this.lang}
-                    .procName=${this.procName} 
-                    .viewName=${this.viewName} 
-                    .filterName=${this.filterName}
-                    .model=${this.componentModel}
-                    .config=${this.config}></program-proc>`
-                  :
-                  html`<genoma-project 
-                    .windowOpenable=${this.windowOpenable}
-                    .sopsPassed=${this.sopsPassed}
-                    .lang=${this.lang}
-                    .procName=${this.procName} 
-                    .viewName=${this.viewName} 
-                    .filterName=${this.filterName}
-                    .model=${this.componentModel}
-                    .config=${this.config}></genoma-project>`
-              }`:html
-            }` :
+          ${this.viewName == 'Browser' ?
+            html`<browser- .config=${this.config}
+              .desktop=${this.desktop} .procModel=${ProceduresModel[this.procName]} .procName=${this.procName}></browser->` :
             html`
-              ${this.topCompositions ?
-                html`${this.topCompositions.map(c => 
-                  html`<templates- 
-                    .windowOpenable=${this.windowOpenable}
-                    .sopsPassed=${this.sopsPassed}
-                    .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
-                    @program-changed=${e=>this.gridItems=e.detail}
-                    @template-event=${this.templateEvent}></templates->`
-                )}` :
-                nothing
-              }
-              ${this.abstract ? 
-                nothing :
+              ${this.componentModel ? 
+                html`${this.viewName == "Programs" || this.viewName == "ProjectManager" ?
+                  html`
+                    ${this.viewName == "Programs" ? 
+                      html`<program-proc 
+                        .windowOpenable=${this.windowOpenable}
+                        .sopsPassed=${this.sopsPassed}
+                        .lang=${this.lang}
+                        .procName=${this.procName} 
+                        .viewName=${this.viewName} 
+                        .filterName=${this.filterName}
+                        .model=${this.componentModel}
+                        .config=${this.config}></program-proc>`
+                      :
+                      html`<genoma-project 
+                        .windowOpenable=${this.windowOpenable}
+                        .sopsPassed=${this.sopsPassed}
+                        .lang=${this.lang}
+                        .procName=${this.procName} 
+                        .viewName=${this.viewName} 
+                        .filterName=${this.filterName}
+                        .model=${this.componentModel}
+                        .config=${this.config}></genoma-project>`
+                  }`:html
+                }` :
                 html`
-                  <div class="layout horizontal flex wrap">
-                    <div class="layout flex">
-                      ${this.getTitle()}
-                      <div class="layout horizontal center flex wrap">
-                        ${this.getButton()}
+                  ${this.topCompositions ?
+                    html`${this.topCompositions.map(c => 
+                      html`<templates- 
+                        .windowOpenable=${this.windowOpenable}
+                        .sopsPassed=${this.sopsPassed}
+                        .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
+                        @program-changed=${e=>this.gridItems=e.detail}
+                        @template-event=${this.templateEvent}></templates->`
+                    )}` :
+                    nothing
+                  }
+                  ${this.abstract ? 
+                    nothing :
+                    html`
+                      <div class="layout horizontal flex wrap">
+                        <div class="layout flex">
+                          ${this.getTitle()}
+                          <div class="layout horizontal center flex wrap">
+                            ${this.getButton()}
+                          </div>
+                          ${this.ready ? 
+                            html`
+                              <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                                @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
+                                .items=${this.gridItems}
+                                .selectedItems="${this.selectedSamples}">
+                                  ${this.gridList()}
+                              </vaadin-grid>
+                            ` :
+                            nothing
+                          }
+                        </div>
+                        ${this.langConfig&&this.viewName=="ProductionLots" ? 
+                          html`${this.lotTemplate()}` :
+                          nothing
+                        }
+                        ${this.dateTemplate()}
+                        ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
+                          html`${this.commentTemplate()}` : nothing
+                        }
+                        ${this.langConfig&&this.langConfig.resultHeader ? 
+                          html`${this.resultTemplate()}` :
+                          nothing
+                        }
+                        ${this.langConfig&&this.langConfig.microorganismHeader ? 
+                          html`${this.microorganismTemplate()}` :
+                          nothing
+                        }
+                        ${this.langConfig&&this.viewName=="LogSamples" ? 
+                          html`${this.pointTemplate()}` :
+                          nothing
+                        }
+                        ${this.langConfig&&this.viewName=="PlatformInstruments" ? 
+                          html`${this.newInstrumentsTemplate()}` :
+                          nothing
+                        }
+                        ${this.langConfig&&this.viewName=="EventsInProgress" ? 
+                          html`${this.instrumentEventTemplate()}` :
+                          nothing
+                        }  
+                        ${this.langConfig&&this.viewName=="WhiteIpList" ? 
+                          html`${this.newPlatformAdminWhiteIPListsTemplate()}` :
+                          nothing
+                        }
+                        ${this.langConfig&&this.viewName=="BlackIpList" ? 
+                          html`${this.newPlatformAdminBlackIPListsTemplate()}` :
+                          nothing
+                        }
+                        ${this.langConfig&&this.viewName=="PlatformBusRules" ? 
+                          html`${this.newPlatformAdminBusinessRulesTemplate()}` :
+                          nothing
+                        }
+                        
+                        <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
                       </div>
-                      ${this.ready ? 
-                        html`
-                          <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-                            @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
-                            .items=${this.gridItems}
-                            .selectedItems="${this.selectedSamples}">
-                              ${this.gridList()}
-                          </vaadin-grid>
-                        ` :
-                        nothing
-                      }
-                    </div>
-                    ${this.langConfig&&this.viewName=="ProductionLots" ? 
-                      html`${this.lotTemplate()}` :
-                      nothing
-                    }
-                    ${this.dateTemplate()}
-                    ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
-                      html`${this.commentTemplate()}` : nothing
-                    }
-                    ${this.langConfig&&this.langConfig.resultHeader ? 
-                      html`${this.resultTemplate()}` :
-                      nothing
-                    }
-                    ${this.langConfig&&this.langConfig.microorganismHeader ? 
-                      html`${this.microorganismTemplate()}` :
-                      nothing
-                    }
-                    ${this.langConfig&&this.viewName=="LogSamples" ? 
-                      html`${this.pointTemplate()}` :
-                      nothing
-                    }
-                    ${this.langConfig&&this.viewName=="PlatformInstruments" ? 
-                      html`${this.newInstrumentsTemplate()}` :
-                      nothing
-                    }
-                    ${this.langConfig&&this.viewName=="EventsInProgress" ? 
-                      html`${this.instrumentEventTemplate()}` :
-                      nothing
-                    }  
-                    ${this.langConfig&&this.viewName=="WhiteIpList" ? 
-                      html`${this.newPlatformAdminWhiteIPListsTemplate()}` :
-                      nothing
-                    }
-                    ${this.langConfig&&this.viewName=="BlackIpList" ? 
-                      html`${this.newPlatformAdminBlackIPListsTemplate()}` :
-                      nothing
-                    }
-                    ${this.langConfig&&this.viewName=="PlatformBusRules" ? 
-                      html`${this.newPlatformAdminBusinessRulesTemplate()}` :
-                      nothing
-                    }
-                    
-                    <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
-                  </div>
+                    `
+                  }
+                  ${this.bottomCompositions ?
+                    html`${this.bottomCompositions.map(c => 
+                      html`<div class="layout flex">
+                        <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
+                          .lang=${this.lang}
+                          .windowOpenable=${this.windowOpenable}
+                          .sopsPassed=${this.sopsPassed}
+                          .model=${c} .config=${this.config} .batchName=${this.batchName}
+                          @reload-samples=${e=>this[e.detail.method]()}
+                          @selected-incub=${this.filteringBatch}
+                          @selected-batch=${this.filteringIncub}
+                          @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
+                      </div>`
+                    )}` :
+                    nothing
+                  }
+                  ${this.tabs ?
+                    html`
+                      <div class="layout vertical flex">
+                        <div class="layout horizontal flex">
+                          ${this.tabs.map(t => 
+                            html`
+                              <mwc-button class="tabBtn" dense unelevated 
+                                .label=${t.langConfig.tab["label_"+ this.lang]}
+                                @click=${()=>this.selectTab(t)}></mwc-button>
+                            `
+                          )}
+                        </div>
+                        <tabs-composition 
+                          .lang=${this.lang}
+                          .windowOpenable=${this.windowOpenable}
+                          .sopsPassed=${this.sopsPassed}
+                          .procName=${this.procName} 
+                          .viewName=${this.viewName} 
+                          .config=${this.config}></tabs-composition>
+                      </div>
+                    ` : nothing
+                  }
                 `
-              }
-              ${this.bottomCompositions ?
-                html`${this.bottomCompositions.map(c => 
-                  html`<div class="layout flex">
-                    <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
-                      .lang=${this.lang}
-                      .windowOpenable=${this.windowOpenable}
-                      .sopsPassed=${this.sopsPassed}
-                      .model=${c} .config=${this.config} .batchName=${this.batchName}
-                      @reload-samples=${e=>this[e.detail.method]()}
-                      @selected-incub=${this.filteringBatch}
-                      @selected-batch=${this.filteringIncub}
-                      @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
-                  </div>`
-                )}` :
-                nothing
-              }
-              ${this.tabs ?
-                html`
-                  <div class="layout vertical flex">
-                    <div class="layout horizontal flex">
-                      ${this.tabs.map(t => 
-                        html`
-                          <mwc-button class="tabBtn" dense unelevated 
-                            .label=${t.langConfig.tab["label_"+ this.lang]}
-                            @click=${()=>this.selectTab(t)}></mwc-button>
-                        `
-                      )}
-                    </div>
-                    <tabs-composition 
-                      .lang=${this.lang}
-                      .windowOpenable=${this.windowOpenable}
-                      .sopsPassed=${this.sopsPassed}
-                      .procName=${this.procName} 
-                      .viewName=${this.viewName} 
-                      .config=${this.config}></tabs-composition>
-                  </div>
-                ` : nothing
               }
             `
           }

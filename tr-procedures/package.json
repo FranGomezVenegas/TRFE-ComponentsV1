@@ -20,6 +20,7 @@
     "@material/mwc-select": "^0.25.3",
     "@material/mwc-textfield": "^0.25.3",
     "@mpachnis/mp-calendar": "^3.1.1",
+    "@spectrum-web-components/split-view": "^0.4.3",
     "@spectrum-web-components/tabs": "^0.8.1",
     "@spectrum-web-components/tooltip": "^0.9.0",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
