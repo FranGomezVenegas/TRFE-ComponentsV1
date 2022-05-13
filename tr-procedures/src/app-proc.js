@@ -60,25 +60,30 @@ export const AppProc = {
         }
       },
       {
-        "actionName": "NEW_INSTRUMENT",
-        "clientMethod": "setInstruments",
+        "actionName": "GET_INSTRUMENT_FAMILY_LIST",
+        "clientMethod": "getFamilyList",
         "button": {
           "icon": "create_new_folder",
           "title": {
-            "label_en": "New", "label_es": "Nuevo"
+            "label_en": "New Test", "label_es": "Nuevo"
           },
           "whenDisabled": "samplesReload"
         },
-        "dialogInfo": {
-          "requiresDialog": true,
-          "name": "newInstrumentDialog"
-        },
-        "apiParams": [
-          { "query": "instrumentName", "element": "instrumentInput" },
-          { "query": "familyName", "element": "instrumentFamilyInput" },
-          { "query": "fieldName", "value": "description" },
-          { "query": "fieldValue", "value": "hola*String" }
-        ]
+        "dialogInfo": { 
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "NEW_INSTRUMENT",
+              "clientMethod": "setInstruments",
+              "apiParams": [
+                { "query": "instrumentName", "element": "instrumentInput" },
+                { "query": "familyName", "element": "instrumentFamilyInput" },
+                { "query": "fieldName", "value": "description" },
+                { "query": "fieldValue", "value": "hola*String" }
+              ]
+            }
+          ]
+        }
       },
       {
         "actionName": "INSTRUMENT_AUDIT_FOR_GIVEN_INSTRUMENT",

@@ -24,6 +24,7 @@ export function DialogTemplate(base) {
         capaRequired: { type: Boolean },
         selectedStucks: { type: Array },
         dataForDialog: { type: Object },
+        familyList: { type: Array },
         microName: { type: String }
       }
     }
@@ -33,6 +34,7 @@ export function DialogTemplate(base) {
       this.lotDays = 7
       this.deactivatedLots = []
       this.microorganismList = []
+      this.familyList = []
       this.capaRequired = false
     }
 
@@ -1110,15 +1112,19 @@ export function DialogTemplate(base) {
     newInstrumentsTemplate() {
       return html`
       <tr-dialog id="newInstrumentDialog" 
-        @closed=${() => this.cleanNewInstrumentFields()}
+        ?open=${this.familyList.length}
+        @closed=${e => { if (e.target === this.newInstrumentDialog) this.cleanNewInstrumentFields() }}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
           <mwc-textfield id="instrumentInput" label="${this.langConfig && this.langConfig.fieldText.newInstrument["label_" + this.lang]}" 
             dialogInitialFocus @keypress=${e => e.keyCode == 13 && this.newInstrument()}></mwc-textfield>
-            <mwc-textfield id="instrumentFamilyInput" label="${this.langConfig && this.langConfig.fieldText.familyName["label_" + this.lang]}" 
-            dialogInitialFocus @keypress=${e => e.keyCode == 13 && this.newInstrument()}></mwc-textfield>
+          <mwc-select id="instrumentFamilyInput" label="${this.langConfig && this.langConfig.fieldText.familyName["label_" + this.lang]}">
+            ${this.familyList.map(m =>
+              html`<mwc-list-item value=${m.name}>${m.name}</mwc-list-item>`
+            )}
+          </mwc-select>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -1223,7 +1229,7 @@ export function DialogTemplate(base) {
       return this.shadowRoot.querySelector("mwc-textfield#instrumentInput")
     }
     get instrumentFamilyInput() {
-      return this.shadowRoot.querySelector("mwc-textfield#instrumentFamilyInput")
+      return this.shadowRoot.querySelector("mwc-select#instrumentFamilyInput")
     }
     get decisionInput() {
       return this.shadowRoot.querySelector("mwc-select#decisionInput")
