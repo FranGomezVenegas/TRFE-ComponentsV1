@@ -466,6 +466,7 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.newIPEntryDialog.close()
+        this.updateIPEntryDialog.close()
         this.reload()
       })
     }
@@ -475,6 +476,7 @@ export function ClientMethod(base) {
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.newIPEntryDialog.close()
+        this.updateIPEntryDialog.close()
         this.reload()
       })
     }
