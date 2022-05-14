@@ -25,7 +25,8 @@ export function DialogTemplate(base) {
         selectedStucks: { type: Array },
         dataForDialog: { type: Object },
         familyList: { type: Array },
-        microName: { type: String }
+        microName: { type: String },
+        fromGrid: { type: Boolean }
       }
     }
 
@@ -36,6 +37,7 @@ export function DialogTemplate(base) {
       this.microorganismList = []
       this.familyList = []
       this.capaRequired = false
+      this.fromGrid = false
     }
 
     /** Date Template Dialog part */
@@ -540,6 +542,7 @@ export function DialogTemplate(base) {
     microorganismTemplate() {
       return html`
       <tr-dialog id="microorganismDialog" ?open=${this.microorganismList.length}
+        @opened=${e => { if (e.target === this.microorganismDialog) this.fromGrid = false }}
         @closing=${e => { if (e.target === this.microorganismDialog) { this.microorganismList = []; this.reload(); } }}
         heading=""
         hideActions=""
@@ -630,6 +633,7 @@ export function DialogTemplate(base) {
 
     selectMicroOrg(e) {
       this.fromGrid = true
+      // reset back the fromGrid because of async process
       const item = e.detail.value;
       // checking opened dialog, whether add or remove
       if (this.mAdd) {

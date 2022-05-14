@@ -167,6 +167,7 @@ export function ClientMethod(base) {
           this.microName = null
           this.microorganismList = j
           this.gridDialogItems = this.selectedSamples[0].microorganism_list_array
+          this.fromGrid = false
           this.requestUpdate()
         }
       })
@@ -207,6 +208,7 @@ export function ClientMethod(base) {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
+        this.microGrid.selectedItems = []
         this.reload()
       })
     }
