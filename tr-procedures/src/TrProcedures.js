@@ -37,6 +37,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
         mwc-textfield[hidden] {
           display: none;
         }
+        div#microGrid {
+          height: 35vh;
+          overflow: auto;
+        }
         mwc-button[hidden] {
           display: none;
         }
@@ -568,8 +572,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       if (action.dialogInfo.automatic) {
         if (this.itemId) {
           this.credsChecker(action.actionName, this.itemId, this.jsonParam(), action)
-        } else {
+        } else if (this.selectedSamples.length) {
           this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
+        } else {
+          this.credsChecker(action.actionName, null, this.jsonParam(), action)
         }
       } else {
         this[action.dialogInfo.name].show()

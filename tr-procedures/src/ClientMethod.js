@@ -3,7 +3,7 @@ export function ClientMethod(base) {
     async getSamples() {
       this.samplesReload = true
       this.selectedSamples = []
-      let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl) 
+      let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl)
         + '?' + new URLSearchParams(this.reqParams)
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -41,11 +41,11 @@ export function ClientMethod(base) {
         this.reloadDialog()
       })
     }
-    
+
     getInstrumentAudit() {
       console.log('this.selectedSamples', this.selectedSamples);
-      this.reqParams.instrumentName=this.selectedSamples[0].name;
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
+      this.reqParams.instrumentName = this.selectedSamples[0].name;
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -62,9 +62,9 @@ export function ClientMethod(base) {
         }
       })
     }
-  
+
     setSamplingDate() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.dateDialog.close()
@@ -73,7 +73,7 @@ export function ClientMethod(base) {
     }
 
     moveToNext() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         if (this.sampleStuckDialog) {
@@ -84,7 +84,7 @@ export function ClientMethod(base) {
     }
 
     addSamplingComment() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.commentDialog.close()
@@ -93,7 +93,7 @@ export function ClientMethod(base) {
     }
 
     removeSamplingComment() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -101,7 +101,7 @@ export function ClientMethod(base) {
     }
 
     getResult() {
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -121,7 +121,7 @@ export function ClientMethod(base) {
           this.requestUpdate()
         } else {
           this.dispatchEvent(new CustomEvent("error", {
-            detail: { 
+            detail: {
               is_error: true,
               message_en: this.selectedAction.alertMsg.empty["label_en"],
               message_es: this.selectedAction.alertMsg.empty["label_es"]
@@ -135,19 +135,19 @@ export function ClientMethod(base) {
     }
 
     enterResult() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
 
     changeUOM() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
 
     enterEventResult() {
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
@@ -160,13 +160,14 @@ export function ClientMethod(base) {
     }
 
     getMicroorganism() {
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.microName = null
           this.microorganismList = j
-          this.filterGridDialog = this.gridDialogItems = this.selectedSamples[0].microorganism_list_array
+          this.gridDialogItems = this.selectedSamples[0].microorganism_list_array
+          this.fromGrid = false
           this.requestUpdate()
         }
       })
@@ -174,7 +175,7 @@ export function ClientMethod(base) {
 
     addSampleMicroorganism() {
       this.sampleState = { action: JSON.stringify(this.selectedAction), sample: this.selectedSamples[0].sample_id }
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -189,9 +190,8 @@ export function ClientMethod(base) {
     }
 
     getMicroorganismItem() {
-      this.filterGridDialog = []
-      this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id +"*Integer"
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl 
+      this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id + "*Integer"
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -205,15 +205,16 @@ export function ClientMethod(base) {
 
     removeSampleMicroorganism() {
       this.sampleState = { action: JSON.stringify(this.selectedAction), sample: this.selectedSamples[0].sample_id }
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
+        this.microGrid.selectedItems = []
         this.reload()
       })
     }
-    
+
     setIncubator() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         this.newBatchDialog.close()
@@ -223,7 +224,7 @@ export function ClientMethod(base) {
     }
 
     getAssign() {
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitIncubationUrl 
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitIncubationUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -253,7 +254,7 @@ export function ClientMethod(base) {
         ...this.reqParams,
         batchName: this.batchName
       }
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -263,7 +264,7 @@ export function ClientMethod(base) {
     async getProgramList() {
       this.samplesReload = true
       this.templates.programsList = []
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
         + '?' + new URLSearchParams(this.reqParams)
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -276,7 +277,7 @@ export function ClientMethod(base) {
     }
 
     getLots() {
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
+      let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         this.samplesReload = false
@@ -287,7 +288,7 @@ export function ClientMethod(base) {
     }
 
     logSample() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.pointDialog.close()
@@ -295,7 +296,7 @@ export function ClientMethod(base) {
     }
 
     reviewTest() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -314,7 +315,7 @@ export function ClientMethod(base) {
     }
 
     setLot() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.lotDialog.close()
@@ -324,29 +325,29 @@ export function ClientMethod(base) {
 
     setInstruments() {
       console.log('this.reqParams', this.reqParams);
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
-//        this.newInstrumentDialog.close()
+        //        this.newInstrumentDialog.close()
         this.reload()
       })
     }
     completeInstrumentEvent() {
       console.log('completeInstrumentEvent this.reqParams', this.reqParams);
-      if (this.selectedSamples!==undefined && this.selectedSamples[0].event_type!==undefined){
-        this.reqParams.actionName="COMPLETE_"+this.selectedSamples[0].event_type;
-      }   
-      this.reqParams.decision = this.decisionInput.value               
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl 
+      if (this.selectedSamples !== undefined && this.selectedSamples[0].event_type !== undefined) {
+        this.reqParams.actionName = "COMPLETE_" + this.selectedSamples[0].event_type;
+      }
+      this.reqParams.decision = this.decisionInput.value
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
-//        this.newInstrumentDialog.close()
+        //        this.newInstrumentDialog.close()
         this.reload()
       })
     }
     getDeactivatedInstruments() {
       this.deactivatedLots = []
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -355,7 +356,7 @@ export function ClientMethod(base) {
       })
     }
     getInstEventResult() {
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -371,7 +372,7 @@ export function ClientMethod(base) {
           this.requestUpdate()
         } else {
           this.dispatchEvent(new CustomEvent("error", {
-            detail: { 
+            detail: {
               is_error: true,
               message_en: this.selectedAction.alertMsg.empty["label_en"],
               message_es: this.selectedAction.alertMsg.empty["label_es"]
@@ -385,7 +386,7 @@ export function ClientMethod(base) {
     }
 
     instEventEnterResult() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reloadDialog()
@@ -393,7 +394,7 @@ export function ClientMethod(base) {
     }
 
     reviewSample() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
+      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -401,9 +402,9 @@ export function ClientMethod(base) {
     }
 
     newInvestigation() {
-      this.reqParams.fieldValue = "Investigation for "+ this.selectedSamples[0].result_id +"*String"
-      this.reqParams.objectsToAdd = "sample_analysis_result*"+ this.selectedSamples[0].result_id
-      let params = this.config.backendUrl + this.selectedAction.endPoint 
+      this.reqParams.fieldValue = "Investigation for " + this.selectedSamples[0].result_id + "*String"
+      this.reqParams.objectsToAdd = "sample_analysis_result*" + this.selectedSamples[0].result_id
+      let params = this.config.backendUrl + this.selectedAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -411,7 +412,7 @@ export function ClientMethod(base) {
     }
 
     getOpenInvestigations() {
-      let params = this.config.backendUrl + this.selectedAction.endPoint 
+      let params = this.config.backendUrl + this.selectedAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -422,7 +423,7 @@ export function ClientMethod(base) {
     }
 
     addInvestObjects() {
-      let params = this.config.backendUrl + this.selectedDialogAction.endPoint 
+      let params = this.config.backendUrl + this.selectedDialogAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.investigationDialog.close()
@@ -432,7 +433,7 @@ export function ClientMethod(base) {
     }
 
     capaDecision() {
-      let params = this.config.backendUrl + this.selectedAction.endPoint 
+      let params = this.config.backendUrl + this.selectedAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.decisionDialog.close()
@@ -444,7 +445,7 @@ export function ClientMethod(base) {
     closeInvestigation() {
       if (!this.selectedSamples[0].capa_decision_on) {
         this.dispatchEvent(new CustomEvent("error", {
-          detail: { 
+          detail: {
             is_error: true,
             message_en: "Required set decision before close",
             message_es: "Decisión de conjunto requerida antes del cierre"
@@ -455,7 +456,7 @@ export function ClientMethod(base) {
         console.log("Required set decision before close")
         return
       }
-      let params = this.config.backendUrl + this.selectedAction.endPoint 
+      let params = this.config.backendUrl + this.selectedAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -463,19 +464,21 @@ export function ClientMethod(base) {
     }
     setWhiteIpsList() {
       console.log('this.reqParams', this.reqParams);
-      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl 
+      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.newIPEntryDialog.close()
+        this.updateIPEntryDialog.close()
         this.reload()
       })
     }
     setBlackIpsList() {
       console.log('this.reqParams', this.reqParams);
-      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl 
+      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.newIPEntryDialog.close()
+        this.updateIPEntryDialog.close()
         this.reload()
       })
     }
@@ -483,7 +486,7 @@ export function ClientMethod(base) {
     async getGenomaProjectsList() {
       this.samplesReload = true
       this.templates.programsList = []
-      let params = this.config.backendUrl + this.config.GenomaProjectAPIqueriesUrl 
+      let params = this.config.backendUrl + this.config.GenomaProjectAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -495,5 +498,14 @@ export function ClientMethod(base) {
       })
     }
 
-}
+    getFamilyList() {
+      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl 
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          this.familyList = j
+        }
+      })
+    }
+  }
 }
