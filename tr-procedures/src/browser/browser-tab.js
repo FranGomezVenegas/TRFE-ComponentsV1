@@ -3,7 +3,7 @@ import { centerAligned, centerJustified, displayFlex, horizontal } from '@collab
 import '@material/mwc-icon-button';
 import '@material/mwc-button';
 
-export class TabBrowser extends LitElement {
+export class BrowserTab extends LitElement {
   static get styles() {
     return css`
       :host {
@@ -44,7 +44,7 @@ export class TabBrowser extends LitElement {
         <mwc-icon-button icon="navigate_before" @click=${this.prevTab} ?hidden=${!this.prev}></mwc-icon-button>
         <div class="tabContainer">
           ${this.tabs.map(t=>
-            html`<mwc-button class="tab-item" outlined aria-label=${t.lp_frontend_page_name} label=${t.label_en} @click=${()=>this.tabChanged(t)}></mwc-button>`
+            html`<mwc-button class="tab-item" outlined aria-label=${t['label_'+this.lang]} label=${t['label_'+this.lang]} @click=${()=>this.tabChanged(t)}></mwc-button>`
           )}
         </div>
         <mwc-icon-button icon="navigate_next" @click=${this.nextTab} ?hidden=${!this.next}></mwc-icon-button>
@@ -75,12 +75,20 @@ export class TabBrowser extends LitElement {
       this.next = false
     }
     this.tabElems.forEach(t => {
-      if (t.label == this.currentTab) {
+      if (t.label == this.selectedTab['label_'+this.lang]) {
         t.raised = true
       } else {
         t.raised = false
       }
     })
+  }
+
+  updated(updates) {
+    if (updates.has('tabs') && this.tabs.length) {
+      this.updateComplete.then(() => {
+        this.tabChanged(this.tabs[0])
+      })  
+    }
   }
 
   firstUpdated() {
@@ -99,9 +107,9 @@ export class TabBrowser extends LitElement {
   }
 
   tabChanged(tab) {
-    this.currentTab = tab.label_en
+    this.selectedTab = tab
     this.tabElems.forEach(t => {
-      if (t.label == this.currentTab && t.ariaLabel == tab.lp_frontend_page_name) {
+      if (t.label == this.selectedTab['label_'+this.lang]) {
         t.raised = true
         t.outlined = false
       } else {
@@ -109,15 +117,14 @@ export class TabBrowser extends LitElement {
         t.raised = false
       }
     })
-    this.dispatchEvent(new CustomEvent('tab-changed', {
-      detail: tab
-    }))
+    this.dispatchEvent(new CustomEvent('tab-changed'))
   }
 
   static get properties() {
     return {
+      lang: { type: String },
       tabs: { type: Array },
-      currentTab: { type: String }, // current selected tab route
+      selectedTab: { type: Object }, // current selected tab
       prev: { type: Boolean },
       next: { type: Boolean }
     };
@@ -128,7 +135,7 @@ export class TabBrowser extends LitElement {
     this.prev = false;
     this.next = false;
     this.tabs = [];
-    this.currentTab = "";
+    this.selectedTab = {};
   }
 }
-customElements.define('tab-browser', TabBrowser);
+customElements.define('browser-tab', BrowserTab);

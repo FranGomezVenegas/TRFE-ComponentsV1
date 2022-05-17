@@ -1497,5 +1497,61 @@ export const EmDemoA = {
       }
     ]
   },
-  "Browser": {}
+  "Browser": {
+    "tabs": [
+      { 
+        "label_en": "Sample", 
+        "label_es": "Sample", 
+        "action": "GET_SAMPLE_STAGES_SUMMARY_REPORT",
+        "fixParams": {
+          "sampleFieldToRetrieve": "ALL",
+          "sampleFieldsToDisplay": "current_stage|program_name|location_name|product_lot|shift"
+        },
+        "extraParams": {
+          "sampleId": ""
+        }
+      },
+      { 
+        "label_en": "Incubation", 
+        "label_es": "Incubation", 
+        "action": "GET_INCUBATOR_REPORT",
+        "fixParams": {
+          "incubatorFieldToRetrieve": "current_stage", 
+          "incubatorFieldsToDisplay": "ALL",
+        },
+        "extraParams": {
+          "incubatorName": "",
+          "startDate": "", 
+          "endDate": ""
+        }
+      },
+      { 
+        "label_en": "Batch", 
+        "label_es": "Batch", 
+        "action": "GET_BATCH_REPORT",
+        "fixParams": {
+          "batchFieldToRetrieve": "ALL", 
+          "batchFieldsToDisplay": "name|active|completed|incubation_incubator|incubation_start|incubation_end",
+        },
+        "extraParams": {
+          "batchName": ""
+        }
+      },
+      { 
+        "label_en": "Production Lot", 
+        "label_es": "Production Lot", 
+        "action": "GET_PRODLOT_REPORT",
+        "fixParams": {
+          "prodLotFieldToRetrieve": "ALL",
+          "prodLotFieldsToDisplay": "ALL",
+          "sampleFieldToRetrieve": "ALL",
+          "sampleFieldsToDisplay": "ALL",
+          "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|area*counter_by_status"
+        },
+        "extraParams": {
+          "lotName": ""
+        }
+      }
+    ]
+  }
 }

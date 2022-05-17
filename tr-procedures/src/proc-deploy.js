@@ -1168,5 +1168,35 @@ export const ProcDeploy = {
       }
     ]
   },
-  "Browser": {}
+  "Browser": {
+    "tabs": [
+      { 
+        "label_en": "Sample", 
+        "label_es": "Sample", 
+        "action": "GET_SAMPLE_STAGES_SUMMARY_REPORT",
+        "fixParams": {
+          "sampleFieldToRetrieve": "ALL",
+          "sampleFieldsToDisplay": "current_stage|program_name|location_name"
+        },
+        "extraParams": {
+          "sampleId": ""
+        }
+      },
+      { 
+        "label_en": "Production Lot", 
+        "label_es": "Production Lot", 
+        "action": "GET_PRODLOT_REPORT",
+        "fixParams": {
+          "prodLotFieldToRetrieve": "ALL",
+          "prodLotFieldsToDisplay": "ALL",
+          "sampleFieldToRetrieve": "ALL",
+          "sampleFieldsToDisplay": "ALL",
+          "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|area*counter_by_status"
+        },
+        "extraParams": {
+          "lotName": ""
+        }
+      }
+    ]
+  }
 }

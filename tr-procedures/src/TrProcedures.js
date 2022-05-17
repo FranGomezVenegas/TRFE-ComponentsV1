@@ -127,7 +127,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     }
     // experimental for browser view
     if (this.viewName == "Browser") {
-      import('./browser-')
+      import('./browser/browser-view')
       return
     }
     this.gridItems = []
@@ -224,8 +224,10 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       ${this.windowOpenable=="yes" ? 
         html`
           ${this.viewName == 'Browser' ?
-            html`<browser- .config=${this.config}
-              .desktop=${this.desktop} .procModel=${ProceduresModel[this.procName]} .procName=${this.procName}></browser->` :
+            html`<browser-view .config=${this.config}
+              .desktop=${this.desktop} 
+              .lang=${this.lang}
+              .model=${ProceduresModel[this.procName]} .procName=${this.procName}></browser-view>` :
             html`
               ${this.componentModel ? 
                 html`${this.viewName == "Programs" || this.viewName == "ProjectManager" ?

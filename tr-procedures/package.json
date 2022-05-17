@@ -10,6 +10,7 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/index.html"
   },
   "dependencies": {
+    "@alenaksu/json-viewer": "^0.3.4",
     "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@google-web-components/google-chart": "^5.0.1",
     "@material/mwc-button": "^0.25.3",
