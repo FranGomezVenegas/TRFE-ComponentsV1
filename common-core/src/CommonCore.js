@@ -64,11 +64,22 @@ export class CommonCore extends LitElement {
       }
     })
     if (this.config.local != false && !window.process) {
-      this.addEventListener('error', e => {
-        this.localToast.textContent = e.detail.message || e.detail['message_'+ this.lang]
-        this.localToast.style.display = 'block'
-        setTimeout(() => this.localToast.style.display = 'none', 4000)
+      this.addEventListener('success', e => {
+        this.showNotif(e)
+        this.localToast.style.backgroundColor = '#0085ff'
       })
+      this.addEventListener('error', e => {
+        this.showNotif(e)
+        this.localToast.style.backgroundColor = '#a33'
+      })
+    }
+  }
+
+  showNotif(e) {
+    this.localToast.textContent = e.detail.message || e.detail['message_'+ this.lang]
+    if (this.localToast.textContent) {
+      this.localToast.style.display = 'block'
+      setTimeout(() => this.localToast.style.display = 'none', 4000)
     }
   }
 
