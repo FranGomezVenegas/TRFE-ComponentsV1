@@ -51,6 +51,7 @@ export function TrazitGenericDialogs(base) {
        // alert(true)
        return true 
     }
+        
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
     genericFormDialog(actionModel = this.actionBeingPerformedModel) {
         // if (this.actionBeingPerformedModel.dialogInfo === undefined) {

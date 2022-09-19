@@ -27,10 +27,11 @@ import {ModuleEnvMonitDialogsMicroorganism} from '../../module_env_monit/Dialogs
 import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
 import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
 import { AuditFunctions} from '../Audit/AuditFunctions';
+import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 
 import '../Audit/audit-dialog';
 //import '../../tabs-composition';
-export class GridWithButtons extends (AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement))))))))))) {
+export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,
@@ -148,6 +149,7 @@ export class GridWithButtons extends (AuditFunctions(ModuleInstrumentsDialogs(Tr
     loadDialogs(){
       //console.log('loadDialogs')
       return html`
+      ${this.credentialsDialog()}
     ${this.genericFormDialog()}
     ${this.reactivateObjectsDialog()}
     ${this.moduleEnvMonitMicroorganismsDialogAdd()}
@@ -266,6 +268,8 @@ export class GridWithButtons extends (AuditFunctions(ModuleInstrumentsDialogs(Tr
           .sopsPassed=${this.sopsPassed} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName} 
           .viewModelFromProcModel=${this.viewModelFromProcModel}
           .selectedItems=${this.selectedItems} .config=${this.config}></audit-dialog>
+
+
         </div>
       `
   }    

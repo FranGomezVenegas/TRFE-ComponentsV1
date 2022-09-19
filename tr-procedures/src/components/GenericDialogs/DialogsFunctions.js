@@ -6,15 +6,16 @@ export function DialogsFunctions(base) {
     return class extends base {
 
         dialogAccept(selected=true) {
+          console.log('dialogAccept before run credsChecker')
             if (selected) {
                 this.credsChecker(this.actionBeingPerformedModel.actionName, this.selectedItems[0].sample_id, this.jsonParamCommons(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
             } else {
                 this.credsChecker(this.actionBeingPerformedModel.actionName, null, this.jsonParamCommons(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
             }
-            this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0])
+            //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0])
         }
 
-          /**
+  /**
    * 
    * @param {*} actionName 
    * @param {*} objId -1 will show up the creds dialog, e.g user profile open the creds dialog. 
@@ -44,18 +45,38 @@ export function DialogsFunctions(base) {
       }
     }
   }
-    
+  
   /**
    * set the justification type, generate justification list for non text type
    */
    checkProcList() {
+    console.log('checkProcList')
     let bypass = true
-    this.type = "confirm"
-    bypass = false
-    alert('Temporalmente en credDialog, toda acción requiere confirmacion')
-    return bypass
-    alert('Temporalmente en credDialog, se ha deshabilitado el tema de las confirmaciones ... ')
-    return true
+    // this.justificationType = null
+    // this.justificationList = null
+    // let procList2 = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    // bypass = true
+    // procList2.forEach(p => {
+    //   //let idx = p.actions_with_confirm_user.findIndex(p => p == this.actionName)
+    //   //if (p.actions_with_esign[idx][this.actionName].type) {
+    //     //this.justificationType = p.actions_with_esign[idx][this.actionName].type
+    //     //if (this.justificationType != "TEXT") {
+    //     //  this.justificationList = p.actions_with_esign[idx][this.actionName].list_entries
+    //     //}
+    //   //}
+    // })
+    // this.type = "esign"
+    // bypass = false
+    // return bypass
+
+
+
+    // // this.type = "confirm"
+    // // bypass = false
+    // // alert('Temporalmente en credDialog, toda acción requiere confirmacion')
+    // // return bypass
+    // alert('Temporalmente en credDialog, se ha deshabilitado el tema de las confirmaciones ... ')
+    // return true
     this.justificationType = null
     this.justificationList = null
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
@@ -101,20 +122,31 @@ export function DialogsFunctions(base) {
     })
     // bypass / no need creds process
     if (bypass) return true
-  }
+  }  
+
   nextRequest() {
     //alert('nextRequest')
-    this.reqParams = {
-      ...this.reqParams,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      dbName: this.config.dbName,
-      actionName: this.actionName,
-      //sampleId: this.objectId,
-      userToCheck: this.userName,
-      passwordToCheck: this.pwd ? this.pwd.value : "",
-      esignPhraseToCheck: this.esg ? this.esg.value : "",
-      auditReasonPhrase: this.jst ? this.jst.value: ""
-    }
+    let credArguments = {}
+    if (this.userTxtFld) {credArguments.userToCheck=this.userTxtFld}
+    if (this.pwd) {credArguments.spasswordToCheck=this.pwd.value}
+    if (this.esg) {credArguments.esignPhraseToCheck=this.esg.value}
+    if (this.jst) {credArguments.auditReasonPhrase=this.jst.value}
+    // credArguments = {
+    //   // ...this.reqParams,
+    //   // finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+    //   // dbName: this.config.dbName,
+    //   // actionName: this.actionName,
+    //   //sampleId: this.objectId,
+    //   userToCheck: this.userName,
+    //   passwordToCheck: this.pwd ? this.pwd.value : "",
+    //   esignPhraseToCheck: this.esg ? this.esg.value : "",
+    //   auditReasonPhrase: this.jst ? this.jst.value: ""
+    // }
+
+    // Now here
+    console.log('nextRequest', 'credArguments', credArguments)
+    this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], {}, credArguments)
+
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {
       if (value != null || value != undefined) {

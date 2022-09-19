@@ -448,7 +448,8 @@ export function ButtonsFunctions(base) {
         } else {
           this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem), action)
         }
-        this.performActionRequestHavingDialogOrNot(action, selectedItem)
+        // Comentado para habilitar confirmDialogs
+        // this.performActionRequestHavingDialogOrNot(action, selectedItem)
         return
             //console.log('buttonActionWithoutDialog')
             this.reqParams.actionName=action.actionName
@@ -465,7 +466,7 @@ export function ButtonsFunctions(base) {
             })
             //this.getHolidayCalendars()
     }
-    performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}){ 
+    performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs ={}){ 
         if (action.alternativeAPIActionMethod!==undefined){
             this[action.alternativeAPIActionMethod]()
             return
@@ -479,9 +480,10 @@ export function ButtonsFunctions(base) {
         }
         let params = this.config.backendUrl + endPointUrl
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
+          + '&'+ new URLSearchParams(credDialogArgs)
         console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
         this.fetchApi(params).then(() => {
-console.log('performActionRequestHavingDialogOrNot: into the fetchApi')
+//console.log('performActionRequestHavingDialogOrNot: into the fetchApi')
             if (action.notGetViewData===undefined||action.notGetViewData===false){
               this.GetViewData()
             }

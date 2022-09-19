@@ -50,6 +50,7 @@ export function ApiFunctions(base) {
         })
       }
     
+      error(e) { }
       // This fetchApi was the original one for model 2.1, on applying naming convention actions/queries we
       //  evidenced that it was not adding notifications ... although it worked before this naming convention changed
       // although now it seemed to be strange that just the naming convention provoked the issue
