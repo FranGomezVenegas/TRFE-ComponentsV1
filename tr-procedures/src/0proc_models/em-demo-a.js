@@ -1710,8 +1710,7 @@ export const EmDemoA = {
 	"component":"Tabs",  
     "abstract": true,
     "tabs": [
-      {
-		  "component":"TableWithButtons",  
+      { "component":"TableWithButtons",  
         "filter": "pending",
         "langConfig": {
           "tab": {
@@ -1807,10 +1806,8 @@ export const EmDemoA = {
             }
           }
         ]
-      },
-	
-      {
-		"component":"TableWithButtons",  
+      },	
+      { "component":"TableWithButtons",  
         "filter": "open",
         "langConfig": {
           "tab": {
