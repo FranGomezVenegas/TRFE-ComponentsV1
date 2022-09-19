@@ -158,7 +158,59 @@ export class CredDialog extends CommonCore {
     }
   }
 
+
+  creadDialogs() {
+    console.log('credDialog>>render')
+    return html`
+      <tr-dialog id="credDialog" 
+        @closed=${this.closed}
+        .heading="${this.headerLabel()}"
+        hideActions=""
+        scrimClickAction=""
+        .escapeKeyAction="${this.escapeKey?'close':''}">
+        ${this.changing||this.nonProc ?
+          nothing :
+          html`<div style="position:absolute;left:15px;top:8px;font-size:12px;">
+            ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName} (id: ${this.objectId})
+          </div>`
+        }
+        <div class="content layout vertical flex center-justified">
+          ${this.inputField()}
+          ${this.changing||this.nonProc ?
+            null :
+            html`${this.auditField()}`
+          }
+          <div style="margin-top:30px">
+            ${this.nonProc ?
+              // closing dialog for non procedures i.e relogin on lock inactivity
+              html`<sp-button size="xl" variant="secondary" @click=${this.failedAttempt}>${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>` :
+              // for procedures
+              html`<sp-button size="xl" variant="secondary" dialogAction="close">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>`
+            }
+            <sp-button size="xl" @click=${this.checking}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+          </div>
+          ${this.setAttempts()}
+        </div>
+      </tr-dialog>
+      <tr-dialog id="confirmDialog" 
+        heading=""
+        hideActions=""
+        scrimClickAction="">
+        <div class="layout vertical flex center-justified">
+          <div>${commonLangConfig.confirmActionPhrase["label_" + this.lang]} ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName}?</div>
+          <div style="margin-top:30px;text-align:center">
+            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+            <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.nextRequest}>
+              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          </div>
+        </div>
+      </tr-dialog>
+    `;
+  }  
+
   render() {
+    console.log('credDialog>>render')
     return html`
       <tr-dialog id="credDialog" 
         @closed=${this.closed}
@@ -352,6 +404,7 @@ export class CredDialog extends CommonCore {
    * set the justification type, generate justification list for non text type
    */
   checkProcListMovedToDialogsFunctions() {
+    console.log('checkProcListMovedToDialogsFunctions')
     // this.type = "confirm"
     // bypass = false
     // alert('Temporalmente en credDialog, toda acción requiere confirmacion')
