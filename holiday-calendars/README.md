@@ -1,20 +1,20 @@
-# \<endpoints-list>
-Component to display the list of endpoints (endpoint_name) grouped by API (api_name)
+# \<holiday-calendars>
+Component to display the list of holidays calendars 
 
 ## Installation
 
 ```bash
-npm i endpoints-list
+npm i holiday-calendars
 ```
 
 ## Usage
 
 ```html
 <script type="module">
-  import 'endpoints-list/endpoints-list.js';
+  import 'holiday-calendars/holiday-calendars.js';
 </script>
 
-<endpoints-list></endpoints-list>
+<holiday-calendars></holiday-calendars>
 ```
 
 

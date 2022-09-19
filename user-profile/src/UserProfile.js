@@ -52,7 +52,102 @@ export class UserProfile extends CredDialog {
       mwc-icon-button {
         color: blue;
       }
-      `
+      mwc-icon-button#lang {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
+      mwc-button.button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        color: white;
+        border-color: transparent !important;
+        --mdc-button-fill-color: red;
+        --mdc-button-ink-color: blue;
+      }            
+      mwc-icon-button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }        
+      mwc-icon-button.disabledtrue{        
+        color : red;
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }        
+      mwc-icon-button#video {
+        color : #FFFFFF;
+        color : rgba(36, 192, 235, 1);
+      }
+      sp-button {
+        background : #24C0EB;
+        background : rgba(36, 192, 235, 1);
+        border-color : inherit !important;
+        border-radius : 35px;
+        -moz-border-radius : 35px;
+        -webkit-border-radius : 35px;
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        color : #FFFFFF;
+        color : rgb(255, 255, 255);
+      }
+      mwc-textfield {
+        border-style : Solid;
+        border-color : #999999;
+        border-color : rgba(153, 153, 153, 1);
+        border-width : 1px;
+        border-radius : 7px;
+        -moz-border-radius : 7px;
+        -webkit-border-radius : 7px;   
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);  
+        --mdc-text-field-idle-line-color:#148CFA;
+        --mdc-text-field-outlined-idle-border-color: #148CFA;
+        --mdc-text-field-label-ink-color:  #148CFA;
+        --mdc-text-field-focused-label-color: #148CFA;
+        --mdc-theme-primary: #0465FB;
+      }
+      nwc-textfield.mdc-text-field {
+      background-color :  #FFFFFF;
+      background-color : rgb(255, 255, 255);     
+      }      
+      mwc-select {
+        border-style : Solid;
+        border-color : #999999;
+        border-color : rgba(153, 153, 153, 1);
+        border-width : 1px;
+        border-radius : 7px;
+        -moz-border-radius : 7px;
+        -webkit-border-radius : 7px;   
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);  
+        --mdc-text-field-idle-line-color:#148CFA;
+        --mdc-text-field-outlined-idle-border-color: #148CFA;
+        --mdc-text-field-label-ink-color:  #148CFA;
+        --mdc-text-field-focused-label-color: #148CFA;
+        --mdc-theme-primary: #0465FB;
+      }      
+      mwc-list-item {
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);     
+        }               
+      `      
     ];
   }
 

@@ -2,20 +2,80 @@
   "dbName": "labplanet",
   "isForTesting": false,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
-  "appAuthenticateApiUrl": "/frontend/AuthenticationAPI",
-  "frontEndEnvMonitSampleUrl": "/moduleenvmon/frontend/EnvMonSampleAPIfrontend",
-  "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPI",
-  "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPI",
-  "frontEndEnvMonitIncubationUrl": "/moduleenvmon/frontend/EnvMonIncubationAPIfrontend",
-  "frontEndEnvMonitUrl": "/moduleenvmon/frontend/EnvMonAPIfrontend",
-  "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPI",
+
+  "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
+
+  "frontEndEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIqueries",
+  "EnvMonSampleAPIQueriesStats": "/moduleenvmon/EnvMonAPIstats",
+  "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIactions",
+  "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPIactions",
+  "frontEndEnvMonitIncubationUrl": "/moduleenvmon/EnvMonIncubationAPIqueries",
+  "frontEndEnvMonitUrl": "/moduleenvmon/EnvMonAPIqueries",
+  "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPIactions",
+
   "ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
   "ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
   "PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
   "PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
 
-  "GenomaProjectAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIFrontend",
+  "GenomaStudyAPIactionsUrl": "/modulegenoma/GenomaStudyAPIactions",
+  "GenomaStudyAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIqueries",
 
+  "SampleAPIactionsUrl": "/modulesample/SampleAPIactions",
+  "SampleAPIqueriesUrl": "/modulesample/SampleAPIqueries",
+
+
+  "local": true,
+  "localDefaultView111": {
+    "procName":  "em-demo-a", 
+    "viewName": "SamplePendingSampling", 
+    "filterName" :  "SamplingSMP" 
+  },
+  "localDefaultView12344": {
+    "procName":  "em-demo-a", 
+    "viewName": "SampleIncubation", 
+    "filterName" :  "Incubation" 
+  },
+  "localDefaultView1": {
+    "procName":  "em-demo-a", 
+    "viewName": "SampleMicroorganism", 
+    "filterName" :  "MicroOrganismSMP" 
+  },
+  "localDefaultView11": {
+    "procName":  "em-demo-a", 
+    "viewName": "Deviation", 
+    "filterName" :  "pending" 
+  },
+  "localDefaultView123": {
+    "procName":  "em-demo-a", 
+    "viewName": "SamplePlateReading", 
+    "filterName" :  "PlateReadingSMP" 
+  },
+  "localDefaultView4": {
+    "procName":  "em-demo-a", 
+    "viewName": "ProductionLots", 
+    "filterName" :  "SampleLot" 
+  },  
+  "localDefaultView3": {
+    "procName":  "sample-coa-rel1", 
+    "viewName": "LogSamplesModuleSamples", 
+    "filterName" :  "SampleLogin" 
+  },
+  "localDefaultView21": {
+    "procName":  "em-demo-a", 
+    "viewName": "DataMining", 
+    "filterName" :  "DataMining" 
+  },
+  "localDefaultView2": {
+    "procName":  "em-demo-a", 
+    "viewName": "Browser", 
+    "filterName" :  "Browser" 
+  },
+   "localDefaultView": {
+    "procName":  "app", 
+    "viewName": "WhiteIpList", 
+    "filterName" :  "WhiteIpList" 
+  }  
+ 
   
-  "local": true
 }

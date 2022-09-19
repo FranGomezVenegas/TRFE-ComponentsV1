@@ -65,21 +65,52 @@ export class CommonCore extends LitElement {
     })
     if (this.config.local != false && !window.process) {
       this.addEventListener('success', e => {
+        // alert('addEventListener for success')
+
+        // if (e.is_error===undefined){
+        //   return
+        // }
         this.showNotif(e)
-        this.localToast.style.backgroundColor = '#0085ff'
+        // if (e.is_error===true){
+        //   this.localToast.style.backgroundColor = '#0085ff'
+        // }else{
+        //   this.localToast.style.backgroundColor = '#b22222'
+        // }
       })
       this.addEventListener('error', e => {
+        // alert('addEventListener for error')
         this.showNotif(e)
         this.localToast.style.backgroundColor = '#a33'
       })
     }
   }
 
-  showNotif(e) {
+  showNotifOld(e) {
+    //console.log('showNotifOld')
     this.localToast.textContent = e.detail.message || e.detail['message_'+ this.lang]
     if (this.localToast.textContent) {
       this.localToast.style.display = 'block'
       setTimeout(() => this.localToast.style.display = 'none', 4000)
+    }
+  }
+
+  showNotif(e) {
+    console.log('showNotif', e)
+    if (e.detail.is_error===undefined){
+      return
+    }
+    let msgContent= e.detail['message_'+ this.lang]!==undefined ? e.detail['message_'+ this.lang] : e.detail.message
+    this.localToast.textContent = msgContent
+    if (this.localToast.textContent&&e.detail.is_error===true) {
+      this.localToast.style.backgroundColor = '#b22222'
+      this.localToast.style.display = 'block'
+      setTimeout(() => this.localToast.style.display = 'none', 4000)
+      return
+    }else{
+      this.localToast.style.backgroundColor = '#0085ff'
+      this.localToast.style.display = 'block'
+      setTimeout(() => this.localToast.style.display = 'none', 4000)
+      return
     }
   }
 
@@ -111,6 +142,8 @@ export class CommonCore extends LitElement {
     console.log(JSON.parse(sessionStorage.getItem("userSession")))
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
     this.headerInfo = JSON.parse(sessionStorage.getItem("userSession")).header_info
+    //console.log('this.headerInfo', this.headerInfo)
+
   }
 
   /**
@@ -118,11 +151,14 @@ export class CommonCore extends LitElement {
    * @param {*} urlParams the url api with params
    * @param {*} feedback will be show up the user feedback
    */
-  fetchApi(urlParams, feedback=true) {
+  fetchApi(urlParams, feedback=true) { 
+    // notification enabled by default, just turn log to false for those what requires no notification   
     let log = true
-    if (urlParams.indexOf("/frontend/") >= 0) {
+    if (urlParams.toString().toUpperCase().includes("QUERI")) {
       log = false
     }
+    log = true
+    console.log('fetchApi, log', log, 'urlParams', urlParams, urlParams.toString().toUpperCase())
     urlParams += "&isForTesting="+ this.config.isForTesting
     this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
     return fetch(urlParams).then(async r => {

@@ -87,7 +87,7 @@ export class MyCertifications extends CommonCore {
       res = await this.fetchApi(this.config.backendUrl + this.config.apiAnalysisUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
         actionName: e.detail.certification_level.endpoint_name,
-        procInstanceName: e.detail.procedure_name,
+        procInstanceName: e.detail.procedure,
         methodName: e.detail.method_name,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
       }))
@@ -95,7 +95,7 @@ export class MyCertifications extends CommonCore {
       res = await this.fetchApi(this.config.backendUrl + this.config.apiSopUserUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
         actionName: e.detail.certification_level.endpoint_name,
-        procInstanceName: e.detail.procedure_name,
+        procInstanceName: e.detail.procedure,
         sopName: e.detail.sop_name,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken      
       }))

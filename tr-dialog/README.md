@@ -32,3 +32,18 @@ npm start
 ```
 
 To run a local development server that serves the basic demo located in `demo/index.html`
+
+
+## Requirements Tracking
+
+This area want to track the requirements that made this web component to become a reality.
+
+- #192. Corporative dark-blue color for corner icons [https://github.com/FranGomezVenegas/FETR/issues/192](url)
+
+
+## Fixed Bugs Tracking
+
+This area want to track the bugs identified for this Web Component that were already implemented/fixed.
+
+
+

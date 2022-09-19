@@ -77,7 +77,8 @@ class DemoExample extends LitElement {
   }
 
   setNotif(e) {
-    this.toast.labelText = e.detail.message_en;
+console.log('setNotif', e.detail.message_en)    
+    this.toast.labelText = e.detail.message_en;    
     this.toast.show();
     if (e.detail.log) { // logging as required
       this.notifs = [

@@ -1,27 +1,21 @@
-import { html, css, nothing } from 'lit';
+import { html, css, nothing, LitElement } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ProceduresModel } from './ProceduresModel';
-import { ClientMethod } from './ClientMethod';
-import { DialogTemplate } from './DialogTemplate';
-import '@material/mwc-button';
-import '@material/mwc-icon-button';
-import '@material/mwc-textfield';
-import '@vaadin/vaadin-grid/vaadin-grid';
-import '@vaadin/vaadin-grid/vaadin-grid-column';
-import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
-import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
-import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
+// import { CommonsClientMethod } from './CommonsClientMethod';
+// import { DialogTemplate } from './DialogTemplate';
+// import { CommonsDialogTemplate } from './CommonsDialogTemplate';
+// import { DialogTemplateEnvMonit } from './module_env_monit/DialogTemplateEnvMonit';
+// import { DialogTemplateInstruments } from './module_instruments/DialogTemplateInstruments';
 import '@trazit/tr-dialog/tr-dialog';
-import './audit-dialog';
-import './templates-';
-import './bottom-composition';
-import './tabs-composition';
-import './components/program-proc';
-import './components/genoma-project';
+import './components/Audit/audit-dialog';
 
-export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
+import {ApiFunctions} from './components/Api/ApiFunctions';
+
+
+
+export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   static get styles() {
     return [
       Layouts, Alignment,
@@ -97,65 +91,147 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
   static get properties() {
     return {
       procName: { type: String },
+      viewModelFromProcModel: {type: Object},      
       viewName: { type: String },
       filterName: { type: String },
-      langConfig: { type: Object },
-      actions: { type: Array },
-      compositions: { type: Array },
-      samplesReload: { type: Boolean },
-      gridItems: { type: Array },
-      selectedSamples: { type: Array },
-      selectedAction: { type: Object },
-      batchName: { type: String },
-      componentModel: { type: String },
+      // langConfig: { type: Object },
+      // actions: { type: Array },
+      // compositions: { type: Array },
+      // samplesReload: { type: Boolean },
+      // gridItems: { type: Array },
+      // selectedSamples: { type: Array },
+      // selectedAction: { type: Object },
+      // batchName: { type: String },
+      // viewModelFromProcModel: { type: String },
       tabs: { type: Array },
       windowOpenable: { type: String },
-      sopsPassed: { type: Boolean },
+      // sopsPassed: { type: Boolean },
       // we will wait the updated langConfig completed
       // fixed issue: https://github.com/FranGomezVenegas/FETR/issues/158
       ready: { type: Boolean },
-      sampleState: { type: Object }
+      sampleState: { type: Object },
+      // masterData:{ type: Array}
+     
     };
+  }
+  constructor() {
+    super()
+   
   }
 
   resetView() {
+    let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procName)
     if (!this.config.local) {
-      let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procName)
       if (findProc.length) {
         ProceduresModel[this.procName] = findProc[0].procModel
       }
     }
+    this.procInstanceModel=ProceduresModel[this.procName]
+    if (findProc!==undefined&&findProc.length>0&&findProc[0].master_data!==undefined){
+      this.masterData=findProc[0].master_data
+      console.log('master data', this.masterData)   
+    }
+    
     // experimental for browser view
-    if (this.viewName == "Browser") {
-      import('./browser/browser-view')
+    // if (this.viewName == "Browser") {
+    //   import('./browser/browser-view')
+    //   return
+    // }
+    // if (this.viewName == "DataMining") {
+    //   import('./data_mining/datamining-mainview')
+    //   return
+    // }
+    this.gridItems = []
+    this.viewModelFromProcModel = null
+    if (ProceduresModel[this.procName][this.viewName]===undefined){
+      alert('Not found any window called '+this.viewName+' in the Backend Proc Model for procedure '+this.procName)
       return
     }
-    this.gridItems = []
-    this.componentModel = null
-    this.abstract = ProceduresModel[this.procName][this.viewName].abstract
+    if (ProceduresModel[this.procName][this.viewName].component===undefined){
+      alert('The window called '+this.viewName+' has no component specified in the Backend Proc Model for procedure '+this.procName)
+      return
+    }
+    this.viewModelFromProcModel=ProceduresModel[this.procName][this.viewName]
+    console.log('resetView', 'component', this.viewModelFromProcModel.component)
+    
+    switch(this.viewModelFromProcModel.component){
+      case 'GridWithButtons':
+      case 'TableWithButtons':        
+        import('./components/grid_with_buttons/grid-with-buttons')
+        if (this.GridWithButtons!==null){
+          this.GridWithButtons.ready=false
+        }        
+        //alert('grid')
+        return
+      case 'Tabs':
+        import('./components/Tabs/tabs-main-view')
+        return
+      case 'ModuleEnvMonitProgramProc':
+        import('./module_env_monit/program-proc')
+        return
+      case 'ModuleEnvMonitSampleIncubation':
+        import('./module_env_monit/sample-incubation-view')
+        return
+      case 'EnvMonitBrowser', 'Browser':
+        import('./browser/browser-view')
+        return
+      case 'DataMining':
+        import('./data_mining/datamining-mainview')
+        return
+      case 'ModuleGenomaProjectWindow':
+        import('./module_genoma/genoma-project')
+        return
+      case 'ModuleSampleLogSample':
+        import('./module_sample/log-sample-module-sample')
+        return
+      default:
+        alert('In TrProcedures, not found component '+this.viewModelFromProcModel.component)
+        return
+    }
+
+
+    if (ProceduresModel[this.procName][this.viewName].abstract===undefined){
+      this.abstract = false
+    }else{
+      this.abstract = ProceduresModel[this.procName][this.viewName].abstract
+    }
     this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
     this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
     this.tabs = ProceduresModel[this.procName][this.viewName].tabs
     this.enterResults = []
     this.microorganismList = []
     this.selectedSamples = []
+    let hasOwnComponent=ProceduresModel[this.procName][this.viewName].hasOwnComponent
+    if (ProceduresModel[this.procName][this.viewName]!==undefined){
+      this.viewModelFromProcModel = ProceduresModel[this.procName][this.viewName]
+    }
     if (ProceduresModel[this.procName][this.viewName].component) {
-      this.componentModel = ProceduresModel[this.procName][this.viewName]
+      this.viewModelFromProcModel = ProceduresModel[this.procName][this.viewName]
     } else if (ProceduresModel[this.procName][this.viewName].tabs) {
       // 
     } else {
       this.langConfig = ProceduresModel[this.procName][this.viewName].langConfig
       this.actions = ProceduresModel[this.procName][this.viewName].actions
-      this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
+      this.selectedAction = ProceduresModel[this.procName][this.viewName].viewQuery   
     }
+   // console.log('resetView', 'this.selectedAction', this.selectedAction)
+    if (this.selectedAction===undefined&&hasOwnComponent===undefined){
+      alert('resetView-->viewQuery property not found in the procedure model for procInstanceName'+this.procName+' and view '+this.viewName)
+      return
+    }
+    this.reload()
     this.requestUpdate()
   }
 
   async authorized() {
-    super.authorized()
+    //super.authorized() -- credDialog
+    //console.log('authorized')
     this.windowOpenable = null
     this.sopsPassed = null
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+
+    if (this.procName===undefined||procList===undefined){return}
+    
     let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
     if (anyAccess.length) {
       let defView = anyAccess[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
@@ -169,7 +245,18 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           this.sopsPassed = defView[0].sops_passed
         }
       }
-      this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
+      if (!this.sopsPassed) {
+        if (anyAccess.length && anyAccess[0].userSopMode!==undefined && anyAccess[0].userSopMode.toString().toUpperCase().includes("DISAB")) {
+          this.sopsPassed=true
+        } else{      
+          if (anyAccess[0].userSopMode===undefined||anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification===undefined){
+            this.sopsPassed=false
+            this.windowOpenable = "no"
+          }else{
+            this.windowOpenable = anyAccess[0].windowOpenableWhenNotSopCertifiedUserSopCertification.toLowerCase()
+          }
+        }
+      }
       // When sopsPassed=true then does not matter what windowOpenableWhenNotSopCertifiedUserSopCertification business rule is set
       if (this.sopsPassed) {
         this.windowOpenable = "yes"
@@ -196,7 +283,9 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     await this.updateComplete
     // experimental for browser view
     if (this.viewName == "Browser") return
-    if (!this.componentModel) {
+    if (this.viewName == "DataMining") return
+    //console.log('this.viewModelFromProcModel', this.viewModelFromProcModel)    
+    if (!this.viewModelFromProcModel) {
       // whether user has access into the selected proc
       if (!this.abstract && this.audit) {
         this.audit.updateComplete.then(() => {
@@ -207,6 +296,12 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           }
         })
       }
+//FRAAAAAAAAN , parche
+      alert('Fran, acuerdate del parche en TrProcedures.authorized para sampleAuditRevisionMode y sampleAuditChildRevisionRequirede')
+      this.audit.sampleAuditRevisionMode = true
+      this.audit.sampleAuditChildRevisionRequired = true
+//FRAAAAAAAAN , parche
+
       if (anyAccess.length) {
         if (this.tabs) {
           this.tabsComposition.updateComplete.then(() => {
@@ -216,187 +311,93 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
           this.reload()
         }
       }
-    }
+    }    
   }
 
-  render() {
-    return html`
+  reload() {
+    return
+    this.resetDialogThings()
+    this.selectedAction = ProceduresModel[this.procName][this.viewName].viewQuery
+    this.actionMethod(this.selectedAction)
+  }    
+  resetDialogThings() {
+    this.itemId = null
+    this.targetValue = {}
+    this.selectedResults = []
+    this.selectedDialogAction = null
+  }
+  ownComponents(){
+    if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component!==undefined){
+      console.log('ownComponents', 'component', this.viewModelFromProcModel.component)
+    }
+    return html `
+      ${this.viewModelFromProcModel.component == 'Browser' ? html`
+        <browser-view .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></browser-view>
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'DataMining' ? html`
+        <datamining-mainview .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .masterData=${this.masterData} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></datamining-mainview>
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'ModuleSampleLogSample' ? html`
+        <log-sample-module-sample 
+          .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed}  .lang=${this.lang}
+          .procName=${this.procName} .viewName=${this.viewName}   .filterName=${this.filterName}  
+          .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}>
+        </log-sample-module-sample>        
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitProgramProc' ? html`
+        <program-proc .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
+          .config=${this.config}></program-proc>      
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitSampleIncubation' ? html`
+        <sample-incubation-view .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
+          .config=${this.config}></sample-incubation-view>      
+      `: nothing}
+
+      
+
+      ${this.viewModelFromProcModel.component == 'ModuleGenomaProjectWindow' ? html`
+        <genoma-project .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
+          .config=${this.config}></genoma-project>      
+      `:html``}
+    `
+  }
+  render(){
+    if (this.viewModelFromProcModel!==undefined){
+      console.log('render', this.viewModelFromProcModel, 'windowOpenable', this.windowOpenable)
+    }
+    return html`   
       ${this.windowOpenable=="yes" ? 
-        html`
-          ${this.viewName == 'Browser' ?
-            html`<browser-view .config=${this.config}
-              .desktop=${this.desktop} 
-              .lang=${this.lang}
-              .model=${ProceduresModel[this.procName]} .procName=${this.procName}></browser-view>` :
-            html`
-              ${this.componentModel ? 
-                html`${this.viewName == "Programs" || this.viewName == "ProjectManager" ?
-                  html`
-                    ${this.viewName == "Programs" ? 
-                      html`<program-proc 
-                        .windowOpenable=${this.windowOpenable}
-                        .sopsPassed=${this.sopsPassed}
-                        .lang=${this.lang}
-                        .procName=${this.procName} 
-                        .viewName=${this.viewName} 
-                        .filterName=${this.filterName}
-                        .model=${this.componentModel}
-                        .config=${this.config}></program-proc>`
-                      :
-                      html`<genoma-project 
-                        .windowOpenable=${this.windowOpenable}
-                        .sopsPassed=${this.sopsPassed}
-                        .lang=${this.lang}
-                        .procName=${this.procName} 
-                        .viewName=${this.viewName} 
-                        .filterName=${this.filterName}
-                        .model=${this.componentModel}
-                        .config=${this.config}></genoma-project>`
-                  }`:html
-                }` :
-                html`
-                  ${this.topCompositions ?
-                    html`${this.topCompositions.map(c => 
-                      html`<templates- 
-                        .windowOpenable=${this.windowOpenable}
-                        .sopsPassed=${this.sopsPassed}
-                        .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
-                        @program-changed=${e=>this.gridItems=e.detail}
-                        @template-event=${this.templateEvent}></templates->`
-                    )}` :
-                    nothing
-                  }
-                  ${this.abstract ? 
-                    nothing :
-                    html`
-                      <div class="layout horizontal flex wrap">
-                        <div class="layout flex">
-                          ${this.getTitle()}
-                          <div class="layout horizontal center flex wrap">
-                            ${this.getButton()}
-                          </div>
-                          ${this.ready ? 
-                            html`
-                              <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-                                @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
-                                .items=${this.gridItems}
-                                .selectedItems="${this.selectedSamples}">
-                                  ${this.gridList()}
-                              </vaadin-grid>
-                            ` :
-                            nothing
-                          }
-                        </div>
-                        ${this.langConfig&&this.viewName=="ProductionLots" ? 
-                          html`${this.lotTemplate()}` :
-                          nothing
-                        }
-                        ${this.dateTemplate()}
-                        ${this.langConfig&&this.langConfig.fieldText&&this.langConfig.fieldText.comment ?
-                          html`${this.commentTemplate()}` : nothing
-                        }
-                        ${this.langConfig&&this.langConfig.resultHeader ? 
-                          html`${this.resultTemplate()}` :
-                          nothing
-                        }
-                        ${this.langConfig&&this.langConfig.microorganismHeader ? 
-                          html`${this.microorganismTemplate()}` :
-                          nothing
-                        }
-                        ${this.langConfig&&this.viewName=="LogSamples" ? 
-                          html`${this.pointTemplate()}` :
-                          nothing
-                        }
-                        ${this.langConfig&&this.viewName=="PlatformInstruments" ? 
-                          html`${this.newInstrumentsTemplate()}` :
-                          nothing
-                        }
-                        ${this.langConfig&&this.viewName=="EventsInProgress" ? 
-                          html`${this.instrumentEventTemplate()}` :
-                          nothing
-                        }  
-                        ${this.langConfig&&this.viewName=="WhiteIpList" ? 
-                          html`${this.newPlatformAdminWhiteIPListsTemplate()}` :
-                          nothing
-                        }
-                        ${this.langConfig&&this.viewName=="BlackIpList" ? 
-                          html`${this.newPlatformAdminBlackIPListsTemplate()}` :
-                          nothing
-                        }
-                        ${this.langConfig&&this.viewName=="PlatformBusRules" ? 
-                          html`${this.newPlatformAdminBusinessRulesTemplate()}` :
-                          nothing
-                        }
-                        
-                        <audit-dialog @sign-audit=${this.setAudit} .lang=${this.lang}></audit-dialog>
-                      </div>
-                    `
-                  }
-                  ${this.bottomCompositions ?
-                    html`${this.bottomCompositions.map(c => 
-                      html`<div class="layout flex">
-                        <bottom-composition id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
-                          .lang=${this.lang}
-                          .windowOpenable=${this.windowOpenable}
-                          .sopsPassed=${this.sopsPassed}
-                          .model=${c} .config=${this.config} .batchName=${this.batchName}
-                          @reload-samples=${e=>this[e.detail.method]()}
-                          @selected-incub=${this.filteringBatch}
-                          @selected-batch=${this.filteringIncub}
-                          @set-grid=${e=>this.setGrid(e.detail)}></bottom-composition>
-                      </div>`
-                    )}` :
-                    nothing
-                  }
-                  ${this.tabs ?
-                    html`
-                      <div class="layout vertical flex">
-                        <div class="layout horizontal flex">
-                          ${this.tabs.map(t => 
-                            html`
-                              <mwc-button class="tabBtn" dense unelevated 
-                                .label=${t.langConfig.tab["label_"+ this.lang]}
-                                @click=${()=>this.selectTab(t)}></mwc-button>
-                            `
-                          )}
-                        </div>
-                        <tabs-composition 
-                          .lang=${this.lang}
-                          .windowOpenable=${this.windowOpenable}
-                          .sopsPassed=${this.sopsPassed}
-                          .procName=${this.procName} 
-                          .viewName=${this.viewName} 
-                          .config=${this.config}></tabs-composition>
-                      </div>
-                    ` : nothing
-                  }
-                `
-              }
-            `
-          }
-        ` : nothing
-      }
-      ${super.render()}
+      html`      
+        ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component !== null&&this.viewModelFromProcModel.component !== undefined
+          &&this.viewModelFromProcModel.component.toLowerCase() == 'tablewithbuttons' ? html`
+          <grid-with-buttons id="gridwithbuttons" .viewModelFromProcModel=${this.viewModelFromProcModel} viewName=${this.viewName} 
+            filterName=${this.filterName} procInstanceName=${this.procName} lang=${this.lang}
+            .config=${this.config} .reqParams=${this.reqParams} ?ready="false">
+          </grid-with-buttons>
+        `: html`
+
+        ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component !== null&&this.viewModelFromProcModel.component !== undefined
+          &&this.viewModelFromProcModel.component.toLowerCase() == 'tabs' ? html`
+            <tabs-main-view id="tabsmainview" .tabsMainViewModelFromProcModel=${this.viewModelFromProcModel} viewName=${this.viewName} 
+            filterName=${this.filterName} procInstanceName=${this.procName} lang=${this.lang}
+            .config=${this.config} .reqParams=${this.reqParams} ?ready="false"></tabs-main-view>
+          `: html`
+            ${this.ownComponents()}
+          `}  
+        `}        
+      `:
+      nothing}
+    ${super.render()}    
     `;
   }
+  get GridWithButtons() {return this.shadowRoot.querySelector("grid-with-buttons#gridwithbuttons")}
 
-  selectTab(tab) {
-    this.tabsComposition.model = tab
-  }
 
-  get tabsComposition() {
-    return this.shadowRoot.querySelector("tabs-composition")
-  }
 
-  get batchElement() {
-    return this.shadowRoot.querySelector("bottom-composition#active_batches")
-  }
-
-  get incubElement() {
-    return this.shadowRoot.querySelector("bottom-composition#samplesWithAnyPendingIncubation")
-  }
-
-  filteringIncub(e) {
+  xfilteringIncub(e) {
     if (e.detail.sample) {
       this.batchName = e.detail.sample.name
       // if select new batch item, don't show up any incub samples
@@ -450,7 +451,7 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this.requestUpdate()
   }
 
-  filteringBatch(e) {
+  xfilteringBatch(e) {
     if (e.detail.sample) {
       // sample not in batch, show the batch that incubation_start = "" & assigned incub#1 (incub_stage=1)
       if (!e.detail.sample.incubation_batch) {
@@ -515,140 +516,27 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
       this.batchElement.filteredItems = this.batchElement.gridItems
     }
   }
-
-  templateEvent(e) {
+  xtemplateEvent(e) {
     if (e.detail.calledActionIdx >= 0) {
       this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[e.detail.calledActionIdx]
       this.reload()
     }
   }
-
-  get templates() {
-    return this.shadowRoot.querySelector("templates-")
-  }
-
-  get audit() {
-    return this.shadowRoot.querySelector("audit-dialog")
-  }
-    
-  setAudit(e) {
+  xsetAudit(e) {
     this.targetValue = {
       auditId: e.detail.audit_id
     }
     this.itemId = e.detail.audit_id
-    this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
+    this.selectedDialogAction = this.selectedAction.dialogInfo.viewQuery
     this.actionMethod(this.selectedDialogAction, false)
   }
 
-  get grid() {
-    return this.shadowRoot.querySelector("vaadin-grid#mainGrid")
-  }
-
-  reload() {
-    this.resetDialogThings()
-    this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[0]
-    this.actionMethod(this.selectedAction)
-  }
-
-  resetDialogThings() {
-    this.itemId = null
-    this.targetValue = {}
-    this.selectedResults = []
-    this.selectedDialogAction = null
-  }
-
-  reloadDialog() {
+  xreloadDialog() {
     this.resetDialogThings()
     this.actionMethod(this.selectedAction)
   }
-
-  actionMethod(action, replace = true, actionNumIdx) {
-    if (replace) {
-      this.selectedAction = action
-    }
-    if (actionNumIdx) {
-      action = ProceduresModel[this.procName][this.viewName].actions[actionNumIdx]
-      this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[actionNumIdx]
-    }
-    if (action.dialogInfo) {
-      if (action.dialogInfo.automatic) {
-        if (this.itemId) {
-          this.credsChecker(action.actionName, this.itemId, this.jsonParam(), action)
-        } else if (this.selectedSamples.length) {
-          this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
-        } else {
-          this.credsChecker(action.actionName, null, this.jsonParam(), action)
-        }
-      } else {
-        this[action.dialogInfo.name].show()
-      }
-    } else {
-      if (this.selectedSamples.length) {
-        this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
-      } else {
-        this.credsChecker(action.actionName, null, this.jsonParam(), action)
-      }
-    }
-  }
-
-  getButton() {
-    return html`
-      ${this.actions&&this.actions.map(action =>
-        html`${action.button ?
-          html`${action.button.icon ?
-            html`<mwc-icon-button 
-              class="${action.button.class}"
-              icon="${action.button.icon}" 
-              title="${action.button.title['label_'+this.lang]}" 
-              ?disabled=${this.btnDisabled(action)}
-              @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
-            html`${action.button.img ?
-              html`<mwc-icon-button 
-                class="${action.button.class} img"
-                title="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${this.btnDisabled(action)}
-                ?hidden=${this.btnHidden(action)}
-                @click=${()=>this.actionMethod(action)}>
-                  <img class="iconBtn" src="images/${action.button.img}">
-                </mwc-icon-button>` :
-              html`<mwc-button dense raised 
-                label="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${this.btnDisabled(action)}
-                @click=${()=>this.actionMethod(action)}></mwc-button>`
-            }`
-          }` :
-          nothing
-        }`
-      )}
-    `
-  }
-
-  btnDisabled(action) {
-    let d = false
-    if (this.sopsPassed == false) {
-      if (this.windowOpenable == "yes") {
-        d = action.button.whenDisabled == "samplesReload" && action.button.title.label_en == "Reload" ? this.samplesReload : true
-      }
-    } else {
-      d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length
-    }
-    return d
-  }
-
-  btnHidden(action) {
-    let d = true
-    if (action.button.showWhenSelectedItem) {
-      if (this.selectedSamples.length && this.selectedSamples[0][action.button.showWhenSelectedItem.column] == action.button.showWhenSelectedItem.value) {
-        d = false
-      }
-    } else {
-      d = false
-    }
-    return d
-  }
-
-  nextRequest() {
-    super.nextRequest()
+  xnextRequest() {
+    super.xnextRequest()
     this.reqParams = {
       procInstanceName: this.procName,
       ...this.reqParams
@@ -657,250 +545,4 @@ export class TrProcedures extends ClientMethod(DialogTemplate(CredDialog)) {
     this[action.clientMethod]()
   }
 
-  dialogAccept(selected=true) {
-    if (selected) {
-      this.credsChecker(this.selectedAction.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction), this.selectedAction)
-    } else {
-      this.credsChecker(this.selectedAction.actionName, null, this.jsonParam(this.selectedAction), this.selectedAction)
-    }
-  }
-
-  jsonParam() {
-    let jsonParam = {}
-    let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
-    if (action.apiParams) {
-      action.apiParams.forEach(p => {
-        if (p.element) {
-          jsonParam[p.query] = this[p.element].value // get value from field input
-        } else if (p.defaultValue) {
-          jsonParam[p.query] = p.defaultValue // get value from default value (i.e incubator)
-        } else if (p.beItem) {
-          jsonParam[p.query] = this.selectedSamples[0][p.beItem] // get value from selected item
-        } else if (p.targetValue) {
-          jsonParam[p.query] = this.targetValue[p.query] // get value from target element passed
-        } else {
-          jsonParam[p.query] = p.value
-        }
-      })
-    }
-    if (action.paramFilter) {
-      jsonParam[action.paramFilter[this.filterName].query] = action.paramFilter[this.filterName].value
-    }
-    return jsonParam
-  }
-
-  setGrid(j) {
-    this.selectedSamples = []
-    if (this.abstract) {
-      this.shadowRoot.querySelectorAll("bottom-composition").forEach(c => {
-        // updating grid of samples_stillIncubationStageAndBothIncubCompleted
-        if (c.siGrid) {
-          if (j) {
-            if (j.samples_stillIncubationStageAndBothIncubCompleted && j.samples_stillIncubationStageAndBothIncubCompleted.length) {
-              c.stucksList = j.samples_stillIncubationStageAndBothIncubCompleted
-              c.stuckNum = c.stucksList.length
-              c.siGrid.items = j.samples_stillIncubationStageAndBothIncubCompleted
-            } else {
-              c.stucksList = null
-              c.siGrid.items = []
-            }
-          } else {
-            c.stucksList = null
-            c.siGrid.items = []
-          }
-          c.selectedStucks = []
-        }
-    
-        if (j) {
-          c.gridItems = c.filteredItems = j[c.model.filter]
-        } else {
-          c.gridItems = c.filteredItems = []
-        }
-        this.batchName = null
-        c.selectedSamples = []
-        c.samplesReload = false
-        c.requestUpdate()
-      })
-    } else {
-      if (j) {
-        this.gridItems = j
-      } else {
-        this.gridItems = []
-      }
-    }
-
-    this.ready = true
-    if (this.sampleState) {
-      this.reloadSampleState()
-    }
-  }
-
-  gridList() {
-    return Object.entries(this.langConfig.gridHeader).map(
-      ([key, value], i) => html`
-        ${this.langConfig.gridHeader[key].is_icon ?
-          this.iconColumn(key, value, i) :
-          this.nonIconColumn(key, value, i)
-        }
-      `
-    )
-  }
-
-  iconColumn(key, value, i) {
-    return html`
-      ${this.desktop ?
-        html`
-          ${i==0 ?
-            html`${this.langConfig.gridHeader[key].width ?
-              html`
-              <vaadin-grid-column
-                header="${value['label_'+this.lang]}"
-                ${columnBodyRenderer(this.iconRenderer)}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'center' }"
-                width="${this.langConfig.gridHeader[key].width}" resizable
-              ></vaadin-grid-column>
-              ` :
-              html`
-              <vaadin-grid-column
-                header="${value['label_'+this.lang]}"
-                ${columnBodyRenderer(this.iconRenderer)}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'center' }"
-                flex-grow="0"
-              ></vaadin-grid-column>
-              `
-            }` :
-            html`${this.langConfig.gridHeader[key].width ?
-              html`
-              <vaadin-grid-column
-                header="${value['label_'+this.lang]}"
-                ${columnBodyRenderer(this.iconRenderer)}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'center' }"
-                width="${this.langConfig.gridHeader[key].width}" resizable
-              ></vaadin-grid-column>
-              ` :
-              html`<vaadin-grid-column
-                header="${value['label_'+this.lang]}"
-                ${columnBodyRenderer(this.iconRenderer)}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'center' }"
-                auto-width
-              ></vaadin-grid-column>`
-            }`
-          }
-        ` :
-        html`
-          <vaadin-grid-column
-            header="${value['label_'+this.lang]}"
-            ${columnBodyRenderer(this.iconRenderer)}
-            text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'center' }"
-            width="65px" resizable
-          ></vaadin-grid-column>
-        `
-      }
-    `
-  }
-
-  iconRenderer(sample) {
-    if (this.filterName == "SampleLogin") {
-      return html`<img src="/images/labplanet.png" style="width:20px">`
-    } else if (this.viewName == "PlatformInstruments") {
-      return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
-    } else if (this.viewName == "EventsInProgress") {
-      return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
-    } else if (this.viewName == "WhiteIpList") {
-      return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
-    } else if (this.viewName == "BlackIpList") {
-      return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
-    } else if (this.viewName == "PlatformBusRules") {
-      return html`<img src="/images/${sample.disabled?'activate.svg':'deactivate.svg'}" style="width:20px">`
-    } else {
-      return html`<img src="/images/${this.filterName}_${sample.status?sample.status.toLowerCase():''}.png" style="width:20px">`
-    }
-  }
-
-  nonIconColumn(key, value, i) {
-    return html`${this.langConfig.gridHeader[key].sort ?
-      this.sortColumn(key, value, i) :
-      this.filterColumn(key, value, i)
-    }`
-  }
-
-  sortColumn(key, value, i) {
-    return html`
-      ${this.desktop ?
-        html`
-          ${i==0 ?
-            html`${this.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-sort-column width="${this.langConfig.gridHeader[key].width}" resizable 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
-                path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
-              html`<vaadin-grid-sort-column flex-grow="0" 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
-                path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-            }` :
-            html`${this.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-sort-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
-              html`<vaadin-grid-sort-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-            }`
-          }
-        ` :
-        html`<vaadin-grid-sort-column width="65px" resizable 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
-          path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-      }
-    `
-  }
-
-  filterColumn(key, value, i) {
-    return html`
-      ${this.desktop ?
-        html`
-          ${i==0 ?
-            html`${this.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-filter-column width="${this.langConfig.gridHeader[key].width}" resizable 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
-                path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-              html`<vaadin-grid-filter-column flex-grow="0" 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
-                path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-            }` :
-            html`${this.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-filter-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                width="${this.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-              html`<vaadin-grid-filter-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-            }`
-          }
-        ` :
-        html`<vaadin-grid-filter-column width="65px" resizable 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          text-align="${this.langConfig.gridHeader[key].align ? this.langConfig.gridHeader[key].align : 'end' }"
-          path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-      }
-    `
-  }
-
-  isConfidential(sample, key) {
-    if (this.langConfig.gridHeader[key].confidential_value&&sample[key]) {
-      return html`*****`
-    } else {
-      return html`${sample[key]}`
-    }
-  }
-
-  getTitle() {
-    if (this.langConfig&&this.langConfig.title[this.filterName]) {
-      return html`<h1>${this.langConfig.title[this.filterName]["label_"+this.lang]}</h1>`
-    }
-  }
 }

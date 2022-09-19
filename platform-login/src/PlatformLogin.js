@@ -63,15 +63,20 @@ export class PlatformLogin extends CommonCore {
         display: none;
       }
       div.login-box {
-        background-color: rgba(177, 242, 244, 0.25);
-        border-radius: 20px;
-        box-shadow: rgb(136, 136, 136) 5px 5px;
-        padding: 10px;
-        width: 300px;
+        background : #FFFFFF;
+        background : rgba(255, 255, 255, 1);
+        border-radius : 67px;
+        -moz-border-radius : 67px;
+        -webkit-border-radius : 67px;
+        padding: 20px;
+        -webkit-filter: drop-shadow(0 0 8px rgba(120, 217, 255)); /* webkit only 
+        assuming the content is written in rgba(120, 217, 255) */
+filter: drop-shadow(0 0 8px rgba(120, 217, 255));              /* FF~35 */
+filter: drop-shadow(0 0 0 8px rgba(120, 217, 255));              /* MDN */        
       }
       img.appLoginLogoOnTop {
-        height: 3.08vmax;
-        width: 11vmax;
+        height: 5.08vmax;
+        width: 16vmax;
         padding-bottom: 15px;
       }
       h2 {
@@ -82,8 +87,52 @@ export class PlatformLogin extends CommonCore {
       div.input * {
         margin-bottom: 15px;
       }
+      mwc-icon-button#lang {
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
       mwc-icon-button#video {
-        color: #6495ed;
+        color : #FFFFFF;
+        color : rgba(36, 192, 235, 1);
+      }
+      sp-button {
+        background : #24C0EB;
+        background : rgba(36, 192, 235, 1);
+        border-radius : 35px;
+        -moz-border-radius : 35px;
+        -webkit-border-radius : 35px;
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        color : #FFFFFF;
+        color : rgb(255, 255, 255);
+        border-color: transparent !important;
+
+      }
+      mwc-textfield {
+        border-style : Solid;
+        border-color : #999999;
+        border-color : rgba(153, 153, 153, 1);
+        border-width : 1px;
+        border-radius : 7px;
+        -moz-border-radius : 7px;
+        -webkit-border-radius : 7px;   
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);  
+        --mdc-text-field-idle-line-color:#148CFA;
+        --mdc-text-field-outlined-idle-border-color: #148CFA;
+        --mdc-text-field-label-ink-color:  #148CFA;
+        --mdc-text-field-focused-label-color: #148CFA;
+        --mdc-theme-primary: #0465FB;
+      }
+      nwc-textfield.mdc-text-field {
+      background-color :  #FFFFFF;
+      background-color : rgb(255, 255, 255);     
       }
       .content {
         width: 480px;
@@ -170,9 +219,7 @@ export class PlatformLogin extends CommonCore {
             <iframe id="ytube" width="100%" height="345" src="https://www.youtube.com/embed/p-C9v-jCrcM?enablejsapi=1"></iframe>
           </div>
         </tr-dialog>
-        <mwc-icon-button @click=${this.changeLang} title="Language">
-          <img .src="/images/${this.flag}.png" />
-        </mwc-icon-button>
+        <mwc-icon-button id="lang" @click=${this.changeLang} title="Language">${this.lang}</mwc-icon-button>
       </div>
     </div>
     `;

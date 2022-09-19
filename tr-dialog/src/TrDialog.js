@@ -14,6 +14,7 @@ export class TrDialog extends Dialog {
         cursor: pointer;
         --mdc-icon-size: 15px;
         margin: auto 5px;
+        color: rgb(94, 145, 186);
       }
       ::slotted(mwc-icon) {
         cursor: pointer;

@@ -351,7 +351,13 @@ export class CredDialog extends CommonCore {
   /**
    * set the justification type, generate justification list for non text type
    */
-  checkProcList() {
+  checkProcListMovedToDialogsFunctions() {
+    // this.type = "confirm"
+    // bypass = false
+    // alert('Temporalmente en credDialog, toda acción requiere confirmacion')
+    // return bypass
+    alert('Temporalmente en credDialog, se ha deshabilitado el tema de las confirmaciones ... ')
+    return true
     this.justificationType = null
     this.justificationList = null
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
@@ -407,6 +413,7 @@ export class CredDialog extends CommonCore {
    * @param {*} action ref of action object
    */
   credsChecker(actionName, objId, params={}, action) {
+    console.log('credsChecker')
     this.actionObj = action || {}
     this.reqParams = params
     if (actionName) {
@@ -460,13 +467,14 @@ export class CredDialog extends CommonCore {
     })
   }
 
-  nextRequest() {
+  nextRequestMovedToDialogsFunctions() {
+    alert('nextRequest')
     this.reqParams = {
       ...this.reqParams,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       dbName: this.config.dbName,
       actionName: this.actionName,
-      sampleId: this.objectId,
+      //sampleId: this.objectId,
       userToCheck: this.userName,
       passwordToCheck: this.pwd ? this.pwd.value : "",
       esignPhraseToCheck: this.esg ? this.esg.value : "",
@@ -493,4 +501,63 @@ export class CredDialog extends CommonCore {
       `*** Intentos: ${this.attempt} de ${this.maxFails}`
     return html`<p class=${this.attempt==0?'attemptsphraseblue':'attemptsphrasered'}>${txt}</p>`
   }
+
+  credsCheckerCommons(actionName, objId, params={}, action) {
+    console.log('credsCheckerCommons', 'actionName', actionName, 'action', action)
+    this.actionObj = action || {}
+    this.reqParams = params
+    if (actionName) {
+      this.actionName = actionName
+      if (objId!==undefined&&objId == -1) {
+        this.credDialog.show()
+      } else {
+        this.objectId = objId
+        let noNeedCreds = this.checkProcList()
+        if (noNeedCreds) {
+          this.nextRequestCommons(action)
+        } else {
+          if (this.type == "confirm") {
+            this.confirmDialog.show()
+          } else {
+            this.credDialog.show()
+          }
+        }
+      }
+    }
+  }
+
+  nextRequestCommons(action) {
+    console.log('nextRequestCommons')
+    this.reqParams = {
+      ...this.reqParams,
+      procInstanceName: this.procInstanceName,      
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      dbName: this.config.dbName,
+      actionName: action.actionName,
+      //sampleId: this.objectId,
+      userToCheck: this.userName,
+      passwordToCheck: this.pwd ? this.pwd.value : "",
+      esignPhraseToCheck: this.esg ? this.esg.value : "",
+      auditReasonPhrase: this.jst ? this.jst.value: ""
+    }
+    let params = this.config.backendUrl + action.endPoint
+    + '?' + new URLSearchParams(this.reqParams) 
+    // if (extraParams!==undefined){
+    //   params=params + '&' + new URLSearchParams(extraParams)
+    // }
+    this.fetchApi(params).then(() => {
+//      this.reload()
+    })
+    let cleanParams = {}
+    Object.entries(this.reqParams).map(([key, value]) => {
+      if (value != null || value != undefined) {
+        cleanParams[key] = value
+      }
+    })
+    this.reqParams = cleanParams
+    if (this.credDialog) {
+      this.credDialog.close()
+    }
+  }
+  
 }

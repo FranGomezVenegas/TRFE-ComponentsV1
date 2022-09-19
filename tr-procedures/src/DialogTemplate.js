@@ -85,17 +85,20 @@ export function DialogTemplate(base) {
         heading=""
         hideActions=""
         scrimClickAction="">
-        <div class="layout vertical flex center-justified">
-          <mwc-textfield id="commentInput" label="${this.langConfig.fieldText && this.langConfig.fieldText.comment["label_" + this.lang]}" 
-            dialogInitialFocus
-            @keypress=${e => e.keyCode == 13 && this.addComment()}></mwc-textfield>
-          <div style="margin-top:30px;text-align:center">
-            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.addComment}>
-              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+        ${!this.selectedAction.dialogInfo ?
+        html`ggg`: html`        
+          <div class="layout vertical flex center-justified">
+            <mwc-textfield id="commentInput" label="${this.selectedAction.dialogInfo.fieldText && this.selectedAction.dialogInfo.fieldText.comment["label_" + this.lang]}" 
+              dialogInitialFocus
+              @keypress=${e => e.keyCode == 13 && this.addComment()}></mwc-textfield>
+            <div style="margin-top:30px;text-align:center">
+              <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+                ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
+              <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.addComment}>
+                ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+            </div>
           </div>
-        </div>
+        `}        
       </tr-dialog>
       `
     }
@@ -124,7 +127,7 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         ${this.selectedSamples.length ?
-          html`<label slot="topLeft" style="font-size:12px">Sample ID: ${this.selectedSamples[0].sample_id || this.selectedSamples[0].id}</label>` : nothing
+          html`<label slot="topLeft" style="font-size:12px">${this.langConfig.resultHeaderObjectLabelTopLeft["label_" + this.lang]} ${this.selectedSamples[0].sample_id || this.selectedSamples[0].id}</label>` : nothing
         }
         <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
           .items=${this.enterResults}
@@ -142,8 +145,8 @@ export function DialogTemplate(base) {
           html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
         }
           ${this.selectedAction.actionName == "INSTRUMENT_EVENT_VARIABLES" ?
-          html`${this.evList()}` :
-          html`${this.erList()}`
+          html`${this.instrumentEventList()}` :
+          html`${this.enterResultList()}`
         }
         </vaadin-grid>
         <div id="rowTooltip">&nbsp;</div>
@@ -265,7 +268,8 @@ export function DialogTemplate(base) {
       `
     }
 
-    erList() {
+    enterResultList() {
+      //alert(this.selectedAction.actionName)
       return Object.entries(this.langConfig.resultHeader).map(([key, value], i) =>
         html`
           ${this.desktop ?
@@ -277,17 +281,29 @@ export function DialogTemplate(base) {
                   flex-grow="0"
                   path="${key}" 
                   header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
-                html`${key == "raw_value" ?
-                  html`<vaadin-grid-column 
-                    ${columnBodyRenderer(this.valRenderer)}
-                    text-align="center" 
-                    resizable 
-                    width="130px"
-                    path="${key}" 
-                    header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
-                  html`${key == "uom" ?
-                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable flex-grow=1 text-align='center' path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
-                    html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
+                  html`${key == "raw_value" ?
+                    html`<vaadin-grid-column 
+                      ${columnBodyRenderer(this.valRenderer)}
+                      text-align="center" 
+                      resizable 
+                      width="130px"
+                      path="${key}" 
+                      header="${value['label_' + this.lang]}"></vaadin-grid-column>` 
+                    :
+                    html`${key == "sar2_raw_value" ?
+                      html`<vaadin-grid-column 
+                        ${columnBodyRenderer(this.valRenderer)}
+                        text-align="center" 
+                        resizable 
+                        width="130px"
+                        path="${key}" 
+                        header="${value['label_' + this.lang]}"></vaadin-grid-column>` 
+                      :
+                      html`${key == "uom" ?
+                        html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable flex-grow=1 text-align='center' path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>` 
+                      :
+                        html`<vaadin-grid-column resizable flex-grow=1 path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
+                      }`
                     }`
                   }`
               }
@@ -304,12 +320,24 @@ export function DialogTemplate(base) {
                     ${columnBodyRenderer(this.valRenderer)}
                     width="130px" resizable 
                     path="${key}" 
-                    header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                    header="${value['label_' + this.lang]}"></vaadin-grid-column>` 
+                  :
+                  html`${key == "sar2_raw_value" ?
+                    html`<vaadin-grid-column 
+                      ${columnBodyRenderer(this.valRenderer)}
+                      text-align="center" 
+                      resizable 
+                      width="130px"
+                      path="${key}" 
+                      header="${value['label_' + this.lang]}"></vaadin-grid-column>` 
+                  :                  
                   html`${key == "uom" ?
-                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
+                    html`<vaadin-grid-column ${columnBodyRenderer(this.uomRenderer)} resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>` 
+                  :
                     html`<vaadin-grid-column resizable width="65px" path="${key}" header="${value['label_' + this.lang]}"></vaadin-grid-column>`
                     }`
                   }`
+                }`
               }
             `
           }
@@ -317,14 +345,14 @@ export function DialogTemplate(base) {
       )
     }
 
-    evList() {
+    instrumentEventList() {
       return Object.entries(this.langConfig.resultHeader).map(([key, value], i) =>
         html`
           ${this.desktop ?
             html`
               ${key == "value" ?
                 html`<vaadin-grid-column 
-                  ${columnBodyRenderer(this.valRenderer)}
+                  ${columnBodyRenderer(this.valRendererInstrument)}
                   text-align="center" 
                   width="130px"
                   path="${key}" 
@@ -335,7 +363,7 @@ export function DialogTemplate(base) {
             html`
               ${key == "value" ?
                 html`<vaadin-grid-column 
-                  ${columnBodyRenderer(this.valRenderer)}
+                  ${columnBodyRenderer(this.valRendererInstrument)}
                   width="130px" resizable
                   path="${key}" 
                   header="${value['label_' + this.lang]}"></vaadin-grid-column>` :
@@ -364,6 +392,12 @@ export function DialogTemplate(base) {
     }
 
     valRenderer(result) {
+      var rawValue=''
+      if (this.selectedAction.actionName.toUpperCase().includes('SECOND')){
+        rawValue = result.sar2_raw_value
+      }else{
+        rawValue = result.raw_value
+      }
       if (result.is_locked) {
         return html`
           <div style="width: 100%;height: 55px;position: relative; background-color: rgb(255 8 8 / 20%)">
@@ -371,34 +405,35 @@ export function DialogTemplate(base) {
           </div>
         `
       } else {
-        if (result.param_type == "TEXT" || result.param_type == "qualitative") {
-          return html`<input class="enterResultVal" type="text" .value=${result.raw_value} 
+        if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
+          return html`<input class="enterResultVal" type="text" .value=${rawValue} 
             ?disabled=${this.selectedAction.dialogInfo.readOnly}
             @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>`
-        } else if (result.param_type.indexOf("LIST") > -1) {
-          let lEntry = result.list_entry.split("|")
+        } else if (result.param_type.toUpperCase().indexOf("LIST") > -1) {
+//console.log('valRenderer', 'result', result)
+          let lEntry = ('|'+result.list_entry).split("|")
           return html`
-            ${result.param_type == "TEXTLIST" ?
+            ${result.param_type.toUpperCase() == "TEXTLIST" ?
               html`
                 <input class="enterResultVal" list="listEntry${result.result_id}" 
-                  .value=${result.raw_value}
+                  .value=${rawValue}
                   @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
                 <datalist id="listEntry${result.result_id}">
                   ${lEntry.map(l =>
-                    html`<option value="${l}">`
+                    html`<option value="${l}">${l}`
                   )}
                 </datalist>
               ` :
               html`
                 <select class="enterResultVal" @change=${e => this.setResult(result, e.target)}>
                   ${lEntry.map(l =>
-                    html`<option value="${l}" ?selected=${l==result.raw_value}>`
+                    html`<option value="${l}" ?selected=${l==rawValue}>${l}`
                   )}
                 </select>
               `
             }
           `
-        } else if (result.param_type == "REAL") {
+        } else if (result.param_type.toUpperCase() == "REAL") {
           let step = result.max_dp ? 1 / Math.pow(10, result.max_dp) : 0.01
           let min = result.min_allowed ? result.min_allowed : 0
           let max = result.max_allowed && result.max_allowed
@@ -425,6 +460,73 @@ export function DialogTemplate(base) {
               .value=${this.adjustValUndetermined(result)} 
               @input=${e=>this.setValidVal(e, result)}
               @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
+          `
+        }
+      }
+    }
+
+    valRendererInstrument(result) {
+      if (result.is_locked) {
+        return html`
+          <div style="width: 100%;height: 55px;position: relative; background-color: rgb(255 8 8 / 20%)">
+            <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
+          </div>
+        `
+      } else {
+        if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
+          return html`<input class="enterResultVal" type="text" .value=${result.value} 
+            ?disabled=${this.selectedAction.dialogInfo.readOnly}
+            @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>`
+        } else if (result.param_type.toUpperCase().indexOf("LIST") > -1) {
+          let lEntry = result.allowed_values.split("|")
+          return html`
+            ${result.param_type.toUpperCase() == "TEXTLIST" ?
+              html`
+                <input class="enterResultVal" list="listEntry${result.result_id}" 
+                  .value=${result.value}
+                  @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>
+                <datalist id="listEntry${result.result_id}">
+                  ${lEntry.map(l =>
+                    html`<option value="${l}">${l}`
+                  )}
+                </datalist>
+              ` :
+              html`
+                <select class="enterResultVal" @change=${e => this.setResultInstrument(result, e.target)}>
+                  ${lEntry.map(l =>
+                    html`<option value="${l}" ?selected=${l==result.value}>${l}`
+                  )}
+                </select>
+              `
+            }
+          `
+        } else if (result.param_type.toUpperCase() == "REAL") {
+          let step = result.max_dp ? 1 / Math.pow(10, result.max_dp) : 0.01
+          let min = result.min_allowed ? result.min_allowed : 0
+          let max = result.max_allowed && result.max_allowed
+          return html`
+            ${this[`${result.param_type+''+result.result_id}`]}
+            <input class="enterResultVal" id="${result.param_type+''+result.result_id}" 
+              ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
+              .step=${step} 
+              .min=${min}
+              .max=${max}
+              .value=${result.value} 
+              @input=${e=>this.setValidVal(e, result)}
+              @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>
+          `
+        } else {
+          let min = result.min_allowed ? result.min_allowed : 0
+          let max = result.max_allowed && result.max_allowed
+          return html`
+            ${this[`${result.param_type+''+result.result_id}`]}
+            <input class="enterResultVal" id="${result.param_type+''+result.result_id}" 
+              ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
+              .min=${min}
+              .max=${max}
+              .value=${result.value}
+              @input=${e=>this.setValidVal(e, result)}
+              @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>
           `
         }
       }
@@ -517,10 +619,43 @@ export function DialogTemplate(base) {
     }
 
     setResult(result, target) {
+      var resId=''
+      if (this.selectedAction.actionName.toUpperCase().includes('SECOND')){
+        resId = result.sar2_result_id
+      }else{
+        resId = result.result_id
+      }      
       let newValue = target.value
       this.targetValue = {
         rawValueResult: newValue,
-        resultId: result.result_id,
+        resultId: resId,
+        eventId: result.event_id,
+        instrumentName: result.instrument,
+        variableName: result.param_name
+      }
+      // vaadin grid field rebinding doesn't work, so let's do manually
+      // ClientMethod::getResult
+      this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
+      let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
+      this.selectedDialogAction = JSON.parse(act)
+      var rawValue=''
+      if (this.selectedAction.actionName.toUpperCase().includes('SECOND')){
+        rawValue = result.sar2_raw_value
+      }else{
+        rawValue = result.raw_value
+      }
+      console.log('setResult', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction)
+      if (rawValue) {
+        this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
+        this.actionMethod(this.selectedDialogAction, false)
+      } else {
+        this.actionMethod(this.selectedDialogAction, false)
+      }
+    }
+    setResultInstrument(result, target) {
+      let newValue = target.value
+      this.targetValue = {
+        newValue: newValue,
         eventId: result.event_id,
         instrumentName: result.instrument,
         variableName: result.param_name
@@ -573,12 +708,12 @@ export function DialogTemplate(base) {
           )}
         </mwc-select>
         <sp-button id="mAddBtn" size="m" variant="cta" @click=${()=>this.setMicroorganism(false)}>
-          ${this.langConfig.fieldText.addBtn["label_" + this.lang]}</sp-button>
+          ${this.selectedAction.dialogInfo.fieldText.addBtn["label_" + this.lang]}</sp-button>
 
-        <mwc-textfield id="mAddHoc" label="${this.langConfig.fieldText.addhocInput['label_' + this.lang]}"
+        <mwc-textfield id="mAddHoc" label="${this.selectedAction.dialogInfo.fieldText.addhocInput['label_' + this.lang]}"
           @input=${this.inputAddhoc}></mwc-textfield>
         <sp-button id="mAddHocBtn" size="m" variant="secondary" @click=${()=>this.setMicroorganism()}>
-          ${this.langConfig.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
+          ${this.selectedAction.dialogInfo.fieldText.addhocBtn["label_" + this.lang]}</sp-button>
 
         <div id='microGrid'>
           <vaadin-grid theme="row-dividers" multi-sort
@@ -796,7 +931,7 @@ export function DialogTemplate(base) {
     // }
 
     /** Incubation Template Dialog part */
-    newBatchTemplate() {
+    newBatchTemplate() {      
       return html`
       <tr-dialog id="newBatchDialog" 
         @closed=${() => this.batchInput.value = ""}
@@ -996,7 +1131,7 @@ export function DialogTemplate(base) {
         sampleTemplateVersion: this.templates.selectedProgram.sample_config_code_version,
         fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
       }
-      this.actionMethod(null, false, 1)
+      this.actionMethod(null, false, 0)
     }
 
     /** Lot Template Dialog part */
@@ -1038,31 +1173,18 @@ export function DialogTemplate(base) {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          ${this.selectedAction.actionName == "EM_NEW_PRODUCTION_LOT" ?
-          html`
-              <mwc-textfield id="lotInput" 
-                label="${this.langConfig.fieldText.newLot["label_" + this.lang]}" 
-                dialogInitialFocus
-                @keypress=${e => e.keyCode == 13 && this.lotAction()}></mwc-textfield>
+        ${!this.selectedAction.dialogInfo ?
+          html``: html`
+            ${this.selectedAction.actionName == "EM_NEW_PRODUCTION_LOT" ?
+            html`
+                <mwc-textfield id="lotInput" 
+                  label="${this.selectedAction.dialogInfo.fieldText.newLot["label_" + this.lang]}" 
+                  dialogInitialFocus
+                  @keypress=${e => e.keyCode == 13 && this.lotAction()}></mwc-textfield>
             ` :
-          html`
-              <div class="layout vertical flex">
-                <div class="layout horizontal flex center-center">
-                  <mwc-textfield class="layout flex" id="lotNumDays" type="number" 
-                    .value=${this.lotDays} @change=${e => this.lotDays = e.target.value}
-                    label="${this.langConfig.fieldText.lotDays["label_" + this.lang]}"
-                    @keypress=${e => e.keyCode == 13 && this.setDays()}></mwc-textfield>
-                  <mwc-icon-button icon="refresh" @click=${this.setDays}></mwc-icon-button>
-                </div>
-                <mwc-select id="lotName" label="${this.langConfig.fieldText.lotName["label_" + this.lang]}" 
-                  ?disabled=${!this.deactivatedLots.length}>
-                  ${this.deactivatedLots.map((l, i) =>
-            html`<mwc-list-item value="${l.lot_name}" ?selected=${i == 0}>${l.lot_name}</mwc-list-item>`
-          )}
-                </mwc-select>
-              </div>
-            `
-        }
+            html`
+            `}
+        `}        
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
               ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
@@ -1108,147 +1230,6 @@ export function DialogTemplate(base) {
       }
     }
 
-    cleanNewInstrumentFields() {
-      this.instrumentInput.value = "";
-      this.instrumentFamilyInput.value = ""
-    }
-
-    newInstrumentsTemplate() {
-      return html`
-      <tr-dialog id="newInstrumentDialog" 
-        ?open=${this.familyList.length}
-        @closed=${e => { if (e.target === this.newInstrumentDialog) this.cleanNewInstrumentFields() }}
-        heading=""
-        hideActions=""
-        scrimClickAction="">
-        <div class="layout vertical flex center-justified">
-          <mwc-textfield id="instrumentInput" label="${this.langConfig && this.langConfig.fieldText.newInstrument["label_" + this.lang]}" 
-            dialogInitialFocus @keypress=${e => e.keyCode == 13 && this.newInstrument()}></mwc-textfield>
-          <mwc-select id="instrumentFamilyInput" label="${this.langConfig && this.langConfig.fieldText.familyName["label_" + this.lang]}">
-            ${this.familyList.map(m =>
-              html`<mwc-list-item value=${m.name}>${m.name}</mwc-list-item>`
-            )}
-          </mwc-select>
-          <div style="margin-top:30px;text-align:center">
-            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" @click=${this.newInstrument}>
-              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-          </div>
-        </div>
-      </tr-dialog>
-      <tr-dialog id="undecomInstrDialog"
-        @closed=${e => { if (e.target === this.undecomInstrDialog) this.deactivatedLots = [] }}
-        heading=""
-        hideActions=""
-        scrimClickAction="">
-        <div class="layout vertical flex center-justified">
-          ${this.selectedAction.actionName == "xUNDECOMMISSION_INSTRUMENT" ?
-          html`
-              <mwc-textfield id="instrumentInput" 
-                label="${this.langConfig.fieldText.instrumentName["label_" + this.lang]}" 
-                dialogInitialFocus
-                @keypress=${e => e.keyCode == 13 && this.undecomInstrument()}></mwc-textfield>
-            ` :
-          html`
-              <div class="layout vertical flex">
-                <div class="layout horizontal flex center-center">
-                  <mwc-textfield class="layout flex" id="lotNumDays" type="number" 
-                    .value=${this.lotDays} @change=${e => this.lotDays = e.target.value}
-                    label="${this.langConfig.fieldText.lotDays["label_" + this.lang]}"
-                    @keypress=${e => e.keyCode == 13 && this.setDays()}></mwc-textfield>
-                  <mwc-icon-button icon="refresh" @click=${this.setDays}></mwc-icon-button>
-                </div>
-                <mwc-select id="instrumentName" label="${this.langConfig.fieldText.instrumentName["label_" + this.lang]}" 
-                  ?disabled=${!this.deactivatedLots.length}>
-                  ${this.deactivatedLots.map((l, i) =>
-            html`<mwc-list-item value="${l.name}" ?selected=${i == 0}>${l.name}</mwc-list-item>`
-          )}
-                </mwc-select>
-              </div>
-            `
-        }
-          <div style="margin-top:30px;text-align:center">
-            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.undecomInstrument}>
-              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-          </div>
-        </div>
-      </tr-dialog>
-      `
-    }
-    undecomInstrument() {
-      if (this.selectedAction.actionName == "UNDECOMMISSION_INSTRUMENT") {
-        if (this.instrumentName.value) {
-          this.selectedDialogAction = null
-          this.dialogAccept(false)
-        }
-      } else {
-        if (this.instrumentInput.value) {
-          this.dialogAccept(false)
-        }
-      }
-    }
-
-    get newInstrumentDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#newInstrumentDialog")
-    }
-    get undecomInstrDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#undecomInstrDialog")
-    }
-    get instrumentName() {
-      return this.shadowRoot.querySelector("mwc-select#instrumentName")
-    }
-
-
-    instrumentEventTemplate() {
-      return html`
-      <tr-dialog id="completeInstrumentEventDialog" 
-        @closed=${() => this.cleanNewInstrumentFields()}
-        heading=""
-        hideActions=""
-        scrimClickAction="">
-        <div class="layout vertical flex center-justified">
-            <mwc-select id="decisionInput" label="${this.langConfig && this.langConfig.fieldText.decision["label_" + this.lang]}">
-            ${this.langConfig.fieldText.decision.items.map((c, i) =>
-        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-      )}
-          </mwc-select>
-
-          <div style="margin-top:30px;text-align:center">
-            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" @click=${this.instrumentEventDecision}>
-              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-          </div>
-        </div>
-      </tr-dialog>      
-      `
-    }
-    get completeInstrumentEventDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#completeInstrumentEventDialog")
-    }
-    get instrumentInput() {
-      return this.shadowRoot.querySelector("mwc-textfield#instrumentInput")
-    }
-    get instrumentFamilyInput() {
-      return this.shadowRoot.querySelector("mwc-select#instrumentFamilyInput")
-    }
-    get decisionInput() {
-      return this.shadowRoot.querySelector("mwc-select#decisionInput")
-    }
-
-    instrumentEventDecision() {
-      if (this.decisionInput.value) {
-        this.dialogAccept(false)
-      }
-    }
-    newInstrument() {
-      if (this.instrumentInput.value) {
-        this.dialogAccept(false)
-      }
-    }
 
     /** Investigation Template Dialog part */
     investigationTemplate() {
