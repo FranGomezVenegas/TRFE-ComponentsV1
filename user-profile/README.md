@@ -37,7 +37,7 @@ To run a local development server that serves the basic demo located in `demo/in
 
 This area want to track the requirements that made this web component to become a reality.
 
-- #193. Corporative Trazit Theme [https://github.com/FranGomezVenegas/FETR/issues/193](url)
+[- #193. Corporative Trazit Theme](https://github.com/FranGomezVenegas/FETR/issues/193)
 
 
 ## Fixed Bugs Tracking
