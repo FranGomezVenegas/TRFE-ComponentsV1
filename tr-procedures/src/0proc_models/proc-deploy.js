@@ -581,7 +581,7 @@ export const ProcDeploy = {
     },
     "viewQuery":    
     { "actionName": "SAMPLEANALYSIS_PENDING_REVISION",
-	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+	  "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "xxxclientMethod": "getSamples",
       "addRefreshButton": true,
       "button": {
@@ -702,7 +702,7 @@ export const ProcDeploy = {
     },
     "viewQuery":    
     { "actionName": "SAMPLES_PENDING_TESTINGGROUP_REVISION",
-	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+	  "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -853,7 +853,7 @@ export const ProcDeploy = {
   },
     "viewQuery":    
     { "actionName": "SAMPLES_PENDING_SAMPLE_REVISION",
-	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+	  "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
