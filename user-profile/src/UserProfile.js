@@ -5,14 +5,21 @@ import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@spectrum-web-components/button/sp-button';
 
-const langConfig = {
+import { DialogsFunctions } from '../../tr-procedures/src/components/GenericDialogs/DialogsFunctions';
+import {TrazitCredentialsDialogs} from '../../tr-procedures/src/components/GenericDialogs/TrazitCredentialsDialogs';
+
+const viewInfoDefinition = {
   "Password": {
     "label_en": "New Password",
-    "label_es": "Nueva Contraseña"
+    "label_es": "Nueva Contraseña",
+    "empty_label_en": "Please fill the new password first",
+    "empty_label_es": "Por favor entra una nueva contraseña antes",
   },
   "Esign": {
     "label_en": "New Esign",
-    "label_es": "Nueva Firma Electrónica"
+    "label_es": "Nueva Firma Electrónica",
+    "empty_label_en": "Please fill the new E Sign first",
+    "empty_label_es": "Por favor entra una nueva firma electrónica antes",
   },
   "Shift": {
     "label_en": "Shift",
@@ -33,7 +40,7 @@ const langConfig = {
   }
 };
 
-export class UserProfile extends CredDialog {
+export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredDialog)) {
   static get styles() {
     return [
       Layouts,
@@ -155,46 +162,43 @@ export class UserProfile extends CredDialog {
     return html`
       <div class="input">
         <div class="layout horizontal flex center">
-          <mwc-textfield id="newPwd" .label="${langConfig.Password["label_" + this.lang]}" type="password" iconTrailing="visibility"
+          <mwc-textfield id="newPwd" .label="${viewInfoDefinition.Password["label_" + this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newPwd.value) this.confirmNewVal("USER_CHANGE_PSWD") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_PSWD")} .label="${langConfig.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_PSWD")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
-          <mwc-textfield id="newEsign" .label="${langConfig.Esign["label_" + this.lang]}" type="password" iconTrailing="visibility"
+          <mwc-textfield id="newEsign" .label="${viewInfoDefinition.Esign["label_" + this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newEsg.value) this.confirmNewVal("USER_CHANGE_ESIGN") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${langConfig.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
         <div class="layout horizontal flex center">
-          <mwc-select label='${langConfig.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
-            ${langConfig.Shift.items.map(c =>
+          <mwc-select label='${viewInfoDefinition.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
+            ${viewInfoDefinition.Shift.items.map(c =>
       html`<mwc-list-item value="${c.keyName}" 
                 ?selected=${c.keyName == this.userShift}>${c["keyValue_" + this.lang]}</mwc-list-item>`
     )}
           </mwc-select>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_SHIFT")} .label="${langConfig.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_SHIFT")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
       </div>
-      <sp-button size="xl" @click=${() => this.dispatchEvent(new CustomEvent('save-tabs'))}>${langConfig.TabLogin["label_" + this.lang]}</sp-button>
+      <sp-button size="xl" @click=${() => this.dispatchEvent(new CustomEvent('save-tabs'))}>${viewInfoDefinition.TabLogin["label_" + this.lang]}</sp-button>
       ${super.render()}
     `;
   }
-
-  get newPwd() {
-    return this.shadowRoot.querySelector("mwc-textfield#newPwd")
-  }
-
-  get newEsg() {
-    return this.shadowRoot.querySelector("mwc-textfield#newEsign")
-  }
-
-  get newShift() {
-    return this.shadowRoot.querySelector("mwc-select#newShift")
-  }
+ 
+  get newPwd() {return this.shadowRoot.querySelector("mwc-textfield#newPwd")}
+  get newEsg() {return this.shadowRoot.querySelector("mwc-textfield#newEsign")}
+  get newShift() {return this.shadowRoot.querySelector("mwc-select#newShift")}
 
   static get properties() {
     return {
-      userShift: { type: String }
+      userShift: { type: String },
+      targetValue:{ type: Object}
     }
+  }
+  constructor() {
+    super();
+    this.targetValue = {}
   }
 
   authorized() {
@@ -220,22 +224,47 @@ export class UserProfile extends CredDialog {
     })
   }
 
-  confirmNewVal(action) {
-    if (action == "USER_CHANGE_PSWD") {
+  confirmNewVal(actionName) {
+    let action={}
+    action.actionName = actionName
+    action.endPoint = this.config.appAuthenticateApiUrl
+    action.requiresDialog = false
+    this.targetValue=this.reqParams
+
+    if (actionName == "USER_CHANGE_PSWD") {
       this.type = "user"
-      this.credsChecker(action, -1, {
-        newPassword: this.newPwd.value
-      })
-    } else if (action == "USER_CHANGE_ESIGN") {
+      if (this.newPwd.value===undefined||this.newPwd.value.length===0){
+        alert(viewInfoDefinition.Password["empty_label_" + this.lang])
+        return
+      }
+      alert('action under development')
+      return
+        this.selectedItems=[]
+      let item={newPassword: this.newPwd.value}
+      this.selectedItems.push(item)
+      this.actionMethod(action)
+      return
+      this.config.appAuthenticateApiUrl
+      this.credsChecker(actionName, -1, {
+        newPassword: this.newPwd.value}, action)
+
+    } else if (actionName == "USER_CHANGE_ESIGN") {
       this.type = "esign"
-      this.credsChecker(action, -1, {
-        newEsign: this.newEsg.value
-      })
-    } else if (action == "UPDATE_USER_SHIFT") {
-      this.type = "user"
-      this.credsChecker(action, -1, {
-        newShift: this.newShift.value
-      })
+      if (this.newEsg.value===undefined||this.newEsg.value.length===0){
+        alert(viewInfoDefinition.Esign["empty_label_" + this.lang])
+        return
+      }
+      alert('action under development')
+      return
+        
+      this.credsChecker(actionName, -1, {
+        newEsign: this.newEsg.value}, action)
+    } else if (actionName == "UPDATE_USER_SHIFT") {
+      alert('action under development')
+      return
+        this.type = "user"
+      this.credsChecker(actionName, -1, {
+        newShift: this.newShift.value}, this.targetValue, action)
     }
   }
 

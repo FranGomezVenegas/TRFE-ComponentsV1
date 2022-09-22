@@ -43,3 +43,6 @@ This area want to track the requirements that made this web component to become 
 ## Fixed Bugs Tracking
 
 This area want to track the bugs identified for this Web Component that were already implemented/fixed.
+
+- Adapted to model 2.1 - credsChecker in new place.
+- check, notify and stop when the new X value was not entered prior to click the button to perform the action
