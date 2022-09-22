@@ -1,4 +1,10 @@
 export const AppProc = {
+  "TrackingChanges":{
+	  "version": 0.9,
+	  "last change on (YYYYMMDD)": "20220921",
+	  "last_change_note": "replace whenDisabled by requiresGridItemSelected",
+	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
+  },	
   "ModuleSettings":{
 	  "actionsEndpoints":[
 		{ "name": "Instruments" , "url" : "/app/procs/InstrumentsAPIactions"}
@@ -67,7 +73,7 @@ export const AppProc = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       }
     },
     "actions": [
@@ -91,7 +97,7 @@ export const AppProc = {
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {          
           "name": "genericDialog",
@@ -158,7 +164,7 @@ export const AppProc = {
           "title": {
             "label_en": "Instrument Audit", "label_es": "Auditoría de Instrumento"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -196,7 +202,7 @@ export const AppProc = {
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
-          "whenDisabled": "selectedSamples",
+          "requiresGridItemSelected": true,
           "showWhenSelectedItem": {
             "column": "on_line",
             "value": true
@@ -214,7 +220,7 @@ export const AppProc = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "whenDisabled": "selectedSamples",
+          "requiresGridItemSelected": true,
           "showWhenSelectedItem": {
             "column": "on_line",
             "value": false
@@ -232,7 +238,7 @@ export const AppProc = {
           "title": {
             "label_en": "Start Calibration", "label_es": "Iniciar Calibración"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
@@ -246,7 +252,7 @@ export const AppProc = {
           "title": {
             "label_en": "Start Prev Maint", "label_es": "Iniciar Mant Prev"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
@@ -260,7 +266,7 @@ export const AppProc = {
           "title": {
             "label_en": "Start Service", "label_es": "Iniciar Servicio"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
@@ -275,7 +281,7 @@ export const AppProc = {
           "title": {
             "label_en": "Start Verification", "label_es": "Iniciar Verificación"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
@@ -293,7 +299,7 @@ export const AppProc = {
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         }
       },
       { "actionName": "UNDECOMMISSION_INSTRUMENT",
@@ -307,7 +313,7 @@ export const AppProc = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": true
         },
 		"requiresDialog": true,
         "dialogInfo": {          
@@ -383,7 +389,7 @@ export const AppProc = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       }
     },
   "actions": [
@@ -408,7 +414,7 @@ export const AppProc = {
             "title": {
                 "label_en": "Complete Event", "label_es": "Completar Evento"
             },
-            "whenDisabled": "selectedSamples"
+            "requiresGridItemSelected": true
         },
         "endPointParams": [
             { "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
@@ -425,7 +431,7 @@ export const AppProc = {
         "title": {
           "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
         },
-        "whenDisabled": "selectedSamples"
+        "requiresGridItemSelected": true
       },
       "dialogInfo": {
         "automatic": true,
@@ -456,7 +462,7 @@ export const AppProc = {
           "title": {
             "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
       "resultHeader": {
         "id": {

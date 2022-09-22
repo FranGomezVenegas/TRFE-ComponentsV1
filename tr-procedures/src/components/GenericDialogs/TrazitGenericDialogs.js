@@ -43,12 +43,13 @@ export function TrazitGenericDialogs(base) {
       this.actionBeingPerformedModel={}
     }
     openThisDialog(actionModel = this.actionBeingPerformedModel){
-
+alert('openThisDialog')
        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
         //alert(false)
         return false
        }      
        // alert(true)
+       this.resetFields()
        return true 
     }
         
@@ -65,6 +66,9 @@ export function TrazitGenericDialogs(base) {
         //         return nothing
         //     }
         // }    
+
+         // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi 
+         //     otherwise it is not compatible with actions requiring credentials dialog.
     return html`
     <style>
     mwc-textfield {
@@ -87,7 +91,7 @@ export function TrazitGenericDialogs(base) {
         --mdc-theme-primary: #0465FB;
       }
     </style>
-        <tr-dialog id="genericDialog"  @opened=${this.defaultValue} ?open=${this.openThisDialog(actionModel)}   @closed=${this.resetFields} heading="" hideActions="" scrimClickAction="">
+        <tr-dialog id="genericDialog"  @opened=${this.defaultValue} ?open=${this.openThisDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
         ${!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields ?
             html``: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
@@ -95,7 +99,7 @@ export function TrazitGenericDialogs(base) {
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text1" type="text"  label="${fld.text1["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${fld.text1.default_value ? fld.text1.default_value : ''}  label="${fld.text1["label_" + this.lang]}" 
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
@@ -543,21 +547,25 @@ export function TrazitGenericDialogs(base) {
         this.dialogAccept(false)
       }
     }
-    acceptedGenericDialog(){
+    acceptedGenericDialog(e){
         if (this.checkMandatoryFieldsNotEmpty()){
             this.dialogAccept(false)
         }else{
-            alert('mandatories pending')
+            console.log('Accepted Generic Dialog but mandatories pending then action not performed')
+           // alert('mandatories pending')
+           e.stopPropagation();
         }
     }
-    checkMandatoryFieldsNotEmpty(){        
-        return true
+    checkMandatoryFieldsNotEmpty(){                
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
-        for (let i=0;i<dlgFlds.length;i++){
+        for (let i=0;i<dlgFlds.length;i++){            
             let fldObj=dlgFlds[i]
+            console.log('checkMandatoryFieldsNotEmpty', fldObj)
             let keyName=Object.keys(fldObj)
-            if ((fldObj.optional===undefined||fldObj.optional===false)&&this[keyName[0]].value.length==0){
-                alert('Field '+fldObj["label_"+this.lang]+' is empty')
+            let fldDef=fldObj[keyName[0]]
+            if ((fldDef.optional===undefined||
+                fldDef.optional===false)&&this[keyName[0]].value.length==0){
+                alert('Field '+fldDef["label_"+this.lang]+' is mandatory')
                 return false
             }
         }
@@ -565,7 +573,8 @@ export function TrazitGenericDialogs(base) {
     }
 
     defaultValue(){
-        console.log('defaultValue')
+        //console.log('defaultValue')
+        this.resetFields()
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
@@ -588,7 +597,8 @@ export function TrazitGenericDialogs(base) {
             }
         }
     }    
-    resetFields(){        
+    resetFields(){           
+        //alert('reset Fields now')   
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')

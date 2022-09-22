@@ -1,8 +1,10 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20220918",
-	  "last change note": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
+	  "last change on (YYYYMMDD)": "20220921",
+	  "last_change_note_20220921": "Fixed issues in ProductionLots reactivate lot, 3 errors on open dialog for the first time(1) use numDays (2) and error when query returns no records for the list(3)",
+	  "last_change_note_20220921_2": "replace whenDisabled by requiresGridItemSelected",
+	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
   },
   "ModuleSettings":{
 	  "actionsEndpoints":[
@@ -38,7 +40,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Refresh", "label_es": "Recargar"
           },
-          "whenDisabled": "samplesReload"
+          "xxxwhenDisabled": "samplesReload"
       }
     },
 	"actions": [
@@ -50,7 +52,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": false
         },
         "dialogInfo": {          
           "name": "genericDialog",
@@ -75,13 +77,13 @@ export const EmDemoA = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": false
         },
 		"requiresDialog": true,
         "dialogInfo": {          
           "name": "reactivateObjectDialog",
           "fieldsObject": {
-			"numDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+			"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
 			"objectName": { "label_en": "Production Lot to reactivate", "label_es": "Lote de Producción a Reactivar" }
           },    
           "listDefinition":{
@@ -95,7 +97,7 @@ export const EmDemoA = {
 			  "clientMethod": "getDeactivatedObjects",
 			  "endPoint": "/moduleenvmon/EnvMonAPIqueries",
 			  "endPointParams": [
-				{ "argumentName": "numDays", "element": "lotNumDays", "defaultValue": 7 }
+				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
 			  ]
 		  },
           "action": [            
@@ -114,7 +116,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         }
       }
     ]
@@ -192,7 +194,7 @@ export const EmDemoA = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "subAction": {
         "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
@@ -260,7 +262,7 @@ export const EmDemoA = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
@@ -280,7 +282,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -317,7 +319,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Set Sample Date", "label_es": "Establecer Fecha Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -331,18 +333,19 @@ export const EmDemoA = {
           "title": {
             "label_en": "Change Sample Date", "label_es": "Cambiar Fecha Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": { 
           "namesssss": "dateDialog",
 		  "name": "genericDialog",
           "fields": [            
-			{"datetime1": { "label_en": "new Comment", "label_es": "Comentario" }}
+			{"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" }},
+			{"text1": { "label_en": "new Date", "label_es": "Nueva Fecha" }}
           ]  		  
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-          { "argumentName": "newDateTime", "element": "datetime1", "defaultValue": "" }
+          { "argumentName": "newDateTime", "element": "datetime1", "selObjectPropertyName": "sampling_date"  }
         ]
       },
       { "actionName": "SAMPLESTAGE_MOVETONEXT",
@@ -354,7 +357,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -368,7 +371,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Add Sampling Comment", "label_es": "Agregar Comentario de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {           
           "namezzzz": "commentDialog",
@@ -390,7 +393,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Remove Sampling Comment", "label_es": "Eliminar Comentario de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -444,7 +447,7 @@ export const EmDemoA = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
@@ -464,7 +467,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -501,7 +504,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Set Sample Date", "label_es": "Establecer Fecha Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -515,7 +518,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Change Sample Date", "label_es": "Cambiar Fecha Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": { 
 		  "name": "genericDialog",
@@ -536,7 +539,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Set END Sample Date", "label_es": "Establecer Fecha FIN Muestreo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -550,7 +553,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Change END Sample Date", "label_es": "Cambiar Fecha FIN Muestreo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": { 
 		  "name": "genericDialog",
@@ -572,7 +575,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -586,7 +589,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Add Sampling Comment", "label_es": "Agregar Comentario de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {           
           "namezzzz": "commentDialog",
@@ -608,7 +611,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Remove Sampling Comment", "label_es": "Eliminar Comentario de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -676,7 +679,7 @@ export const EmDemoA = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code" },
@@ -697,7 +700,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Previous", "label_es": "Previo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -711,7 +714,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -725,7 +728,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -765,7 +768,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": { 
 		  "name": "resultDialog",
@@ -848,7 +851,7 @@ export const EmDemoA = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code" },
@@ -870,7 +873,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Previous", "label_es": "Previo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -883,7 +886,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -897,7 +900,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -937,7 +940,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": { 
 		  "name": "resultDialog",
@@ -1046,7 +1049,7 @@ export const EmDemoA = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
@@ -1066,7 +1069,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Previous", "label_es": "Previo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -1080,7 +1083,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -1094,7 +1097,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -1131,7 +1134,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Add Microorganism", "label_es": "Añadir Microorganismo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -1193,7 +1196,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Remove Microorganism", "label_es": "Borrar Microorganismo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "zzzendPointParams": [
           { "argumentName": "whereFieldsName", "value": "sample_id" },
@@ -1320,7 +1323,7 @@ export const EmDemoA = {
 			"title": {
 			  "label_en": "Reload", "label_es": "Recargar"
 			},
-			"whenDisabled": "samplesReload"
+			"requiresGridItemSelected": true
 		  }
 		},        
 		"actions": [
@@ -1332,7 +1335,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "New Batch", "label_es": "Nuevo Lote"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             },
             "dialogInfo": {               
 				"name": "genericDialog",
@@ -1486,7 +1489,7 @@ export const EmDemoA = {
 			"title": {
 			  "label_en": "Reload", "label_es": "Recargar"
 			},
-			"whenDisabled": "samplesReload"
+			"requiresGridItemSelected": true
 		  }
 		},        
         "actions": [
@@ -1609,7 +1612,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Incubation1, Not in Batch", "label_es": "Incubación1, Pendiente Asignar Tanda"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
           },
           { "clientMethod": "filterSamples",
@@ -1621,7 +1624,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Incubation1, In Batch", "label_es": "Incubación1, En Tanda"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
           },
           { "clientMethod": "filterSamples",
@@ -1632,7 +1635,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Incubation1 In-Progress", "label_es": "Incubación1 en curso"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
           },
           { "clientMethod": "filterSamples",
@@ -1644,7 +1647,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Incubation2, Not in Batch", "label_es": "Incubación2, Pendiente Asignar Tanda"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
           },
           { "clientMethod": "filterSamples",
@@ -1656,7 +1659,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Incubation2, In Batch", "label_es": "Incubación2, En Tanda"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
           },
           { "clientMethod": "filterSamples",
@@ -1667,7 +1670,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Incubation2 In-Progress", "label_es": "Incubación2 en curso"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
           },
           { "clientMethod": "filterSamples",
@@ -1679,7 +1682,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Reset", "label_es": "Reiniciar"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
           }
         ]
@@ -1688,23 +1691,22 @@ export const EmDemoA = {
   "Programs": {
     "component": "ModuleEnvMonitProgramProc",   
     "hasOwnComponent": true,
-    "actions": [
-      {
-        "actionName": "PROGRAMS_LIST",
-        "clientMethod": "getProgramList",
-        "button": {
-          "icon": "refresh",
-          "title": {
-            "label_en": "Reload", "label_es": "Recargar"
-          },
-          "whenDisabled": "samplesReload"
-        },
-        "subAction": {
-          "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-          "clientMethod": "getLots"
-        }
-      }
-    ]
+    "viewQuery": {  "actionName": "PROGRAMS_LIST",
+					"endPoint": "/moduleenvmon/EnvMonAPIqueries",
+					"clientMethod": "getProgramList",
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Reload", "label_es": "Recargar"
+					  },
+					  "requiresGridItemSelected": true
+					},
+					"subAction": {
+					  "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+					  "clientMethod": "getLots"
+					}
+	},    
+	"actions": []
   },
   "Deviation": {
 	"component":"Tabs",  
@@ -1756,7 +1758,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Reload", "label_es": "Recargar"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }		
 		},
 		"actions": [
@@ -1769,7 +1771,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Create Investigation", "label_es": "Crear Investigación"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": true
             },
             "endPointParams": [
 				{ "argumentName": "fieldName", "value": "description" },
@@ -1786,7 +1788,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": true
             },
             "dialogInfo": {
 			"name": "investigationDialog",
@@ -1863,7 +1865,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Reload", "label_es": "Recargar"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
 		},
 		"actions": [
@@ -1876,7 +1878,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Decision", "label_es": "Decisión"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": true
             },
             "dialogInfo": {               
               "name": "decisionDialog"
@@ -1897,7 +1899,7 @@ export const EmDemoA = {
               "title": {
                 "label_en": "Close", "label_es": "Cerrar"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": true
             },
             "endPointParams": [
               { "argumentName": "investigationId", "selObjectPropertyName": "id" }
@@ -1948,7 +1950,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Refresh", "label_es": "Recargar"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": true
       }
     },
     "bottomCompositions": [
@@ -1979,7 +1981,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {          
           "name": "newIncubatorDialog",
@@ -2016,7 +2018,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {
           "requiresDialog": true,
@@ -2056,7 +2058,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         }
       },
       { "actionName": "EM_INCUBATION_ADD_TEMP_READING",
@@ -2072,7 +2074,7 @@ export const EmDemoA = {
           "title": {
             "label_en": "Add Temperature Reading", "label_es": "Añadir Registro Temperatura"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {                    
           "name": "genericDialog",

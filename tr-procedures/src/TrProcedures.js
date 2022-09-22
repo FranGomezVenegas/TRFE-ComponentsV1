@@ -328,7 +328,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   }
   ownComponents(){
     if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component!==undefined){
-      console.log('ownComponents', 'component', this.viewModelFromProcModel.component)
+      //console.log('ownComponents', 'component', this.viewModelFromProcModel.component)
     }
     return html `
       ${this.viewModelFromProcModel.component == 'Browser' ? html`
@@ -346,8 +346,8 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       `:html``}
       ${this.viewModelFromProcModel.component == 'ModuleEnvMonitProgramProc' ? html`
         <program-proc .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
-          .procName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
-          .config=${this.config}></program-proc>      
+          .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
+          .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></program-proc>      
       `:html``}
       ${this.viewModelFromProcModel.component == 'ModuleEnvMonitSampleIncubation' ? html`
         <sample-incubation-view .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}

@@ -21,47 +21,31 @@ import './ProgramProc/sampling-points';
 import './ProgramProc/sampling-points-map';
 import './ProgramProc/corrective-actions';
 
+import {DialogsFunctions} from '../components/GenericDialogs/DialogsFunctions';
+import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
+import {GridFunctions} from '../components/grid_with_buttons/GridFunctions';
+import { ApiFunctions } from '../components/Api/ApiFunctions';
+
+// { tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"}
+
 let tabBtns = {
   "default": [
-    {
-      tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"
-    },
-    {
-      tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"
-    },
-    {
-      tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"
-    },
-    {
-      tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"
-    },
-    {
-      tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"
-    },
-    {
-      tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"
-    }
+    {tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"},
+    {tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"},
+    {tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"},
+    {tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"},
+    {tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"}
   ],
   "proc-deploy": [
-    {
-      tabLabel_en: "Home", tabLabel_es: "Inicio", view: "summary"
-    },
-    {
-      tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"
-    },
-    {
-      tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"
-    },
-    {
-      tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"
-    },
-    {
-      tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"
-    }
+    {tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"},
+    {tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"},
+    {tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"},
+    {tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"},
+    {tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"},    
   ]
 }
 
-export class ProgramProc extends TabFunctions(CredDialog) {
+export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(DialogsFunctions(TabFunctions(CredDialog))))) {
   static get styles() {
     return [
       Layouts, Alignment,
@@ -97,21 +81,23 @@ export class ProgramProc extends TabFunctions(CredDialog) {
     return {
       model: { type: Object },
       config: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       viewName: { type: String },
       filterName: { type: String },
       langConfig: { type: Object },
       actions: { type: Array },
       samplesReload: { type: Boolean },
-      selectedSamples: { type: Array },
+      selectedItems: { type: Array },
       selectedAction: { type: Object },
       prev: { type: Boolean },
       next: { type: Boolean },
       programsList: { type: Array },
-      selectedProgram: { type: Object },
+      selectedProgram: { type: Array },
       tabView: { type: String },
       windowOpenable: { type: String },
-      sopsPassed: { type: Boolean }
+      sopsPassed: { type: Boolean },
+
+      viewModelFromProcModel: { type: Object },
     };
   }
 
@@ -121,6 +107,9 @@ export class ProgramProc extends TabFunctions(CredDialog) {
     this.prev = false
     this.next = false
     this.programsList = []
+    this.selectedItems = []
+    this.viewModelFromProcModel = {}
+    this.selectedProgram=[]
   }
 
   updated(updates) {
@@ -131,9 +120,10 @@ export class ProgramProc extends TabFunctions(CredDialog) {
 
   resetView() {
     this.programsList = []
-    this.actions = this.model.actions
-    this.selectedAction = this.model.actions[0]
-    this.actionMethod(this.selectedAction)
+    this.GetViewData()
+    // this.actions = this.model.actions
+    // this.selectedAction = this.model.actions[0]
+    // this.actionMethod(this.selectedAction)
   }
 
   render() {
@@ -149,22 +139,36 @@ export class ProgramProc extends TabFunctions(CredDialog) {
         ${this.showTabElement(tabBtns)}
 
         <summary-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="summary"}></summary-view>
-        <parameter-limits .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
-        <config-calendar .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="config-calendar"}></config-calendar>
-        <sampling-points .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} ?hidden=${this.tabView!="sampling-points"}></sampling-points>
-        <sampling-points-map .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} ?hidden=${this.tabView!="sampling-points-map"}></sampling-points-map>
+        <parameter-limits .procInstanceName=${this.procInstanceName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
+        
+        <config-calendar .lang=${this.lang} .selectedProgram=${this.selectedProgram} 
+          ?hidden=${this.tabView!="config-calendar"}></config-calendar>
+        
+        <sampling-points .procInstanceName=${this.procInstanceName}           
+          .filterName=${this.filterName}  .viewName=${this.viewName}
+          .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} 
+          ?hidden=${this.tabView!="sampling-points"}>
+        </sampling-points>
+        
+        <sampling-points-map .procInstanceName=${this.procInstanceName} 
+          .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} 
+          ?hidden=${this.tabView!="sampling-points-map"}>
+        </sampling-points-map>
+        
         <core-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="core"}></core-view>
         <corrective-actions 
-          .windowOpenable=${this.windowOpenable}
-          .sopsPassed=${this.sopsPassed}
-         
-          .procName=${this.procName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} ?hidden=${this.tabView!="corrective-actions"}></corrective-actions>
+          .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} 
+          .procInstanceName=${this.procInstanceName} .lang=${this.lang} 
+          .selectedProgram=${this.selectedProgram} .config=${this.config} 
+          ?hidden=${this.tabView!="corrective-actions"}>
+        </corrective-actions>
         ${super.render()}
       </div>
     `
   }
 
   programChanged(e) {
+    console.log('programChanged')
     let program = this.programsList.filter(p => p.name == e.target.value)
     if (program.length) {
       this.selectedProgram = program[0]
@@ -217,15 +221,16 @@ export class ProgramProc extends TabFunctions(CredDialog) {
   }
 
   nextRequest() {
+    return
     super.nextRequest()
     this.reqParams = {
-      procInstanceName: this.procName,
+      procInstanceName: this.procInstanceName,
       ...this.reqParams
     }
     this[this.selectedAction.clientMethod]()
   }
 
-  jsonParam() {
+  xjsonParam() {
     let jsonParam = {}
     let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
     if (action.apiParams) {
@@ -235,7 +240,7 @@ export class ProgramProc extends TabFunctions(CredDialog) {
         } else if (p.defaultValue) {
           jsonParam[p.query] = p.defaultValue // get value from default value (i.e incubator)
         } else if (p.beItem) {
-          jsonParam[p.query] = this.selectedSamples[0][p.beItem] // get value from selected item
+          jsonParam[p.query] = this.selectedItems[0][p.beItem] // get value from selected item
         } else if (p.targetValue) {
           jsonParam[p.query] = this.targetValue[p.query] // get value from target element passed
         } else {
@@ -250,14 +255,25 @@ export class ProgramProc extends TabFunctions(CredDialog) {
   }
 
   async getProgramList() {
+    let queryDefinition=this.viewModelFromProcModel.viewQuery
+    if (queryDefinition===undefined){return}
+
     this.samplesReload = true
-    let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
-      + '?' + new URLSearchParams(this.reqParams)
+    //let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
+    //  + '?' + new URLSearchParams(this.reqParams)
+    this.selectedItems = []      
+    let APIParams=this.getAPICommonParams(queryDefinition)
+    let viewParams=this.jsonParam(queryDefinition)
+    let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
+      + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)    
     await this.fetchApi(params).then(j => {
       if (j && !j.is_error) {
         this.programsList = j.programsList
-        if (this.selectedAction.subAction) {
-          this.actionMethod(this.selectedAction.subAction)
+        // if (this.programsList.length==1){
+        //   this.selectedProgram=this.programsList[0]
+        // }
+        if (queryDefinition.subAction) {
+          this.GetAlternativeViewData(queryDefinition.subAction)
         }
         this.requestUpdate()
       }
@@ -272,7 +288,7 @@ export class ProgramProc extends TabFunctions(CredDialog) {
     })
   }
 
-  actionMethod(action, replace = true) {
+  xactionMethod(action, replace = true) {
     if (replace) {
       this.selectedAction = action
     }

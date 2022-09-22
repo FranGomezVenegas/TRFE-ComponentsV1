@@ -95,7 +95,7 @@ export class CommonCore extends LitElement {
   }
 
   showNotif(e) {
-    console.log('showNotif', e)
+    //console.log('showNotif', e)
     if (e.detail.is_error===undefined){
       return
     }

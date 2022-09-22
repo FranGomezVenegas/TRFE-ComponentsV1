@@ -25,23 +25,26 @@ return class extends base {
       //  console.log('reactivateObjectsDialog', 'actionBeingPerformedModel', this.actionBeingPerformedModel)
       //if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject===undefined){return nothing}
         return html` 
+        <tr-dialog id="reactivateObjectDialog" ?open=${this.actionBeingPerformedModel&&this.actionBeingPerformedModel.dialogInfo&&this.actionBeingPerformedModel.dialogInfo.name==='reactivateObjectDialog'} heading="" hideActions="" @open="${this.cleanReactivateObjectList}" scrimClickAction="">
         ${this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name!=="reactivateObjectDialog" ? nothing :
         html`
-        <tr-dialog id="reactivateObjectDialog" heading="" hideActions="" @open="${this.cleanReactivateObjectList}" scrimClickAction="">
+
         <div class="layout vertical flex center-justified">        
                 <div class="layout vertical flex">
                   <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="queryNumDays" type="number" 
                       .value=${this.numDays} @change=${e => this.numDays = e.target.value}
-                      label="${this.actionBeingPerformedModel.dialogInfo.fieldsObject.numDays["label_" + this.lang]}"
+                      label="${this.actionBeingPerformedModel.dialogInfo.fieldsObject.queryNumDays["label_" + this.lang]}"
                       @keypress=${e => e.keyCode == 13 && this.setDays()}></mwc-textfield>
                     <mwc-icon-button icon="refresh" @click=${this.setDays}></mwc-icon-button>
                   </div>
                   <mwc-select id="objectToReactivateName" label="${this.actionBeingPerformedModel.dialogInfo.fieldsObject.objectName["label_" + this.lang]}" 
                     ?disabled=${!this.deactivatedObjects.length}>
+                    ${!this.deactivatedObjects.length ? nothing : html`
                     ${this.deactivatedObjects.map((l, i) =>
                     html`<mwc-list-item value="${this.listItemValueToGet(l)}" ?selected=${i == 0}>${this.listItemValueToDisplay(l)}</mwc-list-item>`
                     )}
+                    `}
                   </mwc-select>
                 </div>     
           <div style="margin-top:30px;text-align:center">
@@ -59,7 +62,8 @@ return class extends base {
         this.deactivatedObjects= []
     }    
     setDays() {
-        console.log('setDays clicked')
+        //console.log('setDays clicked')
+        //alert(this.numDays)
         this.selectedDialogAction = this.actionBeingPerformedModel.dialogInfo.viewQuery
         this.GetAlternativeViewData(this.selectedDialogAction, false)
     }  

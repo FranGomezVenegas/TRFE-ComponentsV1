@@ -1,8 +1,9 @@
 export const ProcDeploy = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20220918",
-	  "last change note": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
+	  "last change on (YYYYMMDD)": "20220921",
+	  "last_change_note": "replace whenDisabled by requiresGridItemSelected",
+	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
   },
   "ModuleSettings":{
 	  "actionsEndpoints":[
@@ -21,12 +22,9 @@ export const ProcDeploy = {
         }
       },
       "gridHeader": {
-        "lot_name": {
-          "label_en": "Name", "label_es": "Nombre", "width": "80%", "sort": false, "filter": true, "align": "left"
-        },
-        "created_on": {
-          "label_en": "Created On", "label_es": "F. Creación", "width": "20%", "sort": true, "filter": false, "confidential_value":true
-        }
+        "lot_name": {"label_en": "Name", "label_es": "Nombre", "width": "80%", "sort": false, "filter": true, "align": "left"},
+        "created_on": {"label_en": "Created On", "label_es": "F. Creación", "width": "20%", "sort": true, "filter": false, "confidential_value":true},
+		"closed_on": {"label_en": "Closed On", "label_es": "F. Cierre", "width": "20%", "sort": true, "filter": false}
       }
     },
     "viewQuery":
@@ -40,12 +38,11 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Refresh", "label_es": "Recargar"
           },
-          "whenDisabled": "samplesReload"
+          "xxxwhenDisabled": "samplesReload"
       }
     },
-  "actions": [
-      {
-        "actionName": "EM_NEW_PRODUCTION_LOT",
+	"actions": [
+      { "actionName": "EM_NEW_PRODUCTION_LOT",
 		"endPointUrl": "ProdLot",
 		"requiresDialog": true,
         "button": {
@@ -53,7 +50,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": false
         },
         "dialogInfo": {          
           "name": "genericDialog",
@@ -67,8 +64,7 @@ export const ProcDeploy = {
           { "argumentName": "fieldValue", "value": "true*Boolean" }
         ]
       },
-      {
-        "actionName": "EM_ACTIVATE_PRODUCTION_LOT",
+      { "actionName": "EM_ACTIVATE_PRODUCTION_LOT",
         "endPoint": "/moduleenvmon/EnvMonProdLotAPIactions",  
         "endPointParams": [
           { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
@@ -79,13 +75,13 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": false
         },
 		"requiresDialog": true,
         "dialogInfo": {          
           "name": "reactivateObjectDialog",
           "fieldsObject": {
-			"numDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+			"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
 			"objectName": { "label_en": "Production Lot to reactivate", "label_es": "Lote de Producción a Reactivar" }
           },    
           "listDefinition":{
@@ -94,20 +90,19 @@ export const ProcDeploy = {
               {"value": "Lot: ", "type":"fix"}, {"value": "lot_name", "type":"field"} 
             ]
           },
-		  "argumentName": {
+		  "viewQuery": {
 			  "actionName": "DEACTIVATED_PRODUCTION_LOTS_LAST_N_DAYS",
 			  "clientMethod": "getDeactivatedObjects",
 			  "endPoint": "/moduleenvmon/EnvMonAPIqueries",
 			  "endPointParams": [
-				{ "argumentName": "numDays", "element": "lotNumDays", "defaultValue": 7 }
+				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
 			  ]
 		  },
           "action": [            
           ]
         }
       },
-      {
-        "actionName": "EM_DEACTIVATE_PRODUCTION_LOT",
+      { "actionName": "EM_DEACTIVATE_PRODUCTION_LOT",
         "endPoint": "/moduleenvmon/EnvMonProdLotAPIactions",     
         "clientMethod": "buttonActionWithoutDialog",
         "endPointParams": [
@@ -119,7 +114,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Deactivate", "label_es": "Desactivar"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         }
       }
     ]
@@ -197,7 +192,7 @@ export const ProcDeploy = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "subAction": {
         "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
@@ -258,7 +253,7 @@ export const ProcDeploy = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
@@ -281,7 +276,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -318,7 +313,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Set Sample Date", "label_es": "Establecer Fecha Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -332,7 +327,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Change Sample Date", "label_es": "Cambiar Fecha Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": { 
           "namesssss": "dateDialog",
@@ -343,22 +338,7 @@ export const ProcDeploy = {
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-          { "argumentName": "newDateTime", "element": "datetime1", "defaultValue": "" }
-        ]
-      },
-      { "actionName": "SAMPLESTAGE_MOVETONEXT",
-        "clientMethod": "moveToNext",
-		"requiresDialog": false,
-		"endPointUrl": "Samples",
-        "button": {
-          "icon": "next_week",
-          "title": {
-            "label_en": "Next", "label_es": "Siguiente"
-          },
-          "whenDisabled": "selectedSamples"
-        },
-        "endPointParams": [
-          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+          { "argumentName": "newDateTime", "element": "datetime1" }
         ]
       },
       { "actionName": "SAMPLINGCOMMENTADD",		
@@ -369,13 +349,13 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Add Sampling Comment", "label_es": "Agregar Comentario de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {           
           "namezzzz": "commentDialog",
 		  "name": "genericDialog",
           "fields": [            
-			{"text1": { "label_en": "new Comment", "label_es": "Comentario" }}
+			{"text1": { "label_en": "new Comment", "label_es": "Comentario", "selObjectPropertyName": "sampling_comment" }}
           ]    
         },
         "endPointParams": [
@@ -391,7 +371,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Remove Sampling Comment", "label_es": "Eliminar Comentario de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -429,7 +409,7 @@ export const ProcDeploy = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
@@ -455,7 +435,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -495,7 +475,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": { 
 		  "name": "resultDialog",
@@ -590,7 +570,7 @@ export const ProcDeploy = {
           "label_en": "Reload",
           "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         {
@@ -622,7 +602,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -661,7 +641,7 @@ export const ProcDeploy = {
             "label_en": "Review Test",
             "label_es": "Revisar Ensayo"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           {"argumentName": "testId", "selObjectPropertyName": "test_id"}
@@ -710,7 +690,7 @@ export const ProcDeploy = {
           "label_en": "Reload",
           "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         {
@@ -730,7 +710,7 @@ export const ProcDeploy = {
       }
     },
     "actions": [
-      { "actionName": "GET_SAMPLE_AUDIT",	  
+      { "actionName": "GET_SAMPLE_AUDIT",	  	  
 		"requiresDialog": true,
 		"endPoint": "/modulesample/SampleAPIqueries",
         "button": {
@@ -738,7 +718,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -767,48 +747,70 @@ export const ProcDeploy = {
           ]
         }
       },
-      { "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
-	    "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-        "clientMethod": "getResult",
+      { "actionName": "ENTERRESULT",
+		"requiresDialog": true,
+		"endPointUrl": "Samples",
         "alertMsg": {
           "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
         },
         "button": {
           "icon": "document_scanner",
           "title": {
-            "label_en": "Enter Result",
-            "label_es": "Ingrese el Resultado"
+            "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
-        "dialogInfo": {
-          "automatic": true,
-          "readOnly": true
+        "dialogInfo": { 
+		  "name": "resultDialog",
+		  "subQueryName": "getResult",
+		  "viewQuery": {
+			  "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+			  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+			  "endPointParams": [				  
+				{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+			  ]
+		  },			  
+		  "automatic": true,
+          "readOnly": true,
+		  "resultHeader": {
+			"spec_eval": {"label_en": "Spec Eval", "label_es": "Eval Espec"},
+			"result_id": {"label_en": "Result Id", "label_es": "Id Resultado"},
+			"analysis": {"label_en": "Analysis", "label_es": "Análísis"},
+			"param_name": {"label_en": "Parameter", "label_es": "Parámetro"},
+			"raw_value": {"label_en": "Value", "label_es": "Valor"},
+			"uom": {"label_en": "UOM", "label_es": "UOM"}
+		  },
+		  "resultHeaderObjectLabelTopLeft": {
+			"label_en": "Sample: ", "label_es": "Muestra: "
+		  },  
+          "action": [
+            { "actionName": "ENTERRESULT",
+			  "requiresDialog": false,
+			  "endPointUrl": "Samples",
+              "clientMethod": "enterResult",
+              "endPointParams": [
+                { "argumentName": "rawValueResult", "targetValue": true },
+                { "argumentName": "resultId", "targetValue": true }
+              ]
+            },
+            { "actionName": "RESULT_CHANGE_UOM",
+              "clientMethod": "changeUOM",
+              "endPointParams": [
+                { "argumentName": "newResultUom", "targetValue": true },
+                { "argumentName": "resultId", "targetValue": true }
+              ]
+            }
+          ]
         },
         "endPointParams": [
-          {
-            "argumentName": "sampleAnalysisResultFieldToRetrieve",
-            "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
-          },
-          {
-            "argumentName": "sortFieldsName",
-            "value": "test_id|result_id"
-          },
-          {
-            "argumentName": "sampleAnalysisWhereFieldsName",
-            "value": "testing_group|status in"
-          },
+          { "argumentName": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
+          { "argumentName": "sortFieldsName", "value": "test_id|result_id" },
+          { "argumentName": "sampleAnalysisWhereFieldsName", "value": "testing_group|status not in" },
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
         ],
-        "paramFilter": {
-          "RTG-FQ": {
-            "argumentName": "sampleAnalysisWhereFieldsValue",
-            "value": "FQ|REVIEWED*String"
-          },
-          "RTG-MB": {
-            "argumentName": "sampleAnalysisWhereFieldsValue",
-            "value": "MB|REVIEWED*String"
-          }
+	    "paramFilter": {
+          "ER-FQ": { "argumentName": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
+          "ER-MB": { "argumentName": "sampleAnalysisWhereFieldsValue", "value": "MB|REVIEWED*String" }
         }
       },
       { "actionName": "REVIEWSAMPLE_TESTINGGROUP",
@@ -818,7 +820,7 @@ export const ProcDeploy = {
         "button": {
           "icon": "reviews",
           "title": {"label_en": "Review", "label_es": "Revisar"},
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           {"argumentName": "sampleId", "selObjectPropertyName": "sample_id"},
@@ -853,7 +855,7 @@ export const ProcDeploy = {
   },
     "viewQuery":    
     { "actionName": "SAMPLES_PENDING_SAMPLE_REVISION",
-	  "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+	  "xxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -861,7 +863,7 @@ export const ProcDeploy = {
           "label_en": "Reload",
           "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       },
       "endPointParams": [
         {
@@ -887,7 +889,7 @@ export const ProcDeploy = {
           "title": {
             "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
@@ -926,7 +928,7 @@ export const ProcDeploy = {
             "label_en": "Review",
             "label_es": "Revisar"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -944,7 +946,7 @@ export const ProcDeploy = {
             "label_en": "Enter Result",
             "label_es": "Ingrese el Resultado"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {
           "automatic": true,
@@ -956,23 +958,22 @@ export const ProcDeploy = {
   "Programs": {
     "component": "ModuleEnvMonitProgramProc",   
     "hasOwnComponent": true,
-    "actions": [
-      {
-        "actionName": "PROGRAMS_LIST",
-        "clientMethod": "getProgramList",
-        "button": {
-          "icon": "refresh",
-          "title": {
-            "label_en": "Reload", "label_es": "Recargar"
-          },
-          "whenDisabled": "samplesReload"
-        },
-        "subAction": {
-          "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-          "clientMethod": "getLots"
-        }
-      }
-    ]
+    "viewQuery": {  "actionName": "PROGRAMS_LIST",
+					"endPoint": "/moduleenvmon/EnvMonAPIqueries",
+					"clientMethod": "getProgramList",
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Reload", "label_es": "Recargar"
+					  },
+					  "requiresGridItemSelected": true
+					},
+					"subAction": {
+					  "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+					  "clientMethod": "getLots"
+					}
+	},    
+	"actions": []
   },
   "Deviation": {
 	"component":"Tabs",  
@@ -1025,7 +1026,7 @@ export const ProcDeploy = {
               "title": {
                 "label_en": "Reload", "label_es": "Recargar"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }		
 		},
 		"actions": [
@@ -1038,7 +1039,7 @@ export const ProcDeploy = {
               "title": {
                 "label_en": "Create Investigation", "label_es": "Crear Investigación"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": false
             },
             "endPointParams": [
 				{ "argumentName": "fieldName", "value": "description" },
@@ -1055,7 +1056,7 @@ export const ProcDeploy = {
               "title": {
                 "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": true
             },
             "dialogInfo": {
 			"name": "investigationDialog",
@@ -1134,7 +1135,7 @@ export const ProcDeploy = {
               "title": {
                 "label_en": "Reload", "label_es": "Recargar"
               },
-              "whenDisabled": "samplesReload"
+              "requiresGridItemSelected": true
             }
 		},
 		"actions": [
@@ -1147,7 +1148,7 @@ export const ProcDeploy = {
               "title": {
                 "label_en": "Decision", "label_es": "Decisión"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": true
             },
             "dialogInfo": {               
               "name": "decisionDialog"
@@ -1168,7 +1169,7 @@ export const ProcDeploy = {
               "title": {
                 "label_en": "Close", "label_es": "Cerrar"
               },
-              "whenDisabled": "selectedSamples"
+              "requiresGridItemSelected": true
             },
             "endPointParams": [
               { "argumentName": "investigationId", "selObjectPropertyName": "id" }

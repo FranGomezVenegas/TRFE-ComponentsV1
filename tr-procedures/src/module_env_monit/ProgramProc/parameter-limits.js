@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, nothing  } from 'lit';
 import { CoreView } from './../../components/core-view';
 import { Alignment, Layouts } from '@collaborne/lit-flexbox-literals';
 
@@ -148,6 +148,8 @@ export class ParameterLimits extends CoreView {
           </tr>
         </thead>
         <tbody>
+        ${this.selectedProgram===undefined||this.selectedProgram.spec_definition===undefined||this.selectedProgram.spec_definition.spec_limits===undefined ? nothing : 
+        html`
           ${this.selectedProgram&&this.selectedProgram.spec_definition.spec_limits.map(p => 
             html`
             <tr>
@@ -173,6 +175,7 @@ export class ParameterLimits extends CoreView {
             </tr>
             `
           )}
+        `}
         </tbody>
       </table>
     `;

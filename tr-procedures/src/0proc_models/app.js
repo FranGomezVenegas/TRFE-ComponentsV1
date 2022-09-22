@@ -1,4 +1,10 @@
 export const App = {
+  "TrackingChanges":{
+	  "version": 0.9,
+	  "last change on (YYYYMMDD)": "20220921",
+	  "last_change_note": "replace whenDisabled by requiresGridItemSelected",
+	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
+  },	
   "ModuleSettings":{
 	  "actionsEndpoints":[
 		{ "name": "Instruments" , "url" : "/app/PlatformAdminActions"}
@@ -50,7 +56,7 @@ export const App = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       }
     },
     "actions": [
@@ -62,7 +68,7 @@ export const App = {
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {          
 			"name": "genericDialog",
@@ -90,7 +96,7 @@ export const App = {
             "title": {
               "label_en": "Deactivate", "label_es": "Desactivar"
             },
-            "whenDisabled": "selectedSamples",
+            "requiresGridItemSelected": true,
             "hidWhenSelectedItem": {
               "column": "active",
               "value": true
@@ -108,7 +114,7 @@ export const App = {
             "title": {
               "label_en": "Activate", "label_es": "Activar"
             },
-            "whenDisabled": "selectedSamples",
+            "requiresGridItemSelected": true,
             "hidWhenSelectedItem": {
               "column": "active",
               "value": false
@@ -126,7 +132,7 @@ export const App = {
             "title": {
                 "label_en": "Update", "label_es": "Modificar"
             },
-            "whenDisabled": "selectedSamples"
+            "requiresGridItemSelected": true
         },
         "dialogInfo": {          
 			"name": "genericDialog",
@@ -155,7 +161,7 @@ export const App = {
           "title": {
             "label_en": "Remove", "label_es": "Borrar"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "id", "selObjectPropertyName": "id" }
@@ -208,7 +214,7 @@ export const App = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       }
     },
     "actions": [
@@ -247,7 +253,7 @@ export const App = {
             "title": {
               "label_en": "Deactivate", "label_es": "Desactivar"
             },
-            "whenDisabled": "selectedSamples",
+            "requiresGridItemSelected": true,
             "hidWhenSelectedItem": {
               "column": "active",
               "value": true
@@ -264,7 +270,7 @@ export const App = {
             "title": {
               "label_en": "Activate", "label_es": "Activar"
             },
-            "whenDisabled": "selectedSamples",
+            "requiresGridItemSelected": true,
             "hidWhenSelectedItem": {
               "column": "active",
               "value": false
@@ -281,7 +287,7 @@ export const App = {
             "title": {
                 "label_en": "Update", "label_es": "Modificar"
             },
-            "whenDisabled": "selectedSamples"
+            "requiresGridItemSelected": true
         },
         "dialogInfo": {          
 			"name": "genericDialog",
@@ -309,7 +315,7 @@ export const App = {
           "title": {
             "label_en": "Remove", "label_es": "Borrar"
           },
-          "whenDisabled": "selectedSamples"
+          "requiresGridItemSelected": true
       },
       "endPointParams": [
         { "argumentName": "id", "selObjectPropertyName": "id" }
@@ -343,7 +349,7 @@ export const App = {
         "title": {
           "label_en": "Reload", "label_es": "Recargar"
         },
-        "whenDisabled": "samplesReload"
+        "requiresGridItemSelected": true
       }
     },
     "actions": [

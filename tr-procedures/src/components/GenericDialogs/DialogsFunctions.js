@@ -1,9 +1,10 @@
 import { html, css } from 'lit';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { CredDialog } from '@trazit/cred-dialog';
+import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
 
 export function DialogsFunctions(base) {
-    return class extends base {
+    return class extends ButtonsFunctions(base) {
 
         dialogAccept(selected=true) {
           console.log('dialogAccept before run credsChecker')
@@ -23,7 +24,7 @@ export function DialogsFunctions(base) {
    * @param {*} action ref of action object
    */
   credsChecker(actionName, objId, params={}, action) {
-    console.log('credsChecker')
+    //console.log('credsChecker', 'isPlatform', isPlatform)
     this.actionObj = action || {}
     this.reqParams = params
     if (actionName) {
@@ -127,8 +128,8 @@ export function DialogsFunctions(base) {
   nextRequest() {
     //alert('nextRequest')
     let credArguments = {}
-    if (this.userTxtFld) {credArguments.userToCheck=this.userTxtFld}
-    if (this.pwd) {credArguments.spasswordToCheck=this.pwd.value}
+    if (this.userTxtFld) {credArguments.userToCheck=this.userTxtFld.value}
+    if (this.pwd) {credArguments.passwordToCheck=this.pwd.value}
     if (this.esg) {credArguments.esignPhraseToCheck=this.esg.value}
     if (this.jst) {credArguments.auditReasonPhrase=this.jst.value}
     // credArguments = {
@@ -145,7 +146,14 @@ export function DialogsFunctions(base) {
 
     // Now here
     console.log('nextRequest', 'credArguments', credArguments)
-    this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], {}, credArguments)
+    if (this.selectedItems===undefined){
+      this.selectedItems=[]
+      this.selectedItems.push({})
+    }
+    if (this.targetValue===undefined){
+      this.targetValue={}
+    }
+    this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], this.targetValue, credArguments)
 
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {

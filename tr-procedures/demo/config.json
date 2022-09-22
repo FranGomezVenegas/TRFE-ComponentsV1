@@ -51,7 +51,7 @@
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingSMP" 
   },
-  "localDefaultView4": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "ProductionLots", 
     "filterName" :  "SampleLot" 
@@ -71,11 +71,16 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
-   "localDefaultView": {
+   "localDefaultView999": {
     "procName":  "app", 
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
-  }  
+  },  
+   "localDefaultView888": {
+    "procName":  "em-demo-a",
+    "viewName": "Programs", 
+    "filterName" :  "Programs" 
+  }    
  
   
 }

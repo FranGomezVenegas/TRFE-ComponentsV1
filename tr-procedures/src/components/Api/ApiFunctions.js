@@ -51,6 +51,7 @@ export function ApiFunctions(base) {
       }
     
       error(e) { }
+
       // This fetchApi was the original one for model 2.1, on applying naming convention actions/queries we
       //  evidenced that it was not adding notifications ... although it worked before this naming convention changed
       // although now it seemed to be strange that just the naming convention provoked the issue
@@ -96,7 +97,7 @@ export function ApiFunctions(base) {
           let jsonParam = {}
           if (action.endPointParams) {
               action.endPointParams.forEach(p => {
-
+//console.log('jsonParam', 'element', p)
               if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
                   if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
                     var msg=""
@@ -126,8 +127,8 @@ export function ApiFunctions(base) {
                 }else{                
                   jsonParam[p.argumentName] = this[p.element].value // get value from field input
                 }
-              } else if (p.defaultValue) {
-                  jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
+              } else if (p.fixValue) {  //defaultValue
+                  jsonParam[p.argumentName] = p.fixValue // get value from default value (i.e incubator)
               } else if (p.beItem) {
                   jsonParam[p.argumentName] = this.selectedItem[0][p.beItem] // get value from selected item
               } else if (p.selObjectPropertyName) {
@@ -194,6 +195,7 @@ export function ApiFunctions(base) {
                   if (this[p.element]===undefined||this[p.element]===null){
                     alert('Not found the html element called '+p.element+' Please talk with your System Admin')
                   }else{
+                    console.log('element object in context content is:', this[p.element])
                     jsonParam[p.argumentName] = this[p.element].value // get value from field input
                   }
                 }

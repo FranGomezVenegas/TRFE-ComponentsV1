@@ -3,6 +3,8 @@ import { CoreView } from './../../components/core-view';
 import { Alignment, Layouts } from '@collaborne/lit-flexbox-literals';
 import { commonLangConfig } from '@trazit/common-core';
 
+import {DialogsFunctions} from '../../components/GenericDialogs/DialogsFunctions';
+
 let langConfig = {
   "title": {
     "label_en": "Program Sampling Points", 
@@ -25,36 +27,24 @@ let langConfig = {
   }
 }
 let actions = [
-  {
-    "actionName": "PROGRAMS_LIST",
-    "clientMethod": "getProgramList",
-    "button": {
-      "icon": "refresh",
-      "title": {
-        "label_en": "Reload", "label_es": "Recargar"
-      },
-      "whenDisabled": "samplesReload"
-    },
-    "subAction": {
-      "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-      "clientMethod": "getLots"
-    }
-  },
-  {
-    "actionName": "LOGSAMPLE",
+  { "actionName": "LOGSAMPLE",
+    "endPointUrl": "Samples",
+    "requiresDialog": false,
+    "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
     "clientMethod": "logSample",
-    "apiParams": [
-      { "query": "locationName", "element": "locationInput", "defaultValue": "" },
-      { "query": "sampleTemplate", "targetValue": true },
-      { "query": "sampleTemplateVersion", "targetValue": true },
-      { "query": "fieldName", "defaultValue": "shift|production_lot" },
-      { "query": "fieldValue", "targetValue": true },
-      { "query": "numSamplesToLog", "defaultValue": 1 }
+    "endPointParams": [
+      { "argumentName": "programName", "element": "programInput" },
+      { "argumentName": "locationName", "element": "locationInput" },
+      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+      { "argumentName": "fieldName", "targetValue": "fieldName" },
+      { "argumentName": "fieldValue", "targetValue": "fieldValue" },
+      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
     ]
   }
 ]
 
-export class SamplingPointsMap extends CoreView {
+export class SamplingPointsMap extends DialogsFunctions(CoreView) {
   static get styles() {
     return [Layouts, Alignment,
       super.styles,
@@ -78,18 +68,21 @@ export class SamplingPointsMap extends CoreView {
   static get properties() {
     return {
       samplePoints: { type: Array },
-      selectedSamples: { type: Array },
+      selectedItems: { type: Array },
       selectedAction: { type: Object },
       targetValue: { type: Object },
       procName: { type: String },
-      config: { type: Object }
+      config: { type: Object },
+      selectedProgram: { type: Array },
     };
   }
 
   constructor() {
     super()
     this.samplePoints = []
-    this.selectedSamples = []
+    this.selectedItems = []
+    this.selectedProgram = []
+    return
     this.selectedAction = actions[0]
   }
 
@@ -104,7 +97,7 @@ export class SamplingPointsMap extends CoreView {
               html`<img class="mapIcon" 
                 src="/images/${this.mapIcon(point.map_icon)}" 
                 style="top:${point.map_icon_top};left:${point.map_icon_left};width:${point.map_icon_w}px;height:${point.map_icon_h}px"
-                @mouseover=${()=>this.selectedSamples=[point]}>`
+                @mouseover=${()=>this.selectedItems=[point]}>`
             )}
           </div>
         </div>
@@ -121,15 +114,15 @@ export class SamplingPointsMap extends CoreView {
   /** Point Template Dialog part */
   pointTemplate() {
     return html`
-    <tr-dialog id="pointDialog" .open=${this.selectedSamples&&this.selectedSamples.length}
-      @closed=${e=>{if(e.target===this.pointDialog)this.selectedSamples=[]}}
+    <tr-dialog id="pointDialog" .open=${this.selectedItems&&this.selectedItems.length}
+      @closed=${e=>{if(e.target===this.pointDialog)this.selectedItems=[]}}
       heading=""
       hideActions=""
       scrimClickAction="">
       <div class="layout vertical flex center-justified">
         <div class="layout horizontal justified flex">
-          <sp-button size="m" variant="secondary" dialogAction="accept">
-            ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+          <sp-button size="m" variant="secondary" dialogAction="close">
+            ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
           <sp-button size="m" @click=${this.setLogSample}>${langConfig.fieldText.logBtn["label_"+this.lang]}</sp-button>
         </div>
         <mwc-select label="${langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
@@ -142,7 +135,7 @@ export class SamplingPointsMap extends CoreView {
             html`<mwc-list-item value="${c.lot_name}" ?selected=${i==0}>${c.lot_name}</mwc-list-item>`
           )}
         </mwc-select>
-        ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
+        ${this.selectedItems.length&&this.selectedItems[0].card_info.map(f => 
           html`<mwc-textfield label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${f.value}></mwc-textfield>`
         )}
       </div>
@@ -171,6 +164,31 @@ export class SamplingPointsMap extends CoreView {
   }
 
   setLogSample() {
+    this.targetValue = {}
+    this.targetValue.fieldName=''
+    this.targetValue.fieldValue=''
+    if (this.lotField.value!==undefined){
+      if (this.targetValue.fieldName.length>0){
+        this.targetValue.fieldName=this.targetValue.fieldName+"|"
+        this.targetValue.fieldValue=this.targetValue.fieldValue+"|"
+      }
+      this.targetValue.fieldName=this.targetValue.fieldName+"production_lot"
+      this.targetValue.fieldValue=this.targetValue.fieldValue+this.lotField.value
+    }
+    
+    if (this.shiftField.value!==undefined){
+      if (this.targetValue.fieldName.length>0){
+        this.targetValue.fieldName=this.targetValue.fieldName+"|"
+        this.targetValue.fieldValue=this.targetValue.fieldValue+"|"
+      }
+      this.targetValue.fieldName=this.targetValue.fieldName+"shift"
+      this.targetValue.fieldValue=this.targetValue.fieldValue+this.shiftField.value
+    }
+    this.selectedAction=actions[0]
+    this.reqParams=this.jsonParamCommons(actions[0], {}, this.targetValue)
+    this.nextRequestCommons(actions[0])
+    return    
+
     this.targetValue = {
       sampleTemplate: this.selectedProgram.sample_config_code,
       sampleTemplateVersion: this.selectedProgram.sample_config_code_version,
@@ -179,7 +197,7 @@ export class SamplingPointsMap extends CoreView {
     this.actionMethod(null, false, 1)
   }
 
-  actionMethod(action, replace = true, actionNumIdx) {
+  xactionMethod(action, replace = true, actionNumIdx) {
     if (replace) {
       this.selectedAction = action
     }
@@ -187,8 +205,8 @@ export class SamplingPointsMap extends CoreView {
       action = actions[actionNumIdx]
       this.selectedAction = actions[actionNumIdx]
     }
-    if (this.selectedSamples.length) {
-      this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
+    if (this.selectedItems.length) {
+      this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(), action)
     } else {
       this.credsChecker(action.actionName, null, this.jsonParam(), action)
     }
@@ -212,7 +230,7 @@ export class SamplingPointsMap extends CoreView {
     return jsonParam
   }
 
-  nextRequest() {
+  xnextRequest() {
     super.nextRequest()
     this.reqParams = {
       procInstanceName: this.procName,
@@ -221,7 +239,7 @@ export class SamplingPointsMap extends CoreView {
     this[this.selectedAction.clientMethod]()
   }
 
-  getLots() {
+  xgetLots() {
     let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
@@ -231,7 +249,7 @@ export class SamplingPointsMap extends CoreView {
     })
   }
 
-  logSample() {
+  xlogSample() {
     this.reqParams.programName = this.selectedProgram.name
     let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
       + '?' + new URLSearchParams(this.reqParams)
@@ -242,7 +260,10 @@ export class SamplingPointsMap extends CoreView {
 
   setView() {
     this.samplePoints = []
-    this.selectedSamples = []
+    this.selectedItems = []
+    if (this.selectedProgram===undefined){return}
+    this.samplePoints = this.selectedProgram.sample_points
+    return
     this.selectedAction = actions[0]
     this.actionMethod(this.selectedAction.subAction)
   }

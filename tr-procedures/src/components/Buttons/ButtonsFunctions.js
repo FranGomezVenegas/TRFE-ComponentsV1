@@ -81,7 +81,7 @@ export function ButtonsFunctions(base) {
             color: red; 
           }
         </style>     
-          ${sectionModel.viewQuery&&sectionModel.viewQuery.addRefreshButton&&sectionModel.viewQuery.addRefreshButton ===true?
+          ${sectionModel!==undefined&&sectionModel.viewQuery&&sectionModel.viewQuery.addRefreshButton&&sectionModel.viewQuery.addRefreshButton ===true?
           html`
           <mwc-icon-button 
               class="${sectionModel.viewQuery.button.class}"
@@ -90,7 +90,7 @@ export function ButtonsFunctions(base) {
               @click=${()=>this.GetViewData()}>
           </mwc-icon-button>` : nothing
           }
-          ${sectionModel.actions&&sectionModel.actions.map(action =>
+          ${sectionModel!==undefined&&sectionModel.actions&&sectionModel.actions.map(action =>
           html`
           ${this.btnHidden(action) ? nothing : 
           html`${action.button ?
@@ -113,7 +113,7 @@ export function ButtonsFunctions(base) {
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
                   label="${action.button.title['label_'+this.lang]}" 
-                  ?disabled=${this.btnDisabled(action, sectionModel)}
+                  ?disabled="${this.btnDisabled(action, sectionModel)}"
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, sectionModel)}></mwc-button>`
               }`
@@ -232,7 +232,7 @@ export function ButtonsFunctions(base) {
     }    
 
     btnDisabled(action, viewModelFromProcModel=this.viewModelFromProcModel) {
-      //console.log('btnDisabled', viewModelFromProcModel.viewName)
+      //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
         let d = false
         if (action.mode!==undefined && action.mode.toString().toUpperCase()==="READONLY") {
           return true        
@@ -241,29 +241,54 @@ export function ButtonsFunctions(base) {
           return false        
         }           
         d=this.disabledByCertification(action)
+        //console.log('btnDisabled', 'disabledByCertification returned ', d)
         if (d) {return d}
 
-
+// if (action.actionName==='EM_ACTIVATE_PRODUCTION_LOT'){
+//   console.log(d, 'requiresGridItemSelected', action.button.requiresGridItemSelected, 'viewModelFromProcModel.alternativeItemPropertyName', viewModelFromProcModel.alternativeItemPropertyName)
+// }        
         if (action.button.requiresGridItemSelected!==undefined){
-          if (action.button.requiresGridItemSelected===false){return false}
+          if (action.button.requiresGridItemSelected===false){
+            return false
+          }
+
           if (viewModelFromProcModel.alternativeItemPropertyName!==undefined){
             //console.log('viewModelFromProcModel.alternativeItemPropertyName', viewModelFromProcModel.alternativeItemPropertyName)
-            if (this[viewModelFromProcModel.alternativeItemPropertyName]!==undefined&&this[viewModelFromProcModel.alternativeItemPropertyName].length>0){
-              return false
-            }else{
+            if (this[viewModelFromProcModel.alternativeItemPropertyName]===undefined){
               return true
+            }else{
+              if (this[viewModelFromProcModel.alternativeItemPropertyName].length>0){
+                return false
+              }else{
+                return true
+              }
             }
+          }else{
+              if (action.actionName==='EM_ACTIVATE_PRODUCTION_LOT'){                
+              }
+              if (this.selectedItems===undefined){
+                return true
+              }else{
+                if (this.selectedItems[0]!==undefined){
+                  return false
+                }else{
+                  return true
+                }
+              }            
           }
         }
+        return d
 
         if (this.sopsPassed == false) {
           if (this.windowOpenable == "yes") {
             d = action.button.whenDisabled == "samplesReload" && action.button.title.label_en == "Reload" ? this.samplesReload : true
           }
         } else {
+          if (action.button.whenDisabled===undefined){return false}
           d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedItems.length
         }
-        return d
+        return false
+        
     }    
     btnHidden(action) {
     let d = false
@@ -440,13 +465,13 @@ export function ButtonsFunctions(base) {
       }
       this.samplesReload = false
     }
-    actionWhenRequiresNoDialog(action, selectedItem) {
+    actionWhenRequiresNoDialog(action, selectedItem, targetValue ={} ) {
         console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
         this.selectedAction=action
         if (this.itemId) {
-          this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+          this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem, targetValue), action)
         } else {
-          this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+          this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem, targetValue), action)
         }
         // Comentado para habilitar confirmDialogs
         // this.performActionRequestHavingDialogOrNot(action, selectedItem)
@@ -482,6 +507,7 @@ export function ButtonsFunctions(base) {
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
           + '&'+ new URLSearchParams(credDialogArgs)
         console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
+        
         this.fetchApi(params).then(() => {
 //console.log('performActionRequestHavingDialogOrNot: into the fetchApi')
             if (action.notGetViewData===undefined||action.notGetViewData===false){
@@ -517,6 +543,7 @@ export function ButtonsFunctions(base) {
         })            
 
     }
+
     disabledByCertification(action){      
       let sopsPassed = false
       let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures

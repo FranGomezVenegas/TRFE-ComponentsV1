@@ -4,7 +4,10 @@ import { Alignment, Layouts } from '@collaborne/lit-flexbox-literals';
 import { commonLangConfig } from '@trazit/common-core';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 
-let langConfig = {
+import {DialogsFunctions} from '../../components/GenericDialogs/DialogsFunctions';
+import '../../components/grid_with_buttons/grid-with-buttons'
+
+let thisTabViewDefinition = {
   "title": {
     "label_en": "Program Sampling Points", 
     "label_es": "Puntos de muestro del programa"
@@ -43,39 +46,56 @@ let langConfig = {
     "person_ana_definition": {
       "label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"
     }
+  },
+  "gridActionOnClick":{"actionName": "LOGSAMPLE",
+  "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+  "requiresDialog": true,
+  "xxxclientMethod": "logSampleDialog",
+  "dialogQueries":[
+      {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+        "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+        "variableForData": "prodLotList"		  
+      }
+    ],
+    "dialogInfo":{
+      "name" : "pointDialog",
+      "action": { "actionName": "LOGSAMPLE",
+        "endPointUrl": "Samples",
+        "requiresDialog": false,
+        "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+        "xxxclientMethod": "logSample",
+        "endPointParams": [
+          { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+          { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+          { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+          { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+          { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+          { "argumentName": "fieldValue", "targetValue": true },
+          { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+        ]
+      }
+    }  
   }
 }
 let actions = [
-  {
-    "actionName": "PROGRAMS_LIST",
-    "clientMethod": "getProgramList",
-    "button": {
-      "icon": "refresh",
-      "title": {
-        "label_en": "Reload", "label_es": "Recargar"
-      },
-      "whenDisabled": "samplesReload"
-    },
-    "subAction": {
-      "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-      "clientMethod": "getLots"
-    }
-  },
-  {
-    "actionName": "LOGSAMPLE",
+  { "actionName": "LOGSAMPLE",
+    "endPointUrl": "Samples",
+    "requiresDialog": false,
+    "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
     "clientMethod": "logSample",
-    "apiParams": [
-      { "query": "locationName", "element": "locationInput", "defaultValue": "" },
-      { "query": "sampleTemplate", "targetValue": true },
-      { "query": "sampleTemplateVersion", "targetValue": true },
-      { "query": "fieldName", "defaultValue": "shift|production_lot" },
-      { "query": "fieldValue", "targetValue": true },
-      { "query": "numSamplesToLog", "defaultValue": 1 }
+    "endPointParams": [
+      { "argumentName": "programName", "element": "programInput" },
+      { "argumentName": "locationName", "element": "locationInput" },
+      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+      { "argumentName": "fieldName", "targetValue": "fieldName" },
+      { "argumentName": "fieldValue", "targetValue": "fieldValue" },
+      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
     ]
   }
 ]
 
-export class SamplingPoints extends CoreView {
+export class SamplingPoints extends DialogsFunctions(CoreView) {
   static get styles() {
     return [Layouts, Alignment,
       super.styles,
@@ -95,43 +115,80 @@ export class SamplingPoints extends CoreView {
   static get properties() {
     return {
       samplesReload: { type: Boolean },
-      selectedSamples: { type: Array },
+      selectedItems: { type: Array },
       selectedAction: { type: Object },
       targetValue: { type: Object },
       procName: { type: String },
-      config: { type: Object }
+      config: { type: Object },
+
+      selectedProgram: { type: Array },
     };
   }
 
   constructor() {
     super()
-    this.selectedSamples = []
+    this.selectedItems = []
+    this.selectedProgram = []
+    return
     this.selectedAction = actions[0]
   }
 
+  xtabView(){
+    return html`
+    grid-with-buttons ${this.filterName} ${this.procInstanceName} ${this.viewName} ${this.lang} 
+    <grid-with-buttons id="gridwithbuttons" .thisTabViewDefinition=${thisTabViewDefinition} viewName=${this.viewName} 
+      filterName=${this.filterName} procInstanceName=${this.procInstanceName} lang=${this.lang}
+      .config=${this.config} .reqParams=${this.reqParams} ?ready="false">
+    </grid-with-buttons>
+
+    `    
+  }
+  // <div class="layout horizontal center flex wrap">
+  // ${this.getButton()}
+  // </div>
   tabView() {
     return html`
       <div class="layout horizontal flex wrap">
         <div class="layout flex">
-          <h1>${langConfig.title["label_"+this.lang]}</h1>
-          <div class="layout horizontal center flex wrap">
-            ${this.getButton()}
-          </div>
+          <h1>${thisTabViewDefinition.title["label_"+this.lang]}</h1>
+
           <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort 
-            @active-item-changed=${e=>this.selectedSamples=e.detail.value ? [e.detail.value] : []}
-            .selectedItems="${this.selectedSamples}">
+            @active-item-changed=${this.activeItemChanged}
+            .selectedItems="${this.selectedItems}">
             ${this.gridList()}
           </vaadin-grid>
         </div>
-        ${this.pointTemplate()}
+        
       </div>
     `;
   }
 
+  activeItemChanged(e){
+    this.selectedItems=e.detail.value ? [e.detail.value] : []    
+    if (this.selectedItems.length==0){return}
+    alert('Temporalmente deshabilitada la accion')
+    return
+    if (e===undefined){return}
+    let d=true
+    d=this.disabledByCertification(thisTabViewDefinition.gridActionOnClick)     
+    if (d) {
+       //alert('View in read only mode')
+      return
+    }
+    this.selectedItems=e.detail.value ? [e.detail.value] : []
+    if (this.selectedItems.length>0&&thisTabViewDefinition.gridActionOnClick!==undefined){
+      //alert(thisTabViewDefinition.gridActionOnClick.actionName)
+      this.GetAlternativeViewData(thisTabViewDefinition.gridActionOnClick)
+    }
+    this.pointDialog.show()
+
+  }
+
+  //${this.pointTemplate()}
   /** Point Template Dialog part */
   pointTemplate() {
     return html`
-    <tr-dialog id="pointDialog" .open=${this.selectedSamples&&this.selectedSamples.length}
+    <tr-dialog id="pointDialog" .open=${this.selectedItems&&this.selectedItems.length}
       @closed=${e=>{if(e.target===this.pointDialog)this.grid.activeItem=null}}
       heading=""
       hideActions=""
@@ -140,21 +197,24 @@ export class SamplingPoints extends CoreView {
         <div class="layout horizontal justified flex">
           <sp-button size="m" variant="secondary" dialogAction="accept">
             ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-          <sp-button size="m" @click=${this.setLogSample}>${langConfig.fieldText.logBtn["label_"+this.lang]}</sp-button>
+          <sp-button size="m" @click=${this.setLogSample}>${thisTabViewDefinition.fieldText.logBtn["label_"+this.lang]}</sp-button>
         </div>
-        <mwc-select label="${langConfig.fieldText.shift["label_"+this.lang]}" id="shift">
-          ${langConfig.fieldText.shift.items.map((c,i) => 
+        <mwc-select label="${thisTabViewDefinition.fieldText.shift["label_"+this.lang]}" id="shift">
+          ${thisTabViewDefinition.fieldText.shift.items.map((c,i) => 
             html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
           )}
         </mwc-select>
-        <mwc-select label="${langConfig.fieldText.lot["label_"+this.lang]}" id="lot">
-          ${langConfig.fieldText.lot.items.map((c,i) => 
+        <mwc-select label="${thisTabViewDefinition.fieldText.lot["label_"+this.lang]}" id="lot">
+          ${thisTabViewDefinition.fieldText.lot.items.map((c,i) => 
             html`<mwc-list-item value="${c.lot_name}" ?selected=${i==0}>${c.lot_name}</mwc-list-item>`
           )}
         </mwc-select>
-        ${this.selectedSamples.length&&this.selectedSamples[0].card_info.map(f => 
-          html`<mwc-textfield label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${f.value}></mwc-textfield>`
-        )}
+        ${this.selectedItems===undefined||this.selectedItems[0]===undefined||this.selectedItems[0].card_info===undefined ? nothing :
+        html`
+          ${this.selectedItems.length&&this.selectedItems[0].card_info.map(f => 
+            html`<mwc-textfield label=${f['label_'+this.lang]} name=${f.name} type=${f.type} value=${f.value}></mwc-textfield>`
+          )}
+        `}
       </div>
     </tr-dialog>
     `
@@ -185,6 +245,31 @@ export class SamplingPoints extends CoreView {
   }
 
   setLogSample() {
+    this.targetValue = {}
+    this.targetValue.fieldName=''
+    this.targetValue.fieldValue=''
+    if (this.lotField.value!==undefined){
+      if (this.targetValue.fieldName.length>0){
+        this.targetValue.fieldName=this.targetValue.fieldName+"|"
+        this.targetValue.fieldValue=this.targetValue.fieldValue+"|"
+      }
+      this.targetValue.fieldName=this.targetValue.fieldName+"production_lot"
+      this.targetValue.fieldValue=this.targetValue.fieldValue+this.lotField.value
+    }
+    
+    if (this.shiftField.value!==undefined){
+      if (this.targetValue.fieldName.length>0){
+        this.targetValue.fieldName=this.targetValue.fieldName+"|"
+        this.targetValue.fieldValue=this.targetValue.fieldValue+"|"
+      }
+      this.targetValue.fieldName=this.targetValue.fieldName+"shift"
+      this.targetValue.fieldValue=this.targetValue.fieldValue+this.shiftField.value
+    }
+    this.selectedAction=actions[0]
+    this.reqParams=this.jsonParamCommons(actions[0], {}, this.targetValue)
+    this.nextRequestCommons(actions[0])
+    return    
+
     this.targetValue = {
       sampleTemplate: this.selectedProgram.sample_config_code,
       sampleTemplateVersion: this.selectedProgram.sample_config_code_version,
@@ -193,7 +278,7 @@ export class SamplingPoints extends CoreView {
     this.actionMethod(null, false, 1)
   }
 
-  getButton() {
+  xgetButton() {
     return html`
       ${actions.map(action =>
         html`${action.button ?
@@ -201,7 +286,7 @@ export class SamplingPoints extends CoreView {
             class="${action.button.class}"
             icon="${action.button.icon}" 
             title="${action.button.title['label_'+this.lang]}" 
-            ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedSamples.length}
+            ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedItems.length}
             @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
           nothing
         }`
@@ -209,7 +294,7 @@ export class SamplingPoints extends CoreView {
     `
   }
 
-  actionMethod(action, replace = true, actionNumIdx) {
+  xactionMethod(action, replace = true, actionNumIdx) {
     if (replace) {
       this.selectedAction = action
     }
@@ -217,14 +302,14 @@ export class SamplingPoints extends CoreView {
       action = actions[actionNumIdx]
       this.selectedAction = actions[actionNumIdx]
     }
-    if (this.selectedSamples.length) {
-      this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(), action)
+    if (this.selectedItems.length) {
+      this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(), action)
     } else {
       this.credsChecker(action.actionName, null, this.jsonParam(), action)
     }
   }
 
-  jsonParam() {
+  xjsonParam() {
     let jsonParam = {}
     if (this.selectedAction.apiParams) {
       this.selectedAction.apiParams.forEach(p => {
@@ -242,7 +327,7 @@ export class SamplingPoints extends CoreView {
     return jsonParam
   }
 
-  nextRequest() {
+  xnextRequest() {
     super.nextRequest()
     this.reqParams = {
       procInstanceName: this.procName,
@@ -252,13 +337,13 @@ export class SamplingPoints extends CoreView {
   }
 
   gridList() {
-    return Object.entries(langConfig.gridHeader).map(
+    return Object.entries(thisTabViewDefinition.gridHeader).map(
       ([key, value], i) => html`${this.nonIconColumn(key, value, i)}`
     )
   }
 
   nonIconColumn(key, value, i) {
-    return html`${langConfig.gridHeader[key].sort ?
+    return html`${thisTabViewDefinition.gridHeader[key].sort ?
       this.sortColumn(key, value, i) :
       this.filterColumn(key, value, i)
     }`
@@ -269,18 +354,18 @@ export class SamplingPoints extends CoreView {
       ${this.desktop ?
         html`
           ${i==0 ?
-            html`${langConfig.gridHeader[key].width ?
+            html`${thisTabViewDefinition.gridHeader[key].width ?
               html`<vaadin-grid-sort-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                width="${langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
+                width="${thisTabViewDefinition.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
               html`<vaadin-grid-sort-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
                 flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
             }` :
-            html`${langConfig.gridHeader[key].width ?
+            html`${thisTabViewDefinition.gridHeader[key].width ?
               html`<vaadin-grid-sort-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                width="${langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
+                width="${thisTabViewDefinition.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
               html`<vaadin-grid-sort-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
                 resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
@@ -289,7 +374,7 @@ export class SamplingPoints extends CoreView {
         ` :
         html`<vaadin-grid-sort-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end' }"
+          text-align="${thisTabViewDefinition.gridHeader[key].align ? thisTabViewDefinition.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
       }
     `
@@ -300,18 +385,18 @@ export class SamplingPoints extends CoreView {
       ${this.desktop ?
         html`
           ${i==0 ?
-            html`${langConfig.gridHeader[key].width ?
+            html`${thisTabViewDefinition.gridHeader[key].width ?
               html`<vaadin-grid-filter-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                width="${langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+                width="${thisTabViewDefinition.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
               html`<vaadin-grid-filter-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
                 flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
             }` :
-            html`${langConfig.gridHeader[key].width ?
+            html`${thisTabViewDefinition.gridHeader[key].width ?
               html`<vaadin-grid-filter-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                width="${langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
+                width="${thisTabViewDefinition.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
               html`<vaadin-grid-filter-column 
                 ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
                 resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
@@ -320,14 +405,14 @@ export class SamplingPoints extends CoreView {
         ` :
         html`<vaadin-grid-filter-column width="65px" resizable 
           ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-          text-align="${langConfig.gridHeader[key].align ? langConfig.gridHeader[key].align : 'end' }"
+          text-align="${thisTabViewDefinition.gridHeader[key].align ? thisTabViewDefinition.gridHeader[key].align : 'end' }"
           path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
       }
     `
   }
 
   isConfidential(sample, key) {
-    if (langConfig.gridHeader[key].confidential_value&&sample[key]) {
+    if (thisTabViewDefinition.gridHeader[key].confidential_value&&sample[key]) {
       return html`*****`
     } else {
       return html`${sample[key]}`
@@ -335,6 +420,7 @@ export class SamplingPoints extends CoreView {
   }
 
   async getProgramList() {
+    return
     this.samplesReload = true
     let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
       + '?' + new URLSearchParams(this.reqParams)
@@ -349,12 +435,13 @@ export class SamplingPoints extends CoreView {
   }
 
   getLots() {
+    return
     let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
       + '?' + new URLSearchParams(this.reqParams)
     this.fetchApi(params).then(j => {
       this.samplesReload = false
       this.grid.items = this.selectedProgram.sample_points
-      langConfig.fieldText.lot.items = j
+      thisTabViewDefinition.fieldText.lot.items = j
       this.requestUpdate()
     })
   }
@@ -370,7 +457,10 @@ export class SamplingPoints extends CoreView {
   }
 
   setView() {
-    this.selectedSamples = []
+    this.selectedItems = []
+    if (this.selectedProgram===undefined){return}
+    this.grid.items = this.selectedProgram.sample_points
+    return
     this.selectedAction = actions[0]
     this.actionMethod(this.selectedAction.subAction)
   }

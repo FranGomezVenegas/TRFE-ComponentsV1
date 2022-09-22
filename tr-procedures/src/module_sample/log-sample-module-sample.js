@@ -71,7 +71,7 @@ export class LogSampleModuleSample extends ((CredDialog)) {
   }
 
   render() {
-    console.log('render', this.viewModelFromProcModel.langConfig)
+    // console.log('render', this.viewModelFromProcModel.langConfig)
     return html`
       <div class="layout vertical flex">
       <h1>${this.viewModelFromProcModel.langConfig.title["label_"+this.lang]}</h1>

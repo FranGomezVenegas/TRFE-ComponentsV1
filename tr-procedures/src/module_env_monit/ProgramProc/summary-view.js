@@ -57,11 +57,13 @@ export class SummaryView extends CoreView {
 
   setView() {
     let data = [["Stage", "Counter"]]
-    this.selectedProgram.samples_summary_by_stage.forEach(c => {
-      if (c.current_stage != "END") {
-        data.push([c.current_stage, c.COUNTER])
-      }
-    })
+    if (this.selectedProgram!==undefined&&this.selectedProgram.samples_summary_by_stage!==undefined){  
+      this.selectedProgram.samples_summary_by_stage.forEach(c => {
+        if (c.current_stage != "END") {
+          data.push([c.current_stage, c.COUNTER])
+        }
+      })
+    }
     this.chart.data = JSON.stringify(data)
   }
 }

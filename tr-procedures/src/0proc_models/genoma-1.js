@@ -23,16 +23,16 @@ export const Genoma1 = {
           }
         },
         "gridHeader": {
-            "id":{name: 'id', label_en:'Id', label_es: 'Id', sort:false, filter:true, is_icon:false, width:"20%"},
-            "name":{name: 'name', label_en:'Name', label_es: 'Nombre', sort:false, filter:true, is_icon:false, width:"20%"},
-            "value":{name: 'value', label_en:'Value', label_es: 'Valor', sort:false, filter:true, is_icon:false, width:"20%"},
-            "variable_set":{name: 'variable_set', label_en:'Var Set', label_es: 'Conjunto', sort:false, filter:true, is_icon:false, width:"20%"},
-            "type":{name: 'type', label_en:'Type', label_es: 'Tipo', sort:false, filter:true, is_icon:false, width:"20%"},
-            "owner_table":{name: 'owner_table', label_en:'Owner', label_es: 'Dueño', sort:false, filter:true, is_icon:false, width:"20%"},
-            "owner_id":{name: 'owner_id', label_en:'Owner Id', label_es: 'Id Dueño', sort:false, filter:true, is_icon:false, width:"20%"},    
-            "sample":{name: 'sample', label_en:'Sample', label_es: 'Muestra', sort:false, filter:true, is_icon:false, width:"20%"},
-            "individual":{name: 'individual', label_en:'Individual', label_es: 'Individuo', sort:false, filter:true, is_icon:false, width:"20%"},
-            "family":{name: 'family', label_en:'Family', label_es: 'Familia', sort:true, filter:false, is_icon:false, width:"20%"},    
+            "id":{"name": "id", "label_en":"Id", "label_es": "Id", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "name":{"name": "name", "label_en":"Name", "label_es": "Nombre", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "value":{"name": "value", "label_en":"Value", "label_es": "Valor", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "variable_set":{"name": "variable_set", "label_en":"Var Set", "label_es": "Conjunto", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "type":{"name": "type", "label_en":"Type", "label_es": "Tipo", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "owner_table":{"name": "owner_table", "label_en":"Owner", "label_es": "Dueño", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "owner_id":{"name": "owner_id", "label_en":"Owner Id", "label_es": "Id Dueño", "sort":false, "filter":true, "is_icon":false, "width":"20%"},    
+            "sample":{"name": "sample", "label_en":"Sample", "label_es": "Muestra", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "individual":{"name": "individual", "label_en":"Individual", "label_es": "Individuo", "sort":false, "filter":true, "is_icon":false, "width":"20%"},
+            "family":{"name": "family", "label_en":"Family", "label_es": "Familia", "sort":true, "filter":false, "is_icon":false, "width":"20%"}    
         }
       },
       "viewQuery":
@@ -45,7 +45,7 @@ export const Genoma1 = {
           "title": {
             "label_en": "Reload", "label_es": "Recargar"
           },
-          "whenDisabled": "samplesReload"
+          "requiresGridItemSelected": true
         },
         "subAction": {
           "actionName": "ALL_ACTIVE_PROJECTS",
@@ -56,7 +56,7 @@ export const Genoma1 = {
         {
           "actionName": "LOGSAMPLE",
           "clientMethod": "logSample",
-          "endPointParams": [
+          "apiParams": [
             { "query": "programName", "element": "programInput", "defaultValue": "" },
             { "query": "locationName", "element": "locationInput", "defaultValue": "" },
             { "query": "sampleTemplate", "targetValue": true },
@@ -81,7 +81,7 @@ export const Genoma1 = {
       ]
     },
     "ProjectManager": {
-        "component": "ModuleGenomaProjectWindow",
+        "component": "program-proc",
         "hasOwnComponent": true,
         "viewQuery":
         {
@@ -93,11 +93,11 @@ export const Genoma1 = {
             "title": {
               "label_en": "Reload", "label_es": "Recargar"
             },
-            "whenDisabled": "samplesReload"
+            "requiresGridItemSelected": true
           },
           "subAction": {
               "actionName": "ALL_ACTIVE_PROJECTS",
-              "clientMethod": "getGenomaProjectsList",
+              "clientMethod": "getGenomaProjectsList"
           }
         },
       "actions": [
@@ -110,13 +110,13 @@ export const Genoma1 = {
             "title": {
               "label_en": "Reload", "label_es": "Recargar"
             },
-            "whenDisabled": "samplesReload"
+            "requiresGridItemSelected": true
           },
           "subAction": {
               "actionName": "ALL_ACTIVE_PROJECTS",
-              "clientMethod": "getGenomaProjectsList",
+              "clientMethod": "getGenomaProjectsList"
           }
-        },
+        }
         ]
-      },
+      }
   }

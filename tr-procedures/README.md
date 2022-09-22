@@ -14,3 +14,14 @@ This v2 is a refactor of v1 then no new features are added but trying to reduce 
 ```bash
 npm run start
 ```
+## Requirements Tracking
+
+This area want to track the requirements that made this web component to become a reality.
+
+[- #196. Check Mandatory Fields not filled](https://github.com/FranGomezVenegas/FE-Issues/issues/196)
+[- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)
+
+
+## Fixed Bugs Tracking
+
+This area want to track the bugs identified for this Web Component that were already implemented/fixed.

@@ -6,6 +6,7 @@ import '@vaadin/vaadin-combo-box/vaadin-combo-box';
 import '@spectrum-web-components/button/sp-button';
 import '@trazit/tr-dialog/tr-dialog';
 
+
 const langConfig = {
   "pwdWindowTitle": {
     "label_en": "Please confirm your credentials (user & password)",
@@ -160,7 +161,7 @@ export class CredDialog extends CommonCore {
 
 
   creadDialogs() {
-    console.log('credDialog>>render')
+    //console.log('credDialog>>render')
     return html`
       <tr-dialog id="credDialog" 
         @closed=${this.closed}
@@ -210,7 +211,7 @@ export class CredDialog extends CommonCore {
   }  
 
   render() {
-    console.log('credDialog>>render')
+    //console.log('credDialog>>render')
     return html`
       <tr-dialog id="credDialog" 
         @closed=${this.closed}
@@ -403,7 +404,7 @@ export class CredDialog extends CommonCore {
   /**
    * set the justification type, generate justification list for non text type
    */
-  checkProcListMovedToDialogsFunctions() {
+  xcheckProcListMovedToDialogsFunctions() {
     console.log('checkProcListMovedToDialogsFunctions')
     // this.type = "confirm"
     // bypass = false
@@ -465,7 +466,7 @@ export class CredDialog extends CommonCore {
    * @param {*} params ref of this.reqParams
    * @param {*} action ref of action object
    */
-  credsChecker(actionName, objId, params={}, action) {
+  xcredsCheckerMovedToDialogsFunctions(actionName, objId, params={}, action) {
     console.log('credsChecker')
     this.actionObj = action || {}
     this.reqParams = params
@@ -520,7 +521,7 @@ export class CredDialog extends CommonCore {
     })
   }
 
-  nextRequestMovedToDialogsFunctions() {
+  xnextRequestMovedToDialogsFunctions() {
     alert('nextRequest')
     this.reqParams = {
       ...this.reqParams,
