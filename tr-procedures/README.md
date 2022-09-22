@@ -20,7 +20,7 @@ This area want to track the requirements that made this web component to become 
 
 [- #196. Check Mandatory Fields not filled](https://github.com/FranGomezVenegas/FE-Issues/issues/196)
 [- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)
-
+[- #198. Not allowed negative numDays for Reactivate Dialog](https://github.com/FranGomezVenegas/FE-Issues/issues/198)
 
 ## Fixed Bugs Tracking
 

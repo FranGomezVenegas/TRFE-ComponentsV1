@@ -20,6 +20,15 @@ return class extends base {
         this.deactivatedObjects = []
     }
   
+    noNegativeValues(e) {
+      if (e.target.value <=0){
+        this.numDays=0
+        e.target.value=0
+      }
+      // console.log('setValidVal', e)
+      return
+    }    
+
     //${this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject.objectName===undefined ?          
     reactivateObjectsDialog() {
       //  console.log('reactivateObjectsDialog', 'actionBeingPerformedModel', this.actionBeingPerformedModel)
@@ -34,6 +43,7 @@ return class extends base {
                   <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="queryNumDays" type="number" 
                       .value=${this.numDays} @change=${e => this.numDays = e.target.value}
+                      @input=${e=>this.noNegativeValues(e)}
                       label="${this.actionBeingPerformedModel.dialogInfo.fieldsObject.queryNumDays["label_" + this.lang]}"
                       @keypress=${e => e.keyCode == 13 && this.setDays()}></mwc-textfield>
                     <mwc-icon-button icon="refresh" @click=${this.setDays}></mwc-icon-button>
