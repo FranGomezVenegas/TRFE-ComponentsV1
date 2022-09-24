@@ -325,7 +325,8 @@ export function ButtonsFunctions(base) {
             this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
             return
         }  
-        if (this[selectedItemPropertyName]===undefined||this[selectedItemPropertyName][0]===undefined){
+        if ( action.requiresGridItemSelected!==undefined&&action.requiresGridItemSelected===true&&
+          (this[selectedItemPropertyName]===undefined||this[selectedItemPropertyName][0]===undefined) ){
           alert('Please select one item in the table prior')
           return
         }
