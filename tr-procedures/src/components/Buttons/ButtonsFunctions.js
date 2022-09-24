@@ -237,13 +237,20 @@ export function ButtonsFunctions(base) {
         if (action.mode!==undefined && action.mode.toString().toUpperCase()==="READONLY") {
           return true        
         }   
+        // if (action.buttonForQuery!==undefined && action.buttonForQuery===true) {
+        //   if (action.button.requiresGridItemSelected!==undefined&&
+        //     action.button.requiresGridItemSelected===true){
+        //       return false
+        //   }else{          
+        //     return false        
+        //   }
+        // }           
         if (action.buttonForQuery!==undefined && action.buttonForQuery===true) {
-          return false        
-        }           
-        d=this.disabledByCertification(action)
-        //console.log('btnDisabled', 'disabledByCertification returned ', d)
-        if (d) {return d}
-
+        }else{
+          d=this.disabledByCertification(action)
+          //console.log('btnDisabled', 'disabledByCertification returned ', d)
+          if (d) {return d}
+        }
 // if (action.actionName==='EM_ACTIVATE_PRODUCTION_LOT'){
 //   console.log(d, 'requiresGridItemSelected', action.button.requiresGridItemSelected, 'viewModelFromProcModel.alternativeItemPropertyName', viewModelFromProcModel.alternativeItemPropertyName)
 // }        
@@ -264,8 +271,6 @@ export function ButtonsFunctions(base) {
               }
             }
           }else{
-              if (action.actionName==='EM_ACTIVATE_PRODUCTION_LOT'){                
-              }
               if (this.selectedItems===undefined){
                 return true
               }else{
