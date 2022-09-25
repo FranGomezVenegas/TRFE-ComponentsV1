@@ -427,15 +427,12 @@ alert('openThisDialog')
                         <mwc-textfield id="daterange5dateEnd" label="${fld.daterange5.dateEnd["label_" + this.lang]}" type="date"></mwc-textfield>
                         </div>
                     `}                       
-
-
-                                        
                 
 
                 ${!fld.list1 ?html``: html`        
                     <mwc-select id="list1" label="${fld.list1["label_" + this.lang]}">
                     ${fld.list1.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+                        html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list2 ?html``: html`        
@@ -595,6 +592,7 @@ alert('openThisDialog')
     }
 
     defaultValue(){
+        //return
         //console.log('defaultValue')
         this.resetFields()
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
@@ -627,10 +625,15 @@ alert('openThisDialog')
             return
         }
         for (let i=0;i<dlgFlds.length;i++){
-            let fldObj=dlgFlds[i]
+            let fldObj=dlgFlds[i]            
             let keyName=Object.keys(fldObj)
             if (this[keyName]!==null){
-                this[keyName[0]].value=""
+                console.log(keyName[0])
+                if (keyName[0].includes('list')){
+
+                }else{
+                    this[keyName[0]].value=""
+                }
             }
         }
     }
