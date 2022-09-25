@@ -53,6 +53,27 @@ alert('openThisDialog')
        return true 
     }
         
+    
+    setValidVal(e, fieldDef) {
+        console.log('setValidVal', e, 'fieldDef', fieldDef)
+        return
+      if (typeof fieldDef.min_allowed == 'number' && e.target.value < fieldDef.min_allowed) {
+        e.target.value = fieldDef.min_allowed
+        return
+      }
+      if (typeof fieldDef.max_allowed == 'number' && e.target.value > fieldDef.max_allowed) {
+        e.target.value = fieldDef.max_allowed
+        return
+      }
+      // make sure the decimal length <= max_dp when manual input
+      if (fieldDef.max_dp) {
+        let v = e.target.value.split(".")
+        if (v.length > 1 && v[1].length > fieldDef.max_dp) {
+          v[1] = v[1].substring(0, fieldDef.max_dp)
+          e.target.value = Number(v.join("."))
+        }
+      }
+    }    
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
     genericFormDialog(actionModel = this.actionBeingPerformedModel) {
         // if (this.actionBeingPerformedModel.dialogInfo === undefined) {
@@ -170,6 +191,7 @@ alert('openThisDialog')
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number1" type="number" 
+                    @input=${e=>this.setValidVal(e, fld)}
                     .value=${fld.number1.default_value ? fld.number1.default_value : ''} label="${fld.number1["label_" + this.lang]}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>

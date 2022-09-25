@@ -25,3 +25,4 @@ This area want to track the requirements that made this web component to become 
 ## Fixed Bugs Tracking
 
 This area want to track the bugs identified for this Web Component that were already implemented/fixed.
+[- #199. Buttons 'buttonForQuery' was enabling the button always even when no record selected](https://github.com/FranGomezVenegas/FE-Issues/issues/199)

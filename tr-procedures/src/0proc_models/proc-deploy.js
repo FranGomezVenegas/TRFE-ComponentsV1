@@ -2,7 +2,8 @@ export const ProcDeploy = {
   "TrackingChanges":{
 	  "version": 0.9,
 	  "last change on (YYYYMMDD)": "20220921",
-	  "last_change_note": "replace whenDisabled by requiresGridItemSelected",
+	  "last_change_note_20220921": "Fixed issues in ProductionLots reactivate lot, 3 errors on open dialog for the first time(1) use numDays (2) and error when query returns no records for the list(3)",
+	  "last_change_note_20220921_2": "replace whenDisabled by requiresGridItemSelected",
 	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
   },
   "ModuleSettings":{
@@ -934,23 +935,71 @@ export const ProcDeploy = {
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
         ]
       },
-      { "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
-        "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-		"clientMethod": "getResult",
+      { "actionName": "VIEWRESULT",
+		"buttonForQuery": true,
+		"requiresDialog": true,
+		"endPointUrl": "Samples",
         "alertMsg": {
           "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
         },
         "button": {
           "icon": "document_scanner",
           "title": {
-            "label_en": "Enter Result",
-            "label_es": "Ingrese el Resultado"
+            "label_en": "View Results", "label_es": "Ver los Resultados"
           },
           "requiresGridItemSelected": true
         },
-        "dialogInfo": {
-          "automatic": true,
-          "readOnly": true
+        "dialogInfo": { 
+		  "name": "resultDialog",
+		  "subQueryName": "getResult",
+		  "viewQuery": {
+			  "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+			  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+			  "endPointParams": [				  
+				{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+			  ]
+		  },			  
+		  "automatic": true,
+          "readOnly": true,
+		  "resultHeader": {
+			"spec_eval": {"label_en": "Spec Eval", "label_es": "Eval Espec"},
+			"result_id": {"label_en": "Result Id", "label_es": "Id Resultado"},
+			"analysis": {"label_en": "Analysis", "label_es": "Análísis"},
+			"param_name": {"label_en": "Parameter", "label_es": "Parámetro"},
+			"raw_value": {"label_en": "Value", "label_es": "Valor"},
+			"uom": {"label_en": "UOM", "label_es": "UOM"}
+		  },
+		  "resultHeaderObjectLabelTopLeft": {
+			"label_en": "Sample: ", "label_es": "Muestra: "
+		  },  
+          "action": [
+            { "actionName": "ENTERRESULT",
+			  "requiresDialog": false,
+			  "endPointUrl": "Samples",
+              "clientMethod": "enterResult",
+              "endPointParams": [
+                { "argumentName": "rawValueResult", "targetValue": true },
+                { "argumentName": "resultId", "targetValue": true }
+              ]
+            },
+            { "actionName": "RESULT_CHANGE_UOM",
+              "clientMethod": "changeUOM",
+              "endPointParams": [
+                { "argumentName": "newResultUom", "targetValue": true },
+                { "argumentName": "resultId", "targetValue": true }
+              ]
+            }
+          ]
+        },
+        "endPointParams": [
+          { "argumentName": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
+          { "argumentName": "sortFieldsName", "value": "test_id|result_id" },
+          { "argumentName": "sampleAnalysisWhereFieldsName", "value": "testing_group|status not in" },
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+        ],
+	    "paramFilter": {
+          "ER-FQ": { "argumentName": "sampleAnalysisWhereFieldsValue", "value": "FQ|REVIEWED*String" },
+          "ER-MB": { "argumentName": "sampleAnalysisWhereFieldsValue", "value": "MB|REVIEWED*String" }
         }
       }
     ]
