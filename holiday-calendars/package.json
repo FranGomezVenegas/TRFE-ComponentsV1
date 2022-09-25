@@ -25,6 +25,7 @@
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
     "@trazit/relogin-dialog": "file:.yalc/@trazit/relogin-dialog",
     "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
+    "@trazit/tr-procedures": "file:.yalc/@trazit/tr-procedures",
     "@vaadin/vaadin-grid": "^21.0.5",
     "lit": "^2.0.2",
     "lit-vaadin-helpers": "^0.2.2"
