@@ -49,8 +49,34 @@ export function CalendarActions(base) {
                 })
                 //this.getHolidayCalendars()
           }
+          //actionBeingPerformedModel
+          checkMandatoryFieldsNotEmpty(){                
+            let dlgFlds=Object.values(this.selectedAction.dialogInfo.fields)
+            for (let i=0;i<dlgFlds.length;i++){            
+                let fldObj=dlgFlds[i]
+                let keyName=Object.keys(this.selectedAction.dialogInfo.fields)
+                console.log('checkMandatoryFieldsNotEmpty', fldObj, keyName[i])
+
+                let fldDef=dlgFlds[i]
+                if ((fldDef.optional===undefined||
+                    fldDef.optional===false)&&this[keyName[i]].value.length==0){
+                    alert('Field '+fldDef["label_"+this.lang]+' is mandatory')
+                    return false
+                }
+            }
+            return true
+          }          
           genomaSuperDialogClickedActionNoCredChecker(){
             //console.log('genomaSuperDialogClickedAction')
+            
+            if (this.checkMandatoryFieldsNotEmpty()){
+            }else{
+                console.log('Accepted Generic Dialog but mandatories pending then action not performed')
+              // alert('mandatories pending')
+            return
+              //e.stopPropagation();
+            }
+
             let action=this.selectedAction
             let selectedItem={}
             if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
@@ -153,20 +179,36 @@ export function CalendarActions(base) {
             if (action.endPointParams) {
               action.endPointParams.forEach(p => {
                 if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
-                    if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
+                  if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][p.internalVariableObjProperty]===undefined){
+                    var msg=""
+                    if (this[p.internalVariableObjName][p.internalVariableObjProperty]===undefined){
+                      msg='The object '+p.internalVariableObjName+' has no one property called '+p.internalVariableObjProperty
+                      alert(msg)
+                      //console.log(msg, this[p.internalVariableObjName][0])
+                    }else{
+                      msg='there is no object called '+p.internalVariableObjName+' in this view'
+                      alert(msg)
+                    }
+                //    alert('No family selected')
+                    return jsonParam[p.argumentName] = "ERROR: "+msg
+                  }  
+                jsonParam[p.argumentName] = this[p.internalVariableObjName][p.internalVariableObjProperty]
+               
+                } else if (p.internalVariableArrName&&p.internalVariableObjProperty) {          
+                    if (this[p.internalVariableArrName]===undefined||this[p.internalVariableArrName][0][p.internalVariableObjProperty]===undefined){
                       var msg=""
-                      if (this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
-                        msg='The object '+p.internalVariableObjName+' has no one property called '+p.internalVariableObjProperty
+                      if (this[p.internalVariableArrName][0][p.internalVariableObjProperty]===undefined){
+                        msg='The object '+p.internalVariableArrName+' has no one property called '+p.internalVariableObjProperty
                         alert(msg)
-                        //console.log(msg, this[p.internalVariableObjName][0])
+                        //console.log(msg, this[p.internalVariableArrName][0])
                       }else{
-                        msg='there is no object called '+p.internalVariableObjName+' in this view'
+                        msg='there is no object called '+p.internalVariableArrName+' in this view'
                         alert(msg)
                       }
                   //    alert('No family selected')
                       return jsonParam[p.argumentName] = "ERROR: "+msg
                     }  
-                  jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
+                  jsonParam[p.argumentName] = this[p.internalVariableArrName][0][p.internalVariableObjProperty]
                  
                 } else if (p.element) {
                   if (p.isAdhocField!==undefined&&p.isAdhocField===true){

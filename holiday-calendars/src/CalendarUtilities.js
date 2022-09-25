@@ -58,7 +58,9 @@ export function CalendarUtilities(base) {
         }
         
           buttonAction(action, selectedItem, replace = true, actionNumIdx) {
-            //console.log(action, this.newStudyIndividual)
+            //alert('buttonActions')
+            console.log(action, this.newStudyIndividual, action)
+            this.selectedAction=action
             if (action===undefined){return}
             if (action.clientMethod===undefined&&action.dialogInfo===undefined){
               this.buttonActionWithoutDialogNoCredChecker(action, selectedItem)

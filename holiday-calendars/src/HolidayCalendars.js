@@ -15,13 +15,17 @@ import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 
 //import '@alenaksu/json-viewer';
 //import '@spectrum-web-components/split-view/sp-split-view';
-const langConfig = {
+
+const viewInfoDefinition = {
   grid: {
     id: {"label_en": "Id", "label_es": "Id"},
     date: {"label_en": "Date", "label_es": "Fecha"},
     day_name: {"label_en":"Name", "label_es": "Nombre"},
     created_on: {"label_en":"Creation Date", "label_es": "F.Creación"},
     created_by: {"label_en": "Creator", "label_es": "Creador"}
+  },
+  selector: { 
+    title: {"label_en": "Calendar Name", "label_es": "Calendario"}
   },
   calendarActions: [
     { "actionName": "NEW_CALENDAR",
@@ -42,7 +46,7 @@ const langConfig = {
     "dialogInfo": {
       "requiresDialog": true,
       "name": "genericFormDialog",
-      "fieldText": {
+      "fields": {
         "text1": { "label_en": "New calendar name", "label_es": "Nombre nuevo calendario" },
         "text2": { "label_en": "Description", "label_es": "Descripción" },
       }
@@ -52,7 +56,8 @@ const langConfig = {
   ],
   calendarDateActions: [
     { "actionName": "ADD_DATE_TO_CALENDAR",
-    "clientMethod": "newStudyIndividual",
+    "requiresDialog": true,
+    "xxxclientMethod": "newStudyIndividual",
     "selObjectVariableName": "selectedCalendar", 
     "endPoint": "/app/HolidayCalendarAPIactions",
     "endPointParams": [ 
@@ -73,7 +78,7 @@ const langConfig = {
     "dialogInfo": {
       "requiresDialog": true,
       "name": "genericFormDialog",
-      "fieldText": {
+      "fields": {
         "text1": { "label_en": "Date Name", "label_es": "Nombre" },
         "date1": { "label_en": "Date", "label_es": "Fecha"}
       }
@@ -83,8 +88,8 @@ const langConfig = {
       "selObjectVariableName": "selectedCalendarDate", 
       "endPoint": "/app/HolidayCalendarAPIactions",
       "endPointParams": [ 
-        { "argumentName": "calendar", "internalVariableObjName":"selectedCalendarDate", "internalVariableObjProperty":"calendar_code", "ZZZselObjectPropertyName": "study"},
-        { "argumentName": "date_id", "internalVariableObjName":"selectedCalendarDate", "internalVariableObjProperty":"id" },        
+        { "argumentName": "calendar", "internalVariableArrName":"selectedCalendarDate", "internalVariableObjProperty":"calendar_code", "ZZZselObjectPropertyName": "study"},
+        { "argumentName": "date_id", "internalVariableArrName":"selectedCalendarDate", "internalVariableObjProperty":"id" },        
       ],
       "button": {
         "z-icdon": "refresh",
@@ -97,7 +102,7 @@ const langConfig = {
   ]
 };
 
-
+ 
 export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore)))) {
   static get styles() {
     return [
@@ -132,6 +137,78 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
       google-chart.calendarchart{
         height:180px;
       }
+      mwc-icon-button#lang {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
+      mwc-button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        color: white;
+        border-color: transparent !important;
+        --mdc-button-fill-color: red;
+        --mdc-button-ink-color: blue;
+      }            
+      mwc-icon-button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }        
+      mwc-icon-button.disabledtrue{        
+        color : red;
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }        
+      mwc-icon-button#video {
+        color : #FFFFFF;
+        color : rgba(36, 192, 235, 1);
+      }
+      sp-button {
+        background : #24C0EB;
+        background : rgba(36, 192, 235, 1);
+        border-color : inherit !important;
+        border-radius : 35px;
+        -moz-border-radius : 35px;
+        -webkit-border-radius : 35px;
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        color : #FFFFFF;
+        color : rgb(255, 255, 255);
+      }
+      mwc-textfield {
+        border-style : Solid;
+        border-color : #999999;
+        border-color : rgba(153, 153, 153, 1);        
+        border-width : 1px;
+        border-radius : 7px;
+        -moz-border-radius : 7px;
+        -webkit-border-radius : 7px;   
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);     
+        background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
+      }
+      mwc-textfield.mdc-text-field {
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);     
+      }
+      mwc-textfield.mdc-textfield.mdc-floating-label {
+        color: red; 
+      }
+
       `
     ]
   }
@@ -145,7 +222,7 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
       selectedApis: { type: Array },
       selectedTxts: { type: Array },
       selectedCalendarDate: { type: Array },
-      selectedCalendar: { type: Array },
+      selectedCalendar: { type: Object },
     };
   }
 
@@ -161,21 +238,31 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
     this.selectedCalendarDate = []
     
   }
-
+  calendarSelectorTitle(){
+    return viewInfoDefinition.selector.title["label_"+this.lang]
+    return 'Calendar Name'
+  }
+  listEntryLabel(entry){
+    if (entry.description&&entry.description.length>0){
+      return entry.code +' ('+entry.description+')'
+    }else{
+      return entry.code
+    }
+  }
   render() {
     return html`
       <div class="layout horizontal center flex wrap">      
         <mwc-icon-button icon="refresh" @click=${this.getHolidayCalendars}></mwc-icon-button>      
-        <mwc-select outlined id="calendarsList" label="Project Name" @change=${this.calendarChanged} ?hidden=${this.calendars.length<2}>
+        <mwc-select outlined id="calendarsList" label="${this.calendarSelectorTitle()}" @change=${this.calendarChanged} ?hidden=${this.calendars.length<2}>
             ${this.calendars&&this.calendars.map((p,i) => 
-              html`<mwc-list-item value="${p.code}" ?selected=${i==0}>${p.description}</mwc-list-item>`
+              html`<mwc-list-item value="${p.code}" ?selected=${i==0}>${this.listEntryLabel(p)}</mwc-list-item>`
             )}
           </mwc-select>
-          ${this.getButton(langConfig.calendarActions, this.selectedCalendar[0])}
+          ${this.getButton(viewInfoDefinition.calendarActions, this.selectedCalendar)}
       </div>
       <h1>${this.getTitle()}</h1>
 
-      ${this.getButton(langConfig.calendarDateActions, this.selectedCalendarDate)}
+      ${this.getButton(viewInfoDefinition.calendarDateActions, this.selectedCalendarDate)}
       <div class="layout horizontal center flex wrap">  
         <google-chart class="calendarchart" type="calendar"></google-chart>
       </div>
@@ -183,25 +270,22 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
        .selectedItems="${this.selectedCalendarDate}" 
       >
         <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-        <vaadin-grid-sort-column path="id" .header="${langConfig.grid.id["label_"+this.lang]}"></vaadin-grid-sort-column>
-        <vaadin-grid-sort-column path="date" .header="${langConfig.grid.date["label_"+this.lang]}"></vaadin-grid-sort-column>
-        <vaadin-grid-filter-column path="day_name" .header="${langConfig.grid.day_name["label_"+this.lang]}"></vaadin-grid-filter-column>
-        <vaadin-grid-filter-column path="created_on" .header="${langConfig.grid.created_on["label_"+this.lang]}"></vaadin-grid-filter-column>
-        <vaadin-grid-filter-column path="created_by" .header="${langConfig.grid.created_by["label_"+this.lang]}"></vaadin-grid-filter-column>
+        <vaadin-grid-sort-column path="id" .header="${viewInfoDefinition.grid.id["label_"+this.lang]}"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column path="date" .header="${viewInfoDefinition.grid.date["label_"+this.lang]}"></vaadin-grid-sort-column>
+        <vaadin-grid-filter-column path="day_name" .header="${viewInfoDefinition.grid.day_name["label_"+this.lang]}"></vaadin-grid-filter-column>
+        <vaadin-grid-filter-column path="created_on" .header="${viewInfoDefinition.grid.created_on["label_"+this.lang]}"></vaadin-grid-filter-column>
+        <vaadin-grid-filter-column path="created_by" .header="${viewInfoDefinition.grid.created_by["label_"+this.lang]}"></vaadin-grid-filter-column>
       </vaadin-grid>
       ${this.calendarDialogsTemplate()} 
-      
     `;
   }
-//  <google-chart  data='[["Month", "Days"], ["Jan", 31]]'></google-chart>
-
-  
+    
 
   get grid() {return this.shadowRoot.querySelector("vaadin-grid")}
   get chart() {return this.shadowRoot.querySelector("google-chart")}
   getTitle(){
-    if (this.selectedCalendar&&this.selectedCalendar[0].code){
-      return this.selectedCalendar[0].description+'  ('+this.selectedCalendar[0].code+')'
+    if (this.selectedCalendar&&this.selectedCalendar.code){
+      return this.selectedCalendar.description+'  ('+this.selectedCalendar.code+')'
     }else{
       return ''
     }
@@ -230,7 +314,7 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
     program=this.calendars.filter(p => p.code == e.target.value)
     if (program.length) {
       this.selectedCalendar = []
-      this.selectedCalendar[0]=program[0]
+      this.selectedCalendar=program[0]
       //this.selectedCalendar.study = []
       //this.selectedCalendar.study=[]
       //console.log('this.selectedCalendar', this.selectedCalendar)
@@ -291,11 +375,11 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
             color: '#EEF1FF'
           },
       }
-      if (this.selectedCalendar[0]){
-        if (this.selectedCalendar[0].description){
-          options.title=this.selectedCalendar[0].description
+      if (this.selectedCalendar){
+        if (this.selectedCalendar.description){
+          options.title=this.selectedCalendar.description
         }else{
-          options.title=this.selectedCalendar[0].code
+          options.title=this.selectedCalendar.code
         }
       }
     this.chart.options=options
@@ -310,7 +394,7 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
         {year:2019, month:3, day:7, value:6},
         {year:2021, month:10, day:1, value:-10},
     ]
-    datas=this.selectedCalendar[0].holidays_calendar_date
+    datas=this.selectedCalendar.holidays_calendar_date
     var i;
     var datesArr=[];
     for (i = 0; i < datas.length; i++) { 
@@ -360,12 +444,13 @@ export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(Cal
   }
 
   getTitle() {
-    if (this.langConfig&&this.langConfig.title[this.filterName]) {
-      return html`<h1>${this.langConfig.title[this.filterName]["label_"+this.lang]}</h1>`
+    if (this.viewInfoDefinition&&this.viewInfoDefinition.title[this.filterName]) {
+      return html`<h1>${this.viewInfoDefinition.title[this.filterName]["label_"+this.lang]}</h1>`
     }
   }
   getHolidayCalendars() {
-    var curCalendar=this.selectedCalendar[0]
+    var curCalendar=this.selectedCalendar
+    if (curCalendar===undefined){return}
     this.fetchApi(this.config.backendUrl + this.config.HolidayCalendarAPIqueriesUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
