@@ -123,7 +123,7 @@ export class ParameterLimits extends CoreView {
 
   static get properties() {
     return {
-      procName: { type: String }
+      procInstanceName: { type: String }
     }
   }
 
@@ -133,18 +133,18 @@ export class ParameterLimits extends CoreView {
       <table class="styled-table">
         <thead>
           <tr>
-            ${this.procName=="proc-deploy" ?
+            ${this.procInstanceName=="proc-deploy" ?
               html`
-                <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).testing_group["label_"+ this.lang]}</th>
+                <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).testing_group["label_"+ this.lang]}</th>
               ` :
               html`
-                <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).variation["label_"+ this.lang]}</th>
+                <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).variation["label_"+ this.lang]}</th>
               `
             }
-            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).analysis["label_"+ this.lang]}</th>
-            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).method_and_version["label_"+ this.lang]}</th>
-            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).parameter["label_"+ this.lang]}</th>
-            <th>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default).rule["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).analysis["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).method_and_version["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).parameter["label_"+ this.lang]}</th>
+            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).rule["label_"+ this.lang]}</th>
           </tr>
         </thead>
         <tbody>
@@ -153,7 +153,7 @@ export class ParameterLimits extends CoreView {
           ${this.selectedProgram&&this.selectedProgram.spec_definition.spec_limits.map(p => 
             html`
             <tr>
-              ${this.procName=="proc-deploy" ?
+              ${this.procInstanceName=="proc-deploy" ?
                 html`
                   <td>${p.testing_group}</td>
                   <td>${p.analysis}</td>
@@ -161,10 +161,13 @@ export class ParameterLimits extends CoreView {
                   <td>${p.parameter}</td>
                 ` :
                 html`
-                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.variation_name]["label_"+ this.lang]}</td>
-                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.analysis]["label_"+ this.lang]}</td>
-                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.method_name]["label_"+ this.lang]}</td>
-                  <td>${(langConfig.configTableSpecLimits[this.procName]||langConfig.configTableSpecLimits.default)["value_"+p.parameter]["label_"+ this.lang]}</td>
+                ${this.procInstanceName}
+                  ${p.variation_name===undefined ? nothing: html`
+                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.variation_name]["label_"+ this.lang]}</td>
+                  `}
+                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.analysis]["label_"+ this.lang]}</td>
+                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.method_name]["label_"+ this.lang]}</td>
+                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.parameter]["label_"+ this.lang]}</td>
                 `
               }
               <td>
