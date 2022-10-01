@@ -41,7 +41,7 @@ export class LogSampleModuleSample extends ((CredDialog)) {
     return {
       model: { type: Object },
       config: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       viewName: { type: String },
       filterName: { type: String },
       langConfig: { type: Object },
@@ -89,7 +89,7 @@ export class LogSampleModuleSample extends ((CredDialog)) {
   buttonCliked(){
     this.selectedAction=this.viewModelFromProcModel.actions[0]
     this.reqParams=this.jsonParamCommons(this.viewModelFromProcModel.actions[0])
-    this.nextRequestCommons()
+    this.nextRequestCommons(this.viewModelFromProcModel.actions[0])
   }
   isScroll() {
     if (this.tabContainer.offsetWidth < this.tabContainer.scrollWidth) {
