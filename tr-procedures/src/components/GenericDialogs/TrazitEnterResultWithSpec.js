@@ -137,7 +137,7 @@ return class extends LitElement {
 
 
       <tr-dialog id="resultDialog" ?open=${this.enterResults.length}
-        @opened=${() => this.setCellListener()}
+        @opened=${() => this.setCellListenerEnterResults()}
         @closing=${() => this.removeEvents()}
         heading=""
         hideActions=""
@@ -157,7 +157,7 @@ return class extends LitElement {
             }
           }}
             .detailsOpenedItems=${this.selectedResults}
-            ${gridRowDetailsRenderer(this.detailRenderer)}>
+            ${gridRowDetailsRenderer(this.detailRendererEnterResults)}>
             ${this.desktop ?
             html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
             html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
@@ -167,7 +167,7 @@ return class extends LitElement {
             html`${this.enterResultList()}`
           }
           </vaadin-grid>
-          <div id="rowTooltip">&nbsp;</div>
+          <div id="rowTooltipenterresults">&nbsp;</div>
         `}
       </tr-dialog>
       <tr-dialog id="uomConvertionDialog" ?open=${this.dataForDialog}
@@ -189,58 +189,60 @@ return class extends LitElement {
       `
     }
 
-    get rowTooltip() {
-      return this.shadowRoot.querySelector("#rowTooltip")
-    }
+    get rowTooltipEnterResults() {return this.shadowRoot.querySelector("#rowTooltipenterresults")}
 
     get uomDialog() {
       return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")
     }
 
-    setCellListener() {
+    setCellListenerEnterResults() {
+      console.log('setCellListenerEnterResults EnterResults')
       if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES") {
         // 
       } else {
         if (this.erGrid===undefined||this.erGrid===null){return}
-        this.rowTooltip.style.display = "block"
-        this.rowTooltip.style.visibility = "hidden"
-        this.rowTooltip.style.fontSize = "12px"
-        this.rowTooltip.style.color = "white"
+        this.rowTooltipEnterResults.style.display = "block"
+        this.rowTooltipEnterResults.style.visibility = "hidden"
+        this.rowTooltipEnterResults.style.fontSize = "12px"
+        this.rowTooltipEnterResults.style.color = "white"
         let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
         rows.forEach((r, i) => {
           if (i > 0 && this.enterResults[i - 1]) {
-            r.removeEventListener('mouseenter', () => this.showLockReason(i))
-            r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
+            r.removeEventListener('mouseenter', () => this.showLockReasonEnterResults(i))
+            r.removeEventListener('mouseleave', this.hideLockReasonEnterResults.bind(this))
           }
           if (i > 0 && this.enterResults[i - 1] && (this.enterResults[i - 1].is_locked || this.enterResults[i - 1].warning_reason)) {
-            r.addEventListener('mouseenter', () => this.showLockReason(i))
-            r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+            r.addEventListener('mouseenter', () => this.showLockReasonEnterResults(i))
+            r.addEventListener('mouseleave', this.hideLockReasonEnterResults.bind(this))
           }
         })
       }
     }
 
-    showLockReason(i) {
+    showLockReasonEnterResults(i) {
+
       let labels = {
         "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
         "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
       }
       if (this.enterResults[i - 1].is_locked) {
-        this.rowTooltip.style.backgroundColor = "rgb(255 8 8)"
-        this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = labels['locking_reason_label_' + this.lang] + ": " + (this.enterResults[i - 1].locking_reason["message_" + this.lang])
+        this.rowTooltipEnterResults.style.backgroundColor = "rgb(255 8 8)"
+        this.rowTooltipEnterResults.style.visibility = "visible"
+        this.rowTooltipEnterResults.textContent = labels['locking_reason_label_' + this.lang] + ": " + (this.enterResults[i - 1].locking_reason["message_" + this.lang])
       } else if (this.enterResults[i - 1].warning_reason) {
-        this.rowTooltip.style.backgroundColor = "#0085ff"
-        this.rowTooltip.style.visibility = "visible"
-        this.rowTooltip.textContent = labels['warning_reason_label_' + this.lang] + ": " + this.enterResults[i - 1].warning_reason["message_" + this.lang]
+        this.rowTooltipEnterResults.style.backgroundColor = "#0085ff"
+        this.rowTooltipEnterResults.style.visibility = "visible"
+        this.rowTooltipEnterResults.textContent = labels['warning_reason_label_' + this.lang] + ": " + this.enterResults[i - 1].warning_reason["message_" + this.lang]
       }
+      console.log(this.rowTooltipEnterResults.textContent)
     }
 
-    hideLockReason() {
-      this.rowTooltip.style.visibility = "hidden"
+    hideLockReasonEnterResults() {
+      this.rowTooltipEnterResults.style.visibility = "hidden"
     }
 
-    detailRenderer(result) {
+    detailRendererEnterResults(result) {
+      console.log('detailRendererEnterResults', result.sample_id, 'result', result)
       let labels = {
         "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
         "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
@@ -401,13 +403,13 @@ return class extends LitElement {
       if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES") {
         // 
       } else {
-        this.rowTooltip.textContent = ""
-        this.rowTooltip.style.visibility = "hidden"
+        this.rowTooltipEnterResults.textContent = ""
+        this.rowTooltipEnterResults.style.visibility = "hidden"
         let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
         rows.forEach((r, i) => {
           if (i > 0 && this.enterResults[i - 1] && this.enterResults[i - 1].is_locked) {
-            r.removeEventListener('mouseenter', this.showLockReason.bind(this))
-            r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
+            r.removeEventListener('mouseenter', this.showLockReasonEnterResults.bind(this))
+            r.removeEventListener('mouseleave', this.hideLockReasonEnterResults.bind(this))
           }
         })
       }

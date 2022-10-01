@@ -1,5 +1,6 @@
 import { html, css, LitElement, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
+import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
@@ -254,9 +255,13 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
               html`
               <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${this.activeItemChanged}
-                .items=${this.gridItems} .selectedItems="${this.selectedItems}">
+                .items=${this.gridItems} .selectedItems="${this.selectedItems}"
+                ${gridRowDetailsRenderer(this.detailRenderer)}
+                ${this.setCellListener()}
+                >
                 ${this.gridList(this.viewModelFromProcModel)}
               </vaadin-grid>
+              <div id="rowTooltip">&nbsp;</div>
               ` :
               html``
           }
@@ -277,6 +282,9 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
   }
 
 //  ${this.resultTemplate()}
+get rowTooltip() {
+  return this.shadowRoot.querySelector("#rowTooltip")
+}
 
   xtabsBlock(){
     return html`
@@ -381,12 +389,96 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
     get audit() {return this.shadowRoot.querySelector("audit-dialog")}    
 
 
-   templateEvent(e) {
+  templateEvent(e) {
     console.log('templateEvent')
     if (e.detail.calledActionIdx >= 0) {
       this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[e.detail.calledActionIdx]
       this.reload()
     }
+  }
+
+  showLockReason(i) {
+    //alert('showLockReason', i)
+    let labels = {
+      "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
+      "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
+    }
+    if (this.grid.items[i - 1].is_locked) {
+      this.rowTooltip.style.backgroundColor = "#24C0EB"
+      this.rowTooltip.style.visibility = "visible"
+      let txtValue=labels['locking_reason_label_' + this.lang] + ": "
+      if (this.grid.items[i - 1].locking_reason===undefined||this.grid.items[i - 1].locking_reason["message_" + this.lang]===undefined){
+        txtValue=txtValue+"undefined"
+      }else{
+        txtValue=txtValue+this.grid.items[i - 1].locking_reason["message_" + this.lang]
+      }
+      this.rowTooltip.textContent = txtValue
+    } else if (this.grid.items[i - 1].warning_reason) {
+      this.rowTooltip.style.backgroundColor = "#D6E9F8"
+      this.rowTooltip.style.visibility = "visible"
+      let txtValue=labels['warning_reason_label_' + this.lang] + ": "
+      if (this.grid.items[i - 1].warning_reason===undefined||this.grid.items[i - 1].warning_reason["message_" + this.lang]===undefined){
+        txtValue=txtValue+"undefined"
+      }else{
+        txtValue=txtValue+this.grid.items[i - 1].warning_reason["message_" + this.lang]
+      }
+    }
+  }
+
+  hideLockReason() {
+    this.rowTooltip.style.visibility = "hidden"
+  }
+
+  detailRenderer(result) {
+    console.log('detailRenderer', result)
+    let labels = {
+      "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
+      "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
+    }
+    return html`
+      <div style="text-align:center;font-size:12px">
+        <p>${result.spec_eval ?
+        html`${result.spec_eval == 'IN' ?
+          html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
+          html`${result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC") ?
+            html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
+            html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
+            }`
+          }` :
+        html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
+      }</p>
+        <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (${result.method_version})</p>
+        <p>Range Evaluation: ${result.spec_eval}</p>
+        <p>Range Rule: ${result.spec_eval_detail}</p>
+        ${result.is_locked ?
+        html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locked_reason}</p>` : nothing
+      }
+        ${result.warning_reason ?
+        html`<p style="color:#0085ff">${labels['warning_reason_label_' + this.lang]}: ${result.warning_reason["message_" + this.lang]}</p>` : nothing
+      }
+      </div>
+    `
+  }  
+
+  setCellListener() {
+    // alert('setCellListener')
+    console.log('setCellListener')
+    if (this.grid===undefined||this.grid===null){return}
+    this.rowTooltip.style.display = "block"
+    this.rowTooltip.style.visibility = "hidden"
+    this.rowTooltip.style.fontSize = "12px"
+    this.rowTooltip.style.color = "white"
+    let rows = this.grid.shadowRoot.querySelectorAll("tr[part=row]")
+    rows.forEach((r, i) => {
+      if (i > 0 && this.grid.items[i - 1]) {
+        r.removeEventListener('mouseenter', () => this.showLockReason(i))
+        r.removeEventListener('mouseleave', this.hideLockReason.bind(this))
+      }
+      if (i > 0 && this.grid.items[i - 1] && (this.grid.items[i - 1].is_locked || this.grid.items[i - 1].warning_reason)) {
+        r.addEventListener('mouseenter', () => this.showLockReason(i))
+        r.addEventListener('mouseleave', this.hideLockReason.bind(this))
+      }
+    })    
   }
 
   }
