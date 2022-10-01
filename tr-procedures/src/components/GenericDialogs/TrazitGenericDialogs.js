@@ -43,7 +43,7 @@ export function TrazitGenericDialogs(base) {
       this.actionBeingPerformedModel={}
     }
     openThisDialog(actionModel = this.actionBeingPerformedModel){
-alert('openThisDialog')
+//alert('openThisDialog')
        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
         //alert(false)
         return false
