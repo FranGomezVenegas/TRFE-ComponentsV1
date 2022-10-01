@@ -59,7 +59,7 @@ export function TrazitFilterActions(base) {
               "dbName": "labplanet",
               "isForTesting": false,
               "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
-              "appAuthenticateApiUrl": "/frontend/AuthenticationAPI",
+              "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
               "frontEndEnvMonitSampleUrl": "/moduleenvmon/frontend/EnvMonSampleAPIfrontend",
               "EnvMonSampleAPIQueriesStats": "/moduleenvmon/EnvMonAPIstats",
               "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPI",

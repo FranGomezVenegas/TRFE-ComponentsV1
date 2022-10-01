@@ -1,1 +1,5 @@
-{}
+{
+  "dependencies": {
+    "@trazit/proc-management-home": "file:ProcManagement/proc-management-home"
+  }
+}
