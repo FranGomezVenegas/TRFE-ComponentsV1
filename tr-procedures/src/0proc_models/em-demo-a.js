@@ -1,7 +1,10 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20220921",
+	  "last change on (YYYYMMDD)": "20220929",
+	  "last_change_note_20220929": "Fixed view for PlateReadingSecondEntry, endpoint should be /moduleenvmon/EnvMonSampleAPIqueries",
+	  "last_change_note_20220928": "Fixed Start and End incubation to get the batchName",
+	  "last_change_note_20220926": "Fixed Reactivate/Activate for Incubators",
 	  "last_change_note_20220921": "Fixed issues in ProductionLots reactivate lot, 3 errors on open dialog for the first time(1) use numDays (2) and error when query returns no records for the list(3)",
 	  "last_change_note_20220921_2": "replace whenDisabled by requiresGridItemSelected",
 	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
@@ -845,6 +848,7 @@ export const EmDemoA = {
     },
     "viewQuery":    { "actionName": "SAMPLES_BY_STAGE",
       "xxxclientMethod": "getSamples",
+	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -1411,7 +1415,7 @@ export const EmDemoA = {
               "disabledBEState": "incubation_start"
             },
             "endPointParams": [
-              { "argumentName": "batchName", "selObjectPropertyName": "name" },
+              { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" },
               { "argumentName": "batchTemplateId", "defaultValue": 1 },
               { "argumentName": "batchTemplateVersion", "defaultValue": 1 }
             ]
@@ -1429,7 +1433,7 @@ export const EmDemoA = {
 
             },
             "endPointParams": [
-              { "argumentName": "batchName", "selObjectPropertyName": "name" },
+              { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" },
               { "argumentName": "batchTemplateId", "defaultValue": 1 },
               { "argumentName": "batchTemplateVersion", "defaultValue": 1 }
             ]
@@ -1936,9 +1940,7 @@ export const EmDemoA = {
         }
       }
     },
-    "viewQuery":
-      {
-        "actionName": "GET_INCUBATORS_LIST",
+    "viewQuery":{ "actionName": "GET_INCUBATORS_LIST",
         "clientMethodzzzz": "getGridData",
         "endPoint": "/moduleenvmon/EnvMonIncubationAPIqueries",
         "endPointParams": [
@@ -2018,13 +2020,13 @@ export const EmDemoA = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "requiresGridItemSelected": true
+          "requiresGridItemSelected": false
         },
         "dialogInfo": {
           "requiresDialog": true,
           "name": "reactivateObjectDialog",
-          "fieldText": {
-            "numDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+          "fieldsObject": {
+            "queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
             "objectName": { "label_en": "Incubator Name to reactivate", "label_es": "Nombre de Incubadora a Reactivar" }
           },  
           "listDefinition":{
@@ -2034,20 +2036,20 @@ export const EmDemoA = {
               {"value": "name", "type":"field"}, {"value": ")", "type":"fix"}
               ]
           },
-          "viewQuery": [            
-            {
-              "actionName": "GET_INCUBATORS_DEACTIVATED_LAST_N_DAYS",
-              "clientMethod": "getDeactivatedObjects",
-              "endPoint": "/moduleenvmon/EnvMonIncubationAPIqueries",
-              "endPointParams": [
-                { "argumentName": "numDays", "element": "lotNumDays", "defaultValue": 7 }
-              ]
-            }
-          ]
+		  "viewQuery": {
+			  "actionName": "GET_INCUBATORS_DEACTIVATED_LAST_N_DAYS",
+			  "clientMethod": "getDeactivatedObjects",
+			  "endPoint": "/moduleenvmon/EnvMonIncubationAPIqueries",
+			  "endPointParams": [
+				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
+			  ]
+		  },
+          "action": [            
+          ]	  
         }
       },
       { "actionName": "EM_INCUBATION_DEACTIVATE",
-		"requiresDialog": true,
+		"requiresDialog": false,
         "endPoint": "/moduleenvmon/EnvMonIncubationAPIactions",     
         "clientMethod": "buttonActionWithoutDialog",
         "endPointParams": [

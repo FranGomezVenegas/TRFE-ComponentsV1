@@ -1,13 +1,16 @@
 export const App = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20220921",
-	  "last_change_note": "replace whenDisabled by requiresGridItemSelected",
+	  "last change on (YYYYMMDD)": "20220928",
+	  "last_change_note_20220928": "Modified endpoint names to be case sensitve (APIactions and APIqueries) - modified ADD_WHITE_IP requiresGridItemSelected to false",
+	  "last_change_note_20220926": "Added API to the API names, for actions and queries",
+	  "last_change_note_20220926": "typo hidWhenSelectedItem when should be hideWhenSelectedItem",
+	  "last_change_note_20220921": "replace whenDisabled by requiresGridItemSelected",
 	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
   },	
   "ModuleSettings":{
 	  "actionsEndpoints":[
-		{ "name": "Instruments" , "url" : "/app/PlatformAdminActions"}
+		{ "name": "PlatformAdmin" , "url" : "/app/PlatformAdminAPIactions"}
 	  ]
   },	
   "WhiteIpList": {
@@ -50,7 +53,7 @@ export const App = {
     "viewQuery":{ "actionName": "GET_WHITE_IP_LIST",
       "xxxclientMethod": "getSamples",
       "addRefreshButton": true,
-      "endPoint": "/app/PlatformAdminQueries",
+      "endPoint": "/app/PlatformAdminAPIqueries",
       "button": {
         "icon": "refresh",
         "title": {
@@ -68,7 +71,7 @@ export const App = {
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "requiresGridItemSelected": true
+          "requiresGridItemSelected": false
         },
         "dialogInfo": {          
 			"name": "genericDialog",
@@ -97,7 +100,7 @@ export const App = {
               "label_en": "Deactivate", "label_es": "Desactivar"
             },
             "requiresGridItemSelected": true,
-            "hidWhenSelectedItem": {
+            "hideWhenSelectedItem": {
               "column": "active",
               "value": true
             }  
@@ -115,7 +118,7 @@ export const App = {
               "label_en": "Activate", "label_es": "Activar"
             },
             "requiresGridItemSelected": true,
-            "hidWhenSelectedItem": {
+            "hideWhenSelectedItem": {
               "column": "active",
               "value": false
             }  
@@ -208,7 +211,7 @@ export const App = {
     },	
     "viewQuery":{ "actionName": "GET_BLACK_IP_LIST",
       "addRefreshButton": true,
-      "endPoint": "/app/PlatformAdminQueries",
+      "endPoint": "/app/PlatformAdminAPIqueries",
       "button": {
         "icon": "refresh",
         "title": {
@@ -254,7 +257,7 @@ export const App = {
               "label_en": "Deactivate", "label_es": "Desactivar"
             },
             "requiresGridItemSelected": true,
-            "hidWhenSelectedItem": {
+            "showWhenSelectedItem": {
               "column": "active",
               "value": true
             }  
@@ -271,7 +274,7 @@ export const App = {
               "label_en": "Activate", "label_es": "Activar"
             },
             "requiresGridItemSelected": true,
-            "hidWhenSelectedItem": {
+            "showWhenSelectedItem": {
               "column": "active",
               "value": false
             }  
@@ -343,7 +346,7 @@ export const App = {
     {
       "actionName": "GET_PLATFORM_BUSINESS_RULES",
       "addRefreshButton": true,
-      "endPoint": "/app/PlatformAdminQueries",
+      "endPoint": "/app/PlatformAdminAPIqueries",
       "button": {
         "icon": "refresh",
         "title": {

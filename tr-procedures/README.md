@@ -21,8 +21,10 @@ This area want to track the requirements that made this web component to become 
 [- #196. Check Mandatory Fields not filled](https://github.com/FranGomezVenegas/FE-Issues/issues/196)
 [- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)
 [- #198. Not allowed negative numDays for Reactivate Dialog](https://github.com/FranGomezVenegas/FE-Issues/issues/198)
-
+[- #199. Buttons 'buttonForQuery' was enabling the button always even when no record selected](https://github.com/FranGomezVenegas/FE-Issues/issues/199)
 ## Fixed Bugs Tracking
 
 This area want to track the bugs identified for this Web Component that were already implemented/fixed.
-[- #199. Buttons 'buttonForQuery' was enabling the button always even when no record selected](https://github.com/FranGomezVenegas/FE-Issues/issues/199)
+[- #201. Buttons 'ButtonHide' property name hideWhen.... not hidWhen....typo](https://github.com/FranGomezVenegas/FE-Issues/issues/201)
+
+

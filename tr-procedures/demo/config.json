@@ -26,6 +26,21 @@
 
 
   "local": true,
+  "localDefaultView1": {
+    "procName":  "app-proc", 
+    "viewName": "PlatformInstruments", 
+    "filterName" :  "InstrumentsList" 
+  },  
+  "localDefaultView142": {
+    "procName":  "app-proc", 
+    "viewName": "EventsInProgress", 
+    "filterName" :  "EventsER" 
+  },
+  "localDefaultView3321": {
+    "procName":  "em-demo-a", 
+    "viewName": "Incubators", 
+    "filterName" :  "Incubators" 
+  },
   "localDefaultView111": {
     "procName":  "em-demo-a", 
     "viewName": "SamplePendingSampling", 
@@ -51,7 +66,7 @@
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingSMP" 
   },
-  "localDefaultView": {
+  "localDefaultView1234122": {
     "procName":  "em-demo-a", 
     "viewName": "ProductionLots", 
     "filterName" :  "SampleLot" 

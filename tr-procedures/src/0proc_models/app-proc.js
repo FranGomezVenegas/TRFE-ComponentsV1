@@ -1,7 +1,10 @@
 export const AppProc = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20220921",
+	  "last change on (YYYYMMDD)": "20220926",
+	  "last_change_note_20220926": "Enter Results, removed the button that causes the view to be locked",
+	  "last_change_note_20220925": "requiresGridItemSelected set to false for NEW_INSTRUMENT",
+	  "last_change_note_20220922": "Modified Decomission and Undecommision button for Instruments",
 	  "last_change_note": "replace whenDisabled by requiresGridItemSelected",
 	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
   },	
@@ -97,7 +100,7 @@ export const AppProc = {
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "requiresGridItemSelected": true
+          "requiresGridItemSelected": false
         },
         "dialogInfo": {          
           "name": "genericDialog",
@@ -291,7 +294,7 @@ export const AppProc = {
         "endPoint": "/app/procs/InstrumentsAPIactions",     
         "clientMethod": "buttonActionWithoutDialog",
         "endPointParams": [
-          { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
         ],
 		"requiresDialog": false,
         "button": {
@@ -302,10 +305,10 @@ export const AppProc = {
           "requiresGridItemSelected": true
         }
       },
-      { "actionName": "UNDECOMMISSION_INSTRUMENT",
-        "endPoint": "/app/procs/InstrumentsAPIactions",     
+	  { "actionName": "UNDECOMMISSION_INSTRUMENT",
+        "endPoint": "/app/procs/InstrumentsAPIactions",  
         "endPointParams": [
-          { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
         ],
         "clientMethod": "openReactivateObjectDialog",
         "button": {
@@ -313,19 +316,19 @@ export const AppProc = {
           "title": {
             "label_en": "Activate", "label_es": "Activar"
           },
-          "requiresGridItemSelected": true
+          "requiresGridItemSelected": false
         },
 		"requiresDialog": true,
         "dialogInfo": {          
           "name": "reactivateObjectDialog",
           "fieldsObject": {
-			"numDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
-			"objectName": { "label_en": "Instruments to Undecommissioning", "label_es": "Instrumentos a Reactivar" }
+			"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+			"objectName": { "label_en": "Instrument to reactivate", "label_es": "Lote de Producción a Reactivar" }
           },    
           "listDefinition":{
-            "keyFldName":"lot_name",
+            "keyFldName":"name",
             "eachEntryTextGenerator":[
-              {"value": "Lot: ", "type":"fix"}, {"value": "lot_name", "type":"field"} 
+              {"value": "Instrument: ", "type":"fix"}, {"value": "name", "type":"field"} 
             ]
           },
 		  "viewQuery": {
@@ -333,7 +336,7 @@ export const AppProc = {
 			  "clientMethod": "getDeactivatedObjects",
 			  "endPoint": "/app/procs/InstrumentsAPIqueries",
 			  "endPointParams": [
-				{ "argumentName": "numDays", "element": "lotNumDays", "defaultValue": 7 }
+				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
 			  ]
 		  },
           "action": [            
@@ -352,18 +355,10 @@ export const AppProc = {
         }
       },
       "gridHeader": {
-        "event_type": {
-          "label_en": "Event", "label_es": "Evento", "sort": false, "filter": true, "is_icon": true, "width": "20%"
-        },
-        "instrument": {
-          "label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
-        },
-        "created_on": {
-          "label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "created_by": {
-          "label_en": "Creator", "label_es": "Creador", "sort": false, "filter": false, "is_icon": false, "width": "10%"
-        }
+        "event_type": {"label_en": "Event", "label_es": "Evento", "sort": false, "filter": true, "is_icon": true, "width": "20%"},
+        "instrument": {"label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"},
+        "created_on": {"label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
+        "created_by": {"label_en": "Creator", "label_es": "Creador", "sort": false, "filter": false, "is_icon": false, "width": "10%"}
       },
       "xxxxresultHeader": {
         "id": {
@@ -380,7 +375,7 @@ export const AppProc = {
         "label_en": "Instrument Event:", "label_es": "Evento de Instrumento :"
       }
     },
-    "viewQuery":{ "actionName": "INSTRUMENT_EVENTS_INPROGRESS",
+    "viewQuery":{ "actionName": "INSTRUMENT_EVENTS_INPROGRESS",	  
       "xxxclientMethod": "getSamples",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
       "addRefreshButton": true,
@@ -420,37 +415,6 @@ export const AppProc = {
             { "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
             { "argumentName": "decision", "element": "list1" }
         ]
-    },
-		{ "actionName": "INSTRUMENT_EVENT_VARIABLES",
-      "clientMethod": "getInstEventResult",
-      "alertMsg": {
-        "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
-      },
-      "button": {
-        "icon": "document_scanner",
-        "title": {
-          "label_en": "Enter Result", "label_es": "Ingrese el Resultado"
-        },
-        "requiresGridItemSelected": true
-      },
-      "dialogInfo": {
-        "automatic": true,
-        "action": [
-          {
-            "actionName": "ENTER_EVENT_RESULT",
-            "clientMethod": "enterEventResult",
-            "endPointParams": [
-              { "argumentName": "newValue", "targetValue": true },
-              { "argumentName": "eventId", "targetValue": true },
-              { "argumentName": "instrumentName", "targetValue": true },
-              { "argumentName": "variableName", "targetValue": true }
-            ]
-          }
-        ]
-      },
-      "endPointParams": [
-        { "argumentName": "eventId", "selObjectPropertyName": "id"}
-      ]
     },
       { "actionName": "INSTRUMENT_EVENT_VARIABLES",
 		"requiresDialog": true,
