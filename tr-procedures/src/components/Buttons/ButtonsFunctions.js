@@ -303,6 +303,12 @@ export function ButtonsFunctions(base) {
         }else{
           d = true
         }
+    }else if (action.button.hideWhenSelectedItem) {
+      if (this.selectedItems.length && this.selectedItems[0][action.button.hideWhenSelectedItem.column] == action.button.hideWhenSelectedItem.value) {
+        d = true
+      }else{
+        d = false
+      }        
     } else {
         d = false
     }
