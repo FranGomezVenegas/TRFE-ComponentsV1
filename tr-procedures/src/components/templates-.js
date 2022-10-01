@@ -66,6 +66,7 @@ export class Templates extends GridFunctions(LitElement) {
       viewName: { type: String },
       filterName: { type: String },
       procInstanceName: { type: String },
+      
 
     };
   }

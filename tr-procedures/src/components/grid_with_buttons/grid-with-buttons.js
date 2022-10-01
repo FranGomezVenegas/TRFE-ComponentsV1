@@ -81,7 +81,7 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
       return {
         model: { type: Object },
         config: { type: Object },
-        procName: { type: String },
+        procInstanceName: { type: String },
         viewModelFromProcModel: {type: Object},
         ready:{type: Boolean},
         viewName: { type: String },
@@ -196,7 +196,7 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
       html`
           ${c.elementName=='envmonit-batch-sampleincubation' ? html`                               
           <div class="layout flex">
-          <gridmodel-bottomcomp-sampleincubation id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
+          <gridmodel-bottomcomp-sampleincubation id=${c.filter} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName}
               .lang=${this.lang}
               .windowOpenable=${this.windowOpenable}
               .sopsPassed=${this.sopsPassed}
@@ -209,7 +209,7 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
           ` : nothing} 
           ${c.elementName=='chart' ? html`      
           <div class="layout flex">
-          <gridmodel-bottomcomp-chart id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
+          <gridmodel-bottomcomp-chart id=${c.filter} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName}
           .selectedItems=${this.selectedItems} .lang=${this.lang}
           .model=${c} .config=${this.config}></gridmodel-bottomcomp-chart>
           </div>
@@ -392,7 +392,7 @@ get rowTooltip() {
   templateEvent(e) {
     console.log('templateEvent')
     if (e.detail.calledActionIdx >= 0) {
-      this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[e.detail.calledActionIdx]
+      this.selectedAction = ProceduresModel[this.procInstanceName][this.viewName].actions[e.detail.calledActionIdx]
       this.reload()
     }
   }
