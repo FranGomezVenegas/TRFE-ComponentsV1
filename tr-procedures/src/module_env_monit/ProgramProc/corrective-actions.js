@@ -99,7 +99,7 @@ export class CorrectiveActions extends DialogsFunctions(CoreView) {
       selectedItems: { type: Array },
       selectedAction: { type: Object },
       targetValue: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       config: { type: Object },
       windowOpenable: { type: String },
       sopsPassed: { type: Boolean }
@@ -205,7 +205,7 @@ export class CorrectiveActions extends DialogsFunctions(CoreView) {
   xnextRequest() {
     super.nextRequest()
     this.reqParams = {
-      procInstanceName: this.procName,
+      procInstanceName: this.procInstanceName,
       ...this.reqParams
     }
     this[this.selectedAction.clientMethod]()
