@@ -340,7 +340,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       ${this.viewModelFromProcModel.component == 'ModuleSampleLogSample' ? html`
         <log-sample-module-sample 
           .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed}  .lang=${this.lang}
-          .procName=${this.procName} .viewName=${this.viewName}   .filterName=${this.filterName}  
+          .procInstanceName=${this.procName} .viewName=${this.viewName}   .filterName=${this.filterName}  
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}>
         </log-sample-module-sample>        
       `:html``}
