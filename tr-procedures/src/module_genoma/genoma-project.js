@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, LitElement } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
@@ -18,11 +18,11 @@ import './GenomaProject/study-individuals';
 import './GenomaProject/study-families';
 import './GenomaProject/study-samples-set';
 import './GenomaProject/study-variable-values';
-import {GenomaUtilities} from './GenomaUtilities';
-import { CommonsDialogTemplate } from './../CommonsDialogTemplate';
-import { commonLangConfig } from '@trazit/common-core';
-import { GenomaActions } from './GenomaActions';
-import { GenomaDialogTemplate} from './GenomaDialogTemplate';
+// import {GenomaUtilities} from './GenomaUtilities';
+// import { CommonsDialogTemplate } from './../CommonsDialogTemplate';
+// import { commonLangConfig } from '@trazit/common-core';
+// import { GenomaActions } from './GenomaActions';
+// import { GenomaDialogTemplate} from './GenomaDialogTemplate';
 
 import '../components/Tabs/tab-element';
 import {TabFunctions} from '../components/Tabs/TabFunctions';
@@ -38,17 +38,17 @@ let tabBtns = {
     {tabLabel_en: "Samples Set", tabLabel_es: "Agrupador Muestras", view: "study-samples-set"}    
   ]
 }
+let viewQuery = { "actionName": "ALL_ACTIVE_PROJECTS",
+  "clientMethod": "getGenomaProjectsList",
+  "button": {
+    "icon": "refresh",
+    "title": {
+      "label_en": "Reload", "label_es": "Recargar"
+    },
+    requiresObjectSelected : false
+  }    
+}
 let actions = [
-  { "actionName": "ALL_ACTIVE_PROJECTS",
-    "clientMethod": "getGenomaProjectsList",
-    "button": {
-      "icon": "refresh",
-      "title": {
-        "label_en": "Reload", "label_es": "Recargar"
-      },
-      requiresObjectSelected : false
-    }    
-  },
   { "actionName": "PROJECT_NEW",
   "clientMethod": "newStudyIndividual",
   "endPoint": "/modulegenoma/GenomaProjectAPI",
@@ -74,12 +74,12 @@ let actions = [
 },
 
 ]
-
-export class GenomaProject extends GenomaDialogTemplate(GenomaActions(CommonsDialogTemplate(GenomaUtilities(TabFunctions(CredDialog))))) {
+// GenomaDialogTemplate(GenomaActions(CommonsDialogTemplate(GenomaUtilities(TabFunctions(CredDialog))))) 
+export class GenomaProject extends TabFunctions(LitElement) {
   static get styles() {
     return [
       Layouts, Alignment,
-      super.styles,
+      //super.styles,
       css`
         :host {
           display: block;
@@ -117,7 +117,7 @@ export class GenomaProject extends GenomaDialogTemplate(GenomaActions(CommonsDia
       langConfig: { type: Object },
       actions: { type: Array },
       samplesReload: { type: Boolean },
-      selectedSamples: { type: Array },
+      selectedItems: { type: Array },
       selectedAction: { type: Object },
       prev: { type: Boolean },
       next: { type: Boolean },
@@ -145,7 +145,7 @@ export class GenomaProject extends GenomaDialogTemplate(GenomaActions(CommonsDia
     this.selectedProject = {}
     this.selectedStudy = {}
 
-    this.selectedSamples = []
+    this.selectedItems = []
 
     this.MDprocedureUsers = []
     this.MDvariables = []
@@ -160,6 +160,11 @@ export class GenomaProject extends GenomaDialogTemplate(GenomaActions(CommonsDia
 
   resetView() {
     this.programsList = []
+    xczxc
+    this.selectedAction
+
+    return
+
     this.actions = this.model.actions
     this.selectedAction = this.model.actions[0]
     this.actionMethod(this.selectedAction)
@@ -314,7 +319,7 @@ export class GenomaProject extends GenomaDialogTemplate(GenomaActions(CommonsDia
     }
   }
   setView() {
-    this.selectedSamples = []
+    this.selectedItems = []
     this.selectedAction = actions[0]
     this.actionMethod(this.selectedAction.subAction)
   }

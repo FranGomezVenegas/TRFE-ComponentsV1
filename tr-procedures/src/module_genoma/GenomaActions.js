@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
-
+import {DialogsFunctions} from '../components/GenericDialogs/DialogsFunctions';
 export function GenomaActions(base) {
-    return class extends base {
+    return class extends DialogsFunctions(base) {
 
           buttonActionWithoutDialogNoCredChecker(action, selectedItem) {
             this.selectedAction=action
@@ -198,7 +198,7 @@ export function GenomaActions(base) {
                 if (this.itemId) {
                   this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
                 } else {
-                  this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                  this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
                 }
               } else {
                 let dialogName=action.dialogInfo.name
@@ -215,8 +215,8 @@ export function GenomaActions(base) {
                 this[dialogName].show()
               }
             } else {
-              if (this.selectedSamples.length) {
-                this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              if (this.selectedItems.length) {
+                this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
               } else {
                 this.credsChecker(action.actionName, null, this.jsonParamCommons(this.selectedAction, selectedItem), action)
               }
