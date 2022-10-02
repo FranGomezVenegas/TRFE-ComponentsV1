@@ -81,7 +81,7 @@ export const Genoma1 = {
       ]
     },
     "ProjectManager": {
-        "component": "program-proc",
+        "component": "ModuleGenomaProjectWindow",
         "hasOwnComponent": true,
         "viewQuery":
         {

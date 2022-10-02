@@ -26,10 +26,10 @@
 
 
   "local": true,
-  "localDefaultView1": {
-    "procName":  "app-proc", 
-    "viewName": "PlatformInstruments", 
-    "filterName" :  "InstrumentsList" 
+  "localDefaultView": {
+    "procName":  "genoma-1", 
+    "viewName": "ProjectManager", 
+    "filterName" :  "ProjectManager" 
   },  
   "localDefaultView142": {
     "procName":  "app-proc", 

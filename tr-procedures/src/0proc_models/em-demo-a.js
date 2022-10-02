@@ -1707,6 +1707,7 @@ export const EmDemoA = {
 					},
 					"subAction": {
 					  "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+					  "endPoint": "/moduleenvmon/EnvMonAPIqueries",
 					  "clientMethod": "getLots"
 					}
 	},    
@@ -2088,7 +2089,7 @@ export const EmDemoA = {
     ]
   },
   "Browser": {
-	"component": "EnvMonitBrowser",
+	"component": "Browser",
     "tabs": [
       { 
         "label_en": "Sample", 
