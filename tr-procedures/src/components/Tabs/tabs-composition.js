@@ -7,10 +7,12 @@ import { columnBodyRenderer } from 'lit-vaadin-helpers';
 
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
+import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
+import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
 
-//import {TrazitInvestigationsDialog} from './components/GenericDialogs/TrazitInvestigationsDialog';
-//TrazitInvestigationsDialog
-export class TabsComposition extends ButtonsFunctions(GridFunctions(((CredDialog)))) {
+
+
+export class TabsComposition extends ButtonsFunctions(GridFunctions(DialogsFunctions(TrazitInvestigationsDialog(CredDialog)))) {
   static get styles() {
     return [
       Layouts,
@@ -19,6 +21,7 @@ export class TabsComposition extends ButtonsFunctions(GridFunctions(((CredDialog
         mwc-button {
           --mdc-typography-button-text-transform: none;
           margin: 0 2px;
+          --mdc-typography-button-font-size: 15px;
         }
         tr-dialog * {
           margin-bottom: 5px;
@@ -86,6 +89,7 @@ export class TabsComposition extends ButtonsFunctions(GridFunctions(((CredDialog
   }
 
   render() {
+    //alert(this.filterName)
     return html`${this.viewModelFromProcModel ? 
       html`
         <div class="layout horizontal flex wrap">
@@ -108,13 +112,16 @@ export class TabsComposition extends ButtonsFunctions(GridFunctions(((CredDialog
       nothing
     }
     ${super.render()}
+    ${this.investigationTemplate()}
+    ${this.decisionTemplate()}
     `;
   }
+  // ${this.viewModelFromProcModel.filter=="open" ?
+  // html`${this.decisionTemplate()}` : nothing
+  // }    
 
-  // ${this.investigationTemplate()}
-  // ${this.filterName=="open" ?
-  //   html`${this.decisionTemplate()}` : nothing
-  // }
+  
+
 
   get grid() {return this.shadowRoot.querySelector("vaadin-grid#mainGrid")}
 

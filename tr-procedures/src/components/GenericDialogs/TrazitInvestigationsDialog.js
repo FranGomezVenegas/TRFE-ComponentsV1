@@ -12,19 +12,22 @@ return class extends DialogsFunctions(base) {
         return {
           selectedInvestigations:{ type: Array},
           openInvests:{ type: Array},
+          capaRequired: {type: Boolean}
         }
     }
     constructor() {
         super()
         this.selectedInvestigations=[]
         this.openInvests=[]
+        this.capaRequired=false
     }
 
     investigationTemplate() {
       if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined
-        ||this.viewModelFromProcModel.langConfig.gridHeader===undefined||this.viewModelFromProcModel.langConfig.gridHeader.created_on===undefined){return html``}
+        ||this.viewModelFromProcModel.langConfig.gridHeader===undefined||this.viewModelFromProcModel.langConfig.gridHeader.created_on===undefined
+        ||this.viewModelFromProcModel.filter!=="pending"){return html``}
       return html`
-      <tr-dialog id="investigationDialog" ?open=${this.openInvests.length}
+      <tr-dialog id="investigationDialog" ?open=${this.openInvests.length}        
         @closed=${e => { if (e.target === this.investigationDialog) { this.openInvests = []; this.grid.activeItem = null } }}
         heading=""
         hideActions=""
@@ -51,7 +54,10 @@ return class extends DialogsFunctions(base) {
       `
     }
     decisionTemplate() {
-      if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined){return html``}
+      if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined||this.viewModelFromProcModel.langConfig.fieldText===undefined
+        ||this.viewModelFromProcModel.filter!=="open"
+        ){return html``}
+      
       return html`
       <tr-dialog id="decisionDialog" 
         @opened=${() => this.capaRequired = this.capaCheck.checked}
@@ -60,24 +66,24 @@ return class extends DialogsFunctions(base) {
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="systemName" label="${this.langConfig.fieldText.systemName["label_" + this.lang]}" 
+          <mwc-textfield id="systemName" label="${this.viewModelFromProcModel.langConfig.fieldText.systemName["label_" + this.lang]}" 
             .value=${this.selectedItems.length && this.selectedItems[0].capa_external_system_name}
             dialogInitialFocus></mwc-textfield>
-          <mwc-textfield id="systemId" label="${this.langConfig.fieldText.systemId["label_" + this.lang]}"
+          <mwc-textfield id="systemId" label="${this.viewModelFromProcModel.langConfig.fieldText.systemId["label_" + this.lang]}"
             .value=${this.selectedItems.length && this.selectedItems[0].capa_external_system_id}></mwc-textfield>
-          <mwc-formfield label="${this.langConfig.fieldText.capa["label_" + this.lang]}">
+          <mwc-formfield label="${this.viewModelFromProcModel.langConfig.fieldText.capa["label_" + this.lang]}">
             <mwc-checkbox id="capaCheck" 
               ?checked=${this.selectedItems.length && this.selectedItems[0].capa_required}
-              @change=${e => {
-          this.capaRequired = e.target.checked;
-          this.capaId.value = "";
-          this.capaName.value = "";
-        }}></mwc-checkbox>
+              @change=${e => {                
+                this.capaRequired = e.target.checked;
+                this.capaId.value = "";
+                this.capaName.value = "";
+            }}></mwc-checkbox>
           </mwc-formfield>
-          <mwc-textfield id="capaName" label="${this.langConfig.fieldText.capaName["label_" + this.lang]}"
+          <mwc-textfield id="capaName" label="${this.viewModelFromProcModel.langConfig.fieldText.capaName["label_" + this.lang]}"
             .value=${this.selectedItems.length && this.selectedItems[0].external_system_name}
             ?hidden=${!this.capaRequired}></mwc-textfield>
-          <mwc-textfield id="capaId" label="${this.langConfig.fieldText.capaId["label_" + this.lang]}"
+          <mwc-textfield id="capaId" label="${this.viewModelFromProcModel.langConfig.fieldText.capaId["label_" + this.lang]}"
             .value=${this.selectedItems.length && this.selectedItems[0].external_system_id}
             ?hidden=${!this.capaRequired}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
