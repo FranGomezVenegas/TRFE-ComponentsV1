@@ -12,7 +12,8 @@ return class extends DialogsFunctions(base) {
         return {
           selectedInvestigations:{ type: Array},
           openInvests:{ type: Array},
-          capaRequired: {type: Boolean}
+          capaRequired: {type: Boolean},
+          targetValue: {type: Object}
         }
     }
     constructor() {
@@ -20,6 +21,7 @@ return class extends DialogsFunctions(base) {
         this.selectedInvestigations=[]
         this.openInvests=[]
         this.capaRequired=false
+        this.targetValue={}
     }
 
     investigationTemplate() {
@@ -135,10 +137,11 @@ return class extends DialogsFunctions(base) {
         return
       }
 
-      this.targetValue = {
-        "capaFieldValue": "Trackwise" + this.systemName.value + "*String|" + this.systemId.value + "*String|" + this.capaName.value + "*String|" + this.capaId.value + "*String"
+      let targetValue = {
+        "capaFieldValue": "Trackwise" + this.systemName.value + "*String|" + this.systemId.value + "*String|" + this.capaName.value + "*String|" + this.capaId.value + "*String",
+        "capaRequired": this.capaRequired
       }
-      this.dialogAccept(false)
+      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], targetValue)
     }
     addInvestigationAction() {
       let targetValue = {
