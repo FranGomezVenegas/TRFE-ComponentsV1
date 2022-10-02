@@ -162,7 +162,7 @@ export function DialogsFunctions(base) {
       }
     })
     this.reqParams = cleanParams
-    if (this.credDialog) {
+    if (this.credDialog) {      
       this.credDialog.close()
     }
   }  

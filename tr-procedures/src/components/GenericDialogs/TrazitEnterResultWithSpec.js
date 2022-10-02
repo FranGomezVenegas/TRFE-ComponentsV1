@@ -2,6 +2,7 @@ import { html, css, nothing, LitElement } from 'lit';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { commonLangConfig } from '@trazit/common-core';
+import { ReactiveElement } from 'lit';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
@@ -403,6 +404,7 @@ return class extends LitElement {
       if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES") {
         // 
       } else {
+        if (this.rowTooltipEnterResults===undefined||this.rowTooltipEnterResults===null){return}
         this.rowTooltipEnterResults.textContent = ""
         this.rowTooltipEnterResults.style.visibility = "hidden"
         let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
@@ -548,7 +550,7 @@ return class extends LitElement {
         if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
           return html`<input class="enterResultVal" type="text" .value=${result.value} 
             ?disabled=${this.actionBeingPerformedModel.dialogInfo.readOnly}
-            @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>`
+            @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e)}>`
         } else if (result.param_type.toUpperCase().indexOf("LIST") > -1) {
           let lEntry = result.allowed_values.split("|")
           return html`
@@ -556,7 +558,7 @@ return class extends LitElement {
               html`
                 <input class="enterResultVal" list="listEntry${result.result_id}" 
                   .value=${result.value}
-                  @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>
+                  @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e)}>
                 <datalist id="listEntry${result.result_id}">
                   ${lEntry.map(l =>
                     html`<option value="${l}">${l}`
@@ -564,7 +566,7 @@ return class extends LitElement {
                 </datalist>
               ` :
               html`
-                <select class="enterResultVal" @change=${e => this.setResultInstrument(result, e.target)}>
+                <select class="enterResultVal" @change=${e => this.setResultInstrument(result, e)}>
                   ${lEntry.map(l =>
                     html`<option value="${l}" ?selected=${l==result.value}>${l}`
                   )}
@@ -585,7 +587,7 @@ return class extends LitElement {
               .max=${max}
               .value=${result.value} 
               @input=${e=>this.setValidVal(e, result)}
-              @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>
+              @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e)}>
           `
         } else {
           let min = result.min_allowed ? result.min_allowed : 0
@@ -598,7 +600,7 @@ return class extends LitElement {
               .max=${max}
               .value=${result.value}
               @input=${e=>this.setValidVal(e, result)}
-              @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e.target)}>
+              @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e)}>
           `
         }
       }
@@ -798,9 +800,9 @@ return class extends LitElement {
         this.actionMethod(this.selectedDialogAction, false)
       }
     }
-    setResultInstrument(result, target) {
+    setResultInstrument(result, e) {
       console.log('setResultInstrument')
-      let newValue = target.value
+      let newValue = e.target.value
       this.targetValue = {
         newValue: newValue,
         eventId: result.event_id,
@@ -809,7 +811,7 @@ return class extends LitElement {
       }
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
-      this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
+      this.curResultRef = { elm: e.target, resId: result.result_id, evtId: result.event_id }
       let act = JSON.stringify(this.actionBeingPerformedModel.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
       if (result.raw_value || result.value) {
@@ -818,8 +820,11 @@ return class extends LitElement {
       } else {
         this.actionMethod(this.selectedDialogAction, false)
       }
+//      e.stopPropagation();
     }
-
+  //   update(changedProperties) {
+  //    super.update(changedProperties);
+  // }
 
     //get reactivateObjectDialog() {return this.shadowRoot.querySelector("tr-dialog#resultDialog")}
   
