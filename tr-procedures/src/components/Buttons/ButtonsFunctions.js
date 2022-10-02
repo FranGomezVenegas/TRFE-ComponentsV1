@@ -2,9 +2,10 @@ import { html, css, nothing} from 'lit';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ApiFunctions } from '../Api/ApiFunctions';
 
+ 
 
 export function ButtonsFunctions(base) {
-    return class extends ApiFunctions(base) {
+    return class extends (ApiFunctions(base)) {
     getButton(sectionModel = this.viewModelFromProcModel) {
 //console.log('getButton', 'sectionModel', sectionModel)      
       return html`
@@ -14,6 +15,14 @@ export function ButtonsFunctions(base) {
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
+          }
+          mwc-button {
+            background-color: rgba(36, 192, 235, 1);
+            font-family: Montserrat;
+            font-weight: bold;
+            font-size: 19px;
+            --mdc-theme-primary:rgba(36, 192, 235, 1);
+            border-radius: 12px;
           }
           mwc-button.button {        
             color : rgba(36, 192, 235, 1);
@@ -28,6 +37,7 @@ export function ButtonsFunctions(base) {
             border-color: transparent !important;
             --mdc-button-fill-color: red;
             --mdc-button-ink-color: blue;
+            border-radius: 12px;
           }            
           mwc-icon-button {        
             color : rgba(36, 192, 235, 1);
