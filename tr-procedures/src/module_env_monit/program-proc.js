@@ -281,8 +281,12 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
   }
 
   getLots() {
-    let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
-      + '?' + new URLSearchParams(this.reqParams)
+    let queryDefinition=this.viewModelFromProcModel.viewQuery.subAction
+    if (queryDefinition===undefined){return}
+
+    let APIParams=this.getAPICommonParams(queryDefinition)
+    let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
+      + '?' + new URLSearchParams(APIParams)
     this.fetchApi(params).then(j => {
       this.samplesReload = false
     })
