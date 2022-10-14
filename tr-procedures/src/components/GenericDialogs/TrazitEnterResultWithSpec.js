@@ -540,6 +540,7 @@ return class extends LitElement {
     }
 
     valRendererInstrument(result) {
+      console.log('valRendererInstrument', 'result', result)
       if (result.is_locked) {
         return html`
           <div style="width: 100%;height: 55px;position: relative; background-color: rgb(255 8 8 / 20%)">
@@ -820,7 +821,7 @@ return class extends LitElement {
       } else {
         this.actionMethod(this.selectedDialogAction, false)
       }
-//      e.stopPropagation();
+      //e.stopPropagation();
     }
   //   update(changedProperties) {
   //    super.update(changedProperties);
