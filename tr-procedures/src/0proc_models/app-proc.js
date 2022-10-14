@@ -417,7 +417,7 @@ export const AppProc = {
         ]
     },
       { "actionName": "INSTRUMENT_EVENT_VARIABLES",
-		"requiresDialog": true,
+		"requiresDialog": true,		
         "alertMsg": {
           "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
         },
@@ -456,7 +456,9 @@ export const AppProc = {
           "action": [
             {
               "actionName": "ENTER_EVENT_RESULT",
+			  "notGetViewData": true,
 			  "requiresDialog": false,
+			  "keepTheDialogOpen": true,
 			  "endPointUrl": "Samples",
               "clientMethod": "enterEventResult",
               "endPointParams": [

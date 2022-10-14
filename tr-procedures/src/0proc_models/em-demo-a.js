@@ -1,7 +1,8 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20220929",
+	  "last change on (YYYYMMDD)": "20221002",
+	  "last_change_note_20221002": "Fixed deviation",
 	  "last_change_note_20220929": "Fixed view for PlateReadingSecondEntry, endpoint should be /moduleenvmon/EnvMonSampleAPIqueries",
 	  "last_change_note_20220928": "Fixed Start and End incubation to get the batchName",
 	  "last_change_note_20220926": "Fixed Reactivate/Activate for Incubators",
@@ -1876,7 +1877,7 @@ export const EmDemoA = {
 		"actions": [
           {
             "actionName": "INVESTIGATION_CAPA_DECISION",			
-            "alternativeAPIActionMethod": "capaDecisionAction",
+            "xxxxalternativeAPIActionMethod": "capaDecisionAction",
             "endPoint": "/app/InvestigationAPIactions",
 			"requiresDialog": true,
             "button": {
@@ -1890,9 +1891,10 @@ export const EmDemoA = {
             },
             "endPointParams": [
               { "argumentName": "investigationId", "selObjectPropertyName": "id" },
-              { "argumentName": "capaRequired", "element": "capaCheck", "type": "check" },
+              { "argumentName": "capaRequired", "targetValue": true },
               { "argumentName": "capaFieldName", "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id" },
-              { "argumentName": "capaFieldValue", "targetValue": true }
+              { "argumentName": "capaFieldValue", "targetValue": true },
+			  { "argumentName": "closeInvestigation", "value": false }				  
             ]
           },
           {
