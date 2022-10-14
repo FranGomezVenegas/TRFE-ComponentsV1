@@ -60,6 +60,7 @@ export function GenomaActions(base) {
               params=params + '&' + new URLSearchParams(extraParams)
             }
             this.fetchApi(params).then(() => {
+              alert('closing dialog')
               this[action.dialogInfo.name].close()
               this.getGenomaProjectsList()
               //this.reload()
@@ -119,6 +120,7 @@ export function GenomaActions(base) {
             }
             this.fetchApi(params).then(() => {
               if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined){
+                alert('closing dialog')
                 this[action.dialogInfo.name].close()
               }
               this.getGenomaProjectsList()
