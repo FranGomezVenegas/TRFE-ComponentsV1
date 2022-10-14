@@ -162,8 +162,13 @@ export function DialogsFunctions(base) {
       }
     })
     this.reqParams = cleanParams
-    if (this.credDialog) {      
-      this.credDialog.close()
+    if (this.credDialog) {     
+      if (this.actionBeingPerformedModel.keepTheDialogOpen===undefined
+        ||this.actionBeingPerformedModel.keepTheDialogOpen===false){ 
+            this.credDialog.close()
+      }else{
+        // e.stopPropagation()
+      }
     }
   }  
 

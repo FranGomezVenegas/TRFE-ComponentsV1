@@ -27,7 +27,8 @@ export function TrazitGenericDialogs(base) {
         familyList: { type: Array },
         microName: { type: String },
         fromGrid: { type: Boolean },
-        fields:{type: Array}
+        fields:{type: Array},
+        declineDialog:{type: Object}
       }
     }
 
@@ -41,6 +42,7 @@ export function TrazitGenericDialogs(base) {
       this.fromGrid = false
       this.fields=[]
       this.actionBeingPerformedModel={}
+      this.fieldsShouldBeReset=true
     }
     openThisDialog(actionModel = this.actionBeingPerformedModel){
 //alert('openThisDialog')
@@ -49,7 +51,8 @@ export function TrazitGenericDialogs(base) {
         return false
        }      
        // alert(true)
-       this.resetFields()
+       this.defaultValue()
+       //this.resetFields()
        return true 
     }
         
@@ -112,7 +115,7 @@ export function TrazitGenericDialogs(base) {
         --mdc-theme-primary: #0465FB;
       }
     </style>
-        <tr-dialog id="genericDialog"  @opened=${this.defaultValue} ?open=${this.openThisDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
+        <tr-dialog id="genericDialog"  @opened=${this.defaultValue}  ?open=${this.openThisDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
         ${!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields ?
             html``: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
@@ -549,7 +552,7 @@ export function TrazitGenericDialogs(base) {
                 `            
             )}   
             <div style="margin-top:30px;text-align:center">
-                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
+                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
                     ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
                     ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
@@ -566,7 +569,11 @@ export function TrazitGenericDialogs(base) {
         this.dialogAccept(false)
       }
     }
+    declineDialog(){
+        this.fieldsShouldBeReset=true
+    }
     acceptedGenericDialog(e){
+        this.fieldsShouldBeReset=true
         if (this.checkMandatoryFieldsNotEmpty()){
             this.dialogAccept(false)
         }else{
@@ -592,9 +599,10 @@ export function TrazitGenericDialogs(base) {
     }
 
     defaultValue(){
-        //return
-        //console.log('defaultValue')
-        this.resetFields()
+        if (this.fieldsShouldBeReset===true){
+            this.resetFields()
+            this.fieldsShouldBeReset=false
+        }
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')

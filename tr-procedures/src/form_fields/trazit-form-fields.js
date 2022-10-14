@@ -1,5 +1,7 @@
 import { LitElement, html, css, nothing } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
+import '@material/mwc-checkbox';
+import '@material/mwc-formfield';
 // import '@material/mwc-button';
 // import '@material/mwc-select';
 // import '@material/mwc-list/mwc-list-item';
