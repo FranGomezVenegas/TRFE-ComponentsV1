@@ -8,8 +8,8 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
 // import '@doubletrade/lit-datatable';
-import '../../../tr-procedures/src/form_fields/trazit-form-fields'
-
+//import '../../../tr-procedures/src/form_fields/trazit-form-fields'
+import '@trazit/tr-procedures/src/form_fields/trazit-form-fields';
 export class TestingCoverageSummary extends LitElement {
   static get styles() {
     return [

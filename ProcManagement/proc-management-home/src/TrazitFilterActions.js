@@ -5,8 +5,8 @@ export function TrazitFilterActions(base) {
       jsonParamCommons(selObject) {
         let jsonParam = {}
         if (selObject[0]===undefined){
-          alert('selObject is not an array as expected')
-          console.log('TrazitFilterActions', 'selObject', selObject)
+          //alert('selObject is not an array as expected')
+          console.log('TrazitFilterActions, selObject is not an array as expected', 'selObject', selObject)
           return jsonParam
         }
         selObject.forEach(p => {
@@ -60,20 +60,19 @@ export function TrazitFilterActions(base) {
               "isForTesting": false,
               "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
               "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
-              "frontEndEnvMonitSampleUrl": "/moduleenvmon/frontend/EnvMonSampleAPIfrontend",
+              "frontEndEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIqueries",
               "EnvMonSampleAPIQueriesStats": "/moduleenvmon/EnvMonAPIstats",
-              "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPI",
-              "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPI",
-              "frontEndEnvMonitIncubationUrl": "/moduleenvmon/frontend/EnvMonIncubationAPIfrontend",
-              "frontEndEnvMonitUrl": "/moduleenvmon/frontend/EnvMonAPIfrontend",
-              "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPI",
+              "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIactions",
+              "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPIactions",
+              "frontEndEnvMonitIncubationUrl": "/moduleenvmon/EnvMonIncubationAPIqueries",
+              "frontEndEnvMonitUrl": "/moduleenvmon/EnvMonAPIqueries",
+              "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPIactions",
               "ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
               "ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
               "PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
               "PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
-              "GenomaStudyAPIactionsUrl": "/modulegenoma/GenomaStudyAPI",
-              "GenomaStudyAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIFrontend",
-              "local": true,
+              "GenomaStudyAPIactionsUrl": "/modulegenoma/GenomaStudyAPIactions",
+              "GenomaStudyAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIqueries",              "local": true,
               "localDefaultView": {
                   "procName": "em-demo-a",
                   "viewName": "DataMining",

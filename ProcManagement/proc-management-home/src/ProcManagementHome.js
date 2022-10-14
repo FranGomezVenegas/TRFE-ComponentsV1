@@ -1,9 +1,11 @@
 import { html, css, LitElement } from 'lit';
 //import { CommonCore } from '@trazit/common-core';
-import {ProcManagement} from '../proc-management-model';
-import './trazit-filter-view';
-import '@trazit/tr-procedures/src/form_fields/trazit-form-fields';
 
+//import {ProcManagement} from '@trazit/tr-procedures/src/0proc_models/proc-management-model';
+import {ProcManagement} from '../../../tr-procedures/src/0proc_models/proc-management-model';
+import './trazit-filter-view';
+//import '@trazit/tr-procedures/src/form_fields/trazit-form-fields';
+import '../../../tr-procedures/src/form_fields/trazit-form-fields';
 export class ProcManagementHome extends ((((LitElement)))) {
   static get styles() {
     return [

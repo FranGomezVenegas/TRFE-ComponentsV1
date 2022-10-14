@@ -4,10 +4,10 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@alenaksu/json-viewer';
 
 // import '@material/mwc-icon-button';
-// import '@material/mwc-ripple'
+ //import '@material/mwc-ripple'
 import '@spectrum-web-components/split-view/sp-split-view';
-import '@trazit/tr-procedures/src/browser/sp-card-ext';
-//import '../../../tr-procedures/src/browser/sp-card-ext';
+//import '@trazit/tr-procedures/src/browser/sp-card-ext';
+ import '../../../tr-procedures/src/browser/sp-card-ext';
 import {TrazitFilterActions} from './TrazitFilterActions';
 import '@doubletrade/lit-datatable';
 
@@ -89,6 +89,10 @@ export class TrazitFilterViewContent extends TrazitDialogActions(TrazitDialogTem
         padding: 0.5rem;
         font-family: var(--font-family);
         font-size: 1.3rem;        
+      }
+      img {
+        height:15vw;
+        width:30vw;
       }
     `];
   }
@@ -253,7 +257,7 @@ export class TrazitFilterViewContent extends TrazitDialogActions(TrazitDialogTem
         ${this.data[elem.elementName].map(entry =>
           html`          
           <trazit-filter-content-card .currentdata="${entry}" .currentelement="${elem}" @click=${this.cardClicked}>
-          <img slot="cover-photo" style="${entry[elem.imageStyle]}" src="${entry[elem.imageFld]!==undefined&&entry[elem.imageFld].length ? entry[elem.imageFld].toString() : '/images/trazit-removebg.png'}" alt="${entry[elem.image_alt]}" />          
+          <img id="g" slot="cover-photo2" src="${entry[elem.imageFld]!==undefined&&entry[elem.imageFld].length ? entry[elem.imageFld].toString() : '/images/trazit-removebg.png'}" alt="${entry[elem.image_alt]}" />          
             <div slot="footer">
               ${elem.fieldsToDisplayFooter.map(dElems =>  
               html`

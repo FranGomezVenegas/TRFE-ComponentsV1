@@ -71,6 +71,7 @@ export function TrazitDialogActions(base) {
             //console.log(extraParams)
             //return
             this.fetchApi(params).then(() => {
+              alert('closing dialog')
               this[action.dialogInfo.name].close()
               this.getHolidayCalendars()
               //this.reload()
@@ -104,6 +105,7 @@ export function TrazitDialogActions(base) {
             })            
           }
           nextRequest() {
+            alert('TrazitDialogActions-nextRequest')
             super.nextRequest()
             this.reqParams = {
               procInstanceName: this.procName,
@@ -130,6 +132,7 @@ export function TrazitDialogActions(base) {
             }
             this.fetchApi(params).then(() => {
               if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined){
+                alert('closing dialog')
                 this[action.dialogInfo.name].close()
               }
               if (this.getHolidayCalendars!==undefined){

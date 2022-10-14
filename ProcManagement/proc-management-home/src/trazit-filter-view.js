@@ -10,6 +10,47 @@ export class TrazitFilterView extends TrazitFilterActions(LitElement) {
     return [
       Layouts,
       css`
+      mwc-icon-button#lang {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
+      mwc-button {
+        background-color: rgba(36, 192, 235, 1);
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        --mdc-theme-primary:rgba(36, 192, 235, 1);
+        border-radius: 12px;
+      }
+      mwc-button.button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        color: white;
+        border-color: transparent !important;
+        --mdc-button-fill-color: red;
+        --mdc-button-ink-color: blue;
+        border-radius: 12px;
+      }            
+      mwc-icon-button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }        
+      mwc-icon-button.disabledtrue{        
+        color : red;
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }        
       sp-split-view {
         height: calc(100vh - 150px);
       }

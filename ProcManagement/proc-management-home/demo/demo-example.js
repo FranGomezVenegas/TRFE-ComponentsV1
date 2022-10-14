@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
-import { getUserSession } from '@trazit/platform-login';
-import '@trazit/platform-login/platform-login';
-import '../proc-management-home';
+// import { getUserSession } from '@trazit/platform-login';
+// import '@trazit/platform-login/platform-login';
+// import '../proc-management-home';
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -22,17 +22,17 @@ class DemoExample extends LitElement {
     super();
     this.auth = false;
   }
-
+  // <platform-login @authorized=${e=>{
+  //   this.auth=e.target.auth;
+  //   this.el.config=this.pLogin.config;}}></platform-login>
+  // <div ?hidden="${!this.auth}">
+  //   <h1>Hi ${this.getUser()}, you are authorized</h1>
+  //   <button @click=${()=>this.pLogin.logout()}>Logout</button><br><br>
+  //   <proc-management-home></proc-management-home>
+  // </div>
   render() {
     return html`
-      <platform-login @authorized=${e=>{
-        this.auth=e.target.auth;
-        this.el.config=this.pLogin.config;}}></platform-login>
-      <div ?hidden="${!this.auth}">
-        <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <button @click=${()=>this.pLogin.logout()}>Logout</button><br><br>
-        <proc-management-home></proc-management-home>
-      </div>
+asds
     `;
   }
 
