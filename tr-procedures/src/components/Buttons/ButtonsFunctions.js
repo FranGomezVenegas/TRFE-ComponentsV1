@@ -433,7 +433,7 @@ export function ButtonsFunctions(base) {
         })
         this.samplesReload = false
     }
-    async GetAlternativeViewData(queryDefinition){
+    async GetAlternativeViewData(queryDefinition, selObject = {}){
         if (queryDefinition.clientMethod!==undefined){
             //alert('Calling '+queryDefinition.clientMethod+' from GetViewData')            
             if (this[queryDefinition.clientMethod]===undefined){
@@ -445,7 +445,7 @@ export function ButtonsFunctions(base) {
         }
         console.log('GetViewData', 'queryDefinition', queryDefinition)
         let APIParams=this.getAPICommonParams(queryDefinition)
-        let viewParams=this.jsonParam(queryDefinition)
+        let viewParams=this.jsonParam(queryDefinition, selObject)
         let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
@@ -539,8 +539,22 @@ export function ButtonsFunctions(base) {
             if (action.notGetViewData===undefined||action.notGetViewData===false){
               this.GetViewData()
             }
+            let action2 = this.actionBeingPerformedModel
+            if (action.actionName.includes("ENTER_EVENT_RESULT")){
+              this.actionMethod(this.viewModelFromProcModel.actions[1], this.selectedItems[0])
+              //alert(action.actionName)
+            }
+            if (action.actionName.includes("ENTERRESULT")){
+              this.actionMethod(this.viewModelFromProcModel.actions[1], this.selectedItems[0])
+              //alert(action.actionName)
+            }   
+            if (action.actionName.includes("ENTER_PLATE_READING")){
+              this.actionMethod(this.viewModelFromProcModel.actions[3], this.selectedItems[0])
+              //alert(action.actionName)
+            }                                   
             if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined
                 &&action!==null&&action.dialogInfo!==null&&action.dialogInfo.name!==null){
+                  alert('closing dialog')
                 this[action.dialogInfo.name].close()
             }
             if (action.secondaryActionToPerform!==undefined){
