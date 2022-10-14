@@ -96,6 +96,7 @@ export function CalendarActions(base) {
             //console.log(extraParams)
             //return
             this.fetchApi(params).then(() => {
+              alert('closing dialog')
               this[action.dialogInfo.name].close()
               this.getHolidayCalendars()
               //this.reload()
@@ -155,6 +156,7 @@ export function CalendarActions(base) {
             }
             this.fetchApi(params).then(() => {
               if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined){
+                alert('closing dialog')
                 this[action.dialogInfo.name].close()
               }
               this.getHolidayCalendars()
