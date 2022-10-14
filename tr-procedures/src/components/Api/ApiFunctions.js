@@ -91,7 +91,7 @@ export function ApiFunctions(base) {
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
         return extraParams
       }          
-      jsonParam(action) {
+      jsonParam(action, selObject = {}) {
         //alert('jsonParam', 'action', action)
         if (action===undefined){return}
           let jsonParam = {}
@@ -232,7 +232,6 @@ export function ApiFunctions(base) {
           return jsonParam
       }        
       getActionAPIUrl(action){
-
         console.log('getActionAPIUrl', this.procInstanceName)
         if (action!==undefined&&action.endPoint!==undefined){
           return action.endPoint ? action.endPoint : this.config.SampleAPIactionsUrl
