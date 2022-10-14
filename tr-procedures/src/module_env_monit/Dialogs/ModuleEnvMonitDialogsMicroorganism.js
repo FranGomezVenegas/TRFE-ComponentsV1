@@ -349,16 +349,18 @@ openRemoveDialog(){
       let queryDefinition=this.actionBeingPerformedModel.dialogInfo.action[0]
       //this.sampleState = { action: JSON.stringify(queryDefinition), sample: this.selectedItems[0].sample_id }
       if (!this.microGrid.selectedItems.length) return
+      this.targetValue = {}
       this.targetValue = {
         sampleId: this.selectedItems[0].sample_id,
         microorganismName: this.microGrid.selectedItems[0].name,
         numItems: this.microGrid.selectedItems[0].items - this.microItems.value
       }
       this.microItems.hidden = true
-      console.log('removeSampleMicroorganismAction', 'targetValue', this.targetValue)      
+      console.log('removeSampleMicroorganismAction 20221013', 'targetValue', this.targetValue, 'queryDefinition', queryDefinition)      
       let APIParams=this.getAPICommonParams(queryDefinition)
-      var extraParams=this.jsonParamCommons(queryDefinition, this.selectedItems[0], this.targetValue)   
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
+      var extraParams=this.jsonParamCommons(queryDefinition, this.selectedItems[0], this.targetValue)  
+      let endPointUrl=this.getActionAPIUrl(queryDefinition) 
+      let params = this.config.backendUrl + endPointUrl
         + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams)+ '&'+ new URLSearchParams(extraParams)
       this.fetchApi(params).then(() => {
         this.microorganismList = []
