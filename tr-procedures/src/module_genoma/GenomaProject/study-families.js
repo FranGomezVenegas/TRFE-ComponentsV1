@@ -526,7 +526,7 @@ export class StudyFamilies extends GenomaDialogTemplate(GridUtilities(GenomaUtil
 //     this.actionMethod(this.selectedAction.subAction)
 //   }
 
-  jsonParamCommons(selAction, selObject) {
+  xjsonParamCommons(selAction, selObject) {
     //console.log('jsonParamCommons', selAction)
     if (selAction===undefined){
       selAction=this.selectedAction
@@ -575,7 +575,7 @@ export class StudyFamilies extends GenomaDialogTemplate(GridUtilities(GenomaUtil
         } else {
           jsonParam[p.argumentName] = p.value
         }
-        console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+        console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
       })
     }
     if (action.paramFilter) {

@@ -323,8 +323,8 @@ export class GenomaProject extends TabFunctions(LitElement) {
     this.selectedAction = actions[0]
     this.actionMethod(this.selectedAction.subAction)
   }
-  jsonParamCommons(selAction, selObject) {
-    // console.log('jsonParamCommons', selAction)
+  xjsonParamCommons(selAction, selObject) {
+    // console.log('xjsonParamCommons', selAction)
      if (selAction===undefined){
        selAction=this.selectedAction
      }
@@ -372,7 +372,7 @@ export class GenomaProject extends TabFunctions(LitElement) {
          } else {
            jsonParam[p.argumentName] = p.value
          }
-         console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+         console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
        })
      }
      if (action.paramFilter) {

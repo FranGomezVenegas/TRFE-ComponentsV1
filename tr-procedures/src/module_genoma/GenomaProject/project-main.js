@@ -257,8 +257,8 @@ export class ProjectMain extends GenomaDialogTemplate(GridUtilities(GenomaUtilit
   //   this.actionMethod(this.selectedAction.subAction)
   // }
 
-  jsonParamCommons(selAction, selObject) {
-    //console.log('jsonParamCommons', selAction)
+  xjsonParamCommons(selAction, selObject) {
+    //console.log('xjsonParamCommons', selAction)
     if (selAction===undefined){
       selAction=this.selectedAction
     }
@@ -297,7 +297,7 @@ export class ProjectMain extends GenomaDialogTemplate(GridUtilities(GenomaUtilit
          
         } else if (p.element) {
           if (this[p.element]===undefined){
-            alert('jsonParamCommons. Element '+p.element+' not found to get the value' )
+            alert('xjsonParamCommons. Element '+p.element+' not found to get the value' )
           }else{
             jsonParam[p.argumentName] = this[p.element].value // get value from field input
           }
@@ -310,7 +310,7 @@ export class ProjectMain extends GenomaDialogTemplate(GridUtilities(GenomaUtilit
         } else {
           jsonParam[p.argumentName] = p.value
         }
-        console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+        console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
       })
     }
     if (action.paramFilter) {

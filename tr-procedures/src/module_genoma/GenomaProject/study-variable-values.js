@@ -381,12 +381,12 @@ export class StudyVariableValues extends GenomaDialogTemplate(GridUtilities(Geno
     }
   }
 
-  jsonParamCommons(selAction, selObject) {
+  xjsonParamCommons(selAction, selObject) {
     let jsonParam = {}
     if (selAction.endPointParams===undefined){
       return jsonParam
     }
-    console.log('jsonParamCommons', selAction)
+    console.log('xjsonParamCommons', selAction)
     if (selAction===undefined){
       selAction=this.selectedAction
     }
@@ -419,7 +419,7 @@ export class StudyVariableValues extends GenomaDialogTemplate(GridUtilities(Geno
         } else {
           jsonParam[p.argumentName] = p.value
         }
-        console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+        console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
       })
     }
     if (action.paramFilter) {
