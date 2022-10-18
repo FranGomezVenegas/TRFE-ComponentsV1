@@ -238,7 +238,7 @@ export function ModuleInstrumentsDialogs(base) {
           alert(endPointUrl)
           return
       }
-      let viewParams=this.jsonParamCommons(action, this.selectedItems[0])
+      let viewParams=this.jsonParam(action, this.selectedItems[0])
       let params = this.config.backendUrl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 

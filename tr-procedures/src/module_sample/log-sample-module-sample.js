@@ -88,7 +88,7 @@ export class LogSampleModuleSample extends ((CredDialog)) {
   get trazitFormFields() {    return this.shadowRoot.querySelector("trazit-form-fields#filterfields")    } 
   buttonCliked(){
     this.selectedAction=this.viewModelFromProcModel.actions[0]
-    this.reqParams=this.jsonParamCommons(this.viewModelFromProcModel.actions[0])
+    this.reqParams=this.jsonParam(this.viewModelFromProcModel.actions[0])
     this.nextRequestCommons(this.viewModelFromProcModel.actions[0])
   }
   isScroll() {
@@ -98,8 +98,8 @@ export class LogSampleModuleSample extends ((CredDialog)) {
       this.next = false
     }
   }
-  jsonParamCommons(selAction, selObject) {
-    //console.log('jsonParamCommons', selAction)
+  xjsonParamCommons(selAction, selObject) {
+    //console.log('xjsonParamCommons', selAction)
     if (selAction===undefined){
       selAction=this.selectedAction
     }
@@ -149,7 +149,7 @@ export class LogSampleModuleSample extends ((CredDialog)) {
         } else {
           jsonParam[p.argumentName] = p.value
         }
-        console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+        console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
       })
     }
     if (action.paramFilter) {

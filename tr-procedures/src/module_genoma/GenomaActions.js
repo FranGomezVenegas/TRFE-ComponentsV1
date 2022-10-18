@@ -7,7 +7,7 @@ export function GenomaActions(base) {
             this.selectedAction=action
             //console.log('buttonActionWithoutDialog')
             this.reqParams.actionName=action.actionName
-            var extraParams=this.jsonParamCommons(action, selectedItem)   
+            var extraParams=this.jsonParam(action, selectedItem)   
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -24,14 +24,14 @@ export function GenomaActions(base) {
             this.selectedAction=action
             //console.log('genomaSuperDialogClickedAction')
             if (this.itemId) {
-              this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem), action)
             } else {
-              this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
                 //console.log('buttonActionWithoutDialog')
                 this.reqParams.actionName=action.actionName
-                var extraParams=this.jsonParamCommons(action, selectedItem)   
+                var extraParams=this.xjsonParamCommons(action, selectedItem)   
             //    if (extraParams.includes("ERROR")){return}   
                 let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
                 params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -52,7 +52,7 @@ export function GenomaActions(base) {
                 selectedItem=this[action.selObjectVariableName][0]
             }
             this.reqParams.actionName=action.actionName
-            var extraParams=this.jsonParamCommons(action, selectedItem)      
+            var extraParams=this.jsonParam(action, selectedItem)      
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -74,13 +74,13 @@ export function GenomaActions(base) {
                 selectedItem=this[action.selObjectVariableName][0]
             }
             if (this.itemId) {
-              this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem), action)
             } else {
-              this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
             this.reqParams.actionName=action.actionName
-            var extraParams=this.jsonParamCommons(action, selectedItem)      
+            var extraParams=this.xjsonParamCommons(action, selectedItem)      
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -111,7 +111,7 @@ export function GenomaActions(base) {
             if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
                 selectedItem=this[action.selObjectVariableName][0]
             }
-            var extraParams=this.jsonParamCommons(action, selectedItem)      
+            var extraParams=this.jsonParam(action, selectedItem)      
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -128,8 +128,8 @@ export function GenomaActions(base) {
             })            
 
           }
-          jsonParamCommons(selAction, selObject) {
-            //console.log('jsonParamCommons', selAction)
+          xjsonParamCommons(selAction, selObject) {
+            //console.log('xjsonParamCommons', selAction)
             if (selAction===undefined){
               selAction=this.selectedAction
             }
@@ -177,7 +177,7 @@ export function GenomaActions(base) {
                 } else {
                   jsonParam[p.argumentName] = p.value
                 }
-                console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+                console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
               })
             }
             if (action.paramFilter) {
@@ -198,9 +198,9 @@ export function GenomaActions(base) {
             if (action.dialogInfo) {
               if (action.dialogInfo.automatic) {
                 if (this.itemId) {
-                  this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                  this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem), action)
                 } else {
-                  this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                  this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(this.selectedAction, selectedItem), action)
                 }
               } else {
                 let dialogName=action.dialogInfo.name
@@ -218,9 +218,9 @@ export function GenomaActions(base) {
               }
             } else {
               if (this.selectedItems.length) {
-                this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(this.selectedAction, selectedItem), action)
               } else {
-                this.credsChecker(action.actionName, null, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                this.credsChecker(action.actionName, null, this.jsonParam(this.selectedAction, selectedItem), action)
               }
             }
           }  

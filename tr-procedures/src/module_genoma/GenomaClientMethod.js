@@ -18,7 +18,7 @@ export function GenomaClientMethod(base) {
 
     buttonActionWithoutDialog(action, selectedItem) {
       console.log('buttonActionWithoutDialog')
-      var extraParams=this.jsonParamCommons(action, selectedItem)      
+      var extraParams=this.jsonParam(action, selectedItem)      
       let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
       params=params+'?' + new URLSearchParams(this.reqParams) 
       if (extraParams!==undefined){
@@ -29,8 +29,8 @@ export function GenomaClientMethod(base) {
       })
     }
 
-    jsonParamCommons(selAction, selObject) {
-      console.log('jsonParamCommons', selAction)
+    xjsonParamCommons(selAction, selObject) {
+      console.log('xjsonParamCommons', selAction)
       if (selAction===undefined){
         selAction=this.selectedAction
       }
@@ -56,7 +56,7 @@ export function GenomaClientMethod(base) {
           } else {
             jsonParam[p.argumentName] = p.value
           }
-          console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+          console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
         })
       }
       if (action.paramFilter) {

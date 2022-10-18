@@ -185,7 +185,7 @@ export class SamplingPointsMap extends DialogsFunctions(CoreView) {
       this.targetValue.fieldValue=this.targetValue.fieldValue+this.shiftField.value
     }
     this.selectedAction=actions[0]
-    this.reqParams=this.jsonParamCommons(actions[0], {}, this.targetValue)
+    this.reqParams=this.jsonParam(actions[0], {}, this.targetValue)
     this.nextRequestCommons(actions[0])
     return    
 
