@@ -7,7 +7,7 @@ export function TrazitDialogActions(base) {
             this.selectedAction=action
             console.log('buttonActionWithoutDialogNoCredChecker')
 
-            var extraParams=this.jsonParamCommons(action, selectedItem)   
+            var extraParams=this.jsonParam(action, selectedItem)   
             extraParams.actionName=action.actionName
             extraParams.dbName= this.config.dbName
             extraParams.procName = "app"
@@ -30,14 +30,14 @@ export function TrazitDialogActions(base) {
             this.selectedAction=action
             //console.log('genomaSuperDialogClickedAction')
             if (this.itemId) {
-              this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem), action)
             } else {
-              this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
                 //console.log('buttonActionWithoutDialog')
                 this.reqParams.actionName=action.actionName
-                var extraParams=this.jsonParamCommons(action, selectedItem)   
+                var extraParams=this.xjsonParamCommons(action, selectedItem)   
             //    if (extraParams.includes("ERROR")){return}   
                 let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
                 params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -57,7 +57,7 @@ export function TrazitDialogActions(base) {
             if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
                 selectedItem=this[action.selObjectVariableName][0]
             }
-            var extraParams=this.jsonParamCommons(action, selectedItem)      
+            var extraParams=this.jsonParam(action, selectedItem)      
             extraParams.actionName=action.actionName
             extraParams.dbName= this.config.dbName
             //extraParams.procName = "app"
@@ -85,13 +85,13 @@ export function TrazitDialogActions(base) {
                 selectedItem=this[action.selObjectVariableName][0]
             }
             if (this.itemId) {
-              this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem), action)
             } else {
-              this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
             this.reqParams.actionName=action.actionName
-            var extraParams=this.jsonParamCommons(action, selectedItem)      
+            var extraParams=this.xjsonParamCommons(action, selectedItem)      
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -123,7 +123,7 @@ export function TrazitDialogActions(base) {
             if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
                 selectedItem=this[action.selObjectVariableName][0]
             }
-            var extraParams=this.jsonParamCommons(action, selectedItem)      
+            var extraParams=this.jsonParam(action, selectedItem)      
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -142,8 +142,8 @@ export function TrazitDialogActions(base) {
             })            
 
           }
-          jsonParamCommons(selAction, selObject) {
-            //console.log('jsonParamCommons', selAction)
+          jsonParam(selAction, selObject) {
+            //console.log('jsonParam', selAction)
             if (selAction===undefined){
               selAction=this.selectedAction
             }
@@ -207,7 +207,7 @@ export function TrazitDialogActions(base) {
                 } else {
                   jsonParam[p.argumentName] = p.value
                 }
-                console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+                console.log('jsonParam', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
               })
             }
             if (action.paramFilter) {
@@ -232,9 +232,9 @@ export function TrazitDialogActions(base) {
             if (action.dialogInfo) {
               if (action.dialogInfo.automatic) {
                 if (this.itemId) {
-                  this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                  this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem), action)
                 } else {
-                  this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                  this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction, selectedItem), action)
                 }
               } else {
                 let dialogName=action.dialogInfo.name
@@ -253,9 +253,9 @@ export function TrazitDialogActions(base) {
               }
             } else {
               if (this.selectedSamples.length) {
-                this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction, selectedItem), action)
               } else {
-                this.credsChecker(action.actionName, null, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+                this.credsChecker(action.actionName, null, this.jsonParam(this.selectedAction, selectedItem), action)
               }
             }
           }  

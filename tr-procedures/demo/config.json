@@ -26,7 +26,12 @@
 
 
   "local": true,
-  "localDefaultView": {
+  "localDefaultView142": {
+    "procName":  "proc-deploy", 
+    "viewName": "SampleEnterResult", 
+    "filterName" :  "ER-FQ" 
+  },
+  "localDefaultView64324324": {
     "procName":  "genoma-1", 
     "viewName": "ProjectManager", 
     "filterName" :  "ProjectManager" 

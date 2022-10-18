@@ -70,9 +70,11 @@ export class CredDialog extends CommonCore {
       tr-dialog {
         --mdc-dialog-heading-ink-color: blue;
         --mdc-typography-headline6-font-size: 35px;
+        --mdc-dialog-z-index:9999999;
       }
       .content {
         opacity: 0.9;
+        --mdc-dialog-z-index:9999999;
       }
       .content * {
         margin: 5px 0;

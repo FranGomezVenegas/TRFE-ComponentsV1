@@ -2,7 +2,7 @@ import { html, css } from 'lit';
 
 export function TrazitFilterActions(base) {
     return class extends base {
-      jsonParamCommons(selObject) {
+      xjsonParamCommons(selObject) {
         let jsonParam = {}
         if (selObject[0]===undefined){
           //alert('selObject is not an array as expected')
@@ -42,7 +42,7 @@ export function TrazitFilterActions(base) {
           } else {
             jsonParam[p.argumentName] = p.value
           }
-          //console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+          //console.log('jsonParam', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
         })
         return jsonParam
       }
@@ -82,8 +82,8 @@ export function TrazitFilterActions(base) {
           }
       
         }
-        console.log('line86', 'about to call jsonparamcommons', this.selectedEntry.filter.extraParams)
-        var extraParams=this.jsonParamCommons(this.selectedEntry.filter.extraParams) 
+        console.log('line86', 'about to call jsonparam', this.selectedEntry.filter.extraParams)
+        var extraParams=this.jsonParam(this.selectedEntry.filter.extraParams) 
         let reqParams = {
           procInstanceName: this.procName,
           finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
@@ -202,11 +202,11 @@ export function TrazitFilterActions(base) {
         if (action.dialogInfo) {
           if (action.dialogInfo.automatic) {
             if (this.itemId) {
-              console.log('line206', 'about to call jsonparamcommons', this.selectedAction, selectedItem)
-              this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              console.log('line206', 'about to call jsonparam', this.selectedAction, selectedItem)
+              this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem), action)
             } else {
-              console.log('line209', 'about to call jsonparamcommons', this.selectedAction, selectedItem)
-              this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+              console.log('line209', 'about to call jsonparam', this.selectedAction, selectedItem)
+              this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction, selectedItem), action)
             }
           } else {
             let dialogName=action.dialogInfo.name
@@ -224,11 +224,11 @@ export function TrazitFilterActions(base) {
           }
         } else {
           if (this.selectedSamples!==null&&this.selectedSamples!==undefined&&this.selectedSamples.length) {
-            console.log('line228', 'about to call jsonparamcommons', this.selectedAction, selectedItem)
-            this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+            console.log('line228', 'about to call jsonparam', this.selectedAction, selectedItem)
+            this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(this.selectedAction, selectedItem), action)
           } else {
-            console.log('line231', 'about to call jsonparamcommons', this.selectedAction, selectedItem)
-            this.credsChecker(action.actionName, null, this.jsonParamCommons(this.selectedAction, selectedItem), action)
+            console.log('line231', 'about to call jsonparam', this.selectedAction, selectedItem)
+            this.credsChecker(action.actionName, null, this.jsonParam(this.selectedAction, selectedItem), action)
           }
         }
       }  

@@ -1,7 +1,12 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20221002",
+	  "last change on (YYYYMMDD)": "20221018",
+	  "last_change_note_20221018": "renamed paramFilter by subViewFilter when the entry is for two views and they require particular filters",
+	  "last_change_note_20221017": "Modified SAMPLESTAGE_MOVETONEXT and SAMPLESTAGE_MOVETOPREVIOUS for Samples Pending Plate Reading Second Entry",
+      "last_change_note_20221012": "Added first fix for entering results",
+	  "last_change_note_20221005": "Modified endpoint names for Incubators and APIs names",
+	  "last_change_note_20221003": "Modified newIncubatorList to be genericDialog, ModuleSettings modified to add a new url for Incubators, requiresGridItemSelected set to false for EM_NEW_INCUBATOR",
 	  "last_change_note_20221002": "Fixed deviation",
 	  "last_change_note_20220929": "Fixed view for PlateReadingSecondEntry, endpoint should be /moduleenvmon/EnvMonSampleAPIqueries",
 	  "last_change_note_20220928": "Fixed Start and End incubation to get the batchName",
@@ -15,7 +20,8 @@ export const EmDemoA = {
 		{ "name": "Programs" , "url" : "/moduleenvmon/EnvMonAPIactions"},
 	    { "name": "Samples" , "url" : "/moduleenvmon/EnvMonSampleAPIactions"},
 		{ "name": "Batches" , "url" : "/moduleenvmon/EnvMonAPIactions"},
-		{ "name": "ProdLot" , "url" : "/moduleenvmon/EnvMonProdLotAPIactions"}		
+		{ "name": "ProdLot" , "url" : "/moduleenvmon/EnvMonProdLotAPIactions"},
+		{ "name": "Incubators" , "url" : "/moduleenvmon/EnvMonIncubatorAPIactions"}		
 	  ]
   },
   "ProductionLots": {
@@ -272,9 +278,9 @@ export const EmDemoA = {
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
         { "argumentName": "whereFieldsValue", "value": "Sampling|prog_pers_template|false*Boolean" }
       ],
-      "paramFilter": {
-        "SamplingSMP": { "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*|requires_tracking_sampling_end" },
-        "SamplingPERS": { "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*|requires_tracking_sampling_end" }
+      "subViewFilter": {
+        "SamplingSMP": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*|requires_tracking_sampling_end" }],
+        "SamplingPERS": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*|requires_tracking_sampling_end" }]
       }
     },
     "actions": [
@@ -457,9 +463,9 @@ export const EmDemoA = {
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
         { "argumentName": "whereFieldsValue", "value": "true*Boolean|Sampling|prog_pers_template" }
       ],
-      "paramFilter": {
-        "SamplingSMP": { "argumentName": "whereFieldsName", "value": "requires_tracking_sampling_end|current_stage|sample_config_code not in*" },
-        "SamplingPERS": { "argumentName": "whereFieldsName", "value": "requires_tracking_sampling_end|current_stage|sample_config_code in*" }
+      "subViewFilter": {
+        "SamplingSMP": [{ "argumentName": "whereFieldsName", "value": "requires_tracking_sampling_end|current_stage|sample_config_code not in*" }],
+        "SamplingPERS": [{ "argumentName": "whereFieldsName", "value": "requires_tracking_sampling_end|current_stage|sample_config_code in*" }]
       }
     },
     "actions": [
@@ -689,9 +695,9 @@ export const EmDemoA = {
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code" },
         { "argumentName": "whereFieldsValue", "value": "PlateReading|prog_pers_template" }
       ],
-      "paramFilter": {
-        "PlateReadingSMP": { "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
-        "PlateReadingPERS": { "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
+      "subViewFilter": {
+        "PlateReadingSMP": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*" }],
+        "PlateReadingPERS": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*" }]
       }
     },
     "actions": [
@@ -762,6 +768,7 @@ export const EmDemoA = {
         }
       },
       { "actionName": "ENTER_PLATE_READING",
+        "notGetViewData": true,
 		"requiresDialog": true,
 		"endPointUrl": "Samples",
         "alertMsg": {
@@ -862,18 +869,18 @@ export const EmDemoA = {
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code" },
         { "argumentName": "whereFieldsValue", "value": "PlateReadingSecondEntry|prog_pers_template" }        
       ],
-      "paramFilter": {
-        "PlateReadingSecondEntrySMP": { 
-          "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
-        "PlateReadingSecondEntryPERS": { 
-          "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
+      "subViewFilter": {
+        "PlateReadingSecondEntrySMP": [{ 
+          "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*" }],
+        "PlateReadingSecondEntryPERS": [{ 
+          "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*" }]
       }
     },
     "actions": [
       { "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
-        "clientMethod": "moveToNext",
+		"requiresDialog": false,
+		"endPointUrl": "Samples",
         "button": {
-          "class": "reverse",
           "icon": "next_week",
           "title": {
             "label_en": "Previous", "label_es": "Previo"
@@ -882,10 +889,11 @@ export const EmDemoA = {
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-        ]    
+        ]
       },
-      { "actionName": "SAMPLESTAGE_MOVETONEXT",
-        "clientMethod": "moveToNext",
+	  { "actionName": "SAMPLESTAGE_MOVETONEXT",
+		"requiresDialog": false,
+		"endPointUrl": "Samples",
         "button": {
           "icon": "next_week",
           "title": {
@@ -893,7 +901,7 @@ export const EmDemoA = {
           },
           "requiresGridItemSelected": true
         },
-        "endPointParams": [
+		"endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
         ]
       },
@@ -1060,9 +1068,9 @@ export const EmDemoA = {
         { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
         { "argumentName": "whereFieldsValue", "value": "MicroorganismIdentification|prog_pers_template" }
       ],
-      "paramFilter": {
-        "MicroOrganismSMP": { "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*" },
-        "MicroOrganismPERS": { "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*" }
+      "subViewFilter": {
+        "MicroOrganismSMP": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*" }],
+        "MicroOrganismPERS": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*" }]
       }
     },
     "actions": [
@@ -1229,6 +1237,7 @@ export const EmDemoA = {
           "action": [
             {
               "actionName": "REMOVE_SAMPLE_MICROORGANISM",
+              "endPointUrl": "Samples",
               "clientMethod": "removeSampleMicroorganism",
               "endPointParams": [
                 { "argumentName": "sampleId", "targetValue": true },
@@ -1383,7 +1392,7 @@ export const EmDemoA = {
             },
 			"dialogQueries":[
 				{	"actionName": "GET_INCUBATORS_LIST",				
-					"endPoint": "/moduleenvmon/EnvMonIncubationAPIqueries",
+					"endPoint": "/moduleenvmon/EnvMonIncubatorAPIqueries",
 					"variableForData": "incubatorsList"		  
 				}
 			],
@@ -1945,7 +1954,7 @@ export const EmDemoA = {
     },
     "viewQuery":{ "actionName": "GET_INCUBATORS_LIST",
         "clientMethodzzzz": "getGridData",
-        "endPoint": "/moduleenvmon/EnvMonIncubationAPIqueries",
+        "endPoint": "/moduleenvmon/EnvMonIncubatorAPIqueries",
         "endPointParams": [
           { "argumentName": "stage", "element": "lotNumDays", "defaultValue": 1 }
         ],
@@ -1978,19 +1987,34 @@ export const EmDemoA = {
     }
     ],
     "actions": [
-      { "actionName": "EM_NEW_INCUBATOR",
+      { "actionName": "EM_INCUBATOR_NEW",
+        "endPointUrl": "Incubators",
 		"requiresDialog": true,
-        "clientMethod": "setLot",
+        "xxxclientMethod": "setLot",
         "button": {
           "icon": "create_new_folder",
           "title": {
             "label_en": "New", "label_es": "Nuevo"
           },
-          "requiresGridItemSelected": true
+          "requiresGridItemSelected": false
         },
         "dialogInfo": {          
-          "name": "newIncubatorDialog",
-          "fieldText": {
+          "name": "genericDialog",
+		  "xxxendPointUrl" : "Incubators",
+		  "xxxname": "newIncubatorDialog",
+		  "fields": [
+			{"text1": { "label_en": "New Incub Name", "label_es": "Nombre para nueva Incubadora" }},
+			{"list1": { 
+				"items": [
+					{ "keyName": "1", "keyValue_en": "1st Incub", "keyValue_es": "1ª Incub" },
+					{ "keyName": "2", "keyValue_en": "2nd Incub", "keyValue_es": "2ª Incub" }
+				],    
+				"label_en": "Incub Stage", "label_es": "Incubación"
+			}},
+			{"number1": { "label_en": "Min Temp", "label_es": "Temp Mín", "default_value":20}},
+			{"number2": { "label_en": "Max Temp", "label_es": "Temp Máx", "default_value":30}}
+          ],
+          "xxxfieldText": {
             "newName": { "label_en": "New Incub Name", "label_es": "Nombre para nueva Incubadora" },
             "incubStage": { 
               "items": [
@@ -2003,16 +2027,16 @@ export const EmDemoA = {
           }
         },
         "endPointParams": [
-          { "argumentName": "newIncubator", "element": "newName" },
-          { "argumentName": "incubStage", "element": "incubStage" },
-          { "argumentName": "minTemp", "element": "minTemp" },
-          { "argumentName": "maxTemp", "element": "maxTemp" },
-          { "argumentName": "fieldName", "value": "active" },
-          { "argumentName": "fieldValue", "value": "true*Boolean" }
+          { "argumentName": "newIncubator", "element": "text1" },
+          { "argumentName": "incubStage", "element": "list1" },
+          { "argumentName": "minTemp", "element": "number1" },
+          { "argumentName": "maxTemp", "element": "number2" },
+          { "argumentName": "fieldName", "fixValue": "active" },
+          { "argumentName": "fieldValue", "fixValue": "true*Boolean" }
         ]
       },
-      { "actionName": "EM_INCUBATION_ACTIVATE",
-        "endPoint": "/moduleenvmon/EnvMonIncubationAPIactions", 
+      { "actionName": "EM_INCUBATOR_ACTIVATE",
+        "endPointUrl": "Incubators", 
 		"requiresDialog": true,		
         "endPointParams": [
           { "argumentName": "incubatorName", "selObjectPropertyName": "name" }
@@ -2042,7 +2066,7 @@ export const EmDemoA = {
 		  "viewQuery": {
 			  "actionName": "GET_INCUBATORS_DEACTIVATED_LAST_N_DAYS",
 			  "clientMethod": "getDeactivatedObjects",
-			  "endPoint": "/moduleenvmon/EnvMonIncubationAPIqueries",
+			  "endPoint": "/moduleenvmon/EnvMonIncubatorAPIqueries",
 			  "endPointParams": [
 				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
 			  ]
@@ -2051,9 +2075,9 @@ export const EmDemoA = {
           ]	  
         }
       },
-      { "actionName": "EM_INCUBATION_DEACTIVATE",
+      { "actionName": "EM_INCUBATOR_DEACTIVATE",
 		"requiresDialog": false,
-        "endPoint": "/moduleenvmon/EnvMonIncubationAPIactions",     
+        "endPointUrl": "Incubators",     
         "clientMethod": "buttonActionWithoutDialog",
         "endPointParams": [
           { "argumentName": "incubatorName", "selObjectPropertyName": "name" }
@@ -2066,8 +2090,8 @@ export const EmDemoA = {
           "requiresGridItemSelected": true
         }
       },
-      { "actionName": "EM_INCUBATION_ADD_TEMP_READING",
-        "endPoint": "/moduleenvmon/EnvMonIncubationAPIactions",     
+      { "actionName": "EM_INCUBATOR_ADD_TEMP_READING",
+        "endPointUrl": "Incubators",     
         "xxxclientMethod": "buttonActionWithoutDialog",
 		"requiresDialog": true,
         "endPointParams": [

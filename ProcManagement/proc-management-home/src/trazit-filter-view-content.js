@@ -6,8 +6,8 @@ import '@alenaksu/json-viewer';
 // import '@material/mwc-icon-button';
  //import '@material/mwc-ripple'
 import '@spectrum-web-components/split-view/sp-split-view';
-//import '@trazit/tr-procedures/src/browser/sp-card-ext';
- import '../../../tr-procedures/src/browser/sp-card-ext';
+import '@trazit/tr-procedures/src/browser/sp-card-ext';
+// import '../../../tr-procedures/src/browser/sp-card-ext';
 import {TrazitFilterActions} from './TrazitFilterActions';
 import '@doubletrade/lit-datatable';
 

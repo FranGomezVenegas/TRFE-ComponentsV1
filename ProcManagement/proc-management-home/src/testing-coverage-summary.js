@@ -205,7 +205,7 @@ export class TestingCoverageSummary extends LitElement {
     this.selectedEntry =this.viewDefinition[e.target.value]
   }
 
-  jsonParamCommons(selObject) {
+  xjsonParamCommons(selObject) {
     let jsonParam = {}
     selObject.forEach(p => {
       if (p.argumentName==="projectName") {
@@ -240,7 +240,7 @@ export class TestingCoverageSummary extends LitElement {
       } else {
         jsonParam[p.argumentName] = p.value
       }
-      //console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+      //console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
     })
     return jsonParam
   }
@@ -283,7 +283,7 @@ export class TestingCoverageSummary extends LitElement {
       }
   
     }
-    var extraParams=this.jsonParamCommons(this.selectedEntry.filter.extraParams) 
+    var extraParams=this.jsonParam(this.selectedEntry.filter.extraParams) 
     let reqParams = {
       procInstanceName: this.procName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
