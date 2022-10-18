@@ -9,9 +9,9 @@ export function DialogsFunctions(base) {
         dialogAccept(selected=true) {
           console.log('dialogAccept before run credsChecker')
             if (selected) {
-                this.credsChecker(this.actionBeingPerformedModel.actionName, this.selectedItems[0].sample_id, this.jsonParamCommons(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
+                this.credsChecker(this.actionBeingPerformedModel.actionName, this.selectedItems[0].sample_id, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
             } else {
-                this.credsChecker(this.actionBeingPerformedModel.actionName, null, this.jsonParamCommons(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
+                this.credsChecker(this.actionBeingPerformedModel.actionName, null, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
             }
             //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0])
         }

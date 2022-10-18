@@ -22,7 +22,7 @@ export function CommonsClientMethod(base) {
         alert('Action with no endPoint property, cannot continue')
         return
       }
-      var extraParams=this.jsonParamCommons(this.selectedAction, this.selectedSamples[0])      
+      var extraParams=this.jsonParam(this.selectedAction, this.selectedSamples[0])      
       let params = this.config.backendUrl + this.selectedAction.endPoint
         + '?' + new URLSearchParams(this.reqParams) 
       if (extraParams!==undefined){
@@ -33,8 +33,8 @@ export function CommonsClientMethod(base) {
       })
     }
 
-    jsonParamCommons(selAction, selObject) {
-      console.log('jsonParamCommons', selAction)
+    xjsonParamCommons(selAction, selObject) {
+      console.log('xjsonParamCommons', selAction)
       let jsonParam = {}
       let action = selAction
       if (action.endPointParams) {
@@ -50,7 +50,7 @@ export function CommonsClientMethod(base) {
           } else {
             jsonParam[p.argumentName] = p.value
           }
-          console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+          console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
         })
       }
       if (action.paramFilter) {
@@ -97,9 +97,9 @@ export function CommonsClientMethod(base) {
       }
       console.log('myActionMethod','action', action, 'selObject', selObject)
         if (selObject!==undefined) {
-          this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParamCommons(action, selObject), action)
+          this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, selObject), action)
         } else {
-          this.credsCheckerCommons(action.actionName, undefined, this.jsonParamCommons(action, selObject), action)
+          this.credsCheckerCommons(action.actionName, undefined, this.jsonParam(action, selObject), action)
         }
     }
   }

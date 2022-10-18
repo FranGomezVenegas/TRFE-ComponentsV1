@@ -698,7 +698,7 @@ return class extends LitElement {
       let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
       this.deactivatedObjects = []
       let APIParams=this.getAPICommonParams(queryDefinition)
-      let viewParams=this.jsonParamCommons(queryDefinition, this.selectedItems[0])
+      let viewParams=this.jsonParam(queryDefinition, this.selectedItems[0])
       let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
         + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
@@ -821,7 +821,6 @@ return class extends LitElement {
       } else {
         this.actionMethod(this.selectedDialogAction, false)
       }
-      //e.stopPropagation();
     }
   //   update(changedProperties) {
   //    super.update(changedProperties);

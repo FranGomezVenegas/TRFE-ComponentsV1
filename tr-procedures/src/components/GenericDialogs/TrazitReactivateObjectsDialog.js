@@ -116,9 +116,9 @@ return class extends base {
         }
         // console.log('myActionMethod','action', action, 'selObject', selObject)
           if (selObject.length) {
-            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParamCommons(action, selObject), action)
+            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, selObject), action)
           } else {
-            this.credsCheckerCommons(action.actionName, null, this.jsonParamCommons(action, selObject), action)
+            this.credsCheckerCommons(action.actionName, null, this.jsonParam(action, selObject), action)
           }
     }    
     getDeactivatedObjects() {

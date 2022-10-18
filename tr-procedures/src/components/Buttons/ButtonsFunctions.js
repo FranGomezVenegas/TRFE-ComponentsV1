@@ -495,16 +495,16 @@ export function ButtonsFunctions(base) {
         console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
         this.selectedAction=action
         if (this.itemId) {
-          this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(this.selectedAction, selectedItem, targetValue), action)
+          this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue), action)
         } else {
-          this.credsChecker(action.actionName, selectedItem, this.jsonParamCommons(this.selectedAction, selectedItem, targetValue), action)
+          this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue), action)
         }
         // Comentado para habilitar confirmDialogs
         // this.performActionRequestHavingDialogOrNot(action, selectedItem)
         return
             //console.log('buttonActionWithoutDialog')
             this.reqParams.actionName=action.actionName
-            var extraParams=this.jsonParamCommons(action, selectedItem)   
+            var extraParams=this.xjsonParamCommons(action, selectedItem)   
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -522,7 +522,7 @@ export function ButtonsFunctions(base) {
             this[action.alternativeAPIActionMethod]()
             return
         }       
-        var extraParams=this.jsonParamCommons(action, selectedItem, targetValue)   
+        var extraParams=this.jsonParam(action, selectedItem, targetValue)   
         let APIParams=this.getAPICommonParams(action)
         let endPointUrl=this.getActionAPIUrl(action)
         if (String(endPointUrl).toUpperCase().includes("ERROR")){

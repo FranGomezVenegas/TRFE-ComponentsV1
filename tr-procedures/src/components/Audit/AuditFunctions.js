@@ -3,8 +3,8 @@ import { html, css, nothing} from 'lit';
 export function AuditFunctions(base) {
     return class extends (base) {
         getObjectAuditInfo() {
-            var extraParams=this.jsonParamCommons(this.actionBeingPerformedModel, this.selectedItems[0], {})   
-            let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)
+            var extraParams=this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0], {})   
+            let APIParams=this.getAPICommon(this.actionBeingPerformedModel)
             let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
             if (String(endPointUrl).toUpperCase().includes("ERROR")){
                 alert(endPointUrl)

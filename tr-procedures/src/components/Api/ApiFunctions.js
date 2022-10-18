@@ -91,7 +91,7 @@ export function ApiFunctions(base) {
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
         return extraParams
       }          
-      jsonParam(action, selObject = {}) {
+      jsonParam(action, selObject = {}, targetValue = {}) {
         //alert('jsonParam', 'action', action)
         if (action===undefined){return}
           let jsonParam = {}
@@ -134,19 +134,70 @@ export function ApiFunctions(base) {
               } else if (p.selObjectPropertyName) {
                 jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
               } else if (p.targetValue) {
-                jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
+                if (targetValue[p.argumentName]!==undefined){
+                  jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
+                }else{
+                  jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
+                }
               } else {
                   jsonParam[p.argumentName] = p.value
               }
               })
           }
-          if (action.paramFilter) {
-              jsonParam[action.paramFilter[this.filterName].argumentName] = action.paramFilter[this.filterName].value
+          console.log('jsonParam', 'action', action, 'filterName', this.filte)
+          if (action.subViewFilter!==undefined&&this.filterName!==undefined){
+            action.subViewFilter[this.filterName].forEach(p => {
+              //console.log('jsonParam', 'element', p)
+              if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
+                  if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
+                    var msg=""
+                    if (this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
+                      msg='The object '+p.internalVariableObjName+' has no one property called '+p.internalVariableObjProperty
+                      alert(msg)
+                      //console.log(msg, this[p.internalVariableObjName][0])
+                    }else{
+                      msg='there is no object called '+p.internalVariableObjName+' in this view'
+                      alert(msg)
+                    }
+                //    alert('No family selected')
+                    return jsonParam[p.argumentName] = "ERROR: "+msg
+                  }  
+                jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
+                
+              }else if (p.element && this[p.element]) {
+                if (p.isAdhocField!==undefined&&p.isAdhocField===true){
+                  var curArgName=jsonParam[p.argumentName]
+                  if (curArgName===undefined){curArgName=''}
+                  if (curArgName.length>0){curArgName=curArgName+"|"}
+                  curArgName=curArgName+this[p.element].value
+                  if (p.fieldType!==undefined){
+                    curArgName=curArgName+"*"+p.fieldType
+                  }
+                  jsonParam[p.argumentName] = curArgName
+                }else{                
+                  jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                }
+              } else if (p.fixValue) {  //defaultValue
+                  jsonParam[p.argumentName] = p.fixValue // get value from default value (i.e incubator)
+              } else if (p.beItem) {
+                  jsonParam[p.argumentName] = this.selectedItem[0][p.beItem] // get value from selected item
+              } else if (p.selObjectPropertyName) {
+                jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
+              } else if (p.targetValue) {
+                jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
+              } else {
+                  jsonParam[p.argumentName] = p.value
+              }
+              })            
           }
+          
+          // if (action.paramFilter) {
+          //     jsonParam[action.paramFilter[this.filterName].argumentName] = action.paramFilter[this.filterName].value
+          // }
           return jsonParam
       }
-      jsonParamCommons(selAction, selObject, targetValue = {}) {
-         // console.log('jsonParamCommons', 'selAction', selAction, 'selObject', selObject)
+      xjsonParamCommons(selAction, selObject, targetValue = {}) {
+         // console.log('xjsonParamCommons', 'selAction', selAction, 'selObject', selObject)
           if (selAction===undefined){
             selAction=this.selectedAction
           }
@@ -219,7 +270,7 @@ export function ApiFunctions(base) {
               } else {
                 jsonParam[p.argumentName] = p.value
               }
-              //console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+              //console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
             })
           }
           if (action.paramFilter) {

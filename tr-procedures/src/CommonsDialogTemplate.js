@@ -188,9 +188,9 @@ export function CommonsDialogTemplate(base) {
       }
       console.log('myActionMethod','action', action, 'selObject', selObject)
         if (selObject.length) {
-          this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParamCommons(action, selObject), action)
+          this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, selObject), action)
         } else {
-          this.credsCheckerCommons(action.actionName, null, this.jsonParamCommons(action, selObject), action)
+          this.credsCheckerCommons(action.actionName, null, this.jsonParam(action, selObject), action)
         }
     }
     
@@ -214,11 +214,11 @@ export function CommonsDialogTemplate(base) {
         if (action&&action.dialogInfo) {
           if (action.dialogInfo.automatic) { 
             if (this.itemId) {
-              this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(action, this.selectedSamples[0]), action)
+              this.credsChecker(action.actionName, this.itemId, this.jsonParam(action, this.selectedSamples[0]), action)
             } else if (this.selectedSamples.length) {
-              this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(action, this.selectedSamples[0]), action)
+              this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(action, this.selectedSamples[0]), action)
             } else {
-              this.credsChecker(action.actionName, null, this.jsonParamCommons(action, this.selectedSamples), action)
+              this.credsChecker(action.actionName, null, this.jsonParam(action, this.selectedSamples), action)
             }
           } else {
             if (this[action.dialogInfo.name]){
@@ -229,9 +229,9 @@ export function CommonsDialogTemplate(base) {
           }
         } else {
           if (this.selectedSamples.length) {
-            this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParamCommons(action, this.selectedSamples[0]), action)
+            this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(action, this.selectedSamples[0]), action)
           } else {
-            this.credsChecker(action.actionName, null, this.jsonParamCommons(action, this.selectedSamples[0]), action)
+            this.credsChecker(action.actionName, null, this.jsonParam(action, this.selectedSamples[0]), action)
           }
         }
       }    
@@ -256,7 +256,7 @@ export function CommonsDialogTemplate(base) {
       //     alert('Action with no endPoint property, cannot continue')
       //     return
       //   }
-      //   var extraParams=this.jsonParamCommons(this.selectedAction, this.selectedSamples[0])      
+      //   var extraParams=this.jsonParam(this.selectedAction, this.selectedSamples[0])      
       //   let params = this.config.backendUrl + this.selectedAction.endPoint
       //     + '?' + new URLSearchParams(this.reqParams) 
       //   if (extraParams!==undefined){
@@ -267,8 +267,8 @@ export function CommonsDialogTemplate(base) {
       //   })
       // }
   
-      jsonParamCommons(selAction, selObject) {
-        console.log('jsonParamCommons', selAction)
+      xjsonParamCommons(selAction, selObject) {
+        console.log('jsonParam', selAction)
         let jsonParam = {}
         let action = selAction
         if (action.endPointParams) {
@@ -284,7 +284,7 @@ export function CommonsDialogTemplate(base) {
             } else {
               jsonParam[p.argumentName] = p.value
             }
-            console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+            console.log('jsonParam', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
           })
         }
         if (action.paramFilter) {
@@ -331,9 +331,9 @@ export function CommonsDialogTemplate(base) {
         }
         console.log('myActionMethod','action', action, 'selObject', selObject)
           if (selObject!==undefined) {
-            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParamCommons(action, selObject), action)
+            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, selObject), action)
           } else {
-            this.credsCheckerCommons(action.actionName, undefined, this.jsonParamCommons(action, selObject), action)
+            this.credsCheckerCommons(action.actionName, undefined, this.jsonParam(action, selObject), action)
           }
       }
    
