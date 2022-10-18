@@ -969,7 +969,7 @@ export class TrazitFormFields extends LitElement {
   }
 
 
-  jsonParamCommons(selObject) {
+  xjsonParamCommons(selObject) {
     let jsonParam = {}
     selObject.forEach(p => {
       if (p.argumentName==="projectName") {
@@ -1004,7 +1004,7 @@ export class TrazitFormFields extends LitElement {
       } else {
         jsonParam[p.argumentName] = p.value
       }
-      //console.log('jsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+      //console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
     })
     return jsonParam
   }
@@ -1017,7 +1017,7 @@ export class TrazitFormFields extends LitElement {
     // Object.entries(this.activeTab.extraParams).map((
     //   [key]) => extraParams[key] = this[key].value
     // )
-    var extraParams=this.jsonParamCommons(this.activeTab.filter.extraParams) 
+    var extraParams=this.jsonParam(this.activeTab.filter.extraParams) 
     let reqParams = {
       procInstanceName: this.procName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,

@@ -621,18 +621,18 @@ samplesPendingIncubLayout(){
     if (action.dialogInfo) {
       if (action.dialogInfo.automatic) {
         if (this.itemId) {
-          this.credsChecker(action.actionName, this.itemId, this.jsonParamCommons(action, this[selectedItemPropertyName][0]), action)
+          this.credsChecker(action.actionName, this.itemId, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
         } else {
-          this.credsChecker(action.actionName, this[selectedItemPropertyName][0].sample_id, this.jsonParamCommons(action, this[selectedItemPropertyName][0]), action)
+          this.credsChecker(action.actionName, this[selectedItemPropertyName][0].sample_id, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
         }
       } else {
         this[action.dialogInfo.name].show()
       }
     } else {
       if (this[selectedItemPropertyName].length) {
-        this.credsChecker(action.actionName, this[selectedItemPropertyName][0].sample_id, this.jsonParamCommons(action, this[selectedItemPropertyName][0]), action)
+        this.credsChecker(action.actionName, this[selectedItemPropertyName][0].sample_id, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
       } else {
-        this.credsChecker(action.actionName, null, this.jsonParamCommons(action, this[selectedItemPropertyName][0]), action)
+        this.credsChecker(action.actionName, null, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
       }
     }
   }
