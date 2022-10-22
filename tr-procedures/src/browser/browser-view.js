@@ -31,10 +31,53 @@ export class BrowserView extends LitElement {
         display: none;
       }
       mwc-button {
-        --mdc-typography-button-text-transform: none;
-        --mdc-typography-button-font-size: 12px;
+        background-color: rgba(36, 192, 235, 1);
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        --mdc-theme-primary:rgba(36, 192, 235, 1);
+        border-radius: 12px;
       }
-      `
+      mwc-button.button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        color: white;
+        border-color: transparent !important;
+        --mdc-button-fill-color: red;
+        --mdc-button-ink-color: blue;
+        border-radius: 12px;
+      }            
+      mwc-textfield {
+        border-style : Solid;
+        border-color : #999999;
+        border-color : rgba(153, 153, 153, 1);
+        border-width : 1px;
+        border-radius : 7px;
+        -moz-border-radius : 7px;
+        -webkit-border-radius : 7px;   
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);  
+        --mdc-text-field-idle-line-color:#148CFA;
+        --mdc-text-field-outlined-idle-border-color: #148CFA;
+        --mdc-text-field-label-ink-color:  #148CFA;
+        --mdc-text-field-focused-label-color: #148CFA;
+        --mdc-theme-primary: #0465FB;
+      }
+      nwc-textfield.mdc-text-field {
+      background-color :  #FFFFFF;
+      background-color : rgb(255, 255, 255);     
+      }
+
+  `
     ];
   }
 

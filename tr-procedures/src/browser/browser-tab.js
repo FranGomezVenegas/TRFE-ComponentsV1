@@ -27,6 +27,7 @@ export class BrowserTab extends LitElement {
         display: inline-block;
         flex-shrink: 0;
       }
+
       mwc-button {
         --mdc-typography-button-text-transform: none;
         --mdc-typography-button-font-size: 12px;
@@ -35,19 +36,51 @@ export class BrowserTab extends LitElement {
       mwc-icon-button[hidden] {
         display: none;
       }
+      mwc-select {        
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgba(36, 192, 235, 1);
+        --mdc-select-dropdown-icon-color:rgba(36, 192, 235, 1);
+        --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
+
+        --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
+
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
+      mwc-select.outlined {        
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      } 
+
     `;
   }
-
+  // <mwc-icon-button icon="navigate_before" @click=${this.prevTab} ?hidden=${!this.prev}></mwc-icon-button>
+  // <div class="tabContainer">
+  //   ${this.tabs.map(t=>
+  //     html`<mwc-button class="tab-item" outlined aria-label=${t['label_'+this.lang]} label=${t['label_'+this.lang]} @click=${()=>this.tabChanged(t)}></mwc-button>`
+  //   )}
+  // </div>
+  // <mwc-icon-button icon="navigate_next" @click=${this.nextTab} ?hidden=${!this.next}></mwc-icon-button>
+  listObjectSelected(e){
+    //console.log('listObjectSelected', e.target.value)
+    this.tabChanged(this.tabs[e.target.value]) 
+  }
   render() {
     return html`
       <div class="tabWrap">
-        <mwc-icon-button icon="navigate_before" @click=${this.prevTab} ?hidden=${!this.prev}></mwc-icon-button>
-        <div class="tabContainer">
-          ${this.tabs.map(t=>
-            html`<mwc-button class="tab-item" outlined aria-label=${t['label_'+this.lang]} label=${t['label_'+this.lang]} @click=${()=>this.tabChanged(t)}></mwc-button>`
-          )}
-        </div>
-        <mwc-icon-button icon="navigate_next" @click=${this.nextTab} ?hidden=${!this.next}></mwc-icon-button>
+
+      <mwc-select style="width:100%;" class="layout flex vertical" outlined id="kpiList" label="Project Name" @change=${this.listObjectSelected}>
+        ${this.tabs&&this.tabs.map((p,i) => 
+          html`<mwc-list-item value="${i}" ?selected=${i==0}>${p['label_'+this.lang]}</mwc-list-item>`
+        )}
+      </mwc-select>      
+
       </div>
     `;
   }
@@ -91,19 +124,19 @@ export class BrowserTab extends LitElement {
     }
   }
 
-  firstUpdated() {
-    this.tabContainer.addEventListener('scroll', ()=>{
-      if (this.tabContainer.scrollLeft == 0) {
-        this.prev = false
-      } else {
-        this.prev = true
-      }
-      if (this.tabContainer.offsetWidth + this.tabContainer.scrollLeft == this.tabContainer.scrollWidth) {
-        this.next = false
-      } else {
-        this.next = true
-      }
-    })
+  XfirstUpdated() {
+    // this.tabContainer.addEventListener('scroll', ()=>{
+    //   if (this.tabContainer.scrollLeft == 0) {
+    //     this.prev = false
+    //   } else {
+    //     this.prev = true
+    //   }
+    //   if (this.tabContainer.offsetWidth + this.tabContainer.scrollLeft == this.tabContainer.scrollWidth) {
+    //     this.next = false
+    //   } else {
+    //     this.next = true
+    //   }
+    // })
   }
 
   tabChanged(tab) {

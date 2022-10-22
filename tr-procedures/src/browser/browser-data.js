@@ -2,7 +2,7 @@ import { LitElement, html, css, nothing } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 // import '@alenaksu/json-viewer';
 import '@material/mwc-icon';
-import './sp-card-ext';
+//import './sp-card-ext';
 import { GoogleChart } from '@google-web-components/google-chart';
 
 class GoogleChartExt extends GoogleChart {

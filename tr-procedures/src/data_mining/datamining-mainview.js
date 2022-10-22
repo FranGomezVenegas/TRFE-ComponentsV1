@@ -10,8 +10,9 @@ import '@material/mwc-checkbox';
 import './datamining-tab';
 import './datamining-data';
 //import '@doubletrade/lit-datatable';
+import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
 
-export class DataMiningMainView extends LitElement {
+export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   static get styles() {
     return [
       Layouts,
@@ -33,10 +34,52 @@ export class DataMiningMainView extends LitElement {
         display: none;
       }
       mwc-button {
-        --mdc-typography-button-text-transform: none;
-        --mdc-typography-button-font-size: 12px;
+        background-color: rgba(36, 192, 235, 1);
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        --mdc-theme-primary:rgba(36, 192, 235, 1);
+        border-radius: 12px;
       }
-      `
+      mwc-button.button {        
+        color : rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        color: white;
+        border-color: transparent !important;
+        --mdc-button-fill-color: red;
+        --mdc-button-ink-color: blue;
+        border-radius: 12px;
+      }
+      mwc-textfield {
+        border-style : Solid;
+        border-color : #999999;
+        border-color : rgba(153, 153, 153, 1);
+        border-width : 1px;
+        border-radius : 7px;
+        -moz-border-radius : 7px;
+        -webkit-border-radius : 7px;   
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color :  #FFFFFF;
+        background-color : rgb(255, 255, 255);  
+        --mdc-text-field-idle-line-color:#148CFA;
+        --mdc-text-field-outlined-idle-border-color: #148CFA;
+        --mdc-text-field-label-ink-color:  #148CFA;
+        --mdc-text-field-focused-label-color: #148CFA;
+        --mdc-theme-primary: #0465FB;
+      }
+      nwc-textfield.mdc-text-field {
+      background-color :  #FFFFFF;
+      background-color : rgb(255, 255, 255);     
+      }
+  `
     ];
   }
 
@@ -620,7 +663,7 @@ export class DataMiningMainView extends LitElement {
     // Object.entries(this.activeTab.extraParams).map((
     //   [key]) => extraParams[key] = this[key].value
     // )
-    var extraParams=this.jsonParam(this.activeTab.filter.extraParams) 
+    var extraParams=this.jsonParam(this.activeTab.filter) 
     let reqParams = {
       procInstanceName: this.procName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
