@@ -80,6 +80,7 @@ export class MyCertifications extends CommonCore {
   }
 
   async markComplete(e) {
+    console.log('markComplete')
     // for something reason e.target will change to demo-example after call API, so keep the ref before call API
     let elm = e.target, res;
     // analytics cert
@@ -113,6 +114,7 @@ export class MyCertifications extends CommonCore {
   }
 
   frontEndCertUserAPI(cert) {
+    //console.log('frontEndCertUserAPI', 'cert', cert)
     let apiUrl = cert.method_name ? this.config.frontEndAnalysisUrl : this.config.frontEndSopUrl
     this.fetchApi(this.config.backendUrl + apiUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
