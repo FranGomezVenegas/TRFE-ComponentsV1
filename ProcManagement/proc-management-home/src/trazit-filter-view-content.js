@@ -36,7 +36,7 @@ import {TrazitDialogActions} from './TrazitDialogActions';
 // }
 // customElements.define('trazit-filter-view-content-google-chart-ext', TrazitFilterViewContentGoogleChartExt);
 
-export class TrazitFilterViewContent extends TrazitDialogActions(TrazitDialogTemplate(TrazitFilterActions(CommonCore))) {
+export class TrazitFilterViewContent extends (TrazitDialogActions(TrazitDialogTemplate(TrazitFilterActions(CommonCore)))) {
   static get styles() {
     return [
       Layouts,
