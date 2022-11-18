@@ -235,6 +235,12 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     let anyAccess = procList.filter(p => p.procInstanceName == this.procName)
     if (anyAccess.length) {
       let defView = anyAccess[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
+      if (defView.length==0) {
+        defView = anyAccess[0].icons_up.filter(d => d.lp_frontend_page_name == this.viewName)
+      }
+      if (defView.length==0) {
+        defView = anyAccess[0].icons_down.filter(d => d.lp_frontend_page_name == this.viewName)
+      }
       if (defView.length) {
         // for fake test
         // this.sopsPassed = false
@@ -359,7 +365,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
 
       ${this.viewModelFromProcModel.component == 'ModuleGenomaProjectWindow' ? html`
         <genoma-project .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
-          .procName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
+          .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .config=${this.config}></genoma-project>      
       `:html``}
     `
