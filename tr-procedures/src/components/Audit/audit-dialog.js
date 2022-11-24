@@ -308,7 +308,7 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
     //this.actionMethod(this.actionBeingPerformedModel, false)
   }
 
-  signAuditMahdi(id) {
+  xsignAuditMahdi(id) {
     this.dispatchEvent(new CustomEvent('sign-audit', {
       detail: { audit_id: id }
     }))
