@@ -3,9 +3,10 @@ import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '../components/core-view';
 import '@trazit/tr-dialog/tr-dialog';
-//import '../form_fields/trazit-form-fields';
+import '../form_fields/trazit-form-fields';
+import {ApiFunctions} from '../components/Api/ApiFunctions'
 
-export class LogSampleModuleSample extends ((CredDialog)) {
+export class LogSampleModuleSample extends (ApiFunctions(CredDialog)) {
   static get styles() {
     return [
       Layouts, Alignment,
@@ -80,13 +81,13 @@ export class LogSampleModuleSample extends ((CredDialog)) {
         </trazit-form-fields>
         </div>
       </div>
-      <mwc-button id="search" raised label="${this.viewModelFromProcModel.langConfig.button["label_"+this.lang]}" @click=${this.buttonCliked}></mwc-button>
+      <mwc-button id="search" raised label="${this.viewModelFromProcModel.langConfig.button["label_"+this.lang]}" @click=${this.buttonClicked}></mwc-button>
         ${super.render()}
       </div>
     `
   }
   get trazitFormFields() {    return this.shadowRoot.querySelector("trazit-form-fields#filterfields")    } 
-  buttonCliked(){
+  buttonClicked(){
     this.selectedAction=this.viewModelFromProcModel.actions[0]
     this.reqParams=this.jsonParam(this.viewModelFromProcModel.actions[0])
     this.nextRequestCommons(this.viewModelFromProcModel.actions[0])
