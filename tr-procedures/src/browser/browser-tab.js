@@ -75,7 +75,7 @@ export class BrowserTab extends LitElement {
     return html`
       <div class="tabWrap">
 
-      <mwc-select style="width:100%;" class="layout flex vertical" outlined id="kpiList" label="Project Name" @change=${this.listObjectSelected}>
+      <mwc-select style="width:100%;" class="layout flex vertical" outlined id="kpiList" label="Browser Name" @change=${this.listObjectSelected}>
         ${this.tabs&&this.tabs.map((p,i) => 
           html`<mwc-list-item value="${i}" ?selected=${i==0}>${p['label_'+this.lang]}</mwc-list-item>`
         )}

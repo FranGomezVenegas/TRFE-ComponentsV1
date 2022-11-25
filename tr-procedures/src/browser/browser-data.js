@@ -4,6 +4,7 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon';
 //import './sp-card-ext';
 import { GoogleChart } from '@google-web-components/google-chart';
+import {DataViews} from '../components/Views/DataViews';
 
 class GoogleChartExt extends GoogleChart {
   redraw() {
@@ -24,7 +25,7 @@ class GoogleChartExt extends GoogleChart {
 }
 customElements.define('google-chart-ext', GoogleChartExt);
 
-export class BrowserData extends LitElement {
+export class BrowserData extends DataViews(LitElement) {
   static get styles() {
     return [
       Layouts,
@@ -45,19 +46,52 @@ export class BrowserData extends LitElement {
   }
 
   render() {
+    console.log('render', 'this.tabDefinition', this.tabDefinition)
     return html`
-      ${this.sampleBrowser()}
-      ${this.incubatorBrowser()}
-      ${this.batchBrowser()}
-      ${this.lotBrowser()}
+    ${this.data===undefined||this.data.report_info===undefined ? nothing: html`
+
+      ${this.tabDefinition.action!==undefined&&this.tabDefinition.action==='GET_SAMPLE_STAGES_SUMMARY_REPORT' ?
+        html `${this.sampleBrowser()}
+      `:nothing}
+
+      ${this.tabDefinition.action!==undefined&&this.tabDefinition.action==='GET_INCUBATOR_REPORT' ?
+        html `${this.incubatorBrowser()}
+      `:nothing}
+
+      ${this.tabDefinition.action!==undefined&&this.tabDefinition.action==='GET_BATCH_REPORT' ?
+        html `${this.batchBrowser()}
+      `:nothing}
+
+      ${this.tabDefinition.action!==undefined&&this.tabDefinition.action==='GET_PRODLOT_REPORT' ?
+        html `${this.lotBrowser()}
+      `:nothing}
       
-      <!-- ${Object.keys(this.data).length ?
-        html`<json-viewer>${JSON.stringify(this.data)}</json-viewer>` :
-        nothing
-      } -->
+      
+    `}
     `;
   }
+//   <!--      
+//   ${this.()}
+//   ${this.()}
+//   ${this.()}
+// `: html`
+//   ${this.jsonViewer(this.data)} -->
 
+
+  // ${Object.keys(this.data).length ?
+  //   html`<json-viewer>${JSON.stringify(this.data)}</json-viewer>` :
+  //   nothing
+  // } 
+  stageTitle(currentStage){
+    return html`
+      <h1>${currentStage}</h1>
+    `
+  }
+  stageTimingCapture(stageData){
+    return html`
+      <h3>${stageData.started_on} --> ${stageData.ended_on}</h3>
+    `
+  }  
   sampleBrowser() {
     return html`${this.data.sampleFieldToRetrieve ? 
       html`
@@ -72,12 +106,14 @@ export class BrowserData extends LitElement {
           <div slot="footer" class="layout vertical">
             ${this.data.stages.map(d =>
               html`
+                ${this.stageTitle(d.current_stage)}
+                ${this.stageTimingCapture(d)}
                 <sp-card-ext heading="${d.current_stage}" ?nonSubHeading=${!d.started_on} subheading="${d.started_on}${d.ended_on&&` >> ${d.ended_on}`}">
                   <div slot="footer">
                     ${d.current_stage == "Sampling" ?
                       html`
                         ${d.data.map(data => 
-                          html`Sampling Date: ${data.sampling_date}`
+                          html`<li>${data.field_name}: ${data.field_value}</li>`
                         )}
                       ` :
                       html`${d.current_stage == "Incubation" ?
@@ -111,17 +147,26 @@ export class BrowserData extends LitElement {
                           html`
                             ${d.data.map(data => 
                               html`${data.field_name == "raw_value" ?
-                                html`Number of Colonies: ${data.field_value}` : nothing
+                                html`<li>Number of Colonies: ${data.field_value}</li>` : nothing
                               }`
                             )}
                           ` :
+                          html`${d.current_stage == "MicroorganismIdentification" ?
                           html`
-                            ${d.data.map(data => 
-                              html`${data.field_name == "name" ?
-                                html`${data.field_name}: ${data.field_value}` : nothing
-                              }`
+                            ${d.data.map(data =>                                      
+                              html`${data.field_name === "microorganism_count"||data.field_name === "microorganism_list" ?                       
+                                html`<li>${data.field_name}: ${data.field_value}</li>` : nothing}`
+                              
                             )}
-                          `                            
+                          ` :
+                            html`
+                              ${d.data.map(data => 
+                                html`${data.field_name == "name" ?
+                                  html`${data.field_name}: ${data.field_value}` : nothing
+                                }`
+                              )}
+                            `                            
+                          }`
                         }`
                       }`
                     }
@@ -137,7 +182,8 @@ export class BrowserData extends LitElement {
             )}
           </div>
         </sp-card-ext>
-      ` : nothing
+      ` : 
+        html`Sample ID: ${data.sample_id}`      
     }`
   }
 
@@ -230,6 +276,7 @@ export class BrowserData extends LitElement {
   static get properties() {
     return {
       data: { type: Object },
+      tabDefinition: { type: Object },
       chartH: { type: Number },
       chartW: { type: Number }
     };
@@ -238,6 +285,7 @@ export class BrowserData extends LitElement {
   constructor() {
     super();
     this.data = {}
+    this.tabDefinition = {}
   }
 
   firstUpdated() {

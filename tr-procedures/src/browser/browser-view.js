@@ -123,7 +123,7 @@ export class BrowserView extends LitElement {
               .tabs=${this.tabList}></browser-tab>
             <div class="layout flex vertical">
             ${this.activeTab.label_en == "Sample" ?
-              html`<mwc-textfield label="Sample ID"></mwc-textfield>` :
+              html`<mwc-textfield label="Sample ID" value="2029"></mwc-textfield>` :
               html`${this.activeTab.label_en == "Incubation" ?
                 html`
                   <mwc-textfield label="Incubator Name"></mwc-textfield>
@@ -131,8 +131,8 @@ export class BrowserView extends LitElement {
                   <mwc-textfield label="End Date" type="datetime-local"></mwc-textfield>
                 ` :
                 html`${this.activeTab.label_en == "Batch" ?
-                  html`<mwc-textfield label="Batch Name"></mwc-textfield>` :
-                  html`<mwc-textfield label="Lot Name"></mwc-textfield>`
+                  html`<mwc-textfield label="Batch Name" value="20220513"></mwc-textfield>` :
+                  html`<mwc-textfield label="Lot Name" value="Lote 20220201"></mwc-textfield>`
                 }`
               }`
             }
@@ -148,7 +148,7 @@ export class BrowserView extends LitElement {
               </div>
               ` : nothing
             }
-            <browser-data .data=${this.sampleData} 
+            <browser-data .data=${this.sampleData} .tabDefinition=${this.activeTab}
               @chart-images=${e=>{this.chartImgs.push(e.detail.imgUri);this.requestUpdate()}}></browser-data>
           </div>
         </sp-split-view>
@@ -240,6 +240,7 @@ export class BrowserView extends LitElement {
     let sessionDate = session.appSessionStartDate
     let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"
     let strContent = `<h2>Summary</h2>`
+    
     strContent = this.sampleContent(strContent)
     strContent = this.incubatorContent(strContent)
     strContent = this.batchContent(strContent)
