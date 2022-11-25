@@ -136,7 +136,7 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
   // ${this.tabsBlock()}  
   render() {
       return html`
-        <div>        
+        <div>      
           ${this.topCompositionBlock()} 
           ${this.abstractBlock()}
           ${this.bottomCompositionBlock()}  
