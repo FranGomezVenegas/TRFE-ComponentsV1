@@ -707,6 +707,19 @@ return class extends LitElement {
 //        + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
+          if (j.length==0){            
+            //alert('Found no results')
+
+            this.dispatchEvent(new CustomEvent("error", {
+              detail: {
+                is_error: true,
+                message_en: 'Found no results',
+                message_es: 'No se encontraron resultados'
+              },
+              bubbles: true,
+              composed: true
+            }))            
+          }
           if (this.curResultRef) {
             let r = j.filter(d => d.result_id == this.curResultRef.resId)
             if (r.length) {
