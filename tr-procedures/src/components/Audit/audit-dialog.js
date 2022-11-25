@@ -59,7 +59,9 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
       sopsPassed: { type: Boolean },
       config:{type: Object},
       localProceduresModels: { type: Object},
-      viewModelFromProcModel: { type: Object}
+      viewModelFromProcModel: { type: Object},
+      objectId: {type: String},
+      ObjectType: {type: String},
     };
   }
 
@@ -84,7 +86,7 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
 
   setPrintContent() {
     this.printObj = {
-      header: `Sample Audit for ${this.audits[0].sample_id}`,
+      header: `${this.objectType} Audit for ${this.objectId}`,
       content: this.setContent()
     }
   }
@@ -166,7 +168,7 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
       </style>
 
       <div class="page-header" style="text-align: center; font-weight: bold;">
-        Sample Audit for ${this.audits[0].sample_id} on ${sessionDate}
+        ${this.objectType} Audit for ${this.objectId} on ${sessionDate}
       </div>
 
       <div class="page-footer">
@@ -189,7 +191,6 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
             </td>
           </tr>
         </tbody>
-
         <tfoot>
           <tr>
             <td>
