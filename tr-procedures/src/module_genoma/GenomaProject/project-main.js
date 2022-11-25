@@ -179,11 +179,11 @@ export class ProjectMain extends GenomaDialogTemplate(GridUtilities(GenomaUtilit
 
   static get properties() {
     return {
-      samplesReload: { type: Boolean },
-      selectedSamples: { type: Array },
-      selectedAction: { type: Object },
-      targetValue: { type: Object },
-      procName: { type: String },
+      xsamplesReload: { type: Boolean },
+      xselectedSamples: { type: Array },
+      xselectedAction: { type: Object },
+      xtargetValue: { type: Object },
+      procInstanceName: { type: String },
       config: { type: Object },
 
       selectedProject: { type: Object },
@@ -194,15 +194,15 @@ export class ProjectMain extends GenomaDialogTemplate(GridUtilities(GenomaUtilit
 
   constructor() {
     super()
-    this.selectedSamples = []
-    this.selectedAction = []
+    this.xselectedSamples = []
+    this.xselectedAction = []
     this.selectedProject = {}
     this.selectedProjectUser= []
-    this.selectedAction = []    
+    this.xselectedAction = []    
     this.MDprocedureUsers = []    
   }
 
-  tabView() {
+  xtabView() {
     return html`
       <div class="layout horizontal flex wrap">
       ${this.selectedProject===undefined ? html``: html`
@@ -243,24 +243,24 @@ export class ProjectMain extends GenomaDialogTemplate(GridUtilities(GenomaUtilit
   // nextRequest() {
   //   super.nextRequest()
   //   this.reqParams = {
-  //     procInstanceName: this.procName,
+  //     procInstanceName: this.procInstanceName,
   //     ...this.reqParams
   //   }
-  //   let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
+  //   let action = this.selectedDialogAction ? this.selectedDialogAction : this.xselectedAction
   //   this.performRequest()
   //   //this[action.clientMethod]()
   // }    
 
   // setView() {
-  //   this.selectedSamples = []
-  //   this.selectedAction = actions[0]
-  //   this.actionMethod(this.selectedAction.subAction)
+  //   this.xselectedSamples = []
+  //   this.xselectedAction = actions[0]
+  //   this.actionMethod(this.xselectedAction.subAction)
   // }
 
   xjsonParamCommons(selAction, selObject) {
     //console.log('xjsonParamCommons', selAction)
     if (selAction===undefined){
-      selAction=this.selectedAction
+      selAction=this.xselectedAction
     }
     if (selObject===undefined){
       if (selAction.selObjectVariableName===undefined){
@@ -305,8 +305,8 @@ export class ProjectMain extends GenomaDialogTemplate(GridUtilities(GenomaUtilit
           jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
         } else if (p.selObjectPropertyName) {
           jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
-        } else if (p.targetValue) {
-          jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
+        } else if (p.xtargetValue) {
+          jsonParam[p.argumentName] = this.xtargetValue[p.argumentName] // get value from target element passed
         } else {
           jsonParam[p.argumentName] = p.value
         }

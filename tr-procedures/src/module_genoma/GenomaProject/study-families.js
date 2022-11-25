@@ -375,7 +375,7 @@ export class StudyFamilies extends GenomaDialogTemplate(GridUtilities(GenomaUtil
       selectedSamples: { type: Array },
       selectedAction: { type: Object },
       targetValue: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       config: { type: Object },
 
       selectedStudy: { type: Object },
@@ -508,7 +508,7 @@ export class StudyFamilies extends GenomaDialogTemplate(GridUtilities(GenomaUtil
   // nextRequest() {
   //   super.nextRequest()
   //   this.reqParams = {
-  //     procInstanceName: this.procName,
+  //     procInstanceName: this.procInstanceName,
   //     ...this.reqParams
   //   }
   //   let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction

@@ -199,7 +199,7 @@ filter: drop-shadow(0 0 0 8px rgba(120, 217, 255));              /* MDN */
         <mwc-textfield id="password" label="${langConfig.password["label_"+this.lang]}" type="password" iconTrailing="visibility" 
           @keypress=${this.checkLogin}
           @click=${this.showPwd}></mwc-textfield>
-          <sp-button size="xl" @click=${this.login}>${langConfig.buttonAccess["label_"+this.lang]}</sp-button>
+          <sp-button id="access" size="xl" @click=${this.login}>${langConfig.buttonAccess["label_"+this.lang]}</sp-button>
         <mwc-select id="role" label="${langConfig.role["label_"+this.lang]}" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
           ${this.userRoles.map(r => 
             html`<mwc-list-item value="${r}">${r}</mwc-list-item>`

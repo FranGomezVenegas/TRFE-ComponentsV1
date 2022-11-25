@@ -121,7 +121,7 @@ export function GenomaClientMethod(base) {
       }
     }
  
-    getButton(butArr, selectedItem) {        
+    xgetButton(butArr, selectedItem) {        
       if (butArr===undefined){return}
       return html`
         ${butArr.map(action =>

@@ -12,24 +12,28 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '../components/core-view';
 import '@trazit/tr-dialog/tr-dialog';
-import './GenomaProject/project-main';
+//import './GenomaProject/project-main';
 import './GenomaProject/study-users';
-import './GenomaProject/study-individuals';
-import './GenomaProject/study-families';
-import './GenomaProject/study-samples-set';
-import './GenomaProject/study-variable-values';
+
+// import './GenomaProject/study-individuals';
+// import './GenomaProject/study-families';
+// import './GenomaProject/study-samples-set';
+
+//import './GenomaProject/study-variable-values';
 // import {GenomaUtilities} from './GenomaUtilities';
 // import { CommonsDialogTemplate } from './../CommonsDialogTemplate';
 // import { commonLangConfig } from '@trazit/common-core';
-// import { GenomaActions } from './GenomaActions';
-// import { GenomaDialogTemplate} from './GenomaDialogTemplate';
+import { GenomaActions } from './GenomaActions';
+//import { GenomaDialogTemplate} from './GenomaDialogTemplate';
 
 import '../components/Tabs/tab-element';
 import {TabFunctions} from '../components/Tabs/TabFunctions';
+import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
 
 let tabBtns = {
   "tabToOpenOnViewOpenTabIndex":0,
-  "genoma-1": [
+  "default": "project-main",
+  "tabs": [
     {tabLabel_en: "Project", tabLabel_es: "Proyecto", view: "project-main"},
     {tabLabel_en: "Users", tabLabel_es: "Usuarios", view: "study-users"},
     {tabLabel_en: "Variable Values", tabLabel_es: "Valores de Variables", view: "study-variable-values"},  
@@ -37,8 +41,9 @@ let tabBtns = {
     {tabLabel_en: "Families", tabLabel_es: "Familias", view: "study-families"},
     {tabLabel_en: "Samples Set", tabLabel_es: "Agrupador Muestras", view: "study-samples-set"}    
   ]
+
 }
-let viewQuery = { "actionName": "ALL_ACTIVE_PROJECTS",
+let xviewQuery = { "actionName": "ALL_ACTIVE_PROJECTS",
   "clientMethod": "getGenomaProjectsList",
   "button": {
     "icon": "refresh",
@@ -48,7 +53,7 @@ let viewQuery = { "actionName": "ALL_ACTIVE_PROJECTS",
     requiresObjectSelected : false
   }    
 }
-let actions = [
+let xactions = [
   { "actionName": "PROJECT_NEW",
   "clientMethod": "newStudyIndividual",
   "endPoint": "/modulegenoma/GenomaProjectAPI",
@@ -75,7 +80,7 @@ let actions = [
 
 ]
 // GenomaDialogTemplate(GenomaActions(CommonsDialogTemplate(GenomaUtilities(TabFunctions(CredDialog))))) 
-export class GenomaProject extends TabFunctions(LitElement) {
+export class GenomaProject extends (GenomaActions(ButtonsFunctions(TabFunctions(LitElement)))) {
   static get styles() {
     return [
       Layouts, Alignment,
@@ -109,18 +114,18 @@ export class GenomaProject extends TabFunctions(LitElement) {
 
   static get properties() {
     return {
-      model: { type: Object },
+      viewModelFromProcModel : { type: Object },
       config: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       viewName: { type: String },
       filterName: { type: String },
       langConfig: { type: Object },
       actions: { type: Array },
-      samplesReload: { type: Boolean },
+      xsamplesReload: { type: Boolean },
       selectedItems: { type: Array },
-      selectedAction: { type: Object },
-      prev: { type: Boolean },
-      next: { type: Boolean },
+      xselectedAction: { type: Object },
+      xprev: { type: Boolean },
+      xnext: { type: Boolean },
       programsList: { type: Array },
       tabView: { type: String },
       windowOpenable: { type: String },
@@ -138,9 +143,10 @@ export class GenomaProject extends TabFunctions(LitElement) {
 
   constructor() {
     super()
+    this.viewModelFromProcModel = {}
     this.tabView = "summary"
-    this.prev = false
-    this.next = false
+    this.xprev = false
+    this.xnext = false
     this.programsList = []
     this.selectedProject = {}
     this.selectedStudy = {}
@@ -153,24 +159,29 @@ export class GenomaProject extends TabFunctions(LitElement) {
   }
 
   updated(updates) {
-    if (updates.has('model')) {
-      this.resetView()
+    if (updates.has('viewModelFromProcModel')) {
+       this.resetView()
     }
   }
 
   resetView() {
     this.programsList = []
-    xczxc
-    this.selectedAction
-
+    this.getGenomaProjectsList()
+    if (this.viewModelFromProcModel.defaultTabOnOpen!==undefined){
+      let mye={}
+      let whichTab = this.viewModelFromProcModel.tabs.filter(p => p.view == this.viewModelFromProcModel.defaultTabOnOpen)
+      if (whichTab.length) {
+        mye.detail=whichTab[0]//this.viewModelFromProcModel.tabs[whichTab]
+        this.tabChanged(mye)      
+      }
+    }    
     return
-
-    this.actions = this.model.actions
-    this.selectedAction = this.model.actions[0]
-    this.actionMethod(this.selectedAction)
+    this.actions = this.viewModelFromProcModel .actions
+    this.xselectedAction = this.viewModelFromProcModel .actions[0]
+    this.actionMethod(this.xselectedAction)
 
     if (tabBtns.tabToOpenOnViewOpenTabIndex!==undefined&&tabBtns.tabToOpenOnViewOpenTabIndex>-1){
-      let tbsArr=tabBtns[this.procName]
+      let tbsArr=tabBtns[this.procInstanceName]
       let mye={}
       mye.detail=tbsArr[tabBtns.tabToOpenOnViewOpenTabIndex]
       this.tabChanged(mye)
@@ -187,7 +198,7 @@ export class GenomaProject extends TabFunctions(LitElement) {
     return html`
       <div class="layout vertical flex">
         <div class="layout horizontal center-center">
-        ${this.getButton(actions)}
+        ${this.getButton(this.viewModelFromProcModel.actions)}
 
         <mwc-select outlined id="projectList" label="Project Name" @change=${this.projectChanged} ?hidden=${this.programsList.length<2}>
             ${this.programsList&&this.programsList.map((p,i) => 
@@ -204,29 +215,52 @@ export class GenomaProject extends TabFunctions(LitElement) {
             ` : html``
           }
         </div>
-        ${this.showTabElement(tabBtns)}
-        <project-main .MDprocedureUsers=${this.MDprocedureUsers} .reqParams=${this.reqParams} .procName=${this.procName} .config=${this.config} .lang=${this.lang} .selectedProject=${this.selectedProject} 
-          ?hidden=${this.tabView!="project-main"}></project-main>
-        <study-users .MDprocedureUsers=${this.MDprocedureUsers} .reqParams=${this.reqParams} .procName=${this.procName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy}  .selectedProject=${this.selectedProject} 
-          ?hidden=${this.tabView!="study-users"}></study-users>
-        <study-individuals .reqParams=${this.reqParams} .procName=${this.procName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
-          ?hidden=${this.tabView!="study-individuals"}
+        ${this.showTabElement(this.viewModelFromProcModel, tabBtns)}
+
+          <study-users .viewModelFromProcModel=${this.viewModelFromProcModel.projectmain} .MDprocedureUsers=${this.MDprocedureUsers} .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} 
+            .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy}  .selectedProject=${this.selectedProject} 
+            ?hidden=${this.tabView!="projectmain"}></study-users>
+  
+          <study-users .viewModelFromProcModel=${this.viewModelFromProcModel.studyusers} .MDprocedureUsers=${this.MDprocedureUsers} .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} 
+            .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy}  .selectedProject=${this.selectedProject} 
+            ?hidden=${this.tabView!="studyusers"}></study-users>
+
+          <study-users .viewModelFromProcModel=${this.viewModelFromProcModel.studyvariablevalues}  .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} 
+            .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy}  .selectedProject=${this.selectedProject} 
+            ?hidden=${this.tabView!="studyvariablevalues"}></study-users>
+
+          <study-users .viewModelFromProcModel=${this.viewModelFromProcModel.studyindividuals}  .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} 
+            .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy}  .selectedProject=${this.selectedProject} 
+            ?hidden=${this.tabView!="studyindividuals"}></study-users>
+
+          <study-users .viewModelFromProcModel=${this.viewModelFromProcModel.studyfamilies}  .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} 
+            .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy}  .selectedProject=${this.selectedProject} 
+            ?hidden=${this.tabView!="studyfamilies"}></study-users>
+          <study-users .viewModelFromProcModel=${this.viewModelFromProcModel.studysamplesset}  .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} 
+            .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy}  .selectedProject=${this.selectedProject} 
+            ?hidden=${this.tabView!="studysamplesset"}></study-users>
+            
+
+        <study-individuals .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
+          ?hidden=${this.tabView!="studyindividuals"}
           .MDvariablesSet=${this.MDvariablesSet} .MDvariables=${this.MDvariables}></study-individuals>
-        <study-families .reqParams=${this.reqParams} .procName=${this.procName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
-          ?hidden=${this.tabView!="study-families"}></study-families>
-        <study-samples-set .reqParams=${this.reqParams} .procName=${this.procName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
-          ?hidden=${this.tabView!="study-samples-set"}></study-samples-set>
-        <study-variable-values .reqParams=${this.reqParams} .procName=${this.procName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
-          ?hidden=${this.tabView!="study-variable-values"}></study-variable-values>
+        <study-families .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
+          ?hidden=${this.tabView!="studyfamilies"}></study-families>
+        <study-samples-set .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
+          ?hidden=${this.tabView!="studysamplesset"}></study-samples-set>
+        <study-variable-values .reqParams=${this.reqParams} .procInstanceName=${this.procInstanceName} .config=${this.config} .lang=${this.lang} .selectedStudy=${this.selectedStudy} .selectedProject=${this.selectedProject}  
+          ?hidden=${this.tabView!="studyvariablevalues"}></study-variable-values>
           
           
         <core-view .lang=${this.lang} .selectedProgram=${this.selectedStudy} ?hidden=${this.tabView!="core"}></core-view>
-        ${this.genomaDialogsTemplate()} 
+                
         ${super.render()}
       </div>
     `
   }
 
+
+  //${this.genomaDialogsTemplate()} 
   programChanged(e) {
     let program = this.programsList.filter(p => p.name == e.target.value)
     if (program.length) {
@@ -248,45 +282,45 @@ export class GenomaProject extends TabFunctions(LitElement) {
     }
   }
 
-  prevTab() {
+  xxprevTab() {
     this.tabContainer.scrollLeft = this.tabContainer.scrollLeft - 200
   }
 
-  nextTab() {
+  xxnextTab() {
     this.tabContainer.scrollLeft = this.tabContainer.scrollLeft + 200
   }
 
-  isScroll() {
+  xisScroll() {
     if (this.tabContainer.offsetWidth < this.tabContainer.scrollWidth) {
-      this.next = true
+      this.xnext = true
     } else {
-      this.next = false
+      this.xnext = false
     }
   }
 
-  firstUpdated() {
+  xfirstUpdated() {
     super.firstUpdated()
     this.tabContainer.addEventListener('scroll', () => {
       if (this.tabContainer.scrollLeft == 0) {
-        this.prev = false
+        this.xprev = false
       } else {
-        this.prev = true
+        this.xprev = true
       }
       if (this.tabContainer.offsetWidth + this.tabContainer.scrollLeft == this.tabContainer.scrollWidth) {
-        this.next = false
+        this.xnext = false
       } else {
-        this.next = true
+        this.xnext = true
       }
     })
   }
 
-  // nextRequest() {
-  //   super.nextRequest()
+  // xnextRequest() {
+  //   super.xnextRequest()
   //   this.reqParams = {
-  //     procInstanceName: this.procName,
+  //     procInstanceName: this.procInstanceName,
   //     ...this.reqParams
   //   }
-  //   this[this.selectedAction.clientMethod]()
+  //   this[this.xselectedAction.clientMethod]()
   // }
 
   projectChanged(e) {
@@ -320,13 +354,18 @@ export class GenomaProject extends TabFunctions(LitElement) {
   }
   setView() {
     this.selectedItems = []
-    this.selectedAction = actions[0]
-    this.actionMethod(this.selectedAction.subAction)
+    this.getGenomaProjectsList()
+    alert('setView')
+    return
+    this.xselectedAction = actions[0]
+    this.actionMethod(this.xselectedAction.subAction)
   }
+
+
   xjsonParamCommons(selAction, selObject) {
     // console.log('xjsonParamCommons', selAction)
      if (selAction===undefined){
-       selAction=this.selectedAction
+       selAction=this.xselectedAction
      }
      if (selObject===undefined){
        if (selAction.selObjectVariableName===undefined){

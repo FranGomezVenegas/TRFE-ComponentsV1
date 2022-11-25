@@ -3,7 +3,7 @@ import {DialogsFunctions} from '../components/GenericDialogs/DialogsFunctions';
 export function GenomaActions(base) {
     return class extends DialogsFunctions(base) {
 
-          buttonActionWithoutDialogNoCredChecker(action, selectedItem) {
+          xbuttonActionWithoutDialogNoCredChecker(action, selectedItem) {
             this.selectedAction=action
             //console.log('buttonActionWithoutDialog')
             this.reqParams.actionName=action.actionName
@@ -20,7 +20,7 @@ export function GenomaActions(base) {
             })
             //this.getGenomaProjectsList()
           }
-          buttonActionWithoutDialog(action, selectedItem) {
+          xbuttonActionWithoutDialog(action, selectedItem) {
             this.selectedAction=action
             //console.log('genomaSuperDialogClickedAction')
             if (this.itemId) {
@@ -44,7 +44,7 @@ export function GenomaActions(base) {
                 })
                 //this.getGenomaProjectsList()
           }
-          genomaSuperDialogClickedActionNoCredChecker(){
+          xgenomaSuperDialogClickedActionNoCredChecker(){
             //console.log('genomaSuperDialogClickedAction')
             let action=this.selectedAction
             let selectedItem={}
@@ -66,7 +66,7 @@ export function GenomaActions(base) {
               //this.reload()
             })            
           }
-          genomaSuperDialogClickedAction(){
+          xgenomaSuperDialogClickedAction(){
             //console.log('genomaSuperDialogClickedAction')
             let action=this.selectedAction
             let selectedItem={}
@@ -93,7 +93,7 @@ export function GenomaActions(base) {
               //this.reload()
             })            
           }
-          nextRequest() {
+          xnextRequest() {
             super.nextRequest()
             this.reqParams = {
               procInstanceName: this.procName,
@@ -104,7 +104,7 @@ export function GenomaActions(base) {
             //this[action.clientMethod]()
           }    
                 
-          performRequest(){
+          xperformRequest(){
             let action=this.selectedAction
             this.reqParams.actionName=action.actionName
             let selectedItem={}
@@ -186,7 +186,7 @@ export function GenomaActions(base) {
             return jsonParam
           }
         
-          actionMethod(action, replace = true) {
+          xactionMethod(action, replace = true) {
             console.log('actionMethod')
             if (replace) {
               this.selectedAction = action
@@ -224,7 +224,7 @@ export function GenomaActions(base) {
               }
             }
           }  
-          async getGenomaProjectsList() {
+          async getGenomaProjectsListOld() {
             this.samplesReload = true
             var curProject = this.selectedProject 
             var curStudy = this.selectedStudy 
@@ -257,5 +257,37 @@ export function GenomaActions(base) {
                 console.log('selectedStudy', this.selectedStudy)
             }
           }
+          async getGenomaProjectsList() {
+            let queryDefinition=this.viewModelFromProcModel.viewQuery
+            if (queryDefinition===undefined){return}
+        
+            this.samplesReload = true
+            //let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
+            //  + '?' + new URLSearchParams(this.reqParams)
+            this.selectedItems = []      
+            let APIParams=this.getAPICommonParams(queryDefinition)
+            let viewParams=this.jsonParam(queryDefinition)
+            let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.GenomaStudyAPIqueriesUrl)
+              + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)    
+            await this.fetchApi(params).then(j => {
+              if (j && !j.is_error) {
+                this.programsList = j.project
+                if (j.master_data&&j.master_data.users){
+                  this.MDprocedureUsers = j.master_data.users
+                  this.MDvariablesSet = j.master_data.variables_set
+                  this.MDvariables = j.master_data.variables
+                }
+
+                // this.programsList = j.programsList
+                // // if (this.programsList.length==1){
+                // //   this.selectedProgram=this.programsList[0]
+                // // }
+                // if (queryDefinition.subAction) {
+                //   this.GetAlternativeViewData(queryDefinition.subAction)
+                // }
+                // this.requestUpdate()
+              }
+            })
+          }          
     }
 }

@@ -102,7 +102,7 @@ export class StudyVariableValues extends GenomaDialogTemplate(GridUtilities(Geno
       selectedSamples: { type: Array },
       selectedAction: { type: Object },
       targetValue: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       config: { type: Object },
 
       selectedStudy: { type: Object },

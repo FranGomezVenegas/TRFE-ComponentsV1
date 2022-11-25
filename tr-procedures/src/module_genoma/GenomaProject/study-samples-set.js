@@ -12,8 +12,7 @@ import { GenomaDialogTemplate} from '../GenomaDialogTemplate';
 //import { CommonsClientMethod} from './../../CommonsClientMethod';
 let langConfig = {
   "title": {
-    "label_en": "Samples Set", 
-    "label_es": "Agrupador de Muestras"
+    "label_en": "Samples Set", "label_es": "Agrupador de Muestras"
   },
   "fieldText": {
     "logBtn": { "label_en": "Log Sample", "label_es": "Registrar Muestra" },
@@ -273,7 +272,7 @@ export class StudySamplesSet extends GenomaDialogTemplate(GridUtilities(GenomaUt
       selectedSamples: { type: Array },
       selectedAction: { type: Object },
       targetValue: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       config: { type: Object },
 
       selectedStudy: { type: Object },
@@ -347,7 +346,7 @@ export class StudySamplesSet extends GenomaDialogTemplate(GridUtilities(GenomaUt
   // nextRequest() {
   //   super.nextRequest()
   //   this.reqParams = {
-  //     procInstanceName: this.procName,
+  //     procInstanceName: this.procInstanceName,
   //     ...this.reqParams
   //   }
   //   let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction

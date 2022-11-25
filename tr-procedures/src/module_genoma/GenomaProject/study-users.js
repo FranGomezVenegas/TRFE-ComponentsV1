@@ -3,13 +3,20 @@ import { CoreView } from '../../components/core-view';
 import { Alignment, justified, Layouts } from '@collaborne/lit-flexbox-literals';
 import { commonLangConfig } from '@trazit/common-core';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
-import { CommonsDialogTemplate } from '../../CommonsDialogTemplate';
-import { GenomaUtilities } from '../GenomaUtilities';
+//import { CommonsDialogTemplate } from '../../CommonsDialogTemplate';
+//import { GenomaUtilities } from '../GenomaUtilities';
 import { GridUtilities} from '../GridUtilities';
-import { GenomaActions} from '../GenomaActions';
+//import { GenomaActions} from '../GenomaActions';
 import { GenomaDialogTemplate} from '../GenomaDialogTemplate';
+import '../../components/grid_with_buttons/grid-with-buttons';
+import {ButtonsFunctions} from '../../components/Buttons/ButtonsFunctions';
+import {TrazitGenericDialogs} from '../../components/GenericDialogs/TrazitGenericDialogs';
+import {TrazitReactivateObjectsDialog} from '../../components/GenericDialogs/TrazitReactivateObjectsDialog';
 //import { CommonsClientMethod} from './../../CommonsClientMethod';
-let langConfig = {
+
+
+let langConfig = {}
+let langConfig2 = {
   "title": {
     "label_en": "Users", 
     "label_es": "Usuarios"
@@ -29,8 +36,9 @@ let langConfig = {
     },
     buttons:[
       { "actionName": "STUDY_ADD_USER",
+        "requiresDialog": true,
         "clientMethod": "newStudyIndividual",
-        "selObjectVariableName": "selectedStudyUser", 
+        "selObjectVariableName": "selectedItems", 
         "endPoint": "/modulegenoma/GenomaStudyAPI",
         "endPointParams": [ 
           { "argumentName": "studyName", "internalVariableObjName":"selectedStudy", "internalVariableObjProperty":"study", "ZZZselObjectPropertyName": "study"},
@@ -64,7 +72,7 @@ let langConfig = {
       },
       { "actionName": "STUDY_USER_DEACTIVATE",
         "clientMethod": "buttonActionWithoutDialog",
-        "selObjectVariableName": "selectedStudyUser",
+        "selObjectVariableName": "selectedItems",
         "endPoint": "/modulegenoma/GenomaStudyAPI",
         "endPointParams": [
           { "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -87,7 +95,7 @@ let langConfig = {
           //{ "argumentName": "userRole", "selObjectPropertyName": "roles" }
         ],
         "clientMethod": "openReactivateObjectDialog",
-        "selObjectVariableName": "selectedStudyUser",
+        "selObjectVariableName": "selectedItems",
         "button": {
           "icon": "alarm_add",
           "title": {
@@ -127,8 +135,9 @@ let langConfig = {
 }
 let actions = [
 ]
-
-export class StudyUsers extends GenomaDialogTemplate(GridUtilities(GenomaUtilities(GenomaActions(CommonsDialogTemplate(CoreView))))) {
+//ButtonsFunctions
+// GenomaDialogTemplate(GridUtilities(GenomaUtilities(GenomaActions(CommonsDialogTemplate(CoreView)))))
+export class StudyUsers extends GenomaDialogTemplate(TrazitGenericDialogs(TrazitReactivateObjectsDialog(TrazitGenericDialogs(GridUtilities(ButtonsFunctions(CoreView)))))) {
   static get styles() {
     return [Layouts, Alignment,
       super.styles,
@@ -148,62 +157,90 @@ export class StudyUsers extends GenomaDialogTemplate(GridUtilities(GenomaUtiliti
   static get properties() {
     return {
       samplesReload: { type: Boolean },
-      selectedSamples: { type: Array },
+      selectedItems: { type: Array },
       selectedAction: { type: Object },
       targetValue: { type: Object },
-      procName: { type: String },
+      procInstanceName: { type: String },
       config: { type: Object },
 
       selectedStudy: { type: Object },
       selectedStudyUser: { type: Array },
+      
+      filterName: { type: String },
+      viewName: { type: String },
+      lang: { type: String },
+      actionBeingPerformedModel:{type:Object},
+      viewModelFromProcModel: { type: Object}
+      
     };
   }
 
   constructor() {
     super()
-    this.selectedSamples = []
+    this.selectedItems = []
     this.selectedAction = actions[0]
 
     this.selectedStudyUser = []
     this.selectedAction = []
+    this.viewModelFromProcModel = {}
+    this.actionBeingPerformedModel={}
   }
   //height="${this.tableHeight(this.selectedStudy.study_users)}px">
   tabView() {
-    //console.log('selectedStudy', this.selectedStudy)
     if (this.selectedStudy===undefined){
-      return html`hhhh`;
+      return html``;
     }else{
       return html`
+      
+      ${this.genericFormDialog()}
+      ${this.reactivateObjectsDialog()}
+      ${this.genomaDialogsSetResultValueTemplate()}
+      
         <div class="layout horizontal flex wrap">
           ${this.selectedStudy===undefined ? html`
             <h2>Please select one study first</h2>
           `: html`
             <div class="layout flex">
-              <h1>${langConfig.title["label_"+this.lang]} ${this.selectedStudy.name}</h1>
+              <h1>${this.viewModelFromProcModel.langConfig.title["label_"+this.lang]} ${this.selectedStudy.name}</h1>
               <div class="layout horizontal center flex wrap">
-                ${this.getButton(langConfig.actions)}
+                ${this.getButton(this.viewModelFromProcModel)}
               </div>
-              ${this.getButton(langConfig.gridHeaderStudyUsers.buttons, this.selectedStudyUser)}
+              ${this.getButton(this.viewModelFromProcModel.actions)}
               <vaadin-grid id="studyusergrid" theme="row-dividers" column-reordering-allowed multi-sort 
-                @active-item-changed=${e=>this.selectedStudyUser=e.detail.value ? [e.detail.value] : []}
-                .selectedItems="${this.selectedStudyUser}" .items="${this.selectedStudy.study_users}">              
-                ${this.gridListFromGridUtilities(langConfig.gridHeaderStudyUsers, 'studyusergrid', this.selectedStudy.study_users)}                  
+                @active-item-changed=${e=>this.selectedItems=e.detail.value ? [e.detail.value] : []}
+                .selectedItems="${this.selectedItems}" .items="${this[this.viewModelFromProcModel.langConfig.selectedObjectName][this.viewModelFromProcModel.langConfig.gridElementName]}">
+                ${this.gridListFromGridUtilities(this.viewModelFromProcModel.langConfig.gridHeader, this.viewModelFromProcModel.langConfig.gridName, this[this.viewModelFromProcModel.langConfig.selectedObjectName][this.viewModelFromProcModel.langConfig.gridElementName])}
               </vaadin-grid>
             </div>
-            ${this.genomaDialogsTemplate()} 
-            ${this.reactiveObjectTemplate()}
+            ${this.viewModelFromProcModel.hasChild===undefined||this.viewModelFromProcModel.childObject===undefined ? nothing: html`
+              <div class="layout flex">
+                <h1>${this.viewModelFromProcModel.langConfig.title["label_"+this.lang]} ${this.selectedStudy.name}</h1>
+                <div class="layout horizontal center flex wrap">
+                  ${this.getButton(this.viewModelFromProcModel)}
+                </div>
+                ${this.getButton(this.viewModelFromProcModel.actions)}
+                <vaadin-grid id="studyusergrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                  @active-item-changed=${e=>this.selectedItems=e.detail.value ? [e.detail.value] : []}
+                  .selectedItems="${this.selectedItems}" .items="${this[this.viewModelFromProcModel.langConfig.selectedObjectName][this.viewModelFromProcModel.langConfig.gridElementName]}">
+                  ${this.gridListFromGridUtilities(this.viewModelFromProcModel.langConfig.gridHeader, this.viewModelFromProcModel.langConfig.gridName, this[this.viewModelFromProcModel.langConfig.selectedObjectName][this.viewModelFromProcModel.langConfig.gridElementName])}
+                </vaadin-grid>
+              </div>
+            `}            
           `}
         </div>
+        
       `;
     }
   }
+  // ${this.genomaDialogsTemplate()} 
+  //${this.reactiveObjectTemplate()}
   get studyusergrid() {
     return this.shadowRoot.querySelector("vaadin-grid#studyusergrid")
   }
   // nextRequest() {
   //   super.nextRequest()
   //   this.reqParams = {
-  //     procInstanceName: this.procName,
+  //     procInstanceName: this.procInstanceName,
   //     ...this.reqParams
   //   }
   //   let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
@@ -223,12 +260,12 @@ export class StudyUsers extends GenomaDialogTemplate(GridUtilities(GenomaUtiliti
     })
   }
   // genericFormClient(){
-  //   this.selectedSamples = []
+  //   this.selectedItems = []
   //   this.newStudyIndividual.show()
   // }
 
   // setView() {
-  //   this.selectedSamples = []
+  //   this.selectedItems = []
   //   this.selectedAction = actions[0]
   //   this.actionMethod(this.selectedAction.subAction)
   // }
@@ -282,86 +319,5 @@ export class StudyUsers extends GenomaDialogTemplate(GridUtilities(GenomaUtiliti
     }
     return jsonParam
   }
-
-  // enterResultList() {
-  //   //console.log('enterResultList')
-  //     return html`
-  //     <mwc-textfield class="layout flex" id="text1" type="text" 
-  //     .value=${this.selectedAction.dialogInfo.fieldText.variableName.default_value ? this.selectedAction.dialogInfo.fieldText.variableName.default_value : this[this.selectedAction.selObjectVariableName][0].name} 
-  //     label="${this.selectedAction.dialogInfo.fieldText.variableName["label_" + this.lang]}"
-  //     disabled
-  //     @keypress=${e => e.keyCode == 13 && this.genomaSuperDialogClickedAction()}></mwc-textfield>
-  //     ${this[this.selectedAction.selObjectVariableName][0].type}
-  //     ${this[this.selectedAction.selObjectVariableName][0].value}      
-  //     `    
-  // }
-  // valRenderer(result) {
-  //   if (result.is_locked) {
-  //     return html`
-  //       <div style="width: 100%;height: 55px;position: relative; background-color: rgb(255 8 8 / 20%)">
-  //         <div style="width: 100%;text-align:center; margin: 0;position: absolute;top: 50%;-ms-transform: translateY(-50%);transform: translateY(-50%);">${result.raw_value}</div>
-  //       </div>
-  //     `
-  //   } else {
-  //     if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
-  //       return html`<input class="enterResultVal" type="text" .value=${result.raw_value} 
-  //         ?disabled=${this.selectedAction.dialogInfo.readOnly}
-  //         @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>`
-  //     } else if (result.param_type.toUpperCase().indexOf("LIST") > -1) {
-  //       let lEntry = result.list_entry.split("|")
-  //       return html`
-  //         ${result.param_type.toUpperCase() == "TEXTLIST" ?
-  //           html`
-  //             <input class="enterResultVal" list="listEntry${result.result_id}" 
-  //               .value=${result.raw_value}
-  //               @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
-  //             <datalist id="listEntry${result.result_id}">
-  //               ${lEntry.map(l =>
-  //                 html`<option value="${l}">${l}`
-  //               )}
-  //             </datalist>
-  //           ` :
-  //           html`
-  //             <select class="enterResultVal" @change=${e => this.setResult(result, e.target)}>
-  //               ${lEntry.map(l =>
-  //                 html`<option value="${l}" ?selected=${l==result.raw_value}>${l}`
-  //               )}
-  //             </select>
-  //           `
-  //         }
-  //       `
-  //     } else if (result.param_type.toUpperCase() == "REAL") {
-  //       let step = result.max_dp ? 1 / Math.pow(10, result.max_dp) : 0.01
-  //       let min = result.min_allowed ? result.min_allowed : 0
-  //       let max = result.max_allowed && result.max_allowed
-  //       return html`
-  //         ${this[`${result.param_type+''+result.result_id}`]}
-  //         <input class="enterResultVal" id="${result.param_type+''+result.result_id}" 
-  //           ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
-  //           .step=${step} 
-  //           .min=${min}
-  //           .max=${max}
-  //           .value=${this.adjustValUndetermined(result)} 
-  //           @input=${e=>this.setValidVal(e, result)}
-  //           @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
-  //       `
-  //     } else {
-  //       let min = result.min_allowed ? result.min_allowed : 0
-  //       let max = result.max_allowed && result.max_allowed
-  //       return html`
-  //         ${this[`${result.param_type+''+result.result_id}`]}
-  //         <input class="enterResultVal" id="${result.param_type+''+result.result_id}" 
-  //           ?disabled=${this.selectedAction.dialogInfo.readOnly} type="number" 
-  //           .min=${min}
-  //           .max=${max}
-  //           .value=${this.adjustValUndetermined(result)} 
-  //           @input=${e=>this.setValidVal(e, result)}
-  //           @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
-  //       `
-  //     }
-  //   }
-  // }
-
-  
 }
 customElements.define('study-users', StudyUsers);

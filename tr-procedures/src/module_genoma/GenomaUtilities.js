@@ -8,7 +8,7 @@ export function GenomaUtilities(base) {
             }
             return this[action.selObjectVariableName][0]
         }
-        getButton(butArr, selectedItem) {        
+        xgetButton(butArr, selectedItem) {        
             if (butArr===undefined){return}
             return html`
               ${butArr.map(action =>
@@ -40,7 +40,7 @@ export function GenomaUtilities(base) {
               )}
             `
         }  
-        buttonDisable(action){
+        xbuttonDisable(action){
           //console.log('buttonDisable')
           if (action===undefined||action.button===undefined){return true}
           if (action.button.requiresObjectSelected===undefined){return true}
@@ -54,7 +54,7 @@ export function GenomaUtilities(base) {
           return false
         }
         
-          buttonAction(action, selectedItem, replace = true, actionNumIdx) {
+          xbuttonAction(action, selectedItem, replace = true, actionNumIdx) {
             //console.log(action, this.newStudyIndividual)
             if (action===undefined){return}
             if (action.clientMethod==="buttonActionWithoutDialog"){

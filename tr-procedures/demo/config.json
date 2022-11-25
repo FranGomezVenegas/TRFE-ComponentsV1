@@ -31,12 +31,12 @@
     "viewName": "SampleEnterResult", 
     "filterName" :  "ER-FQ" 
   },
-  "localDefaultView64324324": {
+  "localDefaultView2131231": {
     "procName":  "genoma-1", 
     "viewName": "ProjectManager", 
     "filterName" :  "ProjectManager" 
   },  
-  "localDefaultView142": {
+  "localDefaultView11311": {
     "procName":  "app-proc", 
     "viewName": "EventsInProgress", 
     "filterName" :  "EventsER" 
@@ -66,7 +66,7 @@
     "viewName": "Deviation", 
     "filterName" :  "pending" 
   },
-  "localDefaultView123": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingSMP" 
@@ -86,8 +86,8 @@
     "viewName": "DataMining", 
     "filterName" :  "DataMining" 
   },
-  "localDefaultView2": {
-    "procName":  "em-demo-a", 
+  "localDefaultView2222222221": {
+    "procName":  "proc-deploy", 
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
