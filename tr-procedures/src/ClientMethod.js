@@ -17,26 +17,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       this.samplesReload = false
     }
 
-    getSampleAudit() {
-      let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIqueriesUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          j.forEach(audit => {
-            audit.collapse = true
-            if (audit.sublevel && audit.sublevel.length) {
-              audit.sublevel.forEach(level => {
-                level.collapse = false
-              })
-            }
-          })
-          this.audit.audits = j
-          this.audit.requestUpdate()
-        }
-      })
-    }
-
-    signAudit() {
+    xsignAudit() {
       let params = this.config.backendUrl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -44,28 +25,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    getInstrumentAudit() {
-      console.log('this.selectedSamples', this.selectedSamples);
-      this.reqParams.instrumentName = this.selectedSamples[0].name;
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          j.forEach(audit => {
-            audit.collapse = true
-            if (audit.sublevel && audit.sublevel.length) {
-              audit.sublevel.forEach(level => {
-                level.collapse = false
-              })
-            }
-          })
-          this.audit.audits = j
-          this.audit.requestUpdate()
-        }
-      })
-    }
-
-    setSamplingDate() {
+    xsetSamplingDate() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -74,7 +34,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    moveToNext() {
+    xmoveToNext() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -85,7 +45,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    addSamplingComment() {
+    xaddSamplingComment() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -95,7 +55,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    removeSamplingComment() {
+    xremoveSamplingComment() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -457,64 +417,6 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    setWhiteIpsList() {
-      console.log('this.reqParams', this.reqParams, 'this.selectedAction', this.selectedAction);
-      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.newIPEntryDialog.close()
-        this.updateIPEntryDialog.close()
-        this.reload()
-      })
-    }
-    setBlackIpsList() {
-      console.log('this.reqParams', this.reqParams);
-      let params = this.config.backendUrl + this.config.PlatformAdminAPIactionsUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.newIPEntryDialog.close()
-        this.updateIPEntryDialog.close()
-        this.reload()
-      })
-    }
-
-    // async getGenomaProjectsList() {
-    //   this.samplesReload = true
-    //   this.templates.programsList = []
-    //   let params = this.config.backendUrl + this.config.GenomaStudyAPIqueriesUrl
-    //     + '?' + new URLSearchParams(this.reqParams)
-    //   await this.fetchApi(params).then(j => {
-    //     if (j && !j.is_error) {
-    //       if (this.selectedAction.subAction) {
-    //         this.actionMethod(this.selectedAction.subAction)
-    //         this.templates.programsList = j.programsList
-    //       }
-    //     }
-    //   })
-    // }
-
-
-
-    getDeactivatedLots() {
-      this.deactivatedLots = []
-      let params = this.config.backendUrl + this.selectedDialogAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          this.deactivatedLots = j
-        }
-      })
-    }
-
-    setLot() {
-      console.log('setLot')
-      let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.lotDialog.close()
-        this.reload()
-      })
-    }
 
   }
 }

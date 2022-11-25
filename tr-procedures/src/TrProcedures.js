@@ -3,11 +3,6 @@ import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ProceduresModel } from './ProceduresModel';
-// import { CommonsClientMethod } from './CommonsClientMethod';
-// import { DialogTemplate } from './DialogTemplate';
-// import { CommonsDialogTemplate } from './CommonsDialogTemplate';
-// import { DialogTemplateEnvMonit } from './module_env_monit/DialogTemplateEnvMonit';
-// import { DialogTemplateInstruments } from './module_instruments/DialogTemplateInstruments';
 import '@trazit/tr-dialog/tr-dialog';
 import './components/Audit/audit-dialog';
 
@@ -188,39 +183,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         alert('In TrProcedures, not found component '+this.viewModelFromProcModel.component)
         return
     }
-
-
-    if (ProceduresModel[this.procName][this.viewName].abstract===undefined){
-      this.abstract = false
-    }else{
-      this.abstract = ProceduresModel[this.procName][this.viewName].abstract
-    }
-    this.topCompositions = ProceduresModel[this.procName][this.viewName].topCompositions
-    this.bottomCompositions = ProceduresModel[this.procName][this.viewName].bottomCompositions
-    this.tabs = ProceduresModel[this.procName][this.viewName].tabs
-    this.enterResults = []
-    this.microorganismList = []
-    this.selectedSamples = []
-    let hasOwnComponent=ProceduresModel[this.procName][this.viewName].hasOwnComponent
-    if (ProceduresModel[this.procName][this.viewName]!==undefined){
-      this.viewModelFromProcModel = ProceduresModel[this.procName][this.viewName]
-    }
-    if (ProceduresModel[this.procName][this.viewName].component) {
-      this.viewModelFromProcModel = ProceduresModel[this.procName][this.viewName]
-    } else if (ProceduresModel[this.procName][this.viewName].tabs) {
-      // 
-    } else {
-      this.langConfig = ProceduresModel[this.procName][this.viewName].langConfig
-      this.actions = ProceduresModel[this.procName][this.viewName].actions
-      this.selectedAction = ProceduresModel[this.procName][this.viewName].viewQuery   
-    }
-   // console.log('resetView', 'this.selectedAction', this.selectedAction)
-    if (this.selectedAction===undefined&&hasOwnComponent===undefined){
-      alert('resetView-->viewQuery property not found in the procedure model for procInstanceName'+this.procName+' and view '+this.viewName)
-      return
-    }
-    this.reload()
-    this.requestUpdate()
   }
 
   async authorized() {
@@ -322,9 +284,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
 
   reload() {
     return
-    this.resetDialogThings()
-    this.selectedAction = ProceduresModel[this.procName][this.viewName].viewQuery
-    this.actionMethod(this.selectedAction)
   }    
   resetDialogThings() {
     this.itemId = null
@@ -341,7 +300,8 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         <browser-view .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></browser-view>
       `:html``}
       ${this.viewModelFromProcModel.component == 'DataMining' ? html`
-        <datamining-mainview .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .masterData=${this.masterData} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></datamining-mainview>
+        <datamining-mainview .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} 
+        .viewModelFromProcModel=${this.viewModelFromProcModel} .masterData=${this.masterData} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></datamining-mainview>
       `:html``}
       ${this.viewModelFromProcModel.component == 'ModuleSampleLogSample' ? html`
         <log-sample-module-sample 
@@ -400,155 +360,5 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     `;
   }
   get GridWithButtons() {return this.shadowRoot.querySelector("grid-with-buttons#gridwithbuttons")}
-
-
-
-  xfilteringIncub(e) {
-    if (e.detail.sample) {
-      this.batchName = e.detail.sample.name
-      // if select new batch item, don't show up any incub samples
-      if (!e.detail.sample.incub_stage) {
-        this.incubElement.filteredItems = []
-      // if select new assigned incub#1 (incub_stage=1) and SAMPLES_ARRAY.length=0, show up the incub samples that incubation_batch = "" (orange state)
-      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1" && !e.detail.sample.SAMPLES_ARRAY.length) {
-        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => !item.incubation_batch)
-      // if select new assigned incub#1 (incub_stage=1) and SAMPLES_ARRAY.length>0, show up the incub samples that incubation_batch != "" & pending_incub = 1 & incubation_start = "" (tomato state)
-      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1" && e.detail.sample.SAMPLES_ARRAY.length) {
-        let pendings = this.incubElement.gridItems.filter(item => !item.incubation_batch)
-        let preFilter = this.incubElement.gridItems.filter(item => item.incubation_batch && item.pending_incub == 1 && !item.incubation_start)
-        // sort out by matched sample id
-        let inBatches = preFilter.filter(p => {
-          let matched = false
-          e.detail.sample.SAMPLES_ARRAY.forEach(s => {
-            if (p.sample_id == s.sample_id) matched = true
-          })
-          if (matched) return p
-        })
-        this.incubElement.filteredItems = [...pendings, ...inBatches]
-      // if select started incub#1 (incub_stage=1), show up the incub samples that pending_incub = 1 & incubation_start != "" & incubation_end = "" (gif state)
-      } else if (e.detail.sample.incubation_start && e.detail.sample.incub_stage == "1") {
-        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation_start && !item.incubation_end && item.pending_incub == 1)
-      // if select new assigned incub#2 (incub_stage=2) and SAMPLES_ARRAY.length=0, show up the incub samples that incubation_end != "" & incubation2_batch = "" (MediumSeaGreen state)
-      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2" && !e.detail.sample.SAMPLES_ARRAY.length) {
-        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation_end && !item.incubation2_batch)
-      // if select new assigned incub#2 (incub_stage=2) and SAMPLES_ARRAY.length>0, show up the incub samples that incubation2_batch != "" & pending_incub = 2 & incubation2_start = "" (SlateBlue state)
-      } else if (!e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2" && e.detail.sample.SAMPLES_ARRAY.length) {
-        let pendings = this.incubElement.gridItems.filter(item => !item.incubation2_batch && item.pending_incub == 2 && !item.incubation2_start)
-        let preFilter = this.incubElement.gridItems.filter(item => item.incubation2_batch && item.pending_incub == 2 && !item.incubation2_start)
-        // sort out by matched sample id
-        let inBatches = preFilter.filter(p => {
-          let matched = false
-          e.detail.sample.SAMPLES_ARRAY.forEach(s => {
-            if (p.sample_id == s.sample_id) matched = true
-          })
-          if (matched) return p
-        })
-        this.incubElement.filteredItems = [...pendings, ...inBatches]
-      // if select started incub#2 (incub_stage=2), show up the incub samples that pending_incub = 2 & incubation2_start != "" & incubation2_end = "" (gif state)
-      } else if (e.detail.sample.incubation_start && e.detail.sample.incub_stage == "2") {
-        this.incubElement.filteredItems = this.incubElement.gridItems.filter(item => item.incubation2_start && !item.incubation2_end && item.pending_incub == 2)
-      } else {
-        this.batchElement.filteredItems = this.batchElement.gridItems
-      }
-    } else {
-      this.batchName = null
-      this.incubElement.filteredItems = this.incubElement.gridItems
-    }
-    this.requestUpdate()
-  }
-
-  xfilteringBatch(e) {
-    if (e.detail.sample) {
-      // sample not in batch, show the batch that incubation_start = "" & assigned incub#1 (incub_stage=1)
-      if (!e.detail.sample.incubation_batch) {
-        this.batchElement.filteredItems = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "1")
-      // sample in batch incub#1 & incubation_start="", show the batch that incubation_start = "" & assigned incub#1 (incub_stage=1) & sample_id is already put on SAMPLES_ARRAY
-      } else if (e.detail.sample.incubation_batch && !e.detail.sample.incubation_start) {
-        let preFilter = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "1" && item.SAMPLES_ARRAY.length)
-        // sort out by matched sample id
-        let matched
-        preFilter.forEach(p => {
-          if (!matched) {
-            p.SAMPLES_ARRAY.forEach(s => {
-              if (s.sample_id == e.detail.sample.sample_id) matched = p
-            })
-          }
-        })
-        this.batchElement.filteredItems = [matched]
-      // sample incub#1 incubation_start != "" & incubation_end = "", show the batch that incubation_start != "" & assigned incub#1 (incub_stage=1)
-      } else if (e.detail.sample.incubation_start && !e.detail.sample.incubation_end) {
-        let preFilter = this.batchElement.gridItems.filter(item => item.incubation_start && item.incub_stage == "1")
-        // sort out by matched sample id
-        let matched
-        preFilter.forEach(p => {
-          if (!matched) {
-            p.SAMPLES_ARRAY.forEach(s => {
-              if (s.sample_id == e.detail.sample.sample_id) matched = p
-            })
-          }
-        })
-        this.batchElement.filteredItems = [matched]
-      // sample incub#1 incubation_start != "" & incubation_end != "" & incubation2_batch = "", show the batch that incubation_start = "" & assigned incub#2 (incub_stage=2)
-      } else if (e.detail.sample.incubation_start && e.detail.sample.incubation_end && !e.detail.sample.incubation2_batch) {
-        this.batchElement.filteredItems = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "2")
-      // sample in batch incub#2 & incubation2_start="", show the batch that incubation_start = "" & assigned incub#2 (incub_stage=2) & sample_id is already put on SAMPLES_ARRAY
-      } else if (e.detail.sample.incubation2_batch && !e.detail.sample.incubation2_start) {
-        let preFilter = this.batchElement.gridItems.filter(item => !item.incubation_start && item.incub_stage == "2" && item.SAMPLES_ARRAY.length)
-        // sort out by matched sample id
-        let matched
-        preFilter.forEach(p => {
-          if (!matched) {
-            p.SAMPLES_ARRAY.forEach(s => {
-              if (s.sample_id == e.detail.sample.sample_id) matched = p
-            })
-          }
-        })
-        this.batchElement.filteredItems = [matched]
-      // sample incub#2 incubation2_start != "" & incubation2_end = "", show the batch that incubation_start != "" & assigned incub#2 (incub_stage=2)
-      } else if (e.detail.sample.incubation2_start && !e.detail.sample.incubation2_end) {
-        let preFilter = this.batchElement.gridItems.filter(item => item.incubation_start && item.incub_stage == "2")
-        // sort out by matched sample id
-        let matched
-        preFilter.forEach(p => {
-          if (!matched) {
-            p.SAMPLES_ARRAY.forEach(s => {
-              if (s.sample_id == e.detail.sample.sample_id) matched = p
-            })
-          }
-        })
-        this.batchElement.filteredItems = [matched]
-      }
-    } else {
-      this.batchElement.filteredItems = this.batchElement.gridItems
-    }
-  }
-  xtemplateEvent(e) {
-    if (e.detail.calledActionIdx >= 0) {
-      this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[e.detail.calledActionIdx]
-      this.reload()
-    }
-  }
-  xsetAudit(e) {
-    this.targetValue = {
-      auditId: e.detail.audit_id
-    }
-    this.itemId = e.detail.audit_id
-    this.selectedDialogAction = this.selectedAction.dialogInfo.viewQuery
-    this.actionMethod(this.selectedDialogAction, false)
-  }
-
-  xreloadDialog() {
-    this.resetDialogThings()
-    this.actionMethod(this.selectedAction)
-  }
-  xnextRequest() {
-    super.xnextRequest()
-    this.reqParams = {
-      procInstanceName: this.procName,
-      ...this.reqParams
-    }
-    let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
-    this[action.clientMethod]()
-  }
 
 }
