@@ -127,7 +127,9 @@ export function DialogsFunctions(base) {
 
   nextRequest() {
     //alert('nextRequest')
+    console.log('nextRequest')
     let credArguments = {}
+    if (this.userName) {credArguments.userToCheck=this.userName}
     if (this.userTxtFld) {credArguments.userToCheck=this.userTxtFld.value}
     if (this.pwd) {credArguments.passwordToCheck=this.pwd.value}
     if (this.esg) {credArguments.esignPhraseToCheck=this.esg.value}

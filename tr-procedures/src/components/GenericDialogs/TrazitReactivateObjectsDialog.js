@@ -114,7 +114,7 @@ return class extends base {
           alert('viewQuery property not found in the procedure model for procInstanceName'+this.procName+' and view '+this.viewName)
           return
         }
-        // console.log('myActionMethod','action', action, 'selObject', selObject)
+         console.log('myActionMethod','action', action, 'selObject', selObject)
           if (selObject.length) {
             this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, selObject), action)
           } else {

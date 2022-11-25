@@ -515,7 +515,7 @@ export function TrazitGenericDialogs(base) {
                         html`<mwc-list-item value="${c.user_name}" ?selected=${i == 0}>${c.user_name}</mwc-list-item>`
                         )}
                         </mwc-select>
-                `}           
+                `}         
                 ${!fld.listMDvariablesSet ?
                     html``: html`        
                         <mwc-select id="listMDvariablesSet" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDvariablesSet&&fld.listMDvariablesSet["label_" + this.lang]}">
@@ -720,6 +720,14 @@ export function TrazitGenericDialogs(base) {
     get list7() {    return this.shadowRoot.querySelector("mwc-select#list7")    }    
     get list8() {    return this.shadowRoot.querySelector("mwc-select#list8")    }    
     get list9() {    return this.shadowRoot.querySelector("mwc-select#list9")    }    
-    get list10() {    return this.shadowRoot.querySelector("mwc-select#list10")    }    
+    get list10() {    return this.shadowRoot.querySelector("mwc-select#list10")    }  
+    
+    get listMDprocedureUsers() {return this.shadowRoot.querySelector("mwc-select#listMDprocedureUsers")}
+    get listMDSamplerPersonalAreas() {return this.shadowRoot.querySelector("mwc-select#listMDSamplerPersonalAreas")}
+    get listMDvariablesSet() {return this.shadowRoot.querySelector("mwc-select#listMDvariablesSet")}
+    get listMDvariables() {return this.shadowRoot.querySelector("mwc-select#listMDvariables")}
+    get listSelectedStudyIndividuals() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividuals")}
+    get listSelectedStudyIndividualSamples() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividualSamples")}
+         
   }
 }
