@@ -97,26 +97,28 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       chartImgs: { type: Array },
       datatable:{type: Object},
       leftOpen:{type: Boolean},
-      masterData: {type: Array}
+      masterData: {type: Array},
+      viewModelFromProcModel:{type: Object}
     };
   }
 
   constructor() {
     super()
     this.desktop = true
-    this.model = {}
+    //this.model = {}
     this.tabList = []
     this.activeTab = {}
     this.sampleData = {}
     this.data = {}
     this.chartImgs = []
     this.leftOpen = true
+    this.viewModelFromProcModel = {}
     
   }
 
   updated(updates) {
-    if (updates.has('model') && this.model.DataMining) {
-      this.tabList = this.model.DataMining.tabs
+    if (updates.has('viewModelFromProcModel') && this.viewModelFromProcModel) {
+      this.tabList = this.viewModelFromProcModel.tabs
     }
   }
   filterSize(){
@@ -143,10 +145,8 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
         html`
         <sp-split-view id="leftsplit" resizable primary-size="300">
           <div id="leftSplit">
-            <datamining-tab 
-              @tab-changed=${this.tabChanged}
-              .lang=${this.lang}
-              .tabs=${this.tabList}></datamining-tab>
+            <datamining-tab @tab-changed=${this.tabChanged} .viewModelFromProcModel=${this.viewModelFromProcModel} 
+              .lang=${this.lang}              .tabs=${this.tabList}></datamining-tab>
             <div class="layout flex vertical">
             ${!this.activeTab||!this.activeTab.filter||!this.activeTab.filter.filterFields ?
               html``: html`
@@ -517,7 +517,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
             <mwc-button raised label="Search" @click=${this.getQueryFilterData}></mwc-button>
             </div>
           </div>
-          <div id="rightSplit">
+          <div id="rightSplit" style="display:block;">
 <!--              <div class="layout horizontal">
                 <mwc-icon-button icon="print" @click=${this.print}></mwc-icon-button>                
               </div>
