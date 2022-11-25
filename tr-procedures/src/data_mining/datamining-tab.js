@@ -41,13 +41,16 @@ export class DataMiningTab extends LitElement {
     //console.log('listObjectSelected', e.target.value)
     this.tabChanged(this.tabs[e.target.value]) 
   }
+  listElementLabel(){
+    return this.viewModelFromProcModel.tabsListElement["label_"+this.lang]
+  }
   render() {
     //console.log(this.tabs)
     // @change=${()=>this.tabChanged(t)}
     return html`
       <div class="layout flex vertical">
 
-      <mwc-select style="width:100%;" class="layout flex vertical" outlined id="kpiList" label="Project Name" @change=${this.listObjectSelected}>
+      <mwc-select style="width:100%;" class="layout flex vertical" outlined id="kpiList" label="${this.listElementLabel()}" @change=${this.listObjectSelected}>
         ${this.tabs&&this.tabs.map((p,i) => 
           html`<mwc-list-item value="${i}" ?selected=${i==0}>${p['label_'+this.lang]}</mwc-list-item>`
         )}
@@ -105,7 +108,7 @@ export class DataMiningTab extends LitElement {
     }
   }
 
-  firstUpdated() {
+  XfirstUpdated() {
     // this.tabContainer.addEventListener('scroll', ()=>{
     //   if (this.tabContainer.scrollLeft == 0) {
     //     this.prev = false
@@ -140,7 +143,8 @@ export class DataMiningTab extends LitElement {
       tabs: { type: Array },
       selectedTab: { type: Object }, // current selected tab
       prev: { type: Boolean },
-      next: { type: Boolean }
+      next: { type: Boolean },
+      viewModelFromProcModel: {type: Object}
     };
   }
 
@@ -150,6 +154,7 @@ export class DataMiningTab extends LitElement {
     this.next = false;
     this.tabs = [];
     this.selectedTab = {};
+    this.viewModelFromProcModel = {}
   }
 }
 customElements.define('datamining-tab', DataMiningTab);
