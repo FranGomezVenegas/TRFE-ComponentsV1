@@ -96,9 +96,24 @@ export function ApiFunctions(base) {
         if (action===undefined){return}
           let jsonParam = {}
           if (action.endPointParams) {
-              action.endPointParams.forEach(p => {
-//console.log('jsonParam', 'element', p)
-              if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
+            action.endPointParams.forEach(p => {
+              if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {          
+                if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
+                  var msg=""
+                  if (this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
+                    msg='The object '+p.internalVariableSimpleObjName+' has no one property called '+p.internalVariableSimpleObjProperty
+                    alert(msg)
+                    //console.log(msg, this[p.internalVariableSimpleObjName][0])
+                  }else{
+                    msg='there is no object called '+p.internalVariableSimpleObjName+' in this view'
+                    alert(msg)
+                  }
+              //    alert('No family selected')
+                  return jsonParam[p.argumentName] = "ERROR: "+msg
+                }  
+              jsonParam[p.argumentName] = this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]
+              
+              } else if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
                   if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
                     var msg=""
                     if (this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
@@ -114,7 +129,7 @@ export function ApiFunctions(base) {
                   }  
                 jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
                 
-              }else if (p.element && this[p.element]) {
+              } else if (p.element) {
                 if (p.isAdhocField!==undefined&&p.isAdhocField===true){
                   var curArgName=jsonParam[p.argumentName]
                   if (curArgName===undefined){curArgName=''}
@@ -124,31 +139,64 @@ export function ApiFunctions(base) {
                     curArgName=curArgName+"*"+p.fieldType
                   }
                   jsonParam[p.argumentName] = curArgName
-                }else{                
-                  jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                }else{
+                  if (this[p.element]===undefined||this[p.element]===null){
+                    alert('Not found the html element called '+p.element+' Please talk with your System Admin')
+                  }else{
+                    //console.log('element object in context content is:', this[p.element])
+                    if (this[p.element].value.length>0){
+                      jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                    }else{
+                      if (p.notAddWhenValueIsBlank===undefined||p.notAddWhenValueIsBlank===false){
+                        jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                      }
+                    }
+                  }
                 }
-              } else if (p.fixValue) {  //defaultValue
-                  jsonParam[p.argumentName] = p.fixValue // get value from default value (i.e incubator)
-              } else if (p.beItem) {
-                  jsonParam[p.argumentName] = this.selectedItem[0][p.beItem] // get value from selected item
+              } else if (p.defaultValue) {
+                if (p.isAdhocField!==undefined&&p.isAdhocField===true){
+                  var curArgName=jsonParam[p.argumentName]
+                  if (curArgName===undefined){curArgName=''}
+                  if (curArgName.length>0){curArgName=curArgName+"|"}
+                  curArgName=curArgName+p.defaultValue
+                  if (p.fieldType!==undefined){
+                    curArgName=curArgName+"*"+p.fieldType
+                  }
+                  jsonParam[p.argumentName] = curArgName
+                }else{
+                  jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
+                }
               } else if (p.selObjectPropertyName) {
                 jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
               } else if (p.targetValue) {
-                if (targetValue[p.argumentName]!==undefined){
-                  jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
-                }else{
-                  jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
-                }
+                jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
+              } else if (p.fixValue) {
+                jsonParam[p.argumentName] = p.fixValue
               } else {
-                  jsonParam[p.argumentName] = p.value
+                jsonParam[p.argumentName] = p.value
               }
-              })
+              //console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+            })
           }
           console.log('jsonParam', 'action', action, 'filterName', this.filte)
           if (action.subViewFilter!==undefined&&this.filterName!==undefined){
             action.subViewFilter[this.filterName].forEach(p => {
-              //console.log('jsonParam', 'element', p)
-              if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
+              if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {          
+                if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
+                  var msg=""
+                  if (this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
+                    msg='The object '+p.internalVariableSimpleObjName+' has no one property called '+p.internalVariableSimpleObjProperty
+                    alert(msg)
+                    //console.log(msg, this[p.internalVariableSimpleObjName][0])
+                  }else{
+                    msg='there is no object called '+p.internalVariableSimpleObjName+' in this view'
+                    alert(msg)
+                  }
+              //    alert('No family selected')
+                  return jsonParam[p.argumentName] = "ERROR: "+msg
+                }  
+                jsonParam[p.argumentName] = this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]              
+              } else if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
                   if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
                     var msg=""
                     if (this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
@@ -164,7 +212,7 @@ export function ApiFunctions(base) {
                   }  
                 jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
                 
-              }else if (p.element && this[p.element]) {
+              } else if (p.element) {
                 if (p.isAdhocField!==undefined&&p.isAdhocField===true){
                   var curArgName=jsonParam[p.argumentName]
                   if (curArgName===undefined){curArgName=''}
@@ -174,21 +222,44 @@ export function ApiFunctions(base) {
                     curArgName=curArgName+"*"+p.fieldType
                   }
                   jsonParam[p.argumentName] = curArgName
-                }else{                
-                  jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                }else{
+                  if (this[p.element]===undefined||this[p.element]===null){
+                    alert('Not found the html element called '+p.element+' Please talk with your System Admin')
+                  }else{
+                    //console.log('element object in context content is:', this[p.element])
+                    if (this[p.element].value.length>0){
+                      jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                    }else{
+                      if (p.notAddWhenValueIsBlank===undefined||p.notAddWhenValueIsBlank===false){
+                        jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                      }
+                    }
+                  }
                 }
-              } else if (p.fixValue) {  //defaultValue
-                  jsonParam[p.argumentName] = p.fixValue // get value from default value (i.e incubator)
-              } else if (p.beItem) {
-                  jsonParam[p.argumentName] = this.selectedItem[0][p.beItem] // get value from selected item
+              } else if (p.defaultValue) {
+                if (p.isAdhocField!==undefined&&p.isAdhocField===true){
+                  var curArgName=jsonParam[p.argumentName]
+                  if (curArgName===undefined){curArgName=''}
+                  if (curArgName.length>0){curArgName=curArgName+"|"}
+                  curArgName=curArgName+p.defaultValue
+                  if (p.fieldType!==undefined){
+                    curArgName=curArgName+"*"+p.fieldType
+                  }
+                  jsonParam[p.argumentName] = curArgName
+                }else{
+                  jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
+                }
               } else if (p.selObjectPropertyName) {
                 jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
               } else if (p.targetValue) {
-                jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
+                jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
+              } else if (p.fixValue) {
+                jsonParam[p.argumentName] = p.fixValue
               } else {
-                  jsonParam[p.argumentName] = p.value
+                jsonParam[p.argumentName] = p.value
               }
-              })            
+              //console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
+            })  
           }
           
           // if (action.paramFilter) {
