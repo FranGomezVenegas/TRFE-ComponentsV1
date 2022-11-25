@@ -4,7 +4,6 @@ import '@material/mwc-button';
 import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-textfield';
-//import '@spectrum-web-components/split-view/sp-split-view';
 
 import './browser-tab';
 import './browser-data';
