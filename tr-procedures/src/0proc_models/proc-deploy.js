@@ -1451,6 +1451,24 @@ export const ProcDeploy = {
           }
         ]
       },
+	  {"actionName": "CANCELSAMPLE",
+        "endPointUrl": "Samples",
+        "requiresDialog": false,
+        "button": {
+          "icon": "view_headline",
+          "title": {
+            "label_en": "Cancel",
+            "label_es": "Cancelar"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ]
+      },	  
       {
         "actionName": "VIEWRESULT",
         "buttonForQuery": true,
@@ -1597,7 +1615,8 @@ export const ProcDeploy = {
         "clientMethod": "getLots"
       }
     },
-    "actions": []
+    
+	"actions": []
   },
   "Deviation": {
     "component": "Tabs",
@@ -1919,19 +1938,88 @@ export const ProcDeploy = {
   },
   "Browser": {
     "hasOwnComponent": true,
-    "component": "Browser",
+    "component": "DataMining",
+	"tabsListElement": {"label_en":"Browsers", "label_es":"Buscador"},
     "tabs": [
-      {
+      {		  
+        "action": "GET_SAMPLE_BY_TESTINGGROUP_SUMMARY_REPORT",
         "label_en": "Sample",
         "label_es": "Sample",
-        "action": "GET_SAMPLE_STAGES_SUMMARY_REPORT",
-        "fixParams": {
+		
+        "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+        "filter":{
+			"fixParams": {
+			},
+			"filterFields":[
+				{"text1": { "label_en": "Sample ID", "label_es": "ID Muestra", "default_value": "539" }}
+			],
+			"endPointParams": [
+				{"argumentName": "sampleId", "element": "text1"}
+			]
+		},
+        "reportElements":[
+			[
+				{"type": "ccccjsonViewer",
+				 "endPointResponseObject":"report_info", 
+				}
+			],		
+			[
+				{"type": "reportTitle", "title":{"label_en": "Certificate of Analysis", "label_es": "Certificado de Análisis"}}
+			],
+			[
+				{"type": "cardSomeElementsSingleObject",				 
+				 "endPointResponseObject":"sample", 
+				 "fieldsToDisplay": [
+					{"name": "sample_id", "label_en": "ID", "label_es": "ID"},
+					{"name": "logged_on", "label_en": "Logged On", "label_es": "F. Registro"},					
+				 ], 
+				 "includeChild": true,
+				 "child": [{			
+						 "type": "cardSomeElementsRepititiveObjects",				 				 
+						 "endPointResponseObject":"sample_revision_testing_group", 
+						 "fieldsToDisplay": [
+							{"name": "testing_group", "label_en": "Testing Group", "label_es": "Grupo Analítico"},
+							{"name": "revision_on", "label_en": "Reviewed On", "label_es": "F. Revisión"},
+							{"name": "ready_for_revision", "label_en": "Ready for revision", "label_es": "Listo para revisar"},								
+						 ],
+						 "includeChild": true,
+						 "child": [{
+							 "type": "cardSomeElementsRepititiveObjects",				 
+							 "endPointResponseObject":"sample_analysis", 
+							 "fieldsToDisplay": [
+								{"name": "analysis", "label_en": "Analysis", "label_es": "Análisis"},
+								{"name": "method_name", "label_en": "Method", "label_es": "Méthodo"}
+							 ],
+							 "includeChild": false,
+							 "child": []
+							 
+						 }]							
+				 }]
+				}			
+			],
+			[
+				{"type": "cccjsonViewer",
+				 "endPointResponseObject":"sample", 
+				}
+			]
+		],
+        "xfixParams": {
           "sampleFieldToRetrieve": "ALL",
           "sampleFieldsToDisplay": "current_stage|program_name|location_name"
         },
-        "extraParams": {
+        "xextraParams": {
           "sampleId": ""
-        }
+        },
+		"xviewDefinition":{
+			"title": "Hola"
+		},
+        "printable": true,
+        "download":{
+          "active": true,
+          "elements":[
+            {"elementName": "datatable"}
+          ] 
+        }		
       },
       {
         "label_en": "Production Lot",
@@ -1947,7 +2035,137 @@ export const ProcDeploy = {
         "extraParams": {
           "lotName": ""
         }
-      }
+      },
+      { "action": "QUERY_READING_OUT_OF_RANGE",
+        "label_en": "Readings out of range", 
+        "label_es": "Lecturas fuera de rango", 
+        "endPoint": "/moduleenvmon/EnvMonAPIstats",
+        "filter":{
+          "fixParams": {
+            "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"
+          },
+          "filterFields":[
+            {"text1": { "label_en": "Program", "label_es": "Programa", "default_value": "" }},
+            {"text2": { "label_en": "Location", "label_es": "Ubicación", "default_value": "" }},
+            {"text3": { "label_en": "Area", "label_es": "Area", "default_value": "" }},
+            {"daterange1":
+              {
+              "dateStart":{ "label_en": "Sampling Start Date", "label_es": "Fecha Inicio Muestreo", "default_value": "" },
+              "dateEnd":{ "label_en": "Sampling End Date", "label_es": "Fecha Fin Muestreo", "default_value": "" }
+              }
+            },
+            {"checkbox1": { "label_en": "Exclude Readings Not Entered Yet", "label_es": "Excluir Lecturas no entradas aún", "default_value": true }},
+            {"number1": { "label_en": "Only readings Equal to", "label_es": "Solo las lecturas igual a", "default_value": "" }},
+            {"number2": { "label_en": "Only readings Greater than", "label_es": "Solo las lecturas Mayores a", "default_value": "" }},
+            {"number3": { "label_en": "Only readings Less than", "label_es": "Solo las lecturas Menores a", "default_value": "" }},
+            {"checkbox4": { "label_en": "Include Microorganisms", "label_es": "Incluir Microorganismos", "default_value": false }},
+            {"text4": { "label_en": "Microorganisms to find", "label_es": "Microorganismos a encontrar", "default_value": "" }}
+          ],
+          "extraParams": [
+            {"argumentName": "programName", "element": "text1"},
+            {"argumentName": "locationName", "element": "text2"},
+            {"argumentName": "area", "element": "text3"},
+            {"argumentName": "excludeReadingNotEntered", "element": "checkbox1"},
+            {"argumentName": "samplingDayStart", "element": "daterange1dateStart"},
+            {"argumentName": "samplingDayEnd", "element": "daterange1dateEnd"},
+            {"argumentName": "readingEqual", "element": "number1"},
+            {"argumentName": "readingMin", "element": "number2"},
+            {"argumentName": "readingMax", "element": "number3"},
+            {"argumentName": "includeMicroorganisms", "element": "checkbox4"},
+            {"argumentName": "MicroorganismsToFind", "element": "text4"}
+          ]      
+        },
+        "printable": true,
+        "download":{
+          "active": true,
+          "elements":[
+            {"elementName": "datatable"}
+          ] 
+        },
+
+        "reportElements":[
+          [
+          {"type": "reportTitle", "title":{"label_en": "Readings Out of Range", "label_es": "Lecturas Fuera de Rango Permitido"}}
+          ],
+          [
+          {"type": "card", "title":{"label_en": "Information", "label_es": "Información"}, 
+            "elementName":"production_lot", "subheadingObj": "text1"}
+          ],
+          [
+          {"type": "chart", "elementName": "counter_range_eval",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"counter_range_eval",
+            "chart_title":{"label_en": "Per out of range type", "label_es":"Por tipo de fuera de rango"},
+            "counter_field_name":"count",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": "transparent",
+              "is3D": true,
+              "colors": ["#dfa942", "#d33737", "#bf120f"]              
+            },
+            "grouper_field_name":"spec_eval",
+            "label_values_replacement":{
+              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
+              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
+              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
+            },
+            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
+            "label_item":{"label_en":"Statussss", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          },
+          {"type": "chart", "elementName": "counter_by_area_spec_tmp",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"counter_by_area_spec_tmp",
+            "chart_title":{"label_en": "Per Area and Spec", "label_es":"Por Area y Especificación"},
+            "counter_field_name":"count",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": "transparent",
+              "is3D": true,
+              "colors": ["#1b7fcc", "#5fbd5f", "#bf120f"]              
+            },
+            "grouper_field_name":"sample_config_code",
+            "label_values_replacement":{
+              "prog_pers_template": {"label_es": "Personal", "label_en": "Personnel"},
+              "program_smp_template": {"label_es": "Muestras", "label_en": "Samples"},
+              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
+            },
+            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
+            "label_item":{"label_en":"Statussss", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          }
+        ],
+        [
+          {"type": "grid", "title":{"label_en": "Info Matching Selection Criteria", "label_es": "Información cumpliendo el criterio de selección"}, 
+           "elementName": "datatable", "fieldsToDisplay":[
+              {"property": "program_name", "header": "Program"}, 
+              {"property": "location_name", "header": "Location"}, 
+              {"property": "area", "header": "Area"}, 
+              {"property": "shift", "header": "shift"}, 
+              {"property": "sampling_date", "header": "Sampling Date"}, 
+              {"property": "raw_value_num", "header": "Value"}, 
+              {"property": "spec_eval_detail", "header": "Spec Eval"}
+           ] 
+          }          
+        ]
+        ]
+      }	  
     ]
   }
 }

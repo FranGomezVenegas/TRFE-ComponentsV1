@@ -1,7 +1,9 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20221018",
+	  "last change on (YYYYMMDD)": "20221020",
+	  "last_change_note_20221020": "Adapting DataMining to jsonParam model once its own jsonParam was removed",
+	  "last_change_note_20221020_2": "argumentName fixValue was doubled for NewIncubator, both have been taken out since this value comes from the dba",
 	  "last_change_note_20221018": "renamed paramFilter by subViewFilter when the entry is for two views and they require particular filters",
 	  "last_change_note_20221017": "Modified SAMPLESTAGE_MOVETONEXT and SAMPLESTAGE_MOVETOPREVIOUS for Samples Pending Plate Reading Second Entry",
       "last_change_note_20221012": "Added first fix for entering results",
@@ -35,7 +37,7 @@ export const EmDemoA = {
       },
       "gridHeader": {
         "lot_name": {"label_en": "Name", "label_es": "Nombre", "width": "80%", "sort": false, "filter": true, "align": "left"},
-        "created_on": {"label_en": "Created On", "label_es": "F. Creación", "width": "20%", "sort": true, "filter": false, "confidential_value":true},
+        "created_on": {"label_en": "Created On", "label_es": "F. Creación", "width": "20%", "sort": true, "filter": false, "confidential_value":false},
 		"closed_on": {"label_en": "Closed On", "label_es": "F. Cierre", "width": "20%", "sort": true, "filter": false}
       }
     },
@@ -67,7 +69,9 @@ export const EmDemoA = {
         "dialogInfo": {          
           "name": "genericDialog",
           "fields": [
-			{"text1": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" }}
+			{"text1": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" }},
+			{"text2": { "label_en": "Description", "label_es": "Descripción" }},
+			{"date1": { "label_en": "Date of something", "label_es": "Fecha de algo" }}
           ]
         },
         "endPointParams": [
@@ -295,6 +299,7 @@ export const EmDemoA = {
           "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
+	    
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
         ],        
@@ -304,6 +309,7 @@ export const EmDemoA = {
           "action": [
             {
               "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+			  "auditObjectType": "Sample",
 			  "requiresDialog": false,
 			  "notGetViewData": true,
 			  "xxxxsecondaryActionToPerform": {
@@ -349,13 +355,12 @@ export const EmDemoA = {
           "namesssss": "dateDialog",
 		  "name": "genericDialog",
           "fields": [            
-			{"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" }},
-			{"text1": { "label_en": "new Date", "label_es": "Nueva Fecha" }}
+			{"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" , "optional": true}}			
           ]  		  
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-          { "argumentName": "newDateTime", "element": "datetime1", "selObjectPropertyName": "sampling_date"  }
+          { "argumentName": "newDateTime", "element": "datetime1"}
         ]
       },
       { "actionName": "SAMPLESTAGE_MOVETONEXT",
@@ -1344,7 +1349,6 @@ export const EmDemoA = {
           { "actionName": "EM_BATCH_INCUB_CREATE",
 			"requiresDialog": true,
 			"endPointUrl": "Programs",
-            "xxxclientMethod": "setIncubator",
             "button": {
               "title": {
                 "label_en": "New Batch", "label_es": "Nuevo Lote"
@@ -1415,7 +1419,6 @@ export const EmDemoA = {
           { "actionName": "EM_BATCH_INCUB_START",
 			"endPointUrl": "Programs",
 			"requiresDialog": false,
-            "xxxclientMethod": "setIncubator",
             "button": {
               "title": {
                 "label_en": "Start Incubator", "label_es": "Iniciar Incubadora"
@@ -1433,7 +1436,6 @@ export const EmDemoA = {
           { "actionName": "EM_BATCH_INCUB_END",
 			"endPointUrl": "Programs",
 		    "requiresDialog": false,
-            "xxxclientMethod": "setIncubator",
             "button": {
               "title": {
                 "label_en": "End Incubator", "label_es": "Termina incubadora"
@@ -2030,9 +2032,7 @@ export const EmDemoA = {
           { "argumentName": "newIncubator", "element": "text1" },
           { "argumentName": "incubStage", "element": "list1" },
           { "argumentName": "minTemp", "element": "number1" },
-          { "argumentName": "maxTemp", "element": "number2" },
-          { "argumentName": "fieldName", "fixValue": "active" },
-          { "argumentName": "fieldValue", "fixValue": "true*Boolean" }
+          { "argumentName": "maxTemp", "element": "number2" }
         ]
       },
       { "actionName": "EM_INCUBATOR_ACTIVATE",
@@ -2152,7 +2152,7 @@ export const EmDemoA = {
           "batchFieldsToDisplay": "name|active|completed|incubation_incubator|incubation_start|incubation_end"
         },
         "extraParams": {
-          "batchName": ""
+          "batchName": "20220513"
         }
       },
       { 
@@ -2310,7 +2310,7 @@ export const EmDemoA = {
         "label_es": "Muestras por Lote de Producción", 
         "endPoint": "/moduleenvmon/EnvMonAPIstats",
         "filter":{
-          "fixParams": {
+          "xfixParams": {
           },
           "filterFields":[
             {"daterange1":
@@ -2319,7 +2319,7 @@ export const EmDemoA = {
               "dateEnd":{ "label_en": "Sampling End Date", "label_es": "Fecha Fin Muestreo", "default_value": "" }
               }
             },
-            {"text1": { "label_en": "Lot Name", "label_es": "Lote", "default_value": "Lote video 1" }},
+            {"text1": { "label_en": "Lot Name", "label_es": "Lote", "default_value": "20220202" }},
             {"text2": { "label_en": "Program", "label_es": "Programa", "default_value": "" }},
             {"text3": { "label_en": "Location", "label_es": "Ubicación", "default_value": "" }},
             {"text4": { "label_en": "Area", "label_es": "Area", "default_value": "" }},
@@ -2331,20 +2331,20 @@ export const EmDemoA = {
             {"checkbox3": { "label_en": "Include Microorganisms", "label_es": "Incluir Microorganismos", "default_value": false }},
             {"text5": { "label_en": "Microorganisms to find", "label_es": "Microorganismos a encontrar", "default_value": "" }}
           ],
-          "extraParams": [
-            {"argumentName": "lotName", "element": "text1"},
-            {"argumentName": "programName", "element": "text2"},
-            {"argumentName": "locationName", "element": "text3"},
-            {"argumentName": "area", "element": "text4"},
-            {"argumentName": "excludeSamplerSamples", "element": "checkbox1"},
-            {"argumentName": "excludeReadingNotEntered", "element": "checkbox2"},
-            {"argumentName": "samplingDayStart", "element": "daterange1dateStart"},
-            {"argumentName": "samplingDayEnd", "element": "daterange1dateEnd"},
-            {"argumentName": "readingEqual", "element": "number1"},
-            {"argumentName": "readingMin", "element": "number2"},
-            {"argumentName": "readingMax", "element": "number3"},
-            {"argumentName": "includeMicroorganisms", "element": "checkbox3"},
-            {"argumentName": "MicroorganismsToFind", "element": "text5"}
+          "endPointParams": [
+            {"argumentName": "lotName", "element": "text1", "notAddWhenValueIsBlank": true},
+            {"argumentName": "programName", "element": "text2", "notAddWhenValueIsBlank": true},
+            {"argumentName": "locationName", "element": "text3", "notAddWhenValueIsBlank": true},
+            {"argumentName": "area", "element": "text4", "notAddWhenValueIsBlank": true},
+            {"argumentName": "excludeSamplerSamples", "element": "checkbox1", "notAddWhenValueIsBlank": true},
+            {"argumentName": "excludeReadingNotEntered", "element": "checkbox2", "notAddWhenValueIsBlank": true},
+            {"argumentName": "samplingDayStart", "element": "daterange1dateStart", "notAddWhenValueIsBlank": true},
+            {"argumentName": "samplingDayEnd", "element": "daterange1dateEnd", "notAddWhenValueIsBlank": true},
+            {"argumentName": "readingEqual", "element": "number1", "notAddWhenValueIsBlank": true},
+            {"argumentName": "readingMin", "element": "number2", "notAddWhenValueIsBlank": true},
+            {"argumentName": "readingMax", "element": "number3", "notAddWhenValueIsBlank": true},
+            {"argumentName": "includeMicroorganisms", "element": "checkbox3", "notAddWhenValueIsBlank": true},
+            {"argumentName": "MicroorganismsToFind", "element": "text5", "notAddWhenValueIsBlank": true}
           ]      
         },
         "reportElements":[
@@ -2379,7 +2379,7 @@ export const EmDemoA = {
         "label_es": "Recovery Rate", 
         "endPoint": "/moduleenvmon/EnvMonAPIstats",
         "filter":{
-          "fixParams": {
+          "xxfixParams": {
             "fieldsToRetrieveOrGrouping": "program_name|location_name",
             "whereFieldsName": "sample_config_code|program_name",
             "whereFieldsValue": "program_smp_template*STRING|LlenadoVialesFA2018*STRING"
@@ -2392,7 +2392,11 @@ export const EmDemoA = {
             {"checkbox5": { "label_en": "Show OUTs", "label_es": "Mostrar OUTs", "default_value": true }},
             {"number1": { "label_en": "Perc Num Decs", "label_es": "Num Decimales Perc", "default_value": 2 }}
           ],
-          "extraParams": [
+          "endPointParams": [
+			{"argumentName": "fieldsToRetrieveOrGrouping", "fixValue": "program_name|location_name"},
+			{"argumentName": "whereFieldsName", "fixValue": "sample_config_code|program_name"},
+			{"argumentName": "whereFieldsValue", "fixValue": "program_smp_template*STRING|LlenadoVialesFA2018*STRING"},
+			
             {"argumentName": "showRowTotal", "element": "checkbox1"},
             {"argumentName": "showAbsence", "element": "checkbox2"},
             {"argumentName": "showPresence", "element": "checkbox3"},
@@ -2427,7 +2431,7 @@ export const EmDemoA = {
             "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|area*counter_by_area|has_pre_invest*counter_out|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"
           },
           "filterFields":[
-            {"text1": { "label_en": "Lot Name", "label_es": "Lote", "default_value": "Lote video 1" }},
+            {"text1": { "label_en": "Lot Name", "label_es": "Lote", "default_value": "20220202" }},
             {"text2": { "label_en": "Program", "label_es": "Programa", "default_value": "" }},
             {"text3": { "label_en": "Location", "label_es": "Ubicación", "default_value": "" }},
             {"text4": { "label_en": "Area", "label_es": "Area", "default_value": "" }},
@@ -2561,7 +2565,7 @@ export const EmDemoA = {
         "label_es": "Histórico de muestreos de personal", 
         "endPoint": "/moduleenvmon/EnvMonAPIstats",
         "filter":{
-          "fixParams": [
+          "xxxfixParams": [
             {"sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|area*counter_by_area|has_pre_invest*counter_out|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"},
             {"includeSamplerSamples": "true"},
             {"includeSamples": "false"}
@@ -2587,7 +2591,11 @@ export const EmDemoA = {
             {"checkbox4": { "label_en": "Include Microorganisms", "label_es": "Incluir Microorganismos", "default_value": false }},
             {"text6": { "label_en": "Microorganisms to find", "label_es": "Microorganismos a encontrar", "default_value": "" }}
           ],
-          "extraParams": [
+          "endPointParams": [
+		  {"argumentName": "sampleGroups", "fixValue": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|area*counter_by_area|has_pre_invest*counter_out|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"},
+		  {"argumentName": "includeSamplerSamples", "fixValue": "true"},
+		  {"argumentName": "includeSamples", "fixValue": "false"},
+		  
             {"argumentName": "samplerName", "element": "text1"},
             {"argumentName": "samplerArea", "element": "listMDSamplerPersonalAreas"},
             {"argumentName": "programName", "element": "text3"},
@@ -2720,7 +2728,7 @@ export const EmDemoA = {
               }
             }
           ],
-          "extraParams": [
+          "endPointParams": [
             {"argumentName": "excludeNotClosedYet", "element": "checkbox1"},
             {"argumentName": "creationDayStart", "element": "daterange1dateStart"},
             {"argumentName": "creationDayEnd", "element": "daterange1dateEnd"},

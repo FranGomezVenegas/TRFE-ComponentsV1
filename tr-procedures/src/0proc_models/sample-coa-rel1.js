@@ -22,7 +22,7 @@ export const SampleCoaRel1 = {
       "fields":[
         {"list1": {
           "items": [
-            { "keyName": "demo", "keyValue_en": "Demo", "keyValue_es": "Demo" }
+            { "keyName": "demo", "keyValue_en": "demo", "keyValue_es": "demo" }
           ],
           "label_en": "Spec", "label_es": "Espec"
         }},
@@ -44,9 +44,9 @@ export const SampleCoaRel1 = {
         "selObjectVariableName": "",
         "endPoint": "/modulesample/SampleAPIactions",
         "endPointParams": [
-          {"argumentName": "specName", "element": "list1"},
+          {"argumentName": "specName", "value": "demo"},
           {"argumentName": "specVersion", "value": "1"},
-          {"argumentName": "variationName", "element": "list2"},
+          {"argumentName": "variationName", "value": "global"},
           {"argumentName": "sampleTemplate", "value": "template"},
           {"argumentName": "sampleTemplateVersion", "value": "1"}
           

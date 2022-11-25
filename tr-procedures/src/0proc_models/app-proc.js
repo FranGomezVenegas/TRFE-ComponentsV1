@@ -388,6 +388,38 @@ export const AppProc = {
       }
     },
   "actions": [
+      { "actionName": "COMPLETE_CALIBRATION",
+        "alternativeAPIActionMethod": "completeInstrumentEventAction",
+		"requiresDialog": true,
+        "dialogInfo": {          
+          "namexxx": "completeInstrumentEventDialog",
+		  "name": "genericDialog",
+            "fields": [
+				{"list1": { "label_en": "Decision", "label_es": "Decisión",
+                  "items":[
+                    {"keyName":"ACCEPTED", "keyValue_en":"Accepted", "keyValue_es":"Aceptado"},
+                    {"keyName":"ACCEPTED_WITH_RESTRICTIONS", "keyValue_en":"Accepted with restrictions", "keyValue_es":"Aceptado con restricciones"},
+                    {"keyName":"REJECTED", "keyValue_en":"Rejected", "keyValue_es":"Rechazado"}
+                  ]}
+				}      
+            ]
+        },
+        "button": {
+            "icon": "alarm_on",
+            "title": {
+                "label_en": "Complete Calibration", "label_es": "Completar Calibración"
+            },
+            "requiresGridItemSelected": true,
+			"showWhenSelectedItem": {
+				"column": "event_type",
+				"value": "CALIBRATION"
+			}				
+        },
+        "endPointParams": [
+            { "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
+            { "argumentName": "decision", "element": "list1" }
+        ]
+    },
       { "actionName": "COMPLETE",
         "alternativeAPIActionMethod": "completeInstrumentEventAction",
 		"requiresDialog": true,
@@ -415,7 +447,13 @@ export const AppProc = {
             { "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
             { "argumentName": "decision", "element": "list1" }
         ]
-    },
+    },	
+	
+
+	
+	
+	
+	
       { "actionName": "INSTRUMENT_EVENT_VARIABLES",
 		"requiresDialog": true,		
         "alertMsg": {
