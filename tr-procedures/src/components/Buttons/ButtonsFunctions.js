@@ -135,112 +135,6 @@ export function ButtonsFunctions(base) {
       `
       }    
     
-    xgetButton() {
-      
-    return html`
-      <style>
-        mwc-icon-button#lang {        
-          color : rgba(36, 192, 235, 1);
-          font-family : Montserrat;
-          font-weight : bold;
-          font-size : 19px;
-        }
-        mwc-icon-button {        
-          color : rgba(36, 192, 235, 1);
-          font-family : Montserrat;
-          font-weight : bold;
-          font-size : 19px;
-        }        
-        mwc-icon-button.disabledtrue{        
-          color : red;
-          font-family : Montserrat;
-          font-weight : bold;
-          font-size : 19px;
-        }        
-        mwc-icon-button#video {
-          color : #FFFFFF;
-          color : rgba(36, 192, 235, 1);
-        }
-        sp-button {
-          background : #24C0EB;
-          background : rgba(36, 192, 235, 1);
-          border-color : inherit !important;
-          border-radius : 35px;
-          -moz-border-radius : 35px;
-          -webkit-border-radius : 35px;
-          font-family : Montserrat;
-          font-weight : bold;
-          font-size : 19px;
-          color : #FFFFFF;
-          color : rgb(255, 255, 255);
-        }
-        mwc-textfield {
-          border-style : Solid;
-          border-color : #999999;
-          border-color : rgba(153, 153, 153, 1);        
-          border-width : 1px;
-          border-radius : 7px;
-          -moz-border-radius : 7px;
-          -webkit-border-radius : 7px;   
-          font-family : Montserrat;
-          font-weight : bold;
-          font-size : 19px;
-          background-color :  #FFFFFF;
-          background-color : rgb(255, 255, 255);     
-          background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
-        }
-        mwc-textfield.mdc-text-field {
-          background-color :  #FFFFFF;
-          background-color : rgb(255, 255, 255);     
-        }
-        mwc-textfield.mdc-textfield.mdc-floating-label {
-          color: red; 
-        }
-      </style>        
-        ${this.viewModelFromProcModel.viewQuery&&this.viewModelFromProcModel.viewQuery.addRefreshButton&&this.viewModelFromProcModel.viewQuery.addRefreshButton ===true?
-        html`
-        <mwc-icon-button 
-            class="${this.viewModelFromProcModel.viewQuery.button.class}"
-            icon="${this.viewModelFromProcModel.viewQuery.button.icon}" 
-            title="${this.viewModelFromProcModel.viewQuery.button.title['label_'+this.lang]}"             
-            @click=${()=>this.GetViewData()}>
-        </mwc-icon-button>` : nothing
-        }
-        ${this.viewModelFromProcModel.actions&&this.viewModelFromProcModel.actions.map(action =>
-        html`
-        ${this.btnHidden(action) ? nothing : 
-        html`${action.button ?
-            html`${action.button.icon ?
-            html`<mwc-icon-button 
-                class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
-                icon="${action.button.icon}" 
-                title="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${this.btnDisabled(action, sectionModel)}
-                ?hidden=${this.btnHidden(action)}
-                @click=${()=>this.actionMethod(action, sectionModel)}></mwc-icon-button>` :
-            html`${action.button.img ?
-                html`<mwc-icon-button 
-                class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)} img"
-                title="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${this.btnDisabled(action, sectionModel)}
-                ?hidden=${this.btnHidden(action)}
-                @click=${()=>this.actionMethod(action, sectionModel)}>
-                    <img class="iconBtn" src="images/${action.button.img}">
-                </mwc-icon-button>` :
-                html`<mwc-button dense raised 
-                label="${action.button.title['label_'+this.lang]}" 
-                ?disabled=${this.btnDisabled(action, sectionModel)}
-                ?hidden=${this.btnHidden(action)}
-                @click=${()=>this.actionMethod(action, sectionModel)}></mwc-button>`
-            }`
-            }` :
-            nothing
-          }`
-        }`
-        )}
-    `
-    }    
-
     btnDisabled(action, viewModelFromProcModel=this.viewModelFromProcModel) {
       //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
         let d = false
@@ -261,9 +155,6 @@ export function ButtonsFunctions(base) {
           //console.log('btnDisabled', 'disabledByCertification returned ', d)
           if (d) {return d}
         }
-// if (action.actionName==='EM_ACTIVATE_PRODUCTION_LOT'){
-//   console.log(d, 'requiresGridItemSelected', action.button.requiresGridItemSelected, 'viewModelFromProcModel.alternativeItemPropertyName', viewModelFromProcModel.alternativeItemPropertyName)
-// }        
         if (action.button.requiresGridItemSelected!==undefined){
           if (action.button.requiresGridItemSelected===false){
             return false
@@ -293,17 +184,6 @@ export function ButtonsFunctions(base) {
           }
         }
         return d
-
-        if (this.sopsPassed == false) {
-          if (this.windowOpenable == "yes") {
-            d = action.button.whenDisabled == "samplesReload" && action.button.title.label_en == "Reload" ? this.samplesReload : true
-          }
-        } else {
-          if (action.button.whenDisabled===undefined){return false}
-          d = action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedItems.length
-        }
-        return false
-        
     }    
     btnHidden(action) {
     let d = false
@@ -361,46 +241,7 @@ export function ButtonsFunctions(base) {
         }else{
             alert('the dialog '+action.dialogInfo.name+' does not exist')
         }
-
-    return
-        if (replace) {
-        this.selectedAction = action
-        }
-        if (actionNumIdx!==undefined) {
-        var viewDef=ProceduresModel[this.procName][this.viewName]
-        action = viewDef.actions[actionNumIdx]
-        this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[actionNumIdx]
-        }else{
-        //action = ProceduresModel[this.procName][this.viewName].viewQuery
-        //this.selectedAction = ProceduresModel[this.procName][this.viewName].viewQuery
-        }
-        if (action===undefined){
-        alert('actionMethod--> viewQuery property not found in the procedure model for procInstanceName'+this.procName+' and view '+this.viewName)
-        return
-        }
-        if (action&&action.dialogInfo) {
-        if (action.dialogInfo.automatic) {
-            if (this.itemId) {
-            this.credsChecker(action.actionName, this.itemId, this.jsonParam(), action)
-            } else if (this.selectedItems.length) {
-            this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(), action)
-            } else {
-            this.credsChecker(action.actionName, null, this.jsonParam(), action)
-            }
-        } else {
-            if (this[action.dialogInfo.name]){
-            this[action.dialogInfo.name].show()          
-            }else{
-            alert('the dialog '+action.dialogInfo.name+' does not exist')
-            }
-        }
-        } else {
-        if (this.selectedItems.length) {
-            this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(), action)
-        } else {
-            this.credsChecker(action.actionName, null, this.jsonParam(), action)
-        }
-        }
+      return
     }    
     async GetViewData(){
         console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
@@ -483,7 +324,9 @@ export function ButtonsFunctions(base) {
         //console.log('params', params)        
         await this.fetchApi(params).then(j => {
           if (j && !j.is_error) {
+            alert(j.length)
             this[currQuery.variableForData]=j
+
           } else {            
             this[currQuery.variableForData]=[]
           }
@@ -502,20 +345,6 @@ export function ButtonsFunctions(base) {
         // Comentado para habilitar confirmDialogs
         // this.performActionRequestHavingDialogOrNot(action, selectedItem)
         return
-            //console.log('buttonActionWithoutDialog')
-            this.reqParams.actionName=action.actionName
-            var extraParams=this.xjsonParamCommons(action, selectedItem)   
-        //    if (extraParams.includes("ERROR")){return}   
-            let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
-            params=params+'?' + new URLSearchParams(this.reqParams) 
-            if (extraParams!==undefined){
-              params=params + '&' + new URLSearchParams(extraParams)
-            }
-            this.fetchApi(params).then(() => {
-                this.getHolidayCalendars()
-              //this.reload()
-            })
-            //this.getHolidayCalendars()
     }
     performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs ={}){ 
         if (action.alternativeAPIActionMethod!==undefined){
@@ -554,7 +383,8 @@ export function ButtonsFunctions(base) {
             }                                   
             if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined
                 &&action!==null&&action.dialogInfo!==null&&action.dialogInfo.name!==null){
-                  alert('closing dialog')
+                  //alert('closing dialog')
+                  //console.log('closing dialog')
                 this[action.dialogInfo.name].close()
             }
             if (action.secondaryActionToPerform!==undefined){
