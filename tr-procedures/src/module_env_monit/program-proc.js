@@ -29,19 +29,12 @@ import { ApiFunctions } from '../components/Api/ApiFunctions';
 // { tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"}
 
 let tabBtns = {
-  "default": [
+  "tabs": [
     {tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"},
     {tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"},
     {tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"},
     {tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"},
     {tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"}
-  ],
-  "proc-deploy": [
-    {tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"},
-    {tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"},
-    {tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"},
-    {tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"},
-    {tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"},    
   ]
 }
 
@@ -136,7 +129,7 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
             )}
           </mwc-select>
         </div>
-        ${this.showTabElement(tabBtns)}
+        ${this.showTabElement(this.viewModelFromProcModel, tabBtns)}
 
         <summary-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="summary"}></summary-view>
         <parameter-limits .procInstanceName=${this.procInstanceName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
