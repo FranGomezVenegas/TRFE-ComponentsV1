@@ -77,6 +77,13 @@ export function TrazitGenericDialogs(base) {
         }
       }
     }    
+    fieldLabel(fld){        
+        let fldLbl= fld["label_" + this.lang]
+        if (fld.optional===undefined||fld.optional===false){
+            fldLbl="* "+fldLbl
+        }
+        return fldLbl
+    }
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
     genericFormDialog(actionModel = this.actionBeingPerformedModel) {
         // if (this.actionBeingPerformedModel.dialogInfo === undefined) {
@@ -123,70 +130,70 @@ export function TrazitGenericDialogs(base) {
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${fld.text1.default_value ? fld.text1.default_value : ''}  label="${fld.text1["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${fld.text1.default_value ? fld.text1.default_value : ''}  label="${this.fieldLabel(fld.text1)}" 
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${fld.text2.default_value ? fld.text2.default_value : ''} label="${fld.text2["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${fld.text2.default_value ? fld.text2.default_value : ''} label="${this.fieldLabel(fld.text2)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text3" type="text" .value=${fld.text3.default_value ? fld.text3.default_value : ''} label="${fld.text3["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text3" type="text" .value=${fld.text3.default_value ? fld.text3.default_value : ''} label="${this.fieldLabel(fld.text3)}" 
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}                       
                 ${!fld.text4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text4" type="text" .value=${fld.text4.default_value ? fld.text4.default_value : ''} label="${fld.text4["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text4" type="text" .value=${fld.text4.default_value ? fld.text4.default_value : ''} label="${this.fieldLabel(fld.text4)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text5" type="text" .value=${fld.text5.default_value ? fld.text5.default_value : ''} label="${fld.text5["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text5" type="text" .value=${fld.text5.default_value ? fld.text5.default_value : ''} label="${this.fieldLabel(fld.text5)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text6" type="text" .value=${fld.text6.default_value ? fld.text6.default_value : ''} label="${fld.text6["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text6" type="text" .value=${fld.text6.default_value ? fld.text6.default_value : ''} label="${this.fieldLabel(fld.text6)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text7" type="text" .value=${fld.text7.default_value ? fld.text7.default_value : ''} label="${fld.text7["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text7" type="text" .value=${fld.text7.default_value ? fld.text7.default_value : ''} label="${this.fieldLabel(fld.text7)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text8" type="text" .value=${fld.text8.default_value ? fld.text8.default_value : ''} label="${fld.text8["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text8" type="text" .value=${fld.text8.default_value ? fld.text8.default_value : ''} label="${this.fieldLabel(fld.text8)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text9" type="text" .value=${fld.text9.default_value ? fld.text9.default_value : ''} label="${fld.text9["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text9" type="text" .value=${fld.text9.default_value ? fld.text9.default_value : ''} label="${this.fieldLabel(fld.text9)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text10" type="text" .value=${fld.text10.default_value ? fld.text10.default_value : ''} label="${fld.text10["label_" + this.lang]}" 
+                    <mwc-textfield class="layout flex" id="text10" type="text" .value=${fld.text10.default_value ? fld.text10.default_value : ''} label="${this.fieldLabel(fld.text10)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}                              
@@ -195,7 +202,7 @@ export function TrazitGenericDialogs(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number1" type="number" 
                     @input=${e=>this.setValidVal(e, fld)}
-                    .value=${fld.number1.default_value ? fld.number1.default_value : ''} label="${fld.number1["label_" + this.lang]}"
+                    .value=${fld.number1.default_value ? fld.number1.default_value : ''} label="${this.fieldLabel(fld.number1)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -203,7 +210,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number2" type="number" 
-                    .value=${fld.number2.default_value ? fld.number2.default_value : ''}   label="${fld.number2["label_" + this.lang]}"
+                    .value=${fld.number2.default_value ? fld.number2.default_value : ''}   label="${this.fieldLabel(fld.number2)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -211,7 +218,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number3" type="number" 
-                    .value=${fld.number3.default_value ? fld.number3.default_value : ''}   label="${fld.number3["label_" + this.lang]}"
+                    .value=${fld.number3.default_value ? fld.number3.default_value : ''}   label="${this.fieldLabel(fld.number3)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -219,7 +226,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number4" type="number" 
-                    .value=${fld.number4.default_value ? fld.number4.default_value : ''}   label="${fld.number4["label_" + this.lang]}"
+                    .value=${fld.number4.default_value ? fld.number4.default_value : ''}   label="${this.fieldLabel(fld.number4)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -227,7 +234,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number5" type="number" 
-                    .value=${fld.number5.default_value ? fld.number5.default_value : ''}   label="${fld.number5["label_" + this.lang]}"
+                    .value=${fld.number5.default_value ? fld.number5.default_value : ''}   label="${this.fieldLabel(fld.number5)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -235,7 +242,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number6" type="number" 
-                    .value=${fld.number6.default_value ? fld.number6.default_value : ''}   label="${fld.number6["label_" + this.lang]}"
+                    .value=${fld.number6.default_value ? fld.number6.default_value : ''}  label="${this.fieldLabel(fld.number6)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -243,7 +250,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number7" type="number" 
-                    .value=${fld.number7.default_value ? fld.number7.default_value : ''}   label="${fld.number7["label_" + this.lang]}"
+                    .value=${fld.number7.default_value ? fld.number7.default_value : ''}   label="${this.fieldLabel(fld.number7)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -251,7 +258,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number8" type="number" 
-                    .value=${fld.number8.default_value ? fld.number8.default_value : ''}   label="${fld.number8["label_" + this.lang]}"
+                    .value=${fld.number8.default_value ? fld.number8.default_value : ''}   label="${this.fieldLabel(fld.number8)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -259,7 +266,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number9" type="number" 
-                    .value=${fld.number9.default_value ? fld.number9.default_value : ''}   label="${fld.number9["label_" + this.lang]}"
+                    .value=${fld.number9.default_value ? fld.number9.default_value : ''}   label="${this.fieldLabel(fld.number9)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -267,13 +274,13 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number10" type="number" 
-                    .value=${fld.number10.default_value ? fld.number10.default_value : ''}   label="${fld.number10["label_" + this.lang]}"
+                    .value=${fld.number10.default_value ? fld.number10.default_value : ''}   label="${this.fieldLabel(fld.number10)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.checkbox1 ?
                     html``: html`        
-                    <mwc-formfield label="${fld.checkbox1["label_" + this.lang]}">
+                    <mwc-formfield label="${this.fieldLabel(fld.checkbox1)}" >
                         <mwc-checkbox id="checkbox1" 
                         ?checked=${fld.checkbox1.default_value===undefined ? false : fld.checkbox1.default_value}
                         @change=${e => { this.checkbox1.value=this.checkbox1.checked}}
@@ -283,7 +290,7 @@ export function TrazitGenericDialogs(base) {
                 `}                              
                     ${!fld.checkbox2 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox2["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox2)}" >
                         <mwc-checkbox id="checkbox2" 
                         ?checked=${fld.checkbox2.default_value===undefined ? false : fld.checkbox2.default_value}
                         @change=${e => { this.checkbox2.value=this.checkbox2.checked}}
@@ -293,7 +300,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox3 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox3["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox3)}" >
                         <mwc-checkbox id="checkbox3" 
                         ?checked=${fld.checkbox3.default_value===undefined ? false : fld.checkbox3.default_value}
                         @change=${e => { this.checkbox3.value=this.checkbox3.checked}}
@@ -303,7 +310,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox4 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox4["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox4)}" >
                         <mwc-checkbox id="checkbox4" 
                         ?checked=${fld.checkbox4.default_value===undefined ? false : fld.checkbox4.default_value}
                         @change=${e => { this.checkbox4.value=this.checkbox4.checked}}
@@ -313,7 +320,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox5 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox5["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox5)}" >
                         <mwc-checkbox id="checkbox5" 
                         ?checked=${fld.checkbox5.default_value===undefined ? false : fld.checkbox5.default_value}
                         @change=${e => { this.checkbox5.value=this.checkbox5.checked}}
@@ -323,7 +330,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox6 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox6["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox6)}" >
                         <mwc-checkbox id="checkbox6" 
                         ?checked=${fld.checkbox6.default_value===undefined ? false : fld.checkbox6.default_value}
                         @change=${e => { this.checkbox6.value=this.checkbox6.checked}}
@@ -333,7 +340,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox7 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox7["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox7)}" >
                         <mwc-checkbox id="checkbox7" 
                         ?checked=${fld.checkbox7.default_value===undefined ? false : fld.checkbox7.default_value}
                         @change=${e => { this.checkbox7.value=this.checkbox7.checked}}
@@ -343,7 +350,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox8 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox8["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox8)}" >
                         <mwc-checkbox id="checkbox8" 
                         ?checked=${fld.checkbox8.default_value===undefined ? false : fld.checkbox8.default_value}
                         @change=${e => { this.checkbox8.value=this.checkbox8.checked}}
@@ -353,7 +360,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox9 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox9["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox9)}" >
                         <mwc-checkbox id="checkbox9" 
                         ?checked=${fld.checkbox9.default_value===undefined ? false : fld.checkbox9.default_value}
                         @change=${e => { this.checkbox9.value=this.checkbox9.checked}}
@@ -363,7 +370,7 @@ export function TrazitGenericDialogs(base) {
                     `}                              
                     ${!fld.checkbox10 ?
                     html``: html`        
-                        <mwc-formfield label="${fld.checkbox10["label_" + this.lang]}">
+                        <mwc-formfield label="${this.fieldLabel(fld.checkbox10)}" >
                         <mwc-checkbox id="checkbox10" 
                         ?checked=${fld.checkbox10.default_value===undefined ? false : fld.checkbox10.default_value}
                         @change=${e => { this.checkbox10.value=this.checkbox10.checked}}
@@ -372,16 +379,16 @@ export function TrazitGenericDialogs(base) {
                         </mwc-formfield>
                     `}                              
 
-                    ${!fld.date1 ?html``: html`<mwc-textfield id="date1" label="${fld.date1["label_" + this.lang]}" type="date"></mwc-textfield>`}                              
-                    ${!fld.date2 ?html``: html`<mwc-textfield id="date2" label="${fld.date2["label_" + this.lang]}" type="date"></mwc-textfield>`}   
-                    ${!fld.date3 ?html``: html`<mwc-textfield id="date3" label="${fld.date3["label_" + this.lang]}" type="date"></mwc-textfield>`}                              
-                    ${!fld.date4 ?html``: html`<mwc-textfield id="date4" label="${fld.date4["label_" + this.lang]}" type="date"></mwc-textfield>`}   
-                    ${!fld.date5 ?html``: html`<mwc-textfield id="date5" label="${fld.date5["label_" + this.lang]}" type="date"></mwc-textfield>`}                              
-                    ${!fld.date6 ?html``: html`<mwc-textfield id="date6" label="${fld.date6["label_" + this.lang]}" type="date"></mwc-textfield>`}   
-                    ${!fld.date7 ?html``: html`<mwc-textfield id="date7" label="${fld.date7["label_" + this.lang]}" type="date"></mwc-textfield>`}                              
-                    ${!fld.date8 ?html``: html`<mwc-textfield id="date8" label="${fld.date8["label_" + this.lang]}" type="date"></mwc-textfield>`}   
-                    ${!fld.date9 ?html``: html`<mwc-textfield id="date9" label="${fld.date9["label_" + this.lang]}" type="date"></mwc-textfield>`}                              
-                    ${!fld.date10 ?html``: html`<mwc-textfield id="date10" label="${fld.date10["label_" + this.lang]}" type="date"></mwc-textfield>`}   
+                    ${!fld.date1 ?html``: html`<mwc-textfield id="date1" label="${this.fieldLabel(fld.date1)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date2 ?html``: html`<mwc-textfield id="date2" label="${this.fieldLabel(fld.date2)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date3 ?html``: html`<mwc-textfield id="date3" label="${this.fieldLabel(fld.date3)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date4 ?html``: html`<mwc-textfield id="date4" label="${this.fieldLabel(fld.date4)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date5 ?html``: html`<mwc-textfield id="date5" label="${this.fieldLabel(fld.date5)}" > type="date"></mwc-textfield>`}                           
+                    ${!fld.date6 ?html``: html`<mwc-textfield id="date6" label="${this.fieldLabel(fld.date6)}" > type="date"></mwc-textfield>`} 
+                    ${!fld.date7 ?html``: html`<mwc-textfield id="date7" label="${this.fieldLabel(fld.date7)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date8 ?html``: html`<mwc-textfield id="date8" label="${this.fieldLabel(fld.date8)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date9 ?html``: html`<mwc-textfield id="date9" label="${this.fieldLabel(fld.date9)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date10 ?html``: html`<mwc-textfield id="date10" label="${this.fieldLabel(fld.date10)}" > type="date"></mwc-textfield>`}
 
                     ${!fld.datetime1 ?html``: html`<input id="datetime1" type="datetime-local" dialogInitialFocus>`}   
                     ${!fld.datetime2 ?html``: html`<input id="datetime2" type="datetime-local" dialogInitialFocus>`}   
@@ -398,102 +405,96 @@ export function TrazitGenericDialogs(base) {
                     ${!fld.daterange1 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange1dateStart" label="${fld.daterange1.dateStart["label_" + this.lang]}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange1dateEnd" label="${fld.daterange1.dateEnd["label_" + this.lang]}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange1dateStart" label="${this.fieldLabel(fld.daterange1.dateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange1dateEnd" label="${this.fieldLabel(fld.daterange1.dateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
                     ${!fld.daterange2 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange2dateStart" label="${fld.daterange2.dateStart["label_" + this.lang]}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange2dateEnd" label="${fld.daterange2.dateEnd["label_" + this.lang]}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange2dateStart" label="${this.fieldLabel(fld.daterange2.dateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange2dateEnd" label="${this.fieldLabel(fld.daterange2.dateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
                     ${!fld.daterange3 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange3dateStart" label="${fld.daterange3.dateStart["label_" + this.lang]}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange3dateEnd" label="${fld.daterange3.dateEnd["label_" + this.lang]}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange3dateStart" label="${this.fieldLabel(fld.daterange3.dateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange3dateEnd" label="${this.fieldLabel(fld.daterange3.dateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
                     ${!fld.daterange4 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange4dateStart" label="${fld.daterange4.dateStart["label_" + this.lang]}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange4dateEnd" label="${fld.daterange4.dateEnd["label_" + this.lang]}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange4dateStart" label="${this.fieldLabel(fld.daterange4.dateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange4dateEnd" label="${this.fieldLabel(fld.daterange4.dateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
                     ${!fld.daterange5 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange5dateStart" label="${fld.daterange5.dateStart["label_" + this.lang]}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange5dateEnd" label="${fld.daterange5.dateEnd["label_" + this.lang]}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange5dateStart" label="${this.fieldLabel(fld.daterange5.dateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange5dateEnd" label="${this.fieldLabel(fld.daterange5.dateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
                 
 
                 ${!fld.list1 ?html``: html`        
-                    <mwc-select id="list1" label="${fld.list1["label_" + this.lang]}">
+                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}">
                     ${fld.list1.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list2 ?html``: html`        
-                    <mwc-select id="list2" label="${fld.list2["label_" + this.lang]}">
+                    <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}">
                     ${fld.list2.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list3 ?html``: html`        
-                    <mwc-select id="list3" label="${fld.list3["label_" + this.lang]}">
+                    <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}">
                     ${fld.list3.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list4 ?html``: html`        
-                    <mwc-select id="list4" label="${fld.list4["label_" + this.lang]}">
+                    <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}">
                     ${fld.list4.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list5 ?html``: html`        
-                    <mwc-select id="list5" label="${fld.list5["label_" + this.lang]}">
+                    <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}">
                     ${fld.list5.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list6 ?html``: html`        
-                    <mwc-select id="list6" label="${fld.list6["label_" + this.lang]}">
-                    ${fld.list6.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
-                ${!fld.list6 ?html``: html`        
-                    <mwc-select id="list6" label="${fld.list6["label_" + this.lang]}">
+                    <mwc-select id="list6" label="${this.fieldLabel(fld.list6)}">
                     ${fld.list6.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list7 ?html``: html`        
-                    <mwc-select id="list7" label="${fld.list7["label_" + this.lang]}">
+                    <mwc-select id="list7" label="${this.fieldLabel(fld.list7)}">
                     ${fld.list7.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list8 ?html``: html`        
-                    <mwc-select id="list8" label="${fld.list8["label_" + this.lang]}">
+                    <mwc-select id="list8" llabel="${this.fieldLabel(fld.list8)}">
                     ${fld.list8.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list9 ?html``: html`        
-                    <mwc-select id="list9" label="${fld.list9["label_" + this.lang]}">
+                    <mwc-select id="list9" label="${this.fieldLabel(fld.list9)}">
                     ${fld.list9.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
                     </mwc-select>`}  
                 ${!fld.list10 ?html``: html`        
-                    <mwc-select id="list10" label="${fld.list10["label_" + this.lang]}">
+                    <mwc-select id="list10" label="${this.fieldLabel(fld.list10)}">
                     ${fld.list10.items.map((c, i) =>
                         html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
                     )}
