@@ -66,7 +66,7 @@
     "viewName": "Deviation", 
     "filterName" :  "pending" 
   },
-  "localDefaultView": {
+  "localDefaultView123111s": {
     "procName":  "em-demo-a", 
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingSMP" 
@@ -91,7 +91,7 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
-   "localDefaultView999": {
+   "localDefaultView": {
     "procName":  "app", 
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 

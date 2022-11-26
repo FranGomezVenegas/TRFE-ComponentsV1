@@ -102,7 +102,7 @@ export const App = {
             "requiresGridItemSelected": true,
             "hideWhenSelectedItem": {
               "column": "active",
-              "value": true
+              "value": false
             }  
         },
         "endPointParams": [
@@ -118,10 +118,10 @@ export const App = {
               "label_en": "Activate", "label_es": "Activar"
             },
             "requiresGridItemSelected": true,
-            "hideWhenSelectedItem": {
-              "column": "active",
-              "value": false
-            }  
+            "hideWhenSelectedItem": [
+				{"column": "active","value": true},
+				{"column": "active","value": true}
+			]
         },
         "endPointParams": [
           { "argumentName": "id", "selObjectPropertyName": "id" }

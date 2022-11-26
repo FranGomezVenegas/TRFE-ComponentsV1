@@ -186,24 +186,43 @@ export function ButtonsFunctions(base) {
         return d
     }    
     btnHidden(action) {
-    let d = false
-    if (action.button.showWhenSelectedItem) {
-        if (this.selectedItems.length && this.selectedItems[0][action.button.showWhenSelectedItem.column] == action.button.showWhenSelectedItem.value) {
-          d = false
-        }else{
-          d = true
+      let d = false
+      if (action.button.showWhenSelectedItem) {
+        if (this.selectedItems===undefined || this.selectedItems[0]===undefined){return true} // keep hide when no selection
+        if (Array.isArray(action.button.showWhenSelectedItem)) {
+          action.button.showWhenSelectedItem.forEach(rowArray => {
+            if (this.selectedItems[0][rowArray.column] === rowArray.value) {
+              d=true              
+            }
+          })
+          return d
+        }else{ //then it is json object
+          if (this.selectedItems[0][action.button.showWhenSelectedItem.column] !== action.button.showWhenSelectedItem.value) {
+            return false
+          }else{
+            return true
+          }
         }
-    }else if (action.button.hideWhenSelectedItem) {
-      if (this.selectedItems.length && this.selectedItems[0][action.button.hideWhenSelectedItem.column] == action.button.hideWhenSelectedItem.value) {
-        d = true
-      }else{
-        d = false
-      }        
-    } else {
-        d = false
-    }
-    // console.log('btnHidden', action, 'selectedItems', this.selectedItems, 'd', d)      
-    return d
+      }else if (action.button.hideWhenSelectedItem) {
+        if (this.selectedItems===undefined || this.selectedItems[0]===undefined){return true} // keep shown when no selection
+        if (Array.isArray(action.button.hideWhenSelectedItem)) {        
+          action.button.hideWhenSelectedItem.forEach(rowArray => {
+            if (this.selectedItems[0][rowArray.column] != rowArray.value) {
+              d=true              
+            }
+          })
+          return !d
+        }else{ //then it is json object
+          if (this.selectedItems[0][action.button.hideWhenSelectedItem.column] === action.button.hideWhenSelectedItem.value) {
+            return true
+          }else{
+            return false
+          }        
+        }  
+      } else {
+          d = false
+      }
+      return d
     }        
     actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName='selectedItems') {
     //this.loadDialogs()  

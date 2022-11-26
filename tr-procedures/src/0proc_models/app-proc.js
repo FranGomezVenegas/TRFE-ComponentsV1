@@ -85,7 +85,7 @@ export const AppProc = {
 		"requiresDialog": true,
         "endPointParams": [
           { "argumentName": "instrumentName", "element": "text1", "defaultValue": "" },
-          { "argumentName": "familyName", "element": "list1", "defaultValue": "" },
+          { "argumentName": "familyName", "element": "list1", "defaultValue": ""},
           { "argumentName": "modelNumber", "element": "text2", "defaultValue": "" },
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
@@ -114,7 +114,7 @@ export const AppProc = {
                 { "keyName": "familyObsIntentosCorrecto", "keyValue_en": "Corr-Attempt-Obs", "keyValue_es": "Corr-Intent-Obs" },
                 { "keyName": "familyObsIntentoCorrectoTerminado", "keyValue_en": "Corr-Attempt-Obs-End", "keyValue_es": "Corr-Intent-Obs-Term" }
               ],    
-              "label_en": "Family", "label_es": "Familia" 
+              "label_en": "Family", "label_es": "Familia", "optional":true
             }},
             {"text2": { "label_en": "Model Number", "label_es": "Modelo" }},
 			{"list2": { 
