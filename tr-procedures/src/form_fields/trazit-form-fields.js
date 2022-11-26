@@ -107,7 +107,7 @@ export class TrazitFormFields extends LitElement {
             ${!fld.text1 ?
                 html``: html`        
                 <div class="layout horizontal flex center-center">
-                <mwc-textfield class="layout flex" id="text1" type="text" .value=${fld.text1.default_value ? fld.text1.default_value : ''} label="${fld.text1["label_" + this.lang]}" 
+                <mwc-textfield class="layout flex" id="text1" type="text" .value=${fld.text1.default_value ? fld.text1.default_value : ''} label="${fld.text1["label_" + this.lang]}${fld.text1.optional===undefined||fld.text1.optional===false ? "*": ""}" 
                   @keypress=${e => e.keyCode == 13 && this.genomaSuperDialogClickedAction()}></mwc-textfield>
                 </div>
             `}          
