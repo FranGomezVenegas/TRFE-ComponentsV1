@@ -148,6 +148,9 @@ export function DialogsFunctions(base) {
 
     // Now here
     console.log('nextRequest', 'credArguments', credArguments)
+    if (this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
+      this.selectedItems=this[this.actionBeingPerformedModel.alternativeItemPropertyName]
+    }
     if (this.selectedItems===undefined){
       this.selectedItems=[]
       this.selectedItems.push({})

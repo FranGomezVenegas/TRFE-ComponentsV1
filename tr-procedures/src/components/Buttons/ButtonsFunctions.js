@@ -369,7 +369,7 @@ export function ButtonsFunctions(base) {
         if (action.alternativeAPIActionMethod!==undefined){
             this[action.alternativeAPIActionMethod]()
             return
-        }       
+        }      
         var extraParams=this.jsonParam(action, selectedItem, targetValue)   
         let APIParams=this.getAPICommonParams(action)
         let endPointUrl=this.getActionAPIUrl(action)

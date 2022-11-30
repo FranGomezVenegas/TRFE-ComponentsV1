@@ -1590,12 +1590,12 @@ export const EmDemoA = {
 			"endPointUrl": "Samples",
 			"requiresDialog": false,
             "clientMethod": "addRemoveBatch",
+			"alternativeItemPropertyName": "selectedSamples",
             "button": {
               "title": {
                 "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
               },
-              "requiresGridItemSelected": true,
-			  "alternativeItemPropertyName": "selectedSamples"
+              "requiresGridItemSelected": true			  
             },
             "endPointParams": [
               { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
@@ -1608,6 +1608,7 @@ export const EmDemoA = {
 			"endPointUrl": "Samples",
 			"requiresDialog": false,
             "clientMethod": "addRemoveBatch",
+			"alternativeItemPropertyName": "selectedSamples",
             "button": {
               "title": {
                 "label_en": "Remove from Batch", "label_es": "Quitar de Tanda"
@@ -1958,7 +1959,7 @@ export const EmDemoA = {
         "clientMethodzzzz": "getGridData",
         "endPoint": "/moduleenvmon/EnvMonIncubatorAPIqueries",
         "endPointParams": [
-          { "argumentName": "stage", "element": "lotNumDays", "defaultValue": 1 }
+          
         ],
         "addRefreshButton": true,
         "button": {

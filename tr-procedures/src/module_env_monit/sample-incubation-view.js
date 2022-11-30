@@ -857,7 +857,7 @@ samplesPendingIncubLayout(){
         incubStage: this.selectedIncubators[0].stage
       }
       // this.selectedDialogAction = this.selectedAction.dialogInfo.action[0]
-      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action, this.selectedBatches, targetValue)
+      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action, this.selectedBatches[0], targetValue)
       // this.actionMethod(this.selectedDialogAction, false)
       this.assignDialog.close()
     }

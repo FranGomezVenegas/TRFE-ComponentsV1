@@ -92,7 +92,7 @@ export function ApiFunctions(base) {
         return extraParams
       }          
       jsonParam(action, selObject = {}, targetValue = {}) {
-        //alert('jsonParam', 'action', action)
+        console.log('jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue)
         if (action===undefined){return}
           let jsonParam = {}
           if (action.endPointParams) {
