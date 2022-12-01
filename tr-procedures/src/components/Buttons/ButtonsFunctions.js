@@ -185,9 +185,10 @@ export function ButtonsFunctions(base) {
         }
         return d
     }    
-    btnHidden(action) {
+    btnHidden(action) {      
       let d = false
       if (action.button.showWhenSelectedItem) {
+        console.log('btnHidden')
         if (this.selectedItems===undefined || this.selectedItems[0]===undefined){return true} // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {
           action.button.showWhenSelectedItem.forEach(rowArray => {
@@ -198,9 +199,9 @@ export function ButtonsFunctions(base) {
           return d
         }else{ //then it is json object
           if (this.selectedItems[0][action.button.showWhenSelectedItem.column] !== action.button.showWhenSelectedItem.value) {
-            return false
-          }else{
             return true
+          }else{
+            return false
           }
         }
       }else if (action.button.hideWhenSelectedItem) {
@@ -343,7 +344,7 @@ export function ButtonsFunctions(base) {
         //console.log('params', params)        
         await this.fetchApi(params).then(j => {
           if (j && !j.is_error) {
-            alert(j.length)
+            //alert(j.length)
             this[currQuery.variableForData]=j
 
           } else {            
