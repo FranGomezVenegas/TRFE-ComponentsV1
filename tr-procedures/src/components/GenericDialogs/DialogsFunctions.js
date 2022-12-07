@@ -110,6 +110,11 @@ export function DialogsFunctions(base) {
         --idx // the object is on the previous index
         if (p.actions_with_justification_phrase[idx][this.actionName].type) {
           this.justificationType = p.actions_with_justification_phrase[idx][this.actionName].type
+          if (this.justificationType===undefined||this.justificationType.length==0||this.justificationType.length==='LABPLANET_FALSE'){
+            console.log('In procedure business rules, for action '+this.actionName+', No confirmDialogDetail specified, it will use TEXT then')
+            this.justificationType="TEXT"
+          }
+      
           if (this.justificationType != "TEXT") {
             this.justificationList = p.actions_with_justification_phrase[idx][this.actionName].list_entries
           }  
