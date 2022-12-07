@@ -1,5 +1,5 @@
 {
-  "dbName": "labplanet",
+  "dbName": "trazit_2023",
   "isForTesting": false,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
 
@@ -25,7 +25,7 @@
   "SampleAPIqueriesUrl": "/modulesample/SampleAPIqueries",
 
 
-  "local": true,
+  "local": false,
   "localDefaultView142": {
     "procName":  "proc-deploy", 
     "viewName": "SampleEnterResult", 
