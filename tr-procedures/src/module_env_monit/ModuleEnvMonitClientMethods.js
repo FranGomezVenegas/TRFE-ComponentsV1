@@ -50,7 +50,7 @@ export function ModuleEnvMonitClientMethods(base) {
             
         }
         pointTemplate() {
-            console.log('pointTemplate')
+            // console.log('pointTemplate')
 
             if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined||this.viewModelFromProcModel.langConfig.fieldText===undefined
                 ||this.selectedItems===undefined||this.selectedItems[0]===undefined||this.selectedItems[0].card_info===undefined) {

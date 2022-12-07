@@ -188,7 +188,7 @@ export function ButtonsFunctions(base) {
     btnHidden(action) {      
       let d = false
       if (action.button.showWhenSelectedItem) {
-        console.log('btnHidden')
+        //console.log('btnHidden')
         if (this.selectedItems===undefined || this.selectedItems[0]===undefined){return true} // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {
           action.button.showWhenSelectedItem.forEach(rowArray => {
@@ -264,7 +264,7 @@ export function ButtonsFunctions(base) {
       return
     }    
     async GetViewData(){
-        console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
+        //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
         if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
             //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
             if (this[this.viewModelFromProcModel.viewQuery.clientMethod]===undefined){
@@ -276,7 +276,7 @@ export function ButtonsFunctions(base) {
         }
         let queryDefinition=this.viewModelFromProcModel.viewQuery
         if (queryDefinition===undefined){return}
-        console.log('GetViewData', 'queryDefinition', queryDefinition)
+        //console.log('GetViewData', 'queryDefinition', queryDefinition)
         this.samplesReload = true
         this.selectedItems = []      
         let APIParams=this.getAPICommonParams(queryDefinition)

@@ -81,7 +81,7 @@ export function GridFunctions(base) {
         gridList(viewModelFromProcModel ={}) {
             // this.selectedItems=[]
             // this.gridItems=[]
-            console.log('gridList')    
+            //console.log('gridList')    
             if (viewModelFromProcModel===undefined){return} 
             if (this.gridItems.length==0){return       }
             return Object.entries(viewModelFromProcModel.langConfig.gridHeader).map(

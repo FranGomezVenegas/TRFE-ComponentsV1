@@ -462,7 +462,7 @@ get rowTooltip() {
 
   setCellListener() {
     // alert('setCellListener')
-    console.log('setCellListener')
+    //console.log('setCellListener')
     if (this.grid===undefined||this.grid===null){return}
     this.rowTooltip.style.display = "block"
     this.rowTooltip.style.visibility = "hidden"

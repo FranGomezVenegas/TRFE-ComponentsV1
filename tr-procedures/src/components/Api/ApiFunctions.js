@@ -11,7 +11,7 @@ export function ApiFunctions(base) {
           log = false
         }
         log = true
-        console.log('fetchApi, log', log, 'urlParams', urlParams, urlParams.toString().toUpperCase())
+        //console.log('fetchApi, log', log, 'urlParams', urlParams, urlParams.toString().toUpperCase())
         urlParams += "&isForTesting="+ this.config.isForTesting
         this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
         return fetch(urlParams).then(async r => {

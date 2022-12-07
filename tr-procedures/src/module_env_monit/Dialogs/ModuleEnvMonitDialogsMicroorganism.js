@@ -45,7 +45,7 @@ return class extends base {
       `
     }
     openAddDialog(){
-      console.log('openAddDialog')
+      //console.log('openAddDialog')
       return this.microorganismList.length>0&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.name==="microorganismDialogAdd"
 
     }
