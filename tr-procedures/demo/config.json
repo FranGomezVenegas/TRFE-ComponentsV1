@@ -1,5 +1,6 @@
 {
-  "dbName": "trazit_2023",
+  "dbName": "labplanet",
+  "dbName2023": "trazit_2023",
   "isForTesting": false,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
 
@@ -25,7 +26,7 @@
   "SampleAPIqueriesUrl": "/modulesample/SampleAPIqueries",
 
 
-  "local": false,
+  "local": true,
   "localDefaultView142": {
     "procName":  "proc-deploy", 
     "viewName": "SampleEnterResult", 
@@ -51,7 +52,7 @@
     "viewName": "SamplePendingSampling", 
     "filterName" :  "SamplingSMP" 
   },
-  "localDefaultView12344": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "SampleIncubation", 
     "filterName" :  "Incubation" 
@@ -60,6 +61,11 @@
     "procName":  "em-demo-a", 
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismSMP" 
+  },
+  "localDefaultViewdddd": {
+    "procName":  "em-demo-a", 
+    "viewName": "SampleMicroorganism", 
+    "filterName" :  "MicroOrganismPERS" 
   },
   "localDefaultView11": {
     "procName":  "em-demo-a", 
@@ -70,6 +76,11 @@
     "procName":  "em-demo-a", 
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingSMP" 
+  },
+  "localDefaultView1231231231": {
+    "procName":  "em-demo-a", 
+    "viewName": "SamplePlateReading", 
+    "filterName" :  "PlateReadingPERS" 
   },
   "localDefaultView1234122": {
     "procName":  "em-demo-a", 
@@ -91,7 +102,7 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
-   "localDefaultView": {
+   "localDefaultView12311112333": {
     "procName":  "app", 
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 

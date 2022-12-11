@@ -1,7 +1,15 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20221020",
+	  "last change on (YYYYMMDD)": "20221211",
+	  "last_change_note_20221211": "in Sample Incubation, as it has 2 'selectedItems' (one per table) the way to get the endpoint param value is different due to it requires specify from which variable",
+	  "last_change_note_20221211_2": "Fix in microorganism views filter",
+	  "last_change_note_20221201": "added requires sampling static column in log sample",
+	  "last_change_note_20221130": "skip_previous/next the icons for movetoprevious/next",
+	  "last_change_note_20221130_2": "For SampleIncubation, fixed the issue to get data from alternativeItemPropertyName ",
+	  "last_change_note_20221129": "MicroorganismIdentif, in filter use | instead of * for separator",
+	  "last_change_note_20221128": "Incubators List, removed endpointParam as made no sense",
+	  "last_change_note_20221104": "Commented objects have been removed",
 	  "last_change_note_20221020": "Adapting DataMining to jsonParam model once its own jsonParam was removed",
 	  "last_change_note_20221020_2": "argumentName fixValue was doubled for NewIncubator, both have been taken out since this value comes from the dba",
 	  "last_change_note_20221018": "renamed paramFilter by subViewFilter when the entry is for two views and they require particular filters",
@@ -37,7 +45,7 @@ export const EmDemoA = {
       },
       "gridHeader": {
         "lot_name": {"label_en": "Name", "label_es": "Nombre", "width": "80%", "sort": false, "filter": true, "align": "left"},
-        "created_on": {"label_en": "Created On", "label_es": "F. Creación", "width": "20%", "sort": true, "filter": false, "confidential_value":false},
+        "created_on": {"label_en": "Created On", "label_es": "F. Creación", "width": "20%", "sort": true, "filter": false, "confidential_value":true},
 		"closed_on": {"label_en": "Closed On", "label_es": "F. Cierre", "width": "20%", "sort": true, "filter": false}
       }
     },
@@ -69,9 +77,7 @@ export const EmDemoA = {
         "dialogInfo": {          
           "name": "genericDialog",
           "fields": [
-			{"text1": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" }},
-			{"text2": { "label_en": "Description", "label_es": "Descripción" }},
-			{"date1": { "label_en": "Date of something", "label_es": "Fecha de algo" }}
+			{"text1": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" }}
           ]
         },
         "endPointParams": [
@@ -120,7 +126,6 @@ export const EmDemoA = {
       },
       { "actionName": "EM_DEACTIVATE_PRODUCTION_LOT",
         "endPoint": "/moduleenvmon/EnvMonProdLotAPIactions",     
-        "clientMethod": "buttonActionWithoutDialog",
         "endPointParams": [
           { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
         ],
@@ -165,7 +170,8 @@ export const EmDemoA = {
         "spec_code": {"label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true, "width": "20%"},
         "spec_variation_name": {"label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "20%"},
         "spec_analysis_variation": {"label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "20%"},
-        "person_ana_definition": {"label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"}
+        "person_ana_definition": {"label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"},
+        "requires_tracking_sampling_end": {"label_en": "Sampling Static?", "label_es": "Muestreo Estático?", "sort": false, "filter": true, "width": "40%"}
       },
 	  "gridActionOnClick":{"actionName": "LOGSAMPLE",
 		"endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
@@ -212,6 +218,7 @@ export const EmDemoA = {
       },
       "subAction": {
         "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+		"endPoint": "/moduleenvmon/EnvMonAPIqueries",
         "clientMethod": "getLots"
       }
     },
@@ -269,7 +276,6 @@ export const EmDemoA = {
     },
     "viewQuery":{ "actionName": "SAMPLES_BY_STAGE",
       "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-	  "clientMethodxxxxx": "getSamples",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -299,7 +305,6 @@ export const EmDemoA = {
           "requiresGridItemSelected": true
         },
         "clientMethod": "getObjectAuditInfo",
-	    
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
         ],        
@@ -307,17 +312,9 @@ export const EmDemoA = {
 		  "name": "auditDialog",
           "automatic": true,
           "action": [
-            {
-              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
-			  "auditObjectType": "Sample",
+            { "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
 			  "requiresDialog": false,
 			  "notGetViewData": true,
-			  "xxxxsecondaryActionToPerform": {
-				  "name": "getObjectAuditInfo",
-				  "endPointParams": [
-					{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-				  ]
-			  },
 			  "endPointUrl": "Samples",
               "clientMethod": "signAudit",
               "endPointParams": [
@@ -352,15 +349,14 @@ export const EmDemoA = {
           "requiresGridItemSelected": true
         },
         "dialogInfo": { 
-          "namesssss": "dateDialog",
 		  "name": "genericDialog",
           "fields": [            
-			{"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" , "optional": true}}			
+			{"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" }}
           ]  		  
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-          { "argumentName": "newDateTime", "element": "datetime1"}
+          { "argumentName": "newDateTime", "element": "datetime1", "selObjectPropertyName": "sampling_date"  }
         ]
       },
       { "actionName": "SAMPLESTAGE_MOVETONEXT",
@@ -368,7 +364,7 @@ export const EmDemoA = {
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_next",
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
@@ -389,7 +385,6 @@ export const EmDemoA = {
           "requiresGridItemSelected": true
         },
         "dialogInfo": {           
-          "namezzzz": "commentDialog",
 		  "name": "genericDialog",
           "fields": [            
 			{"text1": { "label_en": "new Comment", "label_es": "Comentario", "selObjectPropertyName": "sampling_comment" }}
@@ -425,8 +420,8 @@ export const EmDemoA = {
           "label_es": "Muestras pendientes de la fecha de muestreo por Intervalo"
         },
         "SamplingPERS": {
-          "label_en": "Personnel Samples Pending Sampling Date", 
-          "label_es": "Muestras de personal pendientes de la fecha de muestreo"
+          "label_en": "Personnel Samples Pending Sampling Date by Interval", 
+          "label_es": "Muestras de personal pendientes de la fecha de muestreo  por Intervalo"
         }
       },
       "gridHeader": {
@@ -496,12 +491,6 @@ export const EmDemoA = {
               "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
 			  "requiresDialog": false,
 			  "notGetViewData": true,
-			  "xxxxsecondaryActionToPerform": {
-				  "name": "getObjectAuditInfo",
-				  "endPointParams": [
-					{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-				  ]
-			  },
 			  "endPointUrl": "Samples",
               "clientMethod": "signAudit",
               "endPointParams": [
@@ -538,12 +527,12 @@ export const EmDemoA = {
         "dialogInfo": { 
 		  "name": "genericDialog",
           "fields": [            
-			{"datetime1": { "label_en": "new Comment", "label_es": "Comentario" }}
+			{"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" }}
           ]  		  
         },
         "endPointParams": [
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-          { "argumentName": "newDateTime", "element": "datetime1", "defaultValue": "" }
+          { "argumentName": "newDateTime", "element": "datetime1", "selObjectPropertyName": "sampling_date"  }
         ]
       },
       { "actionName": "SETSAMPLINGDATEEND",
@@ -586,7 +575,7 @@ export const EmDemoA = {
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_next",
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
@@ -607,7 +596,6 @@ export const EmDemoA = {
           "requiresGridItemSelected": true
         },
         "dialogInfo": {           
-          "namezzzz": "commentDialog",
 		  "name": "genericDialog",
           "fields": [            
 			{"text1": { "label_en": "new Comment", "label_es": "Comentario" }}
@@ -707,11 +695,10 @@ export const EmDemoA = {
     },
     "actions": [
       { "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
-		"xxxmode": "readonly",
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_previous",
           "title": {
             "label_en": "Previous", "label_es": "Previo"
           },
@@ -725,7 +712,7 @@ export const EmDemoA = {
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_next",
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
@@ -757,12 +744,6 @@ export const EmDemoA = {
               "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
 			  "requiresDialog": false,
 			  "notGetViewData": true,
-			  "xxxxsecondaryActionToPerform": {
-				  "name": "getObjectAuditInfo",
-				  "endPointParams": [
-					{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-				  ]
-			  },
 			  "endPointUrl": "Samples",
               "clientMethod": "signAudit",
               "endPointParams": [
@@ -886,7 +867,7 @@ export const EmDemoA = {
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_previous",
           "title": {
             "label_en": "Previous", "label_es": "Previo"
           },
@@ -900,7 +881,7 @@ export const EmDemoA = {
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_next",
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
@@ -932,12 +913,6 @@ export const EmDemoA = {
               "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
 			  "requiresDialog": false,
 			  "notGetViewData": true,
-			  "xxxxsecondaryActionToPerform": {
-				  "name": "getObjectAuditInfo",
-				  "endPointParams": [
-					{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-				  ]
-			  },
 			  "endPointUrl": "Samples",
               "clientMethod": "signAudit",
               "endPointParams": [
@@ -1060,7 +1035,6 @@ export const EmDemoA = {
     "viewQuery":
     { "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
 	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "clientMethodxxx": "getSamples",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -1070,12 +1044,18 @@ export const EmDemoA = {
         "requiresGridItemSelected": true
       },
       "endPointParams": [
-        { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" },
-        { "argumentName": "whereFieldsValue", "value": "MicroorganismIdentification|prog_pers_template" }
+        { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" }
+        
       ],
       "subViewFilter": {
-        "MicroOrganismSMP": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code not in*" }],
-        "MicroOrganismPERS": [{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code in*" }]
+        "MicroOrganismSMP": [
+			{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code" },
+			{ "argumentName": "whereFieldsValue", "value": "MicroorganismIdentification|program_smp_template" }
+		],
+        "MicroOrganismPERS": [
+			{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code" },
+			{ "argumentName": "whereFieldsValue", "value": "MicroorganismIdentification|prog_pers_template" }
+		]
       }
     },
     "actions": [
@@ -1083,7 +1063,7 @@ export const EmDemoA = {
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_previous",
           "title": {
             "label_en": "Previous", "label_es": "Previo"
           },
@@ -1097,7 +1077,7 @@ export const EmDemoA = {
 		"requiresDialog": false,
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "next_week",
+          "icon": "skip_next",
           "title": {
             "label_en": "Next", "label_es": "Siguiente"
           },
@@ -1129,12 +1109,6 @@ export const EmDemoA = {
               "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
 			  "requiresDialog": false,
 			  "notGetViewData": true,
-			  "xxxxsecondaryActionToPerform": {
-				  "name": "getObjectAuditInfo",
-				  "endPointParams": [
-					{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-				  ]
-			  },
 			  "endPointUrl": "Samples",
               "clientMethod": "signAudit",
               "endPointParams": [
@@ -1349,11 +1323,12 @@ export const EmDemoA = {
           { "actionName": "EM_BATCH_INCUB_CREATE",
 			"requiresDialog": true,
 			"endPointUrl": "Programs",
+            "xxxclientMethod": "setIncubator",
             "button": {
               "title": {
                 "label_en": "New Batch", "label_es": "Nuevo Lote"
               },
-              "requiresGridItemSelected": true
+              "requiresGridItemSelected": false
             },
             "dialogInfo": {               
 				"name": "genericDialog",
@@ -1379,7 +1354,7 @@ export const EmDemoA = {
 			  "axxxlternativeItemPropertyName": "selectedBatches"
             },
             "endPointParams": [
-              { "argumentName": "batchName", "selObjectPropertyName": "name" }
+              { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" }
             ]
           },
           { "actionName": "EM_BATCH_ASSIGN_INCUB",
@@ -1419,6 +1394,7 @@ export const EmDemoA = {
           { "actionName": "EM_BATCH_INCUB_START",
 			"endPointUrl": "Programs",
 			"requiresDialog": false,
+            "xxxclientMethod": "setIncubator",
             "button": {
               "title": {
                 "label_en": "Start Incubator", "label_es": "Iniciar Incubadora"
@@ -1436,6 +1412,7 @@ export const EmDemoA = {
           { "actionName": "EM_BATCH_INCUB_END",
 			"endPointUrl": "Programs",
 		    "requiresDialog": false,
+            "xxxclientMethod": "setIncubator",
             "button": {
               "title": {
                 "label_en": "End Incubator", "label_es": "Termina incubadora"
@@ -1512,9 +1489,8 @@ export const EmDemoA = {
           { "actionName": "SAMPLESTAGE_MOVETONEXT",
 			"endPointUrl": "Samples",
 			"requiresDialog": false,	
-            "xxxclientMethod": "moveToNext",
             "button": {
-              "icon": "low_priority",
+              "icon": "skip_next",
               "color": "red",
               "title": {
                 "label_en": "Sample Stuck", "label_es": "Muestra Atascada", "extra": "stuckNum"
@@ -1528,24 +1504,23 @@ export const EmDemoA = {
               "name": "sampleStuckDialog"
             },
             "endPointParams": [
-              { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+			{ "argumentName": "sampleId", "internalVariableObjName": "selectedSamples", "internalVariableObjProperty": "sample_id" }
             ]            
           },
           { "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
 			"requiresDialog": false,
 			"endPointUrl": "Samples",
-            "xxclientMethod": "moveToNext",
             "button": {
               "class": "reverse",
-              "icon": "next_week",
+              "icon": "skip_previous",
               "title": {
                 "label_en": "Previous", "label_es": "Previo"
               },
 			  "requiresGridItemSelected": true,
-			  "alternativeItemPropertyName": "selectedSamples"
+			  "xxxalternativeItemPropertyName": "selectedSamples"
             },
             "endPointParams": [
-              { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+              { "argumentName": "sampleId", "internalVariableObjName": "selectedSamples", "internalVariableObjProperty": "sample_id" }
             ]    
           },
 		  { "actionName": "GET_SAMPLE_AUDIT",	  
@@ -1571,12 +1546,6 @@ export const EmDemoA = {
 				  "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
-				  "xxxxsecondaryActionToPerform": {
-					  "name": "getObjectAuditInfo",
-					  "endPointParams": [
-						{ "argumentName": "sampleId", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "sample_id" }
-					  ]
-				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
@@ -1590,12 +1559,13 @@ export const EmDemoA = {
 			"endPointUrl": "Samples",
 			"requiresDialog": false,
             "clientMethod": "addRemoveBatch",
-			"alternativeItemPropertyName": "selectedSamples",
+            "alternativeItemPropertyName": "selectedSamples",
             "button": {
               "title": {
                 "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
               },
-              "requiresGridItemSelected": true			  
+              "requiresGridItemSelected": true,
+			  "xalternativeItemPropertyName": "selectedSamples"
             },
             "endPointParams": [
               { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
@@ -1608,7 +1578,7 @@ export const EmDemoA = {
 			"endPointUrl": "Samples",
 			"requiresDialog": false,
             "clientMethod": "addRemoveBatch",
-			"alternativeItemPropertyName": "selectedSamples",
+            "alternativeItemPropertyName": "selectedSamples",
             "button": {
               "title": {
                 "label_en": "Remove from Batch", "label_es": "Quitar de Tanda"
@@ -1780,8 +1750,7 @@ export const EmDemoA = {
             }		
 		},
 		"actions": [
-          {
-            "actionName": "NEW_INVESTIGATION", 
+          {"actionName": "NEW_INVESTIGATION", 
             "alternativeAPIActionMethod": "newInvestigationAction",
             "endPoint": "/app/InvestigationAPIactions",
 			"requiresDialog": false,
@@ -1797,9 +1766,7 @@ export const EmDemoA = {
 				{ "argumentName": "objectsToAdd", "targetValue": true }			
             ]
           },
-          {
-            "actionName": "OPEN_INVESTIGATIONS",
-            "clientMethodxxx": "getOpenInvestigations",
+          {"actionName": "OPEN_INVESTIGATIONS",          
             "endPoint": "/app/InvestigationAPIqueries",
 			"requiresDialog": true,
             "button": {
@@ -1887,9 +1854,7 @@ export const EmDemoA = {
             }
 		},
 		"actions": [
-          {
-            "actionName": "INVESTIGATION_CAPA_DECISION",			
-            "xxxxalternativeAPIActionMethod": "capaDecisionAction",
+          {"actionName": "INVESTIGATION_CAPA_DECISION",			
             "endPoint": "/app/InvestigationAPIactions",
 			"requiresDialog": true,
             "button": {
@@ -1909,8 +1874,7 @@ export const EmDemoA = {
 			  { "argumentName": "closeInvestigation", "value": false }				  
             ]
           },
-          {
-            "actionName": "CLOSE_INVESTIGATION",
+          {"actionName": "CLOSE_INVESTIGATION",
             "clientMethod": "closeInvestigation",
             "endPoint": "/app/InvestigationAPIactions",
 			"requiresDialog": false,
@@ -1956,10 +1920,8 @@ export const EmDemoA = {
       }
     },
     "viewQuery":{ "actionName": "GET_INCUBATORS_LIST",
-        "clientMethodzzzz": "getGridData",
         "endPoint": "/moduleenvmon/EnvMonIncubatorAPIqueries",
         "endPointParams": [
-          
         ],
         "addRefreshButton": true,
         "button": {
@@ -1993,7 +1955,6 @@ export const EmDemoA = {
       { "actionName": "EM_INCUBATOR_NEW",
         "endPointUrl": "Incubators",
 		"requiresDialog": true,
-        "xxxclientMethod": "setLot",
         "button": {
           "icon": "create_new_folder",
           "title": {
@@ -2003,8 +1964,6 @@ export const EmDemoA = {
         },
         "dialogInfo": {          
           "name": "genericDialog",
-		  "xxxendPointUrl" : "Incubators",
-		  "xxxname": "newIncubatorDialog",
 		  "fields": [
 			{"text1": { "label_en": "New Incub Name", "label_es": "Nombre para nueva Incubadora" }},
 			{"list1": { 
@@ -2016,18 +1975,7 @@ export const EmDemoA = {
 			}},
 			{"number1": { "label_en": "Min Temp", "label_es": "Temp Mín", "default_value":20}},
 			{"number2": { "label_en": "Max Temp", "label_es": "Temp Máx", "default_value":30}}
-          ],
-          "xxxfieldText": {
-            "newName": { "label_en": "New Incub Name", "label_es": "Nombre para nueva Incubadora" },
-            "incubStage": { 
-              "items": [
-                { "keyName": "1", "keyValue_en": "1st Incub", "keyValue_es": "1ª Incub" },
-                { "keyName": "2", "keyValue_en": "2nd Incub", "keyValue_es": "2ª Incub" }
-              ],    
-              "label_en": "Incub Stage", "label_es": "Incubación" },
-            "minTemp": { "label_en": "Min Temp", "label_es": "Temp Mín", "defaultValue":20 },
-            "maxTemp": { "label_en": "Max Temp", "label_es": "Temp Máx", "defaultValue":30 }
-          }
+          ]
         },
         "endPointParams": [
           { "argumentName": "newIncubator", "element": "text1" },
@@ -2079,7 +2027,6 @@ export const EmDemoA = {
       { "actionName": "EM_INCUBATOR_DEACTIVATE",
 		"requiresDialog": false,
         "endPointUrl": "Incubators",     
-        "clientMethod": "buttonActionWithoutDialog",
         "endPointParams": [
           { "argumentName": "incubatorName", "selObjectPropertyName": "name" }
         ],
@@ -2093,7 +2040,6 @@ export const EmDemoA = {
       },
       { "actionName": "EM_INCUBATOR_ADD_TEMP_READING",
         "endPointUrl": "Incubators",     
-        "xxxclientMethod": "buttonActionWithoutDialog",
 		"requiresDialog": true,
         "endPointParams": [
           { "argumentName": "incubatorName", "selObjectPropertyName": "name" },
@@ -2153,7 +2099,7 @@ export const EmDemoA = {
           "batchFieldsToDisplay": "name|active|completed|incubation_incubator|incubation_start|incubation_end"
         },
         "extraParams": {
-          "batchName": "20220513"
+          "batchName": ""
         }
       },
       { 
@@ -2311,8 +2257,6 @@ export const EmDemoA = {
         "label_es": "Muestras por Lote de Producción", 
         "endPoint": "/moduleenvmon/EnvMonAPIstats",
         "filter":{
-          "xfixParams": {
-          },
           "filterFields":[
             {"daterange1":
               {
@@ -2380,11 +2324,6 @@ export const EmDemoA = {
         "label_es": "Recovery Rate", 
         "endPoint": "/moduleenvmon/EnvMonAPIstats",
         "filter":{
-          "xxfixParams": {
-            "fieldsToRetrieveOrGrouping": "program_name|location_name",
-            "whereFieldsName": "sample_config_code|program_name",
-            "whereFieldsValue": "program_smp_template*STRING|LlenadoVialesFA2018*STRING"
-          },
           "filterFields":[
             {"checkbox1": { "label_en": "Show Row Totals", "label_es": "Mostrar Totales", "default_value": true }},
             {"checkbox2": { "label_en": "Show Absences", "label_es": "Mostrar Ausencias", "default_value": true }},
@@ -2566,11 +2505,6 @@ export const EmDemoA = {
         "label_es": "Histórico de muestreos de personal", 
         "endPoint": "/moduleenvmon/EnvMonAPIstats",
         "filter":{
-          "xxxfixParams": [
-            {"sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|area*counter_by_area|has_pre_invest*counter_out|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"},
-            {"includeSamplerSamples": "true"},
-            {"includeSamples": "false"}
-          ],
           "filterFields":[
             {"text1": { "label_en": "Sampler Name", "label_es": "Muestreador", "default_value": "" }},
             {"listMDSamplerPersonalAreas": { "label_en": "Sampler Area", "label_es": "Area Muestreada", "default_value": "" }},
@@ -2796,3 +2730,4 @@ export const EmDemoA = {
     ]
   }   
 }
+
