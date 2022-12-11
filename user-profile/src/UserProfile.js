@@ -4,10 +4,8 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
 import '@spectrum-web-components/button/sp-button';
-
 import { DialogsFunctions } from '../../tr-procedures/src/components/GenericDialogs/DialogsFunctions';
 import {TrazitCredentialsDialogs} from '../../tr-procedures/src/components/GenericDialogs/TrazitCredentialsDialogs';
-
 const viewInfoDefinition = {
   "Password": {
     "label_en": "New Password",
@@ -39,7 +37,6 @@ const viewInfoDefinition = {
     "label_es": "Guardar Pestañas Actuales"
   }
 };
-
 export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredDialog)) {
   static get styles() {
     return [
@@ -157,7 +154,6 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       `      
     ];
   }
-
   render() {
     return html`
       <div class="input">
@@ -189,7 +185,6 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
   get newPwd() {return this.shadowRoot.querySelector("mwc-textfield#newPwd")}
   get newEsg() {return this.shadowRoot.querySelector("mwc-textfield#newEsign")}
   get newShift() {return this.shadowRoot.querySelector("mwc-select#newShift")}
-
   static get properties() {
     return {
       userShift: { type: String },
@@ -200,19 +195,16 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
     super();
     this.targetValue = {}
   }
-
   authorized() {
     super.authorized()
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     console.log('userShift', 'userSession.header_info', userSession.header_info);
     this.userShift = userSession.header_info.shift
   }
-
   reset() {
     super.reset()
     this.changing = true
   }
-
   firstUpdated() {
     super.firstUpdated()
     this.updateComplete.then(() => {
@@ -223,57 +215,60 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       })
     })
   }
-
   confirmNewVal(actionName) {
     let action={}
     action.actionName = actionName
     action.endPoint = this.config.appAuthenticateApiUrl
     action.requiresDialog = false
+    action.notGetViewData = true
     this.targetValue=this.reqParams
-
     if (actionName == "USER_CHANGE_PSWD") {
       this.type = "user"
       if (this.newPwd.value===undefined||this.newPwd.value.length===0){
         alert(viewInfoDefinition.Password["empty_label_" + this.lang])
         return
       }
-      alert('action under development')
-      return
-        this.selectedItems=[]
-      let item={newPassword: this.newPwd.value}
-      this.selectedItems.push(item)
-      this.actionMethod(action)
-      return
-      this.config.appAuthenticateApiUrl
+//        this.selectedItems=[]
+//      let item={newPassword: this.newPwd.value}
+//      this.selectedItems.push(item)
+//      this.actionMethod(action)
+      //return
+//      this.config.appAuthenticateApiUrl
+      this.actionBeingPerformedModel=action
+      this.type = "user"
       this.credsChecker(actionName, -1, {
-        newPassword: this.newPwd.value}, action)
-
+        newPassword: this.newPwd.value}, action, true, 'user')
     } else if (actionName == "USER_CHANGE_ESIGN") {
       this.type = "esign"
       if (this.newEsg.value===undefined||this.newEsg.value.length===0){
         alert(viewInfoDefinition.Esign["empty_label_" + this.lang])
         return
       }
-      alert('action under development')
-      return
-        
+      this.actionBeingPerformedModel=action
+      this.type = "esign"
       this.credsChecker(actionName, -1, {
-        newEsign: this.newEsg.value}, action)
+        newEsign: this.newEsg.value}, action, true, 'esign')
     } else if (actionName == "UPDATE_USER_SHIFT") {
-      alert('action under development')
-      return
-        this.type = "user"
+      console.log('action', action)
+      action.endPoint='/app/PlatformAdminAPIactions'
+      this.actionBeingPerformedModel=action
+      this.type = "user"
       this.credsChecker(actionName, -1, {
-        newShift: this.newShift.value}, this.targetValue, action)
+        newShift: this.newShift.value}, this.targetValue, action, true, 'user')
     }
   }
-
   /**
   Once user found and verified, confirm the shift changing
   */
   confirmNewShift() {
-    let params = this.config.backendUrl + this.config.appPlatformAdminActions
-      + '?' + new URLSearchParams(this.reqParams)
+    let action={}
+    action.actionName = 'UPDATE_USER_SHIFT'
+    action.endPoint = '/app/PlatformAdminAPIactions'
+    action.requiresDialog = false
+    action.notGetViewData = true
+    let APIParams=this.getAPICommonParams(action)
+    let params = this.config.backendUrl + action.endPoint
+      + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(this.reqParams)
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     this.fetchApi(params).then(j => {
       if (j && !j.is_error) {
@@ -282,27 +277,38 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       }
     })
   }
-
   /**
    * Once user found and verified, confirm the password changing
    */
   async confirmNewPassword() {
-    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl
-      + '?' + new URLSearchParams(this.reqParams)
+//    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl      + '?' + new URLSearchParams(this.reqParams)
+    let action={}
+    action.actionName = 'USER_CHANGE_PSWD'
+    action.endPoint = '/app/AuthenticationAPIactions'
+    action.requiresDialog = false
+    action.notGetViewData = true
+    let APIParams=this.getAPICommonParams(action)
+    let params = this.config.backendUrl + action.endPoint
+      + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(this.reqParams)
     await this.queryApi(params)
     this.newPwd.value = ""
   }
-
   /**
    * Confirm the esign changing
    */
   async confirmNewEsign() {
-    let params = this.config.backendUrl + this.config.appAuthenticateApiUrl
-      + '?' + new URLSearchParams(this.reqParams)
+    // let params = this.config.backendUrl + this.config.appAuthenticateApiUrl      + '?' + new URLSearchParams(this.reqParams)
+    let action={}
+    action.actionName = 'USER_CHANGE_ESIGN'
+    action.endPoint = '/app/AuthenticationAPIactions'
+    action.requiresDialog = false
+    action.notGetViewData = true
+    let APIParams=this.getAPICommonParams(action)
+    let params = this.config.backendUrl + action.endPoint
+      + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(this.reqParams)
     await this.queryApi(params)
     this.newEsg.value = ""
   }
-
   queryApi(params) {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     return this.fetchApi(params).then(j => {
@@ -312,7 +318,6 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       }
     })
   }
-
   nextRequest() {
     super.nextRequest()
     if (this.actionName == "USER_CHANGE_PSWD") {

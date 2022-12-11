@@ -353,72 +353,7 @@ export function TrazitCredentialsDialogs(base) {
     this.credDialog.close()
   }
 
-  /**
-   * set the justification type, generate justification list for non text type
-   */
-  checkProcListMovedToDialogsFunctions() {
-    console.log('checkProcListMovedToDialogsFunctions')
-    // this.type = "confirm"
-    // bypass = false
-    // alert('Temporalmente en credDialog, toda acción requiere confirmacion')
-    // return bypass
-    alert('Temporalmente en credDialog, se ha deshabilitado el tema de las confirmaciones ... ')
-    return true
-    this.justificationType = null
-    this.justificationList = null
-    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-    let bypass = true
-    procList.forEach(p => {
-      if (p.actions_with_esign.indexOf(this.actionName) >= 0) {
-        let idx = p.actions_with_esign.findIndex(p => p == this.actionName)
-        --idx // the object is on the previous index
-        if (p.actions_with_esign[idx][this.actionName].type) {
-          this.justificationType = p.actions_with_esign[idx][this.actionName].type
-          if (this.justificationType != "TEXT") {
-            this.justificationList = p.actions_with_esign[idx][this.actionName].list_entries
-          }
-        }
-        this.type = "esign"
-        bypass = false
-      } else if (p.actions_with_confirm_user.indexOf(this.actionName) >= 0) {
-        let idx = p.actions_with_confirm_user.findIndex(p => p == this.actionName)
-        --idx // the object is on the previous index
-        if (p.actions_with_confirm_user[idx][this.actionName].type) {
-          this.justificationType = p.actions_with_confirm_user[idx][this.actionName].type
-          if (this.justificationType != "TEXT") {
-            this.justificationList = p.actions_with_confirm_user[idx][this.actionName].list_entries
-          }
-        }
-        this.type = "user"
-        bypass = false
-      } else if (p.actions_with_justification_phrase.indexOf(this.actionName) >= 0) {
-        let idx = p.actions_with_justification_phrase.findIndex(p => p == this.actionName)
-        --idx // the object is on the previous index
-        if (p.actions_with_justification_phrase[idx][this.actionName].type) {
-          this.justificationType = p.actions_with_justification_phrase[idx][this.actionName].type
-          if (this.justificationType != "TEXT") {
-            this.justificationList = p.actions_with_justification_phrase[idx][this.actionName].list_entries
-          }  
-        }
-        this.type = "justification"
-        bypass = false
-      } else if (p.actions_with_action_confirm.indexOf(this.actionName) >= 0) {
-        this.type = "confirm"
-        bypass = false
-      }
-    })
-    // bypass / no need creds process
-    if (bypass) return true
-  }
-
-  /**
-   * 
-   * @param {*} actionName 
-   * @param {*} objId -1 will show up the creds dialog, e.g user profile open the creds dialog. 
-   * @param {*} params ref of this.reqParams
-   * @param {*} action ref of action object
-   */
-  credsChecker(actionName, objId, params={}, action) {
+  credsChecker(actionName, objId, params={}, action, isPlatform=false, dialogName='') {
     console.log('credsChecker')
     this.actionObj = action || {}
     this.reqParams = params
@@ -428,7 +363,17 @@ export function TrazitCredentialsDialogs(base) {
         this.credDialog.show()
       } else {
         this.objectId = objId
-        let noNeedCreds = this.checkProcList()
+        let noNeedCreds = false
+        if (!isPlatform){
+          noNeedCreds=this.checkProcList()
+        }else{
+          if (dialogName.length==0){
+            noNeedCreds=true
+          }else{
+            noNeedCreds=false
+            this.type=dialogName
+          }
+        }
         if (noNeedCreds) {
           this.nextRequest()
         } else {
@@ -441,7 +386,7 @@ export function TrazitCredentialsDialogs(base) {
       }
     }
   }
-
+  
   checkingUser() {
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
