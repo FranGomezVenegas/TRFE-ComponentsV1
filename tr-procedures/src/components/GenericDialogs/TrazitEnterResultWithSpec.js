@@ -780,9 +780,22 @@ return class extends LitElement {
     }    
      
     setResult(result, target) {
-      console.log('setResult')
+      
       var resId=''
       if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
+
+        if (result.sar2_result_id===undefined||result.sar2_result_id.length==0){
+        this.dispatchEvent(new CustomEvent("error", {
+          detail: {
+            is_error: true,
+            message_en: 'This result has no second entry feature enabled',
+            message_es: 'Funcionalidad Segunda Entrada no habilitada para este resultado'
+          },
+          bubbles: true,
+          composed: true
+        }))   
+        return
+        }
         resId = result.sar2_result_id
       }else{
         resId = result.result_id
@@ -795,6 +808,7 @@ return class extends LitElement {
         instrumentName: result.instrument,
         variableName: result.param_name
       }
+      console.log('setResult', 'targetValue', this.targetValue)
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
       this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
