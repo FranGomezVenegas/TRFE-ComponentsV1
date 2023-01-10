@@ -2,8 +2,6 @@ import { html, css, nothing, LitElement } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
-//import { ClientMethod } from '../ClientMethod';
-//import { DialogTemplate } from '../DialogTemplate';
 
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
@@ -20,7 +18,7 @@ import { commonLangConfig } from '@trazit/common-core';
 import '../components/Audit/audit-dialog';
 import { AuditFunctions} from '../components/Audit/AuditFunctions';
 
-export class SampleIncubationView extends AuditFunctions(TrazitGenericDialogs(ButtonsFunctions(GridFunctions((LitElement))))) {
+export class SampleIncubationView extends AuditFunctions(TrazitGenericDialogs(ButtonsFunctions(GridFunctions((CredDialog))))) {
   static get styles() {
     return [
       Layouts,
@@ -201,14 +199,11 @@ render(){
 
     ${this.genericFormDialog()}
     ${this.assignTemplate()}
-  
+    ${super.render()}    
   `: nothing
   }`
 }
 
-// <audit-dialog @sign-audit=${this.setAudit}></audit-dialog>
-//${super.render()}  
-// 
 activeBatchesLayout(){
   return html`  
   
@@ -573,7 +568,7 @@ samplesPendingIncubLayout(){
   }
 
   actionMethod(action, viewModel) {
-    // alert('actionMethod')
+   // console.log('actionMethod')
     if (action.clientMethod==='filterSamples'){
       this.filterSamples(action.filterState)
       return
