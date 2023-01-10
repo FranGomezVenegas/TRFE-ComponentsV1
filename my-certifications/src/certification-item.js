@@ -57,6 +57,9 @@ export class CertificationItem extends LitElement {
           html`<div><b>Summary: </b>${this.cert.brief_summary}</div>` :
           nothing
         }
+        ${this.filterData == 'myPendingCertificationApprovals' ? html`
+        <div><b>User: </b>${this.cert.user_name}</div>
+        `: html`${this.filterData}`}
         <div class="layout horizontal center">
           <span><b>My Certification Status: </span>
           <mwc-icon style="color:${this.cert.status=="PASS"?'green':'red'}">${this.cert.status=="PASS"?'bookmark':'warning'}</mwc-icon>

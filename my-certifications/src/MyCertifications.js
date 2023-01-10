@@ -24,6 +24,7 @@ export class MyCertifications extends CommonCore {
       filterData: { type: String }, // sop, psop, analysis, panalysis
       sops: { type: Array },
       analytics: { type: Array },
+      myPendingCertifApprovals: { type: Array},
       certSet: { type: Array }
     };
   }
@@ -32,6 +33,7 @@ export class MyCertifications extends CommonCore {
     super();
     this.sops = [];
     this.analytics = [];
+    this.myPendingCertifApprovals = [];
     this.certSet = [];
   }
 
@@ -57,6 +59,7 @@ export class MyCertifications extends CommonCore {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     this.sops = userSession.all_my_sops.length ? userSession.all_my_sops[0].my_sops : this.sops
     this.analytics = userSession.all_my_analysis_methods.length ? userSession.all_my_analysis_methods[0].my_analysis_method_certifications : this.analytics
+    this.myPendingCertifApprovals = userSession.all_my_pending_certif_approvals.num_objects>0 ? userSession.all_my_pending_certif_approvals.objects : this.myPendingCertifApprovals
   }
 
   /**
@@ -75,6 +78,8 @@ export class MyCertifications extends CommonCore {
       this.certSet = this.sops.filter(s => s.status == "NOT_PASS")
     } else if (this.filterData == "panalytic") {
       this.certSet = this.analytics.filter(s => s.status == "NOT_PASS")
+    } else if (this.filterData == "myPendingCertificationApprovals") {
+      this.certSet = this.myPendingCertifApprovals
     }
     this.requestUpdate()
   }
@@ -140,7 +145,8 @@ export class MyCertifications extends CommonCore {
         sessionStorage.setItem('userSession', JSON.stringify(userSession))
         this.dispatchEvent(new CustomEvent('certs-updated'))
         this.sops = userSession.all_my_sops.length ? userSession.all_my_sops[0].my_sops : this.sops
-        this.analytics = userSession.all_my_analysis_methods.length ? userSession.all_my_analysis_methods[0].my_analysis_method_certifications : this.analytics
+        this.analytics = userSession.all_my_analysis_methods.length ? userSession.all_my_analysis_methods[0].my_analysis_method_certifications : this.analytics        
+        this.myPendingCertifApprovals = userSession.all_my_pending_certif_approvals.num_objects>0 ? userSession.all_my_pending_certif_approvals.objects : this.myPendingCertifApprovals
         let certs = JSON.stringify(this.certSet) // temp ref
         certs = JSON.parse(certs)
         certs.forEach((c,i) => {
