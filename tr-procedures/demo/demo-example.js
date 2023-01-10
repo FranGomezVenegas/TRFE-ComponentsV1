@@ -61,6 +61,7 @@ class DemoExample extends LitElement {
         html`
           <proc-management-home></proc-management-home>
         `:html`                  
+        <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "Home", "Home")}>Home</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "LogSamples", "SampleLogin")}>Log Samples</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "ProductionLots", "SampleLot")}>Production Lots</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "SamplingSMP")}>Samples Sampling </button>
@@ -80,6 +81,7 @@ class DemoExample extends LitElement {
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "DataMining", "DataMining")}>Data Mining</button><br>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "Incubators", "Incubators")}>Incubators</button><br>
 
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "Home", "Home")}>Home</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "LogSamples", "SampleLogin")}>Log Samples (proc)</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "ProductionLots", "SampleLot")}>Production Lots (proc)</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
