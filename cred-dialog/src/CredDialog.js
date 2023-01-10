@@ -281,17 +281,15 @@ export class CredDialog extends CommonCore {
     if (this.type == "user") {
       // adjust the placeholder label for changing purpose
       return html`
-        <mwc-textfield id="user" label="${langConfig.userToCheck["label_"+this.lang]}" type="text" .value=${this.userName} disabled></mwc-textfield>
-        <mwc-textfield id="pwd" label="${this.adjustLbl(`${langConfig.pwToCheck["label_"+this.lang]}`)}" type="password" iconTrailing="visibility" 
-          dialogInitialFocus
+        <mwc-textfield id="userTxtFld" label="${langConfig.userToCheck["label_"+this.lang]}" type="text" dialogInitialFocus .value=${this.userName}></mwc-textfield>
+        <mwc-textfield id="pwd" label="${this.adjustLbl(`${langConfig.pwToCheck["label_"+this.lang]}`)}" type="password" iconTrailing="visibility"           
           @click=${this.showPwd}
           @keypress=${e=>this.keyPress(e, 'checkingUser')}></mwc-textfield>
       `
     } else if (this.type == "esign") {
       // adjust the placeholder label for changing purpose
       return html`
-        <mwc-textfield id="esg" label="${this.adjustLbl(`${langConfig.esgToCheck["label_"+this.lang]}`)}" type="password" iconTrailing="visibility" 
-          dialogInitialFocus
+        <mwc-textfield id="esg" label="${this.adjustLbl(`${langConfig.esgToCheck["label_"+this.lang]}`)}" type="password" iconTrailing="visibility"           
           @click=${this.showPwd}
           @keypress=${e=>this.keyPress(e, 'checkingPhrase')}></mwc-textfield>
       `
@@ -348,6 +346,11 @@ export class CredDialog extends CommonCore {
 
   get credDialog() {
     return this.shadowRoot.querySelector("tr-dialog#credDialog")
+  }
+
+  
+  get userTxtFld() {
+    return this.shadowRoot.querySelector("mwc-textfield#userTxtFld")
   }
 
   get pwd() {
@@ -410,7 +413,7 @@ export class CredDialog extends CommonCore {
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      userToCheck: this.userName,
+      userToCheck: this.userTxtFld.value,
       passwordToCheck: this.pwd.value
     })
     this.fetchApi(params).then(j => {

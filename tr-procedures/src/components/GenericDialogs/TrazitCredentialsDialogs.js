@@ -73,6 +73,8 @@ export function TrazitCredentialsDialogs(base) {
       tr-dialog {
         --mdc-dialog-heading-ink-color: blue;
         --mdc-typography-headline6-font-size: 35px;
+        position: relative;
+        z-index:999;
       }
       .content {
         opacity: 0.9;
@@ -177,6 +179,7 @@ export function TrazitCredentialsDialogs(base) {
         //console.log('credDialog>>render')
         return html`
           <tr-dialog id="credDialog" 
+          style="position: relative; z-index:999;"
             @closed=${this.closed}
             .heading="${this.headerLabel()}"
             hideActions=""

@@ -13,6 +13,8 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
       css`
         tr-dialog {
           --mdc-dialog-max-width: 90vw;
+          position: relative;
+          z-index:999;
         }
         sp-tooltip[hidden] {
           display: none;
@@ -226,7 +228,7 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
 
   render() {
     return html`
-    <tr-dialog id="auditDialog" ?open=${this.audits.length} @closed=${()=>this.audits=[]} class="layout vertical"
+    <tr-dialog id="auditDialog" ?open=${this.audits.length}  @closed=${()=>this.audits=[]} class="layout vertical"
       heading=""
       hideActions=""
       scrimClickAction="">

@@ -148,19 +148,18 @@ export function ModuleInstrumentsDialogs(base) {
     get instrumentName() {
       return this.shadowRoot.querySelector("mwc-select#instrumentName")
     }
-    openRemoveDialog(){      
+    opencompleteInstrumentEventDialog(){      
       let actionName="completeInstrumentEventDialog"
-      //alert(' > '+actionName)      
-      console.log('this.actionBeingPerformedModel.dialogInfo', this.actionBeingPerformedModel.dialogInfo)
+      console.log('opencompleteInstrumentEventDialog this.actionBeingPerformedModel.dialogInfo', this.actionBeingPerformedModel.dialogInfo)
       if (this.actionBeingPerformedModel.dialogInfo===undefined){return false}
       if (this.actionBeingPerformedModel.dialogInfo.name===undefined){return false}
-      return this.actionBeingPerformedModel.dialogInfo.name==actionName
+      return this.actionBeingPerformedModel.dialogInfo.name===actionName
     }
     instrumentEventTemplate() {
       return html`
       ${!this.selectedAction.dialogInfo ?
       html``: html`
-        <tr-dialog id="completeInstrumentEventDialog" ?open=${this.openRemoveDialog()}
+        <tr-dialog id="completeInstrumentEventDialog" ?open=${this.opencompleteInstrumentEventDialog()}
         @closed=${() => this.cleanNewInstrumentFields()}
         heading=""
         hideActions=""
@@ -232,7 +231,7 @@ export function ModuleInstrumentsDialogs(base) {
     }
 
     completeInstrumentEventAction() {
-      alert('completeInstrumentEventAction')
+      //alert('completeInstrumentEventAction')
       console.log('completeInstrumentEvent this.reqParams', this.reqParams);      
       let action=this.actionBeingPerformedModel;
       if (action.actionName!==undefined&&action.actionName==='REOPEN_EVENT'){return}
