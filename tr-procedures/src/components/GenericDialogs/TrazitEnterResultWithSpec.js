@@ -275,6 +275,7 @@ return class extends LitElement {
 
     enterResultList() {
       //alert(this.actionBeingPerformedModel.actionName)
+      console.log('enterResultList', 'gridDef', this.actionBeingPerformedModel.dialogInfo.resultHeader)
       if (this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.resultHeader===undefined)
       {return html``}
       
@@ -472,6 +473,7 @@ return class extends LitElement {
       }else{
         rawValue = result.raw_value
       }
+
       if (result.is_locked) {
         return html`
           <div style="width: 100%;height: 55px;position: relative; background-color: rgb(255 8 8 / 20%)">
@@ -540,7 +542,7 @@ return class extends LitElement {
     }
 
     valRendererInstrument(result) {
-      console.log('valRendererInstrument', 'result', result)
+      //console.log('valRendererInstrument', 'result', result)
       if (result.is_locked) {
         return html`
           <div style="width: 100%;height: 55px;position: relative; background-color: rgb(255 8 8 / 20%)">
@@ -634,9 +636,18 @@ return class extends LitElement {
      * @param {*} elmSet which element field, optional for update the field value after action api
      */
     adjustValUndetermined(result, elmSet) {
-      let lbl = "", raw = ""
+      let lbl = "", raw = ""      
       if (result.raw_value != "") {
-        raw = result.raw_value
+        if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
+          raw = result.sar2_raw_value
+          if (raw===undefined||raw.toString.length==0){
+            raw = result.raw_value  
+          }
+        }else{
+          raw = result.raw_value
+        }
+          
+        //raw = result.raw_value
         if (typeof result.min_undetermined == "number") {
           if (Number(result.raw_value) < result.min_undetermined) {
             lbl = "<"
