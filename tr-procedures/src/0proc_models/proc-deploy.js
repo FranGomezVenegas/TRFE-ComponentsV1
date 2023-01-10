@@ -27,6 +27,9 @@ export const ProcDeploy = {
       }
     ]
   },
+  "Home":{
+	  "component": "ModuleEnvMonitHomeWater"
+  },  
   "ProductionLots": {
     "component": "TableWithButtons",
     "langConfig": {

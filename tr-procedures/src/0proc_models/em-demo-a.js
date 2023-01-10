@@ -34,6 +34,9 @@ export const EmDemoA = {
 		{ "name": "Incubators" , "url" : "/moduleenvmon/EnvMonIncubatorAPIactions"}		
 	  ]
   },
+  "Home":{
+	  "component": "ModuleEnvMonitHomeAir"
+  },
   "ProductionLots": {
     "component": "TableWithButtons",
     "langConfig": {
