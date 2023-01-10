@@ -9,7 +9,6 @@ import './components/Audit/audit-dialog';
 import {ApiFunctions} from './components/Api/ApiFunctions';
 
 
-
 export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   static get styles() {
     return [
@@ -161,6 +160,15 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'Tabs':
         import('./components/Tabs/tabs-main-view')
         return
+      case 'Flowchart':
+        import('./components/FlowChart/flow-chart')
+        return  
+      case 'ModuleEnvMonitHomeAir':
+        import('./module_env_monit/home-air')
+        return  
+      case 'ModuleEnvMonitHomeWater':
+        import('./module_env_monit/home-water')
+        return  
       case 'ModuleEnvMonitProgramProc':
         import('./module_env_monit/program-proc')
         return
@@ -169,7 +177,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         return
       case 'EnvMonitBrowser', 'Browser':
         import('./browser/browser-view')
-        return
+        return        
       case 'DataMining':
         import('./data_mining/datamining-mainview')
         return
@@ -298,10 +306,19 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     return html `
       ${this.viewModelFromProcModel.component == 'Browser' ? html`
         <browser-view .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></browser-view>
-      `:html``}
+      `:html``}      
       ${this.viewModelFromProcModel.component == 'DataMining' ? html`
         <datamining-mainview .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} 
         .viewModelFromProcModel=${this.viewModelFromProcModel} .masterData=${this.masterData} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></datamining-mainview>
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'Flowchart' ? html`
+        <flow-chart .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></flow-chart>
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeAir' ? html`
+        <home-air .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-air>
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeWater' ? html`
+        <home-water .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-water>
       `:html``}
       ${this.viewModelFromProcModel.component == 'ModuleSampleLogSample' ? html`
         <log-sample-module-sample 

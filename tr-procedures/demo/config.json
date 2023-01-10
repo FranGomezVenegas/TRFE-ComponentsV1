@@ -52,11 +52,17 @@
     "viewName": "SamplePendingSampling", 
     "filterName" :  "SamplingSMP" 
   },
-  "localDefaultView": {
+  "localDefaultView33333": {
     "procName":  "em-demo-a", 
     "viewName": "SampleIncubation", 
     "filterName" :  "Incubation" 
   },
+  "localDefaultView": {
+    "procName":  "em-demo-a", 
+    "viewName": "Home", 
+    "filterName" :  "Home" 
+  },
+  
   "localDefaultView1": {
     "procName":  "em-demo-a", 
     "viewName": "SampleMicroorganism", 
