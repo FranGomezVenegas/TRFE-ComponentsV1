@@ -255,7 +255,9 @@ export function ModuleInstrumentsDialogs(base) {
       //  + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         //        this.newInstrumentDialog.close()
+        this.GetViewData()
         this.reload()
+
       })
     }    
 
