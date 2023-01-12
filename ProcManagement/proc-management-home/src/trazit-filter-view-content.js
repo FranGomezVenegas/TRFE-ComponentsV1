@@ -651,6 +651,7 @@ export class TrazitFilterViewContent extends (TrazitDialogActions(TrazitDialogTe
     this.setPrintContent()
     var printWindow = window.open('', '', 'fullscreen=yes');
     printWindow.document.write(this.printObj.content);
+    let strContent
     strContent += this.chartContent()
     let dataContentChart =this.shadowRoot.querySelector("google-chart#counter_range_eval")
     printWindow.document.write(dataContentChart.getImageURI());
