@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
@@ -103,6 +103,9 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
     this.selectedItems = []
     this.viewModelFromProcModel = {}
     this.selectedProgram=[]
+    if (this.viewModelFromProcModel.tabs!==undefined){
+      tabBtns=this.viewModelFromProcModel.tabs
+    }
   }
 
   updated(updates) {
@@ -129,11 +132,11 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
             )}
           </mwc-select>
         </div>
-        ${this.showTabElement(this.viewModelFromProcModel, tabBtns)}
-
+        ${this.showTabElement(this.viewModelFromProcModel, this.viewModelFromProcModel.tabs)}
+      
         <summary-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="summary"}></summary-view>
         <parameter-limits .procInstanceName=${this.procInstanceName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
-        
+
         <config-calendar .lang=${this.lang} .selectedProgram=${this.selectedProgram} 
           ?hidden=${this.tabView!="config-calendar"}></config-calendar>
         
@@ -142,13 +145,14 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
           .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} 
           ?hidden=${this.tabView!="sampling-points"}>
         </sampling-points>
-        
+
         <sampling-points-map .procInstanceName=${this.procInstanceName} 
           .lang=${this.lang} .selectedProgram=${this.selectedProgram} .config=${this.config} 
           ?hidden=${this.tabView!="sampling-points-map"}>
         </sampling-points-map>
         
         <core-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="core"}></core-view>
+
         <corrective-actions 
           .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} 
           .procInstanceName=${this.procInstanceName} .lang=${this.lang} 
@@ -223,30 +227,6 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
     this[this.selectedAction.clientMethod]()
   }
 
-  xjsonParam() {
-    let jsonParam = {}
-    let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
-    if (action.apiParams) {
-      action.apiParams.forEach(p => {
-        if (p.element) {
-          jsonParam[p.query] = this[p.element].value // get value from field input
-        } else if (p.defaultValue) {
-          jsonParam[p.query] = p.defaultValue // get value from default value (i.e incubator)
-        } else if (p.beItem) {
-          jsonParam[p.query] = this.selectedItems[0][p.beItem] // get value from selected item
-        } else if (p.targetValue) {
-          jsonParam[p.query] = this.targetValue[p.query] // get value from target element passed
-        } else {
-          jsonParam[p.query] = p.value
-        }
-      })
-    }
-    if (action.paramFilter) {
-      jsonParam[action.paramFilter[this.filterName].query] = action.paramFilter[this.filterName].value
-    }
-    return jsonParam
-  }
-
   async getProgramList() {
     let queryDefinition=this.viewModelFromProcModel.viewQuery
     if (queryDefinition===undefined){return}
@@ -285,11 +265,5 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
     })
   }
 
-  xactionMethod(action, replace = true) {
-    if (replace) {
-      this.selectedAction = action
-    }
-    this.credsChecker(action.actionName, null, this.jsonParam(), action)
-  }
 }
 window.customElements.define('program-proc', ProgramProc);

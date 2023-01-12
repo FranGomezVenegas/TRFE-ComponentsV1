@@ -14,6 +14,13 @@ This v2 is a refactor of v1 then no new features are added but trying to reduce 
 ```bash
 npm run start
 ```
+
+## Versioning track
+
+v0.0.1 model up to 2.0
+v0.0.2 model 2.1
+v0.1.0 QA cleaning, sonarcloud
+
 ## Requirements Tracking
 
 This area want to track the requirements that made this web component to become a reality.

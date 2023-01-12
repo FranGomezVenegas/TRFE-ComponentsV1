@@ -6,6 +6,7 @@ import { columnBodyRenderer } from 'lit-vaadin-helpers';
 
 import {DialogsFunctions} from '../../components/GenericDialogs/DialogsFunctions';
 import '../../components/grid_with_buttons/grid-with-buttons'
+import {ModuleEnvMonitClientMethods} from '../../module_env_monit/ModuleEnvMonitClientMethods';
 
 let thisTabViewDefinition = {
   "title": {
@@ -47,35 +48,40 @@ let thisTabViewDefinition = {
       "label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"
     }
   },
-  "gridActionOnClick":{"actionName": "LOGSAMPLE",
-  "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
-  "requiresDialog": true,
-  "xxxclientMethod": "logSampleDialog",
-  "dialogQueries":[
-      {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
-        "endPoint": "/moduleenvmon/EnvMonAPIqueries",
-        "variableForData": "prodLotList"		  
+  "langConfig": {
+      "gridActionOnClick":{"actionName": "LOGSAMPLE",
+      "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+      "requiresDialog": true,
+      "clientMethod": "logSampleDialog",
+      "dialogQueries":[
+        {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+          "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+          "variableForData": "prodLotList"		  
+        }
+      ],
+
+      "dialogInfo":{
+        "name" : "pointDialog",
+        "action": { "actionName": "LOGSAMPLE",
+          "endPointUrl": "Samples",
+          "requiresDialog": false,
+          "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+          "clientMethod": "logSample",
+          "endPointParams": [
+            { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+            { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+            { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+            { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+            { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+            { "argumentName": "fieldValue", "targetValue": true },
+            { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+          ]
+        }
       }
-    ],
-    "dialogInfo":{
-      "name" : "pointDialog",
-      "action": { "actionName": "LOGSAMPLE",
-        "endPointUrl": "Samples",
-        "requiresDialog": false,
-        "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
-        "xxxclientMethod": "logSample",
-        "endPointParams": [
-          { "argumentName": "programName", "selObjectPropertyName": "program_name" },
-          { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
-          { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
-          { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
-          { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
-          { "argumentName": "fieldValue", "targetValue": true },
-          { "argumentName": "numSamplesToLog", "defaultValue": 1 }
-        ]
       }
-    }  
+
   }
+
 }
 let actions = [
   { "actionName": "LOGSAMPLE",
@@ -95,7 +101,7 @@ let actions = [
   }
 ]
 
-export class SamplingPoints extends DialogsFunctions(CoreView) {
+export class SamplingPoints extends ModuleEnvMonitClientMethods(DialogsFunctions(CoreView)) {
   static get styles() {
     return [Layouts, Alignment,
       super.styles,
@@ -158,7 +164,7 @@ export class SamplingPoints extends DialogsFunctions(CoreView) {
             ${this.gridList()}
           </vaadin-grid>
         </div>
-        
+        ${this.pointTemplate()}
       </div>
     `;
   }
@@ -166,8 +172,8 @@ export class SamplingPoints extends DialogsFunctions(CoreView) {
   activeItemChanged(e){
     this.selectedItems=e.detail.value ? [e.detail.value] : []    
     if (this.selectedItems.length==0){return}
-    alert('Temporalmente deshabilitada la accion')
-    return
+    //alert('Temporalmente deshabilitada la accion')
+    //return
     if (e===undefined){return}
     let d=true
     d=this.disabledByCertification(thisTabViewDefinition.gridActionOnClick)     
@@ -175,6 +181,7 @@ export class SamplingPoints extends DialogsFunctions(CoreView) {
        //alert('View in read only mode')
       return
     }
+    this.viewModelFromProcModel=thisTabViewDefinition
     this.selectedItems=e.detail.value ? [e.detail.value] : []
     if (this.selectedItems.length>0&&thisTabViewDefinition.gridActionOnClick!==undefined){
       //alert(thisTabViewDefinition.gridActionOnClick.actionName)

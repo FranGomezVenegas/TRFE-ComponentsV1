@@ -197,20 +197,6 @@ export class SamplingPointsMap extends DialogsFunctions(CoreView) {
     this.actionMethod(null, false, 1)
   }
 
-  xactionMethod(action, replace = true, actionNumIdx) {
-    if (replace) {
-      this.selectedAction = action
-    }
-    if (actionNumIdx) {
-      action = actions[actionNumIdx]
-      this.selectedAction = actions[actionNumIdx]
-    }
-    if (this.selectedItems.length) {
-      this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(), action)
-    } else {
-      this.credsChecker(action.actionName, null, this.jsonParam(), action)
-    }
-  }
 
   jsonParam() {
     let jsonParam = {}
@@ -228,34 +214,6 @@ export class SamplingPointsMap extends DialogsFunctions(CoreView) {
       })
     }
     return jsonParam
-  }
-
-  xnextRequest() {
-    super.nextRequest()
-    this.reqParams = {
-      procInstanceName: this.procInstanceName,
-      ...this.reqParams
-    }
-    this[this.selectedAction.clientMethod]()
-  }
-
-  xgetLots() {
-    let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl 
-      + '?' + new URLSearchParams(this.reqParams)
-    this.fetchApi(params).then(j => {
-      this.samplePoints = this.selectedProgram.sample_points
-      langConfig.fieldText.lot.items = j
-      this.requestUpdate()
-    })
-  }
-
-  xlogSample() {
-    this.reqParams.programName = this.selectedProgram.name
-    let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
-      + '?' + new URLSearchParams(this.reqParams)
-    this.fetchApi(params).then(() => {
-      this.pointDialog.close()
-    })
   }
 
   setView() {

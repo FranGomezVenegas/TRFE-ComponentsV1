@@ -1590,7 +1590,7 @@ export const EmDemoA = {
             },
             "endPointParams": [
               { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-			  { "argumentName": "batchName", "selObjectPropertyName": "current_pending_incub_batch" }			  
+			  { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" }			  
             ]            
           },
           { "clientMethod": "filterSamples",
@@ -1697,7 +1697,14 @@ export const EmDemoA = {
 					  "clientMethod": "getLots"
 					}
 	},    
-	"actions": []
+	"actions": [],
+	  "tabs": [
+		{tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"},
+		{tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"},
+		{tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"},
+		{tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"},
+		{tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"}
+	  ]
   },
   "Deviation": {
 	"component":"Tabs",  
