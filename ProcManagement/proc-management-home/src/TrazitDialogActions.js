@@ -35,20 +35,6 @@ export function TrazitDialogActions(base) {
               this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
-                //console.log('buttonActionWithoutDialog')
-                this.reqParams.actionName=action.actionName
-                var extraParams=this.xjsonParamCommons(action, selectedItem)   
-            //    if (extraParams.includes("ERROR")){return}   
-                let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
-                params=params+'?' + new URLSearchParams(this.reqParams) 
-                if (extraParams!==undefined){
-                  params=params + '&' + new URLSearchParams(extraParams)
-                }
-                this.fetchApi(params).then(() => {
-                    this.getHolidayCalendars()
-                  //this.reload()
-                })
-                //this.getHolidayCalendars()
           }
           genomaSuperDialogClickedActionNoCredChecker(){
             //console.log('genomaSuperDialogClickedAction')
@@ -90,19 +76,6 @@ export function TrazitDialogActions(base) {
               this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
-            this.reqParams.actionName=action.actionName
-            var extraParams=this.xjsonParamCommons(action, selectedItem)      
-        //    if (extraParams.includes("ERROR")){return}   
-            let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
-            params=params+'?' + new URLSearchParams(this.reqParams) 
-            if (extraParams!==undefined){
-              params=params + '&' + new URLSearchParams(extraParams)
-            }
-            this.fetchApi(params).then(() => {
-              this[action.dialogInfo.name].close()
-              this.getHolidayCalendars()
-              //this.reload()
-            })            
           }
           nextRequest() {
             alert('TrazitDialogActions-nextRequest')

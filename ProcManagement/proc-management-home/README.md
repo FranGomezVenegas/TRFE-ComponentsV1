@@ -32,3 +32,7 @@ npm start
 ```
 
 To run a local development server that serves the basic demo located in `demo/index.html`
+
+## Versioning track
+Version 0.0.1 is considered the draft
+Version 0.1 is the version by applying QA refactor
