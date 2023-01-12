@@ -60,6 +60,7 @@ export class CommonCore extends LitElement {
         this.localToast.style.fontSize = '12px'
         this.localToast.style.maxWidth = "98vw"
         this.localToast.style.display = "none"
+        this.localToast.style.zIndex = "999"
         this.shadowRoot.appendChild(this.localToast)
       }
     })
@@ -103,12 +104,14 @@ export class CommonCore extends LitElement {
     this.localToast.textContent = msgContent
     if (this.localToast.textContent&&e.detail.is_error===true) {
       this.localToast.style.backgroundColor = '#b22222'
-      this.localToast.style.display = 'block'
+      this.localToast.style.display = 'block' 
+      this.localToast.style.zIndex = '999'
       setTimeout(() => this.localToast.style.display = 'none', 4000)
       return
     }else{
       this.localToast.style.backgroundColor = '#0085ff'
-      this.localToast.style.display = 'block'
+      this.localToast.style.display = 'block' 
+      this.localToast.style.zIndex = '999'
       setTimeout(() => this.localToast.style.display = 'none', 4000)
       return
     }
