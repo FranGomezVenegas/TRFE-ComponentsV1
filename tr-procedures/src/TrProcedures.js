@@ -146,7 +146,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       return
     }
     this.viewModelFromProcModel=ProceduresModel[this.procName][this.viewName]
-    console.log('resetView', 'component', this.viewModelFromProcModel.component)
+    //console.log('resetView', 'component', this.viewModelFromProcModel.component)
     
     switch(this.viewModelFromProcModel.component){
       case 'GridWithButtons':
@@ -348,9 +348,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     `
   }
   render(){
-    if (this.viewModelFromProcModel!==undefined){
-      console.log('render', this.viewModelFromProcModel, 'windowOpenable', this.windowOpenable)
-    }
+    // if (this.viewModelFromProcModel!==undefined){
+    //   console.log('render', this.viewModelFromProcModel, 'windowOpenable', this.windowOpenable)
+    // }
     return html`   
       ${this.windowOpenable=="yes" ? 
       html`      

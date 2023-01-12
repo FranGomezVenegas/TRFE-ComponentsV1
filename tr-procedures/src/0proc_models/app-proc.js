@@ -2,7 +2,8 @@ export const AppProc = {
   "TrackingChanges":{
 	  "version": 0.9,
 	  "last change on (YYYYMMDD)": "20221106 COMPLETED_EVENTS_LAST_N_DAYS",
-	  "last change on (YYYYMMDD)": "20221126",
+	  "last change on (YYYYMMDD)": "20221130",
+	  "last_change_note_20221126": "Added Reopen Instrument button",
 	  "last_change_note_20221126": "Family on newInstrument be optional",
 	  "last_change_note_20221116": "Enter Results button hide dynamically in INSTRUMENT_EVENT_VARIABLES",
 	  "last_change_note_20221112": "Added a button for each instrument completition",
@@ -387,6 +388,45 @@ export const AppProc = {
       }
     },
   "actions": [
+	  { "actionName": "REOPEN_EVENT",
+        "alternativeAPIActionMethod": "completeInstrumentEventAction",
+		"requiresDialog": true,		
+        "clientMethod": "openReactivateObjectDialog",
+		"endPoint": "/app/procs/InstrumentsAPIactions",
+        "button": {
+          "icon": "alarm_add",
+          "title": {
+            "label_en": "Reopen", "label_es": "Reabrir"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {
+          "requiresDialog": true,
+          "name": "reactivateObjectDialog",
+          "fieldsObject": {
+            "queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+            "objectName": { "label_en": "Reopen event", "label_es": "Reabrir evento" }
+          },  
+          "listDefinition":{
+            "keyFldName":"id",
+            "eachEntryTextGenerator":[
+              {"value": "instrument", "type":"field"}, {"value": " (", "type":"fix"}, 
+              {"value": "event_type", "type":"field"}, {"value": "-", "type":"fix"},
+			  {"value": "started_on", "type":"field"}, {"value": "-", "type":"fix"},
+			  {"value": "completed_on", "type":"field"}, {"value": "-", "type":"fix"},
+			  {"value": "instrument_family", "type":"field"}, {"value": ")", "type":"fix"}
+              ]
+          },
+		  "viewQuery": {
+			  "endPoint": "/app/procs/InstrumentsAPIqueries",
+			  "actionName": "COMPLETED_EVENTS_LAST_N_DAYS",
+			  "clientMethod": "getDeactivatedObjects",
+			  "endPointParams": [
+				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
+			  ]
+		  }
+        }
+      },
 	  { "actionName": "COMPLETE_CALIBRATION",
         "alternativeAPIActionMethod": "completeInstrumentEventAction",
 		"requiresDialog": true,
@@ -560,6 +600,13 @@ export const AppProc = {
 			  "requiresDialog": false,
 			  "endPointUrl": "Samples",
               "clientMethod": "enterEventResult",
+			  "xxxsecondaryActionToPerform": {
+				  "name": "INSTRUMENT_EVENT_VARIABLES",
+				  "endPoint": "/app/procs/InstrumentsAPIqueries",
+				  "endPointParams": [
+					{ "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+				  ]
+			  },			  
               "endPointParams": [
 				  { "argumentName": "newValue", "targetValue": true },
 				  { "argumentName": "eventId", "targetValue": true },

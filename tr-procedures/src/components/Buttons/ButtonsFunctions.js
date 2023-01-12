@@ -227,7 +227,7 @@ export function ButtonsFunctions(base) {
     }        
     actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName='selectedItems') {
     //this.loadDialogs()  
-    console.log('actionMethod', 'action', action)
+    console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems)
         if(action===undefined){
             alert('action not passed as argument')
             return
@@ -238,6 +238,7 @@ export function ButtonsFunctions(base) {
             return
         }
         if(action.requiresDialog===false){
+          alert('ButtonsFunctions 241-aquiiiiii')
             this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
             return
         }  
@@ -388,17 +389,34 @@ export function ButtonsFunctions(base) {
             if (action.notGetViewData===undefined||action.notGetViewData===false){
               this.GetViewData()
             }
-            let action2 = this.actionBeingPerformedModel
+            this.selectedItems[0]=selectedItem;
+            action = this.actionBeingPerformedModel
+            let actionRefreshQuery=[]
             if (action.actionName.includes("ENTER_EVENT_RESULT")){
-              this.actionMethod(this.viewModelFromProcModel.actions[1], this.selectedItems[0])
+              actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES")
+              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].event_id)
               //alert(action.actionName)
+              return
             }
             if (action.actionName.includes("ENTERRESULT")){
-              this.actionMethod(this.viewModelFromProcModel.actions[1], this.selectedItems[0])
-              //alert(action.actionName)
+              actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTERRESULT")
+              //let actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES")
+              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+              //this.actionMethodResults(this.viewModelFromProcModel.actions[1], this.selectedItems, this.selectedItems[0].sample_id)
+              return
             }   
             if (action.actionName.includes("ENTER_PLATE_READING")){
-              this.actionMethod(this.viewModelFromProcModel.actions[3], this.selectedItems[0])
+              if (action.actionName.includes("SECONDENTRY")){
+                actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING_SECONDENTRY")
+                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+                return
+              }else{
+                actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING")
+                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+                return
+              }
+              
+              //this.actionMethodResults(this.viewModelFromProcModel.actions[3], this.selectedItems, this.selectedItems[0].sample_id)
               //alert(action.actionName)
             }                                   
             if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined

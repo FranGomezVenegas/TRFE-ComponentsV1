@@ -119,6 +119,7 @@ export function DialogTemplate(base) {
 
     /** Enter Result Template Dialog part */
     resultTemplate() {
+      //console.log('this.enterResults', this.enterResults)
       return html`
       <tr-dialog id="resultDialog" ?open=${this.enterResults.length}
         @opened=${() => this.setCellListener()}

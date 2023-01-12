@@ -275,7 +275,7 @@ return class extends LitElement {
 
     enterResultList() {
       //alert(this.actionBeingPerformedModel.actionName)
-      console.log('enterResultList', 'gridDef', this.actionBeingPerformedModel.dialogInfo.resultHeader)
+      //console.log('enterResultList', 'gridDef', this.actionBeingPerformedModel.dialogInfo.resultHeader)
       if (this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.resultHeader===undefined)
       {return html``}
       
@@ -353,8 +353,8 @@ return class extends LitElement {
         `
       )
     }
-    getResult() {
-      console.log('getResult', 'SampleAPIqueriesUrl')
+    getResult2() {
+      console.log('getResult2', 'SampleAPIqueriesUrl')
       let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
@@ -640,13 +640,13 @@ return class extends LitElement {
       if (result.raw_value != "") {
         if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
           raw = result.sar2_raw_value
-          if (raw===undefined||raw.toString.length==0){
+          if (raw===undefined||String(raw).length==0){
             raw = result.raw_value  
           }
         }else{
           raw = result.raw_value
         }
-          
+        //alert('adjustValUndetermined '+this.actionBeingPerformedModel.actionName+' 1)'+result.raw_value+' 2)'+result.sar2_raw_value)
         //raw = result.raw_value
         if (typeof result.min_undetermined == "number") {
           if (Number(result.raw_value) < result.min_undetermined) {
@@ -704,7 +704,7 @@ return class extends LitElement {
       return this.shadowRoot.querySelector("input[name=rItem]")
     }
     getResult() {
-      console.log('getResult', 'SampleAPIqueriesUrl')
+      console.log('getResult', 'SampleAPIqueriesUrl', 'this.selectedItems[0]', this.selectedItems[0])
 
       let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
       this.deactivatedObjects = []
@@ -732,7 +732,11 @@ return class extends LitElement {
             }))            
           }
           if (this.curResultRef) {
+            if (j.message!==undefined&&j.message.includes('unexpected')){
+              return
+            }
             let r = j.filter(d => d.result_id == this.curResultRef.resId)
+            
             if (r.length) {
               if (this.curResultRef.elm.type == "number") {
                 this.adjustValUndetermined(r[0], this.curResultRef.elm)
@@ -791,7 +795,7 @@ return class extends LitElement {
     }    
      
     setResult(result, target) {
-      
+      //alert('TrazitEnterResultWithSpec line 798-setResult')
       var resId=''
       if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
 
@@ -819,7 +823,7 @@ return class extends LitElement {
         instrumentName: result.instrument,
         variableName: result.param_name
       }
-      console.log('setResult', 'targetValue', this.targetValue)
+      //console.log('setResult', 'targetValue', this.targetValue)
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
       this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
@@ -831,16 +835,58 @@ return class extends LitElement {
       }else{
         rawValue = result.raw_value
       }
-      console.log('setResult', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction)
+      //console.log('setResult Before', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction, 'this.selectedItems', this.selectedItems)
       if (rawValue) {
         this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethod(this.selectedDialogAction, false)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number)
       } else {
-        this.actionMethod(this.selectedDialogAction, false)
+        this.selectedItems[0]=result;
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number)
       }
+      console.log('setResult After', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction, 'this.selectedItems', this.selectedItems)
     }
-    setResultInstrument(result, e) {
-      console.log('setResultInstrument')
+
+    actionMethodResults(action, selObject, sampleId) {
+      //this.loadDialogs()  
+      console.log('actionMethodResults', 'action', action, 'sampleId', sampleId)
+          if(action===undefined){
+              alert('action not passed as argument')
+              return
+          }
+          this.actionBeingPerformedModel=action        
+          if(action.requiresDialog===undefined){
+              alert('The action '+action.actionName+' has no requiresDialog property which is mandatory')
+              return
+          }
+          if(action.requiresDialog===false){
+              this.actionWhenRequiresNoDialog(action, selObject[0])
+              return
+          }  
+          if ( action.requiresGridItemSelected!==undefined&&action.requiresGridItemSelected===true&&
+            (this[selectedItemPropertyName]===undefined||this[selectedItemPropertyName][0]===undefined) ){
+            alert('Please select one item in the table prior')
+            return
+          }
+          this.GetQueriesForDialog(action)        
+          //this.loadDialogs()
+          if (action.dialogInfo.name==="auditDialog"){
+            this[action.clientMethod]()
+            return}
+          if (this[action.dialogInfo.name]){
+              if (action.dialogInfo.subQueryName){
+                  this[action.dialogInfo.subQueryName]()
+              }else{        
+                this[action.dialogInfo.name].show()
+                  
+              }
+          }else{
+              alert('the dialog '+action.dialogInfo.name+' does not exist')
+          }
+        return
+      }      
+
+      setResultInstrument(result, e) {
+      //alert('setResultInstrument , line 890')
       let newValue = e.target.value
       this.targetValue = {
         newValue: newValue,
@@ -855,9 +901,9 @@ return class extends LitElement {
       this.selectedDialogAction = JSON.parse(act)
       if (result.raw_value || result.value) {
         this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethod(this.selectedDialogAction, false)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.event_id)
       } else {
-        this.actionMethod(this.selectedDialogAction, false)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.event_id)
       }
     }
   //   update(changedProperties) {

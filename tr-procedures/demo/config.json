@@ -37,7 +37,7 @@
     "viewName": "ProjectManager", 
     "filterName" :  "ProjectManager" 
   },  
-  "localDefaultView11311": {
+  "localDefaultView": {
     "procName":  "app-proc", 
     "viewName": "EventsInProgress", 
     "filterName" :  "EventsER" 
@@ -57,7 +57,7 @@
     "viewName": "SampleIncubation", 
     "filterName" :  "Incubation" 
   },
-  "localDefaultView": {
+  "localDefaultViewaaaa": {
     "procName":  "em-demo-a", 
     "viewName": "Home", 
     "filterName" :  "Home" 

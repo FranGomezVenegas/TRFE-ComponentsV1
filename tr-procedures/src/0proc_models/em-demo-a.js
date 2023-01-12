@@ -953,7 +953,7 @@ export const EmDemoA = {
 			"sar2_result_id": {"label_en": "Result Id", "label_es": "Id Resultado"},
 			"analysis": {"label_en": "Analysis", "label_es": "Análísis"},
 			"sar2_param_name": {"label_en": "Parameter", "label_es": "Parámetro"},
-			"sar2_raw_value": {"label_en": "Value", "label_es": "Valor"},
+			"sar2_raw_value": {"label_en": "Value", "label_es": "Valor 2"},
 			"sar2_uom": {"label_en": "UOM", "label_es": "UOM"}
 		  },
 		  "resultHeaderObjectLabelTopLeft": {
