@@ -110,7 +110,8 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   }
   constructor() {
     super()
-   
+    this.procName=''
+    this.viewName=''
   }
 
   resetView() {
@@ -137,15 +138,20 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     // }
     this.gridItems = []
     this.viewModelFromProcModel = null
-    if (ProceduresModel[this.procName][this.viewName]===undefined){
+    if (ProceduresModel[this.procName]===undefined){
+      alert('Model for procedure '+this.procName+' not found in the ProceduresModel (probably not load in local)')
+      return
+    }
+    this.viewModelFromProcModel=ProceduresModel[this.procName][this.viewName];
+    if (this.viewModelFromProcModel===undefined){
       alert('Not found any window called '+this.viewName+' in the Backend Proc Model for procedure '+this.procName)
       return
     }
-    if (ProceduresModel[this.procName][this.viewName].component===undefined){
+    if (this.viewModelFromProcModel.component===undefined){
       alert('The window called '+this.viewName+' has no component specified in the Backend Proc Model for procedure '+this.procName)
       return
     }
-    this.viewModelFromProcModel=ProceduresModel[this.procName][this.viewName]
+    
     //console.log('resetView', 'component', this.viewModelFromProcModel.component)
     
     switch(this.viewModelFromProcModel.component){
@@ -300,7 +306,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     this.selectedDialogAction = null
   }
   ownComponents(){
-    if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component!==undefined){
+    if (this.viewModelFromProcModel!==null&&this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component!==undefined){
       //console.log('ownComponents', 'component', this.viewModelFromProcModel.component)
     }
     return html `

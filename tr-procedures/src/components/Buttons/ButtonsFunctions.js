@@ -238,7 +238,7 @@ export function ButtonsFunctions(base) {
             return
         }
         if(action.requiresDialog===false){
-          alert('ButtonsFunctions 241-aquiiiiii')
+          //alert('ButtonsFunctions 241-aquiiiiii')
             this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
             return
         }  

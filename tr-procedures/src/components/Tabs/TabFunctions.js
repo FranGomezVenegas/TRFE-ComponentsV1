@@ -22,13 +22,16 @@ export function TabFunctions(base) {
                     `  
                   )}
                 `:html`
-                ${(hardcodedTbs.tabs).map(t =>
-                  html`
-                  ${t.display===undefined||t.display===true  ?
-                    html`<tab-element .lang=${this.lang} .tab=${t} @tab-rendered=${this.isScroll} @tab-change=${this.tabChanged} ?disabled=${this.samplesReload}></tab-element>`
-                  :nothing}
-                  `                      
-                )}
+                ${hardcodedTbs!==undefined&&hardcodedTbs.tabs!==undefined  ?                
+                html`
+                  ${(hardcodedTbs.tabs).map(t =>
+                    html`
+                    ${t.display===undefined||t.display===true  ?
+                      html`<tab-element .lang=${this.lang} .tab=${t} @tab-rendered=${this.isScroll} @tab-change=${this.tabChanged} ?disabled=${this.samplesReload}></tab-element>`
+                    :nothing}
+                    `                      
+                  )}
+                `: nothing}
               `}
               </div>
               <mwc-icon-button class="slide" icon="navigate_next" @click=${this.nextTab} ?hidden=${!this.next}>
