@@ -4,6 +4,7 @@ import { CommonCore } from '@trazit/common-core';
 import { CalendarUtilities } from './CalendarUtilities';
 import { CalendarActions } from './CalendarActions';
 import { CalendarDialogTemplate} from './CalendarDialogTemplate';
+import { ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions';
 import '@google-web-components/google-chart';
 import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
@@ -61,7 +62,7 @@ const viewInfoDefinition = {
     "selObjectVariableName": "selectedCalendar", 
     "endPoint": "/app/HolidayCalendarAPIactions",
     "endPointParams": [ 
-      { "argumentName": "name", "internalVariableObjName":"selectedCalendar", "internalVariableObjProperty":"code"},
+      { "argumentName": "name", "internalVariableSimpleObjName":"selectedCalendar", "internalVariableSimpleObjProperty":"code"},
       { "argumentName": "dayName", "element": "text1" },
       { "argumentName": "newDate", "element": "date1" }
       // { "argumentName": "fieldsNames", "value": "undefined" },
@@ -88,8 +89,8 @@ const viewInfoDefinition = {
       "selObjectVariableName": "selectedCalendarDate", 
       "endPoint": "/app/HolidayCalendarAPIactions",
       "endPointParams": [ 
-        { "argumentName": "calendar", "internalVariableArrName":"selectedCalendarDate", "internalVariableObjProperty":"calendar_code", "ZZZselObjectPropertyName": "study"},
-        { "argumentName": "date_id", "internalVariableArrName":"selectedCalendarDate", "internalVariableObjProperty":"id" },        
+        { "argumentName": "calendar", "internalVariableObjName":"selectedCalendarDate", "internalVariableObjProperty":"calendar_code", "ZZZselObjectPropertyName": "study"},
+        { "argumentName": "date_id", "internalVariableObjName":"selectedCalendarDate", "internalVariableObjProperty":"id" },        
       ],
       "button": {
         "z-icdon": "refresh",
@@ -103,7 +104,7 @@ const viewInfoDefinition = {
 };
 
  
-export class HolidayCalendars extends CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore)))) {
+export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore))))) {
   static get styles() {
     return [
       css`

@@ -96,7 +96,7 @@ export function CalendarActions(base) {
             //console.log(extraParams)
             //return
             this.fetchApi(params).then(() => {
-              alert('closing dialog')
+              //alert('closing dialog')
               this[action.dialogInfo.name].close()
               this.getHolidayCalendars()
               //this.reload()
@@ -164,96 +164,7 @@ export function CalendarActions(base) {
             })            
 
           }
-          xjsonParamCommons(selAction, selObject) {
-            //console.log('xjsonParamCommons', selAction)
-            if (selAction===undefined){
-              selAction=this.selectedAction
-            }
-            if (selObject===undefined){
-              if (selAction.selObjectVariableName===undefined){
-                alert("Please add the property selObjectVariableName to your action definition")
-                return
-              }
-              selObject=this[selAction.selObjectVariableName][0]
-            }
-            let jsonParam = {}
-            let action = selAction
-            if (action.endPointParams) {
-              action.endPointParams.forEach(p => {
-                if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
-                  if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][p.internalVariableObjProperty]===undefined){
-                    var msg=""
-                    if (this[p.internalVariableObjName][p.internalVariableObjProperty]===undefined){
-                      msg='The object '+p.internalVariableObjName+' has no one property called '+p.internalVariableObjProperty
-                      alert(msg)
-                      //console.log(msg, this[p.internalVariableObjName][0])
-                    }else{
-                      msg='there is no object called '+p.internalVariableObjName+' in this view'
-                      alert(msg)
-                    }
-                //    alert('No family selected')
-                    return jsonParam[p.argumentName] = "ERROR: "+msg
-                  }  
-                jsonParam[p.argumentName] = this[p.internalVariableObjName][p.internalVariableObjProperty]
-               
-                } else if (p.internalVariableArrName&&p.internalVariableObjProperty) {          
-                    if (this[p.internalVariableArrName]===undefined||this[p.internalVariableArrName][0][p.internalVariableObjProperty]===undefined){
-                      var msg=""
-                      if (this[p.internalVariableArrName][0][p.internalVariableObjProperty]===undefined){
-                        msg='The object '+p.internalVariableArrName+' has no one property called '+p.internalVariableObjProperty
-                        alert(msg)
-                        //console.log(msg, this[p.internalVariableArrName][0])
-                      }else{
-                        msg='there is no object called '+p.internalVariableArrName+' in this view'
-                        alert(msg)
-                      }
-                  //    alert('No family selected')
-                      return jsonParam[p.argumentName] = "ERROR: "+msg
-                    }  
-                  jsonParam[p.argumentName] = this[p.internalVariableArrName][0][p.internalVariableObjProperty]
-                 
-                } else if (p.element) {
-                  if (p.isAdhocField!==undefined&&p.isAdhocField===true){
-                    var curArgName=jsonParam[p.argumentName]
-                    if (curArgName===undefined){curArgName=''}
-                    if (curArgName.length>0){curArgName=curArgName+"|"}
-                    curArgName=curArgName+this[p.element].value
-                    if (p.fieldType!==undefined){
-                      curArgName=curArgName+"*"+p.fieldType
-                    }
-                    jsonParam[p.argumentName] = curArgName
-                  }else{
-                    jsonParam[p.argumentName] = this[p.element].value // get value from field input
-                  }
-                } else if (p.defaultValue) {
-                  if (p.isAdhocField!==undefined&&p.isAdhocField===true){
-                    var curArgName=jsonParam[p.argumentName]
-                    if (curArgName===undefined){curArgName=''}
-                    if (curArgName.length>0){curArgName=curArgName+"|"}
-                    curArgName=curArgName+p.defaultValue
-                    if (p.fieldType!==undefined){
-                      curArgName=curArgName+"*"+p.fieldType
-                    }
-                    jsonParam[p.argumentName] = curArgName
-                  }else{
-                    jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
-                  }
-                } else if (p.selObjectPropertyName) {
-                  jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
-                } else if (p.targetValue) {
-                  jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
-                } else {
-                  jsonParam[p.argumentName] = p.value
-                }
-                console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
-              })
-            }
-            if (action.paramFilter) {
-              jsonParam[action.paramFilter[this.filterName].query] = action.paramFilter[this.filterName].value
-            }
-            return jsonParam
-          }
-
+    
           
 //          { "isAdhocField": true, "argumentName": "fieldName", "value": "description" },
 //          { "isAdhocField": true, "argumentName": "fieldValue", "element": "text2", "fieldType":"STRING" }
