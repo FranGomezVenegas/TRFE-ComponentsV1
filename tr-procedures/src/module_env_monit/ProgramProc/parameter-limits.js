@@ -7,7 +7,7 @@ let langConfig = {
     header: { label_en: 'Program limits list', label_es: 'Lista de rangos límite para el programa' }
   },
   configTableSpecLimits: {
-    'default': {
+    'defaultBIG': {
       'rule': {
         'label_en': 'Rule', 'label_es': 'Regla'
       },
@@ -54,6 +54,14 @@ let langConfig = {
         'label_en': 'Reading', 'label_es': 'Recuento'
       }
     },
+    'default': [
+      {'name':'rule', 'label_en': 'Rule', 'label_es': 'Regla'},
+      {'name':'method_and_version','label_en': 'Method & Version', 'label_es': 'Método y Versión'},
+      {'name':'analysis','label_en': 'Analysis', 'label_es': 'Análisis'},
+      {'name':'parameter','label_en': 'Parameter', 'label_es': 'Parámetro'},
+      {'name':'variation', 'label_en': 'Variation', 'label_es': 'Variación'},
+      {'name':'testing_group','label_en': 'Testing Group', 'label_es': 'Grupo Analítico'}
+    ],
     'proc-deploy': {
       'rule': {
         'label_en': 'Rule', 'label_es': 'Regla'
@@ -123,11 +131,76 @@ export class ParameterLimits extends CoreView {
 
   static get properties() {
     return {
-      procInstanceName: { type: String }
+      lang: { type: String },
+      procInstanceName: { type: String },
+      viewModelFromProcModel: { type: Object},
+      tableFieldsDefinition: {type: Array}
     }
   }
-
+  constructor(){
+    super()
+    console.log(this.viewModelFromProcModel)
+    if (this.viewModelFromProcModel===undefined){
+      this.tableFieldsDefinition=langConfig.configTableSpecLimits.default;
+      console.log(this.tableFieldsDefinition, '1')
+      return
+    }
+    if (this.viewModelFromProcModel[parameterLimits]===undefined){
+      this.tableFieldsDefinition=langConfig.configTableSpecLimits.default;
+      console.log(this.tableFieldsDefinition, '2')
+      return
+    }
+    if (this.viewModelFromProcModel[parameterLimits].configTableSpecLimits===undefined){
+      this.tableFieldsDefinition=langConfig.configTableSpecLimits.default;
+      console.log(this.tableFieldsDefinition, '3')
+      return
+    }
+    this.tableFieldsDefinition=this.viewModelFromProcModel[parameterLimits].configTableSpecLimits
+    console.log(this.tableFieldsDefinition, '4')
+    //
+    //
+  }
   tabView() {
+    console.log(this.tableFieldsDefinition)
+    return html`
+      <h2>${langConfig.limitView.header["label_"+ this.lang]} ${this.selectedProgram&&this.selectedProgram.name}</h2>
+      <table class="styled-table">
+        <thead>          
+          <tr>
+            ${this.tableFieldsDefinition.map(fld =>
+              html`
+              <th>${fld["label_"+ this.lang]}</th>
+              `
+            )}
+            <th>Spec</th>
+          </tr>
+        </thead>
+        <tbody>
+        ${this.selectedProgram===undefined||this.selectedProgram.spec_definition===undefined||this.selectedProgram.spec_definition.spec_limits===undefined ? nothing : 
+        html`
+          ${this.selectedProgram&&this.selectedProgram.spec_definition.spec_limits.map(p => 
+            html`
+            <tr>
+              ${this.tableFieldsDefinition.map(fld =>
+                html`
+                <td>${p[fld.name]}</td>
+                `
+              )}
+              <td>
+                <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
+                <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
+                <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
+              </td>
+            </tr>
+            `
+          )}
+        `}
+        </tbody>
+      </table>
+    `;
+  }
+
+  xtabView() {
     return html`
       <h2>${langConfig.limitView.header["label_"+ this.lang]} ${this.selectedProgram&&this.selectedProgram.name}</h2>
       <table class="styled-table">

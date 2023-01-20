@@ -123,6 +123,7 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
   }
 
   render() {
+    console.log('render', this.viewModelFromProcModel)
     return html`
       <div class="layout vertical flex">
         <div class="layout horizontal center-center">
@@ -132,10 +133,12 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
             )}
           </mwc-select>
         </div>
-        ${this.showTabElement(this.viewModelFromProcModel, this.viewModelFromProcModel.tabs)}
+        ${this.showTabElement(this.viewModelFromProcModel, tabBtns)}
       
         <summary-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="summary"}></summary-view>
-        <parameter-limits .procInstanceName=${this.procInstanceName} .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="parameter-limits"}></parameter-limits>
+        <parameter-limits .procInstanceName=${this.procInstanceName} .lang=${this.lang}
+         .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="parameter-limits"}
+         .viewModelFromProcModel=${this.viewModelFromProcModel}></parameter-limits>
 
         <config-calendar .lang=${this.lang} .selectedProgram=${this.selectedProgram} 
           ?hidden=${this.tabView!="config-calendar"}></config-calendar>
