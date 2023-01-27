@@ -369,17 +369,13 @@ console.log('constructor flowchart')
     }
     elementClicked(vwName, fltrName){
       console.log('elementClicked', this.procName,  vwName, fltrName)
-      //let vwName='SampleMicroorganism' 
-      //e.target.viewname
-      //let fltrName='MicroOrganismPERS' 
-      //e.filtername
       this.selectedMenu('/dashboard/procedures?procName='+this.procName+
       '&viewName='+vwName+'&filterName='+fltrName)
     }
     home(){
       return html`
       <div class="maindiv">
-      <div @click=${()=>this.elementClicked("SamplePendingSampling", "SamplingSMP")} class="start-end" style="top: 50px; left: 20px;"><span>New <br>Samples</span></div>
+      <div @click=${()=>this.elementClicked("LogSamples", "SampleLogin")} class="start-end" style="top: 50px; left: 20px;"><span>New <br>Samples</span></div>
       
       <div class="block-background" style="left:0px;">
         <div style="display:inline-grid;">

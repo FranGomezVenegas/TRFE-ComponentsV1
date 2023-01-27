@@ -115,6 +115,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   }
 
   resetView() {
+    //console.log('resetView')
     let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procName)
     if (!this.config.local) {
       if (findProc.length) {
@@ -222,9 +223,17 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         // this.sopsPassed = false
         if (defView[0].icons) {
           let sopIcon = defView[0].icons.filter(i => i.name == this.filterName)
-          this.sopsPassed = sopIcon[0].sops_passed
+          if (sopIcon===undefined||sopIcon[0]===undefined){
+            this.sopsPassed = true
+          }else{
+            this.sopsPassed = sopIcon[0].sops_passed
+          }
         } else {
-          this.sopsPassed = defView[0].sops_passed
+          if (defView===undefined||defView[0]===undefined){
+            this.sopsPassed = true
+          }else{
+            this.sopsPassed = defView[0].sops_passed
+          }
         }
       }
       if (!this.sopsPassed) {
@@ -279,7 +288,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         })
       }
 //FRAAAAAAAAN , parche
-      alert('Fran, acuerdate del parche en TrProcedures.authorized para sampleAuditRevisionMode y sampleAuditChildRevisionRequirede')
+      console.log('Fran, acuerdate del parche en TrProcedures.authorized para sampleAuditRevisionMode y sampleAuditChildRevisionRequirede')
       this.audit.sampleAuditRevisionMode = true
       this.audit.sampleAuditChildRevisionRequired = true
 //FRAAAAAAAAN , parche

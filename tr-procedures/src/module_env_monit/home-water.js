@@ -126,35 +126,35 @@ console.log('constructor flowchart')
             ${this.flowChart()}              
         `: nothing}`
     }
+    selectedMenu(route) {
+      this.shadowRoot.querySelectorAll("sp-action-menu").forEach(s => s.open = false)
+      this.navigate(route)
+    }    
+
     elementClicked(vwName, fltrName){
-      console.log('elementClicked', this.procName,  e)
-      //let vwName='SampleMicroorganism' 
-      //e.target.viewname
-      //let fltrName='MicroOrganismPERS' 
-      //e.filtername
+      console.log('elementClicked', this.procName,  vwName, fltrName)
       this.selectedMenu('/dashboard/procedures?procName='+this.procName+
       '&viewName='+vwName+'&filterName='+fltrName)
-    }    
+    }  
     flowChart(){
       console.log('Flowchart')
         //this.resetView()
         return html`
         <div class="maindiv">
-        <div class="start-end" style="top: 37px; left: 10px;"><span>New <br>Samples</span></div>
+        <div @click=${()=>this.elementClicked("LogSamples", "SampleLogin")} class="start-end" style="top: 37px; left: 10px;"><span>New <br>Samples</span></div>
         
         <div class="block-background" style="left:0px;">
-          <div class="node" style="top:-6px; padding: 15px 20px;"><span>Enter <br>Results</span></div>
-          <div class="node" style="left: 10px; top:-6px; padding: 15px 20px;"><span>Review <br>Tests</span></div>
-          <div class="node" style="left: 10px; top:-6px;padding: 15px 20px;"><span>Review<br>Testing Group</span></div>
+          <div @click=${()=>this.elementClicked("SampleEnterResult", "FQ Testing")} class="node" style="top:-6px; padding: 15px 20px;"><span>Enter <br>Results</span></div>
+          <div @click=${()=>this.elementClicked("ReviewTesting", "FQ Testing")} class="node" style="left: 10px; top:-6px; padding: 15px 20px;"><span>Review <br>Tests</span></div>
+          <div @click=${()=>this.elementClicked("ReviewTestingGroup", "FQ Testing")} class="node" style="left: 10px; top:-6px;padding: 15px 20px;"><span>Review<br>Testing Group</span></div>
         </div>
         <div class="block-background" style="top: -8px; left:140px;">
-          <div class="node" style="top:-6px; padding: 15px 20px;"><span>Enter <br>Results</span></div>
-          
-          <div class="node" style="left: 10px; top:-5px; padding: 15px 20px;"><span>Review <br>Tests</span></div>
-          <div class="node" style="left: 10px; top:-5px; padding: 15px 20px;"><span>Review<br>Testing Group</span></div>
+          <div @click=${()=>this.elementClicked("SampleEnterResult", "MB Testing")} class="node" style="top:-6px; padding: 15px 20px;"><span>Enter <br>Results</span></div>          
+          <div @click=${()=>this.elementClicked("ReviewTesting", "MB Testing")} class="node" style="left: 10px; top:-5px; padding: 15px 20px;"><span>Review <br>Tests</span></div>
+          <div @click=${()=>this.elementClicked("ReviewTestingGroup", "MB Testing")} class="node" style="left: 10px; top:-5px; padding: 15px 20px;"><span>Review<br>Testing Group</span></div>
         </div>
           
-        <div class="start-end" style="top: -61px; left: 125px; padding: 30px 40px;"><span>Review<br>Sample</span></div>
+        <div @click=${()=>this.elementClicked("ReviewSample", "")} class="start-end" style="top: -61px; left: 125px; padding: 30px 40px;"><span>Review<br>Sample</span></div>
       </div>
       `
     }

@@ -468,7 +468,10 @@ export function ButtonsFunctions(base) {
         }         
 
         let defView = procInstanceModel[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
-        if (defView.length) {
+        if (defView===undefined||defView[0]===undefined){
+          return true
+        }
+        if (defView.length>0) {
           // for fake test
           // sopsPassed = false
           if (defView[0].icons) {
@@ -478,11 +481,14 @@ export function ButtonsFunctions(base) {
           // } else {
           //   sopsPassed = defView[0].sops_passed
           }
-        }
-        console.log('disabledByCertification', defView[0].mode)
-        if (defView.length && defView[0].mode.toString().toUpperCase()==="READONLY") {
+        
+          //console.log('disabledByCertification', defView[0].mode)
+          if (defView.length && defView[0].mode.toString().toUpperCase()==="READONLY") {            
+            return true
+          } 
+        }else{
           return true
-        } 
+        }
         sopsPassed = defView[0].sops_passed == true ? true : false
         return !sopsPassed  
       }      
