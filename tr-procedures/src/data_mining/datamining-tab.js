@@ -42,7 +42,11 @@ export class DataMiningTab extends LitElement {
     this.tabChanged(this.tabs[e.target.value]) 
   }
   listElementLabel(){
-    return this.viewModelFromProcModel.tabsListElement["label_"+this.lang]
+    if (this.viewModelFromProcModel.tabsListElement===undefined){
+      return ""
+    }else{
+      return this.viewModelFromProcModel.tabsListElement["label_"+this.lang]
+    }
   }
   render() {
     //console.log(this.tabs)
