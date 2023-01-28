@@ -247,25 +247,26 @@ export class DataMiningData extends DataViews(LitElement) {
   }
 
   downloadDataTableToCSV() {
+    console.log('this.activeTab', this.activeTab)
     let csvContent = "data:text/csv;charset=utf-8,"
     let header = [], contents = []
     contents = this.getTraceabilityInfo()
-    for (let i=0; i<this.data.datatable.length; i++) {
-      if (this.data.datatable[i].spec_code) {
+    for (let i=0; i<this.data[this.activeTab.download.elements[0].elementName].length; i++) {
+      //if (this.data[this.activeTab.download.elements[0].elementName][i].spec_code) {
         if (!header.length) {
-          Object.entries(this.data.datatable[i]).map(([key]) => {
+          Object.entries(this.data[this.activeTab.download.elements[0].elementName][i]).map(([key]) => {
             header.push(key)
           })
           contents.push(header)
         }
         let content = []
-        Object.entries(this.data.datatable[i]).map(([key, val]) => {
+        Object.entries(this.data[this.activeTab.download.elements[0].elementName][i]).map(([key, val]) => {
           content.push(val)
-        })
+        })        
         contents.push(content)
-      }
+      //}
     }
-    contents.forEach(rowArray => {
+    contents.forEach(rowArray => {      
       let row = rowArray.join(",")
       csvContent += row + "\r\n";
     })

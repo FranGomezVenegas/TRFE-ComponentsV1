@@ -1598,7 +1598,7 @@ export const ProcDeploy = {
       }
     ]
   },
-  "Programs": {
+  "Programs": {	  
     "component": "ModuleEnvMonitProgramProc",
     "hasOwnComponent": true,
     "viewQuery": {
@@ -1621,7 +1621,203 @@ export const ProcDeploy = {
     
 	"actions": []
   },
-  "Deviation": {
+"Deviation": {
+	"component":"Tabs",  
+    "abstract": true,
+    "tabs": [
+      { "component":"TableWithButtons",  
+        "filter": "pending",
+        "langConfig": {
+          "tab": {
+            "label_en": "Pending Decision", 
+            "label_es": "Decisión pendiente"
+          },
+          "title": {
+            "pending": {
+				"label_en": "Pending Decision", 
+				"label_es": "Decisión pendiente"
+            }
+          },
+          "gridHeader": {
+            "result_id": {
+              "label_en": "Result", "label_es": "Resultado", "sort": false, "filter": true, "width": "10%"
+            },
+            "sample_id": {
+              "label_en": "Sample", "label_es": "Muestra", "sort": false, "filter": true, "width": "10%"
+            },
+            "created_on": {
+              "label_en": "Creation", "label_es": "Creada", "sort": true, "filter": false, "width": "15%"
+            },
+            "location_name": {
+              "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "15%"
+            },
+            "method_name": {
+              "label_en": "Method", "label_es": "Método", "sort": false, "filter": true, "width": "10%"
+            },
+            "spec_eval_detail": {
+              "label_en": "Problem Detail", "label_es": "Detalle del Problema", "sort": false, "filter": true, "width": "30%"
+            },
+            "spec_rule_with_detail": {
+              "label_en": "Spec Rule", "label_es": "Especificación", "sort": false, "filter": true, "width": "10%"
+            }
+          }
+        },
+        "viewQuery":{
+            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
+            "ssclientMethod": "getSamples",
+            "endPoint": "/app/InvestigationAPIqueries",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "requiresGridItemSelected": true
+            }		
+		},
+		"actions": [
+          {"actionName": "NEW_INVESTIGATION", 
+            "alternativeAPIActionMethod": "newInvestigationAction",
+            "endPoint": "/app/InvestigationAPIactions",
+			"requiresDialog": false,
+            "button": {
+              "title": {
+                "label_en": "Create Investigation", "label_es": "Crear Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+				{ "argumentName": "fieldName", "value": "description" },
+				{ "argumentName": "fieldValue", "targetValue": true },
+				{ "argumentName": "objectsToAdd", "targetValue": true }			
+            ]
+          },
+          {"actionName": "OPEN_INVESTIGATIONS",          
+            "endPoint": "/app/InvestigationAPIqueries",
+			"requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "dialogInfo": {
+			"name": "investigationDialog",
+			"subQueryName": "getOpenInvestigations",				
+              "automatic": true,
+              "action": [
+                {
+                  "actionName": "ADD_INVEST_OBJECTS",
+                  "clientMethod": "addInvestObjects",
+                  "endPoint": "/app/InvestigationAPIactions",
+                  "endPointParams": [
+                    { "argumentName": "investigationId", "targetValue": true },
+                    { "argumentName": "objectsToAdd", "targetValue": true }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },	
+      { "component":"TableWithButtons",  
+        "filter": "open",
+        "langConfig": {
+          "tab": {
+            "label_en": "Investigations", 
+            "label_es": "Investigaciones"
+          },
+          "title": {
+            "open": {
+              "label_en": "In Progress Investigations", 
+              "label_es": "Investigaciones en curso"
+            }
+          },
+          "fieldText": {
+            "systemName": { "label_en": "System Name", "label_es": "Nombre Sistema" },
+            "systemId": { "label_en": "System Id", "label_es": "Id Sistema" },
+            "capa": { "label_en": "CAPA Required", "label_es": "¿Requiere CAPA?" },
+            "capaName": { "label_en": "CAPA System Name", "label_es": "Nombre Sistema CAPA" },
+            "capaId": { "label_en": "CAPA Id", "label_es": "Id CAPA" }
+          },
+          "gridHeader": {
+            "id": {
+              "label_en": "ID", "label_es": "ID", "width": "12px", "sort": false, "filter": true
+            },
+            "description": {
+              "label_en": "description", "label_es": "description", "width": "20px", "sort": false, "filter": true
+            },
+            "created_on": {
+              "label_en": "Creation", "label_es": "Creación", "width": "30px", "sort": false, "filter": true
+            },
+            "external_system_name": {
+              "label_en": "External System Name", "label_es": "Nombre Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "external_system_id": {
+              "label_en": "External System Id", "label_es": "Id Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_required": {
+              "label_en": "capa_required", "label_es": "CAPA Necesario", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_name": {
+              "label_en": "CAPA System", "label_es": "Sistema para CAPAs", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_id": {
+              "label_en": "CAPA System Id", "label_es": "Id en Sistema CAPAs", "width": "20px", "sort": false, "filter": true
+            }
+          }
+        },
+        "viewQuery":{
+            "actionName": "OPEN_INVESTIGATIONS",
+            "sssclientMethod": "getSamples",
+            "endPoint": "/app/InvestigationAPIqueries",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "requiresGridItemSelected": true
+            }
+		},
+		"actions": [
+          {"actionName": "INVESTIGATION_CAPA_DECISION",			
+            "endPoint": "/app/InvestigationAPIactions",
+			"requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Decision", "label_es": "Decisión"
+              },
+              "requiresGridItemSelected": true
+            },
+            "dialogInfo": {               
+              "name": "decisionDialog"
+            },
+            "endPointParams": [
+              { "argumentName": "investigationId", "selObjectPropertyName": "id" },
+              { "argumentName": "capaRequired", "targetValue": true },
+              { "argumentName": "capaFieldName", "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id" },
+              { "argumentName": "capaFieldValue", "targetValue": true },
+			  { "argumentName": "closeInvestigation", "value": false }				  
+            ]
+          },
+          {"actionName": "CLOSE_INVESTIGATION",
+            "clientMethod": "closeInvestigation",
+            "endPoint": "/app/InvestigationAPIactions",
+			"requiresDialog": false,
+            "button": {
+              "title": {
+                "label_en": "Close", "label_es": "Cerrar"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+              { "argumentName": "investigationId", "selObjectPropertyName": "id" }
+            ]
+          }
+        ]
+      }
+    ]
+  },  
+  "Deviation2": {
     "component": "Tabs",
     "abstract": true,
     "tabs": [

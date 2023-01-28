@@ -35,6 +35,29 @@ export class DataMiningTab extends LitElement {
       mwc-icon-button[hidden] {
         display: none;
       }
+      mwc-select {        
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgba(36, 192, 235, 1);
+        --mdc-select-dropdown-icon-color:rgba(36, 192, 235, 1);
+        --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
+        --mdc-notched-outline-border-color: rgba(186, 235, 248, 0.4);
+        --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
+
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
+      mwc-select.outlined {        
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color: 4fcad029;
+      } 
+
     `;
   }
   listObjectSelected(e){

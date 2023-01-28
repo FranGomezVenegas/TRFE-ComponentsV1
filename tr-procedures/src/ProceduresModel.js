@@ -5,6 +5,7 @@ import { EmAir } from './0proc_models/em-air';
 import { App } from './0proc_models/app';
 import { Genoma1 } from './0proc_models/genoma-1';
 import { SampleCoaRel1 } from './0proc_models/sample-coa-rel1';
+import { InvDraft } from './0proc_models/inv-draft';
 
 export const ProceduresModel = {
   ['em-demo-a']: EmDemoA,
@@ -13,5 +14,6 @@ export const ProceduresModel = {
   ['em-air-spr1']: EmAir,
   ['app']: App,
   ['genoma-1']: Genoma1,
-  ['sample-coa-rel1']: SampleCoaRel1
+  ['sample-coa-rel1']: SampleCoaRel1,
+  ['inv-draft']: InvDraft
 }

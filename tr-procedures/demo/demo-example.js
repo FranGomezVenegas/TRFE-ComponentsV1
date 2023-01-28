@@ -116,7 +116,11 @@ class DemoExample extends LitElement {
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewTesting", "RT-MB")}>sample-coa-rel1 RT MB</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewTestingGroup", "RTG-FQ")}>sample-coa-rel1 RTG FQ</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewTestingGroup", "RTG-MB")}>sample-coa-rel1 RTG MB</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewSample", "Review")}>sample-coa-rel1 Review Sample</button>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewSample", "Review")}>sample-coa-rel1 Review Sample</button><br>
+
+          Inv-Draft<br>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLots", "InventoryLots.1")}>InventoryLots</button>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "Issues", "Issues")}>Issues</button>
           
 <!--          <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
           <button @click=${()=>this.pLogin.logout()}>Logout</button><hr> -->

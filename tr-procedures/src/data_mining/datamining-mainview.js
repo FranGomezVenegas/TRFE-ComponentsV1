@@ -33,6 +33,9 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       div[hidden] {
         display: none;
       }
+      div#filterList {
+        padding:8px;
+      }
       mwc-button {
         background-color: rgba(36, 192, 235, 1);
         font-family: Montserrat;
@@ -147,7 +150,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
           <div id="leftSplit">
             <datamining-tab @tab-changed=${this.tabChanged} .viewModelFromProcModel=${this.viewModelFromProcModel} 
               .lang=${this.lang}              .tabs=${this.tabList}></datamining-tab>
-            <div class="layout flex vertical">
+            <div id="filterList" class="layout flex vertical">
             ${!this.activeTab||!this.activeTab.filter||!this.activeTab.filter.filterFields ?
               html``: html`
                 ${this.activeTab.filter.filterFields.map((fld, i) =>             
