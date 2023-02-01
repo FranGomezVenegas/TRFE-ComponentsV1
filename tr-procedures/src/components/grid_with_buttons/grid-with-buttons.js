@@ -101,6 +101,7 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
         // sopsPassed: { type: Boolean },
         actionBeingPerformedModel:{type:Object},
         localProceduresModels: { type: Object},
+        masterData:{type: Object}
       };
     }
   
@@ -112,6 +113,7 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
       this.viewModelFromProcModel={}   
       this.actionBeingPerformedModel={}
       this.localProceduresModels=ProceduresModel
+      this.masterData={}
     }
     resetView(){
       this.selectedItems=[]
