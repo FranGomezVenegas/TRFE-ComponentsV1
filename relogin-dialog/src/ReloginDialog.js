@@ -153,7 +153,7 @@ export class ReloginDialog extends TrazitCredentialsDialogs(CredDialog) {
 
     if (this.noActivity) { 
       //console.log("checkingSesssionExpired ")
-      this.underInactivity=true
+      this.underInactivity=true 
       let curTime = new Date().getTime();
       let runSession = curTime - this.startSession;
 
