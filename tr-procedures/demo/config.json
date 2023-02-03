@@ -113,6 +113,11 @@
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
   },  
+   "localDefaultView": {
+    "procName":  "inv-draft", 
+    "viewName": "InventoryLots", 
+    "filterName" :  "InventoryLots.1" 
+  },  
    "localDefaultView888": {
     "procName":  "em-demo-a",
     "viewName": "Programs", 

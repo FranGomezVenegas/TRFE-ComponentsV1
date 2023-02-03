@@ -125,11 +125,15 @@ export class TrDialog extends Dialog {
   }
 
   show() {
-    this.dialogContent.style.overflow = "auto";
-    this.dialogSurface.style.overflow = "auto";
-    this.dialogSurface.style.top = "0";
-    this.dialogSurface.style.height = "auto";
-    this.expandLabel = "expand_more";
+    if (this.dialogContent!==undefined&&this.dialogContent!==null){
+      this.dialogContent.style.overflow = "auto";
+    }
+    if (this.dialogSurface!==undefined&&this.dialogSurface!==null){
+      this.dialogSurface.style.overflow = "auto";
+      this.dialogSurface.style.top = "0";
+      this.dialogSurface.style.height = "auto";
+    }
+      this.expandLabel = "expand_more";
     super.show()
   }
 

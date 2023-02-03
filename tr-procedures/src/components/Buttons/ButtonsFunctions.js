@@ -1,11 +1,11 @@
 import { html, css, nothing} from 'lit';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ApiFunctions } from '../Api/ApiFunctions';
-
+import { ClientMethod} from '../../../src/ClientMethod';
  
 
 export function ButtonsFunctions(base) {
-    return class extends (ApiFunctions(base)) {
+    return class extends ClientMethod(ApiFunctions(base)) {
     getButton(sectionModel = this.viewModelFromProcModel) {
 //console.log('getButton', 'sectionModel', sectionModel)      
       return html`
@@ -190,10 +190,14 @@ export function ButtonsFunctions(base) {
       if (action.button.showWhenSelectedItem) {
         //console.log('btnHidden')
         if (this.selectedItems===undefined || this.selectedItems[0]===undefined){return true} // keep hide when no selection
-        if (Array.isArray(action.button.showWhenSelectedItem)) {
+        if (Array.isArray(action.button.showWhenSelectedItem)) {          
           action.button.showWhenSelectedItem.forEach(rowArray => {
-            if (this.selectedItems[0][rowArray.column] === rowArray.value) {
+            var curValue=String(rowArray.value).split('|')
+console.log(rowArray.value, this.selectedItems[0][rowArray.column])
+            if (curValue.includes(this.selectedItems[0][rowArray.column])) {              
               d=true              
+            }else{
+              d=false
             }
           })
           return d
@@ -238,9 +242,14 @@ export function ButtonsFunctions(base) {
             return
         }
         if(action.requiresDialog===false){
+          if (action.clientMethod!==undefined){
+            this[action.clientMethod](action, this[selectedItemPropertyName][0])
+            return
+          }else{
           //alert('ButtonsFunctions 241-aquiiiiii')
             this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
             return
+          }
         }  
         if ( action.requiresGridItemSelected!==undefined&&action.requiresGridItemSelected===true&&
           (this[selectedItemPropertyName]===undefined||this[selectedItemPropertyName][0]===undefined) ){
@@ -263,7 +272,8 @@ export function ButtonsFunctions(base) {
             alert('the dialog '+action.dialogInfo.name+' does not exist')
         }
       return
-    }    
+    }   
+      
     async GetViewData(){
         //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
         if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){

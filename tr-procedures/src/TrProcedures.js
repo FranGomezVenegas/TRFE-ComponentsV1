@@ -104,7 +104,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       // fixed issue: https://github.com/FranGomezVenegas/FETR/issues/158
       ready: { type: Boolean },
       sampleState: { type: Object },
-      // masterData:{ type: Array}
+      masterData:{ type: Object}
      
     };
   }
@@ -112,6 +112,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     super()
     this.procName=''
     this.viewName=''
+    this.masterData={}
   }
 
   resetView() {
@@ -289,8 +290,8 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       }
 //FRAAAAAAAAN , parche
       console.log('Fran, acuerdate del parche en TrProcedures.authorized para sampleAuditRevisionMode y sampleAuditChildRevisionRequirede')
-      this.audit.sampleAuditRevisionMode = true
-      this.audit.sampleAuditChildRevisionRequired = true
+      //this.audit.sampleAuditRevisionMode = true
+      //this.audit.sampleAuditChildRevisionRequired = true
 //FRAAAAAAAAN , parche
 
       if (anyAccess.length) {
@@ -373,7 +374,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           &&this.viewModelFromProcModel.component.toLowerCase() == 'tablewithbuttons' ? html`
           <grid-with-buttons id="gridwithbuttons" .viewModelFromProcModel=${this.viewModelFromProcModel} viewName=${this.viewName} 
             filterName=${this.filterName} procInstanceName=${this.procName} lang=${this.lang}
-            .config=${this.config} .reqParams=${this.reqParams} ?ready="false">
+            .config=${this.config} .reqParams=${this.reqParams} .masterData=${this.masterData} ?ready="false">
           </grid-with-buttons>
         `: html`
 

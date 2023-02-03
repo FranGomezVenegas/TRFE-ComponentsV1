@@ -400,7 +400,12 @@ return class extends LitElement {
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
-
+    execResult(params) {
+      this.fetchApi(params).then(j => {
+        this.reloadDialog()
+        this.dataForDialog = null
+      })
+    }
     removeEvents() {
       if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES") {
         // 

@@ -118,6 +118,8 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
     resetView(){
       this.selectedItems=[]
       this.ready=false;
+      console.log('resetView')
+      this.templates.resetView()
     }
     // firstUpdated() {
     //   super.firstUpdated()
@@ -287,109 +289,14 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
 get rowTooltip() {
   return this.shadowRoot.querySelector("#rowTooltip")
 }
-
-  xtabsBlock(){
-    return html`
-    ${this.viewModelFromProcModel.tabs ?
-      html`
-        <div class="layout vertical flex">
-          <div class="layout horizontal flex">
-            ${this.viewModelFromProcModel.tabs.map(t => 
-              html`
-                <mwc-button class="tabBtn" dense unelevated 
-                  .label=${t.langConfig.tab["label_"+ this.lang]}
-                  @click=${()=>this.selectTab(t)}></mwc-button>
-              `
-            )}
-          </div>
-          <tabs-composition 
-            .lang=${this.lang}
-            .windowOpenable=${this.windowOpenable}
-            .sopsPassed=${this.sopsPassed}
-            .procInstanceName=${this.procInstanceName}             
-            .viewName=${this.viewName}  .viewModelFromProcModel=${this.viewModelFromProcModel}
-            .config=${this.config}>${this.defaultTab()}</tabs-composition>
-        </div>
-        
-      ` : nothing
-    }
-    `
-  }
-  xdefaultTab(){
-    if (this.tabsComposition!=null){
-      console.log('defaultTab')
-      this.tabsComposition.ready=false
-      this.tabsComposition.viewModelFromProcModel=this.viewModelFromProcModel.tabs[0]
-    }
-
-  }
-  xselectTab(tab) {
-    console.log('selectTab', tab)
-    this.tabsComposition.viewModelFromProcModel = tab
-    this.tabsComposition.ready=false
-    this.tabsComposition.render()
-    //this.tabsComposition.reload()
-    //this.tabsComposition.grid.
-  }
-
   get xtabsCompositionc() {return this.shadowRoot.querySelector("tabs-composition")}
 
-//     <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-//     @active-item-changed=${e=>this.selectedItems=e.detail.value ? [e.detail.value] : []}
-//     .items=${this.gridItems}
-//     .selectedItems="${this.selectedItems}">
-//     ${this.gridList()}
-// </vaadin-grid>
-
-    // this code is not longer need. We need to build the generic dialog template with generic fields instead!!! :)))
-    // ${this.dateTemplate()}
-    // ${this.selectedAction&&this.selectedAction.dialogInfo&&this.selectedAction.dialogInfo.fieldText&&this.selectedAction.dialogInfo.fieldText.comment ?
-    // html`${this.commentTemplate()}` : nothing
-    // }
-    // ${this.langConfig&&this.langConfig.resultHeader ? 
-    // html`${this.resultTemplate()}` :
-    // nothing
-    // }
-    // ${this.langConfig&&this.langConfig.microorganismHeader ? 
-    // html`${this.microorganismTemplate()}` :
-    // nothing
-    // }
-    // ${this.langConfig&&this.viewName=="ProductionLots" ? 
-    // html`${this.lotTemplate()}` :
-    // nothing
-    // }
-    // ${this.langConfig&&this.viewName=="LogSamples" ? 
-    // html`${this.pointTemplate()}` :
-    // nothing
-    // }
-    // ${this.langConfig&&this.viewName=="PlatformInstruments" ? 
-    // html`${this.newInstrumentsTemplate()}` :
-    // nothing
-    // }
-    // ${this.langConfig&&this.viewName=="EventsInProgress" ? 
-    // html`${this.instrumentEventTemplate()}` :
-    // nothing
-    // }  
-    // ${this.langConfig&&this.viewName=="WhiteIpList" ? 
-    // html`${this.newPlatformAdminWhiteIPListsTemplate()}` :
-    // nothing
-    // }
-    // ${this.langConfig&&this.viewName=="BlackIpList" ? 
-    // html`${this.newPlatformAdminBlackIPListsTemplate()}` :
-    // nothing
-    // }
-    // ${this.langConfig&&this.viewName=="PlatformBusRules" ? 
-    // html`${this.newPlatformAdminBusinessRulesTemplate()}` :
-    // nothing
-    // }
-
-    get batchElement() {return this.shadowRoot.querySelector("gridmodel-bottomcomp-sampleincubation#active_batches")}
-    get incubElement() {return this.shadowRoot.querySelector("gridmodel-bottomcomp-sampleincubation#samplesWithAnyPendingIncubation")}
-    get grid() {return this.shadowRoot.querySelector("vaadin-grid#mainGrid")}
-    get chart() {return this.shadowRoot.querySelector("google-chart")}   
-    get templates() {return this.shadowRoot.querySelector("templates-#topComp")}
-    get audit() {return this.shadowRoot.querySelector("audit-dialog")}    
-
+  get batchElement() {return this.shadowRoot.querySelector("gridmodel-bottomcomp-sampleincubation#active_batches")}
+  get incubElement() {return this.shadowRoot.querySelector("gridmodel-bottomcomp-sampleincubation#samplesWithAnyPendingIncubation")}
+  get grid() {return this.shadowRoot.querySelector("vaadin-grid#mainGrid")}
+  get chart() {return this.shadowRoot.querySelector("google-chart")}   
+  get templates() {return this.shadowRoot.querySelector("templates-#topComp")}
+  get audit() {return this.shadowRoot.querySelector("audit-dialog")}    
 
   templateEvent(e) {
     console.log('templateEvent')
@@ -432,7 +339,7 @@ get rowTooltip() {
   }
 
   detailRenderer(result) {
-    console.log('detailRenderer', result)
+    //console.log('detailRenderer', result)
     let labels = {
       "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
       "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"

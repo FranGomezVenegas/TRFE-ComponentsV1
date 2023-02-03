@@ -85,7 +85,10 @@ export class Templates extends GridFunctions(LitElement) {
       nothing
     }`
   }
-
+  resetView(){
+    console.log('resetView-templates-')
+    this.selectedProgram = {}
+  }
   specCode() {
     return html`    
       <div id= "topElement" class="layout center">

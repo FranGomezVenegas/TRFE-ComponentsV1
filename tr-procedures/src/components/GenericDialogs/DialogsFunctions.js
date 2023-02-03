@@ -153,7 +153,7 @@ export function DialogsFunctions(base) {
 
     // Now here
     console.log('nextRequest', 'credArguments', credArguments)
-    if (this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
+    if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
       this.selectedItems=this[this.actionBeingPerformedModel.alternativeItemPropertyName]
     }
     if (this.selectedItems===undefined){
@@ -163,8 +163,9 @@ export function DialogsFunctions(base) {
     if (this.targetValue===undefined){
       this.targetValue={}
     }
-    this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], this.targetValue, credArguments)
-
+    if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
+      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], this.targetValue, credArguments)
+    }
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {
       if (value != null || value != undefined) {
@@ -173,7 +174,8 @@ export function DialogsFunctions(base) {
     })
     this.reqParams = cleanParams
     if (this.credDialog) {     
-      if (this.actionBeingPerformedModel.keepTheDialogOpen===undefined
+      if (this.actionBeingPerformedModel===undefined
+        ||this.actionBeingPerformedModel.keepTheDialogOpen===undefined
         ||this.actionBeingPerformedModel.keepTheDialogOpen===false){ 
             this.credDialog.close()
       }else{

@@ -393,6 +393,10 @@ export const AppProc = {
 		"requiresDialog": true,		
         "clientMethod": "openReactivateObjectDialog",
 		"endPoint": "/app/procs/InstrumentsAPIactions",
+        "endPointParams": [
+            { "argumentName": "instrumentName", "internalVariableSimpleObjName": "selectedObjectToReactive", "internalVariableSimpleObjProperty": "instrument" },
+            { "argumentName": "eventId", "internalVariableSimpleObjName": "selectedObjectToReactive", "internalVariableSimpleObjProperty": "id" }
+        ],		
         "button": {
           "icon": "alarm_add",
           "title": {

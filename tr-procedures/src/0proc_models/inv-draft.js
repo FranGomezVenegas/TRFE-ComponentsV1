@@ -8,6 +8,7 @@ export const InvDraft = {
 		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIactions"}
 	  ]
   },  
+"master_data":{"category_and_references":[{"name":"Estándares Primarios","inv_category":[{"min_stock_type":"ITEMS","created_on":"2023-01-15 23:57:00.348211+01","processes_list":"","name":"REF1","active":true,"min_stock":2,"min_stock_uom":"","category":"Estándares Primarios","lot_requires_qualif":true,"allowed_uoms":"","created_by":"PROCEDURE_DEPLOYMENT","allow_proc_discounts":false}]},{"name":"Estándares Secundarios","inv_category":[{}]},{"name":"Material  Fungible","inv_category":[{"min_stock_type":"","created_on":"2023-01-15 23:57:00.304747+01","processes_list":"","name":"Bote de agua","active":true,"min_stock":10,"min_stock_uom":"ML","category":"Material  Fungible","lot_requires_qualif":false,"allowed_uoms":"ML|L|CL","created_by":"PROCEDURE_DEPLOYMENT","allow_proc_discounts":false}]},{"name":"Medios de Cultivo","inv_category":[{"min_stock_type":"ITEMS","created_on":"2023-01-15 23:57:00.386413+01","processes_list":"","name":"REF1","active":true,"min_stock":80,"min_stock_uom":"","category":"Medios de Cultivo","lot_requires_qualif":false,"allowed_uoms":"","created_by":"PROCEDURE_DEPLOYMENT","allow_proc_discounts":true}]},{"name":"Otros","inv_category":[{}]},{"name":"Reactivos Comerciales","inv_category":[{"min_stock_type":"VOLUME","created_on":"2023-01-15 23:57:00.304747+01","processes_list":"","name":"REF1","active":true,"min_stock":67000,"min_stock_uom":"ML","category":"Reactivos Comerciales","lot_requires_qualif":true,"allowed_uoms":"ML|L|CL","created_by":"PROCEDURE_DEPLOYMENT","allow_proc_discounts":false}]},{"name":"Reactivos preparados","inv_category":[{}]}]},  
   "InventoryLots": {
 	"component": "TableWithButtons",
     "langConfig": {
@@ -53,12 +54,19 @@ export const InvDraft = {
 		{"actionName": "NEW_INVENTORY_LOT",
 		"requiresDialog": true,
         "endPointParams": [
-          { "argumentName": "reference", "element": "text1", "defaultValue": "" },
+          { "argumentName": "reference", "element": "text1", "defaultValue": ""  },
           { "argumentName": "category", "element": "list1", "defaultValue": "" },
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-          { "argumentName": "expiryDate", "element": "datetime1", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" }
+		  { "argumentName": "volumeUom", "fixValue": "ML" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
+		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" }
         ],
         "button": {
           "icon": "create_new_folder",
@@ -75,12 +83,39 @@ export const InvDraft = {
                 { "keyName": "Reactivos Comerciales", "keyValue_en": "Reactivos Comerciales", "keyValue_es": "Reactivos Comerciales" },
                 { "keyName": "Medios de Cultivo", "keyValue_en": "Medios de Cultivo", "keyValue_es": "Medios de Cultivo" }
               ],    
-              "label_en": "Category", "label_es": "Categoría", "optional": true
+              "label_en": "Category", "label_es": "Categoría", "optional": true, 
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": true,
+			  "valuesFromMasterData": {
+				"propertyNameContainer": "category_and_references",
+				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name",
+				"recalculateObjectOnEntrySelected": "list2"
+			  }
+            }},
+			{"xlist2": { 
+              "items": [
+                { "keyName": "Reactivos Comerciales", "keyValue_en": "Reactivos Comerciales", "keyValue_es": "Reactivos Comerciales" },
+                { "keyName": "Medios de Cultivo", "keyValue_en": "Medios de Cultivo", "keyValue_es": "Medios de Cultivo" }
+              ],    
+              "label_en": "Reference", "label_es": "Referencia", "optional": true, 
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": true,
+			  "zzzvaluesFromMasterData": {
+				"filterInFirstLevel": true, "elementName":"list1",
+				"propertyNameContainer": "category_and_references",
+				"propertyNameContainerLevel2": "inv_category",
+				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name",
+			  }
             }},
 			{"text1": { "label_en": "Reference", "label_es": "Referencia" }},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-            {"datetime1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen" }}			
+			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+            {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
+            {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
+            {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
+			{"text3": { "label_en": "Vendor", "label_es": "Proveedor", "optional": true }},			
+			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
+			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
+			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
+			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }}		
           ]
         }
       },
@@ -130,10 +165,9 @@ export const InvDraft = {
 				"label_en": "Turn Unavailable", "label_es": "Poner NO Disponible"
 			  },
 			  "requiresGridItemSelected": true,
-			  "showWhenSelectedItem": {
-				"column": "status",
-				"value": "AVAILABLE_FOR_USER"
-			  }
+			  "hideWhenSelectedItem": [{
+				"column": "status", "value": "AVAILABLE_FOR_USE"
+			  }]
 			},
 			"endPointParams": [
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
@@ -149,9 +183,9 @@ export const InvDraft = {
 				"label_en": "Turn Available", "label_es": "Poner Disponible"
 			  },
 			  "requiresGridItemSelected": true,
-			  "hideWhenSelectedItem": [
-				{"column": "is_locked", "value": true},
-				{"column": "status", "value": "AVAILABLE_FOR_USE"}
+			  "xshowWhenSelectedItem": [
+				{"column": "is_locked", "value": false},
+				{"column": "status", "value": "NEW|QUARANTINE"}			
 			]
 			},
 			"endPointParams": [
@@ -161,9 +195,21 @@ export const InvDraft = {
 			]
 		},
 		{"actionName": "COMPLETE_QUALIFICATION",
-			"requiresDialog": false,
+			"requiresDialog": true,
+			"dialogInfo": {          
+			  "name": "genericDialog",
+				"fields": [
+					{"list8": { "label_en": "Decision", "label_es": "Decisión",
+					  "items":[
+						{"keyName":"ACCEPTED", "keyValue_en":"Accepted", "keyValue_es":"Aceptado"},
+						{"keyName":"ACCEPTED_WITH_RESTRICTIONS", "keyValue_en":"Accepted with restrictions", "keyValue_es":"Aceptado con restricciones"},
+						{"keyName":"REJECTED", "keyValue_en":"Rejected", "keyValue_es":"Rechazado"}
+					  ]}
+					}      
+				]
+			},
 			"button": {
-			  "icon": "store-check",
+			  "icon": "alarm_on",
 			  "title": {
 				"label_en": "Complete Qualification", "label_es": "Completar Cualificación"
 			  },
@@ -175,10 +221,42 @@ export const InvDraft = {
 			"endPointParams": [
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
-			  { "argumentName": "reference", "selObjectPropertyName": "reference" }
+			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
+			  { "argumentName": "decision", "element": "list8" }
 			]
 		},
-		
+		{"actionName": "COMPLETE_QUALIFICATION",
+			"requiresDialog": true,
+			"dialogInfo": {          
+			  "name": "genericDialog",
+				"fields": [
+					{"list9": { "label_en": "Decision", "label_es": "Decisión",
+					  "items":[
+						{"keyName":"ACCEPTED", "keyValue_en":"Accepted", "keyValue_es":"Aceptado"},
+						{"keyName":"ACCEPTED_WITH_RESTRICTIONS", "keyValue_en":"Accepted with restrictions", "keyValue_es":"Aceptado con restricciones"},
+						{"keyName":"REJECTED", "keyValue_en":"Rejected", "keyValue_es":"Rechazado"}
+					  ]}
+					}      
+				]
+			},
+			"button": {
+			  "icon": "alarm_on",
+			  "title": {
+				"label_en": "Complete Qualification + Available", "label_es": "Completar Cualificación + Disponible"
+			  },
+			  "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": 				
+				{"column": "status", "value": "QUARANTINE"}
+			   
+			},
+			"endPointParams": [
+			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
+			  { "argumentName": "category", "selObjectPropertyName": "category" },
+			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
+			  { "argumentName": "decision", "element": "list9" },
+			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
+			]
+		},		
 		{"actionName": "CONSUME_INV_LOT_VOLUME",
 			"requiresDialog": true,
 			"button": {
@@ -262,7 +340,27 @@ export const InvDraft = {
 			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
 			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
 			]
-		}	
+		},
+		{"actionName": "LOT_PRINT_LABEL",
+			"requiresDialog": false,
+			"endPoint": "/app/procs/InvTrackingAPIqueries",
+			"clientMethod": "inventoryLotPrintLabel",
+			"button": {
+			  "img": "deactivate.svg",
+			  "title": {
+				"label_en": "Print Labels", "label_es": "Imprimir Etiquetas"
+			  },
+			  "requiresGridItemSelected": true,
+			  "hideWhenSelectedItem": [{
+				"column": "status", "value": "AVAILABLE_FOR_USE"
+			  }]
+			},
+			"endPointParams": [
+			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
+			  { "argumentName": "category", "selObjectPropertyName": "category" },
+			  { "argumentName": "reference", "selObjectPropertyName": "reference" }			  
+			]
+		}		
     ]
   },
   
@@ -328,7 +426,6 @@ export const InvDraft = {
             {"elementName": "datatable"}
           ] 
         },
-
         "reportElements":[
           [
 			{"type": "reportTitle", "title":{"label_en": "Expired Lots", "label_es": "Lotes Caducados"}}
@@ -339,7 +436,7 @@ export const InvDraft = {
               {"property": "lot_name", "header": "lot_name"}, 
               {"property": "reference", "header": "reference"}, 
               {"property": "category", "header": "category"}, 
-              {"property": "expiry_reason", "header": "expiry_reason"}
+              {"property": "expiry_reason", "header": "expiry_reason"}			  
            ] 
           }          
         ]

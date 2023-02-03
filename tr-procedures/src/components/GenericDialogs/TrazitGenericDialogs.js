@@ -28,7 +28,8 @@ export function TrazitGenericDialogs(base) {
         microName: { type: String },
         fromGrid: { type: Boolean },
         fields:{type: Array},
-        declineDialog:{type: Object}
+        declineDialog:{type: Object},
+        masterData:{type: Object}
       }
     }
 
@@ -43,6 +44,7 @@ export function TrazitGenericDialogs(base) {
       this.fields=[]
       this.actionBeingPerformedModel={}
       this.fieldsShouldBeReset=true
+      this.masterData={}
     }
     openThisDialog(actionModel = this.actionBeingPerformedModel){
 //alert('openThisDialog')
@@ -121,6 +123,28 @@ export function TrazitGenericDialogs(base) {
         --mdc-text-field-focused-label-color: #148CFA;
         --mdc-theme-primary: #0465FB;
       }
+      mwc-select {        
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgb(47, 47, 47);
+        --mdc-select-dropdown-icon-color:rgba(36, 192, 235, 1);
+        --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
+        --mdc-notched-outline-border-color: rgba(186, 235, 248, 0.4);
+        --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
+
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
+      mwc-select.outlined {        
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color: 4fcad029;
+      }       
     </style>
         <tr-dialog id="genericDialog"  @opened=${this.defaultValue}  ?open=${this.openThisDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
         ${!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields ?
@@ -379,16 +403,16 @@ export function TrazitGenericDialogs(base) {
                         </mwc-formfield>
                     `}                              
 
-                    ${!fld.date1 ?html``: html`<mwc-textfield id="date1" label="${this.fieldLabel(fld.date1)}" > type="date"></mwc-textfield>`}
-                    ${!fld.date2 ?html``: html`<mwc-textfield id="date2" label="${this.fieldLabel(fld.date2)}" > type="date"></mwc-textfield>`}
-                    ${!fld.date3 ?html``: html`<mwc-textfield id="date3" label="${this.fieldLabel(fld.date3)}" > type="date"></mwc-textfield>`}
-                    ${!fld.date4 ?html``: html`<mwc-textfield id="date4" label="${this.fieldLabel(fld.date4)}" > type="date"></mwc-textfield>`}
-                    ${!fld.date5 ?html``: html`<mwc-textfield id="date5" label="${this.fieldLabel(fld.date5)}" > type="date"></mwc-textfield>`}                           
-                    ${!fld.date6 ?html``: html`<mwc-textfield id="date6" label="${this.fieldLabel(fld.date6)}" > type="date"></mwc-textfield>`} 
-                    ${!fld.date7 ?html``: html`<mwc-textfield id="date7" label="${this.fieldLabel(fld.date7)}" > type="date"></mwc-textfield>`}
-                    ${!fld.date8 ?html``: html`<mwc-textfield id="date8" label="${this.fieldLabel(fld.date8)}" > type="date"></mwc-textfield>`}
-                    ${!fld.date9 ?html``: html`<mwc-textfield id="date9" label="${this.fieldLabel(fld.date9)}" > type="date"></mwc-textfield>`}
-                    ${!fld.date10 ?html``: html`<mwc-textfield id="date10" label="${this.fieldLabel(fld.date10)}" > type="date"></mwc-textfield>`}
+                    ${!fld.date1 ?html``: html`<mwc-textfield id="date1" label="${this.fieldLabel(fld.date1)}" type="date"></mwc-textfield>`}
+                    ${!fld.date2 ?html``: html`<mwc-textfield id="date2" label="${this.fieldLabel(fld.date2)}" type="date"></mwc-textfield>`}
+                    ${!fld.date3 ?html``: html`<mwc-textfield id="date3" label="${this.fieldLabel(fld.date3)}" type="date"></mwc-textfield>`}
+                    ${!fld.date4 ?html``: html`<mwc-textfield id="date4" label="${this.fieldLabel(fld.date4)}" type="date"></mwc-textfield>`}
+                    ${!fld.date5 ?html``: html`<mwc-textfield id="date5" label="${this.fieldLabel(fld.date5)}" type="date"></mwc-textfield>`}                           
+                    ${!fld.date6 ?html``: html`<mwc-textfield id="date6" label="${this.fieldLabel(fld.date6)}" type="date"></mwc-textfield>`} 
+                    ${!fld.date7 ?html``: html`<mwc-textfield id="date7" label="${this.fieldLabel(fld.date7)}" type="date"></mwc-textfield>`}
+                    ${!fld.date8 ?html``: html`<mwc-textfield id="date8" label="${this.fieldLabel(fld.date8)}" type="date"></mwc-textfield>`}
+                    ${!fld.date9 ?html``: html`<mwc-textfield id="date9" label="${this.fieldLabel(fld.date9)}" type="date"></mwc-textfield>`}
+                    ${!fld.date10 ?html``: html`<mwc-textfield id="date10" label="${this.fieldLabel(fld.date10)}" type="date"></mwc-textfield>`}
 
                     ${!fld.datetime1 ?html``: html`<input id="datetime1" type="datetime-local" dialogInitialFocus>`}   
                     ${!fld.datetime2 ?html``: html`<input id="datetime2" type="datetime-local" dialogInitialFocus>`}   
@@ -440,16 +464,12 @@ export function TrazitGenericDialogs(base) {
                 
 
                 ${!fld.list1 ?html``: html`        
-                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}">
-                    ${fld.list1.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i==0}>${c["keyValue_"+this.lang]}</mwc-list-item>`
-                    )}
+                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected} >
+                        ${this.listEntries(fld.list1)}
                     </mwc-select>`}  
                 ${!fld.list2 ?html``: html`        
                     <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}">
-                    ${fld.list2.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
+                        ${this.listEntries(fld.list2)}
                     </mwc-select>`}  
                 ${!fld.list3 ?html``: html`        
                     <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}">
@@ -637,7 +657,7 @@ export function TrazitGenericDialogs(base) {
             let fldObj=dlgFlds[i]            
             let keyName=Object.keys(fldObj)
             if (this[keyName]!==null){
-                console.log(keyName[0])
+               // console.log(keyName[0])
                 if (keyName[0].includes('list')){
 
                 }else{
@@ -646,7 +666,102 @@ export function TrazitGenericDialogs(base) {
             }
         }
     }
+    valueSelected(e){
+        //alert('ds '+ e.target.id+this[e.target.id].value)
 
+        // var triggeredElem=this.actionBeingPerformedModel.dialogInfo.fields.filter(p => p == e.target.id)
+
+        let cleanParams = {}
+        // Object.entries(this.actionBeingPerformedModel.dialogInfo.fields).map(([key, value]) => {
+        //   if (value != null || value != undefined) {
+        //     cleanParams[key] = value
+        //   }
+        // })
+        // console.log('cleanParams', cleanParams)
+        var fld =this.actionBeingPerformedModel.dialogInfo.fields[1].list2//(([key, value]) =>{
+            //cleanParams=value
+        //})
+        console.log('fld', fld)
+        let thisNewList2=[]
+        thisNewList2=this.listEntries(fld)
+        console.log('thisNewList2', thisNewList2)
+        //alert(this.actionBeingPerformedModel.dialogInfo.fields[e.target.id].valuesFromMasterData.recalculateObjectOnEntrySelected)
+        //console.log(e.targetValue)
+    }
+    listEntries(fld){
+        console.log('listEntries')
+        var blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
+        var newList=[]
+        if (fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true){
+            newList.push(blankEmpty)
+        }
+        if (fld.valuesFromMasterData!==undefined){
+            var MDentriesArr=this.listEntriesFromMasterData(fld.valuesFromMasterData)
+            if (MDentriesArr.length>0){
+                MDentriesArr.forEach(item =>newList.push(item))
+            }
+        }else{
+            fld.items.forEach(item =>newList.push(item))
+        }
+        if (fld.addBlankValueAtBottom!==undefined&&fld.addBlankValueAtBottom===true){
+            newList.push(blankEmpty)
+        }
+    
+        return html`
+        ${newList.map((c, i) =>
+            html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+        )}
+        `
+    }
+    listEntriesFromMasterData(fldMDDef){
+        if (this.masterData===undefined){return entries}
+        console.log('masterData', this.masterData)
+        console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
+        var entries=[]
+        
+        if (this.masterData[fldMDDef.propertyNameContainer]===undefined){
+            alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
+            return entries
+        }
+        if (fldMDDef.filterInFirstLevel===undefined||fldMDDef.filterInFirstLevel!==true){
+            this.masterData[fldMDDef.propertyNameContainer].forEach(item =>{
+                console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
+                let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
+                blankEmpty.keyName=item[fldMDDef.propertyKeyName]
+                blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
+                blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                console.log('blankEmpty', blankEmpty)
+                entries.push(blankEmpty)
+            })
+        }else{
+            if (fldMDDef.elementName===undefined){
+                alert('Property elementName is mandatory when filterInFirstLevel=true. Review model definition')
+                return entries
+            }
+            if (this[fldMDDef.elementName]===null){return entries}
+            var filterValue=this[fldMDDef.elementName].value
+            if (filterValue===undefined){return entries}
+            var result = this.masterData[fldMDDef.propertyNameContainer].find(item => item.name === filterValue);
+            if (result===undefined){return entries}
+            //alert(filterValue)
+            result[fldMDDef.propertyNameContainerLevel2].forEach(item =>{
+                console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
+                let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
+                blankEmpty.keyName=item[fldMDDef.propertyKeyName]
+                blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
+                blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                console.log('blankEmpty', blankEmpty)
+                entries.push(blankEmpty)
+            })
+            console.log('entries at end', entries)
+            return entries
+            
+        }        
+        //var blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}
+        //entries.push(blankEmpty)
+        return entries
+
+    }
     
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        

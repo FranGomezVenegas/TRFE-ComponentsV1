@@ -357,7 +357,6 @@ export function TrazitCredentialsDialogs(base) {
   }
 
   credsChecker(actionName, objId, params={}, action, isPlatform=false, dialogName='') {
-    console.log('credsChecker')
     this.actionObj = action || {}
     this.reqParams = params
     if (actionName) {

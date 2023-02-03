@@ -17,53 +17,9 @@ console.log('getSamples', 'actionObj', this.actionObj)
       this.samplesReload = false
     }
 
-    xsignAudit() {
-      let params = this.config.backendUrl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.reloadDialog()
-      })
-    }
 
-    xsetSamplingDate() {
-      let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.dateDialog.close()
-        this.reload()
-      })
-    }
 
-    xmoveToNext() {
-      let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        if (this.sampleStuckDialog) {
-          this.sampleStuckDialog.close()
-        }
-        this.reload()
-      })
-    }
-
-    xaddSamplingComment() {
-      let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-//        this.resetDialogThings()
-        this.commentDialog.close()
-        this.reload()
-      })
-    }
-
-    xremoveSamplingComment() {
-      let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.reload()
-      })
-    }
-
-    getResult() {
+    xgetResult() {
       console.log('getResult', 'SampleAPIqueriesUrl')
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIqueriesUrl)
         + '?' + new URLSearchParams(this.reqParams)
@@ -98,31 +54,26 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    enterResult() {      
+    xenterResult() {      
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
   console.log('enterResult', params)
       this.execResult(params)
     }
 
-    changeUOM() {
+    xchangeUOM() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
 
-    enterEventResult() {
+    xenterEventResult() {
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
 
-    execResult(params) {
-      this.fetchApi(params).then(j => {
-        this.reloadDialog()
-        this.dataForDialog = null
-      })
-    }
+
 
     getMicroorganism() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
@@ -355,68 +306,66 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    xnewInvestigation() {
-      this.reqParams.fieldValue = "Investigation for " + this.selectedSamples[0].result_id + "*String"
-      this.reqParams.objectsToAdd = "sample_analysis_result*" + this.selectedSamples[0].result_id
-      let params = this.config.backendUrl + this.selectedAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.reload()
-      })
-    }
-
-    xgetOpenInvestigations() {
-      let params = this.config.backendUrl + this.selectedAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          this.openInvests = j
-          this.requestUpdate()
-        }
-      })
-    }
-
-    xaddInvestObjects() {
-      let params = this.config.backendUrl + this.selectedDialogAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.investigationDialog.close()
-        this.resetDialogThings()
-        this.reload()
-      })
-    }
-
-    xcapaDecision() {
-      let params = this.config.backendUrl + this.selectedAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.decisionDialog.close()
-        this.resetDialogThings()
-        this.reload()
-      })
-    }
-
-    xcloseInvestigation() {
-      if (!this.selectedSamples[0].capa_decision_on) {
-        this.dispatchEvent(new CustomEvent("error", {
-          detail: {
-            is_error: true,
-            message_en: "Required set decision before close",
-            message_es: "Decisión de conjunto requerida antes del cierre"
-          },
-          bubbles: true,
-          composed: true
-        }))
-        console.log("Required set decision before close")
+    inventoryLotPrintLabel(action, selectedItem ) {
+      console.log('inventoryLotPrintLabel this.reqParams', this.reqParams);
+      if (selectedItem === undefined || selectedItem.lot_name === undefined) {
+        alert("item not selected")
         return
+      } 
+
+      var extraParams=this.jsonParam(action,  selectedItem)   
+      let APIParams=this.getAPICommonParams(action)
+      let endPointUrl=this.getActionAPIUrl(action)
+      if (String(endPointUrl).toUpperCase().includes("ERROR")){
+          alert(endPointUrl)
+          return
       }
-      let params = this.config.backendUrl + this.selectedAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.reload()
-      })
-    }
+      let params = this.config.backendUrl + endPointUrl
+        + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
+       // + '&'+ new URLSearchParams(credDialogArgs)
+      console.log('inventoryLotPrintLabel', 'action', action, ' selectedItem',  selectedItem, 'extraParams', extraParams)
 
 
+      //this.reqParams.actionName = "LOT_PRINT_LABEL";     
+      // let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
+      //   + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {          
+          console.log(j.zpl_code)
+          //this.setPrintContent()          
+          var printWindow = window.open('', '', 'fullscreen=yes');
+          printWindow.document.write(j.zpl_code);
+//          printWindow.document.title = this.printObj.header;
+          printWindow.document.close();
+          setTimeout(function () {
+            printWindow.print();
+            
+            printWindow.close();
+          }, 500);  
+        } else {            
+          alert('is_error')
+        }
+      })     
+      return 
+      this.fetchApi(params).then(() => {(j => {
+        console.log('j', j)
+        if (j && j.is_error===undefined) {
+          console.log(j.zpl_code)
+          this.setPrintContent()
+          var printWindow = window.open('', '', 'fullscreen=yes');
+          printWindow.document.write(j.zpl_code);
+//          printWindow.document.title = this.printObj.header;
+          printWindow.document.close();
+          setTimeout(function () {
+            printWindow.print();
+            printWindow.close();
+          }, 500);          
+        } else {
+          alert(j.is_error)
+        }
+        }
+        //this.reload()
+      )})
+    }    
   }
 }
