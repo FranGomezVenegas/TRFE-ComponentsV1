@@ -61,7 +61,7 @@ export class Templates extends GridFunctions(LitElement) {
       buttons: { type: Array },
       lang: { type: String },
       programsList: { type: Array },
-      selectedProgram: { type: Object },
+      selectedProgram: { type: Array },
       viewModelFromProcModel: {type: Object},
       viewName: { type: String },
       filterName: { type: String },
@@ -87,7 +87,29 @@ export class Templates extends GridFunctions(LitElement) {
   }
   resetView(){
     console.log('resetView-templates-')
-    this.selectedProgram = {}
+    this.selectedProgram = []
+    this.programsList = []
+  }
+  populateProgramsList(){
+    let myList=[]
+    this.programsList.forEach(row =>{
+      myList.push(row)
+    })
+    let firstProgram=this.programsList[0]
+    if (firstProgram!==undefined){
+      this.selectedProgram=[]
+      this.selectedProgram.push(firstProgram)
+      let mye={target:{value:''}}
+      mye.target.value=firstProgram.name
+      console.log('mye', mye)
+      this.programChanged(mye)
+    }
+    return html`
+    ${myList.map((c, i) =>
+      html`<mwc-list-item value="${c.name}" ?selected=${i==0}>${c.name}</mwc-list-item>`
+    )}
+    `
+
   }
   specCode() {
     return html`    
@@ -101,9 +123,7 @@ export class Templates extends GridFunctions(LitElement) {
             }))}></mwc-icon-button>`
         )}
         <mwc-select outlined label="Program Name" @change=${this.programChanged} ?hidden=${this.programsList.length<2}>
-          ${this.programsList.map((p,i) => 
-            html`<mwc-list-item value="${p.name}" ?selected=${i==0}>${p.name}</mwc-list-item>`
-          )}
+            ${this.populateProgramsList()}
         </mwc-select>
         ${this.programsList.length==1 ?
           html`<h3>${this.programsList[0].name}</h3>` : nothing
