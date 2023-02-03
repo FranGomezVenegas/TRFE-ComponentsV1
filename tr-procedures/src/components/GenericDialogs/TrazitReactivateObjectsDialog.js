@@ -39,7 +39,31 @@ return class extends base {
         <tr-dialog id="reactivateObjectDialog" ?open=${this.actionBeingPerformedModel&&this.actionBeingPerformedModel.dialogInfo&&this.actionBeingPerformedModel.dialogInfo.name==='reactivateObjectDialog'} heading="" hideActions="" @open="${this.cleanReactivateObjectList}" scrimClickAction="">
         ${this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name!=="reactivateObjectDialog" ? nothing :
         html`
-
+        <style>
+        mwc-select {        
+          --mdc-theme-primary : rgba(36, 192, 235, 1);
+          --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+          --mdc-select-ink-color: rgb(47, 47, 47);
+          --mdc-select-dropdown-icon-color:rgba(36, 192, 235, 1);
+          --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
+          --mdc-notched-outline-border-color: rgba(186, 235, 248, 0.4);
+          --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
+  
+          font-family : Montserrat;
+          font-weight : bold;
+          font-size : 19px;
+        }
+        mwc-select.outlined {        
+          --mdc-theme-primary : rgba(36, 192, 235, 1);
+          --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+          --mdc-select-ink-color: rgba(36, 192, 235, 1);
+          font-family : Montserrat;
+          font-weight : bold;
+          font-size : 19px;
+          background-color: 4fcad029;
+        }       
+  
+        </style>
         <div class="layout vertical flex center-justified">        
                 <div class="layout vertical flex">
                   <div class="layout horizontal flex center-center">
