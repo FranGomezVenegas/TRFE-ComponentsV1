@@ -12,12 +12,14 @@ return class extends base {
         return {
             numDays: { type: Number },
             deactivatedObjects: { type: Array },
+            selectedObjectToReactive: {type: Object}
         }
     }
     constructor() {
         super()
         this.numDays = 7
         this.deactivatedObjects = []
+        this.selectedObjectToReactive = {}
     }
   
     noNegativeValues(e) {
@@ -70,6 +72,7 @@ return class extends base {
     } 
     cleanReactivateObjectList(){
         this.deactivatedObjects= []
+        this.selectedObjectToReactive={}
     }    
     setDays() {
         //console.log('setDays clicked')
@@ -83,6 +86,7 @@ return class extends base {
           //console.log('this.actionBeingPerformedModel', this.actionBeingPerformedModel)
           return entry["name"]
         }
+        this.selectedObjectToReactive=entry
         return entry[this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName]
     }
     listItemValueToDisplay(entry){
@@ -100,7 +104,7 @@ return class extends base {
         return textToDisplay
     }
     reactivateObjectDialogAction() {
-       // console.log('reactivateObjectDialogAction', 'this.objectToReactivateName', this.objectToReactivateName)
+       console.log('reactivateObjectDialogAction', 'this.objectToReactivateName', this.objectToReactivateName)
         if (this.objectToReactivateName.value) {
           this.selectedItems[this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName]=this.objectToReactivateName.value
           this.selectedDialogAction = this.actionBeingPerformedModel
@@ -114,11 +118,11 @@ return class extends base {
           alert('viewQuery property not found in the procedure model for procInstanceName'+this.procName+' and view '+this.viewName)
           return
         }
-         console.log('myActionMethod','action', action, 'selObject', selObject)
+         console.log('myActionMethod','action', action, 'selectedObjectToReactive', this.selectedObjectToReactive)
           if (selObject.length) {
-            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, selObject), action)
+            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, this.selectedObjectToReactive), action)
           } else {
-            this.credsCheckerCommons(action.actionName, null, this.jsonParam(action, selObject), action)
+            this.credsCheckerCommons(action.actionName, null, this.jsonParam(action, this.selectedObjectToReactive), action)
           }
     }    
     getDeactivatedObjects() {
