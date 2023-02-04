@@ -118,8 +118,6 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
     resetView(){
       this.selectedItems=[]
       this.ready=false;
-      console.log('resetView')
-      this.templates.resetView()
     }
     // firstUpdated() {
     //   super.firstUpdated()

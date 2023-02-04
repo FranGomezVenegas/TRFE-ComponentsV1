@@ -116,10 +116,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   }
 
   resetView() {
-    console.log('resetView')
-    if (this.GridWithButtons!==undefined&&this.GridWithButtons!==null){
-      this.GridWithButtons.resetView()
-    }
+
     let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procName)
     if (!this.config.local) {
       if (findProc.length) {

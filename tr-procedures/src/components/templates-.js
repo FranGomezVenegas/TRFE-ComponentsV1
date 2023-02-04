@@ -86,7 +86,7 @@ export class Templates extends GridFunctions(LitElement) {
     }`
   }
   resetView(){
-    console.log('resetView-templates-')
+    //console.log('resetView-templates-')
     this.selectedProgram = []
     this.programsList = []
   }
@@ -101,7 +101,7 @@ export class Templates extends GridFunctions(LitElement) {
       this.selectedProgram.push(firstProgram)
       let mye={target:{value:''}}
       mye.target.value=firstProgram.name
-      console.log('mye', mye)
+      //console.log('mye', mye)
       this.programChanged(mye)
     }
     return html`
