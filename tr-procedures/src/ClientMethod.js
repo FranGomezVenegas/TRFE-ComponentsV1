@@ -1,7 +1,7 @@
 export function ClientMethod(base) {
   return class extends base {
 
-    async getSamples() {
+    async xgetSamples() {
       this.samplesReload = true
       this.selectedSamples = []
 console.log('getSamples', 'actionObj', this.actionObj)      
@@ -19,7 +19,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
 
 
 
-    xgetResult() {
+    xxgetResult() {
       console.log('getResult', 'SampleAPIqueriesUrl')
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIqueriesUrl)
         + '?' + new URLSearchParams(this.reqParams)
@@ -54,20 +54,20 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    xenterResult() {      
+    xxenterResult() {      
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
   console.log('enterResult', params)
       this.execResult(params)
     }
 
-    xchangeUOM() {
+    xxchangeUOM() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
 
-    xenterEventResult() {
+    xxenterEventResult() {
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
@@ -75,7 +75,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
 
 
 
-    getMicroorganism() {
+    xgetMicroorganism() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
@@ -89,7 +89,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    addSampleMicroorganism() {
+    xaddSampleMicroorganism() {
       this.sampleState = { action: JSON.stringify(this.selectedAction), sample: this.selectedSamples[0].sample_id }
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -98,14 +98,14 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    reloadSampleState() {
+    xreloadSampleState() {
       this.selectedSamples = this.gridItems.filter(g => g.sample_id == this.sampleState.sample)
       this.selectedAction = JSON.parse(this.sampleState.action)
       this.reloadDialog()
       this.sampleState = null
     }
 
-    getMicroorganismItem() {
+    xgetMicroorganismItem() {
       this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id + "*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -119,7 +119,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    removeSampleMicroorganism() {
+    xremoveSampleMicroorganism() {
       this.sampleState = { action: JSON.stringify(this.selectedAction), sample: this.selectedSamples[0].sample_id }
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -129,7 +129,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    setIncubator() {
+    xsetIncubator() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
@@ -139,7 +139,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    getAssign() {
+    xgetAssign() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitIncubationUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
@@ -152,7 +152,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    addRemoveBatch() {
+    xaddRemoveBatch() {
       if (this.selectedAction.actionName == "EM_BATCH_INCUB_ADD_SMP" && !this.batchName) {
         this.dispatchEvent(new CustomEvent("error", {
           detail: {
@@ -179,7 +179,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
 
 
 
-    getLots() {
+    xgetLots() {
       console.log('getLots')
       let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -191,7 +191,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    logSample() {
+    xlogSample() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -199,7 +199,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    reviewTest() {
+    xreviewTest() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -207,7 +207,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    getDeactivatedLots() {
+    xgetDeactivatedLots() {
       this.deactivatedLots = []
       let params = this.config.backendUrl + this.selectedDialogAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
@@ -218,7 +218,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    setLot() {
+    xsetLot() {
       console.log('setLot')
       let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -228,7 +228,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    setInstruments() {
+    xsetInstruments() {
       console.log('this.reqParams', this.reqParams);
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -237,7 +237,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
         this.reload()
       })
     }
-    completeInstrumentEvent() {
+    xcompleteInstrumentEvent() {
       console.log('completeInstrumentEvent this.reqParams', this.reqParams);
       if (this.selectedSamples !== undefined && this.selectedSamples[0].event_type !== undefined) {
         this.reqParams.actionName = "COMPLETE_" + this.selectedSamples[0].event_type;
@@ -250,7 +250,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
         this.reload()
       })
     }
-    getDeactivatedInstruments() {
+    xgetDeactivatedInstruments() {
       this.deactivatedLots = []
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -260,7 +260,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
         }
       })
     }
-    getInstEventResult() {
+    xgetInstEventResult() {
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
@@ -290,7 +290,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    instEventEnterResult() {
+    xinstEventEnterResult() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
@@ -298,7 +298,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    reviewSample() {
+    xreviewSample() {
       let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {

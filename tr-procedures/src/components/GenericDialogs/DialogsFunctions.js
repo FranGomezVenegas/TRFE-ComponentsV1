@@ -163,7 +163,7 @@ export function DialogsFunctions(base) {
     if (this.targetValue===undefined){
       this.targetValue={}
     }
-    if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
+    if (this.actionBeingPerformedModel!==undefined){//&&this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
       this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], this.targetValue, credArguments)
     }
     let cleanParams = {}
