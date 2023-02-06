@@ -91,17 +91,20 @@ export const InvDraft = {
 				"recalculateObjectOnEntrySelected": "list2"
 			  }
             }},
-			{"xlist2": { 
+			{"list2": { 
               "items": [
                 { "keyName": "Reactivos Comerciales", "keyValue_en": "Reactivos Comerciales", "keyValue_es": "Reactivos Comerciales" },
                 { "keyName": "Medios de Cultivo", "keyValue_en": "Medios de Cultivo", "keyValue_es": "Medios de Cultivo" }
               ],    
               "label_en": "Reference", "label_es": "Referencia", "optional": true, 
 			  "addBlankValueOnTop": true, "addBlankValueAtBottom": true,
-			  "zzzvaluesFromMasterData": {
+			  "valuesFromMasterData": {
 				"filterInFirstLevel": true, "elementName":"list1",
-				"propertyNameContainer": "category_and_references",
-				"propertyNameContainerLevel2": "inv_category",
+				"propertyNameContainer": "category_and_references", 
+				"propertyNameContainerLevelPropertyKeyName": "name",
+				"propertyNameContainerLevelfixValue": "Medios de Cultivo",
+				"propertyNameContainerLevel2": "inv_reference",
+				"zzzpropertyNameContainerLevel3": "inv_reference",
 				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name",
 			  }
             }},
