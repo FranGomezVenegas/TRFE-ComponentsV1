@@ -28,7 +28,7 @@ export class PlatformNotif extends CommonCore {
 
   render() {
     return html`
-      ${this.notifs.map(n=>
+      ${this.notifs.reverse().map(n=>
         html`
         <sp-accordion allow-multiple style="--spectrum-accordion-text-color: ${n.is_error?'red':'green'}; --spectrum-accordion-text-color-hover: ${n.is_error?'red':'green'}">
           <sp-accordion-item label=${n["message_"+ this.lang]}>
