@@ -765,9 +765,9 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
                 if (result.children.length == 0) {
                     event += '<div class="mp-cld-event"><div class="event">'
                         + '<h3 class="' + item.category + '" ' + (item.color ? ('style="color:' + item.color + '"') : '') + '>' + item.title + ''
-                        + '<i>' + item.date + '</i>'
+                        + '<i>' + (item.sample_id!=="" ? 'Sample: '+item.sample_id : 'No Sample logged yet') + '</i>' 
                         + '</h3>'
-                        + '<span>' + item.content + '</span>'
+                        //+ '<span>' + item.content + '</span>'
                         + '</div></div>';
 
                     dom(result).innerHTML += event;
@@ -776,9 +776,8 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
                     for (var i = 0; i < result.children.length; i++) {
                         event += '<span class="separator"></span><div class="event">'
                             + '<h3 class="' + item.category + '" ' + (item.color ? ('style="color:' + item.color + '"') : '') + '>' + item.title + ''
-                            + '<i>' + item.date + '</i>'
-                            + '</h3>'
-                            + '<span>' + item.content + '</span>'
+                            + '<i>' + (item.sample_id!=="" ? 'Sample: '+item.sample_id : 'No Sample logged yet') + '</i>'                             + '</h3>'
+                            //+ '<span>' + item.content + '</span>'
                             + '</div>';
 
                         dom(result.children[i]).innerHTML += event;

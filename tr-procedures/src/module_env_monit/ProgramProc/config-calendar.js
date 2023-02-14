@@ -7,21 +7,12 @@ import './mp-calendar-ext';
 let langConfig = {
   headerTitle: { label_en: 'Scheduled program locations', label_es: 'Tabla de ubicaciones programadas para el programa' },
   gridHeader: {
-    "program_day_date": {
-      "label_en": "Date", "label_es": "Fecha", "sort": false, "filter": true, "width": "20%"
-    },
-    "area": {
-      "label_en": "Area", "label_es": "Area", "sort": false, "filter": true, "width": "20%"
-    },
-    "location_name": {
-      "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "20%"
-    },
-    "spec_variation_name": {
-      "label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "20%"
-    },
-    "spec_analysis_variation": {
-      "label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "20%"
-    }
+    "program_day_date": {"label_en": "Date", "label_es": "Fecha", "sort": false, "filter": true, "width": "16%"},
+    "area": {"label_en": "Area", "label_es": "Area", "sort": false, "filter": true, "width": "16%"},
+    "location_name": {"label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "16%"},
+    "spec_variation_name": {"label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "16%"},
+    "spec_analysis_variation": {"label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "16%"},
+    "sample_id": {"label_en": "Sample", "label_es": "Muestra", "sort": false, "filter": true, "width": "15%"}
   }
 }
 
