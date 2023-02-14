@@ -16,6 +16,10 @@ export class ReloginDialog extends TrazitCredentialsDialogs(CredDialog) {
       minsLogoutSession: {type: Number},
       secondsNextTimeChecker: {type: Number},
       showTimingInConsole:  { type: Boolean },
+
+      tiempoSaludo: {type: Number}, 
+      tiempoDespedida : {type: Number}, 
+
       underInactivity:{type: Boolean}
     };
   }
@@ -55,92 +59,83 @@ export class ReloginDialog extends TrazitCredentialsDialogs(CredDialog) {
     if (this.businessRules.secondsNextTimeChecker!==undefined){this.secondsNextTimeChecker=Number(this.businessRules.secondsNextTimeChecker)}
     if (this.businessRules.showTimingInConsole!==undefined){this.showTimingInConsole=Number(this.businessRules.showTimingInConsole)}
     
-    this.enterSession()
+    // Fake session
+    // console.clear()
+    // this.isLockSessionEnable=true
+    // this.isLogoutEnable=true
+    // this.minsLockSession=1
+    // this.minsLogoutSession=1.5
+    // this.showTimingInConsole=true
+
     if (this.isLockSessionEnable||this.isLogoutEnable){
-      // An array of DOM events that should be interpreted as
-      // user activity.
-      //this.activityEvents = [ 'mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart' ]
-      this.activityEvents = [ 'mousedown', 'keydown', 'scroll', 'touchstart' ]
-      // add these events to the document.
-      // register the activity function as the listener parameter.
-      // https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
-      // bind(this) will change the signature. So always assign the function to a var after binding this to using function bind API so that same var can be used in removeListener
-      this.getEvent = this.getEvent.bind(this)
-      if (this.activityEvents!==undefined){
-        this.activityEvents.forEach(eventName => {
-          document.addEventListener(eventName, this.getEvent, { once: true })
-        })
+      this.minsLockSession=this.minsLockSession*this.minute
+      this.minsLogoutSession=this.minsLogoutSession*this.minute
+
+      //alert(this.minsLockSession)
+      this.startSession = new Date().getTime()
+      this.checkTimer()
+      if (this.isLockSessionEnable){
+        this.cTemporizadorLock = setTimeout(() => {this.checkSessionExpired()}, this.minsLockSession);
       }
+      if (this.isLogoutEnable){
+        this.cTemporizadorLogOut = setTimeout(() => {this.logout()}, this.minsLogoutSession);    
+      }
+      window.addEventListener('click', () => {this.reiniciarTemporizadores()});
+      window.addEventListener('mousemove', () => {this.reiniciarTemporizadores()});
+      window.addEventListener('keypress', () => {this.reiniciarTemporizadores()});    
+    }
+    return
+  }
+  reiniciarTemporizadores() {
+    this.startSession = new Date().getTime()
+    this.newSession = new Date().getTime()    
+    if (this.isLockSessionEnable){
+      clearTimeout(this.cTemporizadorLock);
+      this.cTemporizadorLock = setTimeout(() => {this.checkSessionExpired()}, this.minsLockSession);      
+    }
+    if (this.isLogoutEnable){
+      clearTimeout(this.cTemporizadorLogOut);
+      this.cTemporizadorLogOut = setTimeout(() => {this.logout()}, this.minsLogoutSession);    
     }
   }
-
   getEvent(evt) {
-    if (!this.underInactivity){
-        this.noActivity = false
-        setTimeout(() => {
-          this.enterSession(evt)
-        }, 1000)
-        this.underInactivity=true
-      }else{
-        this.noActivity = false
-        setTimeout(() => {
-          this.enterSession(evt)
-        }, 1000)
-      }
+    setTimeout(() => {
+      this.enterSession(evt)
+    }, 1000)
+    return
   }
-
   enterSession(e) {
     if (!this.isLockSessionEnable&&!this.isLogoutEnable){
       return
     }
-      if (e) {
-        document.addEventListener(e.type, this.getEvent, { once: true })
-      }
-    
-      //this.activityEvents = [ 'mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart' ]
-      this.activityEvents = [ 'mousedown', 'keydown', 'scroll', 'touchstart' ]
-      // add these events to the document.
-      // register the activity function as the listener parameter.
-      // https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
-      // bind(this) will change the signature. So always assign the function to a var after binding this to using function bind API so that same var can be used in removeListener
-      this.getEvent = this.getEvent.bind(this)
-      if (this.activityEvents!==undefined){
-        this.activityEvents.forEach(eventName => {
-          document.addEventListener(eventName, this.getEvent, { once: true })
-        })
-      }
-    
-    this.noActivity = true
-    // clear out the timeout if exist to stop the previous interval
-    if (this.cTimer) {
-      clearTimeout(this.cTimer);
+    this.checkTimer()
+    if (this.isLockSessionEnable){
+      this.cTemporizadorLock = setTimeout(() => {this.checkSessionExpired()}, this.minsLockSession);
     }
-    if (this.sTimer) {
-      clearTimeout(this.sTimer);
+    if (this.isLogoutEnable){
+      this.cTemporizadorLogOut = setTimeout(() => {this.logout()}, this.minsLogoutSession);    
     }
-    if (this.lTimer) {
-      clearTimeout(this.lTimer);
-    }
-    this.attempt = 0
-    this.startSession = new Date().getTime()
-    this.newSession = new Date().getTime()
-    if (Number(this.minsLockSession) > 0 || Number(this.minsLogoutSession) > 0) {
-      this.checkTimer()
-    }
+    window.addEventListener('click', () => {this.reiniciarTemporizadores()});
+    window.addEventListener('mousemove', () => {this.reiniciarTemporizadores()});
+    window.addEventListener('keypress', () => {this.reiniciarTemporizadores()});    
     this.checkSessionExpired()
   }
 
-  checkTimer() {
-    if (this.noActivity) {
+  checkTimer(expanded=false) {
       let curTime = new Date().getTime();
       let runSession = curTime - this.startSession;
       if (this.showTimingInConsole) {
-        console.log(`timer checker: ${Math.round(runSession/1000)}s`)
+        let logMsg=`timer checker: ${Math.round(runSession/1000)}s`
+        if (expanded){
+          logMsg=logMsg+' '+(this.isLockSessionEnable ? 'Lock Session by inactivity is enabled and session will be locked after '+this.minsLockSession+' Minutes': 'Lock Session by inactivity is disabled')
+          logMsg=logMsg+' '+(this.isLogoutEnable ? 'Log Out Session by inactivity is enabled and session will be closed after '+this.minsLogoutSession+' Minutes': 'LogOut Session by inactivity is disabled')
+        }
+        console.log(logMsg)    
+  
       }
       this.cTimer = setTimeout(() => {
         this.checkTimer()
       }, Number(this.secondsNextTimeChecker) * 1000)
-    }
   }
 
   /**
@@ -150,77 +145,50 @@ export class ReloginDialog extends TrazitCredentialsDialogs(CredDialog) {
     if (!this.isLockSessionEnable&&!this.isLogoutEnable){
       return
     }
-
-    if (this.noActivity) { 
-      //console.log("checkingSesssionExpired ")
-      this.underInactivity=true 
-      let curTime = new Date().getTime();
-      let runSession = curTime - this.startSession;
-
-      this.checkerConsoleLogMessage(runSession)      
-      
-      if (!this.isLockSessionEnable || Number(this.minsLockSession) < 0) {
+    this.underInactivity=true 
+    let curTime = new Date().getTime();
+    let runSession = curTime - this.startSession;
+    if (!this.isLockSessionEnable || Number(this.minsLockSession) < 0) {
+      if (this.isLogoutEnable && Number(this.minsLogoutSession) > 0) {
+        console.log('check logout directly due to  locking is disabled')
+        this.newSession = new Date().getTime()
+        this.checkUserRelogin()
+      }else{
+        console.log('Inactivity modes, lock and log out session, not enabled')
+      }
+    } else {
+      if (this.isLockSessionEnable && (runSession >= Number(this.minsLockSession))) { // session running >= minsLockSession
+        // remove these events from the document.
+        if (this.activityEvents!==undefined){
+          this.activityEvents.forEach(eventName => {
+            document.removeEventListener(eventName, this.getEvent, { once: true })
+          })
+        }
+        // open relogin dialog
+        this.type = "user"
+        this.credsChecker("TOKEN_VALIDATE_USER_CREDENTIALS", -1)
         if (this.isLogoutEnable && Number(this.minsLogoutSession) > 0) {
-          console.log('check logout directly due to  locking is disabled')
+          //This line below, uncomment to start the counter when locking moment starts
           this.newSession = new Date().getTime()
           this.checkUserRelogin()
-        }else{
-          console.log('Inactivity modes, lock and log out session, not enabled')
+        } else {
+          // clear out the timeout if exist to stop the previous time checker
+          if (this.cTimer) {
+            clearTimeout(this.cTimer);
+          }
         }
       } else {
-        if (this.isLockSessionEnable && (runSession >= Number(this.minsLockSession) * this.minute)) { // session running >= minsLockSession
-        //console.log('currentInactivity', (runSession), 'minsForLockSession', this.minsLockSession)
-        //if ((runSession * 1000) >= Number(this.minsLockSession)) { // session running >= minsLockSession
-          // remove these events from the document.
-          if (this.activityEvents!==undefined){
-            this.activityEvents.forEach(eventName => {
-              document.removeEventListener(eventName, this.getEvent, { once: true })
-            })
-          }
-          // open relogin dialog
-          this.type = "user"
-          this.credsChecker("TOKEN_VALIDATE_USER_CREDENTIALS", -1)
-          if (this.isLogoutEnable && Number(this.minsLogoutSession) > 0) {
-            //This line below, uncomment to start the counter when locking moment starts
-            this.newSession = new Date().getTime()
-            this.checkUserRelogin()
-          } else {
-            // clear out the timeout if exist to stop the previous time checker
-            if (this.cTimer) {
-              clearTimeout(this.cTimer);
-            }
-          }
-        } else {
-          this.sTimer = setTimeout(() => {
-            this.checkSessionExpired()
-          }, Number(this.secondsNextTimeChecker) * 1000)
-        }
+        this.sTimer = setTimeout(() => {
+          this.checkSessionExpired()
+        }, Number(this.secondsNextTimeChecker) * 1000)
       }
     }
   }
-
-  checkerConsoleLogMessage(runSession){
-    if (!this.showTimingInConsole) {return}
-    if (this.isLockSessionEnable||this.isLogoutEnable){
-      let logMsg=`timer checker: ${Math.round(runSession/1000)}s`
-      logMsg=logMsg+' '+(this.isLockSessionEnable ? 'Lock Session by inactivity is enabled and session will be locked after '+this.minsLockSession+' Minutes': 'Lock Session by inactivity is disabled')
-      logMsg=logMsg+' '+(this.isLogoutEnable ? 'Log Out Session by inactivity is enabled and session will be closed after '+this.minsLogoutSession+' Minutes': 'LogOut Session by inactivity is disabled')
-
-      console.log(logMsg)    
-    }else{
-      console.log('Inactivity feature disabled ALL')    
-    }
-  }
-  /**
-   * Waiting for relogin action, force logout if no relogin activity
-   */
   checkUserRelogin() {
     if (!this.isLockSessionEnable&&!this.isLogoutEnable){
-      checkerConsoleLogMessage(0)
+      this.checkTimer(true)
       return
     }
-
-    //console.log('checkUserRelogin', 'noActivity', this.noActivity)
     if (this.noActivity) {
       this.underInactivity=true
       if (this.activityEvents!==undefined){
@@ -228,18 +196,13 @@ export class ReloginDialog extends TrazitCredentialsDialogs(CredDialog) {
           document.removeEventListener(eventName, this.getEvent, { once: true })
         })
       }
-  
       let curTime = new Date().getTime();
       let runSession = curTime - this.newSession;
-      
-      this.checkerConsoleLogMessage(runSession)
+      this.checkTimer(true)
 
-      if (runSession >= Number(this.minsLogoutSession) * this.minute) { // session running >= minsLogoutSession  
-        //if ((runSession * 1000) >= Number(this.businessRules.minsLogoutSession)) { // session running >= minsLogoutSession      
-        // should logout
+      if (runSession >= Number(this.minsLogoutSession)) { // session running >= minsLogoutSession  
         this.logout()
       } else {
-        // set the timeout object
         this.lTimer = setTimeout(() => {
           this.checkUserRelogin()
         }, Number(this.secondsNextTimeChecker) * 1000)
