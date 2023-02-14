@@ -460,65 +460,38 @@ export function TrazitGenericDialogs(base) {
                         <mwc-textfield id="daterange5dateStart" label="${this.fieldLabel(fld.daterange5.dateStart)}" type="date"></mwc-textfield>
                         <mwc-textfield id="daterange5dateEnd" label="${this.fieldLabel(fld.daterange5.dateEnd)}" type="date"></mwc-textfield>
                         </div>
-                    `}                       
-                
+                    `}                                   
 
                 ${!fld.list1 ?html``: html`        
                     <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected} >
-                        ${this.listEntries(fld.list1)}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list1)}</mwc-select>`}  
                 ${!fld.list2 ?html``: html`        
                     <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}">
-                        ${this.listEntries(fld.list2)}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list2)}</mwc-select>`}  
                 ${!fld.list3 ?html``: html`        
                     <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}">
-                    ${fld.list3.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list3)}</mwc-select>`}  
                 ${!fld.list4 ?html``: html`        
                     <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}">
-                    ${fld.list4.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list4)}</mwc-select>`}  
                 ${!fld.list5 ?html``: html`        
                     <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}">
-                    ${fld.list5.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list5)}</mwc-select>`}  
                 ${!fld.list6 ?html``: html`        
                     <mwc-select id="list6" label="${this.fieldLabel(fld.list6)}">
-                    ${fld.list6.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list6)}</mwc-select>`}  
                 ${!fld.list7 ?html``: html`        
                     <mwc-select id="list7" label="${this.fieldLabel(fld.list7)}">
-                    ${fld.list7.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list7)}</mwc-select>`}  
                 ${!fld.list8 ?html``: html`        
                     <mwc-select id="list8" llabel="${this.fieldLabel(fld.list8)}">
-                    ${fld.list8.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list8)}</mwc-select>`}  
                 ${!fld.list9 ?html``: html`        
                     <mwc-select id="list9" label="${this.fieldLabel(fld.list9)}">
-                    ${fld.list9.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list9)}</mwc-select>`}  
                 ${!fld.list10 ?html``: html`        
                     <mwc-select id="list10" label="${this.fieldLabel(fld.list10)}">
-                    ${fld.list10.items.map((c, i) =>
-                        html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                    )}
-                    </mwc-select>`}  
+                        ${this.listEntries(fld.list10)}</mwc-select>`}  
 
                     ${!fld.listMDSamplerPersonalAreas ?
                     html``: html`        
@@ -734,16 +707,24 @@ export function TrazitGenericDialogs(base) {
                 entries.push(blankEmpty)
             })
         }else{
-            if (fldMDDef.elementName===undefined){
-                alert('Property elementName is mandatory when filterInFirstLevel=true. Review model definition')
+            if ((fldMDDef.elementName===undefined||fldMDDef.elementName===null)&&(fldMDDef.propertyNameContainerLevelfixValue===undefined||fldMDDef.propertyNameContainerLevelfixValue===null)){
+                alert('Property elementName or propertyNameContainerLevelfixValue is mandatory when filterInFirstLevel=true. Review model definition')
                 return entries
             }
-            if (this[fldMDDef.elementName]===null){return entries}
-            var filterValue=this[fldMDDef.elementName].value
+            var filterValue=undefined
+            if (fldMDDef.propertyNameContainerLevelfixValue!==undefined){
+                filterValue=fldMDDef.propertyNameContainerLevelfixValue                
+            }else{
+                filterValue=this[fldMDDef.elementName].value
+            }
             if (filterValue===undefined){return entries}
             var result = this.masterData[fldMDDef.propertyNameContainer].find(item => item.name === filterValue);
             if (result===undefined){return entries}
             //alert(filterValue)
+            // if (fldMDDef.propertyNameContainerLevel2fixValue!==undefined&&fldMDDef.propertyNameContainerLevel3){
+            //     entries=getListInLevel3(fldMDDef, result[fldMDDef.propertyNameContainerLevel2])
+            //     return entries
+            // }
             result[fldMDDef.propertyNameContainerLevel2].forEach(item =>{
                 console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
                 let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
@@ -760,6 +741,18 @@ export function TrazitGenericDialogs(base) {
         //var blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}
         //entries.push(blankEmpty)
         return entries
+    }
+    getListInLevel3(fldMDDef, level2Arr){
+        let level3Arr = level2Arr.filter(p => p[propertyNameContainerLevel2PropertyKeyName] == fldMDDef.propertyNameContainerLevel2fixValue)
+        level3Arr[fldMDDef.propertyNameContainerLevel3].forEach(item =>{
+            console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyNameContainerLevel2PropertyKeyName)
+            let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
+            blankEmpty.keyName=item[fldMDDef.propertyKeyName]
+            blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
+            blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+            console.log('blankEmpty', blankEmpty)
+            entries.push(blankEmpty)
+        })
 
     }
     
