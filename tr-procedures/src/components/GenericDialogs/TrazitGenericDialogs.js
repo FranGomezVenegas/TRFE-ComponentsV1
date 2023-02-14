@@ -634,7 +634,9 @@ export function TrazitGenericDialogs(base) {
                 if (keyName[0].includes('list')){
 
                 }else{
-                    this[keyName[0]].value=""
+                    if (this[keyName]!==undefined&&this[keyName[0]]!==undefined){
+                        this[keyName[0]].value=""
+                    }
                 }
             }
         }
@@ -665,6 +667,10 @@ export function TrazitGenericDialogs(base) {
         console.log('listEntries')
         var blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
         var newList=[]
+        if (fld===undefined){
+            return html`<mwc-list-item></mwc-list-item>`
+
+        }
         if (fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true){
             newList.push(blankEmpty)
         }
