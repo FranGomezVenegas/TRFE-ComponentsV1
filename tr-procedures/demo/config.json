@@ -37,7 +37,7 @@
     "viewName": "ProjectManager", 
     "filterName" :  "ProjectManager" 
   },  
-  "localDefaultView": {
+  "localDefaultViewcccccc": {
     "procName":  "app-proc", 
     "viewName": "EventsInProgress", 
     "filterName" :  "EventsER" 
@@ -113,10 +113,15 @@
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
   },  
-   "localDefaultView": {
+   "localDefaultView1111": {
     "procName":  "inv-draft", 
     "viewName": "InventoryLots", 
     "filterName" :  "InventoryLots.1" 
+  },  
+   "localDefaultView": {
+    "procName":  "inv-draft", 
+    "viewName": "InventoryLotsMediosDeCultivo", 
+    "filterName" :  "InventoryLots.MediosDeCultivo" 
   },  
    "localDefaultView888": {
     "procName":  "em-demo-a",
