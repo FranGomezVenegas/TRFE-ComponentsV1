@@ -94,7 +94,7 @@ export function GridFunctions(base) {
             )
         }
                     
-        iconColumn(key, value, i, viewModelFromProcModel) {
+        iconColumn(key, value, i, viewModelFromProcModel) {            
         return html`
             ${this.desktop ?
             html`
@@ -103,7 +103,7 @@ export function GridFunctions(base) {
                     html`
                     <vaadin-grid-column
                     header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
+                    ${columnBodyRenderer((sample)=>this.iconRenderer(sample, key, i, viewModelFromProcModel.langConfig.gridHeader[key]))}
                     text-align="${viewModelFromProcModel.langConfig.gridHeader[key].align ? viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
                     width="${viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable
                     ></vaadin-grid-column>
@@ -111,7 +111,7 @@ export function GridFunctions(base) {
                     html`
                     <vaadin-grid-column
                     header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
+                    ${columnBodyRenderer((sample)=>this.iconRenderer(sample, key, i, viewModelFromProcModel.langConfig.gridHeader[key]))}
                     text-align="${viewModelFromProcModel.langConfig.gridHeader[key].align ? viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
                     flex-grow="0"
                     ></vaadin-grid-column>
@@ -121,24 +121,24 @@ export function GridFunctions(base) {
                     html`
                     <vaadin-grid-column
                     header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
+                    ${columnBodyRenderer((sample)=>this.iconRenderer(sample, key, i, viewModelFromProcModel.langConfig.gridHeader[key]))}
                     text-align="${viewModelFromProcModel.langConfig.gridHeader[key].align ? viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
                     width="${viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable
                     ></vaadin-grid-column>
                     ` :
                     html`<vaadin-grid-column
                     header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
+                    ${columnBodyRenderer((sample)=>this.iconRenderer(sample, key, i, viewModelFromProcModel.langConfig.gridHeader[key]))}
                     text-align="${viewModelFromProcModel.langConfig.gridHeader[key].align ? viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
                     auto-width
                     ></vaadin-grid-column>`
                 }`
-                }
+                } 
             ` :
             html`
                 <vaadin-grid-column
                 header="${value['label_'+this.lang]}"
-                ${columnBodyRenderer(this.iconRenderer)}
+                ${columnBodyRenderer((sample)=>this.iconRenderer(sample, key, i, viewModelFromProcModel.langConfig.gridHeader[key]))}
                 text-align="${viewModelFromProcModel.langConfig.gridHeader[key].align ? viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
                 width="65px" resizable
                 ></vaadin-grid-column>
@@ -146,9 +146,38 @@ export function GridFunctions(base) {
             }
         `
         }
-    
-        iconRenderer(sample) {
-//console.log('iconRenderer', 'sample', sample)
+        titleLang(colDef){
+            let titleStr=''
+            if (colDef.title!==undefined){
+                return colDef.title["label_"+this.lang]
+            }    
+            return titleStr
+        }
+        iconRenderer(sample, keyName, i ,colDef) {
+//            if (value!==undefined)
+//console.log('iconRenderer', 'sample', 'i', i, sample, 'colDef', colDef)
+        if (colDef.as_progress!==undefined&&colDef.as_progress){
+            return html`
+            <style>
+            .w3-responsive{display:block;overflow-x:auto}
+            .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
+            .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+            .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+            .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+            .title {
+                font-size: 8px; font-weight: 500; letter-spacing: 0;
+                line-height: 1.5em; padding-bottom: 15px; position: relative;
+                font-family: Montserrat; font-color:rgb(94, 145, 186);
+              }
+            </style>
+            <div class="w3-container" >
+                <div class="w3-background w3-round-xlarge" title="${this.titleLang(colDef)}">
+                <div class="w3-container w3-blue w3-round-xlarge" style="width:${sample[keyName]}%" >${sample[keyName]}%</div>
+                </div>
+            </div>
+            <br>            
+            `
+        }
         if (this.filterName == "SampleLogin") {
             return html`<img src="/images/labplanet.png" style="width:20px">`
         } else if (this.viewName == "PlatformInstruments") {
@@ -247,181 +276,6 @@ export function GridFunctions(base) {
             return html`${sample[key]}`
         }
         if (viewModelFromProcModel.langConfig.gridHeader[key].confidential_value!==undefined&&viewModelFromProcModel.langConfig.gridHeader[key].confidential_value===true&&sample[key]) {
-            return html`*****`
-        } else {
-            return html`${sample[key]}`
-        }
-        }
-
-
-
-
-
-
-
-        xgridList() {
-//console.log('gridList')     
-if (this.gridItems.length==0){return       }
-            return Object.entries(this.viewModelFromProcModel.langConfig.gridHeader).map(
-              ([key, value], i) => html`
-                ${this.viewModelFromProcModel.langConfig.gridHeader[key].is_icon ?
-                  this.iconColumn(key, value, i) :
-                  this.nonIconColumn(key, value, i)
-                }
-              `
-            )
-          }
-        
-        xiconColumn(key, value, i) {
-        return html`
-            ${this.desktop ?
-            html`
-                ${i==0 ?
-                html`${this.viewModelFromProcModel.langConfig.gridHeader[key].width ?
-                    html`
-                    <vaadin-grid-column
-                    header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
-                    width="${this.viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable
-                    ></vaadin-grid-column>
-                    ` :
-                    html`
-                    <vaadin-grid-column
-                    header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
-                    flex-grow="0"
-                    ></vaadin-grid-column>
-                    `
-                }` :
-                html`${this.viewModelFromProcModel.langConfig.gridHeader[key].width ?
-                    html`
-                    <vaadin-grid-column
-                    header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
-                    width="${this.viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable
-                    ></vaadin-grid-column>
-                    ` :
-                    html`<vaadin-grid-column
-                    header="${value['label_'+this.lang]}"
-                    ${columnBodyRenderer(this.iconRenderer)}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
-                    auto-width
-                    ></vaadin-grid-column>`
-                }`
-                }
-            ` :
-            html`
-                <vaadin-grid-column
-                header="${value['label_'+this.lang]}"
-                ${columnBodyRenderer(this.iconRenderer)}
-                text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'center' }"
-                width="65px" resizable
-                ></vaadin-grid-column>
-            `
-            }
-        `
-        }
-    
-        xiconRenderer(sample) {
-        if (this.filterName == "SampleLogin") {
-            return html`<img src="/images/labplanet.png" style="width:20px">`
-        } else if (this.viewName == "PlatformInstruments") {
-            return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
-        } else if (this.viewName == "EventsInProgress") {
-            return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
-        } else if (this.viewName == "WhiteIpList") {
-            return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
-        } else if (this.viewName == "BlackIpList") {
-            return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
-        } else if (this.viewName == "PlatformBusRules") {
-            return html`<img src="/images/${sample.disabled?'activate.svg':'deactivate.svg'}" style="width:20px">`
-        } else {
-            return html`<img src="/images/${this.filterName}_${sample.status?sample.status.toLowerCase():''}.png" style="width:20px">`
-        }
-        }
-    
-        xnonIconColumn(key, value, i) {
-        return html`${this.viewModelFromProcModel.langConfig.gridHeader[key].sort ?
-            this.sortColumn(key, value, i) :
-            this.filterColumn(key, value, i)
-        }`
-        }
-    
-        xsortColumn(key, value, i) {
-        return html`
-            ${this.desktop ?
-            html`
-                ${i==0 ?
-                html`${this.viewModelFromProcModel.langConfig.gridHeader[key].width ?
-                    html`<vaadin-grid-sort-column width="${this.viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'end' }"
-                    path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
-                    html`<vaadin-grid-sort-column flex-grow="0" 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'end' }"
-                    path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-                }` :
-                html`${this.viewModelFromProcModel.langConfig.gridHeader[key].width ?
-                    html`<vaadin-grid-sort-column 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    width="${this.viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
-                    html`<vaadin-grid-sort-column 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-                }`
-                }
-            ` :
-            html`<vaadin-grid-sort-column width="65px" resizable 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'end' }"
-                path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-            }
-        `
-        }
-    
-        xfilterColumn(key, value, i) {
-        return html`
-            ${this.desktop ?
-            html`
-                ${i==0 ?
-                html`${this.viewModelFromProcModel.langConfig.gridHeader[key].width ?
-                    html`<vaadin-grid-filter-column width="${this.viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'end' }"
-                    path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-                    html`<vaadin-grid-filter-column flex-grow="0" 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'end' }"
-                    path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-                }` :
-                html`${this.viewModelFromProcModel.langConfig.gridHeader[key].width ?
-                    html`<vaadin-grid-filter-column 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    width="${this.viewModelFromProcModel.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-                    html`<vaadin-grid-filter-column 
-                    ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                    resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-                }`
-                }
-            ` :
-            html`<vaadin-grid-filter-column width="65px" resizable 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key))}
-                text-align="${this.viewModelFromProcModel.langConfig.gridHeader[key].align ? this.viewModelFromProcModel.langConfig.gridHeader[key].align : 'end' }"
-                path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-            }
-        `
-        }
-    
-        xisConfidential(sample, key) {
-        //if (sample[key]===undefined) return ''
-        if (this.viewModelFromProcModel.langConfig.gridHeader[key]===undefined){ 
-            return html`${sample[key]}`
-        }
-        if (this.viewModelFromProcModel.langConfig.gridHeader[key].confidential_value!==undefined&&this.viewModelFromProcModel.langConfig.gridHeader[key].confidential_value===true&&sample[key]) {
             return html`*****`
         } else {
             return html`${sample[key]}`
