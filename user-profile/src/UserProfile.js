@@ -19,6 +19,20 @@ const viewInfoDefinition = {
     "empty_label_en": "Please fill the new E Sign first",
     "empty_label_es": "Por favor entra una nueva firma electrónica antes",
   },
+  "Email": {
+    "label_en": "New Mail",
+    "label_es": "Nuevo Correo",
+    "empty_label_en": "Please fill the new E Sign first",
+    "empty_label_es": "Por favor entra una nueva firma electrónica antes",
+    "disabled": false
+  },  
+  "Alias": {
+    "label_en": "New Alias",
+    "label_es": "Nuevo Apodo",
+    "empty_label_en": "Please fill the new E Sign first",
+    "empty_label_es": "Por favor entra una nueva firma electrónica antes",
+    "disabled": true
+  },  
   "Shift": {
     "label_en": "Shift",
     "label_es": "Turno",
@@ -52,6 +66,8 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       }
       div.input * {
         margin: 10px 0 5px;
+        padding-left:10px;
+        
       }
       mwc-icon-button {
         color: blue;
@@ -167,6 +183,18 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
             @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newEsg.value) this.confirmNewVal("USER_CHANGE_ESIGN") }}></mwc-textfield>
           <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
+
+        <div class="layout horizontal flex center">
+          <mwc-textfield id="newMail" ?disabled=${viewInfoDefinition.Email.disabled} .label="${viewInfoDefinition.Email["label_" + this.lang]}" type="email" .value=${this.userMail}
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newMail.value) this.confirmNewVal("USER_CHANGE_MAIL") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" ?disabled=${viewInfoDefinition.Email.disabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_MAIL")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+        </div>
+        <div class="layout horizontal flex center">
+          <mwc-textfield id="newAlias" ?disabled=${viewInfoDefinition.Alias.disabled} .label="${viewInfoDefinition.Alias["label_" + this.lang]}" type="email" .value=${this.userAlias}
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newAlias.value) this.confirmNewVal("USER_CHANGE_ALIAS") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" ?disabled=${viewInfoDefinition.Alias.disabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_ALIAS")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+        </div>
+
         <div class="layout horizontal flex center">
           <mwc-select label='${viewInfoDefinition.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
             ${viewInfoDefinition.Shift.items.map(c =>
@@ -185,9 +213,13 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
   get newPwd() {return this.shadowRoot.querySelector("mwc-textfield#newPwd")}
   get newEsg() {return this.shadowRoot.querySelector("mwc-textfield#newEsign")}
   get newShift() {return this.shadowRoot.querySelector("mwc-select#newShift")}
+  get newMail() {return this.shadowRoot.querySelector("mwc-select#newMail")}
+  get newAlias() {return this.shadowRoot.querySelector("mwc-select#newAlias")}
   static get properties() {
     return {
       userShift: { type: String },
+      userMail: { type: String },
+      userAlias: { type: String },
       targetValue:{ type: Object}
     }
   }
@@ -200,6 +232,8 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     console.log('userShift', 'userSession.header_info', userSession.header_info);
     this.userShift = userSession.header_info.shift
+    this.userMail = userSession.header_info.mail
+    this.userAlias = userSession.header_info.alias
   }
   reset() {
     super.reset()
@@ -255,6 +289,20 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       this.type = "user"
       this.credsChecker(actionName, -1, {
         newShift: this.newShift.value}, this.targetValue, action, true, 'user')
+    } else if (actionName == "UPDATE_USER_MAIL") {
+      console.log('action', action)
+      action.endPoint='/app/PlatformAdminAPIactions'
+      this.actionBeingPerformedModel=action
+      this.type = "user"
+      this.credsChecker(actionName, -1, {
+        newMail: this.newMail.value}, this.targetValue, action, true, 'user')
+    } else if (actionName == "UPDATE_USER_ALIAS") {
+      console.log('action', action)
+      action.endPoint='/app/PlatformAdminAPIactions'
+      this.actionBeingPerformedModel=action
+      this.type = "user"
+      this.credsChecker(actionName, -1, {
+        newAlias: this.newAlias.value}, this.targetValue, action, true, 'user')
     }
   }
   /**
@@ -277,6 +325,42 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       }
     })
   }
+
+  confirmNewMail() {
+    let action={}
+    action.actionName = 'UPDATE_USER_MAIL'
+    action.endPoint = '/app/PlatformAdminAPIactions'
+    action.requiresDialog = false
+    action.notGetViewData = true
+    let APIParams=this.getAPICommonParams(action)
+    let params = this.config.backendUrl + action.endPoint
+      + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(this.reqParams)
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+    this.fetchApi(params).then(j => {
+      if (j && !j.is_error) {
+        userSession.header_info.email = this.userMail
+        sessionStorage.setItem("userSession", JSON.stringify(userSession))
+      }
+    })
+  }
+  confirmNewAlias() {
+    let action={}
+    action.actionName = 'UPDATE_USER_ALIAS'
+    action.endPoint = '/app/PlatformAdminAPIactions'
+    action.requiresDialog = false
+    action.notGetViewData = true
+    let APIParams=this.getAPICommonParams(action)
+    let params = this.config.backendUrl + action.endPoint
+      + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(this.reqParams)
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+    this.fetchApi(params).then(j => {
+      if (j && !j.is_error) {
+        userSession.header_info.alias = this.userAlias
+        sessionStorage.setItem("userSession", JSON.stringify(userSession))
+      }
+    })
+  }
+
   /**
    * Once user found and verified, confirm the password changing
    */
