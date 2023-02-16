@@ -584,7 +584,7 @@ export function TrazitGenericDialogs(base) {
             let keyName=Object.keys(fldObj)
             let fldDef=fldObj[keyName[0]]
             if ((fldDef.optional===undefined||
-                fldDef.optional===false)&&this[keyName[0]].value.length==0){
+                fldDef.optional===false)&&this[keyName].value.length==0){
                 alert('Field '+fldDef["label_"+this.lang]+' is mandatory')
                 return false
             }
