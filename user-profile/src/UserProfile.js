@@ -24,14 +24,14 @@ const viewInfoDefinition = {
     "label_es": "Nuevo Correo",
     "empty_label_en": "Please fill the new E Sign first",
     "empty_label_es": "Por favor entra una nueva firma electrónica antes",
-    "disabled": false
+    "enabled": false
   },  
   "Alias": {
     "label_en": "New Alias",
     "label_es": "Nuevo Apodo",
     "empty_label_en": "Please fill the new E Sign first",
     "empty_label_es": "Por favor entra una nueva firma electrónica antes",
-    "disabled": true
+    "enabled": false
   },  
   "Shift": {
     "label_en": "Shift",
@@ -59,7 +59,7 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       css`
       :host {
         display: block;
-        width: 300px;
+        width: 800px;
       }
       :host([hidden]) {
         display: none;
@@ -98,7 +98,7 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
         font-weight : bold;
         font-size : 19px;
       }        
-      mwc-icon-button.disabledtrue{        
+      mwc-icon-button.enabledtrue{        
         color : red;
         font-family : Montserrat;
         font-weight : bold;
@@ -166,43 +166,71 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       mwc-list-item {
         background-color :  #FFFFFF;
         background-color : rgb(255, 255, 255);     
-        }               
+        }  
+        
+        * {
+        box-sizing: border-box;
+      }
+      
+      /* Create three equal columns that floats next to each other */
+      .column {
+        float: left;
+        width: 33.33%;
+        padding: 10px;   
+        display: flex;     
+      }
+      
+      /* Clear floats after the columns */
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      
+      /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+      @media screen and (max-width: 1000px) {
+        .column {
+          width: 100%;
+        }
+      }        
       `      
     ];
   }
   render() {
     return html`
-      <div class="input">
-        <div class="layout horizontal flex center">
+      <div class="row">
+        <div class="column">
+          <mwc-textfield id="newAlias" ?enabled=${viewInfoDefinition.Alias.enabled} .label="${viewInfoDefinition.Alias["label_" + this.lang]}" type="email" .value=${this.userAlias}
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newAlias.value) this.confirmNewVal("USER_CHANGE_ALIAS") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" ?enabled=${viewInfoDefinition.Alias.enabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_ALIAS")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+        </div>
+
+        <div class="column">
+          <mwc-textfield id="newMail" ?enabled=${viewInfoDefinition.Email.enabled} .label="${viewInfoDefinition.Email["label_" + this.lang]}" type="email" .value=${this.userMail}
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newMail.value) this.confirmNewVal("USER_CHANGE_MAIL") }}></mwc-textfield>
+          <mwc-icon-button title="Confirm" ?enabled=${viewInfoDefinition.Email.enabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_MAIL")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+        </div>
+
+        <div class="column">
+          <mwc-select label='${viewInfoDefinition.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
+            ${viewInfoDefinition.Shift.items.map(c =>
+              html`<mwc-list-item value="${c.keyName}" 
+                ?selected=${c.keyName == this.userShift}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+              )}
+          </mwc-select>
+          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_SHIFT")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
           <mwc-textfield id="newPwd" .label="${viewInfoDefinition.Password["label_" + this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newPwd.value) this.confirmNewVal("USER_CHANGE_PSWD") }}></mwc-textfield>
           <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_PSWD")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
-        <div class="layout horizontal flex center">
+        <div class="column">
           <mwc-textfield id="newEsign" .label="${viewInfoDefinition.Esign["label_" + this.lang]}" type="password" iconTrailing="visibility"
             @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newEsg.value) this.confirmNewVal("USER_CHANGE_ESIGN") }}></mwc-textfield>
           <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
-        </div>
-
-        <div class="layout horizontal flex center">
-          <mwc-textfield id="newMail" ?disabled=${viewInfoDefinition.Email.disabled} .label="${viewInfoDefinition.Email["label_" + this.lang]}" type="email" .value=${this.userMail}
-            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newMail.value) this.confirmNewVal("USER_CHANGE_MAIL") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" ?disabled=${viewInfoDefinition.Email.disabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_MAIL")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
-        </div>
-        <div class="layout horizontal flex center">
-          <mwc-textfield id="newAlias" ?disabled=${viewInfoDefinition.Alias.disabled} .label="${viewInfoDefinition.Alias["label_" + this.lang]}" type="email" .value=${this.userAlias}
-            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newAlias.value) this.confirmNewVal("USER_CHANGE_ALIAS") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" ?disabled=${viewInfoDefinition.Alias.disabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_ALIAS")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
-        </div>
-
-        <div class="layout horizontal flex center">
-          <mwc-select label='${viewInfoDefinition.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
-            ${viewInfoDefinition.Shift.items.map(c =>
-      html`<mwc-list-item value="${c.keyName}" 
-                ?selected=${c.keyName == this.userShift}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-    )}
-          </mwc-select>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_SHIFT")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
         </div>
       </div>
       <sp-button size="xl" @click=${() => this.dispatchEvent(new CustomEvent('save-tabs'))}>${viewInfoDefinition.TabLogin["label_" + this.lang]}</sp-button>
@@ -213,8 +241,8 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
   get newPwd() {return this.shadowRoot.querySelector("mwc-textfield#newPwd")}
   get newEsg() {return this.shadowRoot.querySelector("mwc-textfield#newEsign")}
   get newShift() {return this.shadowRoot.querySelector("mwc-select#newShift")}
-  get newMail() {return this.shadowRoot.querySelector("mwc-select#newMail")}
-  get newAlias() {return this.shadowRoot.querySelector("mwc-select#newAlias")}
+  get newMail() {return this.shadowRoot.querySelector("mwc-textfield#newMail")}
+  get newAlias() {return this.shadowRoot.querySelector("mwc-textfield#newAlias")}
   static get properties() {
     return {
       userShift: { type: String },
@@ -410,6 +438,10 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       this.confirmNewEsign()
     } else if (this.actionName == "UPDATE_USER_SHIFT") {
       this.confirmNewShift()
+    } else if (this.actionName == "UPDATE_USER_MAIL") {
+      this.confirmNewMail()
+    } else if (this.actionName == "UPDATE_USER_ALIAS") {
+      this.confirmNewAlias()
     }
   }
 }
