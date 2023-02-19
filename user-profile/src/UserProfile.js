@@ -59,7 +59,7 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       css`
       :host {
         display: block;
-        width: 800px;
+        width: 1000px;
       }
       :host([hidden]) {
         display: none;
@@ -72,7 +72,7 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       mwc-icon-button {
         color: blue;
       }
-      mwc-icon-button#lang {        
+      mwc-icon-button#lang {
         color : rgba(36, 192, 235, 1);
         font-family : Montserrat;
         font-weight : bold;
