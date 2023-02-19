@@ -46,7 +46,7 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
             filterName: { type: String },
             lang: { type: String },
             procInstanceName:{type: String},
-    
+            masterData:{ type: Object}
         }
     }
     constructor() {
@@ -56,7 +56,10 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
 
         this.ready=false;
         this.config={}
-  
+        this.masterData={} 
+        //if (this.viewModelFromProcModel===undefined||Object.keys(this.viewModelFromProcModel).length==0){
+//          this.viewModelFromProcModel=this.tabsMainViewModelFromProcModel.tabs[0]
+  //      }                  
     }
     render() {        
         return html`        
@@ -81,57 +84,33 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
                 )}
               </div>
               <tabs-composition 
-                .lang=${this.lang}
+                .lang=${this.lang} .masterData=${this.masterData}
                 .windowOpenable=${this.windowOpenable}
                 .sopsPassed=${this.sopsPassed}
                 .procInstanceName=${this.procInstanceName}             
-                .viewName=${this.viewName}  .viewModelFromProcModel=${this.viewModelFromProcModel}
-                .config=${this.config}>${this.defaultTab()}</tabs-composition>
+                .viewName=${this.viewName}  .viewModelFromProcModel=${this.viewModelFromProcModel!==undefined&&Object.keys(this.viewModelFromProcModel).length>0 ? this.viewModelFromProcModel : this.tabsMainViewModelFromProcModel.tabs[0]}
+                .config=${this.config}>${this.tabOnOpenView()}</tabs-composition>
             </div>
             
           ` : nothing
         }
         `
     }
-    defaultTab(){
-    if (this.tabsComposition!=null){
-        console.log('defaultTab')
-        // this.tabsComposition.ready=false
-        // this.tabsComposition.viewModelFromProcModel=this.viewModelFromProcModel.tabs[0]
-        if (this.viewModelFromProcModel===undefined){
-            this.viewModelFromProcModel=this.tabsMainViewModelFromProcModel.tabs[0]
-        }
-        this.openTabViewContent()
-    }
-
+    tabOnOpenView() {
+      return
     }
     selectTab(tab) {
-    console.log('selectTab', tab)
-    //this.tabsComposition.viewModelFromProcModel = tab
-    this.viewModelFromProcModel=tab
-    this.openTabViewContent()
-    // this.tabsComposition.ready=false
-    // this.tabsComposition.render()
-    //this.tabsComposition.reload()
-    //this.tabsComposition.grid.
-    }
-
-    openTabViewContent(){
-        import('../grid_with_buttons/grid-with-buttons') 
-        console.log('openTabViewContent', 'this.viewModelFromProcModel', this.viewModelFromProcModel)
-        this.tabsComposition.ready=false
-        if (this.GridWithButtons!==null){
-            this.GridWithButtons.ready=true
-        }
-        return html`
-            <grid-with-buttons id="gridwithbuttons" .viewModelFromProcModel=${this.viewModelFromProcModel} viewName=${this.viewName} 
-                filterName=${this.filterName} procInstanceName=${this.procName} lang=${this.lang}
-                .config=${this.config} .reqParams=${this.reqParams} ?ready="false">
-            </grid-with-buttons>
-        `
+      this.viewModelFromProcModel=tab
+      this.tabsComposition.resetView()
     }
 
     resetView() {
+      //console.log('resetView', 'tabs', this.tabsMainViewModelFromProcModel.tabs, 'master data', this.masterData)
+      if (this.tabsComposition!==null){
+        this.tabsComposition.render()
+      }
+      return
+      this.viewModelFromProcModel=this.tabsMainViewModelFromProcModel.tabs[0]
         if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.component===undefined){return}
         switch(this.viewModelFromProcModel.component){
           case 'GridWithButtons':
@@ -167,6 +146,6 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
       }
     
       get tabsComposition() {return this.shadowRoot.querySelector("tabs-composition")}  
-      get GridWithButtons() {return this.shadowRoot.querySelector("grid-with-buttons#gridwithbuttons")}  
+      get GridWithButtons() {return this.shadowRoot.querySelector("grid-with-buttons")}  
 }
 window.customElements.define('tabs-main-view', TabsMainView);

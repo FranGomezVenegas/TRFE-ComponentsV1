@@ -382,7 +382,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           &&this.viewModelFromProcModel.component.toLowerCase() == 'tabs' ? html`
             <tabs-main-view id="tabsmainview" .tabsMainViewModelFromProcModel=${this.viewModelFromProcModel} viewName=${this.viewName} 
             filterName=${this.filterName} procInstanceName=${this.procName} lang=${this.lang}
-            .config=${this.config} .reqParams=${this.reqParams} ?ready="false"></tabs-main-view>
+            .config=${this.config} .masterData=${this.masterData} .reqParams=${this.reqParams} ?ready="false"></tabs-main-view>
           `: html`
             ${this.ownComponents()}
           `}  
