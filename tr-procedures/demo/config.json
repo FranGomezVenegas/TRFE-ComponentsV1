@@ -1,7 +1,7 @@
 {
   "dbName": "labplanet",
   "dbName2023": "trazit_2023",
-  "isForTesting": false,
+  "isForTesting": true,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
 
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
@@ -52,7 +52,7 @@
     "viewName": "SamplePendingSampling", 
     "filterName" :  "SamplingSMP" 
   },
-  "localDefaultView33333": {
+  "localDefaultViewzzzs": {
     "procName":  "em-demo-a", 
     "viewName": "SampleIncubation", 
     "filterName" :  "Incubation" 
@@ -63,12 +63,12 @@
     "filterName" :  "Home" 
   },
   
-  "localDefaultView1": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismSMP" 
   },
-  "localDefaultViewdddd": {
+  "localDefaultView2": {
     "procName":  "em-demo-a", 
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismPERS" 
@@ -103,11 +103,6 @@
     "viewName": "DataMining", 
     "filterName" :  "DataMining" 
   },
-  "localDefaultView2222222221": {
-    "procName":  "proc-deploy", 
-    "viewName": "Browser", 
-    "filterName" :  "Browser" 
-  },
    "localDefaultView12311112333": {
     "procName":  "app", 
     "viewName": "WhiteIpList", 
@@ -118,16 +113,27 @@
     "viewName": "InventoryLots", 
     "filterName" :  "InventoryLots.1" 
   },  
-   "localDefaultView": {
+   "localDefaultViewxzc": {
     "procName":  "inv-draft", 
     "viewName": "InventoryLotsMediosDeCultivo", 
     "filterName" :  "InventoryLots.MediosDeCultivo" 
+  },  
+   "localDefaultViewxxxxxxxxx": {
+    "procName":  "inv-draft", 
+    "viewName": "InventoryLotsReactivos", 
+    "filterName" :  "InventoryLotsReactivos.MediosDeCultivo" 
   },  
    "localDefaultView888": {
     "procName":  "em-demo-a",
     "viewName": "Programs", 
     "filterName" :  "Programs" 
-  }    
+  },
+  "localDefaultViewzzzz": {
+    "procName":  "em-demo-a", 
+    "viewName": "Browser", 
+    "filterName" :  "Browser" 
+  }
+  
  
   
 }

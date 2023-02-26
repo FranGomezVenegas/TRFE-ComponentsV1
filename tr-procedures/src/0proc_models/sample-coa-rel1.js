@@ -1024,4 +1024,8 @@ export const SampleCoaRel1 = {
     }
   ]
 }  
+,
+"culture-medium": {
+	 "component": "ModuleEnvMonitCultureMedium"
+}
 }
