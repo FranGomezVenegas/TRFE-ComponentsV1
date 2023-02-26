@@ -608,7 +608,9 @@ export function TrazitGenericDialogs(base) {
             
             //if (==null){            
             if (fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
-                this[keyName[0]].value=fldObj[keyName].default_value
+                if (this[keyName[0]!==null]){
+                    this[keyName[0]].value=fldObj[keyName].default_value
+                }
             }
             if (fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null){
                 this[keyName[0]].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
@@ -633,6 +635,7 @@ export function TrazitGenericDialogs(base) {
                // console.log(keyName[0])
                 if (keyName[0].includes('list')){
 
+                    this[keyName[0]].value=[]
                 }else{
                     if (this[keyName]!==undefined&&this[keyName[0]]!==undefined){
                         this[keyName[0]].value=""
