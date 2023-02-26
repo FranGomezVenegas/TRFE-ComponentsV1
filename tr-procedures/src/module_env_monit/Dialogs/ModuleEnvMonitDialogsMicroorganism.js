@@ -291,7 +291,7 @@ openRemoveDialog(){
       this.moduleEnvMonitMicroorganismsDialogAdd()
       let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
       let APIParams=this.getAPICommonParams(queryDefinition)
-      let viewParams=this.jsonParam(queryDefinition)
+      let viewParams=this.jsonParam(queryDefinition, this.selectedItems[0])
       //this.reqParams.whereFieldsName = "sample_id"
       //this.reqParams.whereFieldsValue = this.selectedItems[0].sample_id + "*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
