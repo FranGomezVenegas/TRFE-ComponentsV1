@@ -1,7 +1,6 @@
-import { html, css, nothing, LitElement } from 'lit';
+import { html, css, nothing} from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ProceduresModel } from './ProceduresModel';
 import '@trazit/tr-dialog/tr-dialog';
 import './components/Audit/audit-dialog';
@@ -128,16 +127,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       this.masterData=findProc[0].master_data
       console.log('master data', this.masterData)   
     }
-    
-    // experimental for browser view
-    // if (this.viewName == "Browser") {
-    //   import('./browser/browser-view')
-    //   return
-    // }
-    // if (this.viewName == "DataMining") {
-    //   import('./data_mining/datamining-mainview')
-    //   return
-    // }
     this.gridItems = []
     this.viewModelFromProcModel = null
     if (ProceduresModel[this.procName]===undefined){
@@ -154,7 +143,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       return
     }
     
-    //console.log('resetView', 'component', this.viewModelFromProcModel.component)
+    console.log('resetView', 'component', this.viewModelFromProcModel.component)
     
     switch(this.viewModelFromProcModel.component){
       case 'GridWithButtons':
@@ -173,6 +162,10 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         return  
       case 'ModuleEnvMonitHomeAir':
         import('./module_env_monit/home-air')
+        return  
+      case 'ModuleEnvMonitCultureMedium':
+        this.windowOpenable=true
+        import('./module_env_monit/culture-medium')
         return  
       case 'ModuleEnvMonitHomeWater':
         import('./module_env_monit/home-water')
@@ -236,6 +229,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
             this.sopsPassed = defView[0].sops_passed
           }
         }
+
       }
       if (!this.sopsPassed) {
         if (anyAccess.length && anyAccess[0].userSopMode!==undefined && anyAccess[0].userSopMode.toString().toUpperCase().includes("DISAB")) {
@@ -271,6 +265,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       } else if (defView.length && defView[0].mode==="edit") {
         this.sopsPassed = this.sopsPassed == false ? false : true
       }
+    }else{
+      this.windowOpenable="yes"
+      this.sopsPassed=true
     }
     await this.updateComplete
     // experimental for browser view
@@ -332,6 +329,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       `:html``}
       ${this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeAir' ? html`
         <home-air .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-air>
+      `:html``}
+      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitCultureMedium' ? html`
+        <culture-medium></culture-medium>
       `:html``}
       ${this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeWater' ? html`
         <home-water .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-water>

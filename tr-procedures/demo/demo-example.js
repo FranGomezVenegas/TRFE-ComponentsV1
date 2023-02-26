@@ -5,6 +5,8 @@ import '../tr-procedures';
 import '../../ProcManagement/proc-management-home';
 import '@material/mwc-icon-button';
 import '@material/mwc-ripple';
+import { ProceduresModel, DemoViews } from '../src/ProceduresModel';
+
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -18,6 +20,7 @@ class DemoExample extends LitElement {
   static get properties() {
     return {
       auth: { type: Boolean },
+      hideAllButtonsStatus: { type: Boolean },
       flag: { type: String },
       userRole: { type: String }
     }
@@ -25,16 +28,27 @@ class DemoExample extends LitElement {
 
   constructor() {
     super();
+    this.hideAllButtonsStatus=true;
     this.auth = false;
     this.flag = "es";
     this.userRole='';
   }
-
-  hideActionButton(){
-    //console.log('showActionButton')
-//    if ()
-    return false
+  hideActionButton(proc){
+    if (proc===undefined) return false
+    //alert(proc)
+    let sessionProcs=JSON.parse(sessionStorage.getItem("userSession"))
+    if (sessionProcs===null) return false
+    let findProc = sessionProcs.procedures_list.procedures.filter(m => m.procInstanceName == proc)
+//    console.log('hideAllButtons', 'proc', proc, 'findProc', findProc)
+    return (findProc===undefined||findProc.length==0)
   }
+  toggleHideAllButtonsStatus(){
+    this.hideAllButtonsStatus=!this.hideAllButtonsStatus
+  }
+  hideAllButtons(){
+    return !this.hideAllButtonsStatus
+  }
+
   render() {
     return html`
       <platform-login @authorized=${e=>{
@@ -52,16 +66,25 @@ class DemoExample extends LitElement {
           }
         }
       }}></platform-login>
+
       <div ?hidden="${!this.auth}">
-        <h1>Hi ${this.getUser()}, you are authorized</h1>
+        <h1 @click=${this.toggleHideAllButtonsStatus}>Hi ${this.getUser()}, you are authorized</h1>
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
         <button @click=${()=>this.pLogin.logout()}>Logout</button><hr>
 
         ${this.userRole==="proc_management" ?
         html`
           <proc-management-home></proc-management-home>
-        `:html`                  
-        <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "Home", "Home")}>Home</button>
+        `:html` 
+        <div ?hidden="${this.hideAllButtons()}" id="allButons">  
+        
+        ${DemoViews.map(cur =>
+          html`<button ?hidden="${this.hideActionButton(cur.proc_instance_name)}" 
+            @click=${()=>this.selectMenu(cur.proc_instance_name, cur.view_name, cur.filter_name)}>${cur.title}</button>
+          `
+        )}
+
+        <button ?hidden="${this.hideActionButton("em-demo-a")}" @click=${()=>this.selectMenu("em-demo-a", "Home", "Home")}>Home</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "LogSamples", "SampleLogin")}>Log Samples</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "ProductionLots", "SampleLot")}>Production Lots</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "SamplingSMP")}>Samples Sampling </button>
@@ -120,10 +143,14 @@ class DemoExample extends LitElement {
 
           Inv-Draft<br>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLots", "InventoryLots.1")}>InventoryLots</button>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLotsReactivos", "InventoryLotsReactivos")}>Issues</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "Issues", "Issues")}>Issues</button>
+
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "culture-medium", "culture-medium")}>culture-medium</button>
           
 <!--          <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
           <button @click=${()=>this.pLogin.logout()}>Logout</button><hr> -->
+          </div>
           <tr-procedures></tr-procedures>          
           ${this.openTestDefaultView()}
         </div>
@@ -132,10 +159,11 @@ class DemoExample extends LitElement {
   }
 
   openTestDefaultView(){    
-  //  console.log('openTestDefaultView', this.pLogin)
+    console.log('openTestDefaultView', this.pLogin)
     if (this.pLogin&&this.pLogin.config&&this.pLogin.config.local&&this.pLogin.config.localDefaultView){
+      this.hideAllButtonsStatus=true
       this.selectMenu(this.pLogin.config.localDefaultView.procName, this.pLogin.config.localDefaultView.viewName, this.pLogin.config.localDefaultView.filterName)
-
+      return
     }
   }
   selectMenu(proc, sample, filter) {
