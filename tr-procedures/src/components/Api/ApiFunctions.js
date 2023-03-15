@@ -92,7 +92,7 @@ export function ApiFunctions(base) {
         return extraParams
       }          
       jsonParam(action, selObject = {}, targetValue = {}) {
-        console.log('jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue)
+        //console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue)
         if (action===undefined){return}
           let jsonParam = {}
           if (action.endPointParams) {
@@ -130,7 +130,30 @@ export function ApiFunctions(base) {
                 jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
                 
               } else if (p.element) {
-                if (p.isAdhocField!==undefined&&p.isAdhocField===true){
+                if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
+                  if (this[p.element].value!==undefined){                    
+                    if (jsonParam.fieldName===undefined){
+                      let curFldNameValue=p.argumentName                      
+                      jsonParam["fieldName"]=curFldNameValue
+                      let curFldValValue=this[p.element].value
+                      if (p.fieldType!==undefined){curFldValValue=curFldValValue+"*"+p.fieldType}                      
+                      jsonParam["fieldValue"]=curFldValValue
+                      
+                    }else{
+                      let curFldNameValue=jsonParam["fieldName"]
+                      if (curFldNameValue.length>0){curFldNameValue=curFldNameValue+"|"}   
+                      curFldNameValue=curFldNameValue+p.argumentName 
+                      jsonParam["fieldName"]=curFldNameValue
+
+                      let curFldValValue=jsonParam["fieldValue"]
+                      if (curFldValValue.length>0){curFldValValue=curFldValValue+"|"}   
+                      curFldValValue=curFldValValue+this[p.element].value
+                      if (p.fieldType!==undefined){curFldValValue=curFldValValue+"*"+p.fieldType}                      
+                      jsonParam["fieldValue"]=curFldValValue
+
+                    }
+                  }
+                }else if (p.isAdhocField!==undefined&&p.isAdhocField===true){
                   var curArgName=jsonParam[p.argumentName]
                   if (curArgName===undefined){curArgName=''}
                   if (curArgName.length>0){curArgName=curArgName+"|"}
@@ -178,7 +201,7 @@ export function ApiFunctions(base) {
               //console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
             })
           }
-          console.log('jsonParam', 'action', action, 'filterName', this.filte)
+          //console.log('jsonParam', 'action', action, 'filterName', this.filterName)
           if (action.subViewFilter!==undefined&&this.filterName!==undefined){
             action.subViewFilter[this.filterName].forEach(p => {
               if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {          
@@ -213,7 +236,31 @@ export function ApiFunctions(base) {
                 jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
                 
               } else if (p.element) {
-                if (p.isAdhocField!==undefined&&p.isAdhocField===true){
+                if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
+                  if (this[p.element].value!==undefined){                    
+                    if (jsonParam.fieldName===undefined){
+                      let curFldNameValueObj={}
+                      curFldNameValueObj.push(p.argumentName)
+                      jsonParam["fieldName"]=curFldNameValue
+                      let curFldValValue=curFldValValue+this[p.element].value
+                      if (p.fieldType!==undefined){curFldValValue=curFldValValue+"*"+p.fieldType}                      
+                      jsonParam["fieldValue"]=curFldValValue
+                      
+                    }else{
+                      let curFldNameValue=jsonParam["fieldName"]
+                      if (curFldNameValue.length>0){curFldNameValue=curFldNameValue+"|"}   
+                      curFldNameValue=curFldNameValue+p.argumentName 
+                      jsonParam["fieldName"]=curFldNameValue
+
+                      let curFldValValue=jsonParam["fieldValue"]
+                      if (curFldValValue.length>0){curFldValValue=curFldValValue+"|"}   
+                      curFldValValue=curFldValValue+this[p.element].value
+                      if (p.fieldType!==undefined){curFldValValue=curFldValValue+"*"+p.fieldType}                      
+                      jsonParam["fieldValue"]=curFldValValue
+
+                    }
+                  }
+                }else if (p.isAdhocField!==undefined&&p.isAdhocField===true){
                   var curArgName=jsonParam[p.argumentName]
                   if (curArgName===undefined){curArgName=''}
                   if (curArgName.length>0){curArgName=curArgName+"|"}
@@ -354,7 +401,7 @@ export function ApiFunctions(base) {
           return jsonParam
       }        
       getActionAPIUrl(action){
-        console.log('getActionAPIUrl', this.procInstanceName)
+        //console.log('getActionAPIUrl', this.procInstanceName)
         if (action!==undefined&&action.endPoint!==undefined){
           return action.endPoint ? action.endPoint : this.config.SampleAPIactionsUrl
         }
@@ -382,5 +429,35 @@ export function ApiFunctions(base) {
           return foundEndPoint[0].url
         }
       }
+      getQueryAPIUrl(query){
+        //console.log('getQueryAPIUrl', this.procInstanceName)
+        if (query!==undefined&&query.endPoint!==undefined){
+          return query.endPoint ? query.endPoint : this.config.SampleAPIqueriesUrl
+        }
+        let procInstanceModel={}
+        if (!this.config.local) {
+          let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
+          if (findProc.length) {
+            procInstanceModel= findProc[0].procModel
+          }
+        }else{
+          procInstanceModel=ProceduresModel[this.procInstanceName]
+        }               
+        if (procInstanceModel.ModuleSettings===undefined){
+          return 'ERROR, ModuleSettings property not found in the model for procedure instance '+this.procInstanceName+'. If endPoint property at action level is not defined then moduleSettings becomes mandatory to get the Endpoint url'
+        }
+        let queriesEndpoints=procInstanceModel.ModuleSettings.queriesEndpoints
+        if (queriesEndpoints.length==1){         
+          return queriesEndpoints[0].url
+        }
+        let endPointUrl=action.endPointUrl        
+        let foundEndPoint=queriesEndpoints.filter(m => m.name == endPointUrl)
+        if (foundEndPoint.length===0){
+          return 'ERROR in ApiFunctions.getActionAPIUrl: EndPointUrl '+endPointUrl+" not found in Module Settings"
+        }else{
+          return foundEndPoint[0].url
+        }
+      }
+
     }
 }
