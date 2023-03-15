@@ -57,7 +57,7 @@ export const InvDraft = {
           { "argumentName": "category", "element": "list1", "defaultValue": "" },
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -378,7 +378,7 @@ export const InvDraft = {
           { "argumentName": "category", "fixValue": "Medios de Cultivo"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -701,7 +701,7 @@ export const InvDraft = {
           { "argumentName": "category", "fixValue": "Estándares Primarios"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -1027,7 +1027,7 @@ export const InvDraft = {
           { "argumentName": "category", "fixValue": "Estándares Secundarios"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -1353,7 +1353,7 @@ export const InvDraft = {
           { "argumentName": "category", "fixValue": "Material Fungible"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -1679,7 +1679,7 @@ export const InvDraft = {
           { "argumentName": "category", "fixValue": "Otros"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -1979,6 +1979,12 @@ export const InvDraft = {
         },
 		"lot_name": {
           "label_en": "Name", "label_es": "lot_id", "Nombre": false, "filter": true, "is_icon": false, "width": "10%"
+        },
+        "volume": {
+          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        },
+        "volume_uom": {
+          "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
     },
@@ -2004,7 +2010,7 @@ export const InvDraft = {
           { "argumentName": "category", "fixValue": "Reactivos Comerciales"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -2295,6 +2301,9 @@ export const InvDraft = {
 		"category": {
           "label_en": "Category", "label_es": "Categoría", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
         },
+		"locked_reason": {
+          "label_en": "Locked Reason", "label_es": "Razón de bloqueo", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
+        },
 		"status": {
           "label_en": "Status", "label_es": "Estado", "sort": false, "filter": true, "width": "10%"
         },
@@ -2331,7 +2340,7 @@ export const InvDraft = {
           { "argumentName": "category", "fixValue": "Reactivos preparados"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "ML" },
+		  { "argumentName": "volumeUom", "fixValue": "mL" },
           { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
 		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
 		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
@@ -2362,7 +2371,7 @@ export const InvDraft = {
 				"filterInFirstLevel": true, "elementName":"list1",
 				"propertyNameContainer": "category_and_references",
 				"propertyNameContainerLevelPropertyKeyName": "name",
-				"propertyNameContainerLevelfixValue": "Reactivos Preparados",
+				"propertyNameContainerLevelfixValue": "Reactivos preparados",
 				"propertyNameContainerLevel2": "inv_reference",
 				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
 			  }			
@@ -2644,7 +2653,7 @@ export const InvDraft = {
 		  
 		  "endPointParams": [
 		    {"argumentName": "lotName", "element": "text1", "notAddWhenValueIsBlank": true},
-			{"argumentName": "Reference", "element": "text2", "notAddWhenValueIsBlank": true},
+			{"argumentName": "reference", "element": "text2", "notAddWhenValueIsBlank": true},
             {"argumentName": "category", "element": "text3", "notAddWhenValueIsBlank": true}
 		  ],		  
 		  "extraParams": [],
@@ -2717,7 +2726,7 @@ export const InvDraft = {
             {"text5": { "label_en": "Microorganisms to find", "label_es": "Microorganismos a encontrar", "default_value": "" }}
           ],
 		  "endPointParams": [
-			{"argumentName": "Reference", "element": "text1", "notAddWhenValueIsBlank": true},
+			{"argumentName": "reference", "element": "text1", "notAddWhenValueIsBlank": true},
             {"argumentName": "category", "element": "text2", "notAddWhenValueIsBlank": true}
 		  ],
           "endPointParams2": [
