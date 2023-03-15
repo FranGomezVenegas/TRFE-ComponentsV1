@@ -645,6 +645,7 @@ export function TrazitGenericDialogs(base) {
         }
     }
     valueSelected(e){
+        return // The code below is there only for trying to make lists depending on another list, does not work yet
         //alert('ds '+ e.target.id+this[e.target.id].value)
 
         // var triggeredElem=this.actionBeingPerformedModel.dialogInfo.fields.filter(p => p == e.target.id)
