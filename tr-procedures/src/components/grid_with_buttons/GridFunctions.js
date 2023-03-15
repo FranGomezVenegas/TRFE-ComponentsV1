@@ -178,9 +178,14 @@ export function GridFunctions(base) {
             <br>            
             `
         }
+        if (colDef.image_ame!==undefined&&String(colDef.image_name).toUpperCase()==="ACTIVATE_DEACTIVATE"){
+            return html`<img src="/images/${sample[keyName]?'activate.svg':'deactivate.svg'}" style="width:20px">`
+        }
+        //[{"value": "A", "image_name": "imagenA"}, {"value": "B", "image_name": "imagenB"}, {"value": "else", "image_name": "imagenParaElResto"}]
+
         if (this.filterName == "SampleLogin") {
             return html`<img src="/images/labplanet.png" style="width:20px">`
-        } else if (this.viewName == "PlatformInstruments") {
+        } else if (String(this.viewName).toUpperCase().includes("INSTRUM")) {
             return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
         } else if (this.viewName == "EventsInProgress") {
             return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
