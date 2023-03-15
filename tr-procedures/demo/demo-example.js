@@ -20,7 +20,7 @@ class DemoExample extends LitElement {
   static get properties() {
     return {
       auth: { type: Boolean },
-      hideAllButtonsStatus: { type: Boolean },
+      showAllButtonsStatus: { type: Boolean },
       flag: { type: String },
       userRole: { type: String }
     }
@@ -28,11 +28,21 @@ class DemoExample extends LitElement {
 
   constructor() {
     super();
-    this.hideAllButtonsStatus=true;
+    this.showAllButtonsStatus=false;
     this.auth = false;
     this.flag = "es";
     this.userRole='';
   }
+  hideActionButtonProc(proc){
+    if (proc===undefined) return false
+    //alert(proc)
+    let sessionProcs=JSON.parse(sessionStorage.getItem("userSession"))
+    if (sessionProcs===null) return false
+    let findProc = sessionProcs.procedures_list.procedures.filter(m => m.procInstanceName == proc)
+    //console.log('hideActionButtonProc', 'proc', proc, 'findProc', findProc)
+    return (findProc===undefined||findProc.length==0)
+  }
+
   hideActionButton(proc){
     if (proc===undefined) return false
     //alert(proc)
@@ -43,10 +53,11 @@ class DemoExample extends LitElement {
     return (findProc===undefined||findProc.length==0)
   }
   toggleHideAllButtonsStatus(){
-    this.hideAllButtonsStatus=!this.hideAllButtonsStatus
+    //if (this.showAllButtonsStatus===true){this.showAllButtonsStatus=false;return;}
+    this.showAllButtonsStatus=!this.showAllButtonsStatus
   }
   hideAllButtons(){
-    return !this.hideAllButtonsStatus
+    return this.showAllButtonsStatus===false
   }
 
   render() {
@@ -74,15 +85,21 @@ class DemoExample extends LitElement {
 
         ${this.userRole==="proc_management" ?
         html`
-          <proc-management-home></proc-management-home>
+          <proc-management-home .config="${this.pLogin.config}"></proc-management-home>
         `:html` 
         <div ?hidden="${this.hideAllButtons()}" id="allButons">  
         
-        ${DemoViews.map(cur =>
-          html`<button ?hidden="${this.hideActionButton(cur.proc_instance_name)}" 
-            @click=${()=>this.selectMenu(cur.proc_instance_name, cur.view_name, cur.filter_name)}>${cur.title}</button>
-          `
-        )}
+        ${DemoViews.map(curProc =>          
+          html`
+          ${this.hideActionButtonProc(curProc.proc_instance_name) ?  html``:html`
+          <p>${curProc.label}
+          ${curProc.views.map(curView =>
+          html`<button ?hidden="${this.hideActionButton(curView.proc_instance_name)}" 
+            @click=${()=>this.selectMenu(curView.proc_instance_name, curView.view_name, curView.filter_name)}>${curView.title}</button>
+          `)}
+          </p>
+          `}
+        `)}
 
         <button ?hidden="${this.hideActionButton("em-demo-a")}" @click=${()=>this.selectMenu("em-demo-a", "Home", "Home")}>Home</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "LogSamples", "SampleLogin")}>Log Samples</button>
@@ -120,9 +137,12 @@ class DemoExample extends LitElement {
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "Browser", "Browser")}>Browser</button><br>
 
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "PlatformInstruments", "InstrumentsList")}>Instruments List</button>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "PlatformInstrumentsfamilyCorrecto", "InstrumentsListFamilyCorrecto")}>Instruments List FamilyCorrecto</button><br>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "PlatformInstrumentsfamilyObsIntento", "InstrumentsListFamilyObsIntento")}>Instruments List FamilyObsIntento</button><br>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "EventsInProgress", "EventsER")}>Events In Progress</button><br>
 
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-instruments", "PlatformInstruments", "InstrumentsList")}>Instruments List</button>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-instruments", "PlatformInstrumentsfamilyCorrecto", "InstrumentsListFamilyCorrecto")}>Instruments List FamilyCorrecto</button><br>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-instruments", "EventsInProgress", "EventsER")}>Events In Progress</button><br>
 
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app", "WhiteIpList", "WhiteIpList")}>White IPs List</button>
@@ -142,7 +162,7 @@ class DemoExample extends LitElement {
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewSample", "Review")}>sample-coa-rel1 Review Sample</button><br>
 
           Inv-Draft<br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLots", "InventoryLots.1")}>InventoryLots</button>
+          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLotsGeneral", "InventoryLotsGeneral")}>InventoryLots</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLotsReactivos", "InventoryLotsReactivos")}>Issues</button>
           <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "Issues", "Issues")}>Issues</button>
 
@@ -159,9 +179,9 @@ class DemoExample extends LitElement {
   }
 
   openTestDefaultView(){    
-    console.log('openTestDefaultView', this.pLogin)
+    //console.log('openTestDefaultView', this.pLogin)
     if (this.pLogin&&this.pLogin.config&&this.pLogin.config.local&&this.pLogin.config.localDefaultView){
-      this.hideAllButtonsStatus=true
+      //this.showAllButtonsStatus=true
       this.selectMenu(this.pLogin.config.localDefaultView.procName, this.pLogin.config.localDefaultView.viewName, this.pLogin.config.localDefaultView.filterName)
       return
     }

@@ -6,6 +6,7 @@ import { App } from './0proc_models/app';
 import { Genoma1 } from './0proc_models/genoma-1';
 import { SampleCoaRel1 } from './0proc_models/sample-coa-rel1';
 import { InvDraft } from './0proc_models/inv-draft';
+import { MpRelease1 } from './0proc_models/mp-release1';
 
 export const ProceduresModel = {
   ['em-demo-a']: EmDemoA,
@@ -15,21 +16,41 @@ export const ProceduresModel = {
   ['app']: App,
   ['genoma-1']: Genoma1,
   ['sample-coa-rel1']: SampleCoaRel1,
-  ['inv-draft']: InvDraft
+  ['inv-draft']: InvDraft,
+  ['mp-release1']: MpRelease1
 }
 
 export const DemoViews = [
-  {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-  {"proc_instance_name": "em-demo-a", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
-  {"proc_instance_name": "em-demo-a", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
-  {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSampling", "filter_name": "SamplingPERS", "title": "Personel Sampling"},
-  {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-  {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-  {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-  {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-  {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-
-
+  {"label":"EM-Air (em-demo-a)", "proc_instance_name": "em-demo-a", "views":[
+    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+    {"proc_instance_name": "em-demo-a", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
+    {"proc_instance_name": "em-demo-a", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSampling", "filter_name": "SamplingSMP", "title": "Personel Sampling"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSampling", "filter_name": "SamplingPERS", "title": "Home"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSamplingInterval", "filter_name": "SamplingSMP", "title": "Location SamplingInterval"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSamplingInterval", "filter_name": "SamplingPERS", "title": "Person SamplingInterval"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePlateReading", "filter_name": "PlateReadingSecondEntrySMP", "title": "Location-Plate Reading"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePlateReading", "filter_name": "PlateReadingSecondEntryPERS", "title": "Person-Plate Reading"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePlateReadingSecondEntry", "filter_name": "PlateReadingSecondEntrySMP", "title": "Location-Plate Reading 2nd Entry"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePlateReadingSecondEntry", "filter_name": "PlateReadingSecondEntryPERS", "title": "Person-Plate Reading 2nd Entry"}
+    ]
+  },
+  {"label":"EM-Water (proc-deploy)", "proc_instance_name": "proc-deploy", "views":[
+    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+    {"proc_instance_name": "em-demo-a", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
+    {"proc_instance_name": "em-demo-a", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSampling", "filter_name": "SamplingPERS", "title": "Personel Sampling"},
+    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"}
+    ]
+  },
+  {"label":"Raw Material Inspection Lots (mp-release1", "proc_instance_name": "mp-release1", "views":[
+    {"proc_instance_name": "mp-release1", "view_name": "LotView", "filter_name": "LotView", "title": "LotView"}
+  ]
+  },
 /*
   <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSamplingInterval", "SamplingSMP")}>Samples Sampling (Interval)</button>
   <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSamplingInterval", "SamplingPERS")}>Personel Sampling (Interval)</button>

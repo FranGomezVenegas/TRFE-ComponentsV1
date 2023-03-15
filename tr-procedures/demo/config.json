@@ -63,7 +63,7 @@
     "filterName" :  "Home" 
   },
   
-  "localDefaultView": {
+  "localDefaultViewzxc": {
     "procName":  "em-demo-a", 
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismSMP" 
@@ -132,6 +132,11 @@
     "procName":  "em-demo-a", 
     "viewName": "Browser", 
     "filterName" :  "Browser" 
+  }, 
+  "localDefaultView": {
+    "procName":  "mp-release1", 
+    "viewName": "LotView", 
+    "filterName" :  "LotView" 
   }
   
  
