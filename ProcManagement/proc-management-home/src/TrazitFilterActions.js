@@ -46,7 +46,7 @@ export function TrazitFilterActions(base) {
         })
         return jsonParam
       }
-      getQueryFilterData() {
+      xgetQueryFilterData() {
         if (this.selectedEntry===undefined||this.selectedEntry.filter===undefined){
           alert("No entry selected to perform the search")
           return
@@ -102,13 +102,13 @@ export function TrazitFilterActions(base) {
           }
         })
       }
-      selectedItem(action){
+      xselectedItem(action){
         if (action.selObjectVariableName===undefined){
             return undefined
         }
         return this[action.selObjectVariableName][0]
       }
-      getButton(butArr) {   
+      xgetButton(butArr) {   
 //        console.log('getButton', butArr)     
           if (butArr===undefined){return}
           return html`
@@ -142,7 +142,7 @@ export function TrazitFilterActions(base) {
             )}
           `
       }  
-      buttonDisable(action){
+      xbuttonDisable(action){
         console.log('buttonDisable')
         if (action===undefined||action.button===undefined){return true}
         if (action.button.requiresObjectSelected===undefined){return true}
@@ -160,7 +160,7 @@ export function TrazitFilterActions(base) {
           return false
         }
       }    
-      buttonAction(action, selectedItem, replace = true, actionNumIdx) {
+      xbuttonAction(action, selectedItem, replace = true, actionNumIdx) {
         //console.log(action, this.newStudyIndividual)
         if (action===undefined){return}
         if (action.clientMethod==="buttonActionWithoutDialog"){
@@ -190,7 +190,7 @@ export function TrazitFilterActions(base) {
         console.log('tableHeight', 'tableItemsObj', tableItemsObj, dynamicH+'px')
         return dynamicH.toString()+"px" //(tableItemsObj.length*35)+100
       }
-      actionMethod(action, replace = true) {
+      xactionMethod(action, replace = true) {
         console.log('actionMethod')
         if (replace) {
           this.selectedAction = action
