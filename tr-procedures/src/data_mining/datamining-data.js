@@ -6,8 +6,9 @@ import '@material/mwc-icon';
 import { GoogleChart } from '@google-web-components/google-chart';
 import '@google-web-components/google-chart';
 import {DataViews} from '../components/Views/DataViews';
+import {DataMiningReportModel } from './datamining-reportmodel';
 
-class DataMiningGoogleChartExt extends GoogleChart {
+class DataMiningGoogleChartExt extends DataMiningReportModel(GoogleChart) {
   redraw() {
     if (this.chartWrapper == null || this._data == null)
         return;
@@ -50,7 +51,7 @@ export class DataMiningData extends DataViews(LitElement) {
     console.log('render', 'activeTab', this.activeTab)
     return html`
     <div class="layout horizontal">
-    ${this.activeTab&&this.activeTab.printable&&this.activeTab.printable===true ?
+    ${this.activeTab&&this.activeTab.printable&&this.activeTab.printable.active===true ?
     html`
       <mwc-icon-button icon="print" @click=${this.print}></mwc-icon-button>                
     `: nothing}
@@ -92,7 +93,8 @@ export class DataMiningData extends DataViews(LitElement) {
       html`
         <div style="display:block">
           ${elemDef.map((elem, i) => 
-            html`              
+            html`      
+                    
               ${elem.type==="reportTitle" ? this.kpiReportTitle(elem) : nothing}
               ${elem.type==="card" ? this.kpiCard(elem) : nothing}
               ${elem.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem, data) : nothing}
@@ -105,6 +107,7 @@ export class DataMiningData extends DataViews(LitElement) {
                 html`
                     ${this.kpiCardSomeElementsChild(elem, data)}
               `}              
+              ${elem.type==="Report" ? this.ReportController(elem) : nothing}              
         </div>
         `
         )}      
@@ -112,6 +115,7 @@ export class DataMiningData extends DataViews(LitElement) {
     }`
   }
 
+  
   kpiCardSomeElementsChild(elem, data){
     console.log('kpiCardSomeElementsChild', 'elem.child', elem, 'data', data)
     return html`            
@@ -189,7 +193,7 @@ export class DataMiningData extends DataViews(LitElement) {
 //    schemaPrefix: this.procName, 
     return trackInfo
   }
-  //{"elementName": "recovery_rate", "header": "columns_data", "values":"data"
+  
   downloadDataTableToCSVv2() {
     let csvContent = "data:text/csv;charset=utf-8,"
     let header = [], contents = []
@@ -341,17 +345,12 @@ export class DataMiningData extends DataViews(LitElement) {
     }
     console.log('object to print', contentToPrint)
     this.printObj = {
-      header: this.activeTab["label_"+this.lang],
-      content: this.setContent()      
+      header: this.setPrintableTitleContentController(),
+      content: this.setPrintableContent()      
     }
   }
-  chartContent() {
-    let imgs = `` // ${this.kpiStyleByStringAttribute("div", undefined)}
-    this.chartImgs.forEach(img => {
-      imgs += `<img src="${img}" style="margin-bottom=10px;"><br>`
-    })
-    return imgs
-  }
+
+
   reportHeaderContent(){
     let content=``
     //content += `<img height="50px" src="https://upload.wikimedia.org/wikipedia/en/3/3e/Tranzit_Group_logo%2C_New_Zealand.png" style="margin-bottom=10px;"><br>`
@@ -431,7 +430,7 @@ export class DataMiningData extends DataViews(LitElement) {
     return strContent    
 
   }
-  setContent() {
+  setContentFran() {
     let strContent =``
     let filterContent=``
     filterContent=this.myFilter()
@@ -554,5 +553,216 @@ export class DataMiningData extends DataViews(LitElement) {
     `
     return str
   }  
+
+  ReportController(elem){    
+    if (elem.reportModel==undefined){
+      console.log('elem', elem)
+      return html` No report specified`
+    }
+    if (this[elem.reportModel]!==undefined){
+      return this[elem.reportModel]()
+    }else{
+      alert(elem.reportModel+ ' not found')
+    }    
+    return ""    
+  }  
+  setPrintableTitleContentController(){
+    if (this.activeTab.printable.printableTitleContent==undefined)
+      return this.setContentFran()
+      if (this[this.activeTab.printable.printableTitleContent]!==undefined){
+        return this[this.activeTab.printable.printableTitleContent]()
+      }else{
+        alert(this.activeTab.printable.printableTitleContent+ ' not found')
+      }    
+    return "Report"
+  }
+
+  setPrintableContentController(){
+    if (this.activeTab.printable.printableContent==undefined)
+      return this.setContentFran()
+      if (this[this.activeTab.printable.printableContent]!==undefined){
+        return this[this.activeTab.printable.printableContent]()
+      }else{
+        alert(this.activeTab.printable.printableContent+ ' not found')
+      }    
+    return this.setContentFinal()
+  }
+
+  setPrintableContent(header) {
+    //alert('setContentFinal')
+    let session = JSON.parse(sessionStorage.getItem("userSession"))
+    let sessionDate = session.appSessionStartDate
+    let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"    
+    
+    let strContent = this.setPrintableContentController(header)
+    // strContent = this.incubatorContent(strContent)
+    // strContent = this.batchContent(strContent)
+    // strContent = this.lotContent(strContent)
+
+    let str = `
+      <style type="text/css">
+      .page-header, .page-header-space {
+        height: 50px;
+        padding-top: 30px;
+      }
+      .page-header {
+        font-size: 25px;
+        position: fixed;
+        top: 0mm;
+        width: 100%;
+        border-bottom: 1px solid black; /* for demo */
+      }
+      .page-footer, .page-footer-space {
+        height: 50px;
+        padding-top: 10px;
+      }
+      .page-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid black; /* for demo */
+      }
+      .page {
+        page-break-after: always;
+      }
+      @page {
+        margin: 0mm 10mm 10mm;
+        ${this.activeTab.label_en == 'Production Lot' ? 'size: landscape;' : '' }
+      }
+      @media print {
+        thead {display: table-header-group;} 
+        tfoot {display: table-footer-group;}
+      }
+      </style>
+
+      <div class="page-header" style="text-align: center; font-weight: bold;">
+        ${header}
+      </div>
+
+      <div class="page-footer">
+        ${sessionUser} on ${sessionDate}<br>
+        ${this.data.report_info[0].report_information}
+      </div>
+      <table>
+      <thead>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position header-->
+            <div class="page-header-space"></div>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <!--*** CONTENT GOES HERE ***-->
+            <div class="page">${strContent}</div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position footer-->
+            <div class="page-footer-space"></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    `
+    return str
+  }
+
+
+
+  XsetContent(header) {
+    let session = JSON.parse(sessionStorage.getItem("userSession"))
+    let sessionDate = session.appSessionStartDate
+    let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"
+    let strContent = `<h2>Summary</h2>`
+    
+    strContent = this.setContentController()
+    // strContent = this.sampleContent(strContent)
+    // strContent = this.incubatorContent(strContent)
+    // strContent = this.batchContent(strContent)
+    // strContent = this.lotContent(strContent)
+
+    let str = `
+      <style type="text/css">
+      .page-header, .page-header-space {
+        height: 50px;
+        padding-top: 30px;
+      }
+      .page-header {
+        font-size: 25px;
+        position: fixed;
+        top: 0mm;
+        width: 100%;
+        border-bottom: 1px solid black; /* for demo */
+      }
+      .page-footer, .page-footer-space {
+        height: 50px;
+        padding-top: 10px;
+      }
+      .page-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid black; /* for demo */
+      }
+      .page {
+        page-break-after: always;
+      }
+      @page {
+        margin: 0mm 10mm 10mm;
+        ${this.activeTab.label_en == 'Production Lot' ? 'size: landscape;' : '' }
+      }
+      @media print {
+        thead {display: table-header-group;} 
+        tfoot {display: table-footer-group;}
+      }
+      </style>
+
+      <div class="page-header" style="text-align: center; font-weight: bold;">
+        ${header}
+      </div>
+
+      <div class="page-footer">
+        ${sessionUser} on ${sessionDate}<br>
+        ${this.sampleData.report_info[0].report_information}
+      </div>
+      <table>
+      <thead>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position header-->
+            <div class="page-header-space"></div>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <!--*** CONTENT GOES HERE ***-->
+            <div class="page">${strContent}</div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position footer-->
+            <div class="page-footer-space"></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    `
+    return str
+  }  
+
+
 }
 customElements.define('datamining-data', DataMiningData);

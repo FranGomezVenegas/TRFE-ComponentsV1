@@ -146,7 +146,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     return html`
       ${1==1 ?
         html`
-        <sp-split-view id="leftsplit" resizable primary-size="300">
+        <sp-split-view id="leftsplit" resizable primary-size="120">
           <div id="leftSplit">
             <datamining-tab @tab-changed=${this.tabChanged} .viewModelFromProcModel=${this.viewModelFromProcModel} 
               .lang=${this.lang}              .tabs=${this.tabList}></datamining-tab>
@@ -618,54 +618,9 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   }
 
 
-  xjsonParamCommons(selObject) {
-    let jsonParam = {}
-    selObject.forEach(p => {
-      if (p.argumentName==="projectName") {
-        if (this.selectedProject===undefined||this.selectedProject.name===undefined){
-          alert('No study selected')
-          return jsonParam
-        }
-        jsonParam[p.argumentName] = this.selectedProject.name
-      } else if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
-          if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
-            var msg=""
-            if (this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
-              msg='The object '+p.internalVariableObjName+' has no one property called '+p.internalVariableObjProperty
-              alert(msg)
-              //console.log(msg, this[p.internalVariableObjName][0])
-            }else{
-              msg='there is no object called '+p.internalVariableObjName+' in this view'
-              alert(msg)
-            }
-            return jsonParam[p.argumentName] = "ERROR: "+msg
-          }  
-        jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
-        
-      } else if (p.element) {
-        jsonParam[p.argumentName] = this[p.element].value // get value from field input
-      } else if (p.defaultValue) {
-        jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
-      } else if (p.selObjectPropertyName) {
-        jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
-      } else if (p.targetValue) {
-        jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
-      } else {
-        jsonParam[p.argumentName] = p.value
-      }
-      //console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
-    })
-    return jsonParam
-  }
-
-
   getQueryFilterData() {
     console.log('getQueryFilterData')
     this.dataminingData.data = {}
-    //let extraParams = {}
-    // Object.entries(this.activeTab.extraParams).map((
-    //   [key]) => extraParams[key] = this[key].value
-    // )
     var extraParams=this.jsonParam(this.activeTab.filter) 
     let reqParams = {
       procInstanceName: this.procName,
@@ -808,7 +763,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     return str
   }
 
-  sampleContent(strContent) {
+  xsampleContent(strContent) {
     if (this.sampleData.sampleFieldsToDisplay && this.activeTab.label_en == "Sample") {
       this.sampleData.sampleFieldsToDisplay.forEach(d => {
         strContent += `<li>${d.field_name}: ${d.field_value}</li>`
@@ -854,7 +809,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     return strContent
   }
 
-  incubatorContent(strContent) {
+  xincubatorContent(strContent) {
     if (this.sampleData.incubatorFieldsToDisplay) {
       this.sampleData.incubatorFieldsToDisplay.forEach(d => {
         strContent += `<li>${d.field_name}: ${d.field_value}</li>`
@@ -864,7 +819,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     return strContent
   }
 
-  batchContent(strContent) {
+  xbatchContent(strContent) {
     if (this.sampleData.batchFieldsToDisplay) {
       this.sampleData.batchFieldsToDisplay.forEach(d => {
         strContent += `<li>${d.field_name}: ${d.field_value}</li>`
@@ -876,7 +831,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     return strContent
   }
 
-  lotContent(strContent) {
+  xlotContent(strContent) {
     if (this.sampleData.prodLotFieldsToDisplay) {
       this.sampleData.prodLotFieldsToDisplay.forEach(d => {
         strContent += `<li>${d.field_name}: ${d.field_value}</li>`
