@@ -116,7 +116,7 @@ export function TrazitDialogActions(base) {
 
           }
           jsonParam(selAction, selObject) {
-            //console.log('jsonParam', selAction)
+            console.log('TrazitDialogActions>jsonParam', selAction)
             if (selAction===undefined){
               selAction=this.selectedAction
             }
