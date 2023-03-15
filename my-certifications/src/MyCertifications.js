@@ -16,6 +16,13 @@ export class MyCertifications extends CommonCore {
       }
       @media (max-width: 460px) {
       }
+      certification-item{
+        transition: box-shadow 0.1s;
+        background-size: cover;        
+      }
+      certification-item:hover{        
+        box-shadow: 0px 0px 50px #c99839;
+      }
     `];
   }
 
@@ -48,12 +55,26 @@ export class MyCertifications extends CommonCore {
     return html`
       <div class="layout horizontal flex center-center wrap">
       ${this.certSet.map(c=>
-        html`<certification-item .lang=${this.lang} .cert=${c} @mark-complete=${this.markComplete}></certification-item>`
+        html`<certification-item @mousemove="${this.handleMouseMove}" @mouseout="${this.handleMouseOut}" .lang=${this.lang} .cert=${c} @mark-complete=${this.markComplete}></certification-item>`
       )}
       </div>
     `;
   }
-
+  handleMouseMove(evt) {
+    const el = evt.target;
+    const {layerX, layerY} = evt;
+    const height = el.clientHeight;
+    const width = el.clientWidth;
+    const yRotation = ((layerX - width / 2) / width) * 20;
+    const xRotation = ((layerY - width / 2) / height) * 20;
+    //const transform = perspective("500px"); scale(1.1); rotateX(${xRotation}deg); rotateY(${yRotation}deg);
+    el.style.transform = transform;
+  }
+    
+  handleMouseOut(evt) {
+    const el = evt.target
+    el.style.transform = perspective("500px"); scale(1); rotateX(0); rotateY(0);
+  }
   authorized() {
     super.authorized()
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))

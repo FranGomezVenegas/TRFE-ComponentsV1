@@ -16,12 +16,11 @@ export class CertificationItem extends LitElement {
         display: none;
       }
       .card {
-        background-image: url(/images/SOP-blue.png);
+        background-image: url(/images/SOP-blue2.png);
         background-color: white;
         background-size: cover;
         background-repeat: no-repeat;
         border-radius: 5px;
-        box-shadow: 1px 1px #888888;
         padding: 20px 20px 30px;
         width: 250px;
         height: 200px;
