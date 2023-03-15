@@ -7,6 +7,58 @@ import { navigator } from 'lit-element-router';
 export class HomeAir extends navigator(LitElement) {
   static get styles() {
     return css`
+    .flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 50px;
+    }
+    
+    .node {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #ccc;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .node.start:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-top: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+    
+    .node.end:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-bottom: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+      transform: translate(50%, -50%) rotate(-45deg);
+    }
+    
+    .node:hover {
+      background-color: #555;
+    }
+    
+    .node:active {
+      transform: scale(0.9);
+    }
+    
     .maindiv{
       width: 1250px;
       }
@@ -89,6 +141,65 @@ export class HomeAir extends navigator(LitElement) {
     border: 10px;
     }    
     .node:hover {cursor: pointer;}
+		.container {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+		}
+	.left-element {
+		width: 50%;
+		height: 400px;
+		clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
+		background-color: #1a237e;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		color: #fff;
+		font-size: 2rem;
+		font-weight: bold;
+	}
+
+	.left-element .inner-elements {
+		width: 100%;
+		height: 50%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.left-element .inner-elements .blue-box {
+		width: 80%;
+		height: 45%;
+		background-color: #90caf9;
+		clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		color: #1a237e;
+		font-size: 1.5rem;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.right-element {
+		width: 50%;
+		height: 400px;
+		clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
+		background-color: #1a237e;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		color: #fff;
+		font-size: 2rem;
+		font-weight: bold;
+	}
     `
     // return css`
     //   .maindiv{
@@ -339,7 +450,27 @@ console.log('constructor flowchart')
         this.config={}
   
     }
-    render() {          
+    firstUpdated() {
+      const nodes = this.shadowRoot.querySelectorAll('.node');
+      nodes.forEach(node => {
+        node.addEventListener('click', () => {
+          alert(`Clicked on ${node.textContent}`);
+        });
+      });
+    }
+    render() {
+      return html`
+        <div class="flow">
+          <div class="node start">Start</div>
+          <div class="node location">Location 1</div>
+          <div class="node location">Location 2</div>
+          <div class="node person">Person 1</div>
+          <div class="node person">Person 2</div>
+          <div class="node end">End</div>
+        </div>
+      `;
+    }
+    renderFran() {          
         return html`  
         ${this.viewModelFromProcModel ? 
         html`
@@ -372,8 +503,26 @@ console.log('constructor flowchart')
       this.selectedMenu('/dashboard/procedures?procName='+this.procName+
       '&viewName='+vwName+'&filterName='+fltrName)
     }
+    homeAI(){
+      return html`
+        <div class="container">
+        <div class="left-element">
+          <div class="inner-elements">
+            <div class="blue-box">Element 1</div>
+            <div class="blue-box">Element 2</div>
+          </div>
+        </div>
+        <div class="right-element">
+          <h1>Hola</h1>
+        </div>
+      </div>
+  
+      `
+    }
     home(){
       return html`
+
+
       <div class="maindiv">
       <div @click=${()=>this.elementClicked("LogSamples", "SampleLogin")} class="start-end" style="top: 50px; left: 20px;"><span>New <br>Samples</span></div>
       
