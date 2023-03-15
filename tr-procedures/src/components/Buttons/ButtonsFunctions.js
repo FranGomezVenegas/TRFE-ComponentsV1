@@ -6,8 +6,8 @@ import { ClientMethod} from '../../../src/ClientMethod';
 
 export function ButtonsFunctions(base) {
     return class extends ClientMethod(ApiFunctions(base)) {
-    getButton(sectionModel = this.viewModelFromProcModel) {
-//console.log('getButton', 'sectionModel', sectionModel)      
+    getButton(sectionModel = this.viewModelFromProcModel, data) {
+      //console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -111,21 +111,21 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
-                  @click=${()=>this.actionMethod(action, sectionModel)}></mwc-icon-button>` :
+                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data)}></mwc-icon-button>` :
               html`${action.button.img ?
                   html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)} img"
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
-                  @click=${()=>this.actionMethod(action, sectionModel)}>
+                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
                   label="${action.button.title['label_'+this.lang]}" 
                   ?disabled="${this.btnDisabled(action, sectionModel)}"
                   ?hidden=${this.btnHidden(action)}
-                  @click=${()=>this.actionMethod(action, sectionModel)}></mwc-button>`
+                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data)}></mwc-button>`
               }`
               }` :
               nothing
@@ -193,7 +193,7 @@ export function ButtonsFunctions(base) {
         if (Array.isArray(action.button.showWhenSelectedItem)) {          
           action.button.showWhenSelectedItem.forEach(rowArray => {
             var curValue=String(rowArray.value).split('|')
-console.log(rowArray.value, this.selectedItems[0][rowArray.column])
+//console.log(rowArray.value, this.selectedItems[0][rowArray.column])
             if (curValue.includes(this.selectedItems[0][rowArray.column])) {              
               d=true              
             }else{
@@ -229,9 +229,15 @@ console.log(rowArray.value, this.selectedItems[0][rowArray.column])
       }
       return d
     }        
-    actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName='selectedItems') {
-    //this.loadDialogs()  
-    console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems)
+    actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName='selectedItems', data) {
+      //this.loadDialogs()  
+      if (data!==undefined){
+        if (Object.keys(data).length > 0){
+          this.selectedItems=[]
+          this.selectedItems.push(data)
+        }
+      }
+    //console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems)
         if(action===undefined){
             alert('action not passed as argument')
             return
@@ -246,8 +252,12 @@ console.log(rowArray.value, this.selectedItems[0][rowArray.column])
             this[action.clientMethod](action, this[selectedItemPropertyName][0])
             return
           }else{
-          //alert('ButtonsFunctions 241-aquiiiiii')
-            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
+            //alert('ButtonsFunctions 241-aquiiiiii')
+            if (this[selectedItemPropertyName]===undefined){
+              this.actionWhenRequiresNoDialog(action)
+            }else{
+              this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
+            }
             return
           }
         }  
@@ -274,7 +284,7 @@ console.log(rowArray.value, this.selectedItems[0][rowArray.column])
       return
     }   
       
-    async GetViewData(){
+    async GetViewData(setGrid = true ){
         //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
         if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
             //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
@@ -292,15 +302,29 @@ console.log(rowArray.value, this.selectedItems[0][rowArray.column])
         this.selectedItems = []      
         let APIParams=this.getAPICommonParams(queryDefinition)
         let viewParams=this.jsonParam(queryDefinition)
-        let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
+        let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+        if (String(endPointUrl).toUpperCase().includes("ERROR")){
+            alert(endPointUrl)
+            return
+        }
+        let params = this.config.backendUrl + endPointUrl        
+        //let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
         //console.log('params', params)        
         await this.fetchApi(params).then(j => {
-          if (j && !j.is_error) {
-            this.setGrid(j)
-          } else {            
-            this.setGrid()
+          if (setGrid){
+            if (j && !j.is_error) {
+              this.setGrid(j)
+            } else {            
+              this.setGrid()
+            }
+          }else{
+            if (j && !j.is_error) {
+              this.requestData=j
+            } else {            
+              this.requestData={}
+            }
           }
         })
         this.samplesReload = false
