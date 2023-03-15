@@ -143,7 +143,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       return
     }
     
-    console.log('resetView', 'component', this.viewModelFromProcModel.component)
+    //console.log('resetView', 'component', this.viewModelFromProcModel.component)
     
     switch(this.viewModelFromProcModel.component){
       case 'GridWithButtons':
@@ -159,6 +159,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         return
       case 'Flowchart':
         import('./components/FlowChart/flow-chart')
+        return  
+      case 'ObjectByTabs':
+        import('./components/ObjectByTabs/object-by-tabs')
         return  
       case 'ModuleEnvMonitHomeAir':
         import('./module_env_monit/home-air')
@@ -228,6 +231,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           }else{
             this.sopsPassed = defView[0].sops_passed
           }
+        }
+        if (defView.sop===undefined||defView.sop.length==0){
+          this.sopsPassed=true
         }
 
       }
@@ -317,46 +323,51 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       //console.log('ownComponents', 'component', this.viewModelFromProcModel.component)
     }
     return html `
-      ${this.viewModelFromProcModel.component == 'Browser' ? html`
+      ${this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component == 'Browser' ? html`
         <browser-view .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></browser-view>
       `:html``}      
-      ${this.viewModelFromProcModel.component == 'DataMining' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'DataMining' ? html`
         <datamining-mainview .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} 
         .viewModelFromProcModel=${this.viewModelFromProcModel} .masterData=${this.masterData} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></datamining-mainview>
       `:html``}
-      ${this.viewModelFromProcModel.component == 'Flowchart' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'Flowchart' ? html`
         <flow-chart .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></flow-chart>
       `:html``}
-      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeAir' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeAir' ? html`
         <home-air .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-air>
       `:html``}
-      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitCultureMedium' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitCultureMedium' ? html`
         <culture-medium></culture-medium>
       `:html``}
-      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeWater' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeWater' ? html`
         <home-water .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-water>
       `:html``}
-      ${this.viewModelFromProcModel.component == 'ModuleSampleLogSample' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleSampleLogSample' ? html`
         <log-sample-module-sample 
           .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed}  .lang=${this.lang}
           .procInstanceName=${this.procName} .viewName=${this.viewName}   .filterName=${this.filterName}  
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}>
         </log-sample-module-sample>        
       `:html``}
-      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitProgramProc' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitProgramProc' ? html`
         <program-proc .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></program-proc>      
       `:html``}
-      ${this.viewModelFromProcModel.component == 'ModuleEnvMonitSampleIncubation' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitSampleIncubation' ? html`
         <sample-incubation-view .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .config=${this.config}></sample-incubation-view>      
       `: nothing}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ObjectByTabs' ? html`
+        <object-by-tabs .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
+          .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
+      `:html``}
 
       
 
-      ${this.viewModelFromProcModel.component == 'ModuleGenomaProjectWindow' ? html`
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleGenomaProjectWindow' ? html`
         <genoma-project .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .config=${this.config}></genoma-project>      
