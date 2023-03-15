@@ -3,8 +3,8 @@ import { ApiFunctions } from '../Api/ApiFunctions';
 
 export function AuditFunctions(base) {
     return class extends ApiFunctions(base) {
-        getObjectAuditInfo() {
-            var extraParams=this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0], {})   
+        getObjectAuditInfo(dataElement = this.selectedItems[0]) {
+            var extraParams=this.jsonParam(this.actionBeingPerformedModel, dataElement, {})   
             let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)
             let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
             if (String(endPointUrl).toUpperCase().includes("ERROR")){
@@ -15,17 +15,19 @@ export function AuditFunctions(base) {
               + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
             this.fetchApi(params).then(j => {
               if (j && !j.is_error) {
-                j.forEach(audit => {
-                  audit.collapse = true
-                  if (audit.sublevel && audit.sublevel.length) {
-                    audit.sublevel.forEach(level => {
-                      level.collapse = false
-                    })
-                  }
-                })
-                this.audit.audits = j
-                this.audit.requestUpdate()
+                if (Array.isArray(j)){
+                  j.forEach(audit => {
+                    audit.collapse = true
+                    if (audit.sublevel && audit.sublevel.length) {
+                      audit.sublevel.forEach(level => {
+                        level.collapse = false
+                      })
+                    }
+                  })
+                  this.audit.audits = j
+                  this.audit.requestUpdate()
                // this.audit.auditDialog.show()
+              }
               }
             })
           }
