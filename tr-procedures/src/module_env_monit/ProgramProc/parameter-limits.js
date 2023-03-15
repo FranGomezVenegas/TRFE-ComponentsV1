@@ -200,63 +200,6 @@ export class ParameterLimits extends CoreView {
     `;
   }
 
-  xtabView() {
-    return html`
-      <h2>${langConfig.limitView.header["label_"+ this.lang]} ${this.selectedProgram&&this.selectedProgram.name}</h2>
-      <table class="styled-table">
-        <thead>
-          <tr>
-            ${this.procInstanceName=="proc-deploy" ?
-              html`
-                <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).testing_group["label_"+ this.lang]}</th>
-              ` :
-              html`
-                <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).variation["label_"+ this.lang]}</th>
-              `
-            }
-            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).analysis["label_"+ this.lang]}</th>
-            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).method_and_version["label_"+ this.lang]}</th>
-            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).parameter["label_"+ this.lang]}</th>
-            <th>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default).rule["label_"+ this.lang]}</th>
-          </tr>
-        </thead>
-        <tbody>
-        ${this.selectedProgram===undefined||this.selectedProgram.spec_definition===undefined||this.selectedProgram.spec_definition.spec_limits===undefined ? nothing : 
-        html`
-          ${this.selectedProgram&&this.selectedProgram.spec_definition.spec_limits.map(p => 
-            html`
-            <tr>
-              ${this.procInstanceName=="proc-deploy" ?
-                html`
-                  <td>${p.testing_group}</td>
-                  <td>${p.analysis}</td>
-                  <td>${p.method_name}</td>
-                  <td>${p.parameter}</td>
-                ` :
-                html`
-                ${this.procInstanceName}
-                  ${p.variation_name===undefined ? nothing: html`
-                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.variation_name]["label_"+ this.lang]}</td>
-                  `}
-                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.analysis]["label_"+ this.lang]}</td>
-                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.method_name]["label_"+ this.lang]}</td>
-                  <td>${(langConfig.configTableSpecLimits[this.procInstanceName]||langConfig.configTableSpecLimits.default)["value_"+p.parameter]["label_"+ this.lang]}</td>
-                `
-              }
-              <td>
-                <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
-                <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
-                <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
-              </td>
-            </tr>
-            `
-          )}
-        `}
-        </tbody>
-      </table>
-    `;
-  }
-
   setView() {
   }
 }
