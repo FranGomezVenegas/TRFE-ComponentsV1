@@ -15,6 +15,11 @@ import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigations
 import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
 
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
+import '@vaadin/vaadin-grid/vaadin-grid';
+import '@vaadin/vaadin-grid/vaadin-grid-column';
+import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
+import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
+import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 
 
 export function DataViews(base) {
@@ -196,7 +201,7 @@ export function DataViews(base) {
         }
 
         loadDialogs(){
-          //console.log('loadDialogs')
+          console.log('DataViews loadDialogs')
           return html`
           ${this.credentialsDialog()}
           ${this.genericFormDialog()}

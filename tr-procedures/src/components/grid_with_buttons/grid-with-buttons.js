@@ -1,6 +1,6 @@
 import { html, css, LitElement, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
-import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
+import { columnBodyRenderer, gridRowDetailsRenderer, contextMenuRenderer } from 'lit-vaadin-helpers';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
@@ -17,6 +17,7 @@ import '../../gridmodel-bottomcomp-chart';
 
 import '../templates-';
 import '@trazit/tr-dialog/tr-dialog';
+import { AuditFunctions} from '../Audit/AuditFunctions';
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import {GridFunctions} from './GridFunctions';
 import {ModuleEnvMonitClientMethods} from '../../module_env_monit/ModuleEnvMonitClientMethods';
@@ -27,7 +28,7 @@ import {TrazitEnterResultWithSpec} from '../GenericDialogs/TrazitEnterResultWith
 import {ModuleEnvMonitDialogsMicroorganism} from '../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism';
 import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
 import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
-import { AuditFunctions} from '../Audit/AuditFunctions';
+
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 
 import '../Audit/audit-dialog';
@@ -153,16 +154,17 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
       //console.log('loadDialogs')
       return html`
       ${this.credentialsDialog()}
-    ${this.genericFormDialog()}
-    ${this.reactivateObjectsDialog()}
-    ${this.moduleEnvMonitMicroorganismsDialogAdd()}
-    ${this.moduleEnvMonitMicroorganismsDialogRemove()}
-    ${this.pointTemplate()}
-    ${this.resultTemplate()}
-    ${this.investigationTemplate()}
-    ${this.filterName=="open" ?
-      html`${this.decisionTemplate()}` : nothing
-    }  
+      ${this.genericFormDialog()}
+      ${this.reactivateObjectsDialog()}
+      ${this.moduleEnvMonitMicroorganismsDialogAdd()}
+      ${this.moduleEnvMonitMicroorganismsDialogRemove()}
+      ${this.pointTemplate()}
+      ${this.resultTemplate()}
+      ${this.investigationTemplate()}
+      ${this.filterName=="open" ?
+        html`${this.decisionTemplate()}` : nothing
+      }  
+      ${this.decisionTemplate()}
     `}
   topCompositionBlock(){
       return html`
@@ -238,7 +240,15 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
     }
 
   }
+  rightMouseMenu(){
+    return html `
+    </vaadin-context-menu> 
+    <vaadin-context-menu> 
+      
 
+    `
+
+  }
   abstractBlock(){
     //console.log('abstractBlock')
   return html`
@@ -255,14 +265,17 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
             </div>
             ${this.ready ? 
               html`
+    
               <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${this.activeItemChanged}
                 .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                 ${gridRowDetailsRenderer(this.detailRenderer)}
                 ${this.setCellListener()}
+                ${contextMenuRenderer(this.rightMouseMenu)}
                 >
                 ${this.gridList(this.viewModelFromProcModel)}
               </vaadin-grid>
+                 
               <div id="rowTooltip">&nbsp;</div>
               ` :
               html``

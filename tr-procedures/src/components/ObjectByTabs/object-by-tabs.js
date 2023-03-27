@@ -64,7 +64,7 @@ export class ObjectByTabs extends DialogsFunctions(LitElement) {
         this.selectedItem={}
         this.selectedItemLoaded=false
         //this.getObjectData()
-        this.lotDefault='Testing 2023-03-15T21:20:55.962210'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
+        this.lotDefault='Testing 2023-03-15T21:20:55.962273'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
           }
     render() {       
       this.getObjectData()

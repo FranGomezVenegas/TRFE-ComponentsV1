@@ -427,27 +427,42 @@ export function ButtonsFunctions(base) {
             action = this.actionBeingPerformedModel
             let actionRefreshQuery=[]
             if (action.actionName.includes("ENTER_EVENT_RESULT")){
-              actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES")
-              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].event_id)
+              if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.actions!==undefined){
+                actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES"||s.actionName == "QUALIFIFICATION_EVENT_VARIABLES")
+                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].event_id)
+              }else{
+                this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
+              }
               //alert(action.actionName)
               return
             }
             if (action.actionName.includes("ENTERRESULT")){
-              actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTERRESULT")
-              //let actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES")
-              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-              //this.actionMethodResults(this.viewModelFromProcModel.actions[1], this.selectedItems, this.selectedItems[0].sample_id)
+              if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.actions!==undefined){
+                actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTERRESULT")
+                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+              }else{
+                this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
+              }
               return
             }   
             if (action.actionName.includes("ENTER_PLATE_READING")){
               if (action.actionName.includes("SECONDENTRY")){
-                actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING_SECONDENTRY")
-                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-                return
+                if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.actions!==undefined){
+                  actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING_SECONDENTRY")
+                  this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+                }else{
+                }
+                this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
+                  return
               }else{
-                actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING")
-                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-                return
+                if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.actions!==undefined){
+                  actionRefreshQuery= this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING")
+                  this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+                }else{
+                  this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
+                }
+
+                  return
               }
               
               //this.actionMethodResults(this.viewModelFromProcModel.actions[3], this.selectedItems, this.selectedItems[0].sample_id)
