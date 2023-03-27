@@ -131,7 +131,7 @@ export function ApiFunctions(base) {
                 
               } else if (p.element) {
                 if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
-                  if (this[p.element].value!==undefined){                    
+                  if (this[p.element].value!==undefined&&this[p.element].value.length>0){                    
                     if (jsonParam.fieldName===undefined){
                       let curFldNameValue=p.argumentName                      
                       jsonParam["fieldName"]=curFldNameValue
@@ -237,7 +237,7 @@ export function ApiFunctions(base) {
                 
               } else if (p.element) {
                 if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
-                  if (this[p.element].value!==undefined){                    
+                  if (this[p.element].value!==undefined&&this[p.element].value.length>0){                 
                     if (jsonParam.fieldName===undefined){
                       let curFldNameValueObj={}
                       curFldNameValueObj.push(p.argumentName)
@@ -450,7 +450,7 @@ export function ApiFunctions(base) {
         if (queriesEndpoints.length==1){         
           return queriesEndpoints[0].url
         }
-        let endPointUrl=action.endPointUrl        
+        let endPointUrl=query.endPointUrl        
         let foundEndPoint=queriesEndpoints.filter(m => m.name == endPointUrl)
         if (foundEndPoint.length===0){
           return 'ERROR in ApiFunctions.getActionAPIUrl: EndPointUrl '+endPointUrl+" not found in Module Settings"
