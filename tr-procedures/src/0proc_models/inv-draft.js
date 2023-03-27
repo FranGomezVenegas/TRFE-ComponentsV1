@@ -177,6 +177,63 @@ export const InvDraft = {
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" }
 			]
 		},
+	
+		{"actionName": "QUALIFIFICATION_EVENT_VARIABLES",
+			"requiresDialog": true,
+			"alertMsg": {
+				"empty": { "label_en": "No pending variables to enter result", "label_es": "No hay variables pendientes de resultados" }
+			},
+			"button": {
+				"icon": "document_scanner",
+				"title": {"label_en": "Enter Value", "label_es": "Ingrese el Valor"},
+				"requiresGridItemSelected": true,
+				"showWhenSelectedItem": 				
+					{"column": "status", "value": "QUARANTINE"}
+			},
+			"resultHeader": {
+				"id": {"label_en": "Id", "label_es": "Id", "width": "10%"},
+				"param_name": {"label_en": "Parameter", "label_es": "Parámetro"},
+				"value": {"label_en": "Value", "label_es": "Valor"}
+			},
+			"resultHeaderObjectLabelTopLeft": {
+				"label_en": "Lot Qualification:", "label_es": "Cualificación de Lote :"
+			},    
+			"dialogInfo": { 
+				"name": "resultDialog",
+				"subQueryName": "getResult",		  
+				"viewQuery": {
+					"actionName": "QUALIFIFICATION_EVENT_VARIABLES",
+					"endPoint": "/app/procs/InvTrackingAPIqueries",
+					"endPointParams": [				  
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name"},
+						{ "argumentName": "category", "selObjectPropertyName": "category"},
+						{ "argumentName": "reference", "selObjectPropertyName": "reference"}
+					]
+				},			  
+				"automatic": true,
+				"action": [
+					{ "actionName": "ENTER_EVENT_RESULT",
+						"notGetViewData": true,
+						"requiresDialog": false,
+						"endPointUrl": "Samples",
+						"clientMethod": "enterEventResult",
+						"endPointParams": [
+							{ "argumentName": "newValue", "targetValue": true },
+							{ "argumentName": "certifId", "selObjectPropertyName": "certif_id" },
+							{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
+							{ "argumentName": "category", "selObjectPropertyName": "category"},
+							{ "argumentName": "reference", "selObjectPropertyName": "reference"},
+							{ "argumentName": "variableName", "targetValue": true }
+						]
+					}
+				]
+			},
+			"endPointParams": [
+				{ "argumentName": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
+				{ "argumentName": "sortFieldsName", "value": "test_id|result_id" },
+				{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+			]
+		},
 		{"actionName": "COMPLETE_QUALIFICATION",
 			"requiresDialog": true,
 			"dialogInfo": {          
@@ -208,38 +265,6 @@ export const InvDraft = {
 			  { "argumentName": "decision", "element": "list8" }
 			]
 		},
-		{"actionName": "COMPLETE_QUALIFICATION",
-			"requiresDialog": true,
-			"dialogInfo": {          
-			  "name": "genericDialog",
-				"fields": [
-					{"list9": { "label_en": "Decision", "label_es": "Decisión",
-					  "items":[
-						{"keyName":"ACCEPTED", "keyValue_en":"Accepted", "keyValue_es":"Aceptado"},
-						{"keyName":"ACCEPTED_WITH_RESTRICTIONS", "keyValue_en":"Accepted with restrictions", "keyValue_es":"Aceptado con restricciones"},
-						{"keyName":"REJECTED", "keyValue_en":"Rejected", "keyValue_es":"Rechazado"}
-					  ]}
-					}      
-				]
-			},
-			"button": {
-			  "icon": "alarm_on",
-			  "title": {
-				"label_en": "Complete Qualification + Available", "label_es": "Completar Cualificación + Disponible"
-			  },
-			  "requiresGridItemSelected": true,
-			  "showWhenSelectedItem": 				
-				{"column": "status", "value": "QUARANTINE"}
-			   
-			},
-			"endPointParams": [
-			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
-			  { "argumentName": "category", "selObjectPropertyName": "category" },
-			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "decision", "element": "list9" },
-			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
-			]
-		},		
 		{"actionName": "CONSUME_INV_LOT_VOLUME",
 			"requiresDialog": true,
 			"button": {
@@ -2770,6 +2795,178 @@ export const InvDraft = {
         ]
       }
     ]
-  }   
+  },
+  "QualificationsInProgress": {
+	"component": "TableWithButtons",
+    "langConfig": {
+      "title": {
+        "QualificationsInProgress": {
+          "label_en": "Events in progress",
+          "label_es": "Eventos en curso"
+        }
+      },
+      "gridHeader": {
+        "lot_name": {"label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"},
+        "created_on": {"label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
+        "created_by": {"label_en": "Creator", "label_es": "Creador", "sort": false, "filter": false, "is_icon": false, "width": "10%"}
+      },
+      "xxxxresultHeader": {
+        "id": {
+          "label_en": "Id", "label_es": "Id", "width": "10%"
+        },
+        "param_name": {
+          "label_en": "Parameter", "label_es": "Parámetro"
+        },
+        "value": {
+          "label_en": "Value", "label_es": "Valor"
+        }
+      },
+      "xxxresultHeaderObjectLabelTopLeft": {
+        "label_en": "Instrument Event:", "label_es": "Evento de Instrumento :"
+      }
+    },
+    "viewQuery":{ "actionName": "QUALIFICATIONS_INPROGRESS",	  
+      "xxxclientMethod": "getSamples",
+      "endPoint": "/app/procs/InvTrackingAPIqueries",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload", "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      }
+    },
+  "actions": [
+		{"actionName": "QUALIFIFICATION_EVENT_VARIABLES",
+			"requiresDialog": true,
+			"alertMsg": {
+				"empty": { "label_en": "No pending variables to enter result", "label_es": "No hay variables pendientes de resultados" }
+			},
+			"button": {
+				"icon": "document_scanner",
+				"title": {"label_en": "Enter Value", "label_es": "Ingrese el Valor"},
+				"requiresGridItemSelected": true
+			},
+			"resultHeader": {
+				"id": {"label_en": "Id", "label_es": "Id", "width": "10%"},
+				"param_name": {"label_en": "Parameter", "label_es": "Parámetro"},
+				"value": {"label_en": "Value", "label_es": "Valor"}
+			},
+			"resultHeaderObjectLabelTopLeft": {
+				"label_en": "Lot Qualification:", "label_es": "Cualificación de Lote :"
+			},    
+			"dialogInfo": { 
+				"name": "resultDialog",
+				"subQueryName": "getResult",		  
+				"viewQuery": {
+					"actionName": "QUALIFIFICATION_EVENT_VARIABLES",
+					"endPoint": "/app/procs/InvTrackingAPIqueries",
+					"endPointParams": [				  
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name"},
+						{ "argumentName": "category", "selObjectPropertyName": "category"},
+						{ "argumentName": "reference", "selObjectPropertyName": "reference"}
+					]
+				},			  
+				"automatic": true,
+				"action": [
+					{ "actionName": "ENTER_EVENT_RESULT",
+						"notGetViewData": true,
+						"requiresDialog": false,
+						"endPointUrl": "Samples",
+						"clientMethod": "enterEventResult",
+						"endPointParams": [
+							{ "argumentName": "newValue", "targetValue": true },
+							{ "argumentName": "certifId", "selObjectPropertyName": "certif_id" },
+							{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
+							{ "argumentName": "category", "selObjectPropertyName": "category"},
+							{ "argumentName": "reference", "selObjectPropertyName": "reference"},
+							{ "argumentName": "variableName", "targetValue": true }
+						]
+					}
+				]
+			},
+			"endPointParams": [
+				{ "argumentName": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
+				{ "argumentName": "sortFieldsName", "value": "test_id|result_id" },
+				{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+			]
+		},
+		{"actionName": "COMPLETE_QUALIFICATION",
+			"requiresDialog": true,
+			"dialogInfo": {          
+			  "name": "genericDialog",
+				"fields": [
+					{"list8": { "label_en": "Decision", "label_es": "Decisión",
+					  "items":[
+						{"keyName":"ACCEPTED", "keyValue_en":"Accepted", "keyValue_es":"Aceptado"},
+						{"keyName":"ACCEPTED_WITH_RESTRICTIONS", "keyValue_en":"Accepted with restrictions", "keyValue_es":"Aceptado con restricciones"},
+						{"keyName":"REJECTED", "keyValue_en":"Rejected", "keyValue_es":"Rechazado"}
+					  ]}
+					}      
+				]
+			},
+			"button": {
+			  "icon": "alarm_on",
+			  "title": {
+				"label_en": "Complete Qualification", "label_es": "Completar Cualificación"
+			  },
+			  "requiresGridItemSelected": true			   
+			},
+			"endPointParams": [
+			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
+			  { "argumentName": "category", "selObjectPropertyName": "category" },
+			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
+			  { "argumentName": "decision", "element": "list8" }
+			]
+		},
+		{ "actionName": "REOPEN_EVENT",
+			"alternativeAPIActionMethod": "completeInstrumentEventAction",
+			"requiresDialog": true,		
+			"clientMethod": "openReactivateObjectDialog",
+			"endPoint": "/app/procs/InstrumentsAPIactions",
+			"endPointParams": [
+			  { "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
+			  { "argumentName": "eventId", "selObjectPropertyName": "id" }
+			  
+			],
+			"button": {
+			  "icon": "alarm_add",
+			  "title": {
+				"label_en": "Reopen", "label_es": "Reabrir"
+			  },
+			  "requiresGridItemSelected": false
+			},
+			"dialogInfo": {
+			  "requiresDialog": true,
+			  "name": "reactivateObjectDialog",
+			  "fieldsObject": {
+				"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+				"objectName": { "label_en": "Reopen event", "label_es": "Reabrir evento" }
+			  },  
+			  "listDefinition":{
+				"keyFldName":"id",
+				"eachEntryTextGenerator":[
+				  {"value": "instrument", "type":"field"}, {"value": " (", "type":"fix"}, 
+				  {"value": "event_type", "type":"field"}, {"value": "-", "type":"fix"},
+				  {"value": "started_on", "type":"field"}, {"value": "-", "type":"fix"},
+				  {"value": "completed_on", "type":"field"}, {"value": "-", "type":"fix"},
+				  {"value": "instrument_family", "type":"field"}, {"value": ")", "type":"fix"}
+				  ]
+			  },
+			  "viewQuery": {
+				  "endPoint": "/app/procs/InvTrackingAPIqueries",
+				  "actionName": "COMPLETED_EVENTS_LAST_N_DAYS",
+				  "clientMethod": "getDeactivatedObjects",
+				  "endPointParams": [
+					{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
+				  ]
+			  }
+			}
+		}
+	
+  ]
+  }
+  
   
 }
