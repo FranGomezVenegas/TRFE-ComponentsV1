@@ -721,14 +721,14 @@ export function TrazitGenericDialogs(base) {
                 alert('Property elementName or propertyNameContainerLevelfixValue is mandatory when filterInFirstLevel=true. Review model definition')
                 return entries
             }
-            var filterValue=undefined
+            let filterValue=undefined
             if (fldMDDef.propertyNameContainerLevelfixValue!==undefined){
                 filterValue=fldMDDef.propertyNameContainerLevelfixValue                
             }else{
                 filterValue=this[fldMDDef.elementName].value
             }
             if (filterValue===undefined){return entries}
-            var result = this.masterData[fldMDDef.propertyNameContainer].find(item => item.name === filterValue);
+            let result = this.masterData[fldMDDef.propertyNameContainer].find(item => item.name === filterValue);
             if (result===undefined){return entries}
             //alert(filterValue)
             // if (fldMDDef.propertyNameContainerLevel2fixValue!==undefined&&fldMDDef.propertyNameContainerLevel3){

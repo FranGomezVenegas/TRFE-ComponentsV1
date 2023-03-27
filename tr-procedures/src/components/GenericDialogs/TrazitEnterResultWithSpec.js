@@ -151,7 +151,8 @@ return class extends LitElement {
           <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
             .items=${this.enterResults}
             @selected-items-changed=${e => {
-            if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES") {
+            if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+                this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
               this.selectedResults = []
             } else {
               this.selectedResults = e.detail.value
@@ -163,7 +164,8 @@ return class extends LitElement {
             html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
             html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
           }
-            ${this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES" ?
+            ${this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+              this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES"  ?
             html`${this.instrumentEventList()}` :
             html`${this.enterResultList()}`
           }
@@ -198,7 +200,8 @@ return class extends LitElement {
 
     setCellListenerEnterResults() {
       console.log('setCellListenerEnterResults EnterResults')
-      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES") {
+      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+          this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
         // 
       } else {
         if (this.erGrid===undefined||this.erGrid===null){return}
@@ -407,7 +410,8 @@ return class extends LitElement {
       })
     }
     removeEvents() {
-      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES") {
+      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+          this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
         // 
       } else {
         if (this.rowTooltipEnterResults===undefined||this.rowTooltipEnterResults===null){return}
@@ -493,6 +497,10 @@ return class extends LitElement {
         } else if (result.param_type.toUpperCase().indexOf("LIST") > -1) {
 //console.log('valRenderer', 'result', result)
           let lEntry = ('|'+result.list_entry).split("|")
+          if (result.value.length==0){
+            let blankArr=[""]
+            lEntry=[blankArr].concat(lEntry)
+          }
           return html`
             ${result.param_type.toUpperCase() == "TEXTLIST" ?
               html`
@@ -561,6 +569,10 @@ return class extends LitElement {
             @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e)}>`
         } else if (result.param_type.toUpperCase().indexOf("LIST") > -1) {
           let lEntry = result.allowed_values.split("|")
+          if (result.value.length==0){
+            let blankArr=[""]
+            lEntry=[blankArr].concat(lEntry)
+          }
           return html`
             ${result.param_type.toUpperCase() == "TEXTLIST" ?
               html`
