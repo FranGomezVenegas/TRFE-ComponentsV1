@@ -133,10 +133,15 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   }, 
-  "localDefaultView": {
+  "localDefaultViewxasd": {
     "procName":  "mp-release1", 
     "viewName": "LotView", 
     "filterName" :  "LotView" 
+  },
+  "localDefaultViewxasd": {
+    "procName":  "mp-release1", 
+    "viewName": "SampleEnterResult", 
+    "filterName" :  "ER-FQ" 
   }
   
  

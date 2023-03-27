@@ -1,7 +1,8 @@
 export const AppProc = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20230226",
+	  "last change on (YYYYMMDD)": "20230321",
+	  "last_change_note_20230321": "Responsible and Responsible_backup lists added to NEW_INSTRUMENT",
 	  "last_change_note_20230226": "Added responsible and responsible_backup to the fieldName/Value argument",
 	  "last_change_note_20230202": "Endpoint Params added for REOPEN_EVENT",
 	  "last_change_note_20230201": "Added addBlankValueOnTop a true for list Family at Instrument Management",
@@ -99,8 +100,8 @@ export const AppProc = {
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
-		  { "argumentName": "owner", "element": "list4", "defaultValue": "" },
-		  { "argumentName": "responsible", "element": "list5", "defaultValue": "" },
+		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true, "notAddWhenValueIsBlank": true, "isAdhocField": true},
+		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true, "notAddWhenValueIsBlank": true, "isAdhocField": true},
           { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
@@ -114,8 +115,7 @@ export const AppProc = {
         "dialogInfo": {          
           "name": "genericDialog",
           "fields": [
-			{"text1": { "label_en": "Marc New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
-			{"datetime1": { "label_en": "This field is for Mark", "label_es": "Nombre para nuevo instrumento" }},
+			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
 			{"list1": { 
               "items": [
                 { "keyName": "familyCorrecto", "keyValue_en": "Correct", "keyValue_es": "Correcto" },
@@ -149,22 +149,32 @@ export const AppProc = {
               ],    
               "label_en": "ManufacturerName", "label_es": "Fabricante" 
             }},
-            {"list4": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Owner", "label_es": "Propietario" 
-            }},
-            {"list5": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Responsible", "label_es": "Responsable" 
-            }},
+			{"list4": {
+			  "items": [
+			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+			  ],
+			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list4",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+			{"list5": {
+			  "items": [
+			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
+			  ],
+			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list5",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
             {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
@@ -427,8 +437,8 @@ export const AppProc = {
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
-		  { "argumentName": "owner", "element": "list4", "defaultValue": "" },
-		  { "argumentName": "responsible", "element": "list5", "defaultValue": "" },
+		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
+		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
           { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
@@ -465,22 +475,32 @@ export const AppProc = {
               ],    
               "label_en": "ManufacturerName", "label_es": "Fabricante" 
             }},
-            {"list4": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Owner", "label_es": "Propietario" 
-            }},
-            {"list5": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Responsible", "label_es": "Responsable" 
-            }},
+			{"list4": {
+			  "items": [
+			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+			  ],
+			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list4",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+			{"list5": {
+			  "items": [
+			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
+			  ],
+			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list5",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
             {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
@@ -744,8 +764,8 @@ export const AppProc = {
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
-		  { "argumentName": "owner", "element": "list4", "defaultValue": "" },
-		  { "argumentName": "responsible", "element": "list5", "defaultValue": "" },
+		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
+		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
           { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
@@ -782,22 +802,32 @@ export const AppProc = {
               ],    
               "label_en": "ManufacturerName", "label_es": "Fabricante" 
             }},
-            {"list4": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Owner", "label_es": "Propietario" 
-            }},
-            {"list5": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Responsible", "label_es": "Responsable" 
-            }},
+			{"list4": {
+			  "items": [
+			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+			  ],
+			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list4",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+			{"list5": {
+			  "items": [
+			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
+			  ],
+			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list5",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
             {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
@@ -1061,8 +1091,8 @@ export const AppProc = {
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
-		  { "argumentName": "owner", "element": "list4", "defaultValue": "" },
-		  { "argumentName": "responsible", "element": "list5", "defaultValue": "" },
+		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
+		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
           { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
@@ -1099,22 +1129,32 @@ export const AppProc = {
               ],    
               "label_en": "ManufacturerName", "label_es": "Fabricante" 
             }},
-            {"list4": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Owner", "label_es": "Propietario" 
-            }},
-            {"list5": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Responsible", "label_es": "Responsable" 
-            }},
+			{"list4": {
+			  "items": [
+			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+			  ],
+			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list4",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+			{"list5": {
+			  "items": [
+			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
+			  ],
+			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list5",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
             {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
@@ -1420,22 +1460,32 @@ export const AppProc = {
               ],    
               "label_en": "ManufacturerName", "label_es": "Fabricante" 
             }},
-            {"list4": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Responsible", "label_es": "Responsable" 
-            }},
-            {"list5": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Responsible Backup", "label_es": "Respaldo del Responsable" 
-            }},
+			{"list4": {
+			  "items": [
+			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+			  ],
+			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list4",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+			{"list5": {
+			  "items": [
+			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
+			  ],
+			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list5",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
             {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
@@ -1700,8 +1750,8 @@ export const AppProc = {
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
-		  { "argumentName": "owner", "element": "list4", "defaultValue": "" },
-		  { "argumentName": "responsible", "element": "list5", "defaultValue": "" },
+		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true },
+		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true },
           { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
@@ -1738,22 +1788,32 @@ export const AppProc = {
               ],    
               "label_en": "ManufacturerName", "label_es": "Fabricante" 
             }},
-            {"list4": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Owner", "label_es": "Propietario" 
-            }},
-            {"list5": { 
-              "items": [
-                { "keyName": "Operator1", "keyValue_en": "Operator 1", "keyValue_es": "Operador 1" },                
-                { "keyName": "Operator2", "keyValue_en": "Operator 2", "keyValue_es": "Operador 2" },                
-                { "keyName": "Operator3", "keyValue_en": "Operator 3", "keyValue_es": "Operador 3" }
-              ],    
-              "label_en": "Responsible", "label_es": "Responsable" 
-            }},
+			{"list4": {
+			  "items": [
+			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+			  ],
+			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list4",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+			{"list5": {
+			  "items": [
+			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
+			  ],
+			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list5",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
             {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]

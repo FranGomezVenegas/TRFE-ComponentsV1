@@ -1,7 +1,9 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20221211",
+	  "last change on (YYYYMMDD)": "20230327",
+      "last_change_note_20230327": "Program tabs settings and new Browser model to not be fix view ans BrowserOrig is (keep it as reference)",
+	  "last_change_note_20230112": "fixed batchName argument for EM_BATCH_INCUB_REMOVE_SMP",
 	  "last_change_note_20221211": "in Sample Incubation, as it has 2 'selectedItems' (one per table) the way to get the endpoint param value is different due to it requires specify from which variable",
 	  "last_change_note_20221211_2": "Fix in microorganism views filter",
 	  "last_change_note_20221201": "added requires sampling static column in log sample",
@@ -254,21 +256,12 @@ export const EmDemoA = {
         }
       },
       "gridHeader": {
-        "sample_id": {
-          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true
-        },
-        "program_name": {
-          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true
-        },
-        "location_name": {
-          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true
-        },
-        "sampling_date": {
-          "label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true
-        },
+       "sample_id": {"label_en": "Sample ID","label_es": "ID Muestra", "sort": false, "filter": true},
+        "program_name": {"label_en": "Project", "label_es": "Programa", "sort": false, "filter": true},
+        "location_name": {"label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true},
+        "sampling_date": {"label_en": "Sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true},
         "sampling_comment": {
-          "label_en": "sampling Comment", "label_es": "Comentario Muestreo", "sort": false, "filter": true
-        },
+          "label_en": "sampling Comment", "label_es": "Comentario Muestreo", "sort": false, "filter": true},		  
         "spec_code": {
           "label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true
         },
@@ -953,7 +946,7 @@ export const EmDemoA = {
 			"sar2_result_id": {"label_en": "Result Id", "label_es": "Id Resultado"},
 			"analysis": {"label_en": "Analysis", "label_es": "Análísis"},
 			"sar2_param_name": {"label_en": "Parameter", "label_es": "Parámetro"},
-			"sar2_raw_value": {"label_en": "Value", "label_es": "Valor 2"},
+			"sar2_raw_value": {"label_en": "Value", "label_es": "Valor"},
 			"sar2_uom": {"label_en": "UOM", "label_es": "UOM"}
 		  },
 		  "resultHeaderObjectLabelTopLeft": {
@@ -1701,7 +1694,7 @@ export const EmDemoA = {
 					}
 	},    
 	"actions": [],
-	  "tabs": [
+	"tabs": [
 		{tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"},
 		{tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"},
 		{tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"},
@@ -2925,7 +2918,5 @@ export const EmDemoA = {
       },
     ]
   }   
-
-
 }
 

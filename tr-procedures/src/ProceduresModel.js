@@ -25,6 +25,7 @@ export const DemoViews = [
     {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
     {"proc_instance_name": "em-demo-a", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
     {"proc_instance_name": "em-demo-a", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SampleCultureMedia", "filter_name": "CultureMediaSMP", "title": "Sample Culture"},
     {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSampling", "filter_name": "SamplingSMP", "title": "Personel Sampling"},
     {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSampling", "filter_name": "SamplingPERS", "title": "Home"},
     {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSamplingInterval", "filter_name": "SamplingSMP", "title": "Location SamplingInterval"},
@@ -36,19 +37,32 @@ export const DemoViews = [
     ]
   },
   {"label":"EM-Water (proc-deploy)", "proc_instance_name": "proc-deploy", "views":[
-    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-    {"proc_instance_name": "em-demo-a", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
-    {"proc_instance_name": "em-demo-a", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
-    {"proc_instance_name": "em-demo-a", "view_name": "SamplePendingSampling", "filter_name": "SamplingPERS", "title": "Personel Sampling"},
-    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-    {"proc_instance_name": "em-demo-a", "view_name": "Home", "filter_name": "Home", "title": "Home"}
+    {"proc_instance_name": "proc-deploy", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+    {"proc_instance_name": "proc-deploy", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
+    {"proc_instance_name": "proc-deploy", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
+    {"proc_instance_name": "proc-deploy", "view_name": "SamplePendingSampling", "filter_name": "SamplingPERS", "title": "Personel Sampling"},
+    {"proc_instance_name": "proc-deploy", "view_name": "SampleEnterResult", "filter_name": "ER-FQ", "title": "ER-FQ"},
+    {"proc_instance_name": "proc-deploy", "view_name": "SampleEnterResult", "filter_name": "ER-MB", "title": "ER-MB"},
+    {"proc_instance_name": "proc-deploy", "view_name": "ReviewTesting", "filter_name": "RT-FQ", "title": "RT-FQ"},
+    {"proc_instance_name": "proc-deploy", "view_name": "ReviewTesting", "filter_name": "RT-MB", "title": "RT-MB"},
+    {"proc_instance_name": "proc-deploy", "view_name": "ReviewTestingGroup", "filter_name": "RTG-FQ", "title": "RTG-FQ"},
+    {"proc_instance_name": "proc-deploy", "view_name": "ReviewTestingGroup", "filter_name": "RTG-MB", "title": "RTG-MB"},
+    {"proc_instance_name": "proc-deploy", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"}
     ]
   },
+  {"label":"Raw Material Inspection Lots (inv-draft)", "proc_instance_name": "inv-draft", "views":[
+    {"proc_instance_name": "inv-draft", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
+    {"proc_instance_name": "inv-draft", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
+  ]},
   {"label":"Raw Material Inspection Lots (mp-release1", "proc_instance_name": "mp-release1", "views":[
-    {"proc_instance_name": "mp-release1", "view_name": "LotView", "filter_name": "LotView", "title": "LotView"}
+    {"proc_instance_name": "mp-release1", "view_name": "LotView", "filter_name": "LotView", "title": "LotView"},
+    {"proc_instance_name": "mp-release1", "view_name": "SampleEnterResult", "filter_name": "ER-FQ", "title": "ER-FQ"},
+    {"proc_instance_name": "mp-release1", "view_name": "SampleEnterResult", "filter_name": "ER-MB", "title": "ER-MB"},
+    {"proc_instance_name": "mp-release1", "view_name": "ReviewTesting", "filter_name": "RT-FQ", "title": "RT-FQ"},
+    {"proc_instance_name": "mp-release1", "view_name": "ReviewTesting", "filter_name": "RT-MB", "title": "RT-MB"},
+    {"proc_instance_name": "mp-release1", "view_name": "ReviewTestingGroup", "filter_name": "RTG-FQ", "title": "RTG-FQ"},
+    {"proc_instance_name": "mp-release1", "view_name": "ReviewTestingGroup", "filter_name": "RTG-MB", "title": "RTG-MB"},
+    {"proc_instance_name": "mp-release1", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"}
   ]
   },
 /*
