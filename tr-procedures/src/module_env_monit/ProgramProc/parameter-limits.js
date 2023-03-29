@@ -200,7 +200,5 @@ export class ParameterLimits extends CoreView {
     `;
   }
 
-  setView() {
-  }
 }
 customElements.define('parameter-limits', ParameterLimits);
