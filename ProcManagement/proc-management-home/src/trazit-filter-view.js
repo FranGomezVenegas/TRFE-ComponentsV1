@@ -2,7 +2,6 @@ import { LitElement, html, css, nothing } from 'lit';
 import { TrazitFilterActions } from './TrazitFilterActions';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@spectrum-web-components/split-view/sp-split-view';
-//import '@trazit/tr-procedures/src/form_fields/trazit-form-fields';
 import './trazit-filter-view-content';
 import {ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions';
 

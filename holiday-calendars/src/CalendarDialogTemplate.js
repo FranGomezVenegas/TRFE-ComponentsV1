@@ -153,7 +153,7 @@ export function CalendarDialogTemplate(base) {
 
     get objectSetResultValue() {return this.shadowRoot.querySelector("tr-dialog#objectSetResultValue")      }  
 
-    listItemValueToGet(entry){
+    xlistItemValueToGet(entry){
       if (this.selectedAction.dialogInfo===undefined||this.selectedAction.dialogInfo.listDefinition===undefined||this.selectedAction.dialogInfo.listDefinition.keyFldName===undefined){
         alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.keyFldName property, check the console')
         console.log('this.selectedAction', this.selectedAction)
@@ -161,7 +161,7 @@ export function CalendarDialogTemplate(base) {
       }
       return entry[this.selectedAction.dialogInfo.listDefinition.keyFldName]
     }
-    listItemValueToDisplay(entry){
+    xlistItemValueToDisplay(entry){
       if (this.selectedAction.dialogInfo===undefined||this.selectedAction.dialogInfo.listDefinition===undefined||this.selectedAction.dialogInfo.listDefinition.eachEntryTextGenerator===undefined){
         alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.eachEntryTextGenerator property, check the console')
         console.log('this.selectedAction', this.selectedAction)

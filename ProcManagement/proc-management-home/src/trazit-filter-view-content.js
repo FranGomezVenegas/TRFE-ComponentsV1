@@ -3,11 +3,8 @@ import { CommonCore } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@alenaksu/json-viewer';
 
-// import '@material/mwc-icon-button';
- //import '@material/mwc-ripple'
 import '@spectrum-web-components/split-view/sp-split-view';
 import '@trazit/tr-procedures/src/browser/sp-card-ext';
-// import '../../../tr-procedures/src/browser/sp-card-ext';
 import {TrazitFilterActions} from './TrazitFilterActions';
 import '@doubletrade/lit-datatable';
 
@@ -292,22 +289,19 @@ export class TrazitFilterViewContent extends (TrazitDialogActions(TrazitDialogTe
     `
   }
   kpiStyleByStringAttribute(elType, elem){
-    var defaultOptions=""    
-    if (elType = "title"){
+    let defaultOptions=""    
+    if (elType == "title"){
       defaultOptions="width:300px;color:blue;"    
     }
-    if (elType = "div"){
+    if (elType == "div"){
       defaultOptions="display:flex"    
     }
     if (elem===undefined||elem.elementName===undefined){return defaultOptions} 
-    let chartObj=this.shadowRoot.querySelector(elType+"#"+elem.elementName)    
-    var chartOptions={}
     if (elem.style===undefined){
       return defaultOptions //"color:red;"
     } else {
       return elem.style
     }
-    return 
   }
   kpiChartFran(elem){
     //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
