@@ -1,7 +1,8 @@
 export const EmDemoA = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20230327",
+	  "last change on (YYYYMMDD)": "20230328",
+	  "last_change_note_20230328": "Added assign culture media feature in location sampling, both options, by openReferenceLot and by dialog to enter the name",
       "last_change_note_20230327": "Program tabs settings and new Browser model to not be fix view ans BrowserOrig is (keep it as reference)",
 	  "last_change_note_20230112": "fixed batchName argument for EM_BATCH_INCUB_REMOVE_SMP",
 	  "last_change_note_20221211": "in Sample Incubation, as it has 2 'selectedItems' (one per table) the way to get the endpoint param value is different due to it requires specify from which variable",
@@ -355,6 +356,48 @@ export const EmDemoA = {
           { "argumentName": "newDateTime", "element": "datetime1", "selObjectPropertyName": "sampling_date"  }
         ]
       },
+      { "actionName": "ASSIGN_SAMPLE_CULTURE_MEDIA",
+		"requiresDialog": false,	  
+		"endPointUrl": "Samples",
+        "button": {
+          "icon": "save_alt",
+          "title": {
+            "label_en": "Assign Culture Media (Open)", "label_es": "Asignar Medio de Cultivo (Abierto)"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+          { "argumentName": "inventoryTrackingProcInstanceName", "fixValue": "inv-draft"},
+		  { "argumentName": "category", "fixValue": "Medios de Cultivo"},
+		  { "argumentName": "reference", "fixValue": "REF1"},
+		  { "argumentName": "useOpenReferenceLot", "fixValue": "true"}
+        ]
+      },	  
+      { "actionName": "ASSIGN_SAMPLE_CULTURE_MEDIA",
+		"requiresDialog": true,	  
+		"endPointUrl": "Samples",
+        "button": {
+          "icon": "save_alt",
+          "title": {
+            "label_en": "Assign Culture Media (Select)", "label_es": "Asignar Medio de Cultivo (Escoger)"
+          },
+          "requiresGridItemSelected": true
+        },
+        "dialogInfo": { 
+		  "name": "genericDialog",
+          "fields": [            
+			{"text1": { "label_en": "Lot", "label_es": "Lote", "default_value": "StdPrimDemo 2023-01-23T15:18:41.731217500" }}
+          ]  		  
+        },
+        "endPointParams": [
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+          { "argumentName": "inventoryTrackingProcInstanceName", "fixValue": "inv-draft"},
+		  { "argumentName": "category", "fixValue": "Medios de Cultivo"},
+		  { "argumentName": "reference", "fixValue": "REF1"},
+		  { "argumentName": "referenceLot", "element": "text1"}
+        ]
+      },	  
       { "actionName": "SAMPLESTAGE_MOVETONEXT",
         "clientMethod": "moveToNext",
 		"requiresDialog": false,

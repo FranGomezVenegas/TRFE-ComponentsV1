@@ -1,5 +1,4 @@
-import { html, nothing } from 'lit';
-import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
+import { html } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
@@ -47,7 +46,6 @@ export function TrazitGenericDialogs(base) {
       this.masterData={}
     }
     openThisDialog(actionModel = this.actionBeingPerformedModel){
-//alert('openThisDialog')
        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
         //alert(false)
         return false
@@ -608,9 +606,9 @@ export function TrazitGenericDialogs(base) {
             
             //if (==null){            
             if (fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
-                if (this[keyName[0]!==null]){
+                //if (this[keyName[0]!==null]){
                     this[keyName[0]].value=fldObj[keyName].default_value
-                }
+                //}
             }
             if (fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null){
                 this[keyName[0]].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
