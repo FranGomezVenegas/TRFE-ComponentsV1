@@ -12,19 +12,34 @@ export class EndpointsList extends CommonCore {
       }
       #leftSplit {
         padding: 10px;
+        background-color:transparent;
+        overflow: hidden;
       }
       #endpointName {
         height: 100%;
         overflow-y : auto;
       }
-      #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar, #endpointName::-webkit-scrollbar {
-        display: none;
+      #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar, #endpointName::-webkit-scrollbar {            
       }
+      #rightSplit{
+        background-color:transparent
+      }     
+      input {
+        color: rgba(57, 61, 71, 0.9);
+        font-family: Montserrat;
+      }         
       label {
-        color: blue;
+        color: rgba(57, 61, 71, 0.9);
+        font-family: Montserrat;
       }
       .ed {
         cursor: pointer;
+        color:  rgba(57, 61, 71, 0.9);
+        font-family: Montserrat;
+      }
+      select{
+        color: rgba(57, 61, 71, 0.9);
+        font-family: Montserrat;
       }
       div[hidden] {
         display: none;
@@ -33,6 +48,13 @@ export class EndpointsList extends CommonCore {
         #endpointName {
           height: calc(100vh - 180px);
         }
+      }
+      json-viewer{
+        --background-color: #2a2f3a00;
+        --string-color: rgba(57, 61, 71, 0.9);
+        --property-color: rgba(57, 61, 71, 0.9);
+        --preview-color: #24C0EB;
+        --font-family: Montserrat;
       }
       `
     ]
@@ -67,10 +89,10 @@ export class EndpointsList extends CommonCore {
             <select @change=${this.apiChanged}>
               <option value="">-- Filter by API Name --</option>
               ${this.apis.map(a=>
-                html`<option value=${a}>${a}</option>`
+                html`<option value=${a.api_name}>${a.api_url!==undefined&&a.api_url.length>0 ? a.api_url: a.api_name}</option>`
               )}
             </select><br>
-            Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
+            <label> Last Update</label> <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
             <hr>
             <label>${this.filterDocs.length} of ${this.docs.length}</label>
             <div id="endpointName">
@@ -94,7 +116,7 @@ export class EndpointsList extends CommonCore {
             <select @change=${this.apiChanged}>
               <option value="">-- Filter by API Name --</option>
               ${this.apis.map(a=>
-                html`<option value=${a}>${a}</option>`
+                html`<option value=${a.api_name}>${a.api_url!==undefined&&a.api_url.length>0 ? a.api_url: a.api_name}</option>`
               )}
             </select><br>
             Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
@@ -125,9 +147,22 @@ export class EndpointsList extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken
     }), false).then(j => {
       this.docs = this.filterDocs = j
-      let apis = j.map(d => d.api_name)
-      apis.unshift("All")
-      this.apis = apis.filter((item, index) => apis.indexOf(item) === index);
+
+      let apis = this.docs.reduce((acc, curr) => {
+        const { api_name, api_url } = curr;
+        const existingObj = acc.find(
+          (obj) => obj.api_name === api_name && obj.api_url === api_url
+        );
+      
+        if (!existingObj) {
+          acc.push({ api_name, api_url });
+        }
+      
+        return acc;
+      }, []);      
+      let Allarr={"api_name":"All", "api_url":"All"};
+      apis.unshift(Allarr)
+      this.apis=apis
     })
     this.requestUpdate()
   }
@@ -145,6 +180,18 @@ export class EndpointsList extends CommonCore {
     } else {
       this.filterDocs = this.docs.filter(d => d.api_name == e.target.value)
     }
+    // this.selectedApis = this.filterDocs.map( el =>{
+    //   return{
+    //     title: `${el.endpoint_name} (${el.api_name} ${el.id})`,
+    //     date: `${el.creation_date} ${el.last_update}`,
+    //     dev_notes: `${el.dev_notes}`,
+    //     dev_notes_tags: `${el.dev_notes_tags}`,
+    //     arguments: el.arguments_array.map(arg => { 
+    //       return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
+    //     }),     
+    //     output_object_types: el.output_object_types        
+    //   }
+    // })
     this.requestUpdate()
   }
 
@@ -166,15 +213,20 @@ export class EndpointsList extends CommonCore {
   endpointSelect(evt, api) {
     if (evt.target.style.fontWeight == "bold") {
       evt.target.style.fontWeight = "normal"
-      this.selectedApis = this.selectedApis.filter(a => a.title != `${api.endpoint_name} (${api.api_name} ${api.id})`)
+      this.selectedApis = this.selectedApis.filter(a => a.title != `${api.endpoint_name}`)
       this.selectedTxts = this.selectedTxts.filter(t => t.id != evt.target.id)
     } else {
       evt.target.style.fontWeight = "bold"
       this.selectedApis.push({
-        title: `${api.endpoint_name} (${api.api_name} ${api.id})`,
+        Api_url: `${api.api_url}`,
+        Api_Collection:`${api.api_name} / Id:${api.id} / Number Endpoints in API: ${api.num_endpoints_in_api}`,
+        title: `${api.endpoint_name}`,              
         date: `${api.creation_date} ${api.last_update}`,
+        dev_notes: `${api.dev_notes}`,
+        dev_notes_tags: `${api.dev_notes_tags}`,
+        number_of_arguments: `${api.num_arguments}`,
         arguments: api.arguments_array.map(arg => { 
-          return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
+          return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'], dev_comment: arg.dev_comment, dev_comment_tags: arg.dev_comment_tags };
         }),
         output_object_types: api.output_object_types
       })
@@ -184,13 +236,29 @@ export class EndpointsList extends CommonCore {
   }
 
   endpointDetail(api) {
+  // Define CSS styles for mandatory and non-mandatory arguments
+  const mandatoryStyle = '--property-color: red;';
+  const nonMandatoryStyle = '--property-color: blue;';
+
+  // Map the arguments_array property to an array of argument objects with styled names
+  const argumentsArray = api.arguments_array.map(arg => {
+    const name = arg['is_mandatory?']
+      ? `<span style="${mandatoryStyle}">${arg.name}</span>`
+      : `<span style="${nonMandatoryStyle}">${arg.name}</span>`;
+    return { name, type: arg.type, mandatory: arg['is_mandatory?'], dev_comment: arg.dev_comment, dev_comment_tags: arg.dev_comment_tags };
+  });
+
     return JSON.stringify({
-      title: `${api.endpoint_name} (${api.api_name} ${api.id})`,
+      Api_url: `${api.api_url}`,
+      Api_Collection:`${api.api_name} / Id:${api.id} / Number Endpoints in API: ${api.num_endpoints_in_api}`,
+      title: `${api.endpoint_name}`,              
       date: `${api.creation_date} ${api.last_update}`,
-      arguments: api.arguments_array.map(arg => { 
-        return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
-      }),
-      output_object_types: api.output_object_types
+      dev_notes: `${api.dev_notes}`,
+      dev_notes_tags: `${api.dev_notes_tags}`,
+      number_of_arguments: `${api.num_arguments}`,
+      arguments: argumentsArray,      
+      output_object_types: api.output_object_types,
+
     })
   }
 }
