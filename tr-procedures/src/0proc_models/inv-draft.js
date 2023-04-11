@@ -309,7 +309,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" , "min_allowed":0, "max_dp":1}}
 				]
 			},
 			

@@ -33,31 +33,6 @@ export function CommonsClientMethod(base) {
       })
     }
 
-    xjsonParamCommons(selAction, selObject) {
-      console.log('xjsonParamCommons', selAction)
-      let jsonParam = {}
-      let action = selAction
-      if (action.endPointParams) {
-        action.endPointParams.forEach(p => {
-          if (p.element) {
-            jsonParam[p.argumentName] = this[p.element].value // get value from field input
-          } else if (p.defaultValue) {
-            jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
-          } else if (p.selObjectPropertyName) {
-            jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
-          } else if (p.targetValue) {
-            jsonParam[p.argumentName] = this.targetValue[p.argumentName] // get value from target element passed
-          } else {
-            jsonParam[p.argumentName] = p.value
-          }
-          console.log('xjsonParamCommons', 'endPointParamsArgument', p, 'selObject', selObject, 'jsonParam', jsonParam)
-        })
-      }
-      if (action.paramFilter) {
-        jsonParam[action.paramFilter[this.filterName].argumentName] = action.paramFilter[this.filterName].value
-      }
-      return jsonParam
-    }
     openReactivateObjectDialog() {
       if (this.selectedAction.dialogInfo===undefined){
         return

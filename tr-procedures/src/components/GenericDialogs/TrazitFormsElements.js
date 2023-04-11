@@ -5,7 +5,7 @@ import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import {DialogsFunctions} from './DialogsFunctions';
-export function TrazitGenericDialogs(base) {
+export function TrazitFormsElements(base) {
   return class extends DialogsFunctions(base) {
     static get properties() {
       return {
@@ -57,14 +57,103 @@ export function TrazitGenericDialogs(base) {
     }
         
     
+    setValidVal(e, fieldDef) {
+        console.log('setValidVal', e, 'fieldDef', fieldDef)
+        
+      if (fieldDef.min_allowed!==undefined && typeof fieldDef.min_allowed == 'number' && e.target.value < fieldDef.min_allowed) {
+        e.target.value = fieldDef.min_allowed
+        return
+      }
+      if ( fieldDef.max_allowed!==undefined && typeof fieldDef.max_allowed == 'number' && e.target.value > fieldDef.max_allowed) {
+        e.target.value = fieldDef.max_allowed
+        return
+      }
+      // make sure the decimal length <= max_dp when manual input
+      if (fieldDef.max_dp!==undefined && fieldDef.max_dp) {
+        let v = e.target.value.split(".")
+        if (v.length > 1 && v[1].length > fieldDef.max_dp) {
+          v[1] = v[1].substring(0, fieldDef.max_dp)
+          e.target.value = Number(v.join("."))
+        }
+      }
+    }    
+    fieldLabel(fld){        
+        let fldLbl= fld["label_" + this.lang]
+        if (fld.optional===undefined||fld.optional===false){
+            fldLbl="* "+fldLbl
+        }
+        return fldLbl
+    }
+
+    fldDefaultValue(fldDef){
+        if (fldDef.default_value){
+            return fldDef.default_value
+        } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          
+            if (this[fldDef.internalVariableSimpleObjName]===undefined||this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
+              var msg=""
+              if (this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
+                msg='The object '+fldDef.internalVariableSimpleObjName+' has no one property called '+fldDef.internalVariableSimpleObjProperty
+                alert(msg)
+              }else{
+                msg='there is no object called '+fldDef.internalVariableSimpleObjName+' in this view'
+                alert(msg)
+              }
+              return "ERROR: "+msg
+            }  
+            return this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]          
+        } else if (fldDef.internalVariableObjName&&fldDef.internalVariableObjProperty) {          
+            if (this[fldDef.internalVariableObjName]===undefined||this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]===undefined){
+            var msg=""
+            if (this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]===undefined){
+                msg='The object '+fldDef.internalVariableObjName+' has no one property called '+fldDef.internalVariableObjProperty
+                alert(msg)
+                //console.log(msg, this[fldDef.internalVariableObjName][0])
+            }else{
+                msg='there is no object called '+fldDef.internalVariableObjName+' in this view'
+                alert(msg)
+            }
+        //    alert('No family selected')
+            return "ERROR: "+msg
+            }  
+            return this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]
+        
+        } else if (fldDef.element) {
+        
+        } else if (fldDef.defaultValue) {
+        if (fldDef.isAdhocField!==undefined&&fldDef.isAdhocField===true){
+            curArgName=jsonParam[fldDef.argumentName]
+            if (curArgName===undefined){curArgName=''}
+            if (curArgName.length>0){curArgName=curArgName+"|"}
+            curArgName=curArgName+fldDef.defaultValue
+            if (fldDef.fieldType!==undefined){
+            curArgName=curArgName+"*"+fldDef.fieldType
+            }
+            return curArgName
+        }else{
+            return fldDef.defaultValue // get value from default value (i.e incubator)
+        }
+        } else if (fldDef.selObjectPropertyName) {
+            return selObject[fldDef.selObjectPropertyName] // get value from selected item
+        } else if (fldDef.targetValue) {
+            return targetValue[fldDef.argumentName] // get value from target element passed
+        } else if (fldDef.fixValue) {
+            return fldDef.fixValue
+        } else if (fldDef.contextVariableName) {
+            return this[fldDef.contextVariableName]
+        } else {
+            return ""
+        }
+
+    }
+
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    genericFormDialog(actionModel = this.actionBeingPerformedModel) {
+    genericFormElements(fields = []) {
         // if (this.actionBeingPerformedModel.dialogInfo === undefined) {
-        //     //alert('genericFormDialog has no dialogInfo')
+        //     //alert('genericFormElements has no dialogInfo')
         //     return nothing
         // }
         // if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.name === "genericDialog"){
-        //     let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
+        //     let dlgFlds=fields
         //     if (dlgFlds===undefined){
         //         alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
         //         return nothing
@@ -73,6 +162,8 @@ export function TrazitGenericDialogs(base) {
 
          // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi 
          //     otherwise it is not compatible with actions requiring credentials dialog.
+         this.fields=fields
+     
     return html`
     <style>
     mwc-textfield {
@@ -115,272 +206,242 @@ export function TrazitGenericDialogs(base) {
         font-weight : bold;
         font-size : 19px;
         background-color: 4fcad029;
-      }       
+      } 
+      mwc-formfield{        
+        --mdc-theme-secondary: #1473e6;
+      }      
     </style>
-        <tr-dialog id="genericDialog"  @opened=${this.defaultValue}  ?open=${this.openThisDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
-        ${!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields ?
+        ${!fields ?
             html``: html`              
-            ${actionModel.dialogInfo.fields.map((fld, i) =>             
+            ${fields.map((fld, i) =>             
                 html`            
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${fld.text1.default_value ? fld.text1.default_value : ''}  label="${this.fieldLabel(fld.text1)}" 
+                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${this.fldDefaultValue(fld.text1)}  label="${this.fieldLabel(fld.text1)}" 
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${fld.text2.default_value ? fld.text2.default_value : ''} label="${this.fieldLabel(fld.text2)}" 
+                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${this.fldDefaultValue(fld.text2)} label="${this.fieldLabel(fld.text2)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text3" type="text" .value=${fld.text3.default_value ? fld.text3.default_value : ''} label="${this.fieldLabel(fld.text3)}" 
+                    <mwc-textfield class="layout flex" id="text3" type="text" .value=${this.fldDefaultValue(fld.text3)} label="${this.fieldLabel(fld.text3)}" 
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}                       
                 ${!fld.text4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text4" type="text" .value=${fld.text4.default_value ? fld.text4.default_value : ''} label="${this.fieldLabel(fld.text4)}" 
+                    <mwc-textfield class="layout flex" id="text4" type="text" .value=${this.fldDefaultValue(fld.text4)} label="${this.fieldLabel(fld.text4)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text5" type="text" .value=${fld.text5.default_value ? fld.text5.default_value : ''} label="${this.fieldLabel(fld.text5)}" 
+                    <mwc-textfield class="layout flex" id="text5" type="text" .value=${this.fldDefaultValue(fld.text)} label="${this.fieldLabel(fld.text5)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text6" type="text" .value=${fld.text6.default_value ? fld.text6.default_value : ''} label="${this.fieldLabel(fld.text6)}" 
+                    <mwc-textfield class="layout flex" id="text6" type="text" .value=${this.fldDefaultValue(fld.text6)} label="${this.fieldLabel(fld.text6)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text7" type="text" .value=${fld.text7.default_value ? fld.text7.default_value : ''} label="${this.fieldLabel(fld.text7)}" 
+                    <mwc-textfield class="layout flex" id="text7" type="text" .value=${this.fldDefaultValue(fld.text7)} label="${this.fieldLabel(fld.text7)}" 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text8" type="text" .value=${fld.text8.default_value ? fld.text8.default_value : ''} label="${this.fieldLabel(fld.text8)}"
+                    <mwc-textfield class="layout flex" id="text8" type="text" .value=${this.fldDefaultValue(fld.text8)}label="${this.fieldLabel(fld.text8)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text9" type="text" .value=${fld.text9.default_value ? fld.text9.default_value : ''} label="${this.fieldLabel(fld.text9)}"
+                    <mwc-textfield class="layout flex" id="text9" type="text" .value=${this.fldDefaultValue(fld.text9)} label="${this.fieldLabel(fld.text9)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text10" type="text" .value=${fld.text10.default_value ? fld.text10.default_value : ''} label="${this.fieldLabel(fld.text10)}"
+                    <mwc-textfield class="layout flex" id="text10" type="text" .value=${this.fldDefaultValue(fld.text10)} label="${this.fieldLabel(fld.text10)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
-                `}             
+                `}                              
                 ${!fld.number1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number1" type="number" 
-                    .value=${this.numDays} @change=${e => this.numDays = e.target.value}
-                    @input=${e=>this.setNumberMask(e, fld.number1)}
-                    label="${this.fieldLabel(fld.number1)}"
-                    @keypress=${e => e.keyCode == 13}></mwc-textfield>                 
-                    </div>
-                `}   
-
-                ${!fld.number12 ?
-                    html``: html`        
-                    <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number1" type="number" 
-                    @input=${e=>this.setValidVal(e, fld)}
-                    .value=${fld.number1.default_value ? fld.number1.default_value : ''} label="${this.fieldLabel(fld.number1)}"
+                    @input=${e=>this.setValidVal(e, fld)} .value=${this.fldDefaultValue(fld.number1)} label="${this.fieldLabel(fld.number1)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number2" type="number" @input=${e=>this.setNumberMask(e, fld.number2)} 
-                    .value=${fld.number2.default_value ? fld.number2.default_value : ''}   label="${this.fieldLabel(fld.number2)}"
+                    <mwc-textfield class="layout flex" id="number2" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number2)}   label="${this.fieldLabel(fld.number2)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number3" type="number" @input=${e=>this.setNumberMask(e, fld.number3)}
-                    .value=${fld.number3.default_value ? fld.number3.default_value : ''}   label="${this.fieldLabel(fld.number3)}"
+                    <mwc-textfield class="layout flex" id="number3" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number3)}   label="${this.fieldLabel(fld.number3)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number4" type="number" @input=${e=>this.setNumberMask(e, fld.number4)}
-                    .value=${fld.number4.default_value ? fld.number4.default_value : ''}   label="${this.fieldLabel(fld.number4)}"
+                    <mwc-textfield class="layout flex" id="number4" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number4)}   label="${this.fieldLabel(fld.number4)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number5" type="number" @input=${e=>this.setNumberMask(e, fld.number5)}
-                    .value=${fld.number5.default_value ? fld.number5.default_value : ''}   label="${this.fieldLabel(fld.number5)}"
+                    <mwc-textfield class="layout flex" id="number5" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number5)}   label="${this.fieldLabel(fld.number5)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number6" type="number" @input=${e=>this.setNumberMask(e, fld.number6)}
-                    .value=${fld.number6.default_value ? fld.number6.default_value : ''}  label="${this.fieldLabel(fld.number6)}"
+                    <mwc-textfield class="layout flex" id="number6" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number6)}  label="${this.fieldLabel(fld.number6)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number7" type="number" @input=${e=>this.setNumberMask(e, fld.number7)}
-                    .value=${fld.number7.default_value ? fld.number7.default_value : ''}   label="${this.fieldLabel(fld.number7)}"
+                    <mwc-textfield class="layout flex" id="number7" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number7)}   label="${this.fieldLabel(fld.number7)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number8" type="number" @input=${e=>this.setNumberMask(e, fld.number8)}
-                    .value=${fld.number8.default_value ? fld.number8.default_value : ''}   label="${this.fieldLabel(fld.number8)}"
+                    <mwc-textfield class="layout flex" id="number8" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number8)}   label="${this.fieldLabel(fld.number8)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number9" type="number" @input=${e=>this.setNumberMask(e, fld.number9)}
-                    .value=${fld.number9.default_value ? fld.number9.default_value : ''}   label="${this.fieldLabel(fld.number9)}"
+                    <mwc-textfield class="layout flex" id="number9" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number9)}   label="${this.fieldLabel(fld.number9)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number10" type="number" @input=${e=>this.setNumberMask(e, fld.number10)}
-                    .value=${fld.number10.default_value ? fld.number10.default_value : ''}   label="${this.fieldLabel(fld.number10)}"
+                    <mwc-textfield class="layout flex" id="number10" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.number10)}   label="${this.fieldLabel(fld.number10)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.checkbox1 ?
                     html``: html`        
                     <mwc-formfield label="${this.fieldLabel(fld.checkbox1)}" >
-                        <mwc-checkbox id="checkbox1" 
-                        ?checked=${fld.checkbox1.default_value===undefined ? false : fld.checkbox1.default_value}
-                        @change=${e => { this.checkbox1.value=this.checkbox1.checked}}
-                        value="${fld.checkbox1.default_value}"
+                        <mwc-checkbox id="checkbox1" ?checked=${this.fldDefaultValue(fld.checkbox1)}
+                        @change=${e => { this.checkbox1.value=this.checkbox1.checked}} value="${this.fldDefaultValue(fld.checkbox1)}"
                         ></mwc-checkbox>
                     </mwc-formfield>
                 `}                              
                     ${!fld.checkbox2 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox2)}" >
-                        <mwc-checkbox id="checkbox2" 
-                        ?checked=${fld.checkbox2.default_value===undefined ? false : fld.checkbox2.default_value}
-                        @change=${e => { this.checkbox2.value=this.checkbox2.checked}}
-                        value="${fld.checkbox2.default_value}"
+                    <mwc-formfield label="${this.fieldLabel(fld.checkbox2)}" >
+                        <mwc-checkbox id="checkbox2" ?checked=${this.fldDefaultValue(fld.checkbox2)}
+                        @change=${e => { this.checkbox2.value=this.checkbox2.checked}} value="${this.fldDefaultValue(fld.checkbox2)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox3 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox3)}" >
-                        <mwc-checkbox id="checkbox3" 
-                        ?checked=${fld.checkbox3.default_value===undefined ? false : fld.checkbox3.default_value}
-                        @change=${e => { this.checkbox3.value=this.checkbox3.checked}}
-                        value="${fld.checkbox3.default_value}"
+                    <mwc-formfield label="${this.fieldLabel(fld.checkbox3)}" >
+                        <mwc-checkbox id="checkbox3" ?checked=${this.fldDefaultValue(fld.checkbox3)}
+                        @change=${e => { this.checkbox3.value=this.checkbox3.checked}} value="${this.fldDefaultValue(fld.checkbox3)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox4 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox4)}" >
-                        <mwc-checkbox id="checkbox4" 
-                        ?checked=${fld.checkbox4.default_value===undefined ? false : fld.checkbox4.default_value}
-                        @change=${e => { this.checkbox4.value=this.checkbox4.checked}}
-                        value="${fld.checkbox4.default_value}"
+                    <mwc-formfield label="${this.fieldLabel(fld.checkbox4)}" >
+                        <mwc-checkbox id="checkbox4" ?checked=${this.fldDefaultValue(fld.checkbox4)}
+                        @change=${e => { this.checkbox4.value=this.checkbox4.checked}} value="${this.fldDefaultValue(fld.checkbox4)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox5 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox5)}" >
-                        <mwc-checkbox id="checkbox5" 
-                        ?checked=${fld.checkbox5.default_value===undefined ? false : fld.checkbox5.default_value}
-                        @change=${e => { this.checkbox5.value=this.checkbox5.checked}}
-                        value="${fld.checkbox5.default_value}"
+                        <mwc-checkbox id="checkbox5" ?checked=${this.fldDefaultValue(fld.checkbox5)} @change=${e => { this.checkbox5.value=this.checkbox5.checked}}
+                        value="${this.fldDefaultValue(fld.checkbox5)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox6 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox6)}" >
-                        <mwc-checkbox id="checkbox6" 
-                        ?checked=${fld.checkbox6.default_value===undefined ? false : fld.checkbox6.default_value}
-                        @change=${e => { this.checkbox6.value=this.checkbox6.checked}}
-                        value="${fld.checkbox6.default_value}"
+                        <mwc-checkbox id="checkbox6" ?checked=${this.fldDefaultValue(fld.checkbox6)}
+                        @change=${e => { this.checkbox6.value=this.checkbox6.checked}} value="${this.fldDefaultValue(fld.checkbox6)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox7 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox7)}" >
-                        <mwc-checkbox id="checkbox7" 
-                        ?checked=${fld.checkbox7.default_value===undefined ? false : fld.checkbox7.default_value}
-                        @change=${e => { this.checkbox7.value=this.checkbox7.checked}}
-                        value="${fld.checkbox7.default_value}"
+                        <mwc-checkbox id="checkbox7" ?checked=${this.fldDefaultValue(fld.checkbox7)}
+                        @change=${e => { this.checkbox7.value=this.checkbox7.checked}} value="${this.fldDefaultValue(fld.checkbox7)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox8 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox8)}" >
-                        <mwc-checkbox id="checkbox8" 
-                        ?checked=${fld.checkbox8.default_value===undefined ? false : fld.checkbox8.default_value}
-                        @change=${e => { this.checkbox8.value=this.checkbox8.checked}}
-                        value="${fld.checkbox8.default_value}"
+                        <mwc-checkbox id="checkbox8" ?checked=${this.fldDefaultValue(fld.checkbox8)}
+                        @change=${e => { this.checkbox8.value=this.checkbox8.checked}} value="${this.fldDefaultValue(fld.checkbox8)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox9 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox9)}" >
-                        <mwc-checkbox id="checkbox9" 
-                        ?checked=${fld.checkbox9.default_value===undefined ? false : fld.checkbox9.default_value}
-                        @change=${e => { this.checkbox9.value=this.checkbox9.checked}}
-                        value="${fld.checkbox9.default_value}"
+                        <mwc-checkbox id="checkbox9" ?checked=${this.fldDefaultValue(fld.checkbox9)}
+                        @change=${e => { this.checkbox9.value=this.checkbox9.checked}} value="${this.fldDefaultValue(fld.checkbox9)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox10 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox10)}" >
-                        <mwc-checkbox id="checkbox10" 
-                        ?checked=${fld.checkbox10.default_value===undefined ? false : fld.checkbox10.default_value}
-                        @change=${e => { this.checkbox10.value=this.checkbox10.checked}}
-                        value="${fld.checkbox10.default_value}"
+                        <mwc-checkbox id="checkbox10" ?checked=${this.fldDefaultValue(fld.checkbox10)}
+                        @change=${e => { this.checkbox10.value=this.checkbox10.checked}} value="${this.fldDefaultValue(fld.checkbox10)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
@@ -451,13 +512,13 @@ export function TrazitGenericDialogs(base) {
                     <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}">
                         ${this.listEntries(fld.list2)}</mwc-select>`}  
                 ${!fld.list3 ?html``: html`        
-                    <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}" @input=${this.fldDisabled}>
+                    <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}">
                         ${this.listEntries(fld.list3)}</mwc-select>`}  
                 ${!fld.list4 ?html``: html`        
-                    <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}" @input=${this.fldDisabled}>
+                    <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}" ?disabled=${this.fldDisabled}>
                         ${this.listEntries(fld.list4)}</mwc-select>`}  
                 ${!fld.list5 ?html``: html`        
-                    <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}" @input=${this.fldDisabled}>
+                    <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}" ?disabled=${this.fldDisabled}>
                         ${this.listEntries(fld.list5)}</mwc-select>`}  
                 ${!fld.list6 ?html``: html`        
                     <mwc-select id="list6" label="${this.fieldLabel(fld.list6)}">
@@ -483,7 +544,6 @@ export function TrazitGenericDialogs(base) {
                         )}
                         </mwc-select>
                 `}           
-
                 ${!fld.listMDprocedureUsers ?
                     html``: html`        
                         <mwc-select id="listMDprocedureUsers" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDprocedureUsers&&fld.listMDprocedureUsers["label_" + this.lang]}">
@@ -527,18 +587,9 @@ export function TrazitGenericDialogs(base) {
                 `} 
                 `            
             )}   
-            <div style="margin-top:30px;text-align:center">
-                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
-                    ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
-                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-            </div>  
-        `}
-        </tr-dialog>
+        `}        
     `
     }
-    get genericDialog() {return this.shadowRoot.querySelector("tr-dialog#genericDialog")}
-    get dateDialog() {return this.shadowRoot.querySelector("tr-dialog#dateDialog")}
     get dateInput() {return this.shadowRoot.querySelector("input#dateInput")}
     setNewDate() {
       if (this.dateInput.value) {
@@ -559,10 +610,11 @@ export function TrazitGenericDialogs(base) {
         }
     }
     checkMandatoryFieldsNotEmpty(){                
-        let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
+        //console.log(this.fields)
+        let dlgFlds=this.fields
         for (let i=0;i<dlgFlds.length;i++){            
             let fldObj=dlgFlds[i]
-            console.log('checkMandatoryFieldsNotEmpty', fldObj)
+            //console.log('checkMandatoryFieldsNotEmpty', fldObj)
             let keyName=Object.keys(fldObj)
             let fldDef=fldObj[keyName[0]]
             if ((fldDef.optional===undefined||
@@ -579,7 +631,7 @@ export function TrazitGenericDialogs(base) {
             this.resetFields()
             this.fieldsShouldBeReset=false
         }
-        let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
+        let dlgFlds=fields
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
@@ -605,7 +657,7 @@ export function TrazitGenericDialogs(base) {
     }    
     resetFields(){           
         //alert('reset Fields now')   
-        let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
+        let dlgFlds=fields
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
@@ -630,23 +682,23 @@ export function TrazitGenericDialogs(base) {
         return // The code below is there only for trying to make lists depending on another list, does not work yet
         //alert('ds '+ e.target.id+this[e.target.id].value)
 
-        // var triggeredElem=this.actionBeingPerformedModel.dialogInfo.fields.filter(p => p == e.target.id)
+        // var triggeredElem=fields.filter(p => p == e.target.id)
 
         let cleanParams = {}
-        // Object.entries(this.actionBeingPerformedModel.dialogInfo.fields).map(([key, value]) => {
+        // Object.entries(fields).map(([key, value]) => {
         //   if (value != null || value != undefined) {
         //     cleanParams[key] = value
         //   }
         // })
         // console.log('cleanParams', cleanParams)
-        var fld =this.actionBeingPerformedModel.dialogInfo.fields[1].list2//(([key, value]) =>{
+        var fld =fields[1].list2//(([key, value]) =>{
             //cleanParams=value
         //})
         console.log('fld', fld)
         let thisNewList2=[]
         thisNewList2=this.listEntries(fld)
         console.log('thisNewList2', thisNewList2)
-        //alert(this.actionBeingPerformedModel.dialogInfo.fields[e.target.id].valuesFromMasterData.recalculateObjectOnEntrySelected)
+        //alert(fields[e.target.id].valuesFromMasterData.recalculateObjectOnEntrySelected)
         //console.log(e.targetValue)
     }
     listEntries(fld){
@@ -748,17 +800,8 @@ export function TrazitGenericDialogs(base) {
 
     }
     fldDisabled(){
-        return false
+        return true
     }   
-
-    fieldLabel(fld){        
-        let fldLbl= fld["label_" + this.lang]
-        if (fld.optional===undefined||fld.optional===false){
-            fldLbl="* "+fldLbl
-        }
-        return fldLbl
-    }
-
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
     get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        
@@ -840,27 +883,6 @@ export function TrazitGenericDialogs(base) {
     get listMDvariables() {return this.shadowRoot.querySelector("mwc-select#listMDvariables")}
     get listSelectedStudyIndividuals() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividuals")}
     get listSelectedStudyIndividualSamples() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividualSamples")}
-
-    setNumberMask(e, fieldDef) {
-      if (fieldDef.min_allowed!==undefined && typeof fieldDef.min_allowed == 'number' && e.target.value < fieldDef.min_allowed) {
-        e.target.value = fieldDef.min_allowed
-        this[e.currentTarget.id].value=fieldDef.min_allowed
-        return
-      }
-      if (fieldDef.max_allowed!==undefined && typeof fieldDef.max_allowed == 'number' && e.target.value > fieldDef.max_allowed) {
-        e.target.value = fieldDef.max_allowed
-        this[e.currentTarget.id].value=fieldDef.max_allowed
-        return
-      }
-      // make sure the decimal length <= max_dp when manual input
-      if (fieldDef.max_dp!==undefined) {
-        let v = e.target.value.split(".")
-        if (v.length > 1 && v[1].length > fieldDef.max_dp) {
-          v[1] = v[1].substring(0, fieldDef.max_dp)
-          e.target.value = Number(v.join("."))
-          this[e.currentTarget.id].value=Number(v.join("."))
-        }
-      }
-    }        
+         
   }
 }

@@ -490,7 +490,7 @@ return class extends LitElement {
           </div>
         `
       } else {
-        if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
+        if (result.param_type.toUpperCase() == "TEXT" || result.param_type.toUpperCase() == "QUALITATIVE") {
           return html`<input class="enterResultVal" type="text" .value=${rawValue} 
             ?disabled=${this.actionBeingPerformedModel.dialogInfo.readOnly}
             @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>`

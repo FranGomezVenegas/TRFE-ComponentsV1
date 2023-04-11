@@ -2,10 +2,10 @@ import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../tr-procedures';
-import '../../ProcManagement/proc-management-home';
+import '../src/components/ProcManagement/proc-management-home';
 import '@material/mwc-icon-button';
 import '@material/mwc-ripple';
-import { ProceduresModel, DemoViews } from '../src/ProceduresModel';
+import { DemoViews } from '../src/ProceduresModel';
 
 
 class DemoExample extends LitElement {
@@ -14,6 +14,29 @@ class DemoExample extends LitElement {
         div[hidden] {
           display: none;
         }
+        p{
+          margin:0px;
+        }
+        div.proctitle{
+          font-weight: bold;
+          font-size: 16px;
+        }   
+        button {        
+          color : rgba(36, 192, 235, 1);
+          font-family : Montserrat;
+          font-weight : bold;
+          background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+          font-family: Montserrat;
+          font-size: 11px;
+          color: white;
+          border-color: transparent !important;
+          --mdc-button-fill-color: red;
+          --mdc-button-ink-color: blue;
+          border-radius: 8px;
+        }
+        .language{
+          background-color: white;
+        }   
       `
   }
 
@@ -80,7 +103,7 @@ class DemoExample extends LitElement {
 
       <div ?hidden="${!this.auth}">
         <h1 @click=${this.toggleHideAllButtonsStatus}>Hi ${this.getUser()}, you are authorized</h1>
-        <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
+        <button class="language" @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
         <button @click=${()=>this.pLogin.logout()}>Logout</button><hr>
 
         ${this.userRole==="proc_management" ?
@@ -92,7 +115,7 @@ class DemoExample extends LitElement {
         ${DemoViews.map(curProc =>          
           html`
           ${this.hideActionButtonProc(curProc.proc_instance_name) ?  html``:html`
-          <p>${curProc.label}
+          <div class="proctitle"><p>${curProc.label}</p></div>
           ${curProc.views.map(curView =>
           html`<button ?hidden="${this.hideActionButton(curView.proc_instance_name)}" 
             @click=${()=>this.selectMenu(curView.proc_instance_name, curView.view_name, curView.filter_name)}>${curView.title}</button>
@@ -100,74 +123,6 @@ class DemoExample extends LitElement {
           </p>
           `}
         `)}
-
-        <button ?hidden="${this.hideActionButton("em-demo-a")}" @click=${()=>this.selectMenu("em-demo-a", "Home", "Home")}>Home</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "LogSamples", "SampleLogin")}>Log Samples</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "ProductionLots", "SampleLot")}>Production Lots</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "SamplingSMP")}>Samples Sampling </button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSampling", "SamplingPERS")}>Personel Sampling</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSamplingInterval", "SamplingSMP")}>Samples Sampling (Interval)</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePendingSamplingInterval", "SamplingPERS")}>Personel Sampling (Interval)</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingSMP")}>Sample Plate Reading</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReading", "PlateReadingPERS")}>Personel Plate Reading</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReadingSecondEntry", "PlateReadingSecondEntrySMP")}>Sample Plate Reading SecondEntry</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SamplePlateReadingSecondEntry", "PlateReadingSecondEntryPERS")}>Personel Plate Reading SecondEntry</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SampleIncubation", "Incubation")}>Sample Incubation</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismSMP")}>Sample Microorganism </button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "SampleMicroorganism", "MicroOrganismPERS")}>Personel Microorganism</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "Programs", "Programs")}>Program</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "Deviation", "Deviation")}>Deviation</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "Browser", "Browser")}>Browser</button><br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "DataMining", "DataMining")}>Data Mining</button><br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("em-demo-a", "Incubators", "Incubators")}>Incubators</button><br>
-
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "Home", "Home")}>Home</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "LogSamples", "SampleLogin")}>Log Samples (proc)</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "ProductionLots", "SampleLot")}>Production Lots (proc)</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "SamplePending", "sampling")}>Sampling</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "ER-FQ")}>FQ</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "SampleEnterResult", "ER-MB")}>MB</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "ReviewTesting", "RT-FQ")}>RT FQ</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "ReviewTesting", "RT-MB")}>RT MB</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "ReviewTestingGroup", "RTG-FQ")}>RTG FQ</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "ReviewTestingGroup", "RTG-MB")}>RTG MB</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "ReviewSample", "Review")}>Review Sample</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "Programs", "Programs")}>Program</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "Deviation", "Deviation")}>Deviation</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("proc-deploy", "Browser", "Browser")}>Browser</button><br>
-
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "PlatformInstruments", "InstrumentsList")}>Instruments List</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "PlatformInstrumentsfamilyCorrecto", "InstrumentsListFamilyCorrecto")}>Instruments List FamilyCorrecto</button><br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "PlatformInstrumentsfamilyObsIntento", "InstrumentsListFamilyObsIntento")}>Instruments List FamilyObsIntento</button><br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-proc", "EventsInProgress", "EventsER")}>Events In Progress</button><br>
-
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-instruments", "PlatformInstruments", "InstrumentsList")}>Instruments List</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-instruments", "PlatformInstrumentsfamilyCorrecto", "InstrumentsListFamilyCorrecto")}>Instruments List FamilyCorrecto</button><br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app-instruments", "EventsInProgress", "EventsER")}>Events In Progress</button><br>
-
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app", "WhiteIpList", "WhiteIpList")}>White IPs List</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app", "BlackIpList", "BlackIpList")}>Black IPs List</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("app", "PlatformBusRules", "PlatformBusRules")}>Platform Business Rules</button><br>
-
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("genoma-1", "ProjectManager", "ProjectManager")}>Genoma-ProjectManager</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("genoma-1", "StudyVariableValues", "StudyVariableValues")}>Genoma-StudyVariableValues</button><br>
-
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "LogSamplesModuleSamples", "SampleLogin")}>sample-coa logSamples</button><br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "SampleEnterResult", "ER-FQ")}>sample-coa-rel1 FQ</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "SampleEnterResult", "ER-MB")}>sample-coa-rel1 MB</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewTesting", "RT-FQ")}>sample-coa-rel1 RT FQ</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewTesting", "RT-MB")}>sample-coa-rel1 RT MB</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewTestingGroup", "RTG-FQ")}>sample-coa-rel1 RTG FQ</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewTestingGroup", "RTG-MB")}>sample-coa-rel1 RTG MB</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "ReviewSample", "Review")}>sample-coa-rel1 Review Sample</button><br>
-
-          Inv-Draft<br>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLotsGeneral", "InventoryLotsGeneral")}>InventoryLots</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "InventoryLotsReactivos", "InventoryLotsReactivos")}>Issues</button>
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("inv-draft", "Issues", "Issues")}>Issues</button>
-
-          <button ?hidden="${this.hideActionButton()}" @click=${()=>this.selectMenu("sample-coa-rel1", "culture-medium", "culture-medium")}>culture-medium</button>
-          
 <!--          <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
           <button @click=${()=>this.pLogin.logout()}>Logout</button><hr> -->
           </div>
@@ -182,15 +137,17 @@ class DemoExample extends LitElement {
     //console.log('openTestDefaultView', this.pLogin)
     if (this.pLogin&&this.pLogin.config&&this.pLogin.config.local&&this.pLogin.config.localDefaultView){
       //this.showAllButtonsStatus=true
-      this.selectMenu(this.pLogin.config.localDefaultView.procName, this.pLogin.config.localDefaultView.viewName, this.pLogin.config.localDefaultView.filterName)
-      return
+      this.selectMenu(this.pLogin.config.localDefaultView.procName, this.pLogin.config.localDefaultView.viewName, this.pLogin.config.localDefaultView.filterName)      
     }
   }
-  selectMenu(proc, sample, filter) {
+  selectMenu(proc, viewName, filter) {
     this.trProc.ready = false
     this.trProc.procName = proc
-    this.trProc.viewName = sample
+    this.pLogin.config.localDefaultView.procName=proc
+    this.trProc.viewName = viewName
+    this.pLogin.config.localDefaultView.viewName=viewName
     this.trProc.filterName = filter
+    this.pLogin.config.localDefaultView.filterName=filter
     this.trProc.resetView()
     this.trProc.authorized()
     this.trProc.render()
@@ -208,6 +165,9 @@ class DemoExample extends LitElement {
   firstUpdated() {
     fetch("./config.json").then(r => r.json()).then(j => {
       this.pLogin.config = j
+      if (this.trProcManagement!==null){
+        this.trProcManagement.config=j
+      }
     })
     if (this.auth) {
       let session = getUserSession()

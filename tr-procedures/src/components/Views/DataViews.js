@@ -38,11 +38,14 @@ export function DataViews(base) {
         }
 
         jsonViewer(elem, data = {}){
-        console.log('jsonViewer', 'elem', elem, 'data', data, 'dataToDisplay', data[elem.endPointResponseObject])
+        //console.log('jsonViewer', 'elem', elem, 'data', data, 'dataToDisplay', data[elem.endPointResponseObject])
         return html`
+        <div style="position:relative;">
+            ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title}</span>`}
             ${elem===undefined||data===undefined ? nothing : html`
-            <json-viewer>${JSON.stringify(data[elem.endPointResponseObject])}</json-viewer>       
+            <json-viewer style="padding:0px; padding-left:20px; top:-15px;">${JSON.stringify(data[elem.endPointResponseObject])}</json-viewer>       
             `}
+        </div>
         `   
         }     
         kpiReportTitle(elem){
@@ -80,7 +83,14 @@ export function DataViews(base) {
             `
         }
         readOnlyTable(elem, data) {
-          //console.log(elem, data)
+          console.log('readOnlyTable', elem, data)
+          let dataArr=[]
+          // if (typeof data === "object" && data !== null) {
+          //   dataArr = Object.keys(data).map(key => ({ key, ...data[key] }));//Object.values(data).map((item, index) => ({ key: Object.keys(data)[index], ...item }));
+          //   dataArr=dataArr[0]
+          // }else{
+            dataArr=data
+          // }
           return html`
           <style>
           .styled-table {
@@ -117,7 +127,14 @@ export function DataViews(base) {
           .styled-table tbody tr.active-row {
             font-weight: bold;
             color: #009879;
-          }          
+          }  
+          span.cardLabel {
+            font-weight: bold;
+            color: #032bbc;
+          }   
+          span.cardValue{
+            color: #009879;
+          }     
           </style>
             ${elem.title===undefined ? nothing : html`<h2>${elem.title["label_"+this.lang]}</h2>`}
             <table class="styled-table">
@@ -131,9 +148,9 @@ export function DataViews(base) {
                 </tr>
               </thead>
               <tbody>
-              ${data===undefined ? nothing : 
+              ${dataArr===undefined ? nothing : 
               html`
-                ${data.map(p => 
+                ${dataArr.map(p => 
                   html`
                   <tr>
                     ${elem.columns.map(fld =>
@@ -145,13 +162,38 @@ export function DataViews(base) {
                             <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
                             <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
                           </td>
-                          `:
-                        html`<td>
-                        ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
-                        ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
-                        ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
-                        </td>`
-                      }
+                        `:html`
+                          ${fld.as_progress!==undefined&&fld.as_progress===true?
+                          html`                            
+                            <style>
+                              .w3-responsive{display:block;overflow-x:auto}
+                              .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
+                              .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                              .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                              .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                              .title {
+                                  font-size: 8px; font-weight: 500; letter-spacing: 0;
+                                  line-height: 1.5em; padding-bottom: 15px; position: relative;
+                                  font-family: Montserrat; font-color:rgb(94, 145, 186);
+                                }
+                              </style>
+                              <td>
+                              <div class="w3-container" >
+                                <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                  <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%" >${p[fld.name]}%</div>
+                                </div>
+                              </div>
+                            <br> 
+                            </td>           
+                          `:html`
+                              <td>
+                              ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                              ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                              ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                              </td>
+                          `}
+                        `}
+                      
                       `
                     )}
                   </tr>
@@ -179,17 +221,47 @@ export function DataViews(base) {
         }        
         kpiCardSomeElementsMain(elem, data){
             //console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
-            return html`            
+            return html`   
+            ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title}</span>`}         
             ${data===undefined ? html`nothing to do` :
                 html`
-                ${elem.fieldsToDisplay.map(d =>                    
-                    html`                    
-                    <li>${this.fieldLabel(d)}: ${data[d.name]}</li>`
+                ${elem.fieldsToDisplay.map(fld =>                    
+                    html`    
+                    ${fld.as_progress!==undefined&&fld.as_progress===true?
+                      html`                            
+                      <style>
+                              .w3-responsive{display:block;overflow-x:auto}
+                              .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px;    border-radius: 5px;
+                                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);}
+                              .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                              .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                              .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                              .title {
+                                  font-size: 8px; font-weight: 500; letter-spacing: 0;
+                                  line-height: 1.5em; padding-bottom: 15px; position: relative;
+                                  font-family: Montserrat; font-color:rgb(94, 145, 186);
+                                }
+                              </style>
+                    
+                          
+                          <div class="w3-container" >
+                            <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                              <div class="w3-container w3-blue w3-round-xlarge" style="width:${data[fld.name]}%" >${data[fld.name]}%</div>
+                            </div>
+                          </div>
+                        <br> 
+                        
+                      `:html`                                    
+                        <li><span class="cardLabel">${this.fieldLabel(fld)}:</span> <span class="cardValue"> ${data[fld.name]}</span></li>
+                      `}
+                    `
                 )}
-            `}`
+              `}
+              ${this.getButton(elem, data)}
+            `
         }
-        fieldLabel(d){
-            return d["label_"+this.lang]!==undefined ? d["label_"+this.lang] : d.name
+        fieldLabel(fld){
+            return fld["label_"+this.lang]!==undefined ? fld["label_"+this.lang] : fld.name
             
         }
         dialogs(){
@@ -765,7 +837,14 @@ export function DataViews(base) {
           }
           return strContent
         } 
-        
+        titleLang(colDef){
+          let titleStr=''
+          if (colDef.title!==undefined){
+              return colDef.title["label_"+this.lang]
+          }    
+          return titleStr
+        }        
         get audit() {return this.shadowRoot.querySelector("audit-dialog")}          
     }
+    
 }

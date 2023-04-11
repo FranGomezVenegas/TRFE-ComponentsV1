@@ -1,7 +1,7 @@
 {
   "dbName": "labplanet",
   "dbName2023": "trazit_2023",
-  "isForTesting": true,
+  "isForTesting": false,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
 
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
@@ -37,6 +37,11 @@
     "viewName": "ProjectManager", 
     "filterName" :  "ProjectManager" 
   },  
+  "localDefaultView1231": {
+    "procName":  "app-proc", 
+    "viewName": "PlatformInstruments", 
+    "filterName" :  "InstrumentsList" 
+  },
   "localDefaultViewcccccc": {
     "procName":  "app-proc", 
     "viewName": "EventsInProgress", 
@@ -68,7 +73,7 @@
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismSMP" 
   },
-  "localDefaultView2": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismPERS" 
@@ -108,9 +113,9 @@
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
   },  
-   "localDefaultView1111": {
+   "localDefaultViewzxccccz": {
     "procName":  "inv-draft", 
-    "viewName": "InventoryLots", 
+    "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
    "localDefaultViewxzc": {
@@ -138,10 +143,10 @@
     "viewName": "LotView", 
     "filterName" :  "LotView" 
   },
-  "localDefaultViewxasd": {
+  "localDefaultViewsssssss": {
     "procName":  "mp-release1", 
-    "viewName": "SampleEnterResult", 
-    "filterName" :  "ER-FQ" 
+    "viewName": "ReviewTesting", 
+    "filterName" :  "RT-FQ" 
   }
   
  

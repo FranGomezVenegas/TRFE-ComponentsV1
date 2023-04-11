@@ -6,11 +6,25 @@ import '@spectrum-web-components/tooltip/sp-tooltip.js';
 import '@trazit/tr-dialog/tr-dialog';
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import { ProceduresModel } from '../../ProceduresModel';
-export class AuditDialog extends ButtonsFunctions(CredDialog) {
+import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
+
+const langConfig = {
+  "actionName": {    "label_en": "Action Name",    "label_es": "Acción"  },
+  "performedOn": {    "label_en": "Performed on",    "label_es": "Realizado el"  },
+  "reviewedOn": {    "label_en": "Reviewed on",    "label_es": "Revisado el"  },
+  "auditId": {    "label_en": "Audit Id",    "label_es": "Id Auditoría"  },
+  "fieldsUpdate": {    "label_en": "Fields updated",    "label_es": "Campos modificados"  },
+  "by": {    "label_en": "By",    "label_es": "Por"  },
+  "sign": {    "label_en": "Sign",    "label_es": "Firmar"  }
+}
+export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredDialog)) {
   static get styles() {
     return [
       Layouts,
       css`
+        :host {
+          font-family:Montserrat;
+        }      
         tr-dialog {
           --mdc-dialog-max-width: 90vw;
           position: relative;
@@ -22,11 +36,11 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
         sp-tooltip {
           max-width: 100%;
           width: 100%;
-          --spectrum-tooltip-info-background-color: rgb(144 215 215 / 12%);
+          --spectrum-tooltip-info-background-color: rgba(36, 192, 235, 0.08);
           color: #3f51b5;
         }
         sp-tooltip.sub {
-          --spectrum-tooltip-info-background-color: #c8f3ff;
+          --spectrum-tooltip-info-background-color: rgba(36, 192, 235, 0.09);
         }
         mwc-icon.sign {
           cursor: pointer;
@@ -41,6 +55,64 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
           margin-left: -13px;
           cursor: pointer;
           background: transparent;
+        }
+        .column-list {
+          -webkit-columns: 4; /* Number of columns */
+          -moz-columns: 4;
+          columns: 4;
+          -webkit-column-gap: 10px; /* Spacing between columns */
+          -moz-column-gap: 10px;
+          column-gap: 10px;
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+        }
+        
+        .column-list li {
+          display: inline-block;
+          width: 100%;
+          margin-bottom: 10px;
+          margin-left:30px;
+          hyphens: auto;
+          word-break: break-all;          
+        }
+        span.relevantlabel{
+          font-weight: bold;
+          font-size: 16px;
+        }          
+        span.label{
+          font-weight: bold;         
+        }
+        p{
+            font-weight: bold;
+            font-size: 15px;
+            margin-top:5px;
+            margin-left:4px;
+            margin-bottom:5px;
+        }   
+        .text-group {
+          display: flex;
+          align-items: center;
+        }        
+        .tglabelaction {
+          font-size: 1.2em;
+          width: 100px;
+          text-align: right;
+          margin-right: 20px;
+        }
+        .tglabel {
+          font-size: 1.2em;
+          width: 124px;
+          text-align: right;
+          margin-right: 20px;
+        }
+        .tgvalue {
+          font-size: 1.0em;
+        }
+        div.feldsupdatedregion{
+          border-color : rgba(153, 153, 153, 1);
+          border-left : 1px solid;
+          border-radius : 10px;
         }
       `
     ];
@@ -99,36 +171,41 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
     let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"
     let strContent = ``
     this.audits.forEach(a => {
-      strContent += `<div>action_name: ${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</div>`
-      strContent += `*performed_on: ${a.date} by ${a.person}`
-      strContent += `<br>*reviewed_on: ${a.reviewed ? a.reviewed_on : ''}`
+      strContent += `<div><span class="relevantlabel">${langConfig.actionName["label_"+this.lang]}:</span> ${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</div>`
+      strContent += `<span class="relevantlabel">Performed On:</span> ${a.date} by ${a.person}`
+      strContent += `<br><span class="relevantlabel">Reviewed On:</span> ${a.reviewed ? a.reviewed_on : ''}`
+      
       strContent += `<li>audit_id: ${a.audit_id}</li>`
       let fu = a.fields_updated ? Object.entries(a.fields_updated).map(([key, value]) => { return {k: key, v: value}}) : null
       let strFu = ''
       if (fu) {
+        strFu += `<ul>`
         fu.forEach(d => {
           strFu += `<li>${d.k}: ${d.v}</li>`
         })
+        strFu += `</ul>`
       } else {
         strFu += `<br/>`
-      }
-      strContent += `fields_updated: ${strFu}`
+      }      
+      strContent += `<p>fields_updated: </p> ${strFu}`
       if (a.sublevel.length&&a.sublevel[0].date) {
         strContent += `<div style="margin-left: 20px;">`
         a.sublevel.forEach(s=> {
-          strContent += `<p><div>action_name: ${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>`
-          strContent += `*performed_on: ${s.date} by ${s.person}`
-          strContent += `<br>*reviewed_on: ${s.reviewed ? s.reviewed_on : ''}`
+          strContent += `<p><div><span class="relevantlabel">Action Name: </span>${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>`
+          strContent += `<span class="relevantlabel">Performed On: </span>${s.date} by ${s.person}`
+          strContent += `<br><span class="relevantlabel">Reviewed On: </span>${s.reviewed ? s.reviewed_on : ''}`
           fu = s.fields_updated ? Object.entries(s.fields_updated).map(([key, value]) => { return {k: key, v: value}}) : null
           strFu = ''
           if (fu) {
+            strFu += `<ul>`
             fu.forEach(d => {
               strFu += `<li>${d.k}: ${d.v}</li>`
             })
+            strFu += `</ul>`
           } else {
             strFu += `<br/>`
           }
-          strContent += `<br>fields_updated: ${strFu}`
+          strContent += `<br><p>fields_updated: </p> ${strFu}`
         })
         strContent += `</div>`
       }
@@ -167,6 +244,25 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
         thead {display: table-header-group;} 
         tfoot {display: table-footer-group;}
       }
+      .column-list {
+        -webkit-columns: 3; /* Number of columns */
+        -moz-columns: 3;
+        columns: 3;
+        -webkit-column-gap: 10px; /* Spacing between columns */
+        -moz-column-gap: 10px;
+        column-gap: 10px;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .column-list li {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+            
       </style>
 
       <div class="page-header" style="text-align: center; font-weight: bold;">
@@ -241,25 +337,30 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
             @click=${()=>this.showItem(a,i)}
             style="color:${a.ballState=="open"?'#3f51b5':a.ballState=="hide"?'#eee':'#aaa'}">radio_button_checked</mwc-icon>
           <sp-tooltip open placement="right" variant="info" id="tooltip-${a.audit_id}">
+          
             <div class="layout horizontal flex center">
               ${a.reviewed?
                 html`
-                <mwc-icon title="reviewed_on: ${a.reviewed_on}">grading</mwc-icon>
+                <div class="text-group"><mwc-icon title="${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}">grading</mwc-icon></div>
                 `:
                 html`
-                <mwc-icon class="sign" title="Sign" 
+                <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}" 
                   @click=${()=>this.signAudit(a.audit_id)} ?hidden=${!this.sampleAuditRevisionMode}>edit_note</mwc-icon>
                 `
               }
-              <div>action_name: <b>${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</b></div>
+              <div class="text-group"><div class="tglabelaction">${langConfig.actionName["label_"+this.lang]}: </div><b>${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</b></div>
             </div>
-            <div>
-              *performed_on: ${a.date} by ${a.person}
+            <div class="text-group">
+              <div class="tglabel">${langConfig.performedOn["label_"+this.lang]}: </div>${a.date} ${langConfig.by["label_"+this.lang]} ${a.person}
             </div>
             <div id="audit-${a.audit_id}" hidden=true>
-              ${a.reviewed?html`<br>*reviewed_on: ${a.reviewed_on}`:null}
-              <li>audit_id: ${a.audit_id}</li>
-              fields_updated: ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li>${key}: ${value}</li>`) : ''}<br><br>
+            
+              <div class="text-group">${a.reviewed?html`<br><div class="tglabel">${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}: </div>${a.reviewed_on}`:null}</div>
+                     
+              <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${a.audit_id}</div>
+              <div class="feldsupdatedregion">
+                <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list"> ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+              </div>
               ${a.sublevel.length&&a.sublevel[0].date?
               html`${a.sublevel.map((s,si)=>
                 html`
@@ -274,18 +375,19 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
                           <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
                           `:
                           html`
-                          <mwc-icon class="sign" title="Sign" 
+                          <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}" 
                             @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}>edit_note</mwc-icon>
                           `
                         }
-                        <div>action_name: ${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>
+                        <div class="text-group"><div class="tglabelaction">${langConfig.actionName["label_"+this.lang]}: </div>${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>
                       </div>
-                      <div>
-                        *performed_on: ${s.date} by ${s.person}
-                      </div>
+                      <div class="text-group"><div class="tglabel">${langConfig.performedOn["label_"+this.lang]}: </div>${s.date} ${langConfig.by["label_"+this.lang]} ${s.person}</div>
                       <div id="audit-${s.audit_id}">
-                        ${s.reviewed?html`*reviewed_on: ${s.reviewed_on}<br>`:null}
-                        fields_updated: ${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li>${key}: ${value}</li>`) : ''}
+                        ${s.reviewed?html`<span class="relevantlabel">Reviewed On: </span>${s.reviewed_on}<br>`:null}
+                        <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${s.audit_id}</div>
+                        <div class="feldsupdatedregion">
+                          <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list">${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+                        </div>
                       </div>
                     </sp-tooltip>
                   </div>`
@@ -293,6 +395,7 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
               `: null}
             </div>
           </sp-tooltip>
+        
         </div>
         `
       )}
@@ -306,7 +409,8 @@ export class AuditDialog extends ButtonsFunctions(CredDialog) {
     }    
     console.log('signAudit', 'actionBeingPerformedModel', this.actionBeingPerformedModel)
     //this.selectedDialogAction = this.selectedAction.dialogInfo.viewQuery
-    this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], this.targetValue)
+  //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], this.targetValue)
+    this.actionWhenRequiresNoDialog(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], this.targetValue)
     //this.actionMethod(this.actionBeingPerformedModel.dialogInfo.action[0], false)
     //this.actionMethod(this.actionBeingPerformedModel, false)
   }

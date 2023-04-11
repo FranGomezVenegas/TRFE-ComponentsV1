@@ -2,12 +2,13 @@ import { html, css, nothing} from 'lit';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ApiFunctions } from '../Api/ApiFunctions';
 import { ClientMethod} from '../../../src/ClientMethod';
- 
+import { ProcManagementMethods} from '../../components/ProcManagement/ProcManagementMethods';
+
 
 export function ButtonsFunctions(base) {
-    return class extends ClientMethod(ApiFunctions(base)) {
+    return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
     getButton(sectionModel = this.viewModelFromProcModel, data) {
-      //console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
+//      console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -137,7 +138,8 @@ export function ButtonsFunctions(base) {
     
     btnDisabled(action, viewModelFromProcModel=this.viewModelFromProcModel) {
       //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
-        let d = false
+      if (action.certificationException!==undefined&&action.certificationException===true){ return false}
+      let d = false
         if (action.mode!==undefined && action.mode.toString().toUpperCase()==="READONLY") {
           return true        
         }   
@@ -251,10 +253,13 @@ export function ButtonsFunctions(base) {
           if (action.clientMethod!==undefined){
             this[action.clientMethod](action, this[selectedItemPropertyName][0])
             return
-          }else{
-            //alert('ButtonsFunctions 241-aquiiiiii')
+          }else{            
             if (this[selectedItemPropertyName]===undefined){
-              this.actionWhenRequiresNoDialog(action)
+              if (data===undefined){
+                this.actionWhenRequiresNoDialog(action)
+              }else{
+                this.actionWhenRequiresNoDialog(action, data)
+              }
             }else{
               this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
             }
@@ -281,11 +286,10 @@ export function ButtonsFunctions(base) {
         }else{
             alert('the dialog '+action.dialogInfo.name+' does not exist')
         }
-      return
     }   
       
     async GetViewData(setGrid = true ){
-        //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
+        console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
         if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
             //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
             if (this[this.viewModelFromProcModel.viewQuery.clientMethod]===undefined){
@@ -294,6 +298,18 @@ export function ButtonsFunctions(base) {
             }
             this[this.viewModelFromProcModel.viewQuery.clientMethod]()
             return
+        }
+        if (this.config===undefined||this.config.backendUrl===undefined){
+          fetch("../../../demo/config.json").then(r => r.json()).then(j => {
+              this.config={}
+              this.config=j
+              //this.config.backendUrl=j.backendUrl
+          })          
+        }
+        if (this.config.backendUrl===undefined){
+          this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
+          this.config.dbName="labplanet"
+          this.config.isForTesting=false
         }
         let queryDefinition=this.viewModelFromProcModel.viewQuery
         if (queryDefinition===undefined){return}
@@ -307,13 +323,24 @@ export function ButtonsFunctions(base) {
             alert(endPointUrl)
             return
         }
-        let params = this.config.backendUrl + endPointUrl        
+        let params = this.config.backendUrl + endPointUrl
         //let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
         //console.log('params', params)        
         await this.fetchApi(params).then(j => {
-          if (setGrid){
+          if (queryDefinition.notUseGrid!==undefined&&queryDefinition.notUseGrid===true){
+            if (queryDefinition.variableName!==undefined){
+                if (queryDefinition.endPointResponseVariableName!==undefined){
+                  this[queryDefinition.variableName]=j[queryDefinition.endPointResponseVariableName]
+                }else{
+                  this[queryDefinition.variableName]=j
+                }
+            }else{
+                this.selectedItems=j
+            }
+          }
+          else if (setGrid){
             if (j && !j.is_error) {
               this.setGrid(j)
             } else {            
@@ -472,7 +499,9 @@ export function ButtonsFunctions(base) {
                 &&action!==null&&action.dialogInfo!==null&&action.dialogInfo.name!==null){
                   //alert('closing dialog')
                   //console.log('closing dialog')
-                this[action.dialogInfo.name].close()
+                if (this[action.dialogInfo.name]!==undefined){
+                  this[action.dialogInfo.name].close()
+                }
             }
             if (action.secondaryActionToPerform!==undefined){
                 this[action.secondaryActionToPerform.name]()

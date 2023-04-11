@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../procedure-management';
+//import '@zensen/pdf-viewer'
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -22,7 +23,11 @@ class DemoExample extends LitElement {
     super();
     this.auth = false;
   }
-
+  // <pdf-viewer
+  // .src="https://docs.google.com/a/misena.edu.co/viewer?a=v&pid=sites&srcid=bWlzZW5hLmVkdS5jb3xyZWRlczE0fGd4Ojc5NzYwYTBlYmQ2MmZlODk"
+  // .pageNum="${number('Page Number', 1)}"
+  // .zoomIndex="${number('Zoom Index', 2)}"
+  // ></zen-pdf-viewer>
   render() {
     return html`
       <platform-login @authorized=${e=>{
@@ -30,8 +35,12 @@ class DemoExample extends LitElement {
         this.proc.config=this.pLogin.config;}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <procedure-management></procedure-management><br>
+        <procedure-management></procedure-management><br>        
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
+
+        asd
+
+        
       </div>
     `;
   }

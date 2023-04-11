@@ -23,6 +23,7 @@ return class extends base {
     }
   
     noNegativeValues(e) {
+      alert('reactive')
       if (e.target.value <=0){
         this.numDays=0
         e.target.value=0

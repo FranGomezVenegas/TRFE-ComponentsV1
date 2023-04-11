@@ -43,7 +43,7 @@ export function ApiFunctions(base) {
               bubbles: true,
               composed: true
             }))
-            this.error(e)
+            //this.error(e)
             return e
           }
         })
@@ -79,12 +79,14 @@ export function ApiFunctions(base) {
               return
           })
       }    
-      getAPICommonParams(action){
+      getAPICommonParams(action, excludeProcInstanceName = false){
         if (action===undefined){return}
         let extraParams={}  
         extraParams.actionName=action.actionName
         extraParams.dbName= this.config.dbName
-        extraParams.procInstanceName = this.procInstanceName
+        if (excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
+          extraParams.procInstanceName = this.procInstanceName
+        }
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
         return extraParams
       }          
@@ -193,6 +195,8 @@ export function ApiFunctions(base) {
                 jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
               } else if (p.fixValue) {
                 jsonParam[p.argumentName] = p.fixValue
+              } else if (p.contextVariableName) {
+                jsonParam[p.argumentName] = this[p.contextVariableName]
               } else {
                 jsonParam[p.argumentName] = p.value
               }

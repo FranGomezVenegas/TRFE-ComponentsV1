@@ -167,6 +167,7 @@ export const AppProc = {
 			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
 			  ],
 			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "disableUntilFieldsEntered":["list4"],
 			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
 			  "valuesFromMasterData": {
 				"elementName":"list5",

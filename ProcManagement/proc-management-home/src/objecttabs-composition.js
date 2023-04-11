@@ -1,8 +1,7 @@
 import { html, css, nothing, LitElement } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
-import { Layouts } from '@collaborne/lit-flexbox-literals';
+//import { Layouts } from '@collaborne/lit-flexbox-literals';
 // import { columnBodyRenderer } from 'lit-vaadin-helpers';
-import '@alenaksu/json-viewer';
 
 // import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 // import {GridFunctions} from '../grid_with_buttons/GridFunctions';
@@ -14,7 +13,7 @@ import '@alenaksu/json-viewer';
 // import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 //import('../grid_with_buttons/grid-with-buttons');
 //import '@doubletrade/lit-datatable';
-import {DataViews} from '../../components/Views/DataViews';
+//import {DataViews} from '../../components/Views/DataViews';
 
 //export class ObjecttabsComposition extends TrazitCredentialsDialogs(AuditFunctions(TrazitGenericDialogs(ButtonsFunctions(GridFunctions(DialogsFunctions(TrazitInvestigationsDialog(CredDialog))))))) {
 export class ObjecttabsComposition extends DataViews(CredDialog) {
@@ -42,22 +41,6 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
             padding: 5px;
           }
         }
-        json-viewer{
-          --background-color: #2a2f3a00;
-          --string-color: #24C0EB;
-          --property-color: rgba(36, 75, 170, 0.9);
-          --preview-color: #24C0EB;
-          --font-family: Montserrat;
-          --key-color: rgba(36, 75, 170, 0.9);          
-        } 
-        span.cardLabel {
-          font-weight: bold;
-          color: #032bbc;
-        }   
-        span.cardValue{
-          color: #009879;
-        }     
-
       `
     ];
   }
@@ -80,17 +63,14 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
     this.sopsPassed=false
   }
   render(){
-    return html`
-      <div>   
-        ${this.selectedTabModelFromProcModel===undefined?nothing:html`
-          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
-        `}
+    return html`<div>      
+      ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
       </div>
       ${super.render()}
     ` 
   }
-  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
-    console.log('kpiElementsController', 'data', data, 'elemDef', elemDef)
+  kpiElementsController(elemDef = this.selectedTabModelFromProcModel.view_definition, data = this.selectedItem) {
+    //console.log('kpiElementsController', 'data', data, 'elemDef', elemDef)
     return html`${data&&elemDef&&Object.keys(data).length > 0?       
       html`
         <div style="display:block">
@@ -104,12 +84,8 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
               ${elem.type==="recovery_rate" ? this.kpiRecoveryRate(elem) : nothing}
               ${elem.type==="grid" ? this.kpiGrid(elem, data[elem.endPointResponseObject]) : nothing}
               ${elem.type==="chart" ? this.kpiChartFran(elem) : nothing}   
-              ${elem.type==="jsonViewer" ? this.jsonViewer(elem, data) : nothing}
-
-              ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2!==undefined ? 
-                this.readOnlyTable(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2]) : nothing}
-              ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2===undefined ? 
-                this.readOnlyTable(elem, data[elem.endPointResponseObject]) : nothing}   
+              ${elem.type==="jsonViewer" ? this.jsonViewer(elem, data) : nothing}   
+              ${elem.type==="readOnlyTable" ? this.readOnlyTable(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2]) : nothing}   
               
               ${(elem.includeChild===undefined||elem.includeChild===false) ? nothing :
                 html`
