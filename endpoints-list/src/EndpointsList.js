@@ -17,7 +17,7 @@ export class EndpointsList extends CommonCore {
       }
       #endpointName {
         height: 100%;
-        overflow-y : auto;
+        overflow: hidden;
       }
       #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar, #endpointName::-webkit-scrollbar {            
       }
