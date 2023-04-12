@@ -282,21 +282,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     //console.log('this.viewModelFromProcModel', this.viewModelFromProcModel)    
     if (!this.viewModelFromProcModel) {
       // whether user has access into the selected proc
-      if (!this.abstract && this.audit) {
-        this.audit.updateComplete.then(() => {
-          let whichProc = procList.filter(p => p.procInstanceName == this.procName)
-          if (whichProc.length) {
-            this.audit.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
-            this.audit.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
-          }
-        })
-      }
-//FRAAAAAAAAN , parche
-      console.log('Fran, acuerdate del parche en TrProcedures.authorized para sampleAuditRevisionMode y sampleAuditChildRevisionRequirede')
-      //this.audit.sampleAuditRevisionMode = true
-      //this.audit.sampleAuditChildRevisionRequired = true
-//FRAAAAAAAAN , parche
-
       if (anyAccess.length) {
         if (this.tabs) {
           this.tabsComposition.updateComplete.then(() => {
