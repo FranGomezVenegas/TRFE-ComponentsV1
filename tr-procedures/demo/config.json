@@ -52,7 +52,7 @@
     "viewName": "Incubators", 
     "filterName" :  "Incubators" 
   },
-  "localDefaultView111": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "SamplePendingSampling", 
     "filterName" :  "SamplingSMP" 
@@ -73,7 +73,7 @@
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismSMP" 
   },
-  "localDefaultView": {
+  "localDefaultView111221": {
     "procName":  "em-demo-a", 
     "viewName": "SampleMicroorganism", 
     "filterName" :  "MicroOrganismPERS" 
