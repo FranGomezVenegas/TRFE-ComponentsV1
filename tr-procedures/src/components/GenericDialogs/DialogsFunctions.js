@@ -35,7 +35,7 @@ export function DialogsFunctions(base) {
         this.objectId = objId
         let noNeedCreds = this.checkProcList()
         if (noNeedCreds) {
-          this.nextRequest()
+          this.nextRequest(action)
         } else {
           if (this.type == "confirm") {
             this.confirmDialog.show()
@@ -81,8 +81,11 @@ export function DialogsFunctions(base) {
     this.justificationType = null
     this.justificationList = null
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    
+    let pArr = procList.filter(p => p.procInstanceName == this.procInstanceName)
+    let p = pArr[0]
     bypass = true
-    procList.forEach(p => {
+//    procList.forEach(p => {
       if (p.actions_with_esign.indexOf(this.actionName) >= 0) {
         let idx = p.actions_with_esign.findIndex(p => p == this.actionName)
         --idx // the object is on the previous index
@@ -125,13 +128,14 @@ export function DialogsFunctions(base) {
         this.type = "confirm"
         bypass = false
       }
-    })
+  //  })
     // bypass / no need creds process
     if (bypass) return true
   }  
 
-  nextRequest() {
+  nextRequest(action) {
     //alert('nextRequest')
+    action = action || this.auditAction ||this.actionBeingPerformedModel;
     console.log('nextRequest')
     let credArguments = {}
     if (this.userName) {credArguments.userToCheck=this.userName}
@@ -153,8 +157,8 @@ export function DialogsFunctions(base) {
 
     // Now here
     console.log('nextRequest', 'credArguments', credArguments)
-    if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
-      this.selectedItems=this[this.actionBeingPerformedModel.alternativeItemPropertyName]
+    if (action!==undefined&&action.alternativeItemPropertyName!==undefined){
+      this.selectedItems=this[action.alternativeItemPropertyName]
     }
     if (this.selectedItems===undefined){
       this.selectedItems=[]
@@ -163,8 +167,8 @@ export function DialogsFunctions(base) {
     if (this.targetValue===undefined){
       this.targetValue={}
     }
-    if (this.actionBeingPerformedModel!==undefined){//&&this.actionBeingPerformedModel.alternativeItemPropertyName!==undefined){
-      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], this.targetValue, credArguments)
+    if (action!==undefined){//&&action.alternativeItemPropertyName!==undefined){
+      this.performActionRequestHavingDialogOrNot(action, this.selectedItems[0], this.targetValue, credArguments)
     }
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {
@@ -174,9 +178,9 @@ export function DialogsFunctions(base) {
     })
     this.reqParams = cleanParams
     if (this.credDialog) {     
-      if (this.actionBeingPerformedModel===undefined
-        ||this.actionBeingPerformedModel.keepTheDialogOpen===undefined
-        ||this.actionBeingPerformedModel.keepTheDialogOpen===false){ 
+      if (action===undefined
+        ||action.keepTheDialogOpen===undefined
+        ||action.keepTheDialogOpen===false){ 
             this.credDialog.close()
       }else{
         // e.stopPropagation()

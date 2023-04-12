@@ -404,7 +404,8 @@ export function TrazitCredentialsDialogs(base) {
     if (actionName) {
       this.actionName = actionName
       if (objId == -1) {
-        this.credDialog.show()
+        //this.actionBeingPerformedModel=action
+        this.credDialog.show(action)
       } else {
         this.objectId = objId
         let noNeedCreds = false
@@ -419,12 +420,14 @@ export function TrazitCredentialsDialogs(base) {
           }
         }
         if (noNeedCreds) {
-          this.nextRequest()
+          this.nextRequest(action)
         } else {
           if (this.type == "confirm") {
-            this.confirmDialog.show()
+            //this.actionBeingPerformedModel=action
+            this.confirmDialog.show(action)
           } else {
-            this.credDialog.show()
+            //this.actionBeingPerformedModel=action
+            this.credDialog.show(action)
           }
         }
       }

@@ -7,7 +7,7 @@ import '@trazit/tr-dialog/tr-dialog';
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import { ProceduresModel } from '../../ProceduresModel';
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
-
+import '../../components/Audit/audit-dialog';
 const langConfig = {
   "actionName": {    "label_en": "Action Name",    "label_es": "Acción"  },
   "performedOn": {    "label_en": "Performed on",    "label_es": "Realizado el"  },
@@ -126,6 +126,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
       sampleAuditChildRevisionRequired: { type: Boolean },
       selectedItems:{type: Array},
       actionBeingPerformedModel:{type: Object},
+      auditAction:{type: Object},
       procInstanceName: { type: String },
       filterName: { type: String },
       viewName: { type: String },
@@ -147,6 +148,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
     this.sampleAuditChildRevisionRequired = true;
     this.selectedItems=[]
     this.actionBeingPerformedModel={}
+    this.auditAction={}
     this.config={}
     this.localProceduresModels=ProceduresModel
     this.viewModelFromProcModel={}
@@ -324,6 +326,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
 
   render() {
     return html`
+    ${this.credentialsDialog()}
     <tr-dialog id="auditDialog" ?open=${this.audits.length}  @closed=${()=>this.audits=[]} class="layout vertical"
       heading=""
       hideActions=""
@@ -408,6 +411,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
       auditId: id
     }    
     console.log('signAudit', 'actionBeingPerformedModel', this.actionBeingPerformedModel)
+    this.auditAction=this.actionBeingPerformedModel.dialogInfo.action[0]
     //this.selectedDialogAction = this.selectedAction.dialogInfo.viewQuery
   //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], this.targetValue)
     this.actionWhenRequiresNoDialog(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], this.targetValue)
