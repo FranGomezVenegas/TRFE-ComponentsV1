@@ -72,7 +72,8 @@ export class PlatformLogin extends CommonCore {
         -webkit-filter: drop-shadow(0 0 8px rgba(120, 217, 255)); /* webkit only 
         assuming the content is written in rgba(120, 217, 255) */
 filter: drop-shadow(0 0 8px rgba(120, 217, 255));              /* FF~35 */
-filter: drop-shadow(0 0 0 8px rgba(120, 217, 255));              /* MDN */        
+filter: drop-shadow(0 0 0 8px rgba(120, 217, 255));              /* MDN */   
+box-shadow: 16px 14px 20px #0000008c;     
       }
       img.appLoginLogoOnTop {
         height: 5.08vmax;
