@@ -28,7 +28,19 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
         tr-dialog {
           --mdc-dialog-max-width: 90vw;
           position: relative;
-          z-index:999;
+          z-index:998;
+          transition: opacity 0.2s ease-in-out;
+        }
+        tr-dialog[open] {
+          opacity: 1;
+        }
+        tr-dialog {
+          animation: bounce 0.5s ease-in-out;
+        }
+        @keyframes bounce {
+          0% { transform: translateY(-20px); }
+          50% { transform: translateY(10px); }
+          100% { transform: translateY(0); }
         }
         sp-tooltip[hidden] {
           display: none;
@@ -114,6 +126,47 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
           border-left : 1px solid;
           border-radius : 10px;
         }
+        mwc-textfield {
+          border-style : Solid;
+          border-color : #999999;
+          border-color : rgba(153, 153, 153, 1);
+          border-width : 1px;
+          border-radius : 7px;
+          -moz-border-radius : 7px;
+          -webkit-border-radius : 7px;   
+          font-family : Montserrat;
+          font-weight : bold;
+          font-size : 19px;
+          background-color :  #FFFFFF;
+          background-color : rgb(255, 255, 255);  
+          --mdc-text-field-idle-line-color:#148CFA;
+          --mdc-text-field-outlined-idle-border-color: #148CFA;
+          --mdc-text-field-label-ink-color:  #148CFA;
+          --mdc-text-field-focused-label-color: #148CFA;
+          --mdc-theme-primary: #0465FB;
+        }
+        mwc-select {        
+          --mdc-theme-primary : rgba(36, 192, 235, 1);
+          --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+          --mdc-select-ink-color: rgb(47, 47, 47);
+          --mdc-select-dropdown-icon-color:rgba(36, 192, 235, 1);
+          --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
+          --mdc-notched-outline-border-color: rgba(186, 235, 248, 0.4);
+          --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
+  
+          font-family : Montserrat;
+          font-weight : bold;
+          font-size : 19px;
+        }
+        mwc-select.outlined {        
+          --mdc-theme-primary : rgba(36, 192, 235, 1);
+          --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+          --mdc-select-ink-color: rgba(36, 192, 235, 1);
+          font-family : Montserrat;
+          font-weight : bold;
+          font-size : 19px;
+          background-color: 4fcad029;
+        }            
       `
     ];
   }
@@ -324,7 +377,23 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
     })
   }
 
+  signButtonsMode(){    
+    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+
+    if (this.procInstanceName===undefined||procList===undefined){return}
+    
+    let whichProc = procList.filter(p => p.procInstanceName == this.procInstanceName)            
+    if (whichProc===undefined||whichProc[0]===undefined){
+      this.sampleAuditRevisionMode=true
+      this.sampleAuditChildRevisionRequired=true
+      return
+    }
+    this.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
+    this.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
+//    alert('signButtonsMode '+this.procInstanceName+' sampleAuditRevisionMode: '+this.sampleAuditRevisionMode+' sampleAuditChildRevisionRequired: '+this.sampleAuditChildRevisionRequired )
+  }  
   render() {
+    this.signButtonsMode()
     return html`
     ${this.credentialsDialog()}
     <tr-dialog id="auditDialog" ?open=${this.audits.length}  @closed=${()=>this.audits=[]} class="layout vertical"
