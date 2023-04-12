@@ -356,7 +356,7 @@ export function ApiFunctions(base) {
         }else{
           procInstanceModel=ProceduresModel[this.procInstanceName]
         }               
-        if (procInstanceModel.ModuleSettings===undefined){
+        if (procInstanceModel.ModuleSettings===undefined||procInstanceModel.ModuleSettings.queriesEndpoints===undefined){
           return 'ERROR, ModuleSettings property not found in the model for procedure instance '+this.procInstanceName+'. If endPoint property at action level is not defined then moduleSettings becomes mandatory to get the Endpoint url'
         }
         let queriesEndpoints=procInstanceModel.ModuleSettings.queriesEndpoints
