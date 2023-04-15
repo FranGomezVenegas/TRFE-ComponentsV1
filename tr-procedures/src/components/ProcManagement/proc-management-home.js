@@ -1,4 +1,4 @@
-import { html, css, LitElement, nothing } from 'lit';
+import { html, css, nothing } from 'lit';
 import {ApiFunctions } from '../Api/ApiFunctions';
 import { ProceduresManagement } from '../../0proc_models/ProceduresManagement'
 import '@spectrum-web-components/split-view/sp-split-view';
@@ -6,7 +6,6 @@ import { CommonCore } from '@trazit/common-core';
 import '../../components/ObjectByTabs/objecttabs-composition';
 import {TrazitFormsElements} from '../GenericDialogs/TrazitFormsElements'
 import { ProcManagementMethods} from './ProcManagementMethods';
-//export class ProcManagementHome extends ((ButtonsFunctions(ApiFunctions(CommonCore)))) {
 export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))) {
     static get styles() {
     return [
@@ -75,7 +74,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       }
       divprocCard:hover {
         box-shadow: 0px 0px 50px rgba(0, 0, 0, 1);
-      }      
+      }  
 
       .progress-bar {
         display: inline-block;
@@ -162,26 +161,47 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       .splitter{
         background-color: blue;
       }
+      .sp-split-view.collapsed{
+        width: 0;
+      }
       #leftSplit {
         padding: 10px;
         background-color:transparent;
         overflow: hidden;
         width:290px;
-        top:30px;
+        /* top:30px; */
         position:relative;
+        transition: width 0.5s ease-in-out;
       }
+      #leftSplit.collapsed {
+        width: 0;
+      }
+      /* Add a hover effect to the collapse button */
+      .collapse-button:hover {
+        cursor: pointer;
+      }
+      
+      /* Apply the collapse class to the left side area div when the button is clicked */
+      .collapse-button:hover + #leftSplit {
+        width: 0;
+      }      
       #rightSplit{
         padding: 3px;
         background-color:transparent;
         width: calc(96vw - 290px);
-      }        
+        transition: width 0.5s ease-in-out;
+        position: relative;
+      }  
+      #rightSplit.collapsed {
+        width: 96vw;
+      }      
       #endpointName {
-        height: 100%;
+        box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
         overflow-y : auto;
       }
       #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar, #endpointName::-webkit-scrollbar {      
-        color: red;
-        background-color: blue;      
+        color: rgba(20, 78, 137, 0.5);
+        background-color: rgba(20, 78, 117, 0.5);      
       }
       
       div#leftSplit::-webkit-scrollbar-track, div#endpointName::-webkit-scrollbar-track {
@@ -244,12 +264,14 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       selectedItems: {type: Array},
       procInstanceName:{ type: String},
       actionOutput: {type: Object},
-      allProcedures: {type: Array}
+      allProcedures: {type: Array},
+      leftSplitDisplayed: {type: Boolean}
     };
   }
   constructor() {
     super()
-    this.show = false;
+    this.leftSplitDisplayed=true
+    this.show = false
     this.selectedViewDefinition={}
     this.actionOutput={}
     this.selectedItems=[]
@@ -275,6 +297,21 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       this.GetViewData()
     }
   }
+
+  handleMouseMove(evt) {
+    const el = evt.target;
+    const {layerX, layerY} = evt;
+    const height = el.clientHeight+70;
+    const width = el.clientWidth+70;
+    const yRotation = ((layerX - width / 2) / width) * 20;
+    const xRotation = ((layerY - width / 2) / height) * 20;
+    const transform = `perspective(500px) scale(0.9) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+    el.style.transform = transform;
+  }
+  handleMouseOut(evt) {
+    const el = evt.target;
+    el.style.transform = `perspective(500px) scale(1) rotateX(0) rotateY(0)`;
+  }  
 
   updated(changedProperties) {
     if (changedProperties.has('show')) {
@@ -302,13 +339,19 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     }  
   }
   async authorized() {
-    console.log('procManagementHome async authorized')
+    //console.log('procManagementHome async authorized')
     super.authorized()
   }
   connectedCallback() {
     super.connectedCallback();
     this.show = true;
     //this.selectedProcInstance=this.allProcedures[0]
+  }
+  fieldsToDiscard(fldName){
+    if (fldName==='navigation_icon_name'){return true;}
+    if (fldName==='active'){return true;}
+    if (fldName.includes("label")&&!fldName.includes(this.lang)){return true;}
+    return false;
   }
   render(){return html`
     ${this.selectedProcInstance===undefined ?
@@ -317,7 +360,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           html`
           <div class="${this.show ? 'fade-in' : 'show'}">
           <sp-card-ext heading="${p.name}" id="${p.proc_instance_name}" subheading="'this[elem.subheadingObj].value'" @click=${this.selectedProcedureInstance}>
-            <div class="procCard" style="background:url(${p.navigation_icon_name===undefined ? "trazit-logo.jpg": p.navigation_icon_name}) no-repeat center; height: 125px;
+            <div class="procCard" style="box-shadow: 16px 14px 20px rgba(36, 192, 235, 0.12); background:url(${p.navigation_icon_name===undefined ? "trazit-logo.jpg": p.navigation_icon_name}) no-repeat center; height: 125px;
             width: 430px;
             transition: box-shadow .1s;
             background-size: cover;" slot="cover-photo" @mousemove="${this.handleMouseMove}" @mouseout="${this.handleMouseOut}"></div>      
@@ -329,8 +372,12 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   </p>`}              
                 ${p.cardData.fields===undefined ? nothing:
                 html`
-                  ${p.cardData.fields.map(d =>
-                    html`<li><b>${d.field_name}:</b> ${d.field_value}</li>`
+                  ${p.cardData.fields.map(d =>                    
+                    html`
+                      ${this.fieldsToDiscard(d.field_name)===true ? nothing : 
+                        html`<li style="color: rgba(36, 57, 170, 0.9); position:relative; left:20px;"><b>${d.field_name}:</b> ${d.field_value}</li>`
+                      }
+                    `                    
                   )}              
                 `}
                 ${p.cardData.summary===undefined ? nothing:
@@ -365,10 +412,6 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         )}   
       `:html`
         <div>
-          <div style="display:flex;position: absolute;">
-            <mwc-icon-button size="xl" dense raised label=""  icon="home" @click=${this.resetView}></mwc-icon-button>
-            <span class="selected-proc-instance">${this.selectedProcInstance.name}</span>
-          </div>
           ${this.selectedProcInstance.views===undefined?nothing:
           html`
             <div>${this.selectedProcInstanceMainView()}`}</div>
@@ -376,18 +419,23 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       ` 
     }    
   `}  
+
+  toggleLeftSplitPane(){
+    console.log(this.leftSplitDisplayed)
+    this.leftSplitDisplayed=!this.leftSplitDisplayed
+  }
   selectedProcInstanceMainView() {
     return html`    
       ${this.desktop ?
         html`        
-        <sp-split-view collapsible resizable splitter-pos="250">
-          <div id="leftSplit">
+        <sp-split-view splitter-pos="250">
+          <div id="leftSplit" class="${this.leftSplitDisplayed!==undefined&&this.leftSplitDisplayed?'': 'collapsed'}">
             <div id="endpointName">     
               ${this.selectedProcInstance.views.map((item, index) => html`              
                 <div id="section${index}" class="accordion-item">
                   <div class="layout horizontal center inline-flex wrap accordion-title">
                     ${item.view_definition!==undefined&&item.view_definition.filter!==undefined&&item.view_definition.filterFields!==undefined&&item.view_definition.filterFields.length>0 ? html`
-                      <mwc-icon-button size="s" id="expand" dense raised label=""  icon="${item.expanded!==undefined&&item.expanded?'expand_less': 'expand_more'}"  @click=${() => this.toggleLeftElements(index)}></mwc-icon-button>
+                      <mwc-icon-button size="s" id="expand" dense raised label="" icon="${item.expanded!==undefined&&item.expanded?'expand_less': 'expand_more'}"  @click=${() => this.toggleLeftElements(index)}></mwc-icon-button>
                       <div @click=${() => this.toggleLeftElements(index)} >${item.title}</div>
                     `:html`
                     <div class="accordion-title" @click=${() => this.selectSectionView(index)} >${item.title}</div>
@@ -409,10 +457,10 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             `)}
             </div>
           </div>
-          <div id="rightSplit">
+          <div id="rightSplit" class="${this.leftSplitDisplayed!==undefined&&this.leftSplitDisplayed?'': 'collapsed'}">
             ${this.selectedProcessTitle()}
             ${this.selectedViewDefinition!==undefined&&this.selectedViewDefinition.view_definition!==undefined&&this.selectedViewDefinition ? html`            
-              <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
+              <objecttabs-composition style="position:relative; top:86px;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
               .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}     
               .selectedItem=${this.selectedItem}      
               </objecttabs-composition>              
@@ -424,7 +472,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         ` :
         html`        
         <div id="mobile">
-          <div id="leftSplit">
+          <div id="leftSplit" class="${this.leftSplitDisplayed!==undefined&&this.leftSplitDisplayed?'': 'collapsed'}">
             <div id="endpointName">
             ${this.selectedProcInstance.views.map((item, index) => html`
             <div id="section${index}" class="accordion-item">
@@ -465,13 +513,34 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       <style>
         .title-banner {
           background-color: #007bff; /* Blue */
-          color: #fff; /* White */
+          color: #24c0eb; /* White */
           display: flex;
           justify-content: space-between; /* Add space between left and right text */
           align-items: center;
           height: 60px;
           padding: 0 10px; /* Add padding to keep text away from edges */
-        }
+          position: fixed;
+          z-index: 9999;       
+          width: calc(96vw - 330px);
+          transition: width 0.5s ease-in-out;
+          background : -moz-linear-gradient(46.71% -341.1% -76deg,rgba(214, 233, 248, 1) 43.85%,rgba(255, 255, 255, 1) 58.66%);
+          background : -webkit-linear-gradient(-76deg, rgba(214, 233, 248, 1) 43.85%, rgba(255, 255, 255, 1) 58.66%);
+          background : -webkit-gradient(linear,46.71% -341.1% ,53.29% 441.1% ,color-stop(0.4385,rgba(214, 233, 248, 1) ),color-stop(0.5866,rgba(255, 255, 255, 1) ));
+          background : -o-linear-gradient(-76deg, rgba(214, 233, 248, 1) 43.85%, rgba(255, 255, 255, 1) 58.66%);
+          background : -ms-linear-gradient(-76deg, rgba(214, 233, 248, 1) 43.85%, rgba(255, 255, 255, 1) 58.66%);
+          -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#D6E9F8', endColorstr='#FFFFFF' ,GradientType=0)";
+          background : linear-gradient(166deg, rgba(214, 233, 248, 1) 43.85%, rgba(255, 255, 255, 1) 58.66%);
+          border-radius : 12px;
+          -moz-border-radius : 12px;
+          -webkit-border-radius : 12px;
+          box-shadow : 2.77px 2.77px 4.62px rgba(20, 78, 117, 0.5);
+          box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);     
+          filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2.77, Off=2.77, Color='#144E75') progid:DXImageTransform.Microsoft.gradient(startColorstr='#D6E9F8',endColorstr='#FFFFFF' , GradientType=1);        
+
+        }  
+        .title-banner.collapsed {
+          width: 93.25vw;
+        }  
         
         .title-banner .left-text {
           font-size: 12px;
@@ -489,8 +558,12 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           margin-left: auto; /* Push right text to the very right */
         }    
       </style>    
-      <div class="title-banner">
-        <span class="left-text"></span>
+      <div class="title-banner ${this.leftSplitDisplayed!==undefined&&this.leftSplitDisplayed?'': 'collapsed'}">
+        <span class="left-text">
+        <mwc-icon-button size="s" style="left:22px;" id="expandleftpane" dense raised label=""  icon="${this.leftSplitDisplayed!==undefined&&this.leftSplitDisplayed?'expand_more': 'expand_less'}"   @click=${this.toggleLeftSplitPane}></mwc-icon-button>
+        <mwc-icon-button size="xl" dense raised label=""  icon="home" @click=${this.resetView}></mwc-icon-button> 
+    
+        </span>
         <h1 class="title">${this.selectedProcInstance.procedure_name} v:${this.selectedProcInstance.procedure_version}</h1>
         <span class="right-text">Module ${this.selectedProcInstance.module_name}</span>
       </div>
