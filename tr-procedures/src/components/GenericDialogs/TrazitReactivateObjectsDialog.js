@@ -23,7 +23,7 @@ return class extends base {
     }
   
     noNegativeValues(e) {
-      alert('reactive')
+      //alert('reactive')
       if (e.target.value <=0){
         this.numDays=0
         e.target.value=0
@@ -63,9 +63,12 @@ return class extends base {
           font-size : 19px;
           background-color: 4fcad029;
         }       
+        div.reactivate{
+          min-width:490px;
+        }
   
         </style>
-        <div class="layout vertical flex center-justified">        
+        <div class="layout vertical flex center-justified reactivate">        
                 <div class="layout vertical flex">
                   <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="queryNumDays" type="number" 
@@ -130,6 +133,10 @@ return class extends base {
     }
     reactivateObjectDialogAction() {
        console.log('reactivateObjectDialogAction', 'this.objectToReactivateName', this.objectToReactivateName)
+        if (this.objectToReactivateName.value===undefined||this.objectToReactivateName.value.length==0) {
+          alert('Please check the model, the keyFldName property is set to one value ('+ this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName +') that is not part of those entities data info')
+          return
+        }
         if (this.objectToReactivateName.value) {
           this.selectedItems[this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName]=this.objectToReactivateName.value
           this.selectedDialogAction = this.actionBeingPerformedModel
