@@ -398,7 +398,8 @@ export function TrazitCredentialsDialogs(base) {
     this.credDialog.close()
   }
 
-  credsChecker(actionName, objId, params={}, action, isPlatform=false, dialogName='') {
+  credsChecker(actionName, objId, params={}, action, isPlatform=false, dialogName='', isProcManagement) {
+    console.log('credsChecker', isProcManagement)
     this.actionObj = action || {}
     this.reqParams = params
     if (actionName) {
@@ -410,7 +411,7 @@ export function TrazitCredentialsDialogs(base) {
         this.objectId = objId
         let noNeedCreds = false
         if (!isPlatform){
-          noNeedCreds=this.checkProcList()
+          noNeedCreds=this.checkProcList(isProcManagement)
         }else{
           if (dialogName.length==0){
             noNeedCreds=true
@@ -420,7 +421,7 @@ export function TrazitCredentialsDialogs(base) {
           }
         }
         if (noNeedCreds) {
-          this.nextRequest(action)
+          this.nextRequest(action, isProcManagement)
         } else {
           if (this.type == "confirm") {
             //this.actionBeingPerformedModel=action

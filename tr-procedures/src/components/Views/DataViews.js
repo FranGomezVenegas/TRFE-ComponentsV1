@@ -20,7 +20,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
-
+import '@doubletrade/lit-datatable';
 
 export function DataViews(base) {
     return class extends TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(AuditFunctions(ButtonsFunctions(base))))))))))) {
@@ -37,23 +37,86 @@ export function DataViews(base) {
             `   
         }
 
-        jsonViewer(elem, data = {}){
-        //console.log('jsonViewer', 'elem', elem, 'data', data, 'dataToDisplay', data[elem.endPointResponseObject])
+        getDataFromRoot(elem, data){
+          if (data===undefined){return undefined}
+          if (elem.endPointPropertyArray!==undefined){
+            if (elem.endPointPropertyArray.length === 0) {
+              return data;
+            }
+            
+            //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
+            //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
+            let i=0
+            let subJSON={}
+            //data = data[elem.endPointPropertyArray[0]][0]
+            for (i=0;i<elem.endPointPropertyArray.length;i++){
+              let propertyName=elem.endPointPropertyArray[i]
+              if (Array.isArray(data[propertyName])){
+                if (i<elem.endPointPropertyArray.length-1){
+                  subJSON = data[propertyName][0];
+                }else{
+                  return data[propertyName]
+                }
+              }else{
+                subJSON = data[propertyName];
+              }
+              if (typeof subJSON === 'undefined') {
+                return data
+              }else{
+                data = subJSON
+              }                
+            }
+            return data
+            if (typeof subJSON === 'undefined') {
+              return undefined;
+            } else if (elem.endPointPropertyArray.length % 2 === 0) {
+              // If the input array has an even number of elements, skip one more object level before recursing
+              return getValueFromNestedJSON(subJSON, elem.endPointPropertyArray.slice(0, numObjectsToSkip));
+            } else {
+              // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
+              return getValueFromNestedJSON(subJSON, elem.endPointPropertyArray.slice(0, numObjectsToSkip));
+            }
+          }else{
+            if (elem.endPointResponseObject!==undefined&&elem.endPointResponseObject2!==undefined){
+              let dataToRet=[]
+              dataToRet=data[elem.endPointResponseObject]
+              if (dataToRet!==undefined){
+                return dataToRet[elem.endPointResponseObject2]
+              }else{
+                return []
+              }
+            }else{
+              if (String(elem.endPointResponseObject).toUpperCase()==="ROOT"){
+                return data
+              }else{
+                return  data[elem.endPointResponseObject]
+              }
+            }
+          }
+        }
+
+        jsonViewer(elem, data){
+        // console.log('jsonViewer', 'elem', elem, 'data', data, 'dataToDisplay', data[elem.endPointResponseObject])
         return html`
         <div style="position:relative;">
             ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title}</span>`}
-            ${elem===undefined||data===undefined ? nothing : html`
-            <json-viewer style="padding:0px; padding-left:20px; top:-15px;">${JSON.stringify(data[elem.endPointResponseObject])}</json-viewer>       
-            `}
+            ${elem===undefined||data===undefined ? nothing :  html` 
+                <json-viewer style="padding:0px; padding-left:20px; top:-15px;">${JSON.stringify(this.getDataFromRoot(elem, data))}</json-viewer>`
+            }
         </div>
-        `   
+        `
         }     
         kpiReportTitle(elem){
+        //console.log('kpiReportTitle', elem)          
             return html`    
-             <h1 style="${this.kpiStyleByStringAttribute("h1", elem)}" id="reportTitle">${elem.title["label_"+this.lang]}<h1>
+             <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_"+this.lang]}</p>
             `
         }             
-
+        kpiReportTitleLvl2(elem){
+          return html`    
+          <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_"+this.lang]}</p>
+          `
+      }     
         kpiRecoveryRate(){
             //console.log('kpiRecoveryRate', this.data.recoveryrate_datatable)
             return html`
@@ -71,10 +134,8 @@ export function DataViews(base) {
               if (elem.fieldsToDisplay[i]["label_"+this.lang]!==undefined){
                 elem.fieldsToDisplay[i].header=elem.fieldsToDisplay[i]["label_"+this.lang]
               }
-            }
-        
-            return html`
-              
+            }        
+            return html`              
               ${!data[elem.elementName]||!elem.fieldsToDisplay ? 
                 nothing : 
               html`
@@ -82,15 +143,30 @@ export function DataViews(base) {
               `}
             `
         }
-        readOnlyTable(elem, data) {
-          console.log('readOnlyTable', elem, data)
-          let dataArr=[]
-          // if (typeof data === "object" && data !== null) {
-          //   dataArr = Object.keys(data).map(key => ({ key, ...data[key] }));//Object.values(data).map((item, index) => ({ key: Object.keys(data)[index], ...item }));
-          //   dataArr=dataArr[0]
-          // }else{
-            dataArr=data
-          // }
+        readOnlyTableByGroup(elem, dataArr, isSecondLevel = false) {
+          console.log('readOnlyTableByGroup', elem, dataArr)
+          dataArr=this.getDataFromRoot(elem, dataArr)
+          return html`
+          ${dataArr===undefined ? html`No Data` : 
+          html` hola
+            ${Object.entries(dataArr).map(([key, value]) => 
+            html`
+              ${dataArr.map(p => 
+              html`     
+                ${key}     
+                ${this.readOnlyTable(elem, p, isSecondLevel, value)}
+              `)}
+            `)} 
+          `}
+        `
+        }
+        readOnlyTable(elem, dataArr, isSecondLevel, directData) {
+          if (isSecondLevel===undefined){isSecondLevel=false}
+          if (directData!==undefined){
+            dataArr=directData
+          }else{
+            dataArr=this.getDataFromRoot(elem, dataArr)
+          }
           return html`
           <style>
           .styled-table {
@@ -100,20 +176,26 @@ export function DataViews(base) {
             color: #4285f4;
             font-size:2vmin;
             border-collapse: collapse;
-            margin: 25px 0;
+            margin: 2px 10px; 
             font-family: sans-serif;
-            min-width: 400px;
-            box-shadow: 0 0 20px #44cbe6;
+            /* min-width: 400px; */
+            box-shadow: 0 0 20px #44cbe6;    
+            table-layout: fixed;
+            //width: 91%;                    
           }            
           .styled-table thead tr {
             background-color: #2989d8;
             color: #ffffff;
-            text-align: left;
+            text-align:center;
+            border: 1px solid #2989d8;
           }   
           .styled-table th,
           .styled-table td {
             color: #032bbc; 
             padding: 12px 15px;
+            border: 1px solid #032bbc;
+            word-break: break-all;
+            
           }  
           .styled-table tbody tr {
             border-bottom: 1px solid #207cca;
@@ -135,129 +217,336 @@ export function DataViews(base) {
           span.cardValue{
             color: #009879;
           }     
+          span.title {
+            color: rgb(20, 115, 230);
+            ;margin-top: 10px;font-weight: bold;
+          }
+          span.title.true{
+            font-size: 24px;
+          }
+          span.title.false{
+            font-size: 30px;
+          }
           </style>
-            ${elem.title===undefined ? nothing : html`<h2>${elem.title["label_"+this.lang]}</h2>`}
-            <table class="styled-table">
-              <thead>          
-                <tr>
-                  ${elem.columns.map(fld =>
-                    html`
-                    <th>${fld["label_"+ this.lang]}</th>
-                    `
-                  )}                  
-                </tr>
-              </thead>
-              <tbody>
-              ${dataArr===undefined ? nothing : 
-              html`
-                ${dataArr.map(p => 
-                  html`
+          <div style="display: flex; flex-direction: column; text-align: center;">
+            ${elem===undefined||elem.title===undefined ? nothing : html`
+            <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+            }
+            ${elem.columns===undefined ? html`No columns defined` : html`
+              <table class="styled-table">
+                <thead>          
                   <tr>
                     ${elem.columns.map(fld =>
                       html`
-                        ${fld.name==='pretty_spec' ?
-                        html `
-                          <td>
-                            <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
-                            <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
-                            <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
-                          </td>
-                        `:html`
-                          ${fld.as_progress!==undefined&&fld.as_progress===true?
-                          html`                            
-                            <style>
-                              .w3-responsive{display:block;overflow-x:auto}
-                              .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
-                              .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
-                              .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
-                              .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
-                              .title {
-                                  font-size: 8px; font-weight: 500; letter-spacing: 0;
-                                  line-height: 1.5em; padding-bottom: 15px; position: relative;
-                                  font-family: Montserrat; font-color:rgb(94, 145, 186);
-                                }
-                              </style>
-                              <td>
-                              <div class="w3-container" >
-                                <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
-                                  <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%" >${p[fld.name]}%</div>
-                                </div>
-                              </div>
-                            <br> 
-                            </td>           
+                      <th>${fld["label_"+ this.lang]}</th>
+                      `
+                    )}                  
+                  </tr>
+                </thead>
+                <tbody>
+                ${dataArr===undefined||!Array.isArray(dataArr) ? html`No Data` : 
+                html`
+                  ${dataArr.map(p => 
+                    html`
+                    <tr>
+                      ${elem.columns.map(fld =>
+                        html`
+                          ${fld.name==='pretty_spec' ?
+                          html `
+                            <td>
+                              <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
+                              <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
+                              <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
+                            </td>
                           `:html`
-                              <td>
-                              ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
-                              ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
-                              ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
-                              </td>
+                            ${fld.as_progress!==undefined&&fld.as_progress===true?
+                            html`                            
+                              <style>
+                                .w3-responsive{display:block;overflow-x:auto}
+                                .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
+                                .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                                .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                                .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                                .title {
+                                    font-size: 8px; font-weight: 500; letter-spacing: 0;
+                                    line-height: 1.5em; padding-bottom: 15px; position: relative;
+                                    font-family: Montserrat; font-color:rgb(94, 145, 186);
+                                  }
+                                </style>
+                                <td>
+                                <div class="w3-container" >
+                                  <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                    <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%" >${p[fld.name]}%</div>
+                                  </div>
+                                </div>
+                              <br> 
+                              </td>           
+                            `:html`
+                                <td>
+                                ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                                ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                                ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                                </td>
+                            `}
                           `}
-                        `}
-                      
+                        
+                        `
+                      )}
+                    </tr>
+                    `
+                  )}
+                `}
+                </tbody>
+              </table>
+            `}
+          </div>
+          `;
+        }        
+
+        rolesAndActions(elem, dataArr, isSecondLevel = false) {
+          return html`
+          <style>
+          .styled-table-for-rolesandactions {
+            display: -webkit-inline-box;
+            margin-top: 0px;
+            margin-bottom: 3px;
+            color: #4285f4;
+            font-size:2vmin;
+            border-collapse: collapse;
+            margin: 2px 10px;
+            font-family: sans-serif;
+            /* min-width: 400px; */
+            box-shadow: 0 0 20px #44cbe6;            
+          }            
+          .styled-table-for-rolesandactions thead tr {
+            background-color: #2989d8;
+            color: #ffffff;
+            text-align: left;
+          }   
+          .styled-table-for-rolesandactions th,
+          .styled-table-for-rolesandactions td {
+            color: #032bbc; 
+            padding: 12px 15px;
+            border: 1px solid #032bbc;
+          }  
+          .styled-table-for-rolesandactions td.present {
+            text-align: center;
+            background-color: #5e80003d;
+          }
+          .styled-table-for-rolesandactions td.absent {
+            background-color: #e0121257;
+          }          
+          .styled-table-for-rolesandactions tbody tr {
+            border-bottom: 1px solid #207cca;
+          }
+      
+          .styled-table-for-rolesandactions tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+          }  
+          span.cardLabel {
+            font-weight: bold;
+            color: #032bbc;
+          }   
+          span.cardValue{
+            color: #009879;
+          }     
+          span.title {
+            color: rgb(20, 115, 230);
+            ;margin-top: 10px;font-weight: bold;
+          }
+          span.title.true{
+            font-size: 24px;
+          }
+          span.title.false{
+            font-size: 30px;
+          }
+          </style>
+          <div style="display: flex; flex-direction: column; text-align: center;">
+            ${elem===undefined||elem.title===undefined ? nothing : html`
+            <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+            }
+            <table class="styled-table-for-rolesandactions">
+              <thead>          
+                <tr>
+                ${dataArr===undefined||dataArr[0]===undefined ? nothing : 
+                  html`
+                  ${dataArr[0].map(fld =>
+                    html`
+                    <th style="text-align: center;">${fld}</th>
+                    `
+                  )} 
+                  `    
+                }
+                </tr>
+              </thead>
+              <tbody>
+              ${dataArr===undefined ||dataArr[0]===undefined ? nothing : 
+              html`
+                ${dataArr.map((p, iRow) => 
+                html`
+                  ${iRow==0?nothing: html `
+                  <tr>
+                    ${p.map((fld, iCol) =>                      
+                      html`
+                        ${iCol==0?
+                          html `<th style="background-color: #2989d8; color: white; text-align: right;">${fld}</th>`
+                        : 
+                        html`
+                        ${fld!==undefined&&fld.length>0 ?
+                          html `<td class="present" title="Assigned"> X </td>` 
+                        :
+                          html `<td class="absent" title="NOT assigned"> </td>` 
+                        }    
+                        `                      
+                        }
                       `
                     )}
                   </tr>
-                  `
-                )}
+                `}
+              `)}
               `}
               </tbody>
             </table>
+          </div>
           `;
         }        
+
         kpiCardSomeElementsSingleObject(elem, data){
+          
             return html`  
-            ${this.kpiCardSomeElementsMain(elem, data[elem.endPointResponseObject])}
+            ${this.kpiCardSomeElementsMain(elem, this.getDataFromRoot(elem, data))}
             ` 
         }
         cardSomeElementsRepititiveObjects(elem, data){
-            console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
+            // console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
             return html`  
-            ${data[elem.endPointResponseObject].map(d => 
+            ${data[elem.endPointResponseObject]===undefined? nothing:html`
+              ${data[elem.endPointResponseObject].map(d => 
                 html`
-                ${this.kpiCardSomeElementsMain(elem, d)}
+                  ${this.kpiCardSomeElementsMain(elem, d)}
                 `
-            )}
+              )}
+            `}
             ` 
         }        
         kpiCardSomeElementsMain(elem, data){
-            //console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
+           // console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
             return html`   
             ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title}</span>`}         
             ${data===undefined ? html`nothing to do` :
                 html`
+                <style>
+                ul.column-list {
+                  -webkit-columns: var(--num-columns, 3); /* Number of columns */
+                  -moz-columns: var(--num-columns, 3);
+                  columns: var(--num-columns, 3);
+                  -webkit-column-gap: 10px; /* Spacing between columns */
+                  -moz-column-gap: 10px;
+                  column-gap: 10px;
+                  list-style-type: none;
+                  padding: 0;
+                  margin: 0;
+                }
+                ul.column-list1 {
+                  -webkit-columns: 1; /* Number of columns */
+                  -moz-columns: 1;
+                  columns: 1;
+                  -webkit-column-gap: 10px; /* Spacing between columns */
+                  -moz-column-gap: 10px;
+                  column-gap: 10px;
+                  list-style-type: none;
+                  padding: 0;
+                  margin: 0;
+                }
+                ul.column-list2 {
+                  -webkit-columns: 2; /* Number of columns */
+                  -moz-columns: 2;
+                  columns: 2;
+                  -webkit-column-gap: 10px; /* Spacing between columns */
+                  -moz-column-gap: 10px;
+                  column-gap: 10px;
+                  list-style-type: none;
+                  padding: 0;
+                  margin: 0;
+                }
+                ul.column-list3 {
+                  -webkit-columns: var(--num-columns, 3); /* Number of columns */
+                  -moz-columns: var(--num-columns, 3);
+                  columns: var(--num-columns, 3);
+                  -webkit-column-gap: 10px; /* Spacing between columns */
+                  -moz-column-gap: 10px;
+                  column-gap: 10px;
+                  list-style-type: none;
+                  padding: 0;
+                  margin: 0;
+                }
+                ul.column-list4 {
+                  -webkit-columns: 4; /* Number of columns */
+                  -moz-columns: 4;
+                  columns: 4;
+                  -webkit-column-gap: 10px; /* Spacing between columns */
+                  -moz-column-gap: 10px;
+                  column-gap: 10px;
+                  list-style-type: none;
+                  padding: 0;
+                  margin: 0;
+                }
+                
+                ul.column-list li {
+                  display: inline-block;
+                  width: 100%;
+                  margin-bottom: 10px;
+                  margin-left:30px;
+                  hyphens: auto;
+                  word-break: break-all;          
+                }
+                span.relevantlabel{
+                  font-weight: bold;
+                  font-size: 16px;
+                }          
+                span.label{
+                  font-weight: bold;         
+                }
+
+                </style>
+                ${this.getButton(elem, data, true)}
+                <ul class="column-list${elem.num_columns!==undefined?elem.num_columns:''}">                
                 ${elem.fieldsToDisplay.map(fld =>                    
                     html`    
                     ${fld.as_progress!==undefined&&fld.as_progress===true?
                       html`                            
                       <style>
-                              .w3-responsive{display:block;overflow-x:auto}
-                              .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px;    border-radius: 5px;
-                                box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);}
-                              .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
-                              .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
-                              .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
-                              .title {
-                                  font-size: 8px; font-weight: 500; letter-spacing: 0;
-                                  line-height: 1.5em; padding-bottom: 15px; position: relative;
-                                  font-family: Montserrat; font-color:rgb(94, 145, 186);
-                                }
-                              </style>
-                    
-                          
+                        .w3-responsive{display:block;overflow-x:auto}
+                        .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px;    border-radius: 5px;
+                          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);}
+                        .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                        .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                        .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                        .title {
+                          font-size: 8px; font-weight: 500; letter-spacing: 0;
+                          line-height: 1.5em; padding-bottom: 15px; position: relative;
+                          font-family: Montserrat; font-color:rgb(94, 145, 186);
+                        }
+                      </style>
                           <div class="w3-container" >
                             <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
-                              <div class="w3-container w3-blue w3-round-xlarge" style="width:${data[fld.name]}%" >${data[fld.name]}%</div>
+                              <div title="${this.titleLang(fld)}" class="w3-container w3-blue w3-round-xlarge" style="width:${data[fld.name]}%" >${fld.name}: ${data[fld.name]===undefined||data[fld.name].length==0 ? '0': data[fld.name]}%</div>
                             </div>
                           </div>
                         <br> 
                         
-                      `:html`                                    
-                        <li><span class="cardLabel">${this.fieldLabel(fld)}:</span> <span class="cardValue"> ${data[fld.name]}</span></li>
+                      `:html`    
+                        <li><span class="cardLabel">  
+                        ${this.fieldLabel(fld)}: </span> <span class="cardValue">${data[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                        ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? data[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                        ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? data[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                        </span></li>
                       `}
                     `
                 )}
-              `}
-              ${this.getButton(elem, data)}
+                </ul>
+              `}              
             `
         }
         fieldLabel(fld){
@@ -273,7 +562,7 @@ export function DataViews(base) {
         }
 
         loadDialogs(){
-          console.log('DataViews loadDialogs')
+          //console.log('DataViews loadDialogs')
           return html`
           ${this.credentialsDialog()}
           ${this.genericFormDialog()}
@@ -401,7 +690,7 @@ export function DataViews(base) {
             if (chartObj!==undefined&&chartObj!==null){
               chartObj.style.setProperty("width", "500px")
             }
-            console.log('chartStyle', 'chartName', chartName, chartObj)
+            //console.log('chartStyle', 'chartName', chartName, chartObj)
         }
           
         addNumericValue(rule, value){

@@ -50,7 +50,7 @@ export function DialogsFunctions(base) {
   /**
    * set the justification type, generate justification list for non text type
    */
-   checkProcList() {
+   checkProcList(isProcManagement) {
     console.log('checkProcList')
     let bypass = true
     // this.justificationType = null
@@ -80,9 +80,16 @@ export function DialogsFunctions(base) {
     // return true
     this.justificationType = null
     this.justificationList = null
+    let pArr = []
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-    
-    let pArr = procList.filter(p => p.procInstanceName == this.procInstanceName)
+    if (isProcManagement!==undefined&&isProcManagement===true){
+      pArr = procList.filter(p => p.procInstanceName == 'proc_management')
+    }else{
+      pArr = procList.filter(p => p.procInstanceName == this.procInstanceName)
+    }
+    if (isProcManagement&&(pArr===undefined||pArr.length==0)){
+      return true
+    }
     let p = pArr[0]
     bypass = true
 //    procList.forEach(p => {

@@ -80,8 +80,9 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
     this.sopsPassed=false
   }
   render(){
+    // console.log('view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
     return html`
-      <div>   
+      <div>
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
           ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
         `}
@@ -89,33 +90,75 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
       ${super.render()}
     ` 
   }
+
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
-    console.log('kpiElementsController', 'data', data, 'elemDef', elemDef)
-    return html`${data&&elemDef&&Object.keys(data).length > 0?       
+    // console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
+    return html`${data&&elemDef&&Object.keys(data).length > 0 ?
       html`
         <div style="display:block">
           ${elemDef.map((elem, i) => 
             html`      
-                    
-              ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
-              ${elem.type==="card" ? this.kpiCard(elem, data[elem.endPointResponseObject]) : nothing}
-              ${elem.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem, data) : nothing}
-              ${elem.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem, data) : nothing}              
-              ${elem.type==="recovery_rate" ? this.kpiRecoveryRate(elem) : nothing}
-              ${elem.type==="grid" ? this.kpiGrid(elem, data[elem.endPointResponseObject]) : nothing}
-              ${elem.type==="chart" ? this.kpiChartFran(elem) : nothing}   
-              ${elem.type==="jsonViewer" ? this.jsonViewer(elem, data) : nothing}
+              ${elem.elements!==undefined? html`               
+                ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject], false) : nothing}
+                <div style="display: flex; flex-wrap: wrap; padding-left:30px;">        
+                  ${elem.elements.map((elem2, i) =>
+                    html`
+                      ${elem2.type==="reportTitle" ? this.kpiReportTitleLvl2(elem2, data[elem.endPointResponseObject], true) : nothing}
+                      ${elem2.type==="card" ? this.kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
+                      ${elem2.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}
+                      ${elem2.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
+                      ${elem2.type==="recovery_rate" ? this.kpiRecoveryRate(elem2, true) : nothing}
+                      ${elem2.type==="grid" ? this.kpiGrid(elem2, data[elem2.endPointResponseObject], true) : nothing}
+                      ${elem2.type==="chart" ? this.kpiChartFran(elem2, true) : nothing}   
 
-              ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2!==undefined ? 
-                this.readOnlyTable(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2]) : nothing}
-              ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2===undefined ? 
-                this.readOnlyTable(elem, data[elem.endPointResponseObject]) : nothing}   
-              
-              ${(elem.includeChild===undefined||elem.includeChild===false) ? nothing :
-                html`
-                    ${this.kpiCardSomeElementsChild(elem, data)}
-              `}              
-              ${elem.type==="Report" ? this.ReportController(elem) : nothing}              
+                      ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
+                      ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
+                      ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
+
+                      ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2!==undefined ? 
+                        this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true) : nothing}
+                      ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2===undefined ? 
+                        this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true) : nothing}   
+                        
+                         
+                      ${(elem2.includeChild===undefined||elem2.includeChild===false) ? nothing :
+                        html`
+                            ${this.kpiCardSomeElementsChild(elem2, data, true)}
+                      `}              
+                      ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}              
+                    `
+                  )} 
+                </div>
+              `: html`      
+                ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
+                ${elem.type==="card" ? this.kpiCard(elem, data[elem.endPointResponseObject]) : nothing}
+                ${elem.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem, data) : nothing}
+                ${elem.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem, data) : nothing}              
+                ${elem.type==="recovery_rate" ? this.kpiRecoveryRate(elem) : nothing}
+                ${elem.type==="grid" ? this.kpiGrid(elem, data[elem.endPointResponseObject]) : nothing}
+                ${elem.type==="chart" ? this.kpiChartFran(elem) : nothing}   
+                ${elem.type==="jsonViewer" ? this.jsonViewer(elem, data, true): nothing}
+                ${elem.type==="readOnlyTable" ? this.readOnlyTable(elem, data, true): nothing}
+                ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
+
+              ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
+                this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true) : nothing}
+              ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2===undefined ? 
+                this.rolesAndActions(elem, data[elem.endPointResponseObject], true) : nothing}   
+
+
+                ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2!==undefined ? 
+                  this.readOnlyTable(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2]) : nothing}
+                ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2===undefined ? 
+                  this.readOnlyTable(elem, data[elem.endPointResponseObject]) : nothing}   
+                
+                ${(elem.includeChild===undefined||elem.includeChild===false) ? nothing :
+                  html`
+                      ${this.kpiCardSomeElementsChild(elem, data)}
+                `}              
+                ${elem.type==="Report" ? this.ReportController(elem) : nothing}        
+              `
+              }
         </div>
         `
         )}      

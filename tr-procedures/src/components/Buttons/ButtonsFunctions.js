@@ -7,7 +7,7 @@ import { ProcManagementMethods} from '../../components/ProcManagement/ProcManage
 
 export function ButtonsFunctions(base) {
     return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
-    getButton(sectionModel = this.viewModelFromProcModel, data) {
+    getButton(sectionModel = this.viewModelFromProcModel, data, isProcManagement) {      
 //      console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
       return html`
         <style>
@@ -112,21 +112,21 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
-                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data)}></mwc-icon-button>` :
+                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
               html`${action.button.img ?
                   html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)} img"
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
-                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data)}>
+                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
                   label="${action.button.title['label_'+this.lang]}" 
                   ?disabled="${this.btnDisabled(action, sectionModel)}"
                   ?hidden=${this.btnHidden(action)}
-                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data)}></mwc-button>`
+                  @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
               }`
               }` :
               nothing
@@ -231,7 +231,9 @@ export function ButtonsFunctions(base) {
       }
       return d
     }        
-    actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName='selectedItems', data) {
+    actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
+      selectedItemPropertyName=selectedItemPropertyName||'selectedItems'
+    console.log('actionMethod', this.selectedProcInstance, isProcManagement)
       //this.loadDialogs()  
       if (data!==undefined){
         if (Object.keys(data).length > 0){
@@ -256,12 +258,12 @@ export function ButtonsFunctions(base) {
           }else{            
             if (this[selectedItemPropertyName]===undefined){
               if (data===undefined){
-                this.actionWhenRequiresNoDialog(action)
+                this.actionWhenRequiresNoDialog(action, null, null, isProcManagement)
               }else{
-                this.actionWhenRequiresNoDialog(action, data)
+                this.actionWhenRequiresNoDialog(action, data, null, isProcManagement)
               }
             }else{
-              this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0])
+              this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement)
             }
             return
           }
@@ -416,13 +418,13 @@ export function ButtonsFunctions(base) {
       }
       this.samplesReload = false
     }
-    actionWhenRequiresNoDialog(action, selectedItem, targetValue ={} ) {
+    actionWhenRequiresNoDialog(action, selectedItem, targetValue ={}, isProcManagement ) {
         console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
         this.selectedAction=action
         if (this.itemId) {
-          this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue), action)
+          this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue), action, null, null, isProcManagement)
         } else {
-          this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue), action)
+          this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue), action, null, null, isProcManagement)
         }
         // Comentado para habilitar confirmDialogs
         // this.performActionRequestHavingDialogOrNot(action, selectedItem)
@@ -443,7 +445,7 @@ export function ButtonsFunctions(base) {
         let params = this.config.backendUrl + endPointUrl
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
           + '&'+ new URLSearchParams(credDialogArgs)
-        console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
+        //console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
         
         this.fetchApi(params).then(() => {
 //console.log('performActionRequestHavingDialogOrNot: into the fetchApi')
