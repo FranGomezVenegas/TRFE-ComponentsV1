@@ -2921,50 +2921,100 @@ export const InvDraft = {
 			]
 		},
 		{ "actionName": "REOPEN_EVENT",
-			"alternativeAPIActionMethod": "completeInstrumentEventAction",
-			"requiresDialog": true,		
-			"clientMethod": "openReactivateObjectDialog",
-			"endPoint": "/app/procs/InstrumentsAPIactions",
-			"endPointParams": [
-			  { "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
-			  { "argumentName": "eventId", "selObjectPropertyName": "id" }
-			  
-			],
-			"button": {
-			  "icon": "alarm_add",
-			  "title": {
-				"label_en": "Reopen", "label_es": "Reabrir"
-			  },
-			  "requiresGridItemSelected": false
-			},
-			"dialogInfo": {
-			  "requiresDialog": true,
-			  "name": "reactivateObjectDialog",
-			  "fieldsObject": {
-				"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
-				"objectName": { "label_en": "Reopen event", "label_es": "Reabrir evento" }
-			  },  
-			  "listDefinition":{
-				"keyFldName":"id",
-				"eachEntryTextGenerator":[
-				  {"value": "instrument", "type":"field"}, {"value": " (", "type":"fix"}, 
-				  {"value": "event_type", "type":"field"}, {"value": "-", "type":"fix"},
-				  {"value": "started_on", "type":"field"}, {"value": "-", "type":"fix"},
-				  {"value": "completed_on", "type":"field"}, {"value": "-", "type":"fix"},
-				  {"value": "instrument_family", "type":"field"}, {"value": ")", "type":"fix"}
-				  ]
-			  },
-			  "viewQuery": {
-				  "endPoint": "/app/procs/InvTrackingAPIqueries",
-				  "actionName": "COMPLETED_EVENTS_LAST_N_DAYS",
-				  "clientMethod": "getDeactivatedObjects",
-				  "endPointParams": [
-					{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
-				  ]
-			  }
-			}
-		}
-	
+  "alternativeAPIActionMethod": "completeInstrumentEventAction",
+  "requiresDialog": true,
+  "clientMethod": "openReactivateObjectDialog",
+  "endPoint": "/app/procs/InstrumentsAPIactions",
+  "endPointParams": [
+    {
+      "argumentName": "instrumentName",
+      "selObjectPropertyName": "instrument"
+    },
+    {
+      "argumentName": "eventId",
+      "selObjectPropertyName": "id"
+    }
+  ],
+  "button": {
+    "icon": "alarm_add",
+    "title": {
+      "label_en": "Reopen",
+      "label_es": "Reabrir"
+    },
+    "requiresGridItemSelected": false
+  },
+  "dialogInfo": {
+    "requiresDialog": true,
+    "name": "reactivateObjectDialog",
+    "fieldsObject": {
+      "queryNumDays": {
+        "label_en": "Number of Days",
+        "label_es": "Número de Días"
+      },
+      "objectName": {
+        "label_en": "Reopen event",
+        "label_es": "Reabrir evento"
+      }
+    },
+    "listDefinition": {
+      "keyFldName": "certif_id",
+      "eachEntryTextGenerator": [
+        {
+          "value": "lot_name",
+          "type": "field"
+        },
+        {
+          "value": " (",
+          "type": "fix"
+        },
+        {
+          "value": "category",
+          "type": "field"
+        },
+        {
+          "value": "-",
+          "type": "fix"
+        },
+        {
+          "value": "reference",
+          "type": "field"
+        },
+        {
+          "value": "-",
+          "type": "fix"
+        },
+        {
+          "value": "completed_on",
+          "type": "field"
+        },
+        {
+          "value": "-",
+          "type": "fix"
+        },
+        {
+          "value": "completed_decision",
+          "type": "field"
+        },
+        {
+          "value": ")",
+          "type": "fix"
+        }
+      ]
+    },
+    "viewQuery": {
+      "endPoint": "/app/procs/InvTrackingAPIqueries",
+      "actionName": "COMPLETED_EVENTS_LAST_N_DAYS",
+      "clientMethod": "getDeactivatedObjects",
+      "endPointParams": [
+        {
+          "argumentName": "numDays",
+          "element": "queryNumDays",
+          "fixValue": 7
+        }
+      ]
+    }
+  }
+}	
   ]
   }
   
