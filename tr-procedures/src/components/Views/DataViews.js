@@ -143,24 +143,199 @@ export function DataViews(base) {
               `}
             `
         }
-        readOnlyTableByGroup(elem, dataArr, isSecondLevel = false) {
+        readOnlyTableByGroupOrig(elem, dataArr, isSecondLevel = false) {
           console.log('readOnlyTableByGroup', elem, dataArr)
           dataArr=this.getDataFromRoot(elem, dataArr)
           return html`
+          <style>
+          .table-group-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+          }
+          
+          .table-group {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+          }
+          
+          .table-group-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+          }          
+          </style>
+          <div class="table-group-container">
           ${dataArr===undefined ? html`No Data` : 
-          html` hola
-            ${Object.entries(dataArr).map(([key, value]) => 
-            html`
-              ${dataArr.map(p => 
-              html`     
-                ${key}     
-                ${this.readOnlyTable(elem, p, isSecondLevel, value)}
-              `)}
-            `)} 
+          html` 
+            
+              ${Object.entries(dataArr).map(([key, value]) => 
+              html`
+                ${this.readOnlyTable(elem, Object.entries(value).map, isSecondLevel, value, key)}
+              `)}             
           `}
+          </div>
         `
         }
-        readOnlyTable(elem, dataArr, isSecondLevel, directData) {
+
+        readOnlyTableByGroup(elem, dataArr, isSecondLevel) {
+          if (isSecondLevel===undefined){isSecondLevel=false}
+            dataArr=this.getDataFromRoot(elem, dataArr)
+          return html`
+          <style>
+          .styled-table-bygroup {
+            display: -webkit-inline-box;
+            margin-top: 0px;
+            margin-bottom: 3px;
+            color: #4285f4;
+            font-size:1.8vmin;
+            border-collapse: collapse;
+            margin: 2px 10px; 
+            font-family: sans-serif;
+            /* min-width: 400px; */
+            box-shadow: 0 0 20px #44cbe652;    
+            table-layout: fixed;
+            //width: 91%;                    
+          }            
+          .styled-table-bygroup thead tr {
+            background-color: #2989d8;
+            color: #ffffff;
+            text-align:center;
+            border: 1px solid #c2edf9;
+          }   
+          .styled-table-bygroup thead tr headercolumns{
+            background-color: 2989d870;
+            color: white;
+          }          
+
+          .styled-table-bygroup th {
+            color: white;
+          }
+          .styled-table-bygroup td {
+            color: #24c0eb; 
+            padding: 8px 15px;
+            border: 1px solid #c2edf9;
+            word-break: break-all;  
+            font-weight: bold;         
+          }  
+          .styled-table-bygroup tbody tr {
+            border-bottom: 1px solid #c2edf9;
+          }
+          .styled-table-bygroup tbody tr:nth-of-type(even) {
+            background-color: #c2f2ff5c;
+          }
+          .styled-table-bygroup tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+          }      
+          .styled-table-bygroup tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+          }  
+          span.cardLabel {
+            font-weight: bold;
+            color: #032bbc;
+          }
+          span.cardValue{
+            color: #009879;
+          }     
+          span.title {
+            color: rgb(35, 163, 198);
+            ;margin-top: 10px;font-weight: bold;
+          }
+          span.title.true{
+            font-size: 14px;
+          }
+          span.title.false{
+            font-size: 18px;
+          }
+
+          </style>
+          <div style="display: flex; flex-direction: row; text-align: center;">
+            ${this.getButton(elem, dataArr, true)}
+            <div style="display: flex; flex-direction: column; text-align: center;">
+
+              ${elem===undefined||elem.title===undefined ? nothing : html`
+              <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+              }
+              ${elem.columns===undefined ? html`No columns defined` : html`              
+                <table class="styled-table-bygroup">
+                ${Object.entries(dataArr).sort().map(([key, value]) =>                 
+                html`
+                  <thead>          
+                    <tr>
+                    <th style="color:#24c0eb; background-color: #d6e9f8; text-transform:uppercase; font-size:16px;" colspan=" ${elem.columns.length} ">${key}</th>
+                    </tr>
+                    <tr class="headercolumns">
+                      ${elem.columns.map(fld =>
+                        html`                        
+                        <td style="background-color:#7ccee6; color: white;">${fld["label_"+ this.lang]}</td>
+                        `
+                      )}                  
+                    </tr>
+                  </thead>
+                  <tbody>
+                  ${value===undefined||!Array.isArray(value) ? html`No Data` : 
+                  html`
+                    ${value.sort().map(p => 
+                      html`
+                      <tr>
+                        ${elem.columns.map(fld =>
+                          html`
+                            ${fld.name==='pretty_spec' ?
+                            html `
+                              <td>
+                                <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
+                                <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
+                                <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
+                              </td>
+                            `:html`
+                              ${fld.as_progress!==undefined&&fld.as_progress===true?
+                              html`                            
+                                <style>
+                                  .w3-responsive{display:block;overflow-x:auto}
+                                  .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
+                                  .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                                  .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                                  .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                                  .title {
+                                      font-size: 8px; font-weight: 500; letter-spacing: 0;
+                                      line-height: 1.5em; padding-bottom: 15px; position: relative;
+                                      font-family: Montserrat; font-color:rgb(94, 145, 186);
+                                    }
+                                  </style>
+                                  <td>
+                                  <div class="w3-container" >
+                                    <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                      <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%" >${p[fld.name]}%</div>
+                                    </div>
+                                  </div>
+                                <br> 
+                                </td>           
+                              `:html`
+                                  <td>
+                                  ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                                  ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                                  ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                                  </td>
+                              `}
+                            `}
+                          
+                          `
+                        )}
+                      </tr>
+                      `
+                    )}
+                  `}
+                  </tbody>
+                </table>
+              `)}
+              `}
+            </div>
+          </div>
+          `;
+        }              
+        readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
           if (isSecondLevel===undefined){isSecondLevel=false}
           if (directData!==undefined){
             dataArr=directData
@@ -228,77 +403,84 @@ export function DataViews(base) {
             font-size: 30px;
           }
           </style>
-          <div style="display: flex; flex-direction: column; text-align: center;">
-            ${elem===undefined||elem.title===undefined ? nothing : html`
-            <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
-            }
-            ${elem.columns===undefined ? html`No columns defined` : html`
-              <table class="styled-table">
-                <thead>          
-                  <tr>
-                    ${elem.columns.map(fld =>
-                      html`
-                      <th>${fld["label_"+ this.lang]}</th>
-                      `
-                    )}                  
-                  </tr>
-                </thead>
-                <tbody>
-                ${dataArr===undefined||!Array.isArray(dataArr) ? html`No Data` : 
-                html`
-                  ${dataArr.map(p => 
-                    html`
+          <div style="display: flex; flex-direction: row; text-align: center;">
+            ${this.getButton(elem, dataArr, true)}
+            <div style="display: flex; flex-direction: column; text-align: center;">
+            ${alternativeTitle!==undefined ? html` 
+              <p><span class="title ${isSecondLevel}" >${alternativeTitle}</span></p>`
+            : html`
+              ${elem===undefined||elem.title===undefined ? nothing : html`
+              <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+              }
+            `}
+              ${elem.columns===undefined ? html`No columns defined` : html`
+                <table class="styled-table">
+                  <thead>          
                     <tr>
                       ${elem.columns.map(fld =>
                         html`
-                          ${fld.name==='pretty_spec' ?
-                          html `
-                            <td>
-                              <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
-                              <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
-                              <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
-                            </td>
-                          `:html`
-                            ${fld.as_progress!==undefined&&fld.as_progress===true?
-                            html`                            
-                              <style>
-                                .w3-responsive{display:block;overflow-x:auto}
-                                .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
-                                .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
-                                .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
-                                .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
-                                .title {
-                                    font-size: 8px; font-weight: 500; letter-spacing: 0;
-                                    line-height: 1.5em; padding-bottom: 15px; position: relative;
-                                    font-family: Montserrat; font-color:rgb(94, 145, 186);
-                                  }
-                                </style>
-                                <td>
-                                <div class="w3-container" >
-                                  <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
-                                    <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%" >${p[fld.name]}%</div>
-                                  </div>
-                                </div>
-                              <br> 
-                              </td>           
-                            `:html`
-                                <td>
-                                ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
-                                ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
-                                ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
-                                </td>
-                            `}
-                          `}
-                        
+                        <th>${fld["label_"+ this.lang]}</th>
                         `
-                      )}
+                      )}                  
                     </tr>
-                    `
-                  )}
-                `}
-                </tbody>
-              </table>
-            `}
+                  </thead>
+                  <tbody>
+                  ${dataArr===undefined||!Array.isArray(dataArr) ? html`No Data` : 
+                  html`
+                    ${dataArr.map(p => 
+                      html`
+                      <tr>
+                        ${elem.columns.map(fld =>
+                          html`
+                            ${fld.name==='pretty_spec' ?
+                            html `
+                              <td>
+                                <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
+                                <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
+                                <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
+                              </td>
+                            `:html`
+                              ${fld.as_progress!==undefined&&fld.as_progress===true?
+                              html`                            
+                                <style>
+                                  .w3-responsive{display:block;overflow-x:auto}
+                                  .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
+                                  .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                                  .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                                  .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                                  .title {
+                                      font-size: 8px; font-weight: 500; letter-spacing: 0;
+                                      line-height: 1.5em; padding-bottom: 15px; position: relative;
+                                      font-family: Montserrat; font-color:rgb(94, 145, 186);
+                                    }
+                                  </style>
+                                  <td>
+                                  <div class="w3-container" >
+                                    <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                      <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%" >${p[fld.name]}%</div>
+                                    </div>
+                                  </div>
+                                <br> 
+                                </td>           
+                              `:html`
+                                  <td>
+                                  ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                                  ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                                  ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                                  </td>
+                              `}
+                            `}
+                          
+                          `
+                        )}
+                      </tr>
+                      `
+                    )}
+                  `}
+                  </tbody>
+                </table>
+              `}
+            </div>
           </div>
           `;
         }        
@@ -508,44 +690,52 @@ export function DataViews(base) {
                 span.label{
                   font-weight: bold;         
                 }
-
+                div#mainaddborder {
+                  border: 0.72px solid rgba(36, 192, 235, 1);
+                  border-radius: 10px;
+                  padding: 10px;
+                  margin-right: 2px;
+                }
+                
                 </style>
-                ${this.getButton(elem, data, true)}
-                <ul class="column-list${elem.num_columns!==undefined?elem.num_columns:''}">                
-                ${elem.fieldsToDisplay.map(fld =>                    
-                    html`    
-                    ${fld.as_progress!==undefined&&fld.as_progress===true?
-                      html`                            
-                      <style>
-                        .w3-responsive{display:block;overflow-x:auto}
-                        .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px;    border-radius: 5px;
-                          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);}
-                        .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
-                        .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
-                        .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
-                        .title {
-                          font-size: 8px; font-weight: 500; letter-spacing: 0;
-                          line-height: 1.5em; padding-bottom: 15px; position: relative;
-                          font-family: Montserrat; font-color:rgb(94, 145, 186);
-                        }
-                      </style>
-                          <div class="w3-container" >
-                            <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
-                              <div title="${this.titleLang(fld)}" class="w3-container w3-blue w3-round-xlarge" style="width:${data[fld.name]}%" >${fld.name}: ${data[fld.name]===undefined||data[fld.name].length==0 ? '0': data[fld.name]}%</div>
+                <div id="main${elem.add_border!==undefined&&elem.add_border==true?'addborder': ''}" class="layout vertical flex wrap">
+                  ${this.getButton(elem, data, true)}
+                  <ul class="column-list${elem.num_columns!==undefined?elem.num_columns:''}">                
+                  ${elem.fieldsToDisplay.map(fld =>                    
+                      html`    
+                      ${fld.as_progress!==undefined&&fld.as_progress===true?
+                        html`                            
+                        <style>
+                          .w3-responsive{display:block;overflow-x:auto}
+                          .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px;    border-radius: 5px;
+                            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);}
+                          .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                          .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                          .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                          .title {
+                            font-size: 8px; font-weight: 500; letter-spacing: 0;
+                            line-height: 1.5em; padding-bottom: 15px; position: relative;
+                            font-family: Montserrat; font-color:rgb(94, 145, 186);
+                          }
+                        </style>
+                            <div class="w3-container" >
+                              <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                <div title="${this.titleLang(fld)}" class="w3-container w3-blue w3-round-xlarge" style="width:${data[fld.name]}%" >${fld.name}: ${data[fld.name]===undefined||data[fld.name].length==0 ? '0': data[fld.name]}%</div>
+                              </div>
                             </div>
-                          </div>
-                        <br> 
-                        
-                      `:html`    
-                        <li><span class="cardLabel">  
-                        ${this.fieldLabel(fld)}: </span> <span class="cardValue">${data[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
-                        ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? data[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
-                        ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? data[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
-                        </span></li>
-                      `}
-                    `
-                )}
-                </ul>
+                          <br> 
+                          
+                        `:html`    
+                          <li><span class="cardLabel">  
+                          ${this.fieldLabel(fld)}: </span> <span class="cardValue">${data[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                          ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? data[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                          ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? data[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                          </span></li>
+                        `}
+                      `
+                  )}
+                  </ul>
+                </div>
               `}              
             `
         }

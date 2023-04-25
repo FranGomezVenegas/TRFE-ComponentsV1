@@ -302,9 +302,9 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     
     if (this.localModel){
       this.allProcedures = ProceduresManagement.ProceduresFake.all_platform_procedures_list
-      this.selectedProcInstance=this.allProcedures[1]
+      this.selectedProcInstance=this.allProcedures[0]
       //this.selectSectionView(0)
-      this.selectedViewDefinition = this.selectedProcInstance.views[4]
+      this.selectedViewDefinition = this.selectedProcInstance.views[0]
 
       if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
         //this.objecttabsComposition.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
