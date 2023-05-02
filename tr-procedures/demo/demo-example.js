@@ -187,7 +187,13 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
-    this.flag = this.trProc.changeLang()
+    if (this.trProc!==undefined&&this.trProc!==null){
+      this.flag = this.trProc.changeLang()
+    }
+    if (this.trProcManagement!==undefined&&this.trProcManagement!==null){
+      this.flag = this.trProcManagement.changeLang()
+    }
+
   }
 }
 customElements.define('demo-example', DemoExample);

@@ -3,7 +3,7 @@ import { ApiFunctions } from '../Api/ApiFunctions';
 import { ProceduresManagement } from '../../0proc_models/ProceduresManagement'
 import '@spectrum-web-components/split-view/sp-split-view';
 import { CommonCore } from '@trazit/common-core';
-import '../../components/ObjectByTabs/objecttabs-composition';
+import '../../components/ObjectByTabs/objecttabs-composition'; 
 import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
 import { ProcManagementMethods } from './ProcManagementMethods';
 export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))) {
@@ -264,6 +264,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       show: { type: Boolean },
       selectedViewDefinition: { type: Object },
       selectedItems: { type: Array },
+      procedureVersion: { type: Number },
+      procedureName: { type: String },
       procInstanceName: { type: String }, // This one is for the buttons and should be fix to proc_management to get this procedure model
       actionOutput: { type: Object },
       allProcedures: { type: Array },
@@ -352,12 +354,17 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     this.render()
   }  
 
-  selectSectionView(index) {
-    this.selectedItem ={}
+  selectSectionView(index , notResetSelectedView) {
+    if (notResetSelectedView===undefined||notResetSelectedView==false){
+      this.selectedItem ={}
+    }
     this.selectedTabModelFromProcModel=[]
     this.selectedViewDefinition={}
     this.selectedViewDefinition = this.selectedProcInstance.views[index]
-    this.procInstanceName = this.selectedProcInstance.procedure_name
+    this.procedureName = this.selectedProcInstance.procedure_name
+    this.procedureVersion = this.selectedProcInstance.procedure_version
+    this.procInstanceName = this.selectedProcInstance.proc_instance_name
+
     console.log('this.selectedViewDefinition', this.selectedViewDefinition, 'procInstanceName', this.procInstanceName)
     if (this.objecttabsComposition == null) { return }
     this.selectedProcInstance[0]=this.selectedProcInstance
@@ -365,7 +372,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
     if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
     //  this.objecttabsComposition.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
-      this.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
+      this.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]      
       this.selectedTabModelFromProcModel=this.selectedViewDefinition
 //      this.objecttabsComposition.kpiElementsController(this.selectedViewDefinition.view_definition.reportElements, this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data])
 
@@ -375,10 +382,10 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       this.selectedItem = this.selectedProcInstance.definition
 //      this.objecttabsComposition.kpiElementsController(this.selectedViewDefinition.view_definition.reportElements, this.selectedProcInstance.definition)
     }
-    //console.log(this.selectedItem.procedure_info)
+    console.log('selectedItem', this.selectedItem)
     //this.objecttabsComposition.kpiElementsController(this.selectedViewDefinition.view_definition.reportElements, this.selectedItem)
     this.objecttabsComposition.render()
-    this.objecttabsComposition.render()
+    //this.objecttabsComposition.render()
 //    this.selectedProcInstanceMainView()
     // this.selectedItems=[]
     // this.selectedItems.push(this.objecttabsComposition.selectedItem)
@@ -412,7 +419,16 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           element.classList.remove('fade-in');
         }
       }
+      if (changedProperties.has('selectedProcInstance')) {
+        this.selectedViewDefinition = this.selectedProcInstance.views[0]
+        this.selectSectionView(0)
+      }
+
     }
+    if (changedProperties.has('this.allProcedures')) {
+      // find the selected object in the new allArr array      
+      this.selectedProcInstance = this.allProcedures.find(obj => obj.proc_instance_name === this.selectedProcInstance.proc_instance_name);
+    }    
     const items = this.shadowRoot.querySelectorAll('.accordion-item');
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
@@ -572,6 +588,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             }
           }
           </style>
+          <objecttabs-composition></objecttabs-composition>
        ${this.allProcedures.map(p =>
           html`
           <div class="product_container ${this.show ? 'fade-in' : 'show'}">
@@ -654,9 +671,9 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   <div class="layout horizontal center inline-flex wrap accordion-title">
                     ${item.view_definition !== undefined && item.view_definition.filter !== undefined && item.view_definition.filterFields !== undefined && item.view_definition.filterFields.length > 0 ? html`
                       <mwc-icon-button size="s" id="expand" dense raised label="" icon="${item.expanded !== undefined && item.expanded ? 'expand_less' : 'expand_more'}"  @click=${() => this.toggleLeftElements(index)}></mwc-icon-button>
-                      <div @click=${() => this.toggleLeftElements(index)} >${item.title}</div>
+                      <div @click=${() => this.toggleLeftElements(index)} >${item.title["label_"+this.lang]}</div>
                     `: html`
-                    <div class="accordion-title" @click=${() => this.selectSectionView(index)} >${item.title}</div>
+                    <div class="accordion-title" @click=${() => this.selectSectionView(index)} >${item.title["label_"+this.lang]}</div>
                     `}
                   </div>
                   ${item.expanded !== undefined && item.expanded ? html`
@@ -679,7 +696,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             ${this.selectedProcessTitle()}
             ${this.selectedViewDefinition !== undefined && this.selectedViewDefinition.view_definition !== undefined && this.selectedViewDefinition ? html`            
               <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
-              .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}     
+              .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
               .selectedItem=${this.selectedItem}      
               </objecttabs-composition>              
 
@@ -822,18 +839,28 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         this.actionOutput = j
         this.selectedItem = j
       }
-      this.selectSectionView(index)
+      this.selectSectionView(index, true)
+
       //this.selectedProcInstanceMainView()      
       console.log('actionOutput', this.actionOutput)
-    }).then(j => {
+    }).then(j => {      
       let mye = {}
-      mye = { is_error: false, message_en: "Performed with success", message_es: "Ejecutado correctamente" }
+      if (j.is_error!==undefined&&j.is_error===true){
+//        mye = { is_error: true, message_en: "Performed with success", message_es: "Ejecutado correctamente" }
+        this.dispatchEvent(new CustomEvent('error', {
+          detail: { ...j, log: log },
+          bubbles: true,
+          composed: true
+        }))
 
-      this.dispatchEvent(new CustomEvent('success', {
-        detail: { ...mye, log: log },
-        bubbles: true,
-        composed: true
-      }))
+      }else{
+        mye = { is_error: false, message_en: "Performed with success", message_es: "Ejecutado correctamente" }
+        this.dispatchEvent(new CustomEvent('success', {
+          detail: { ...mye, log: log },
+          bubbles: true,
+          composed: true
+        }))
+      }
       return j
     }).catch(e => {
       if (e.message == "Unexpected end of JSON input") {
@@ -864,7 +891,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
   }
 
 
-
+  
   get objecttabsComposition() { return this.shadowRoot.querySelector("objecttabs-composition") }
 }
 window.customElements.define('proc-management-home', ProcManagementHome);
