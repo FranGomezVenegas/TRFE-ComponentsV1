@@ -156,7 +156,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         top: calc(100% + 5px);
       }   
       sp-split-view {
-        height: calc(100vh - 215px); 
+        height: calc(100vh - 100px); 
         --spectrum-dragbar-handle-width:0px;       
       }
       #splitter{
@@ -656,7 +656,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
   `}
 
   toggleLeftSplitPane() {
-    console.log(this.leftSplitDisplayed)
+    //console.log(this.leftSplitDisplayed)
     this.leftSplitDisplayed = !this.leftSplitDisplayed
   }
   selectedProcInstanceMainView() {
@@ -671,7 +671,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   <div class="layout horizontal center inline-flex wrap accordion-title">
                     ${item.view_definition !== undefined && item.view_definition.filter !== undefined && item.view_definition.filterFields !== undefined && item.view_definition.filterFields.length > 0 ? html`
                       <mwc-icon-button size="s" id="expand" dense raised label="" icon="${item.expanded !== undefined && item.expanded ? 'expand_less' : 'expand_more'}"  @click=${() => this.toggleLeftElements(index)}></mwc-icon-button>
-                      <div @click=${() => this.toggleLeftElements(index)} >${item.title["label_"+this.lang]}</div>
+                      <div @click=${() => this.toggleLeftElements(index)} >${item.title["label_"+this.lang]}</div> 
                     `: html`
                     <div class="accordion-title" @click=${() => this.selectSectionView(index)} >${item.title["label_"+this.lang]}</div>
                     `}
@@ -757,7 +757,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           height: 60px;
           padding: 0 10px; /* Add padding to keep text away from edges */
           position: fixed;
-          z-index: 9999;       
+          z-index: 6;       
           width: calc(96vw - 330px);
           transition: width 0.5s ease-in-out;
           background : -moz-linear-gradient(46.71% -341.1% -76deg,rgba(214, 233, 248, 1) 43.85%,rgba(255, 255, 255, 1) 58.66%);
@@ -801,7 +801,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     
         </span>
         <h1 class="title">${this.selectedProcInstance.procedure_name} v:${this.selectedProcInstance.procedure_version}</h1>
-        <span class="right-text">Module ${this.selectedProcInstance.module_name}</span>
+        <span class="right-text">${this.lang=="es"?"Módulo":"Module"} ${this.selectedProcInstance.module_name}</span>
       </div>
   
 </div>

@@ -52,7 +52,7 @@
     "viewName": "Incubators", 
     "filterName" :  "Incubators" 
   },
-  "localDefaultView": {
+  "localDefaultView12311132": {
     "procName":  "em-demo-a", 
     "viewName": "SamplePendingSampling", 
     "filterName" :  "SamplingSMP" 
@@ -138,7 +138,7 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   }, 
-  "localDefaultViewxasd": {
+  "localDefaultView": {
     "procName":  "mp-release1", 
     "viewName": "LotView", 
     "filterName" :  "LotView" 

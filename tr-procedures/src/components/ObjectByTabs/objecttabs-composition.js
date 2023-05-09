@@ -2,10 +2,12 @@ import { html, css, nothing, LitElement } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@alenaksu/json-viewer';
+import '@spectrum-web-components/split-view/sp-split-view';
 
 import {DataViews} from '../../components/Views/DataViews';
+import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 
-export class ObjecttabsComposition extends DataViews(CredDialog) {
+export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDialog)) {
   static get styles() {
     return [
       Layouts,
@@ -65,7 +67,7 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
     this.selectedItem = {}
     this.selectedTabModelFromProcModel = {}
     this.config = {}
-    this.sopsPassed=false
+    this.sopsPassed=false    
   }
   render(){
     // console.log('view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
@@ -75,6 +77,7 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
           ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
         `}
       </div>
+      ${this.genericFormDialog()}
       ${super.render()}
     ` 
   }
@@ -102,6 +105,7 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
                       ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
                       ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
                       ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
+                      ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 
                       ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2!==undefined ? 
                         this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true) : nothing}
@@ -128,6 +132,7 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
                 ${elem.type==="jsonViewer" ? this.jsonViewer(elem, data, true): nothing}
                 ${elem.type==="readOnlyTable" ? this.readOnlyTable(elem, data, true): nothing}
                 ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
+                ${elem.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem, data, true): nothing}
 
               ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
                 this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true) : nothing}
@@ -150,7 +155,7 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
         </div>
         `
         )}      
-      ` : html`<div>There is no data</div>`
+      ` : nothing
     }`
   }  
 }

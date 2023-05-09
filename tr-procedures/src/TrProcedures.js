@@ -346,7 +346,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       `: nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ObjectByTabs' ? html`
         <object-by-tabs .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
-          .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
       `:html``}
 

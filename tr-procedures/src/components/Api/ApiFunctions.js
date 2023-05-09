@@ -131,6 +131,11 @@ export function ApiFunctions(base) {
                 
               } else if (p.element) {
                 if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
+                  msg='The element '+p.element+' was not added in this dialog definition, please review the endPointParams configuration or add them to the dialog'
+                  alert(msg)
+                  if (this[p.element]==null){
+                    return jsonParam[p.argumentName] = "ERROR: "+msg
+                  }
                   if (this[p.element].value!==undefined&&this[p.element].value.length>0){                    
                     if (jsonParam.fieldName===undefined){
                       let curFldNameValue=p.argumentName                      
@@ -357,7 +362,7 @@ export function ApiFunctions(base) {
           procInstanceModel=ProceduresModel[this.procInstanceName]
         }               
         if (procInstanceModel.ModuleSettings===undefined||procInstanceModel.ModuleSettings.queriesEndpoints===undefined){
-          return 'ERROR, ModuleSettings property not found in the model for procedure instance '+this.procInstanceName+'. If endPoint property at action level is not defined then moduleSettings becomes mandatory to get the Endpoint url'
+          return 'ERROR, ModuleSettings property not found in the model for procedure instance '+this.procInstanceName+'. If endPoint property at action level is not defined then queriesEndpoints property in moduleSettings becomes mandatory to get the Endpoint url'
         }
         let queriesEndpoints=procInstanceModel.ModuleSettings.queriesEndpoints
         if (queriesEndpoints.length==1){         

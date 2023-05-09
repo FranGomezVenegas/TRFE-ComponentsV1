@@ -58,18 +58,10 @@ export function TrazitGenericDialogs(base) {
         
     
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    genericFormDialog(actionModel = this.actionBeingPerformedModel) {
-        // if (this.actionBeingPerformedModel.dialogInfo === undefined) {
-        //     //alert('genericFormDialog has no dialogInfo')
-        //     return nothing
-        // }
-        // if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.name === "genericDialog"){
-        //     let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
-        //     if (dlgFlds===undefined){
-        //         alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
-        //         return nothing
-        //     }
-        // }    
+    genericFormDialog(actionModel) {
+        if (actionModel === undefined) {
+            actionModel = this.actionBeingPerformedModel
+        }
 
          // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi 
          //     otherwise it is not compatible with actions requiring credentials dialog.

@@ -7,13 +7,17 @@ export function DialogsFunctions(base) {
     return class extends ButtonsFunctions(base) {
 
         dialogAccept(selected=true) {
-          console.log('dialogAccept before run credsChecker')
-            if (selected) {
-                this.credsChecker(this.actionBeingPerformedModel.actionName, this.selectedItems[0].sample_id, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
-            } else {
-                this.credsChecker(this.actionBeingPerformedModel.actionName, null, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
-            }
-            //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0])
+          //console.log('dialogAccept before run credsChecker')
+          if (this.actionBeingPerformedModel.clientMethod!==undefined){
+            this[this.actionBeingPerformedModel.clientMethod]()
+            return
+          }
+          if (selected) {
+              this.credsChecker(this.actionBeingPerformedModel.actionName, this.selectedItems[0].sample_id, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
+          } else {
+              this.credsChecker(this.actionBeingPerformedModel.actionName, null, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel)
+          }
+          //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0])
         }
 
   /**
@@ -23,7 +27,7 @@ export function DialogsFunctions(base) {
    * @param {*} params ref of this.reqParams
    * @param {*} action ref of action object
    */
-  credsChecker(actionName, objId, params={}, action) {
+  credsChecker(actionName, objId, params={}, action, isProcManagement) {
     //console.log('credsChecker', 'isPlatform', isPlatform)
     this.actionObj = action || {}
     this.reqParams = params
@@ -33,7 +37,7 @@ export function DialogsFunctions(base) {
         this.credDialog.show()
       } else {
         this.objectId = objId
-        let noNeedCreds = this.checkProcList()
+        let noNeedCreds = this.checkProcList(isProcManagement)
         if (noNeedCreds) {
           this.nextRequest(action)
         } else {
@@ -51,7 +55,7 @@ export function DialogsFunctions(base) {
    * set the justification type, generate justification list for non text type
    */
    checkProcList(isProcManagement) {
-    console.log('checkProcList')
+    //console.log('checkProcList')
     let bypass = true
     // this.justificationType = null
     // this.justificationList = null
@@ -143,7 +147,7 @@ export function DialogsFunctions(base) {
   nextRequest(action) {
     //alert('nextRequest')
     action = action || this.auditAction ||this.actionBeingPerformedModel;
-    console.log('nextRequest')
+    //console.log('nextRequest')
     let credArguments = {}
     if (this.userName) {credArguments.userToCheck=this.userName}
     if (this.userTxtFld) {credArguments.userToCheck=this.userTxtFld.value}

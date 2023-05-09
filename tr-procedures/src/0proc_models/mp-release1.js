@@ -17,7 +17,7 @@ export const MpRelease1 = {
   },
   "LotView": {
     "component": "ObjectByTabs", "hasOwnComponent": true, "showTitleOnTop": true, 
-	"title":{ "fix_text_en": "Inspection Lot ", "fix_text_es": "Lote de Inspección ", "field_name": "lot_name"},
+	"title":{ "fix_text_en": "Selected Inspection Lot: ", "fix_text_es": "Lote de Inspección: ", "name": "lot_name"},
     "viewQuery": {  "actionName": "GET_LOT_INFO",
 		"button": {
 		  "icon": "refresh",
@@ -27,23 +27,42 @@ export const MpRelease1 = {
 		  "requiresGridItemSelected": false
 		},
 		"endPointParams": [
-          { "argumentName": "lotName", "element": "lottoget"}
-        ]	
+          { "argumentName": "lotName", "element": "text1"}
+        ]
 	},    
-	"actions": [],
-	  "tabs": [
+	"filter_button":{"label_en":"Search", "label_es":"Buscar"},
+	"filter":[
+        {
+          "text1": {"label_en": "Lot to get","label_es": "Lote a cargar", "fixValue": "Lot 006"}
+        }	
+	],
+	"filter_results":
+            {
+              "type": "readOnlyTable",
+              "title": "3.4) Menu Definition",
+              "endPointResponseObject": "user_requirements_events",
+              "columns": [
+                { "name": "id", "label_en": "Id", "label_es": "Id"}
+              ]
+            },
+          
+        
+	
+	"actions": [
+	],	
+	"tabs": [
 		{"tabLabel_en": "Summary", "tabLabel_es": "Inicio", "view": "summary",
 		 "view_definition":[
-			{"type": "card", "endPointResponseObject": "lot_info", "title":{"label_en":"Lot Info", "label_es":"Información del Lote"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
+			{"type": "cardSomeElementsSingleObject", "endPointResponseObject": "lot_info", "title":{"label_en":"Lot Info", "label_es":"Información del Lote"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
 				"fieldsToDisplay":[
-					{"field_name": "name", "label_en": "Name", "label_es": "Nombre"},
-					{"field_name": "created_on", "label_en": "Creation D.", "label_es": "F. Creación"},
-					{"field_name": "material_name", "label_en": "Material", "label_es": "Material"},
-					{"field_name": "quantity", "field_name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
-					{"field_name": "num_containers", "label_en": "Num. Containers", "label_es": "Núm. Contenedores"},
-					{"field_name": "bulk_decision", "field_name2": "bulk_decision_by", "field_name3": "bulk_decision_by", "label_en": "Bulks decision", "label_es": "Decisión en los bultos"},
-					{"field_name": "sampling_plan", "label_en": "sampling_plan", "label_es": "sampling_plan"},
-					{"field_name": "analysis_status", "label_en": "analysis_status", "label_es": "analysis_status"}
+					{"name": "name", "label_en": "Name", "label_es": "Nombre"},
+					{"name": "created_on", "label_en": "Creation D.", "label_es": "F. Creación"},
+					{"name": "material_name", "label_en": "Material", "label_es": "Material"},
+					{"name": "quantity", "name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
+					{"name": "num_containers", "label_en": "Num. Containers", "label_es": "Núm. Contenedores"},
+					{"name": "bulk_decision", "name2": "bulk_decision_by", "name3": "bulk_decision_by", "label_en": "Bulks decision", "label_es": "Decisión en los bultos"},
+					{"name": "sampling_plan", "label_en": "sampling_plan", "label_es": "sampling_plan"},
+					{"name": "analysis_status", "label_en": "analysis_status", "label_es": "analysis_status"}
 				],
 				"actions": [
 				  { "actionName": "GET_LOT_AUDIT",	  
@@ -105,12 +124,12 @@ export const MpRelease1 = {
 				  }
 				]
 			},
-			{"type": "card", "endPointResponseObject": "lot_bulk", "title":{"label_en":"Lot Info", "label_es":"Información del Lote"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
+			{"type": "cardSomeElementsRepititiveObjects", "endPointResponseObject": "lot_bulk", "title":{"label_en":"Lot Bulks", "label_es":"Bultos"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
 				"fieldsToDisplay":[
-					{"field_name": "bulk_name", "label_en": "Name", "label_es": "Nombre"},
-					{"field_name": "quantity", "field_name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
-					{"field_name": "sample_quantity", "field_name2": "sample_quantity_uom", "label_en": "Sample Quantity", "label_es": "Cantidad de Muestra"},
-					{"field_name": "decision", "label_en": "Decision", "label_es": "Decisión"}
+					{"name": "bulk_name", "label_en": "Name", "label_es": "Nombre"},
+					{"name": "quantity", "name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
+					{"name": "sample_quantity", "name2": "sample_quantity_uom", "label_en": "Sample Quantity", "label_es": "Cantidad de Muestra"},
+					{"name": "decision", "label_en": "Decision", "label_es": "Decisión"}
 				],
 				"actions": [
 					  { "actionName": "LOT_BULK_ADJUST_QUANTITY",
@@ -190,12 +209,12 @@ export const MpRelease1 = {
 					  
 				]
 			},
-			{"type": "card", "endPointResponseObject": "sample", "title":{"label_en":"Lot Samples", "label_es":"Muestras del Lote"} , 	    "subtitle":{"label_en":"Lot Samples", "label_es":"Muestras del Lote"},
+			{"type": "cardSomeElementsRepititiveObjects", "endPointResponseObject": "sample", "title":{"label_en":"Lot Samples", "label_es":"Muestras del Lote"} , 	    "subtitle":{"label_en":"Lot Samples", "label_es":"Muestras del Lote"},
 				"fieldsToDisplay":[
-					{"field_name": "bulk_name", "label_en": "Bulk", "label_es": "Bulto"},
-					{"field_name": "sample_id", "label_en": "Id", "label_es": "Id"},
-					{"field_name": "quantity", "field_name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
-					{"field_name": "logged_on", "label_en": "Login Date", "label_es": "F. Registro"}
+					{"name": "bulk_name", "label_en": "Bulk", "label_es": "Bulto"},
+					{"name": "sample_id", "label_en": "Id", "label_es": "Id"},
+					{"name": "quantity", "name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
+					{"name": "logged_on", "label_en": "Login Date", "label_es": "F. Registro"}
 				],
 				"actions": [
 				  { "actionName": "GET_SAMPLE_AUDIT",
@@ -398,16 +417,16 @@ export const MpRelease1 = {
 	  "zzzztabs": [
 		{"tabLabel_en": "Summary", "tabLabel_es": "Inicio", "view": "summary",
 		 "view_definition":[
-			{"type": "card", "endPointResponseObject": "lot_info", "title":{"label_en":"Lot Info", "label_es":"Información del Lote"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
+			{"type": "cardSomeElementsRepititiveObjects", "endPointResponseObject": "lot_info", "title":{"label_en":"Lot Info", "label_es":"Información del Lote"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
 				"fieldsToDisplay":[
-					{"field_name": "name", "label_en": "Name", "label_es": "Nombre"},
-					{"field_name": "created_on", "label_en": "Creation D.", "label_es": "F. Creación"},
-					{"field_name": "material_name", "label_en": "Material", "label_es": "Material"},
-					{"field_name": "quantity", "field_name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
-					{"field_name": "num_containers", "label_en": "Num. Containers", "label_es": "Núm. Contenedores"},
-					{"field_name": "bulk_decision", "field_name2": "bulk_decision_by", "field_name3": "bulk_decision_by", "label_en": "Quantity", "label_es": "Cantidad"},
-					{"field_name": "sampling_plan", "label_en": "sampling_plan", "label_es": "sampling_plan"},
-					{"field_name": "analysis_status", "label_en": "analysis_status", "label_es": "analysis_status"}
+					{"name": "name", "label_en": "Name", "label_es": "Nombre"},
+					{"name": "created_on", "label_en": "Creation D.", "label_es": "F. Creación"},
+					{"name": "material_name", "label_en": "Material", "label_es": "Material"},
+					{"name": "quantity", "name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
+					{"name": "num_containers", "label_en": "Num. Containers", "label_es": "Núm. Contenedores"},
+					{"name": "bulk_decision", "name2": "bulk_decision_by", "name3": "bulk_decision_by", "label_en": "Quantity", "label_es": "Cantidad"},
+					{"name": "sampling_plan", "label_en": "sampling_plan", "label_es": "sampling_plan"},
+					{"name": "analysis_status", "label_en": "analysis_status", "label_es": "analysis_status"}
 				],
 				"actions": [
 				  { "actionName": "GET_SAMPLE_AUDIT",	  
@@ -448,12 +467,12 @@ export const MpRelease1 = {
 		},
 		{"tabLabel_en": "Bulks", "tabLabel_es": "Bultos", "view": "lot-bulks",
 		 "view_definition":[
-			{"type": "card", "endPointResponseObject": "lot_bulk", "title":{"label_en":"Lot Info", "label_es":"Información del Lote"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
+			{"type": "cardSomeElementsRepititiveObjects", "endPointResponseObject": "lot_bulk", "title":{"label_en":"Lot Info", "label_es":"Información del Lote"} , 	    "subtitle":{"label_en":"Lot Info", "label_es":"Información del Lote"},
 				"fieldsToDisplay":[
-					{"field_name": "id", "label_en": "Id", "label_es": "Id"},
-					{"field_name": "quantity", "field_name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
-					{"field_name": "sample_quantity", "field_name2": "sample_quantity_uom", "label_en": "Sample Quantity", "label_es": "Cantidad de Muestra"},
-					{"field_name": "decision", "label_en": "Decision", "label_es": "Decisión"}
+					{"name": "id", "label_en": "Id", "label_es": "Id"},
+					{"name": "quantity", "name2": "quantity_uom", "label_en": "Quantity", "label_es": "Cantidad"},
+					{"name": "sample_quantity", "name2": "sample_quantity_uom", "label_en": "Sample Quantity", "label_es": "Cantidad de Muestra"},
+					{"name": "decision", "label_en": "Decision", "label_es": "Decisión"}
 				],
 				"actions": [
 				  { "actionName": "SETSAMPLINGDATE",
@@ -3630,7 +3649,7 @@ export const MpRelease1 = {
           {"type": "reportTitle", "title":{"label_en": "Readings Out of Range", "label_es": "Lecturas Fuera de Rango Permitido"}}
           ],
           [
-          {"type": "card", "title":{"label_en": "Information", "label_es": "Información"}, 
+          {"type": "cardSomeElementsRepititiveObjects", "title":{"label_en": "Information", "label_es": "Información"}, 
             "elementName":"production_lot", "subheadingObj": "text1"}
           ],
           [
@@ -3754,7 +3773,7 @@ export const MpRelease1 = {
               "style":"color:blue"}
           ],
           [
-            {"type": "card", "title":{"label_en": "Information", "label_es": "Información"}, 
+            {"type": "cardSomeElementsRepititiveObjects", "title":{"label_en": "Information", "label_es": "Información"}, 
               "elementName":"production_lot", "subheadingObj": "text1"}
           ],
           [
@@ -3877,7 +3896,7 @@ export const MpRelease1 = {
           {"type": "reportTitle", "title":{"label_en": "Sampling History", "label_es": "Histórico de muestreos"}}
           ],
           [
-          {"type": "card", "title":{"label_en": "Information", "label_es": "Información"}, 
+          {"type": "cardSomeElementsRepititiveObjects", "title":{"label_en": "Information", "label_es": "Información"}, 
             "elementName":"production_lot", "subheadingObj": "text1"}
           ],
           [
@@ -4016,7 +4035,7 @@ export const MpRelease1 = {
             {"type": "reportTitle", "title":{"label_en": "Personal Sampling History", "label_es": "Histórico de muestreos de personal"}}
           ],
           [
-            {"type": "card", "title":{"label_en": "Information", "label_es": "Información"}, 
+            {"type": "cardSomeElementsRepititiveObjects", "title":{"label_en": "Information", "label_es": "Información"}, 
               "elementName":"production_lot", "subheadingObj": "text1"}
           ],
           [

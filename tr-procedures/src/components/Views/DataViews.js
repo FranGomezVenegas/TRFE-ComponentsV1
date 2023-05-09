@@ -1,12 +1,9 @@
 import { html, css, nothing} from 'lit';
-//import { columnBodyRenderer } from 'lit-vaadin-helpers';
-//import { ApiFunctions } from '../Api/ApiFunctions';
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import { AuditFunctions} from '../Audit/AuditFunctions';
 import '../Audit/audit-dialog';
 
 import {ModuleEnvMonitClientMethods} from '../../module_env_monit/ModuleEnvMonitClientMethods';
-import { ProceduresModel } from '../../ProceduresModel';
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import {TrazitReactivateObjectsDialog} from '../GenericDialogs/TrazitReactivateObjectsDialog';
 import {TrazitEnterResultWithSpec} from '../GenericDialogs/TrazitEnterResultWithSpec';
@@ -178,6 +175,164 @@ export function DataViews(base) {
           </div>
         `
         }
+        readOnlyTableByGroupAllInOne(elem, dataArr, isSecondLevel) {
+          if (isSecondLevel===undefined){isSecondLevel=false}
+            dataArr=this.getDataFromRoot(elem, dataArr)
+          return html`
+          <style>
+          .styled-table-bygroup {
+            display: -webkit-inline-box;
+            margin-top: 0px;
+            margin-bottom: 3px;
+            color: #4285f4;
+            font-size:1.8vmin;
+            border-collapse: collapse;
+            margin: 2px 10px; 
+            font-family: sans-serif;
+            /* min-width: 400px; */
+            box-shadow: 0 0 20px #44cbe652;    
+            table-layout: fixed;
+            //width: 91%;                    
+          }            
+          .styled-table-bygroup thead tr {
+            background-color: #2989d8;
+            color: #ffffff;
+            text-align:center;
+            border: 1px solid #c2edf9;
+          }   
+          .styled-table-bygroup thead tr headercolumns{
+            background-color: 2989d870;
+            color: white;
+          }          
+
+          .styled-table-bygroup th {
+            color: white;
+          }
+          .styled-table-bygroup tbody tr:hover td {
+            color: white;
+            background-color: #2989d8;
+          }
+          .styled-table-bygroup td {
+            color: rgba(0, 0, 0, 0.71); 
+            padding: 8px 15px;
+            border: 1px solid #c2edf9;
+            word-break: break-all;  
+            font-weight: bold;         
+          }  
+          .styled-table-bygroup tbody tr {
+            border-bottom: 1px solid #c2edf9;
+          }
+          .styled-table-bygroup tbody tr:nth-of-type(even) {
+            background-color: #c2f2ff5c;
+          }
+          .styled-table-bygroup tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+          }      
+          .styled-table-bygroup tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+          }  
+          span.cardLabel {
+            font-weight: bold;
+            color: #032bbc;
+          }
+          span.cardValue{
+            color: #009879;
+          }     
+          span.title {
+            color: rgb(35, 163, 198);
+            ;margin-top: 10px;font-weight: bold;
+          }
+          span.title.true{
+            font-size: 18px;
+          }
+          span.title.false{
+            font-size: 18px;
+          }
+          </style>
+          <div style="display: flex; flex-direction: row; text-align: center;">            
+            <div style="display: flex; flex-direction: column; text-align: center;">
+              ${elem===undefined||elem.title===undefined ? nothing : html`
+              <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+              }
+              ${this.getButton(elem, dataArr, true)}
+              ${elem.columns===undefined ? html`No columns defined` : html`              
+                <table class="styled-table-bygroup">
+                ${Object.entries(dataArr).sort().map(([key, value]) =>                 
+                html`
+                  <thead>          
+                    <tr>
+                    <th style="color:#24c0eb; background-color: #d6e9f8; text-transform:uppercase; font-size:16px;" colspan=" ${elem.columns.length} ">${key}</th>
+                    </tr>
+                    <tr class="headercolumns">
+                      ${elem.columns.map(fld =>
+                        html`                        
+                        <td style="background-color:#7ccee6; color: white;">${fld["label_"+ this.lang]}</td>
+                        `
+                      )}                  
+                    </tr>
+                  </thead>
+                  <tbody>
+                  ${value===undefined||!Array.isArray(value) ? html`No Data` : 
+                  html`
+                    ${value.sort().map(p => 
+                      html`
+                      <tr>
+                        ${elem.columns.map(fld =>
+                          html`
+                            ${fld.name==='pretty_spec' ?
+                            html `
+                              <td>
+                                <span style="color:green">${p["spec_text_green_area_"+ this.lang]}</span>
+                                <span style="color:orange">${p["spec_text_yellow_area_"+ this.lang]}</span>
+                                <span style="color:red">${p["spec_text_red_area_"+ this.lang]}</span>
+                              </td>
+                            `:html`
+                              ${fld.as_progress!==undefined&&fld.as_progress===true?
+                              html`                            
+                                <style>
+                                  .w3-responsive{display:block;overflow-x:auto}
+                                  .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
+                                  .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                                  .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                                  .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                                  .title {
+                                      font-size: 8px; font-weight: 500; letter-spacing: 0;
+                                      line-height: 1.5em; padding-bottom: 15px; position: relative;
+                                      font-family: Montserrat; font-color:rgb(94, 145, 186);
+                                    }
+                                  </style>
+                                  <td>
+                                  <div class="w3-container" >
+                                    <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                      <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%" >${p[fld.name]}%</div>
+                                    </div>
+                                  </div>
+                                <br> 
+                                </td>           
+                              `:html`
+                                  <td>
+                                  ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                                  ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                                  ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                                  </td>
+                              `}
+                            `}
+                          
+                          `
+                        )}
+                      </tr>
+                      `
+                    )}
+                  `}
+                  </tbody>
+                </table>
+              `)}
+              `}
+            </div>
+          </div>
+          `;
+        }              
 
         readOnlyTableByGroup(elem, dataArr, isSecondLevel) {
           if (isSecondLevel===undefined){isSecondLevel=false}
@@ -212,8 +367,12 @@ export function DataViews(base) {
           .styled-table-bygroup th {
             color: white;
           }
+          .styled-table-bygroup tbody tr:hover td {
+            color: white;
+            background-color: #2989d8;
+          }
           .styled-table-bygroup td {
-            color: #24c0eb; 
+            color: rgba(0, 0, 0, 0.71); 
             padding: 8px 15px;
             border: 1px solid #c2edf9;
             word-break: break-all;  
@@ -244,24 +403,23 @@ export function DataViews(base) {
             ;margin-top: 10px;font-weight: bold;
           }
           span.title.true{
-            font-size: 14px;
+            font-size: 18px;
           }
           span.title.false{
             font-size: 18px;
           }
-
           </style>
-          <div style="display: flex; flex-direction: row; text-align: center;">
-            ${this.getButton(elem, dataArr, true)}
-            <div style="display: flex; flex-direction: column; text-align: center;">
+          <div style="display: flex; flex-direction: column; text-align: center;">            
+          ${elem===undefined||elem.title===undefined ? nothing : html`
+          <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+            }
 
-              ${elem===undefined||elem.title===undefined ? nothing : html`
-              <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
-              }
+            <div style="display: flex; flex-direction: row; text-align: center; flex-wrap:wrap; ">
+              ${this.getButton(elem, dataArr, true)}
               ${elem.columns===undefined ? html`No columns defined` : html`              
-                <table class="styled-table-bygroup">
-                ${Object.entries(dataArr).sort().map(([key, value]) =>                 
+              ${Object.entries(dataArr).sort().map(([key, value]) =>                 
                 html`
+                <table class="styled-table-bygroup">
                   <thead>          
                     <tr>
                     <th style="color:#24c0eb; background-color: #d6e9f8; text-transform:uppercase; font-size:16px;" colspan=" ${elem.columns.length} ">${key}</th>
@@ -349,12 +507,12 @@ export function DataViews(base) {
             margin-top: 0px;
             margin-bottom: 3px;
             color: #4285f4;
-            font-size:2vmin;
+            font-size:1.8vmin;
             border-collapse: collapse;
             margin: 2px 10px; 
             font-family: sans-serif;
             /* min-width: 400px; */
-            box-shadow: 0 0 20px #44cbe6;    
+            box-shadow: 0 0 20px #44cbe652;    
             table-layout: fixed;
             //width: 91%;                    
           }            
@@ -362,18 +520,30 @@ export function DataViews(base) {
             background-color: #2989d8;
             color: #ffffff;
             text-align:center;
-            border: 1px solid #2989d8;
+            border: 1px solid #c2edf9;
           }   
-          .styled-table th,
+          .styled-table thead tr headercolumns{
+            background-color: 2989d870;
+            color: white;
+          }          
+
+          .styled-table th {
+            color: white;
+          }
+          .styled-table tbody tr:hover td {
+            color: white;
+            background-color: #2989d8;
+          }
+
           .styled-table td {
-            color: #032bbc; 
-            padding: 12px 15px;
-            border: 1px solid #032bbc;
-            word-break: break-all;
-            
+            color: rgba(0, 0, 0, 0.71); 
+            padding: 8px 15px;
+            border: 1px solid #c2edf9;
+            word-break: break-all;  
+            font-weight: bold;         
           }  
           .styled-table tbody tr {
-            border-bottom: 1px solid #207cca;
+            border-bottom: 1px solid #c2edf9;
           }
           .styled-table tbody tr:nth-of-type(even) {
             background-color: #c2f2ff5c;
@@ -388,23 +558,23 @@ export function DataViews(base) {
           span.cardLabel {
             font-weight: bold;
             color: #032bbc;
-          }   
+          }
           span.cardValue{
             color: #009879;
           }     
           span.title {
-            color: rgb(20, 115, 230);
+            color: rgb(35, 163, 198);
             ;margin-top: 10px;font-weight: bold;
           }
           span.title.true{
-            font-size: 24px;
+            font-size: 18px;
           }
           span.title.false{
-            font-size: 30px;
+            font-size: 18px;
           }
           </style>
+
           <div style="display: flex; flex-direction: row; text-align: center;">
-            ${this.getButton(elem, dataArr, true)}
             <div style="display: flex; flex-direction: column; text-align: center;">
             ${alternativeTitle!==undefined ? html` 
               <p><span class="title ${isSecondLevel}" >${alternativeTitle}</span></p>`
@@ -413,6 +583,7 @@ export function DataViews(base) {
               <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
               }
             `}
+              ${this.getButton(elem, dataArr, true)}
               ${elem.columns===undefined ? html`No columns defined` : html`
                 <table class="styled-table">
                   <thead>          
@@ -505,22 +676,60 @@ export function DataViews(base) {
             color: #ffffff;
             text-align: left;
           }   
-          .styled-table-for-rolesandactions th,
+          .styled-table-for-rolesandactions thead tr headercolumns{
+            background-color: 2989d870;
+            color: white;
+          }          
+
+          .styled-table-for-rolesandactions th {
+            color: rgba(0, 0, 0, 0.71);
+            text-align: right;
+            font-size: 15px;
+          }
+          .styled-table-for-rolesandactions th:hover {
+            color: white;
+            background-color: #2989d8;
+          }
           .styled-table-for-rolesandactions td {
-            color: #032bbc; 
-            padding: 12px 15px;
-            border: 1px solid #032bbc;
-          }  
+            color: rgba(0, 0, 0, 0.71); 
+            padding: 8px 15px;
+            border: 1px solid #c2edf9;
+            word-break: break-all;  
+            font-weight: bold;         
+          }           
           .styled-table-for-rolesandactions td.present {
             text-align: center;
             background-color: #5e80003d;
+            font-size: 11px;
+          }
+          .styled-table-for-rolesandactions tr:hover td.present {
+            text-align: center;
+            background-color: #5e800073;
+            font-size: 11px;
           }
           .styled-table-for-rolesandactions td.absent {
             background-color: #e0121257;
-          }          
+            font-size: 11px;
+          } 
+          .styled-table-for-rolesandactions tr:hover td.absent {
+            background-color: #e012127d;
+            font-size: 11px;
+          }
+                            
           .styled-table-for-rolesandactions tbody tr {
             border-bottom: 1px solid #207cca;
           }
+          .styled-table-for-rolesandactions tbody tr:nth-of-type(even) {
+            background-color: #c2f2ff5c;
+          }
+          .styled-table-for-rolesandactions tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+          }      
+          .styled-table-for-rolesandactions tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+          }  
+
       
           .styled-table-for-rolesandactions tbody tr.active-row {
             font-weight: bold;
@@ -538,10 +747,10 @@ export function DataViews(base) {
             ;margin-top: 10px;font-weight: bold;
           }
           span.title.true{
-            font-size: 24px;
+            font-size: 18px;
           }
           span.title.false{
-            font-size: 30px;
+            font-size: 18px;
           }
           </style>
           <div style="display: flex; flex-direction: column; text-align: center;">
@@ -572,7 +781,7 @@ export function DataViews(base) {
                     ${p.map((fld, iCol) =>                      
                       html`
                         ${iCol==0?
-                          html `<th style="background-color: #2989d8; color: white; text-align: right;">${fld}</th>`
+                          html `<th>${fld}</th>`
                         : 
                         html`
                         ${fld!==undefined&&fld.length>0 ?
@@ -594,28 +803,76 @@ export function DataViews(base) {
           `;
         }        
 
-        kpiCardSomeElementsSingleObject(elem, data){
-          
+        kpiCardSomeElementsSingleObject(elem, data){          
             return html`  
             ${this.kpiCardSomeElementsMain(elem, this.getDataFromRoot(elem, data))}
             ` 
         }
         cardSomeElementsRepititiveObjects(elem, data){
-            // console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
+            console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
+            data=this.getDataFromRoot(elem, data)
+            console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
             return html`  
-            ${data[elem.endPointResponseObject]===undefined? nothing:html`
-              ${data[elem.endPointResponseObject].map(d => 
+            ${Array.isArray(data) && data.length > 0 ? html`
+              ${data.map(d => 
                 html`
                   ${this.kpiCardSomeElementsMain(elem, d)}
                 `
               )}
-            `}
+            `: nothing
+            }
             ` 
-        }        
+        }     
+        get dialogEl() {return this.shadowRoot.querySelector("div#dialog-frame")}
+        get iframeEl() {return this.shadowRoot.querySelector("iframe#my-iframe")}
+        get videosourceEl() {return this.shadowRoot.querySelector("source#video-source")}
+        //get listMDprocedureUsers() {return this.shadowRoot.querySelector("mwc-select#listMDprocedureUsers")}
+        openDialogFrame(e){          
+          console.log(e.currentTarget.isvideo)
+          this.dialogEl.style.display = 'block';
+          const { width, height } = this.dialogEl.getBoundingClientRect();
+          const marginTop = (height / 2) - 80;
+          const marginLeft = width / 2;
+          if (e.currentTarget.isvideo===undefined||e.currentTarget.isvideo===false){
+            this.iframeEl.src=e.currentTarget.src+"#toolbar=0"
+          }
+          if (e.currentTarget.isvideo!==undefined&&e.currentTarget.isvideo===true){
+            const mimeUrl = e.currentTarget.src.match(/(?<=src=")(.*?)(?=")/)[0];
+            this.videosourceEl.src=mimeUrl
+          }
+
+          this.dialogEl.style.marginTop = `${marginTop}px`;
+          this.dialogEl.style.marginLeft = `${marginLeft}px`;                  
+          //this.dialogEl.style.display = 'block';
+        }   
+        closeDialogFrame(){
+          this.dialogEl.style.display = 'none';
+        }
+        keyPressDialogFrame(e) {
+          alert('key')
+          if (e.key=='Escape') {
+            this.dialogEl.style.display = 'none';
+          }
+          if (e.keyCode==27) {
+            this.dialogEl.style.display = 'none';
+          }
+        }    
+        /**
+         * Stop other videos when playing one video
+         * @param {*} v the playing video element
+        */
+        stopOthers(v) {
+          let allVids = this.shadowRoot.querySelectorAll("video")
+          allVids.forEach(vid => {
+            if (vid.id != v) {
+              vid.pause()
+            }
+          })
+        }    
         kpiCardSomeElementsMain(elem, data){
            // console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
             return html`   
-            ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title}</span>`}         
+            ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title["label_"+this.lang]}</span>`}         
             ${data===undefined ? html`nothing to do` :
                 html`
                 <style>
@@ -695,14 +952,72 @@ export function DataViews(base) {
                   border-radius: 10px;
                   padding: 10px;
                   margin-right: 2px;
+                }     
+                iframe {
+                  width: 100%;
+                  height: 100%;
+                } 
+                /* Dialog styles */
+                .dialog {
+                  display: none;
+                  position: fixed;
+                  z-index: 9999;
+                  top: 0;
+                  left: 0;
+                  width: 1000px;
+                  height: 600px;
+                  background-color: rgba(0, 0, 0, 0.5);
                 }
                 
+                /* Iframe styles */
+                #my-iframe {
+                  width: 100%;
+                  height: 100%;
+                  border: none;
+                }  
+                @keyframes slidein {
+                  from {
+                    margin-left: 30%;
+                  }
+                  to {
+                    margin-left: 0%;
+                  }
+                }           
+                @media (max-width: 460px) {
+                }   
+                iframe::shadow .pdf-viewer::content #controls ::slotted(.SwitchToReadingMode-Small14) {
+                  display: none;
+                }
+                           
                 </style>
                 <div id="main${elem.add_border!==undefined&&elem.add_border==true?'addborder': ''}" class="layout vertical flex wrap">
-                  ${this.getButton(elem, data, true)}
+                <div class="layout horizontal center flex wrap">${this.getButton(elem, data, true)}</div>
                   <ul class="column-list${elem.num_columns!==undefined?elem.num_columns:''}">                
-                  ${elem.fieldsToDisplay.map(fld =>                    
-                      html`    
+                  ${elem.fieldsToDisplay.map((fld, i) =>                    
+                  html`    
+                    ${fld.as_ppt!==undefined&&(fld.as_ppt===true||fld.as_video===true)?
+                    html` 
+                    <mwc-icon-button icon="fullscreen" .isvideo=${data.is_video} .src=${data[fld.name]} @click=${this.openDialogFrame} .fld=${fld}></mwc-icon-button>
+                            ${data.is_video===undefined||data.is_video===false? html` -->
+                              <iframe src=${data[fld.name]} @click=${this.openDialogFrame}></iframe>
+                              <div id="dialog-frame" class="dialog">
+                              <mwc-icon-button icon="fullscreen_exit" @click=${this.closeDialogFrame}></mwc-icon-button> 
+                                <iframe id="my-iframe" controls controlsList="nodownload"></iframe>
+                              </div>
+                            `:html`
+                            <video id="${data[fld.name]}-${i}" controls slot="cover-photo"
+                            @play=${()=>this.stopOthers(`${data[fld.name]}-${i}`)}>
+                            <source type="video/mp4" src="${data[fld.name]}">
+                            </video>
+<!---
+                              <video controls type="video/mp4" src=${data[fld.name]} controlsList="nodownload"oncontextmenu="return false" onselectstart="return false" ondragstart="return false"></video>
+                              <div id="dialog-frame" class="dialog">
+                              <mwc-icon-button icon="fullscreen_exit" @click=${this.closeDialogFrame}></mwc-icon-button> 
+                                <video id="video-source" type="video/mp4" controls controlsList="nodownload"oncontextmenu="return false" onselectstart="return false" ondragstart="return false" >
+                                </video>-->
+                              </div>
+                            `}
+                    `: html`                            
                       ${fld.as_progress!==undefined&&fld.as_progress===true?
                         html`                            
                         <style>
@@ -731,9 +1046,9 @@ export function DataViews(base) {
                           ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? data[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
                           ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? data[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
                           </span></li>
-                        `}
-                      `
-                  )}
+                      `}
+                    `}
+                  `)}
                   </ul>
                 </div>
               `}              
@@ -1320,6 +1635,8 @@ export function DataViews(base) {
           let titleStr=''
           if (colDef.title!==undefined){
               return colDef.title["label_"+this.lang]
+          }else{
+            return colDef.name
           }    
           return titleStr
         }        

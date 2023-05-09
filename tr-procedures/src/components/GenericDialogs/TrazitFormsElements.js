@@ -147,7 +147,8 @@ export function TrazitFormsElements(base) {
     }
 
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    genericFormElements(fields = []) {
+    genericFormElements(fields) {
+        if (fields===undefined){fields=[]}
         // if (this.actionBeingPerformedModel.dialogInfo === undefined) {
         //     //alert('genericFormElements has no dialogInfo')
         //     return nothing

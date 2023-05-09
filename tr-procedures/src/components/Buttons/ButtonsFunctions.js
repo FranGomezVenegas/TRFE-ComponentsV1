@@ -7,7 +7,8 @@ import { ProcManagementMethods} from '../../components/ProcManagement/ProcManage
 
 export function ButtonsFunctions(base) {
     return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
-    getButton(sectionModel = this.viewModelFromProcModel, data, isProcManagement) {      
+    getButton(sectionModel, data, isProcManagement) {   
+      if (sectionModel===undefined){sectionModel=this.viewModelFromProcModel}   
 //      console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
       return html`
         <style>
@@ -368,7 +369,7 @@ export function ButtonsFunctions(base) {
             this[queryDefinition.clientMethod]()
             return
         }
-        console.log('GetViewData', 'queryDefinition', queryDefinition)
+        console.log('GetAlternativeViewData', 'queryDefinition', queryDefinition)
         let APIParams=this.getAPICommonParams(queryDefinition)
         let viewParams=this.jsonParam(queryDefinition, selObject)
         let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
@@ -418,9 +419,10 @@ export function ButtonsFunctions(base) {
       }
       this.samplesReload = false
     }
-    actionWhenRequiresNoDialog(action, selectedItem, targetValue ={}, isProcManagement ) {
+    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement ) {
         console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
         this.selectedAction=action
+        if (targetValue===undefined){targetValue={}}
         if (this.itemId) {
           this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue), action, null, null, isProcManagement)
         } else {
