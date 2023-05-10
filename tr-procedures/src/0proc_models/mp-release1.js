@@ -1302,11 +1302,11 @@ export const MpRelease1 = {
         },
         {
           "argumentName": "whereFieldsValue",
-          "value": "RECEIVED-INCOMPLETE-COMPLETE*String|prog_pers_template"
+          "value": "RECEIVED-INCOMPLETE-COMPLETE*String"
         },
         {
           "argumentName": "whereFieldsName",
-          "value": "status in-|sample_config_code not in*"
+          "value": "status in-"
         }
       ]
     },

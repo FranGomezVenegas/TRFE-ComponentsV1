@@ -108,9 +108,9 @@ export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDi
                       ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 
                       ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2!==undefined ? 
-                        this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true) : nothing}
+                        this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true, this.lang) : nothing}
                       ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2===undefined ? 
-                        this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true) : nothing}   
+                        this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true, this.lang) : nothing}   
                         
                          
                       ${(elem2.includeChild===undefined||elem2.includeChild===false) ? nothing :
@@ -135,9 +135,9 @@ export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDi
                 ${elem.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem, data, true): nothing}
 
               ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
-                this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true) : nothing}
+                this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true, this.lang) : nothing}
               ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2===undefined ? 
-                this.rolesAndActions(elem, data[elem.endPointResponseObject], true) : nothing}   
+                this.rolesAndActions(elem, data[elem.endPointResponseObject], true, this.lang) : nothing}   
 
 
                 ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2!==undefined ? 

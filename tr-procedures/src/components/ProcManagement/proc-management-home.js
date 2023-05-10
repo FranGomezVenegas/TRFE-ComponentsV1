@@ -756,7 +756,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           align-items: center;
           height: 60px;
           padding: 0 10px; /* Add padding to keep text away from edges */
-          position: fixed;
+          position: relative;
           z-index: 6;       
           width: calc(96vw - 330px);
           transition: width 0.5s ease-in-out;

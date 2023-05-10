@@ -426,10 +426,11 @@ export function DataViews(base) {
                     </tr>
                     <tr class="headercolumns">
                       ${elem.columns.map(fld =>
-                        html`                        
-                        <td style="background-color:#7ccee6; color: white;">${fld["label_"+ this.lang]}</td>
-                        `
-                      )}                  
+                      html`
+                        ${this.fieldsToDiscard(fld) === true ? nothing :
+                          html`<td style="background-color:#7ccee6; color: white;">${fld["label_"+ this.lang]}</td>`
+                        }
+                      `)}                  
                     </tr>
                   </thead>
                   <tbody>
@@ -438,8 +439,10 @@ export function DataViews(base) {
                     ${value.sort().map(p => 
                       html`
                       <tr>
-                        ${elem.columns.map(fld =>
-                          html`
+                        ${elem.columns.map(fld =>                          
+                        html`
+                        ${this.fieldsToDiscard(fld) === true ? nothing :
+                          html`  
                             ${fld.name==='pretty_spec' ?
                             html `
                               <td>
@@ -478,7 +481,7 @@ export function DataViews(base) {
                                   </td>
                               `}
                             `}
-                          
+                          `}
                           `
                         )}
                       </tr>
@@ -656,7 +659,8 @@ export function DataViews(base) {
           `;
         }        
 
-        rolesAndActions(elem, dataArr, isSecondLevel = false) {
+        rolesAndActions(elem, dataArr, isSecondLevel = false, lang) {
+          console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
           return html`
           <style>
           .styled-table-for-rolesandactions {
@@ -755,7 +759,7 @@ export function DataViews(base) {
           </style>
           <div style="display: flex; flex-direction: column; text-align: center;">
             ${elem===undefined||elem.title===undefined ? nothing : html`
-            <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+            <p><span class="title ${isSecondLevel}" >${elem.title["label_"+this.lang]}</span></p>`
             }
             <table class="styled-table-for-rolesandactions">
               <thead>          
@@ -764,7 +768,11 @@ export function DataViews(base) {
                   html`
                   ${dataArr[0].map(fld =>
                     html`
+                    ${typeof fld === 'object' ?
+                    html`${this.fieldsToDiscard(fld) === true ? nothing :html`<th style="text-align: center;">${fld.label}</th>`}
+                    `:html`
                     <th style="text-align: center;">${fld}</th>
+                    `}
                     `
                   )} 
                   `    
@@ -780,12 +788,17 @@ export function DataViews(base) {
                   <tr>
                     ${p.map((fld, iCol) =>                      
                       html`
-                        ${iCol==0?
-                          html `<th>${fld}</th>`
+                        ${iCol==0||iCol==1?
+                        html`
+                          ${typeof dataArr[0][iCol] === 'object' ? 
+                          html`
+                            ${this.fieldsToDiscard(dataArr[0][iCol]) === true ? nothing : html`<th>${fld}</th>`}
+                          `: html `<th>${fld}</th>`
+                        }`
                         : 
                         html`
                         ${fld!==undefined&&fld.length>0 ?
-                          html `<td class="present" title="Assigned"> X </td>` 
+                          html `<td class="present" title="Assigned"> ${fld==="ALL"? this.lang==="es"?'TODOS':'ALL' : 'X'} </td>` 
                         :
                           html `<td class="absent" title="NOT assigned"> </td>` 
                         }    
@@ -809,9 +822,9 @@ export function DataViews(base) {
             ` 
         }
         cardSomeElementsRepititiveObjects(elem, data){
-            console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
+            //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
             data=this.getDataFromRoot(elem, data)
-            console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
+            //console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
             return html`  
             ${Array.isArray(data) && data.length > 0 ? html`
               ${data.map(d => 
@@ -994,7 +1007,9 @@ export function DataViews(base) {
                 <div class="layout horizontal center flex wrap">${this.getButton(elem, data, true)}</div>
                   <ul class="column-list${elem.num_columns!==undefined?elem.num_columns:''}">                
                   ${elem.fieldsToDisplay.map((fld, i) =>                    
-                  html`    
+                  html` 
+                  ${this.fieldsToDiscard(fld) === true ? nothing :
+                  html`     
                     ${fld.as_ppt!==undefined&&(fld.as_ppt===true||fld.as_video===true)?
                     html` 
                     <mwc-icon-button icon="fullscreen" .isvideo=${data.is_video} .src=${data[fld.name]} @click=${this.openDialogFrame} .fld=${fld}></mwc-icon-button>
@@ -1048,6 +1063,7 @@ export function DataViews(base) {
                           </span></li>
                       `}
                     `}
+                  `}
                   `)}
                   </ul>
                 </div>
@@ -1639,7 +1655,12 @@ export function DataViews(base) {
             return colDef.name
           }    
           return titleStr
-        }        
+        }  
+        fieldsToDiscard(fld) {
+          if (fld.is_translation === undefined||fld.is_translation ===false) { return false; }
+          if (fld.is_translation ===true &&fld.name.endsWith(this.lang)) { return false; 
+          }else{return true}
+        }      
         get audit() {return this.shadowRoot.querySelector("audit-dialog")}          
     }
     
