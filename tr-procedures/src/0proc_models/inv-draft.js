@@ -1,11 +1,18 @@
 export const InvDraft = {
   "TrackingChanges":{
-	  "version": 0.1,
-	  "last change on (YYYYMMDD)": "Begin"
+	  "version": 0.9,
+	  "last change on (YYYYMMDD)": "20230408",
+	  "last_change_note_20230408": "Added min_allowed 0 and max_dp 0 to verify the functionality in ADJUST_INV_LOT_VOLUME and ADD_INV_LOT_VOLUME",
+	  "last_change_note_20230407": "Added min_allowed 0 and max_dp 0 to verify the functionality in allInventoryLots for CONSUME_INV_LOT_VOLUME",
+	  "last_change_note_20230327": "Added Qualification event enter results in main inventory lots view",
+	  "last_change_note_20230327_2": "Added new view, QualificationInProgress"
   },
   "ModuleSettings":{
 	  "actionsEndpoints":[
 		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIactions"}
+	  ],
+	  "queriesEndpoints":[
+		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIqueries"}
 	  ]
   },
   "InventoryLotsGeneral": {
@@ -66,7 +73,7 @@ export const InvDraft = {
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
 		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
-                  { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
+          { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
           "icon": "create_new_folder",
@@ -89,7 +96,7 @@ export const InvDraft = {
 			}},
 			{"text1": { "label_en": "Reference", "label_es": "Referencia" }},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true , "min_allowed":0, "max_dp":2}},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -281,7 +288,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" , "min_allowed":0, "max_dp":2}}
 				]
 			},
 			
@@ -309,7 +316,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" , "min_allowed":0, "max_dp":1}}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -337,8 +344,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}	
+					]
 			},
 			
 			"endPointParams": [
@@ -604,8 +611,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
-				]
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					]
 			},
 			
 			"endPointParams": [
@@ -632,7 +639,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -660,8 +667,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					]
 			},
 			
 			"endPointParams": [
@@ -930,8 +937,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
-				]
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					]
 			},
 			
 			"endPointParams": [
@@ -958,7 +965,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -986,8 +993,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					]
 			},
 			
 			"endPointParams": [
@@ -1256,8 +1263,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
-				]
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					]
 			},
 			
 			"endPointParams": [
@@ -1284,7 +1291,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -1312,8 +1319,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					]
 			},
 			
 			"endPointParams": [
@@ -1582,8 +1589,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
-				]
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					]
 			},
 			
 			"endPointParams": [
@@ -1610,7 +1617,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -1638,8 +1645,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					]
 			},
 			
 			"endPointParams": [
@@ -1908,8 +1915,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
-				]
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					]
 			},
 			
 			"endPointParams": [
@@ -1936,7 +1943,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -1964,8 +1971,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					]
 			},
 			
 			"endPointParams": [
@@ -2239,8 +2246,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
-				]
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					]
 			},
 			
 			"endPointParams": [
@@ -2267,7 +2274,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -2295,8 +2302,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					]
 			},
 			
 			"endPointParams": [
@@ -2569,8 +2576,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" }}								
-				]
+					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					]
 			},
 			
 			"endPointParams": [
@@ -2597,7 +2604,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar" }}
+					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -2625,8 +2632,8 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir" }}								
-				]
+					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					]
 			},
 			
 			"endPointParams": [
@@ -2800,7 +2807,7 @@ export const InvDraft = {
 	"component": "TableWithButtons",
     "langConfig": {
       "title": {
-        "QualificationsInProgress": {
+        "QualificationsInProgress.1": {
           "label_en": "Events in progress",
           "label_es": "Eventos en curso"
         }
@@ -2920,103 +2927,346 @@ export const InvDraft = {
 			  { "argumentName": "decision", "element": "list8" }
 			]
 		},
-		{ "actionName": "REOPEN_EVENT",
-  "alternativeAPIActionMethod": "completeInstrumentEventAction",
-  "requiresDialog": true,
-  "clientMethod": "openReactivateObjectDialog",
-  "endPoint": "/app/procs/InstrumentsAPIactions",
-  "endPointParams": [
-    {
-      "argumentName": "instrumentName",
-      "selObjectPropertyName": "instrument"
-    },
-    {
-      "argumentName": "eventId",
-      "selObjectPropertyName": "id"
-    }
-  ],
-  "button": {
-    "icon": "alarm_add",
-    "title": {
-      "label_en": "Reopen",
-      "label_es": "Reabrir"
-    },
-    "requiresGridItemSelected": false
+		{ "actionName": "REOPEN_QUALIFICATION",
+			"alternativeAPIActionMethod": "completeInstrumentEventAction",
+			"requiresDialog": true,		
+			"clientMethod": "openReactivateObjectDialog",
+			"endPoint": "/app/procs/InvTrackingAPIactions",
+			"endPointParams": [
+			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
+			  { "argumentName": "category", "selObjectPropertyName": "category" },
+			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
+			  { "argumentName": "certifId", "selObjectPropertyName": "certif_id" }
+			  
+			],
+			"button": {
+			  "icon": "alarm_add",
+			  "title": {
+				"label_en": "Reopen", "label_es": "Reabrir"
+			  },
+			  "requiresGridItemSelected": false
+			},
+			"dialogInfo": {
+			  "requiresDialog": true,
+			  "name": "reactivateObjectDialog",
+			  "fieldsObject": {
+				"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+				"objectName": { "label_en": "Reopen event", "label_es": "Reabrir evento" }
+			  },  
+			  "listDefinition":{
+				"keyFldName":"certif_id",
+				"eachEntryTextGenerator":[
+				  {"value": "lot_name", "type":"field"}, {"value": " (", "type":"fix"}, 
+				  {"value": "category", "type":"field"}, {"value": "-", "type":"fix"},
+				  {"value": "reference", "type":"field"}, {"value": "-", "type":"fix"},
+				  {"value": "completed_on", "type":"field"}, {"value": "-", "type":"fix"},
+				  {"value": "completed_decision", "type":"field"}, {"value": ")", "type":"fix"}
+				  ]
+			  },
+			  "viewQuery": {
+				  "endPoint": "/app/procs/InvTrackingAPIqueries",
+				  "actionName": "COMPLETED_EVENTS_LAST_N_DAYS",
+				  "clientMethod": "getDeactivatedObjects",
+				  "endPointParams": [
+					{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
+				  ]
+			  }
+			}
+		}
+	
+  ]
   },
-  "dialogInfo": {
-    "requiresDialog": true,
-    "name": "reactivateObjectDialog",
-    "fieldsObject": {
-      "queryNumDays": {
-        "label_en": "Number of Days",
-        "label_es": "Número de Días"
+  "Deviation": {
+	"component":"Tabs",  
+    "abstract": true,
+    "tabs": [
+      { "component":"TableWithButtons",  
+        "filter": "pending",
+        "langConfig": {
+          "tab": {
+            "label_en": "Pending Decision", 
+            "label_es": "Decisión pendiente"
+          },
+          "title": {
+            "pending": {
+				"label_en": "Pending Decision", 
+				"label_es": "Decisión pendiente"
+            }
+          },
+          "gridHeader": {
+            "certif_id": {
+              "label_en": "Certif Id", "label_es": "Id certif", "sort": false, "filter": true, "width": "10%"
+            },
+            "lot_name": {
+              "label_en": "Lot Name", "label_es": "Nombre del lote", "sort": false, "filter": true, "width": "10%"
+            },
+            "reference": {
+              "label_en": "Reference", "label_es": "Referencia", "sort": true, "filter": false, "width": "15%"
+            },
+            "category": {
+              "label_en": "Category", "label_es": "Categoria", "sort": false, "filter": true, "width": "15%"
+            },
+            "created_on": {
+              "label_en": "Creation", "label_es": "Creación", "width": "30px", "sort": false, "filter": true
+            },			
+            "object_type": {
+              "label_en": "Object Type", "label_es": "Tipo de objeto", "sort": false, "filter": true, "width": "10%"
+            }
+          }
+        },
+        "viewQuery":{
+            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "requiresGridItemSelected": true
+            }		
+		},
+		"actions": [
+          {"actionName": "NEW_INVESTIGATION", 
+			"requiresDialog": false,
+            "button": {
+              "title": {
+                "label_en": "Create Investigation", "label_es": "Crear Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+				{ "argumentName": "objectToAddObjectName", "selObjectPropertyName": "certif_id" },
+				{ "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type"}						
+            ]
+          },
+          {"actionName": "OPEN_INVESTIGATIONS",     
+			"requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "dialogInfo": {
+			"name": "investigationDialog",
+			"subQueryName": "getOpenInvestigations",				
+              "automatic": true,
+              "action": [
+                {
+                  "actionName": "ADD_INVEST_OBJECTS",
+                  "clientMethod": "addInvestObjects",
+                  "endPointParams": [
+                    { "argumentName": "investigationId", "targetValue": true },
+                    { "argumentName": "objectsToAdd", "targetValue": true }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },	
+      { "component":"TableWithButtons",  
+        "filter": "open",
+        "langConfig": {
+          "tab": {
+            "label_en": "Investigations", 
+            "label_es": "Investigaciones"
+          },
+          "title": {
+            "open": {
+              "label_en": "In Progress Investigations", 
+              "label_es": "Investigaciones en curso"
+            }
+          },
+          "fieldText": {
+            "systemName": { "label_en": "System Name", "label_es": "Nombre Sistema" },
+            "systemId": { "label_en": "System Id", "label_es": "Id Sistema" },
+            "capa": { "label_en": "CAPA Required", "label_es": "¿Requiere CAPA?" },
+            "capaName": { "label_en": "CAPA System Name", "label_es": "Nombre Sistema CAPA" },
+            "capaId": { "label_en": "CAPA Id", "label_es": "Id CAPA" }
+          },
+          "gridHeader": {
+            "id": {
+              "label_en": "ID", "label_es": "ID", "width": "12px", "sort": false, "filter": true
+            },
+            "description": {
+              "label_en": "description", "label_es": "description", "width": "20px", "sort": false, "filter": true
+            },
+            "created_on": {
+              "label_en": "Creation", "label_es": "Creación", "width": "30px", "sort": false, "filter": true
+            },
+            "external_system_name": {
+              "label_en": "External System Name", "label_es": "Nombre Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "external_system_id": {
+              "label_en": "External System Id", "label_es": "Id Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_required": {
+              "label_en": "capa_required", "label_es": "CAPA Necesario", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_name": {
+              "label_en": "CAPA System", "label_es": "Sistema para CAPAs", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_id": {
+              "label_en": "CAPA System Id", "label_es": "Id en Sistema CAPAs", "width": "20px", "sort": false, "filter": true
+            }
+          }
+        },
+        "viewQuery":{
+            "actionName": "OPEN_INVESTIGATIONS",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "requiresGridItemSelected": true
+            }
+		},
+		"actions": [
+          {"actionName": "INVESTIGATION_CAPA_DECISION",			
+			"requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Decision", "label_es": "Decisión"
+              },
+              "requiresGridItemSelected": true
+            },
+            "dialogInfo": {               
+              "name": "decisionDialog"
+            },
+            "endPointParams": [
+              { "argumentName": "investigationId", "selObjectPropertyName": "id" },
+              { "argumentName": "capaRequired", "targetValue": true },
+              { "argumentName": "capaFieldName", "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id" },
+              { "argumentName": "capaFieldValue", "targetValue": true },
+			  { "argumentName": "closeInvestigation", "value": false }				  
+            ]
+          },
+          {"actionName": "CLOSE_INVESTIGATION",
+            "clientMethod": "closeInvestigation",
+			"requiresDialog": false,
+            "button": {
+              "title": {
+                "label_en": "Close", "label_es": "Cerrar"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+              { "argumentName": "investigationId", "selObjectPropertyName": "id" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "configReferences": {
+    "component": "TableWithButtons",
+    "langConfig": {
+      "title": {
+        "configReferences": {
+          "label_en": "Master of References",
+          "label_es": "Maestro de Referencias"
+        }
       },
-      "objectName": {
-        "label_en": "Reopen event",
-        "label_es": "Reabrir evento"
+      "gridHeader": {
+        "category": {
+          "label_en": "Category",
+          "label_es": "Categoría",
+          "width": "20%",
+          "sort": false,
+          "filter": true
+        },
+        "name": {
+          "label_en": "Name",
+          "label_es": "Nombre",
+          "width": "20%",
+          "sort": false,
+          "filter": true,
+          "align": "left"
+        },
+        "lot_requires_qualif": {
+          "label_en": "Requires Qualif?",
+          "label_es": "¿Necesita Cualif?",
+          "width": "20%",
+          "sort": true,
+          "filter": false
+        }
       }
     },
-    "listDefinition": {
-      "keyFldName": "certif_id",
-      "eachEntryTextGenerator": [
-        {
-          "value": "lot_name",
-          "type": "field"
-        },
-        {
-          "value": " (",
-          "type": "fix"
-        },
-        {
-          "value": "category",
-          "type": "field"
-        },
-        {
-          "value": "-",
-          "type": "fix"
-        },
-        {
-          "value": "reference",
-          "type": "field"
-        },
-        {
-          "value": "-",
-          "type": "fix"
-        },
-        {
-          "value": "completed_on",
-          "type": "field"
-        },
-        {
-          "value": "-",
-          "type": "fix"
-        },
-        {
-          "value": "completed_decision",
-          "type": "field"
-        },
-        {
-          "value": ")",
-          "type": "fix"
-        }
-      ]
-    },
     "viewQuery": {
-      "endPoint": "/app/procs/InvTrackingAPIqueries",
-      "actionName": "COMPLETED_EVENTS_LAST_N_DAYS",
-      "clientMethod": "getDeactivatedObjects",
-      "endPointParams": [
-        {
-          "argumentName": "numDays",
-          "element": "queryNumDays",
-          "fixValue": 7
+      "actionName": "ALL_INVENTORY_REFERENCES",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Refresh",
+          "label_es": "Recargar"
         }
-      ]
-    }
-  }
-}	
-  ]
-  }
-  
+      }
+    },
+    "actions": [
+      {
+        "actionName": "CONFIG_ADD_REFERENCE",
+        "requiresDialog": true,
+        "button": {
+          "icon": "create_new_folder",
+          "title": {
+            "label_en": "New",
+            "label_es": "Nuevo"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [            
+			{"text1": {"label_en": "New Reference Name","label_es": "Nombre nueva Referencia"}},
+			{"list1": {"label_en": "Category", "label_es": "Categoría",
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"propertyNameContainer": "category_and_references",
+				"propertyNameContainerLevelPropertyKeyName": "name",
+				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
+			  }			
+			}},		  			  
+			{"checkbox1": {"label_en": "Requires Qualification?","label_es": "¿Requiere Cualificación?", "defaultValue":false}},
+			{"number1": {"label_en": "Min Stock","label_es": "Stock Mínimo", "optional":true}},
+			{"text2": {"label_en": "UOM","label_es": "UDM", "optional":true}},
+			{"text3": {"label_en": "Other Allowed UOMs","label_es": "Otras UDM aceptadas", "optional":true}},
+			{"list2": {"label_en": "min Stock Type","label_es": "Tipo Stock Mínimo", "optional":true,
+				"addBlankValueOnTop": true,
+				"items": [
+					{ "keyName": "VOLUME", "keyValue_en": "Quantity", "keyValue_es": "Cantidad" },                
+					{ "keyName": "PB ITEMS", "keyValue_en": "Items", "keyValue_es": "Items" }
+				]
+			}},
+			{"checkbox2": {"label_en": "Requires control for Available for use","label_es": "¿Requiere control disponible para uso?", "optional":true}},
+			{"number2": {"label_en": "Min Available for use","label_es": "Minimo en Disponible para uso", "optional":true}},
+			{"list3": {"label_en": "Type","label_es": "Tipo", "optional":true,
+				"addBlankValueOnTop": true,
+				"items": [
+					{ "keyName": "VOLUME", "keyValue_en": "Quantity", "keyValue_es": "Cantidad" },                
+					{ "keyName": "PB ITEMS", "keyValue_en": "Items", "keyValue_es": "Items" }
+				]			  
+			}},
+			{"checkbox3": {"label_en": "Allow Some open at a time?","label_es": "¿Permitir abrir varios a la vez?", "optional":true}},
+			{"text4": {"label_en": "Qualification Variables Set","label_es": "Conjunto Variables para Cualificación", "optional":true}},            
+          ]
+        },
+        "endPointParams": [
+          {"argumentName": "name",                "element": "text1"           },
+          {"argumentName": "category",            "element": "list1"          },
+          {"argumentName": "lotRequiresQualif",   "element": "checkbox1"      },
+          {"argumentName": "minStock",            "element": "number1"        },
+          {"argumentName": "minStockUom",         "element": "text2"          },
+          {"argumentName": "allowedUoms",         "element": "text3"          },
+          {"argumentName": "minStockType",        "element": "list2"          },
+          {"argumentName": "requiresAvailableForUse",   "element": "checkbox2"},
+          {"argumentName": "minAvailablesForUse",       "element": "number2"  },
+          {"argumentName": "minAvailablesForUseType",   "element": "list3"    },
+          {"argumentName": "allowedOpeningSomeAtaTime", "element": "checkbox3"},
+          {"argumentName": "qualificationVariablesSet", "element": "text4"    },
+        ]
+      }
+    ]
+  }  
   
 }
