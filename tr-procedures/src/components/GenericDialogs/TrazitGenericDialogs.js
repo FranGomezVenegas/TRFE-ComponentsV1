@@ -576,20 +576,18 @@ export function TrazitGenericDialogs(base) {
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
         }
-        for (let i=0;i<dlgFlds.length;i++){
-            let fldObj=dlgFlds[i]
+        for (const element of dlgFlds){
+            let fldObj=element
             let keyName=Object.keys(fldObj)
             
             //if (==null){            
-            if (fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
-                //if (this[keyName[0]!==null]){
-                    this[keyName[0]].value=fldObj[keyName].default_value
-                //}
+            if (fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
+                this[keyName[0]].value=fldObj[keyName].default_value
             }
-            if (fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null){
+            if (fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null){
                 this[keyName[0]].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
             }
-            if (fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
+            if (fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
                 this[keyName[0]].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
             }
@@ -602,8 +600,8 @@ export function TrazitGenericDialogs(base) {
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
         }
-        for (let i=0;i<dlgFlds.length;i++){
-            let fldObj=dlgFlds[i]            
+        for (const element of dlgFlds){
+            let fldObj=element            
             let keyName=Object.keys(fldObj)
             if (this[keyName]!==null){
                // console.log(keyName[0])
@@ -761,7 +759,6 @@ export function TrazitGenericDialogs(base) {
     get text8() {    return this.shadowRoot.querySelector("mwc-textfield#text8")    }        
     get text9() {    return this.shadowRoot.querySelector("mwc-textfield#text9")    }        
     get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    }        
-    get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    } 
     get checkbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox1")    }        
     get checkbox2() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox2")    }        
     get checkbox3() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox3")    }        

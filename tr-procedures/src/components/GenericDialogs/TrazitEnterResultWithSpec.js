@@ -263,9 +263,9 @@ return class extends LitElement {
             }` :
           html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
         }</p>
-          <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (${result.method_version})</p>
+          <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (v${result.method_version})</p>
           <p>Range Evaluation: ${result.spec_eval}</p>
-          <p>Range Rule: ${result.spec_eval_detail}</p>
+          <p>Range Rule: ${result.spec_eval_detail===undefined||result.spec_eval_detail.length==0?result.spec_rule_info[0].ruleRepresentation: result.spec_eval_detail}</p>
           ${result.is_locked ?
           html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
         }
@@ -474,6 +474,31 @@ return class extends LitElement {
         return html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
       }
     }
+    openFile(res){
+      const jsonString = res.attachment_jsonstring //attachment //attachment_text
+      const jsonData = JSON.parse(jsonString);
+      const byteData = jsonData.data;
+  
+      const blob = new Blob([byteData], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+  
+      window.open(url, '_blank');      
+    }
+
+    downloadFile(res) {
+      const jsonString = res.attachment
+  
+      const jsonData = JSON.parse(jsonString);
+      const byteData = jsonData.data;
+  
+      const blob = new Blob([byteData], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+  
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'file.txt'; // Specify the desired file name
+      link.click();
+    }    
 
     valRenderer(result) {
       var rawValue=''
@@ -497,7 +522,7 @@ return class extends LitElement {
         } else if (result.param_type.toUpperCase().indexOf("LIST") > -1) {
 //console.log('valRenderer', 'result', result)
           let lEntry = ('|'+result.list_entry).split("|")
-          if (result.value.length==0){
+          if (result.value===undefined||result.value.length==0){
             let blankArr=[""]
             lEntry=[blankArr].concat(lEntry)
           }
@@ -563,7 +588,12 @@ return class extends LitElement {
           </div>
         `
       } else {
-        if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
+        if (result.param_type.toUpperCase() == "FILE") {
+          return html`
+          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
+          <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
+          `
+        }else if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
           return html`<input class="enterResultVal" type="text" .value=${result.value} 
             ?disabled=${this.actionBeingPerformedModel.dialogInfo.readOnly}
             @keydown=${e => e.keyCode == 13 && this.setResultInstrument(result, e)}>`
