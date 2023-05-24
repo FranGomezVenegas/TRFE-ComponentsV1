@@ -25,22 +25,26 @@ return class extends DialogsFunctions(base) {
     }
 
     investigationTemplate() {
+      console.log('viewModelFromProcModel', this.viewModelFromProcModel)
       if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined
         ||this.viewModelFromProcModel.langConfig.gridHeader===undefined||this.viewModelFromProcModel.langConfig.gridHeader.created_on===undefined
-        ||this.viewModelFromProcModel.filter!=="pending"){return html``}
+        ||this.viewModelFromProcModel.filter!=="pending"){
+          
+          return html``
+        }
       return html`
       <tr-dialog id="investigationDialog" ?open=${this.openInvests.length}        
         @closed=${e => { if (e.target === this.investigationDialog) { this.openInvests = []; this.grid.activeItem = null } }}
         heading=""
         hideActions=""
         scrimClickAction="">
-        <div class="layout vertical flex center-justified">
+        <div class="layout vertical flex center-justified" style="width:450px;">
           <div style="height:55vh;overflow:auto">
             <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
               @active-item-changed=${e => this.selectedInvestigations = e.detail.value ? [e.detail.value] : []}
               .selectedItems="${this.selectedInvestigations}" all-rows-visible>
-              <vaadin-grid-sort-column width="100%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
-              <vaadin-grid-filter-column width="100%" resizable text-align="center" path="created_on" .header="${this.viewModelFromProcModel.langConfig.gridHeader.created_on["label_" + this.lang]}"></vaadin-grid-filter-column>
+              <vaadin-grid-sort-column width="40%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
+              <vaadin-grid-filter-column width="60%" resizable text-align="center" path="created_on" .header="${this.viewModelFromProcModel.langConfig.gridHeader.created_on["label_" + this.lang]}"></vaadin-grid-filter-column>
             </vaadin-grid>
           </div>
           <div style="margin-top:10px;text-align:center">
@@ -170,13 +174,14 @@ return class extends DialogsFunctions(base) {
     getOpenInvestigations() {
       //this.actionBeingPerformedModel.dialogInfo.viewQuery  
       let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)    
-      let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
+      let endPointUrl=this.getQueryAPIUrl(this.actionBeingPerformedModel)
       if (String(endPointUrl).toUpperCase().includes("ERROR")){
           alert(endPointUrl)
           return
       }
       let params = this.config.backendUrl + endPointUrl        
         + '?' + new URLSearchParams(APIParams) //+ '&'+ new URLSearchParams(extraParams)
+console.log('getOpenInvestigations', 'params', params)        
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.openInvests = j
