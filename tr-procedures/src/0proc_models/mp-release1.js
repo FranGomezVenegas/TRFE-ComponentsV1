@@ -3,7 +3,7 @@ export const MpRelease1 = {
     "version": 0.9,
     "last change on (YYYYMMDD)": "20230323",
 	"last_change_note_20230523": "Added new section for inventory retain",
-    "last_change_note_20230523": "Added Fake CoA as a model in LotView",
+    "last_change_note_20230523_2": "Added Fake CoA as a model in LotView",
     "last_change_note_20230308": "First draft"
   },
   "ModuleSettings": {
