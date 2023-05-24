@@ -49,36 +49,6 @@ export function ApiFunctions(base) {
         })
       }
 
-      // This fetchApi was the original one for model 2.1, on applying naming convention actions/queries we
-      //  evidenced that it was not adding notifications ... although it worked before this naming convention changed
-      // although now it seemed to be strange that just the naming convention provoked the issue
-      xfetchApi(urlParams) { 
-          console.log('fetchApi', 'urlParams', urlParams)        
-          
-          this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
-          return fetch(urlParams).then(async r => {
-              if (r.status == 200) {
-              return r.json()
-              } else {
-              let err = await r.json()
-              throw err
-              }
-          }).then(j => {
-              this.dispatchEvent(new CustomEvent('success', {
-              detail: {...j},
-              bubbles: true,
-              composed: true
-              }))
-              return j
-          }).catch(e => {
-              this.dispatchEvent(new CustomEvent("error", {
-              detail: {...e},
-              bubbles: true,
-              composed: true
-              }))
-              return
-          })
-      }    
       getAPICommonParams(action, excludeProcInstanceName = false){
         if (action===undefined){return}
         let extraParams={}  
@@ -91,7 +61,7 @@ export function ApiFunctions(base) {
         return extraParams
       }          
       jsonParam(action, selObject = {}, targetValue = {}) {
-        //console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue)
+        console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue)
         let curArgName=""
         if (action===undefined){return}
           let jsonParam = {}
@@ -115,7 +85,7 @@ export function ApiFunctions(base) {
               
               } else if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
                   if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
-                    var msg=""
+                    let msg=""
                     if (this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
                       msg='The object '+p.internalVariableObjName+' has no one property called '+p.internalVariableObjProperty
                       alert(msg)
@@ -125,16 +95,22 @@ export function ApiFunctions(base) {
                       alert(msg)
                     }
                 //    alert('No family selected')
-                    return jsonParam[p.argumentName] = "ERROR: "+msg
+                    jsonParam[p.argumentName] = "ERROR: "+msg
+                    return 
                   }  
                 jsonParam[p.argumentName] = this[p.internalVariableObjName][0][p.internalVariableObjProperty]
                 
               } else if (p.element) {
                 if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
-                  msg='The element '+p.element+' was not added in this dialog definition, please review the endPointParams configuration or add them to the dialog'
-                  alert(msg)
                   if (this[p.element]==null){
-                    return jsonParam[p.argumentName] = "ERROR: "+msg
+                    if (p.notAddWhenValueIsBlank!==undefined&&p.notAddWhenValueIsBlank===true){
+                      return
+                    }else{
+                    //msg='The element '+p.element+' was not added in this dialog definition, please review the endPointParams configuration or add them to the dialog'
+                    alert(msg)
+                      jsonParam[p.argumentName] = "ERROR: "+msg
+                      return 
+                    }
                   }
                   if (this[p.element].value!==undefined&&this[p.element].value.length>0){                    
                     if (jsonParam.fieldName===undefined){
