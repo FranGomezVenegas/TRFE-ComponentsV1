@@ -210,8 +210,6 @@ console.log('getOpenInvestigations', 'params', params)
       console.log('capaDecisionAction', 'reqParams', this.reqParams)
       let params = this.config.backendUrl + endPointUrl   
         + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams)
-//      let params = this.config.backendUrl + this.selectedAction.endPoint
-//        + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.decisionDialog.close()
         this.resetDialogThings()
