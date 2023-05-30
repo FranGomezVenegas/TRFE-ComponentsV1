@@ -326,7 +326,12 @@ box-shadow: 16px 14px 20px #0000008c;
       dbName: this.config.dbName,
       actionName: 'authenticate'
     })
-    return this.fetchApi(urlParams, false).then(j => {
+    
+    const formData = new FormData();
+    formData.append('dbUserName', this.user.value);
+    formData.append('dbUserPassword', this.password.value);    
+    const formData2=[this.user.value, this.password.value];
+    return this.fetchApiPost(urlParams, false, formData2).then(j => {
       if (j && !j.is_error) {
         sessionStorage.setItem('partialToken', JSON.stringify(j))
       } else {

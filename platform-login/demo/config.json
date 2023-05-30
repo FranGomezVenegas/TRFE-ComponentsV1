@@ -1,7 +1,8 @@
 {
   "dbName": "labplanet",
   "isForTesting": false,
-  "fullscreen": true,
-  "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
+  "fullscreen": false,
+  "backendUrlovh": "http://51.75.202.142:8888/LabPLANET-API",
+  "backendUrl": "http://localhost:8080/LabPLANET-API",
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions"
 }
