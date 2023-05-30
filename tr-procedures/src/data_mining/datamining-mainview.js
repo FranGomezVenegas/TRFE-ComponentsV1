@@ -11,7 +11,8 @@ import './datamining-tab';
 import './datamining-data';
 //import '@doubletrade/lit-datatable';
 import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
-
+//import jsPDF from 'jspdf';
+import {FakeCOA} from '../0proc_models/RawMaterialCoaFake';
 export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   static get styles() {
     return [
@@ -101,7 +102,9 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       datatable:{type: Object},
       leftOpen:{type: Boolean},
       masterData: {type: Array},
-      viewModelFromProcModel:{type: Object}
+      viewModelFromProcModel:{type: Object},
+      coaTab:{type: Object},
+      coaReportInfo:{type: Object},
     };
   }
 
@@ -116,12 +119,25 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     this.chartImgs = []
     this.leftOpen = true
     this.viewModelFromProcModel = {}
-    
+    this.coaTab ={
+      "printable":{
+        "printableTitleContent": true
+      }
+    }
+    this.coaReportInfo={
+      "report_info":[
+        {"report_information":"This report is COA v1, released this model the 1st of July of 2022"
+        }
+      ]
+    }    
   }
 
   updated(updates) {
     if (updates.has('viewModelFromProcModel') && this.viewModelFromProcModel) {
       this.tabList = this.viewModelFromProcModel.tabs
+      if (this.procName==="mp-release1"){
+       // alert("yeee")
+      }
     }
   }
   filterSize(){
@@ -138,12 +154,618 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       }
       this.leftOpen=!this.leftOpen
     }else{
-      alert('not found')
+      //alert('not found')
     }
   }
-  //this.desktop
-  render() {
+  printPdfAll() {
+      // Hide unnecessary elements
+      document.querySelectorAll('.header, .footer').forEach(el => el.style.display = 'none');
+
+      // Add page breaks
+      const pages = document.querySelectorAll('.page');
+      for (let i = 0; i < pages.length - 1; i++) {
+        pages[i].style.pageBreakAfter = 'always';
+      }
+
+      // Print the document
+      window.print();
+
+      // Restore the original styles
+      document.querySelectorAll('.header, .footer').forEach(el => el.style.display = '');
+      pages.forEach(page => page.style.pageBreakAfter = '');
+  }    
+
+  xxxcoaheaderWithStyleBackup(){
+    let coaData=FakeCOA
     return html`
+    <style type="text/css">
+    :host {
+      font-family: Montserrat;
+    }
+    .document {
+      page-break-after: always;
+    }
+  
+    .title {
+      font-size: 24pt;
+      font-weight: bold;
+      text-align: center;
+      position: relative;
+      top:-90px;
+    }
+    #firstline {
+      height:120px;
+    }
+  
+  
+    .footer2 {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 0.5in;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+      }    
+      .document, .document * {
+        visibility: visible;
+      }
+  
+      .header, .footer {
+        visibility: visible;
+      }
+      .content {
+        margin-top: calc(var(--header-height) + 0.5in);
+      }
+      .document {
+        position: static;
+      }
+    }  
+  
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .logo {
+      margin-left:5px;
+      margin-bottom: 20px;
+      width: 1.5in;
+      height: auto;    
+    }
+    .header {
+      position:relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      justify-content: center;
+    }
+    .form-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
+      margin-bottom:0.05in;
+      padding-bottom: 20px;
+    }  
+    .form-fields {
+      display: grid;
+      grid-template-columns: max-content 1fr; 
+      grid-gap: 10px;
+      text-align: right;
+      left:20px;
+      position: relative;  
+    }
+    .form-fields.col2 {
+      grid-column: 2;
+    }
+    .form-fields label {
+      text-align: left;
+    }
+  
+    .form-fields span {
+      justify-self: start;
+    }
+  
+    body {
+      margin: 0;
+    }
+  
+    .content {
+      margin-top: calc(var(--header-height) + 0.5in);
+    }
+    .table-container {
+      width: 100%;
+    }
+  
+    .table-container table {
+      width: inherit;
+      /* Additional styles for the table */
+    }  
+    table{
+      border: 1px solid black;
+      width: calc(var(--header-width);
+      border-top:0.5px solid black;
+    }
+    .table-container table thead{
+      border: 1px solid black;
+    }
+    tr{
+      border: 1px solid black;
+    }  
+    </style>  
+    <div class="header">
+    <div id="firstline">
+      ${coaData.logo===undefined ? nothing: html`<img class="logo" src="${coaData.logo}" alt="Logo">`}      
+      
+      ${coaData.title2===undefined ? html`<h2 class="title">${coaData.title["label_"+this.lang]}</h2>`
+        : html`<h2 class="title">${coaData.title["label_"+this.lang]}<br>${coaData.title2["label_"+this.lang]}</h2>`}
+    </div>  
+    ${coaData.header===undefined ? nothing: html`
+      <div class="form-header">
+        ${coaData.header.column===undefined ? nothing: html`
+          <div class="form-fields col1">
+          ${coaData.header.column.map(fld =>html`
+            <label for="field1">${fld["label_"+this.lang]}</label>
+            <span>${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</span>
+          `)}
+          </div>    
+        `}
+        ${coaData.header.column2===undefined ? nothing: html`
+          <div class="form-fields col2">
+          ${coaData.header.column2.map(fld =>html`
+            <label for="field1">${fld["label_"+this.lang]}</label>
+            <span>${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</span>
+          `)}
+          </div>    
+        `}
+  
+      </div>  
+    `}
+  </div>
+  
+    `
+  }
+  xxxcoaResultsTableBackup(){
+    let coaData=FakeCOA
+    return html`
+    ${coaData.resultsTable===undefined ? nothing: html` 
+      <style>
+      .table-container {
+        width: 100%;
+      }
+    
+      .table-container table {
+        width: inherit;
+        /* Additional styles for the table */
+      }  
+      table{
+        border: 1px solid black;
+        width: calc(var(--header-width);
+        border-top:0.5px solid black;
+      }
+      .table-container table thead{
+        border: 1px solid black;
+      }
+      tr{
+        border: 1px solid black;
+      }  
+      </style>     
+      <div class="table-container">   
+        <table>
+          <thead>
+            <tr>
+            ${coaData.resultsTable.header===undefined ? nothing: html` 
+              ${coaData.resultsTable.header.map(fld =>html`
+                <th>${fld["label_"+this.lang]===undefined ? fld.label: fld["label_"+this.lang]}</th>
+              `)}
+            `}
+            </tr>
+          </thead>
+          <tbody>          
+            ${coaData.resultsTable.values===undefined ? nothing: html`           
+              ${coaData.resultsTable.values.map(row =>html`
+              <tr>
+                ${row.map(fld =>html`
+                <td style="padding:5px;">${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</td>
+                `)}
+              </tr>   
+              `)}           
+            `}
+          </tbody>
+        </table>
+      </div>
+    `}
+    `
+  }
+  xxxcoaheader(){
+    let coaData=FakeCOA
+    return html`
+    <div class="header">
+    <div id="firstline">
+      ${coaData.logo===undefined ? nothing: html`<img class="logo" src="${coaData.logo}" alt="Logo">`}      
+      
+      ${coaData.title2===undefined ? html`<h2 class="title">${coaData.title["label_"+this.lang]}</h2>`
+        : html`<h2 class="title">${coaData.title["label_"+this.lang]}<br>${coaData.title2["label_"+this.lang]}</h2>`}
+    </div>  
+    ${coaData.header===undefined ? nothing: html`
+      <div class="form-header">
+        ${coaData.header.column===undefined ? nothing: html`
+          <div class="form-fields col1">
+          ${coaData.header.column.map(fld =>html`
+            <label for="field1">${fld["label_"+this.lang]}</label>
+            <span>${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</span>
+          `)}
+          </div>    
+        `}
+        ${coaData.header.column2===undefined ? nothing: html`
+          <div class="form-fields col2">
+          ${coaData.header.column2.map(fld =>html`
+            <label for="field1">${fld["label_"+this.lang]}</label>
+            <span>${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</span>
+          `)}
+          </div>    
+        `}
+  
+      </div>  
+    `}
+  </div>
+  
+    `  
+  }    
+
+
+  xxxrenderCoaFran() {
+    this.data=this.coaReportInfo
+    this.activeTab=this.coaTab  
+    return html`
+    <style type="text/css">
+    :host {
+      font-family: Montserrat;
+    }
+
+    .document {
+      page-break-after: always;
+    }
+
+    .title {
+      font-size: 24pt;
+      font-weight: bold;
+      text-align: center;
+      position: relative;
+      top:-90px;
+    }
+    #firstline {
+      height:120px;
+    }
+
+
+    .footer2 {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 0.5in;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+      }    
+      .document, .document * {
+        visibility: visible;
+      }
+
+      .header, .footer {
+        visibility: visible;
+      }
+      .content {
+        margin-top: calc(var(--header-height) + 0.5in);
+      }
+      .document {
+        position: static;
+      }
+    }  
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      margin-left:5px;
+      margin-bottom: 20px;
+      width: 1.5in;
+      height: auto;    
+    }
+    .header {
+      position:relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      justify-content: center;
+      /*margin-bottom: 0.5in;*/
+      /*border: 1px solid black;*/
+      /*border-bottom:0.5px solid black; */
+    }
+    .form-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
+      margin-bottom:0.05in;
+      padding-bottom: 20px;
+    }  
+    .form-fields {
+      display: grid;
+      grid-template-columns: max-content 1fr; 
+      grid-gap: 10px;
+      text-align: right;
+      left:20px;
+      position: relative;  
+    }
+    .form-fields.col2 {
+      grid-column: 2;
+    }
+    .form-fields label {
+      text-align: left;
+    }
+
+    .form-fields span {
+      justify-self: start;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .content {
+      margin-top: calc(var(--header-height) + 0.5in);
+    }
+    .table-container {
+      width: 100%;
+    }
+
+    .table-container table {
+      width: inherit;
+      /* Additional styles for the table */
+    }  
+    table{
+      border: 1px solid black;
+      width: calc(var(--header-width);
+      /* border-top:0.5px solid black; */
+    }
+    .table-container table thead{
+      /* border: 1px solid black; */
+    }
+    tr{
+      /* border: 1px solid black; */
+    }  
+    </style>
+    <button @click="${this.printCoa}" style="z-index: 999; position: relative;">Print PDF</button>
+    
+    <div class="document">
+      
+    ${this.coaheaderWithStyle()}
+    ${this.coaResultsTable()}
+      <div class="footer">
+        <!-- Footer content goes here -->
+        
+      </div>
+    </div>
+  `;
+  }
+
+  xxxrenderByPages(){
+    this.data=this.coaReportInfo
+    this.activeTab=this.coaTab
+    return html`
+    <style>
+    :host {
+      display: block;
+      font-family: Arial, sans-serif;
+    }
+
+    .page {
+      width: 8.5in;
+      height: 11in;
+      margin: 0 auto;
+      padding: 0.5in;
+      box-sizing: border-box;
+      page-break-after: always;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .page:before, .page:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-color: transparent;
+      pointer-events: none;
+    }
+
+    .page:before {
+      left: -10px;
+      border-width: 0 0 11in 10px;
+      box-shadow: -10px 0 10px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .page:after {
+      right: -10px;
+      border-width: 11in 0 0 10px;
+      box-shadow: 10px 0 10px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5in;
+    }
+
+    .logo {
+      width: 2in;
+      height: 1in;
+      margin-right: 0.5in;
+    }
+
+    .title {
+      font-size: 24pt;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 0.5in;
+    }
+
+    .table td, .table th {
+      border: 1px solid #ccc;
+      padding: 0.25in;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 0.5in;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .signature-block {
+      margin-top: 1in;
+      margin-bottom: 0.5in;
+    }
+
+    .signature {
+      width: 3in;
+      height: 1in;
+      border: 1px solid #ccc;
+      margin-right: 0.5in;
+    }
+
+    @media print {
+      .page {
+        box-shadow: none;
+      }
+
+      .page:before, .page:after {
+        display: none;
+      }
+
+      .header, .footer {
+        display: none;
+      }
+      body * {
+        visibility: hidden;
+      }
+
+      .document, .document * {
+        visibility: visible;
+      }
+
+      .header, .footer {
+        visibility: visible;
+      }
+
+      .document {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }      
+      
+    }
+    </style>
+    <button @click="${this.printPdf}">Print PDF</button>
+    <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>     
+<div class="document">
+    <div class="page">
+    <div class="header">
+      <img class="logo" src="./images/logo.png" alt="Logo">
+      <h1 class="title">My PDF Document</h1>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>City</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>John Doe</td>
+          <td>30</td>
+          <td>New York</td>
+        </tr>
+        <tr>
+          <td>Jane Doe</td>
+          <td>25</td>
+          <td>Los Angeles</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="page">
+    <div class="header">
+      <img class="logo" src="./images/logo.png" alt="Logo">
+      <h1 class="title">My PDF Document</h1>
+    </div>
+    <div class="signature-block">
+      <div class="signature">Fecha</div>
+      <div class="signature"></div>
+    </div>
+    <div class="footer">
+      Page 2 of 2
+    </div>
+  </div>
+</div>
+    `
+
+  }
+  //this.desktop
+
+  render() {
+    return html`    
       ${1==1 ?
         html`
         <sp-split-view id="leftsplit" resizable primary-size="120">
@@ -545,7 +1167,6 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   get text8() {    return this.shadowRoot.querySelector("mwc-textfield#text8")    }        
   get text9() {    return this.shadowRoot.querySelector("mwc-textfield#text9")    }        
   get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    }        
-  get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    } 
   get checkbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox1")    }        
   get checkbox2() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox2")    }        
   get checkbox3() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox3")    }        
@@ -898,5 +1519,1191 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       return
     })
   }
+
+  xxcoaForInspectionLotHeader(){
+    if (this.activeTab.printable.printableTitleContent==undefined)
+      return this.setContentFranCoa()
+      if (this[this.activeTab.printable.printableTitleContent]!==undefined){
+        return this[this.activeTab.printable.printableTitleContent]()
+      }else{
+        //alert(this.activeTab.printable.printableTitleContent+ ' not found')
+      }    
+    return "."
+  }
+  xxxcoaForInspectionLotContent(strPageHeader, strPageFooter) {
+    //alert('setContentFinal')
+    let headerData=''
+    let headerDataDiv =this.shadowRoot.querySelectorAll("div.document")
+    if (headerDataDiv!==undefined){
+      headerDataDiv[0].style.border="0px solid";
+      headerData=headerDataDiv[0].outerHTML
+    }
+    
+    return headerData
+    console.log('strPageFooter', strPageFooter)
+    let session = JSON.parse(sessionStorage.getItem("userSession"))
+    let sessionDate = session.appSessionStartDate
+    let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"    
+    let chHtmlObj=this.coaheader()
+    let strCoaheader='wola'+this.coaheader().innerText
+    let strContent = ``//this.setPrintableContentControllerCoa()
+    
+    let str = `
+      <style type="text/css">
+
+      :host {
+        font-family: Montserrat;
+      }
+      .document {
+        page-break-after: always;
+      }
+    
+      .title {
+        font-size: 24pt;
+        font-weight: bold;
+        text-align: center;
+        position: relative;
+        top:-90px;
+      }
+      #firstline {
+        height:120px;
+      }
+    
+    
+      .footer2 {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 0.5in;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        .header {
+          position: fixed;
+          top: 0;
+          left: 0;
+        }
+        .footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+        }    
+        .document, .document * {
+          visibility: visible;
+        }
+    
+        .header, .footer {
+          visibility: visible;
+        }
+        .content {
+          margin-top: calc(var(--header-height) + 0.5in);
+        }
+        .document {
+          position: static;
+        }
+      }  
+    
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    
+      .logo {
+        margin-left:5px;
+        margin-bottom: 20px;
+        width: 1.5in;
+        height: auto;    
+      }
+      .header {
+        position:relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        justify-content: center;
+        /*margin-bottom: 0.5in;*/
+        border: 1px solid black;
+        border-bottom:0.5px solid black; 
+      }
+      .form-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        margin-bottom:0.05in;
+        padding-bottom: 20px;
+      }  
+      .form-fields {
+        display: grid;
+        grid-template-columns: max-content 1fr; 
+        grid-gap: 10px;
+        text-align: right;
+        left:20px;
+        position: relative;  
+      }
+      .form-fields.col2 {
+        grid-column: 2;
+      }
+      .form-fields label {
+        text-align: left;
+      }
+    
+      .form-fields span {
+        justify-self: start;
+      }
+    
+      body {
+        margin: 0;
+      }
+    
+      .content {
+        margin-top: calc(var(--header-height) + 0.5in);
+      }
+      .table-container {
+        width: 100%;
+      }
+    
+      .table-container table {
+        width: inherit;
+        /* Additional styles for the table */
+      }  
+      table{
+        border: 1px solid black;
+        width: calc(var(--header-width);
+        border-top:0.5px solid black;
+      }
+      .table-container table thead{
+        border: 1px solid black;
+      }
+      tr{
+        border: 1px solid black;
+      }  
+      
+      .fran{
+
+      }
+
+      .page-header, .page-header-space {
+        height: 50px;
+        padding-top: 30px;
+      }
+      .page-header {
+        font-size: 25px;
+        position: fixed;
+        top: 0mm;
+        width: 100%;
+        border-bottom: 1px solid black; /* for demo */
+      }
+      .page-footer, .page-footer-space {
+        height: 50px;
+        padding-top: 10px;
+      }
+      .page-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid black; /* for demo */
+      }
+      .page {
+        page-break-after: always;
+      }
+      @page {
+        margin: 0mm 10mm 10mm;
+        ${this.activeTab.label_en == 'Production Lot' ? 'size: landscape;' : '' }
+      }
+      @media print {
+        thead {display: table-header-group;} 
+        tfoot {display: table-footer-group;}
+      }
+      </style>
+
+      <div class="page-header" style="text-align: center; font-weight: bold;">        
+       
+      </div>
+
+      <div class="page-footer">
+        ${sessionUser} on ${sessionDate}<br>
+        ${this.data.report_info[0].report_information}
+      </div>
+      <table>
+      <thead>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position header-->
+            <div class="page-header-space">${headerData}</div>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <!--*** CONTENT GOES HERE ***-->
+            <div class="page">${strContent}</div>
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position footer-->
+            <div class="page-footer-space">${strPageFooter}</div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    `
+    return str
+  }  
+  xxxsetPrintableContentControllerCoa(){
+    if (this.activeTab.printable.printableContent==undefined)
+      return this.setContentFranCoa()
+      if (this[this.activeTab.printable.printableContent]!==undefined){
+        return this[this.activeTab.printable.printableContent]()
+      }else{
+        //alert(this.activeTab.printable.printableContent+ ' not found')
+      }    
+    return this.setContentFinal()
+  }
+  xxxsetContentFranCoa() {
+    alert('setContentFranCoa')
+    let strContent =``
+    let filterContent=``
+    filterContent=this.myFilter()
+    strContent =this.myCharts()
+    let strContent2 =`` 
+    strContent2=this.myTables()
+    //let strCoaheader=this.printableCoaHeader()
+    let strCoaheader=this.coaheader().innerText
+    let str = `
+      <style type="text/css">
+      .page-header, .page-header-space {
+        height: 50px;
+        padding-top: 30px;
+      }
+      .page-header {
+        display: flex;
+        font-size: 25px;
+        position: fixed;
+        top: 0mm;
+        width: 100%;
+        border-bottom: 1px solid black; /* for demo */
+      }
+      .page-footer, .page-footer-space {
+        height: 50px;
+        padding-top: 10px;
+      }
+      .page-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid black; /* for demo */
+      }
+      .page {
+        page-break-after: always;
+      }
+      @page {
+        margin: 0mm 10mm 10mm;
+        ${this.activeTab.label_en == 'Production Lot' ? 'size: landscape;' : '' }
+      }
+      @media print {
+        thead {display: table-header-group;} 
+        tfoot {display: table-footer-group;}
+      }
+      .styled-table {
+        display: -webkit-inline-box;
+        margin-top: 0px;
+        margin-bottom: 3px;
+        color: #4285f4;
+        font-size:2vmin;
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px #44cbe6;
+      }            
+      .styled-table thead tr {
+        background-color: #2989d8;
+        color: #ffffff;
+        text-align: left;
+      }   
+      .styled-table th,
+      .styled-table td {
+        color: #032bbc; 
+        padding: 12px 15px;
+      }  
+      .styled-table tbody tr {
+        border-bottom: 1px solid #207cca;
+      }
+      .styled-table tbody tr:nth-of-type(even) {
+        background-color: #c2f2ff5c;
+      }
+      .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+      }      
+      .styled-table tbody tr.active-row {
+        font-weight: bold;
+        color: #009879;
+      }
+
+      </style>
+eeee
+      <div class="page-header" style="text-align: center; font-weight: bold;">      
+      </div>
+
+      <div class="page-footer">
+        
+      </div>
+      <table>
+      <thead>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position header-->
+            <div class="page-header-space"></div>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <!--*** CONTENT GOES HERE ***-->
+            <div class="page">${strCoaheader}</div>
+            <div class="page">${strContent2}</div>
+            
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td>
+            <!--place holder for the fixed-position footer-->
+            <div class="page-footer-space"></div>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    `
+    return str
+  }  
+  xxxprintableCoaHeader(){
+    let content=`` 
+    let dataContentChart =this.shadowRoot.querySelectorAll("div.header")    
+    content += dataContentChart
+    return content
+  }
+  xxxmyCharts(){
+    let content=`` 
+    let dataContentChart =this.shadowRoot.querySelectorAll("google-chart")    
+    if (dataContentChart!==undefined){
+      //let imgs = `` // ${this.kpiStyleByStringAttribute("div", undefined)}
+      content += `<div style="display:flex;">`  
+      for (var i=0;i<dataContentChart.length;i++){
+        content += `<img src="${dataContentChart[i].imageURI}" style="margin-bottom=10px;"><br>`
+      }
+      content += `</div>`
+
+    }
+    return content    
+  }
+  xxxmyFilter(){
+    let content=`` 
+    console.log(this.data.filter_detail)
+    if (this.data.filter_detail!=undefined){
+      let filterContent=[]
+      filterContent=this.data.filter_detail
+      content += `<div style="display:flex;">` 
+      for (var i=0;i<filterContent.length;i++){
+        content += `${filterContent[i].filter_name}:${filterContent[i].value}`
+      }    
+      content += `</div>`
+    }
+    return content    
+  }
+ 
+  xxxmyTables(){    
+    let strContent=`` 
+    let dataContentTables =this.shadowRoot.querySelectorAll("lit-datatable")
+    if (dataContentTables!==undefined){
+      for (var i=0;i<dataContentTables.length;i++){
+//        strContent += `<table border="1" cellpadding="3" style="border-collapse: collapse; width: 100%;">`
+        strContent += `<table class="styled-table" >`
+        strContent += `<tr>`
+        dataContentTables[i].headers.forEach(f => {
+          if (f.innerText) {
+            strContent += `<th>${f.innerText}</th>`
+          }
+        })
+        strContent += `</tr>`
+        //strContent += `</td><td>`
+        dataContentTables[i].table.forEach(row => {
+          strContent += `<tr>`
+          for (var col=0;col<row.columns.length;col++){
+            var valToDisp=''                  
+            if (row.columns[col].innerText) {
+              valToDisp=row.columns[col].innerText
+            }
+            strContent += `<td>${valToDisp}</td>`             
+          }
+          strContent += `</tr>`
+        })
+        strContent += `</table>`
+      }
+    }
+    return strContent    
+
+  }
+  xxxreportHeaderContentCoa(){
+    let content=``
+    //content += `<img height="50px" src="https://upload.wikimedia.org/wikipedia/en/3/3e/Tranzit_Group_logo%2C_New_Zealand.png" style="margin-bottom=10px;"><br>`
+    content += `<div>`
+    content += `hollla`
+    content += `<p style="text-align: center;"><img height="50px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPwOK46iZVfnuBPpbQVbU7BRpc27BhtTkbgAQuF8AUyqxjBb-oTn1-5jxl8vg2_05FNvE&usqp=CAU" style="margin-bottom=10px;">` //${this.activeTab["label_"+this.lang]}</p>`       
+    content +=`<td> ${this.activeTab["label_"+this.lang]}</p>`
+    content += `</div>`
+    return content
+  }
+  xxxreportFooterContentCoa(){    
+    let content=``
+    let session = JSON.parse(sessionStorage.getItem("userSession"))
+    let sessionDate = session.appSessionStartDate
+    let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"
+
+    content += `${sessionUser} on ${sessionDate}<br>`
+    content += `${this.activeTab["label_"+this.lang]} system: ${this.dbName} Procedure: ${this.procName}`
+    return content
+  }
+
+  resultsTableExtraTables(){
+  if (1==1){return html``}  
+  return html`
+    <div class="content">
+      <!-- Your report content goes here -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>DETERMINACION</th>
+              <th>MÉTODO</th>
+              <th>ESPECIFICACIÓN</th>
+              <th>RESULTADO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SOLUBILIDAD</td>
+              <td>Fácilmente soluble en cloroformo, tolueno, acetona y metanol, casi insoluble en agua.</td>
+              <td>PCC-MMP-125</td>
+              <td>Cumple</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>30</td>
+              <td>New York</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>30</td>
+              <td>New York</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>30</td>
+              <td>New York</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>30</td>
+              <td>New York</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>30</td>
+              <td>New York</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John1 Doe</td>
+              <td>301</td>
+              <td>New1 York</td>
+            </tr>
+            <tr>
+              <td>John2 Doe</td>
+              <td>302</td>
+              <td>New2 York</td>
+            </tr>
+            <tr>
+              <td>John3 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John4 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John5 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John6 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John7 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John8 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John9 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John10 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John11 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John12 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John13 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John14 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+            <tr>
+              <td>John15 Doe</td>
+              <td>303</td>
+              <td>New3 York</td>
+            </tr>
+
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Johnwwwww Doe</td>
+              <td>30</td>
+              <td>Newwwwwwww York</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Citykkkkkk</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>John Doe</td>
+              <td>30</td>
+              <td>New Yorkkkkkkkk</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    `
+  }
+  
+  
+  
+    
+
+  renderCoaMovedToCoaView() {
+    return html`
+    
+      <style type="text/css">
+      :host {
+        font-family: Montserrat;
+      }
+      .document {
+        page-break-after: always;
+      }   
+      .title {
+        font-size: 24pt;
+        font-weight: bold;
+        text-align: center;
+        position: relative;
+        top:-90px;
+      }
+      #firstline {
+        height:120px;
+      }        
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 0.5in;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        .header {
+          position: fixed;
+          top: 0;
+          left: 0;
+        }
+        .footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+        }    
+        .document, .document * {
+          visibility: visible;
+        }
+    
+        .header, .footer {
+          visibility: visible;
+        }
+        .content {
+          margin-top: calc(var(--header-height) + 0.5in);
+        }
+        .document {
+          position: static;
+        }
+        .header {
+          border: 0px;
+        }
+      }  
+    
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    
+      .logo {
+        margin-left:5px;
+        margin-bottom: 20px;
+        width: 1.5in;
+        height: auto;    
+      }
+      .header {
+        position:relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        justify-content: center;
+        /* margin-bottom: 0.5in; */        
+      }
+      .form-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        margin-bottom:0.05in;
+        padding-bottom: 20px;
+      }  
+      .form-fields {
+        display: grid;
+        grid-template-columns: max-content 1fr; 
+        grid-gap: 10px;
+        text-align: right;
+        left:20px;
+        position: relative;  
+      }
+      .form-fields.col2 {
+        grid-column: 2;
+      }
+      .form-fields label {
+        text-align: left;
+      }
+    
+      .form-fields span {
+        justify-self: start;
+      }
+    
+      body {
+        margin: 0;
+      }
+    
+      .content {
+        margin-top: calc(var(--header-height) + 0.5in);
+      }
+      .table-container {
+        width: 100%;
+      }
+    
+      .table-container table {
+        width: inherit;
+        /* Additional styles for the table */
+      }  
+      table.pageformattable{
+        border: 0px solid black;
+        width: calc(var(--header-width);
+        /* border-top:0.5px solid black; */
+      }
+      .pageformattable.table-container table thead{
+        /*border: 1px solid black;*/
+      }
+      .pageformattable.tr{
+        /*border: 1px solid black;*/
+      }  
+      .pageformattable.td{
+        /*border: 1px solid black;*/
+      }        
+      </style>
+      <button @click="${this.printCoa}" style="z-index: 999; position: relative;">Print PDF</button>
+      <div class="document">
+        <div class="page-header" style="text-align: center; font-weight: bold;"></div>
+        <div class="page-footer"></div>
+        <table class="pageformattable">
+          <thead>
+            <tr><td>
+              <div class="page-header-space">${this.coaheaderWithStyle()}</div>
+            </td></tr>
+          </thead>
+          <tbody>
+            <tr><td>            
+                <div class="page">
+                  ${this.coaResultsTable()} ${this.resultsTableExtraTables()}                   
+                </div>
+            </td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>
+              <div class="page-footer-space">${this.coaUsageDecision()}${this.coaSignatures()}</div>
+            </td></tr>
+          </tfoot>
+        </table>
+      </div>
+    `    
+  }    
+  coaheaderWithStyle(){
+    let coaData=FakeCOA
+    return html`
+    <style type="text/css">
+    :host {
+      font-family: Montserrat;
+    }
+    .title-header {
+      font-size: 24pt;
+      font-weight: bold;
+      text-align: center;
+      position: relative;
+      top:-90px;
+    }
+    #firstline-header {
+      height:120px;
+    }
+    .logo-header {
+      margin-left:5px;
+      margin-bottom: 20px;
+      width: 1.5in;
+      height: auto;    
+    }
+    .header-header {
+      position:relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      justify-content: center;
+    }
+    .form-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
+      margin-bottom:0.05in;
+      padding-bottom: 20px;
+    }  
+    .form-fields {
+      display: grid;
+      grid-template-columns: max-content 1fr; 
+      grid-gap: 10px;
+      text-align: right;
+      left:20px;
+      position: relative;  
+    }
+    .form-fields.col2 {
+      grid-column: 2;
+    }
+    .form-fields label {
+      text-align: left;
+    }
+
+    .form-fields span {
+      justify-self: start;
+    }
+    </style>  
+    <div class="header-header">
+    <div id="firstline-header">
+      ${coaData.logo===undefined ? nothing: html`<img class="logo-header" src="${coaData.logo}" alt="Logo">`}      
+      
+      ${coaData.title2===undefined ? html`<h2 class="title-header">${coaData.title["label_"+this.lang]}</h2>`
+        : html`<h2 class="title-header">${coaData.title["label_"+this.lang]}<br>${coaData.title2["label_"+this.lang]}</h2>`}
+    </div>  
+    ${coaData.header===undefined ? nothing: html`
+      <div class="form-header">
+        ${coaData.header.column===undefined ? nothing: html`        
+          <div class="form-fields col1">
+          ${coaData.header.column.map(fld =>html`
+            <label for="field1">${fld["label_"+this.lang]}</label>
+            <span>${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</span>
+          `)}
+          </div>    
+        `}
+        ${coaData.header.column2===undefined ? nothing: html`
+          <div class="form-fields col2">
+          ${coaData.header.column2.map(fld =>html`
+            <label for="field1">${fld["label_"+this.lang]}</label>
+            <span>${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</span>
+          `)}
+          </div>    
+        `}
+
+      </div>  
+    `}
+  </div>
+
+    `
+  }
+
+  coaResultsTable(){
+    let coaData=FakeCOA
+    return html`
+    ${coaData.resultsTable===undefined ? nothing: html` 
+      <style>
+      .table-container-results {
+        width: 100%;
+      }
+    
+      .table-container-results table {
+        width: inherit;
+        border: 0px solid black;
+        /* Additional styles for the table */
+      }  
+      table{      
+        width: calc(var(--header-width);
+        border-top:0.5px solid black;
+      }
+      .table-container-results table thead{
+        border: 0px solid black;
+      }
+      tr{
+        border: 1px solid black;
+      }  
+      </style>     
+      <div class="table-container-results">   
+        <table>
+          <thead>
+            <tr>
+            ${coaData.resultsTable.header===undefined ? nothing: html` 
+              ${coaData.resultsTable.header.map(fld =>html`
+                <th style="font-weight: bold; font-size:18px; border-bottom: 5px double black;">${fld["label_"+this.lang]===undefined ? fld.label: fld["label_"+this.lang]}</th>
+              `)}
+            `}
+            </tr>
+          </thead>
+          <tbody>          
+            ${coaData.resultsTable.values===undefined ? nothing: html`           
+              ${coaData.resultsTable.values.map(row =>html`
+              <tr>
+                ${row.map(fld =>html`
+                <td style="padding:5px;">${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</td>
+                `)}
+              </tr>   
+              `)}           
+            `}
+          </tbody>
+        </table>
+      </div>
+    `}
+    `
+  }  
+  coaUsageDecision(){
+    let coaData=FakeCOA
+    return html`
+    ${coaData.usageDecision===undefined ? nothing: html` 
+    <style>
+      .usage-decision-container {
+          padding: 30px;
+          padding-left: 20px;
+          font-size: 20px;
+          font-weight: bold;          
+      }
+      .form-fields label {
+        text-align: left;
+      }
+
+      .form-fields span {
+        justify-self: start;
+      }
+    </style>
+    <div class="usage-decision-container"> 
+      <label for="field1">${coaData.usageDecision.label["label_"+this.lang]}</label>
+      ${coaData.usageDecision.decided!==undefined&&coaData.usageDecision.decided===true ? html`    
+        <span>${coaData.usageDecision.value["value_"+this.lang]===undefined ? coaData.usageDecision.value: coaData.usageDecision.value["value_"+this.lang]}</span>
+      `:html`
+        <span style="color:red;">${coaData.usageDecision.noDecision["label_"+this.lang]===undefined ? coaData.usageDecision.noDecision: coaData.usageDecision.noDecision["label_"+this.lang]}</span>
+      `}
+    </div>
+    `}
+    `
+  }
+
+  coaSignatures(){
+    let coaData=FakeCOA
+    return html`
+    ${coaData.signatures===undefined ? nothing: html` 
+    <style>
+      .signature-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .signature-box {
+        border: 1px solid black;
+        flex: 1 1 calc(30.33% - 20px);
+        padding: 10px;
+        text-align: center;
+        max-width: calc(30.33% - 20px);
+      }
+
+      .signature-title {
+        font-weight: bold;
+      }
+
+      .signature-name {
+        margin-top: 20px;
+        font-size: 18px;
+      }
+
+      .signature-date {
+        margin-top: 10px;
+        font-size: 14px;
+      }
+
+      .signature-box + .signature-box {
+        margin-left: 10px;
+      }
+    </style>
+    ${coaData.signatures===undefined ? nothing: html` 
+    <div class="signature-container">      
+      ${coaData.signatures.map(curSign =>html`
+      <div class="signature-box">
+        <div class="signature-title">${curSign.title["label_"+this.lang]}</div>
+
+        ${curSign.manualsign!==undefined&&curSign.manualsign===true ? html`
+          <div style="height: 100px; border: 1px dashed black; margin-top: 20px;"></div>
+        `:nothing}
+
+        ${curSign.signed!==undefined&&curSign.signed===true ?
+        html`                    
+          <div class="signature-name">${curSign.author["value_"+this.lang]}</div>
+          <div class="signature-date">${curSign.date["value_"+this.lang]}</div>        
+        `:html`
+        <div class="signature-name" style="color:red;">${curSign.noSigned["label_"+this.lang]}</div>        
+        `}
+        ${curSign.manualsign!==undefined&&curSign.manualsign===false&&curSign.signElectronicallyPhrase!==undefined&&curSign.signed===true ? html`
+          <div class="signature-name" style="font-style: italic; font-size:12px;">${curSign.signElectronicallyPhrase["label_"+this.lang]}</div>
+        `:nothing}
+      </div>  
+      `)}
+    </div>
+    `}
+    `}
+    `
+  }
+
+  pageFooter(){
+    let coaData=FakeCOA
+    let session = JSON.parse(sessionStorage.getItem("userSession"))
+    let sessionDate = session.appSessionStartDate
+    let sessionUser = session.header_info.first_name +" "+ session.header_info.last_name +" ("+ session.userRole +")"    
+    let footerText=`<i>${sessionUser} on ${sessionDate} `
+    if (coaData.report_info!==undefined&&coaData.report_info.report_information!==undefined){
+      footerText+=`${coaData.report_info.report_information["label_"+this.lang]}`
+    }  
+    footerText+=`</i>`
+    return footerText
+  }
+  printCoa() {
+    let coaData=FakeCOA
+    this.setPrintContentCoa()
+    let printWindow = window.open('', '', 'fullscreen=yes');
+    printWindow.document.write(this.printObj.contentWithFooter);
+    printWindow.document.title = coaData.report_info.provisional_report["label_"+this.lang];     
+    printWindow.document.close();
+    setTimeout(function () {
+      printWindow.print();
+      printWindow.close();
+    }, 500);
+  }
+  
+
+  setPrintContentCoa() { 
+    let headerData=''
+    let headerDataDiv =this.shadowRoot.querySelectorAll("div.document")
+    if (headerDataDiv!==undefined){
+      headerData=headerDataDiv[0].outerHTML
+    }    
+    //console.log('object to print', headerData)
+    this.printObj = {
+      header: '.', //this.pageFooter(), //this.coaForInspectionLotHeader(),
+      content: headerData, //this.coaForInspectionLotContent(),   
+      contentWithFooter: `
+      <html>
+        <head>        
+          <style>
+            @media print {
+    
+              title {
+                color: red;
+                display: none;
+              }
+              #header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+              }
+              #footer {
+                position: fixed;
+                bottom: 0px;
+                right: 0;
+                font-size: 12px;                              
+              }
+              #content2 {                
+                margin-top: calc(var(--header-height) + 10px);
+                margin-bottom: 200px; /* calc(var(--footer-height) + 10px);*/
+              }
+              #content{
+                margin-top: calc(var(--header-height) - 10px);
+                margin-bottom: initial;
+              }
+            }
+          </style>
+        </head>
+        <body>
+        
+          <div id="header"></div> 
+          <div id="content">${headerData}</div></div>
+          <div id="footer" class="footer">${this.pageFooter()}</div>
+        </body>
+      </html>
+    `         
+    }
+  }  
+
 }
 window.customElements.define('datamining-mainview', DataMiningMainView);

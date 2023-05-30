@@ -554,7 +554,7 @@ export function TrazitGenericDialogs(base) {
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         for (let i=0;i<dlgFlds.length;i++){            
             let fldObj=dlgFlds[i]
-            console.log('checkMandatoryFieldsNotEmpty', fldObj)
+           // console.log('checkMandatoryFieldsNotEmpty', fldObj)
             let keyName=Object.keys(fldObj)
             let fldDef=fldObj[keyName[0]]
             if ((fldDef.optional===undefined||
@@ -669,6 +669,23 @@ export function TrazitGenericDialogs(base) {
         `
     }
     listEntriesFromMasterData(fldMDDef){
+
+        let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+        console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
+        let findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
+        // if (!this.config.local) {
+        //   if (findProc.length) {
+        //     ProceduresModel[this.procName] = findProc[0].procModel
+        //   }
+        // }
+//        this.procInstanceModel=ProceduresModel[this.procName]
+        if (findProc!==undefined&&findProc.length>0&&findProc[0].master_data!==undefined){
+          this.masterData=findProc[0].master_data
+          console.log('master data', this.masterData)   
+        }
+    
+
+
         if (this.masterData===undefined){return entries}
         console.log('masterData', this.masterData)
         console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
@@ -680,12 +697,12 @@ export function TrazitGenericDialogs(base) {
         }
         if (fldMDDef.filterInFirstLevel===undefined||fldMDDef.filterInFirstLevel!==true){
             this.masterData[fldMDDef.propertyNameContainer].forEach(item =>{
-                console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
+               // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
                 let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
                 blankEmpty.keyName=item[fldMDDef.propertyKeyName]
                 blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
                 blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
-                console.log('blankEmpty', blankEmpty)
+                //console.log('blankEmpty', blankEmpty)
                 entries.push(blankEmpty)
             })
         }else{

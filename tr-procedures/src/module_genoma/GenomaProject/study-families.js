@@ -674,8 +674,8 @@ export class StudyFamilies extends GenomaDialogTemplate(GridUtilities(GenomaUtil
           html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
         }</p>
           <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (${result.method_version})</p>
-          <p>Range Evaluation: ${result.spec_eval}</p>
-          <p>Range Rule: ${result.spec_eval_detail===undefined||result.spec_eval_detail.length==0?result.spec_rule_info[0].ruleRepresentation: result.spec_eval_detail}</p>
+          <p>Range Rule: ${result.spec_rule_info[0].ruleRepresentation}</p>
+          <p>Range Evaluation: ${result.spec_eval} (${result.spec_eval_detail})</p>
           ${result.is_locked ?
           html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
         }
