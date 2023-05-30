@@ -137,13 +137,17 @@ export function ButtonsFunctions(base) {
       `
       }    
     
-    btnDisabled(action, viewModelFromProcModel=this.viewModelFromProcModel) {
+    btnDisabled(action, viewModelFromProcModel) {
       //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
+      if (viewModelFromProcModel===undefined){viewModelFromProcModel=this.viewModelFromProcModel}
       if (action.certificationException!==undefined&&action.certificationException===true){ return false}
       let d = false
-        if (action.mode!==undefined && action.mode.toString().toUpperCase()==="READONLY") {
-          return true        
-        }   
+      if (action.mode!==undefined && action.mode.toString().toUpperCase()==="READONLY") {
+        return true        
+      }   
+      if (viewModelFromProcModel.mode!==undefined && viewModelFromProcModel.mode.toString().toUpperCase()==="READONLY") {
+        return true        
+      }          
         // if (action.buttonForQuery!==undefined && action.buttonForQuery===true) {
         //   if (action.button.requiresGridItemSelected!==undefined&&
         //     action.button.requiresGridItemSelected===true){
@@ -234,7 +238,7 @@ export function ButtonsFunctions(base) {
     }        
     actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
       selectedItemPropertyName=selectedItemPropertyName||'selectedItems'
-    console.log('actionMethod', this.selectedProcInstance, isProcManagement)
+    //console.log('actionMethod', this.selectedProcInstance, isProcManagement)
       //this.loadDialogs()  
       if (data!==undefined){
         if (Object.keys(data).length > 0){
@@ -292,7 +296,7 @@ export function ButtonsFunctions(base) {
     }   
       
     async GetViewData(setGrid = true ){
-        console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
+        //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
         if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
             //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
             if (this[this.viewModelFromProcModel.viewQuery.clientMethod]===undefined){
@@ -340,7 +344,14 @@ export function ButtonsFunctions(base) {
                   this[queryDefinition.variableName]=j
                 }
             }else{
-                this.selectedItems=j
+              this.selectedItems=j   
+              this.selectedItem=this.selectedItems[0]
+              console.log('this.selectedItems', this.selectedItems)           
+              if (j && !j.is_error) {
+                this.requestData=j
+              } else {            
+                this.requestData={}
+              }                
             }
           }
           else if (setGrid){
@@ -450,7 +461,7 @@ export function ButtonsFunctions(base) {
         //console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
         
         this.fetchApi(params).then(() => {
-//console.log('performActionRequestHavingDialogOrNot: into the fetchApi')
+console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action', action)
             if (action.notGetViewData===undefined||action.notGetViewData===false){
               this.GetViewData()
             }
@@ -534,7 +545,9 @@ export function ButtonsFunctions(base) {
 
     }
 
-    disabledByCertification(action){      
+    disabledByCertification(action){
+      //console.log('disabledByCertification', 'action', action)      
+      console.log('viewName', this.viewName, 'procInstanceName', this.procInstanceName)
       let sopsPassed = false
       let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
   
@@ -542,17 +555,24 @@ export function ButtonsFunctions(base) {
       
       let procInstanceModel = procList.filter(p => p.procInstanceName == this.procInstanceName)
       if (procInstanceModel.length) {
+
         if (procInstanceModel.length && procInstanceModel[0].userSopMode===undefined){
           return true
         }
-        if (procInstanceModel.length && procInstanceModel[0].userSopMode.toString().toUpperCase().includes("DISAB")) {
-          return false
-        }         
+        
 
         let defView = procInstanceModel[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
         if (defView===undefined||defView[0]===undefined){
           return true
         }
+        //console.log('disabledByCertification', defView[0].mode)
+        if (defView.length && defView[0].mode!==undefined && defView[0].mode.toString().toUpperCase()==="READONLY") {            
+          return true
+        } 
+        if (procInstanceModel.length && procInstanceModel[0].userSopMode.toString().toUpperCase().includes("DISAB")) {
+          return false
+        }         
+
         if (defView.length>0) {
           // for fake test
           // sopsPassed = false
@@ -564,10 +584,6 @@ export function ButtonsFunctions(base) {
           //   sopsPassed = defView[0].sops_passed
           }
         
-          //console.log('disabledByCertification', defView[0].mode)
-          if (defView.length && defView[0].mode.toString().toUpperCase()==="READONLY") {            
-            return true
-          } 
         }else{
           return true
         }

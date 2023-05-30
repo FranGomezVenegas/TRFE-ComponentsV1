@@ -88,7 +88,6 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
         viewName: { type: String },
         filterName: { type: String },
         lang: { type: String },
-        procInstanceName:{type: String},
         // langConfig: { type: Object },
         // actions: { type: Array },
         // samplesReload: { type: Boolean },
@@ -261,6 +260,7 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
         <div class="layout horizontal flex wrap">
             <div class="layout flex">          
             <div class="layout horizontal center flex wrap">
+            
               ${this.getButton()}
             </div>
             ${this.ready ? 
@@ -368,9 +368,9 @@ get rowTooltip() {
         html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
       }</p>
         <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (${result.method_version})</p>
-        <p>Range Evaluation: ${result.spec_eval}</p>
-        <p>Range Rule: ${result.spec_eval_detail}</p>
-        ${result.is_locked ?
+        <p>Range Rule: ${result.spec_rule_info[0].ruleRepresentation}</p>
+        <p>Range Evaluation: ${result.spec_eval} (${result.spec_eval_detail})</p>
+      ${result.is_locked ?
         html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locked_reason}</p>` : nothing
       }
         ${result.warning_reason ?

@@ -46,7 +46,8 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
             filterName: { type: String },
             lang: { type: String },
             procInstanceName:{type: String},
-            masterData:{ type: Object}
+            masterData:{ type: Object},
+            selectedItems: { type: Array },
         }
     }
     constructor() {
@@ -57,6 +58,7 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
         this.ready=false;
         this.config={}
         this.masterData={} 
+        this.selectedItems=[]
         //if (this.viewModelFromProcModel===undefined||Object.keys(this.viewModelFromProcModel).length==0){
 //          this.viewModelFromProcModel=this.tabsMainViewModelFromProcModel.tabs[0]
   //      }                  

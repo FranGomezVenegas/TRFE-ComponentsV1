@@ -6,7 +6,11 @@ export function GridFunctions(base) {
 
         getTitle(sectionModel = this.viewModelFromProcModel) {
             //alert(this.filterName)
+            let textToDisplay=this.filterName
             if (sectionModel.langConfig&&sectionModel.langConfig.title[this.filterName]) {
+                textToDisplay=sectionModel.langConfig.title[this.filterName]["label_"+this.lang]
+            }
+            //if (sectionModel.langConfig&&sectionModel.langConfig.title[this.filterName]) {
                 let viewDisabled=this.disabledByCertification({})
                 if (viewDisabled){
                     let title={}
@@ -19,11 +23,11 @@ export function GridFunctions(base) {
                             font-style: oblique;
                         }
                     </style>
-                    <h1>${sectionModel.langConfig.title[this.filterName]["label_"+this.lang]}<span class="readonly"> ${title["label_"+this.lang]}</span></h1>`
+                    <h1>${textToDisplay}<span class="readonly"> ${title["label_"+this.lang]}</span></h1>`
                 }else{
-                    return html`<h1>${sectionModel.langConfig.title[this.filterName]["label_"+this.lang]}</h1>`
+                    return html`<h1>${textToDisplay}</h1>`
                 }
-            }
+            //}
           }
         cleanGrid(){
             this.selectedItems = []
