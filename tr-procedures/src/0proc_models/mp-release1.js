@@ -163,6 +163,7 @@ export const MpRelease1 = {
     },
     "viewQuery": {
       "actionName": "GET_LOT_INFO",
+	  "notUseGrid": true,
       "button": {
         "icon": "refresh",
         "title": {
@@ -187,7 +188,7 @@ export const MpRelease1 = {
         "text1": {
           "label_en": "Lot to get",
           "label_es": "Lote a cargar",
-          "fixValue": "Lot 006"
+          "fixValue": "CC USP 003"
         }
       }
     ],
@@ -211,7 +212,8 @@ export const MpRelease1 = {
         "view": "summary",
         "view_definition": [
           {
-            "type": "coa"
+            "type": "coa",
+			"endPointResponseObject": "lot_coa"
 		  }
 		]
 	  },
@@ -1488,14 +1490,12 @@ export const MpRelease1 = {
         "lot_name": {
           "label_en": "Lot",
           "label_es": "Lote",
-          "sort": true,
-          "filter": false
+          "filter": true,
         },
         "bulk_name": {
           "label_en": "Bulk",
           "label_es": "Bulto",
-          "sort": true,
-          "filter": false
+          "filter": true,
         },
         "volume": {
           "label_en": "Volume",

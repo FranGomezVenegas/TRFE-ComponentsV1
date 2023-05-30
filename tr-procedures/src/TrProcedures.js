@@ -95,7 +95,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       // selectedSamples: { type: Array },
       // selectedAction: { type: Object },
       // batchName: { type: String },
-      // viewModelFromProcModel: { type: String },
+      // viewModelFromProcModel: { type: String },      
       tabs: { type: Array },
       windowOpenable: { type: String },
       // sopsPassed: { type: Boolean },
@@ -305,7 +305,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   }
   ownComponents(){
     if (this.viewModelFromProcModel!==null&&this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component!==undefined){
-      //console.log('ownComponents', 'component', this.viewModelFromProcModel.component)
+      //console.log('ownComponents', 'component', this.viewModelFromProcModel.component, 'viewName', this.viewName)
     }
     return html `
       ${this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component == 'Browser' ? html`
@@ -346,7 +346,8 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       `: nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ObjectByTabs' ? html`
         <object-by-tabs .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
-          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .model=${this.viewModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
       `:html``}
 

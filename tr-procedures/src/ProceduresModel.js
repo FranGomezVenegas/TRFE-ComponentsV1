@@ -110,10 +110,13 @@ export const DemoViews = [
     {"proc_instance_name": "inv-draft", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
     {"proc_instance_name": "inv-draft", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
     {"proc_instance_name": "inv-draft", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLotsGeneral", "title": "InventoryLots"},
-    {"proc_instance_name": "inv-draft", "view_name": "InventoryLotsReactivos", "filter_name": "InventoryLotsReactivos", "title": "Issues"},
+    {"proc_instance_name": "inv-draft", "view_name": "InventoryLotsReactivos", "filter_name": "InventoryLotsReactivos", "title": "InventoryLotsReactivos"},
     {"proc_instance_name": "inv-draft", "view_name": "Issues", "filter_name": "Issues", "title": "Issues"},
+    {"proc_instance_name": "inv-draft", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
+	{"proc_instance_name": "inv-draft", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"}	
   ]},
   {"label":"Raw Material Inspection Lots (mp-release1", "proc_instance_name": "mp-release1", "views":[
+    {"proc_instance_name": "mp-release1", "view_name": "lotCreation", "filter_name": "lotCreation", "title": "lotCreation"},
     {"proc_instance_name": "mp-release1", "view_name": "LotView", "filter_name": "LotView", "title": "LotView"},
     {"proc_instance_name": "mp-release1", "view_name": "SampleEnterResult", "filter_name": "ER-FQ", "title": "ER-FQ"},
     {"proc_instance_name": "mp-release1", "view_name": "SampleEnterResult", "filter_name": "ER-MB", "title": "ER-MB"},
@@ -121,7 +124,9 @@ export const DemoViews = [
     {"proc_instance_name": "mp-release1", "view_name": "ReviewTesting", "filter_name": "RT-MB", "title": "RT-MB"},
     {"proc_instance_name": "mp-release1", "view_name": "ReviewTestingGroup", "filter_name": "RTG-FQ", "title": "RTG-FQ"},
     {"proc_instance_name": "mp-release1", "view_name": "ReviewTestingGroup", "filter_name": "RTG-MB", "title": "RTG-MB"},
-    {"proc_instance_name": "mp-release1", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"}
+    {"proc_instance_name": "mp-release1", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"},
+    {"proc_instance_name": "mp-release1", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"}	
+
   ]
   }
 ]
