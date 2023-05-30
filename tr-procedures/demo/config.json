@@ -3,6 +3,7 @@
   "dbName2023": "trazit_2023",
   "isForTesting": false,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
+  "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
 
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
 
@@ -128,12 +129,19 @@
     "viewName": "InventoryLotsReactivos", 
     "filterName" :  "InventoryLotsReactivos.MediosDeCultivo" 
   },  
+   "localDefaultView1145": {
+    "procName":  "inv-draft", 
+    "viewName": "Deviation", 
+    "filterName" :  "Deviation" 
+  },  
+  
+  
    "localDefaultView888": {
     "procName":  "em-demo-a",
     "viewName": "Programs", 
     "filterName" :  "Programs" 
   },
-  "localDefaultViewzzzz": {
+  "localDefaultViewxxxxs": {
     "procName":  "em-demo-a", 
     "viewName": "Browser", 
     "filterName" :  "Browser" 
@@ -143,6 +151,12 @@
     "viewName": "LotView", 
     "filterName" :  "LotView" 
   },
+  "localDefaultViewsssss": {
+    "procName":  "mp-release1", 
+    "viewName": "Browser", 
+    "filterName" :  "Browser" 
+  },
+
   "localDefaultViewsssssss": {
     "procName":  "mp-release1", 
     "viewName": "ReviewTesting", 

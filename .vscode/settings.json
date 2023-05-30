@@ -20,5 +20,9 @@
     },
     "peacock.color": "#42b883",
     "search.useGlobalIgnoreFiles": false,
-    "search.useIgnoreFiles": false
+    "search.useIgnoreFiles": false,
+    "sonarlint.connectedMode.project": {
+        "connectionId": "frangomezvenegas",
+        "projectKey": "FranGomezVenegas_TRFE-Components"
+    }
 }
