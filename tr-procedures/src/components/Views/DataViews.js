@@ -411,7 +411,7 @@ export function DataViews(base) {
           </style>
           <div style="display: flex; flex-direction: column; text-align: center;">            
           ${elem===undefined||elem.title===undefined ? nothing : html`
-          <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+          <p><span class="title ${isSecondLevel}" >${elem.title["label_"+this.lang]}</span></p>`
             }
 
             <div style="display: flex; flex-direction: row; text-align: center; flex-wrap:wrap; ">
@@ -583,7 +583,7 @@ export function DataViews(base) {
               <p><span class="title ${isSecondLevel}" >${alternativeTitle}</span></p>`
             : html`
               ${elem===undefined||elem.title===undefined ? nothing : html`
-              <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
+              <p><span class="title ${isSecondLevel}" >${elem.title["label_"+this.lang]}</span></p>`
               }
             `}
               ${this.getButton(elem, dataArr, true)}

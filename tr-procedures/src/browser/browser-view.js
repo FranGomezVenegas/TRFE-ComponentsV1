@@ -102,6 +102,7 @@ export class BrowserView extends LitElement {
     this.activeTab = {}
     this.sampleData = {}
     this.chartImgs = []
+    if (this.config.local==true){alert('yeee')}
   }
 
   updated(updates) {

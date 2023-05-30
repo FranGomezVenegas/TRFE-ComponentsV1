@@ -5,9 +5,11 @@ import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
 
 import {DataViews} from '../../components/Views/DataViews';
+import {CoaView} from '../../components/Views/CoaView';
+import {TestScripts} from '../../components/Views/TestScripts';
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 
-export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDialog)) {
+export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDialogs(DataViews(CredDialog)))) {
   static get styles() {
     return [
       Layouts,
@@ -59,6 +61,9 @@ export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDi
       selectedItem: { type: Object },
       selectedTabModelFromProcModel: { type: Object },
       sopsPassed: { type: Boolean },
+      viewName: { type: String },
+      filterName: { type: String },
+
     }
   }
   constructor() {
@@ -70,7 +75,7 @@ export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDi
     this.sopsPassed=false    
   }
   render(){
-    // console.log('view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
+//    console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
     return html`
       <div>
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
@@ -111,13 +116,17 @@ export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDi
                         this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true, this.lang) : nothing}
                       ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2===undefined ? 
                         this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true, this.lang) : nothing}   
+
+                      ${elem2.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}
                         
                          
                       ${(elem2.includeChild===undefined||elem2.includeChild===false) ? nothing :
                         html`
                             ${this.kpiCardSomeElementsChild(elem2, data, true)}
                       `}              
-                      ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}              
+                      ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}
+                      ${elem2.type==="testScripts" ? this.scripts(elem2, true) : nothing}
+
                     `
                   )} 
                 </div>
@@ -140,16 +149,19 @@ export class ObjecttabsComposition extends TrazitGenericDialogs(DataViews(CredDi
                 this.rolesAndActions(elem, data[elem.endPointResponseObject], true, this.lang) : nothing}   
 
 
-                ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2!==undefined ? 
+                ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2!==undefined&&data[elem.endPointResponseObject]!==undefined ? 
                   this.readOnlyTable(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2]) : nothing}
                 ${elem.type==="readOnlyTable"&&elem.endPointResponseObject2===undefined ? 
-                  this.readOnlyTable(elem, data[elem.endPointResponseObject]) : nothing}   
+                  this.readOnlyTable(elem, data[elem.endPointResponseObject]) : nothing}
                 
                 ${(elem.includeChild===undefined||elem.includeChild===false) ? nothing :
                   html`
                       ${this.kpiCardSomeElementsChild(elem, data)}
-                `}              
-                ${elem.type==="Report" ? this.ReportController(elem) : nothing}        
+                `}
+                ${elem.type==="Report" ? this.ReportController(elem) : nothing}
+                ${elem.type==="testScripts" ? this.scripts(elem, true) : nothing}
+                ${elem.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}
+                
               `
               }
         </div>

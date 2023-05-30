@@ -116,6 +116,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
             masterData:{ type: Object},
             requestData: {type: Array},
             selectedItem:{ type: Object},
+            selectedItems:{ type: Array},
             selectedItemLoaded:{type: Boolean},
             leftSplitDisplayed: { type: Boolean },
         }
@@ -131,6 +132,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
         this.langConfig = this.viewModelFromProcModel.langConfig
         this.requestData =[]
         this.selectedItem={}
+        this.selectedItems=[]
         this.selectedItemLoaded=false
         //this.getObjectData()
         this.desktop = true
@@ -138,7 +140,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
         this.leftSplitDisplayed=true
         this.lotDefault='Testing 2023-03-15T21:20:55.962273'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
           }
-    title() {
+    title() {      
       return html`
         <style>
           .title-banner {
@@ -193,7 +195,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
           </span>
           <h1 class="title">
             ${this.viewModelFromProcModel.title["fix_text_"+this.lang]===undefined ? '' :this.viewModelFromProcModel.title["fix_text_"+this.lang]}
-            ${this.selectedItem[this.viewModelFromProcModel.title.field_name]===undefined ? '' :this.selectedItem[this.viewModelFromProcModel.title.field_name]}  
+            ${this.selectedItem===undefined||this.selectedItem[this.viewModelFromProcModel.title.field_name]===undefined ? '' :this.selectedItem[this.viewModelFromProcModel.title.field_name]}  
           </h1>
           <span class="right-text"></span>
         </div>
@@ -202,11 +204,11 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
       `
     }
     toggleLeftSplitPane() {
-      console.log(this.leftSplitDisplayed)
+      //console.log(this.leftSplitDisplayed)
       this.leftSplitDisplayed = !this.leftSplitDisplayed
     }  
     filterPerformAction(e) {
-      console.log('this.selectedItem', this.selectedItem)
+      // console.log('this.selectedItem', this.selectedItem)
       //if (Object.keys(this.selectedItem).length === 0){
       //if (!this.selectedItemLoaded){        
 //      if (this.lottoget!==null&& this.lottoget.value!=='' && this.selectedItemLot!=this.lottoget.value){
@@ -225,11 +227,11 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
     }
 
     toggleLeftSplitPane() {
-      console.log(this.leftSplitDisplayed)
+      //console.log(this.leftSplitDisplayed)
       this.leftSplitDisplayed = !this.leftSplitDisplayed
     }
 
-    render() {
+    render() {      
       return html`    
       ${this.genericFormDialog()}
         ${this.desktop ?
@@ -254,7 +256,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
             ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
                 <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
                 .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                .selectedItem=${this.selectedItem}      
+                .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
                 </objecttabs-composition>              
  
               `: nothing}
@@ -272,8 +274,8 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
 
         ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`
             <objecttabs-composition .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
-              .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-              .selectedItem=${this.selectedProcInstance}      
+              .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName} .filterName=${this.filterName} 
+              .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
             </objecttabs-composition>              
           `: nothing}
         </div>
@@ -307,7 +309,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
         }
         `
     }
-    
+
     selectedTabContent(){
       if (Object.keys(this.selectedTabModelFromProcModel).length === 0){
         this.selectedTabModelFromProcModel=this.viewModelFromProcModel.tabs[0]
@@ -315,8 +317,8 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
       //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
       return html`
       <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
-      .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-      .selectedItem=${this.selectedItem}      
+      .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
+      .selectedItem=${this.selectedItem}  .viewModelFromProcModel=${this.viewModelFromProcModel}   
       </objecttabs-composition>      
       `
     }
@@ -337,33 +339,13 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
       this.objecttabsComposition.render()
     }
 
-    xgetObjectData(){
-      console.log('this.selectedItem', this.selectedItem)
-      //if (Object.keys(this.selectedItem).length === 0){
-      //if (!this.selectedItemLoaded){        
-      if (this.lottoget!==null&& this.lottoget.value!=='' && this.selectedItemLot!=this.lottoget.value){
-        this.selectedItemLot=""
-        this.GetViewData(false)
-        if (this.requestData.length===1){
-          if (Array.isArray(this.requestData)){
-            this.selectedItem=this.requestData[0]
-          }else{
-            this.selectedItem={}
-          }
-          this.selectedItemLot=this.lottoget.value
-          this.selectedItemLoaded=true
-        }
-      }
-    }
     resetView() {
       //console.log('resetView', 'tabs', this.tabsMainViewModelFromProcModel.tabs, 'master data', this.masterData)
       if (this.objecttabsComposition!==null){
         this.objecttabsComposition.render()
       }
-      return
-      }
-      get lottoget() {    return this.shadowRoot.querySelector("mwc-textfield#lottoget")    }        
-
-      get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition")}  
+    }
+    get lottoget() {    return this.shadowRoot.querySelector("mwc-textfield#lottoget")    }        
+    get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition")}  
 }
 window.customElements.define('object-by-tabs', ObjectByTabs);
