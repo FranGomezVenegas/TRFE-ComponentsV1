@@ -391,7 +391,7 @@ export function CoaView(base) {
               <div class="signature-box">
                 <div class="signature-title">${curSign["label_"+this.lang]}</div>
         
-                ${curSign.manualsign!==undefined&&curSign.manualsign===true ? html`
+                ${curSign.manual_sign!==undefined&&curSign.manual_sign===true ? html`
                   <div style="height: 100px; border: 1px dashed black; margin-top: 20px;"></div>
                 `:nothing}
         
@@ -402,8 +402,9 @@ export function CoaView(base) {
                 `:html`
                 <div class="signature-name" style="color:red;">${curSign["label_when_not_signed_"+this.lang]}</div>        
                 `}
-                ${curSign.manualsign!==undefined&&curSign.manualsign===false&&curSign.sign_electronically_en!==undefined&&curSign.signed===true ? html`
-                  <div class="signature-name" style="font-style: italic; font-size:12px;">${curSign["lsign_electronically_"+this.lang]}</div>
+                AAAAA
+                ${curSign.manual_sign!==undefined&&curSign.manual_sign===false&&curSign.sign_electronically_en!==undefined&&curSign.signed===true ? html`
+                  <div class="signature-name" style="font-style: italic; font-size:12px;">${curSign["sign_electronically_"+this.lang]}</div>
                 `:nothing}
               </div>  
               `)}
