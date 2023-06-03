@@ -95,6 +95,12 @@ return class extends LitElement {
         this.selectedItems=[]
         this.actionBeingPerformedModel={}
     }
+    get erGrid() {return this.shadowRoot.querySelector("vaadin-grid#erGrid")}
+    get resultDialog() {return this.shadowRoot.querySelector("tr-dialog#resultDialog")}
+    get rItem() {return this.shadowRoot.querySelector("input[name=rItem]")}
+    get rowTooltipEnterResults() {return this.shadowRoot.querySelector("#rowTooltipenterresults")}
+    get uomDialog() {return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")}
+
     resultTemplate() {
       // console.log('resultTemplate')
       // if(this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name===undefined){return nothing}
@@ -192,12 +198,36 @@ return class extends LitElement {
       `
     }
 
-    get rowTooltipEnterResults() {return this.shadowRoot.querySelector("#rowTooltipenterresults")}
-
-    get uomDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")
+    detailRendererEnterResults(result) {
+      console.log('detailRendererEnterResults', result.sample_id, 'result', result)
+      let labels = {
+        "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
+        "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
+      }
+      return html`
+        <div style="text-align:center;font-size:12px">
+          <p>${result.spec_eval ?
+          html`${result.spec_eval == 'IN' ?
+            html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
+            html`${result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC") ?
+              html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
+              html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
+              }`
+            }` :
+          html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
+        }</p>
+          <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (v${result.method_version})</p>
+          <p>Range Rule: ${result.spec_rule_info[0].ruleRepresentation}</p>
+          <p>Range Evaluation: ${result.spec_eval} (${result.spec_eval_detail})</p>
+          ${result.is_locked ?
+          html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
+        }
+          ${result.warning_reason ?
+          html`<p style="color:#0085ff">${labels['warning_reason_label_' + this.lang]}: ${result.warning_reason["message_" + this.lang]}</p>` : nothing
+        }
+        </div>
+      `
     }
-
     setCellListenerEnterResults() {
       console.log('setCellListenerEnterResults EnterResults')
       if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
@@ -240,41 +270,10 @@ return class extends LitElement {
       }
       console.log(this.rowTooltipEnterResults.textContent)
     }
-
     hideLockReasonEnterResults() {
       this.rowTooltipEnterResults.style.visibility = "hidden"
     }
 
-    detailRendererEnterResults(result) {
-      console.log('detailRendererEnterResults', result.sample_id, 'result', result)
-      let labels = {
-        "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
-        "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
-      }
-      return html`
-        <div style="text-align:center;font-size:12px">
-          <p>${result.spec_eval ?
-          html`${result.spec_eval == 'IN' ?
-            html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
-            html`${result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC") ?
-              html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
-              html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
-              }`
-            }` :
-          html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
-        }</p>
-          <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (v${result.method_version})</p>
-          <p>Range Rule: ${result.spec_rule_info[0].ruleRepresentation}</p>
-          <p>Range Evaluation: ${result.spec_eval} (${result.spec_eval_detail})</p>
-          ${result.is_locked ?
-          html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
-        }
-          ${result.warning_reason ?
-          html`<p style="color:#0085ff">${labels['warning_reason_label_' + this.lang]}: ${result.warning_reason["message_" + this.lang]}</p>` : nothing
-        }
-        </div>
-      `
-    }
 
     enterResultList() {
       //alert(this.actionBeingPerformedModel.actionName)
@@ -356,78 +355,6 @@ return class extends LitElement {
         `
       )
     }
-    getResult2() {
-      console.log('getResult2', 'SampleAPIqueriesUrl')
-      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          if (this.curResultRef) {
-            let r = j.filter(d => d.result_id == this.curResultRef.resId)
-            if (r.length) {
-              if (this.curResultRef.elm.type == "number") {
-                this.adjustValUndetermined(r[0], this.curResultRef.elm)
-              } else {
-                this.curResultRef.elm.value = r[0].raw_value
-              }
-            }
-          }
-          this.curResultRef = undefined
-          this.selectedResults = []
-          this.enterResults = j
-          this.requestUpdate()
-        } else {
-          this.dispatchEvent(new CustomEvent("error", {
-            detail: {
-              is_error: true,
-              message_en: this.actionBeingPerformedModel.alertMsg.empty["label_en"],
-              message_es: this.actionBeingPerformedModel.alertMsg.empty["label_es"]
-            },
-            bubbles: true,
-            composed: true
-          }))
-          // console.log(this.actionBeingPerformedModel.alertMsg.empty["label_en"])
-        }
-      })
-    }
-
-    enterResult() {      
-      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-   console.log('enterResult', params)
-      this.execResult(params)
-    }
-
-    changeUOM() {
-      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.execResult(params)
-    }
-    execResult(params) {
-      this.fetchApi(params).then(j => {
-        this.reloadDialog()
-        this.dataForDialog = null
-      })
-    }
-    removeEvents() {
-      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
-          this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
-        // 
-      } else {
-        if (this.rowTooltipEnterResults===undefined||this.rowTooltipEnterResults===null){return}
-        this.rowTooltipEnterResults.textContent = ""
-        this.rowTooltipEnterResults.style.visibility = "hidden"
-        let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
-        rows.forEach((r, i) => {
-          if (i > 0 && this.enterResults[i - 1] && this.enterResults[i - 1].is_locked) {
-            r.removeEventListener('mouseenter', this.showLockReasonEnterResults.bind(this))
-            r.removeEventListener('mouseleave', this.hideLockReasonEnterResults.bind(this))
-          }
-        })
-      }
-      this.curResultRef = undefined
-      this.enterResults = []
-    }
 
     instrumentEventList() {
       return Object.entries(this.actionBeingPerformedModel.resultHeader).map(([key, value], i) =>
@@ -458,47 +385,45 @@ return class extends LitElement {
         `
       )
     }
+    changeUOM() {
+      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
+        + '?' + new URLSearchParams(this.reqParams)
+      this.execResult(params)
+    }
+    enterResult() {      
+      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
+        + '?' + new URLSearchParams(this.reqParams)
+   //console.log('enterResult', params)
+      this.execResult(params)
+    }
 
-    specRenderer(result) {
-      if (result.spec_eval) {
-        if (result.spec_eval == 'IN') {
-          return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
-        } else {
-          if (result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC")) {
-            return html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
-          } else {
-            return html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
-          }
-        }
+    execResult(params) {
+      this.fetchApi(params).then(j => {
+        this.reloadDialog()
+        this.dataForDialog = null
+      })
+    }
+    removeEvents() {
+      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+          this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
+        // 
       } else {
-        return html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
+        if (this.rowTooltipEnterResults===undefined||this.rowTooltipEnterResults===null){return}
+        this.rowTooltipEnterResults.textContent = ""
+        this.rowTooltipEnterResults.style.visibility = "hidden"
+        let rows = this.erGrid.shadowRoot.querySelectorAll("tr[part=row]")
+        rows.forEach((r, i) => {
+          if (i > 0 && this.enterResults[i - 1] && this.enterResults[i - 1].is_locked) {
+            r.removeEventListener('mouseenter', this.showLockReasonEnterResults.bind(this))
+            r.removeEventListener('mouseleave', this.hideLockReasonEnterResults.bind(this))
+          }
+        })
       }
-    }
-    openFile(res){
-      const jsonString = res.attachment_jsonstring //attachment //attachment_text
-      const jsonData = JSON.parse(jsonString);
-      const byteData = jsonData.data;
-  
-      const blob = new Blob([byteData], { type: 'application/octet-stream' });
-      const url = URL.createObjectURL(blob);
-  
-      window.open(url, '_blank');      
+      this.curResultRef = undefined
+      this.enterResults = []
     }
 
-    downloadFile(res) {
-      const jsonString = res.attachment
-  
-      const jsonData = JSON.parse(jsonString);
-      const byteData = jsonData.data;
-  
-      const blob = new Blob([byteData], { type: 'application/octet-stream' });
-      const url = URL.createObjectURL(blob);
-  
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'file.txt'; // Specify the desired file name
-      link.click();
-    }    
+
 
     valRenderer(result) {
       var rawValue=''
@@ -515,7 +440,11 @@ return class extends LitElement {
           </div>
         `
       } else {
-        if (result.param_type.toUpperCase() == "TEXT" || result.param_type.toUpperCase() == "QUALITATIVE") {
+        if (result.param_type.toUpperCase() == "CALC") {
+          return html`<input class="enterResultVal" type="text" .value=${rawValue} 
+            disabled>
+          `
+        } else if (result.param_type.toUpperCase() == "TEXT" || result.param_type.toUpperCase() == "QUALITATIVE") {
           return html`<input class="enterResultVal" type="text" .value=${rawValue} 
             ?disabled=${this.actionBeingPerformedModel.dialogInfo.readOnly}
             @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>`
@@ -588,7 +517,11 @@ return class extends LitElement {
           </div>
         `
       } else {
-        if (result.param_type.toUpperCase() == "FILE") {
+        if (result.param_type.toUpperCase() == "CALC") {
+          return html`<input class="enterResultVal" type="text" .value=${rawValue} 
+            disabled>
+          `
+        } else if (result.param_type.toUpperCase() == "FILE") {
           return html`
           <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
           <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
@@ -738,18 +671,48 @@ return class extends LitElement {
       this.selectedDialogAction = this.actionBeingPerformedModel.dialogInfo.action[actionIdx]
       this.actionMethod(this.selectedDialogAction, false)
     }
-
-    get erGrid() {
-      return this.shadowRoot.querySelector("vaadin-grid#erGrid")
+    specRenderer(result) {
+      if (result.spec_eval) {
+        if (result.spec_eval == 'IN') {
+          return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
+        } else {
+          if (result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC")) {
+            return html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
+          } else {
+            return html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
+          }
+        }
+      } else {
+        return html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
+      }
+    }
+    openFile(res){
+      const jsonString = res.attachment_jsonstring //attachment //attachment_text
+      const jsonData = JSON.parse(jsonString);
+      const byteData = jsonData.data;
+  
+      const blob = new Blob([byteData], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+  
+      window.open(url, '_blank');      
     }
 
-    get resultDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#resultDialog")
-    }
+    downloadFile(res) {
+      const jsonString = res.attachment
+  
+      const jsonData = JSON.parse(jsonString);
+      const byteData = jsonData.data;
+  
+      const blob = new Blob([byteData], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+  
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'file.txt'; // Specify the desired file name
+      link.click();
+    }    
 
-    get rItem() {
-      return this.shadowRoot.querySelector("input[name=rItem]")
-    }
+
     getResult() {
       console.log('getResult', 'SampleAPIqueriesUrl', 'this.selectedItems[0]', this.selectedItems[0])
 
@@ -932,7 +895,7 @@ return class extends LitElement {
         return
       }      
 
-      setResultInstrument(result, e) {
+    setResultInstrument(result, e) {
       //alert('setResultInstrument , line 890')
       let newValue = e.target.value
       this.targetValue = {
@@ -953,6 +916,41 @@ return class extends LitElement {
         this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.event_id)
       }
     }
+    xgetResult2() {
+      console.log('getResult2', 'SampleAPIqueriesUrl')
+      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
+        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          if (this.curResultRef) {
+            let r = j.filter(d => d.result_id == this.curResultRef.resId)
+            if (r.length) {
+              if (this.curResultRef.elm.type == "number") {
+                this.adjustValUndetermined(r[0], this.curResultRef.elm)
+              } else {
+                this.curResultRef.elm.value = r[0].raw_value
+              }
+            }
+          }
+          this.curResultRef = undefined
+          this.selectedResults = []
+          this.enterResults = j
+          this.requestUpdate()
+        } else {
+          this.dispatchEvent(new CustomEvent("error", {
+            detail: {
+              is_error: true,
+              message_en: this.actionBeingPerformedModel.alertMsg.empty["label_en"],
+              message_es: this.actionBeingPerformedModel.alertMsg.empty["label_es"]
+            },
+            bubbles: true,
+            composed: true
+          }))
+          // console.log(this.actionBeingPerformedModel.alertMsg.empty["label_en"])
+        }
+      })
+    }
+
   //   update(changedProperties) {
   //    super.update(changedProperties);
   // }
