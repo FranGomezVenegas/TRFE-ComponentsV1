@@ -313,7 +313,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       `:html``}      
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'DataMining' ? html`
         <datamining-mainview .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} 
-        .viewModelFromProcModel=${this.viewModelFromProcModel} .masterData=${this.masterData} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></datamining-mainview>
+        .viewModelFromProcModel=${this.viewModelFromProcModel} .masterData=${this.masterData} .model=${ProceduresModel[this.procName]} .procInstanceName=${this.procName} .procName=${this.procName}></datamining-mainview>
       `:html``}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'Flowchart' ? html`
         <flow-chart .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></flow-chart>

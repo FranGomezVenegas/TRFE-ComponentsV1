@@ -48,6 +48,11 @@
     "viewName": "EventsInProgress", 
     "filterName" :  "EventsER" 
   },
+  "localDefaultView": {
+    "procName":  "app-proc", 
+    "viewName": "InstrumentReport", 
+    "filterName" :  "InstrumentReport" 
+  },
   "localDefaultView3321": {
     "procName":  "em-demo-a", 
     "viewName": "Incubators", 
@@ -134,7 +139,11 @@
     "viewName": "Deviation", 
     "filterName" :  "Deviation" 
   },  
-  
+     "localDefaultViewxxxxxxxxxxx": {
+    "procName":  "inv-draft", 
+    "viewName": "Issues", 
+    "filterName" :  "Issues" 
+  },  
   
    "localDefaultView888": {
     "procName":  "em-demo-a",
@@ -146,7 +155,9 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   }, 
-  "localDefaultView": {
+  
+  
+  "localDefaultViewxxxasda": {
     "procName":  "mp-release1", 
     "viewName": "LotView", 
     "filterName" :  "LotView" 

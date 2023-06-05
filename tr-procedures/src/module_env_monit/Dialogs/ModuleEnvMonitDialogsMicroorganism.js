@@ -270,30 +270,19 @@ openRemoveDialog(){
         this.performActionRequestHavingDialogOrNot(this.selectedDialogAction, this.selectedItems[0], this.targetValue)
       }
     }
-
-
-
     reload() {
       this.resetDialogThings()
-      return
-      this.actionBeingPerformedModel = this.model.actions[0]
-      this.actionMethod(this.actionBeingPerformedModel)
     }
-  
     resetDialogThings() {
       this.targetValue = {}
       this.selectedDialogAction = null
     }
-
-
     getMicroorganismToAdd() {      
       console.log('getMicroorganismToAdd')
       this.moduleEnvMonitMicroorganismsDialogAdd()
       let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
       let APIParams=this.getAPICommonParams(queryDefinition)
       let viewParams=this.jsonParam(queryDefinition, this.selectedItems[0])
-      //this.reqParams.whereFieldsName = "sample_id"
-      //this.reqParams.whereFieldsValue = this.selectedItems[0].sample_id + "*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(viewParams) + '&'+ new URLSearchParams(APIParams) 
       this.fetchApi(params).then(j => {

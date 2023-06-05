@@ -37,17 +37,7 @@ export function ModuleEnvMonitClientMethods(base) {
         }
         logSampleDialog() {
             // alert('logSampleDialog')
-            this.GetQueriesForDialog(this.viewModelFromProcModel.langConfig.gridActionOnClick)
-            return
-            this.reqParams.programName = this.selectedProgram.name
-            let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl 
-              + '?' + new URLSearchParams(this.reqParams)
-            this.fetchApi(params).then(() => {
-              this.selectedAction = actions[0]
-              this.GetQueriesForDialog(this.viewModelFromProcModel.langConfig.gridActionOnClick)
-              this.pointDialog.close()
-            })
-            
+            this.GetQueriesForDialog(this.viewModelFromProcModel.langConfig.gridActionOnClick)            
         }
         pointTemplate() {
             // console.log('pointTemplate')

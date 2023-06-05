@@ -1,4 +1,4 @@
-import { html, css, nothing, LitElement } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@alenaksu/json-viewer';
@@ -88,7 +88,9 @@ export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDial
   }
 
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
-    // console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
+    if (this.selectedItem!==undefined){
+      console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
+    }
     return html`${data&&elemDef&&Object.keys(data).length > 0 ?
       html`
         <div style="display:block">

@@ -6,13 +6,11 @@ import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-textfield';
 import '@material/mwc-formfield';
 import '@material/mwc-checkbox';
-//import '@spectrum-web-components/split-view/sp-split-view';
 import './datamining-tab';
 import './datamining-data';
-//import '@doubletrade/lit-datatable';
 import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
-//import jsPDF from 'jspdf';
 import {FakeCOA} from '../0proc_models/RawMaterialCoaFake';
+import '../components/ObjectByTabs/objecttabs-composition';
 export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   static get styles() {
     return [
@@ -105,6 +103,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       viewModelFromProcModel:{type: Object},
       coaTab:{type: Object},
       coaReportInfo:{type: Object},
+      procInstanceName: { type: String },
     };
   }
 
@@ -129,7 +128,9 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
         {"report_information":"This report is COA v1, released this model the 1st of July of 2022"
         }
       ]
-    }    
+    }   
+    
+    //this.activeTab=this.tabList[0] 
   }
 
   updated(updates) {
@@ -765,6 +766,10 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   //this.desktop
 
   render() {
+    if (this.activeTab!==undefined&&this.activeTab.filter!==undefined&&this.activeTab.filter.filterField!==undefined){
+      console.log(this.activeTab.filter.filterField)
+    }
+    
     return html`    
       ${1==1 ?
         html`
@@ -1145,11 +1150,19 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
           <div id="rightSplit" style="display:block;">
 <!--              <div class="layout horizontal">
                 <mwc-icon-button icon="print" @click=${this.print}></mwc-icon-button>                
-              </div>
--->
-            <datamining-data .data=${this.data} .activeTab=${this.activeTab} lang=${this.lang}
-            dbName=${this.config.dbName} procName=${this.procName}
-              @chart-images=${e=>{this.chartImgs.push(e.detail.imgUri);this.requestUpdate()}}></datamining-data>
+              </div> -->
+              <div id="document" style="display:block;">
+              ${this.activeTab===undefined? nothing:html`
+                <datamining-data id="mydata" .data=${this.data} .activeTab=${this.activeTab} lang=${this.lang}
+                  dbName=${this.config.dbName} procName=${this.procName}
+                  @chart-images=${e=>{this.chartImgs.push(e.detail.imgUri);this.requestUpdate()}}></datamining-data>
+
+                <objecttabs-composition .selectedTabModelFromProcModel=${this.activeTab.reportElements}
+                  .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName}
+                  .filterName=${this.filterName} .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
+                </objecttabs-composition>    
+              `}  
+              </div>        
           </div>
         </sp-split-view>
         ` :
@@ -1157,6 +1170,10 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       }
     `
   }
+
+  get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition")}  
+
+  get kpidata() {    return this.shadowRoot.querySelector("div#kpidata")    }        
   get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
   get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
   get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        
@@ -1229,7 +1246,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   }
 
   get dataminingData() {
-    return this.shadowRoot.querySelector("datamining-data")
+    return this.shadowRoot.querySelector("datamining-data#mydata")
   }
 
   tabChanged(e) {
@@ -1241,7 +1258,9 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
 
   getQueryFilterData() {
     console.log('getQueryFilterData')
-    this.dataminingData.data = {}
+    if (this.dataminingData!==null){
+      this.dataminingData.data = {}
+    }
     var extraParams=this.jsonParam(this.activeTab.filter) 
     let reqParams = {
       procInstanceName: this.procName,
@@ -1252,7 +1271,11 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       ...this.activeTab.filter.fixParams,
       ...extraParams
     }
-    let params = this.config.backendUrl + (this.activeTab.endPoint ? this.activeTab.endPoint : this.config.EnvMonSampleAPIQueriesStats)
+    let endPointUrl=this.getQueryAPIUrl(this.activeTab)
+    if (String(endPointUrl).toUpperCase().includes("ERROR")){
+      endPointUrl=(this.activeTab.endPoint ? this.activeTab.endPoint : this.config.EnvMonSampleAPIQueriesStats)
+    }
+    let params = this.config.backendUrl + endPointUrl
       + '?' + new URLSearchParams(reqParams)
     this.fetchApi(params).then(j => {
       if (j && !j.is_error) {
@@ -1478,7 +1501,301 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     return imgs
   }
 
-  print() {
+  documentForPrinter(elem, data) {
+    console.log('data',data)
+      return html`
+      
+        <style type="text/css">
+        :host {
+          font-family: Montserrat;
+        }
+        .document {
+          page-break-after: always;
+        }   
+        .title {
+          font-size: 24pt;
+          font-weight: bold;
+          text-align: center;
+          position: relative;
+          top:-90px;
+        }
+        #firstline {
+          height:120px;
+        }        
+        .footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 0.5in;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+          }
+          .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+          }    
+          .document, .document * {
+            visibility: visible;
+          }
+      
+          .header, .footer {
+            visibility: visible;
+          }
+          .content {
+            margin-top: calc(var(--header-height) + 0.5in);
+          }
+          .document {
+            position: static;
+          }
+          .header {
+            border: 0px;
+          }
+        }  
+      
+        .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+      
+        .logo {
+          margin-left:5px;
+          margin-bottom: 20px;
+          width: 1.2in;
+          height: auto;    
+        }
+        .header {
+          position:relative;
+          top: 0;
+          left: 0;
+          right: 0;
+          justify-content: center;
+          /* margin-bottom: 0.5in; */        
+        }
+        .form-header {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-gap: 20px;
+          margin-bottom:0.05in;
+          padding-bottom: 10px;
+        }  
+        .form-fields {
+          display: grid;
+          grid-template-columns: max-content 1fr; 
+          grid-gap: 10px;
+          text-align: right;
+          left:20px;
+          position: relative;  
+        }
+        .form-fields.col2 {
+          grid-column: 2;
+        }
+        .form-fields label {
+          text-align: left;
+        }
+      
+        .form-fields span {
+          justify-self: start;
+        }
+      
+        body {
+          margin: 0;
+        }
+      
+        .content {
+          margin-top: calc(var(--header-height) + 0.5in);
+        }
+        .table-container {
+          width: 100%;
+        }
+      
+        .table-container table {
+          width: inherit;
+          /* Additional styles for the table */
+        }  
+        table.pageformattable{
+          border: 0px solid black;
+          width: calc(var(--header-width);
+          /* border-top:0.5px solid black; */
+        }
+        .pageformattable.table-container table thead{
+          /*border: 1px solid black;*/
+        }
+        .pageformattable.tr{
+          /*border: 1px solid black;*/
+        }  
+        .pageformattable.td{
+          /*border: 1px solid black;*/
+        }        
+        </style>
+        <mwc-icon-button icon="print" @click=${()=>{this.printCoa(data)}}></mwc-icon-button>   
+
+        <div id="document" class="document">
+          <div class="page-header" style="text-align: center; font-weight: bold;"></div>
+          <div class="page-footer"></div>
+          <table class="pageformattable">
+            <thead>
+              <tr><td>
+                <div class="page-header-space">${this.coaheaderWithStyle(data)}</div>
+              </td></tr>
+            </thead>
+            <tbody>
+              <tr><td>            
+                  <div class="page">
+                    ${this.coaResultsTable(data)} ${this.resultsTableExtraTables(data)}                   
+                  </div>
+              </td></tr>
+            </tbody>
+            <tfoot>
+              <tr><td>
+                
+              </td></tr>
+            </tfoot>
+          </table>
+        </div>
+        <div id="pagefooter" class="document">
+        <div class="page-footer-space">${this.coaUsageDecision(data)}${this.coaSignatures(data)}</div>
+        </div>
+      `    
+    }    
+
+  print(){
+    let litDatatable = this.dataminingData; //this.shadowRoot.querySelector('lit-datatable');
+
+// Get the HTML content of the lit-datatable component
+let datatableContent = litDatatable.innerHTML;
+
+// Create a new window for printing
+let printWindow = window.open('', '_blank');
+
+// Write the content with footer to the print window
+printWindow.document.write(`
+  <html>
+    <head>
+      <!-- Add any necessary stylesheets or scripts here -->
+    </head>
+    <body>
+      ${datatableContent}
+      <!-- Add your custom footer content here -->
+    </body>
+  </html>
+`);
+
+// Close the document for writing
+printWindow.document.close();
+
+// Trigger the print dialog for the print window
+printWindow.print();
+  }
+
+  cccprint(data){
+    let coaData=data//FakeCOA
+    this.setPrintContentCoa(data)
+    let printWindow = window.open('', '', 'fullscreen=yes');
+    printWindow.document.write(this.printObj.contentWithFooter);
+    console.log('contentWithFooter', this.printObj.contentWithFooter)
+    printWindow.document.title = "provisional_copy"; //coaData.report_info["provisional_copy_"+this.lang];     
+    printWindow.document.close();
+    setTimeout(function () {
+      printWindow.print();
+      printWindow.close();
+    }, 500);
+  }
+ 
+  setPrintContentCoa(data) { 
+    let headerData=''
+    // //let headerDataDiv =this.shadowRoot.querySelectorAll("div#kpidata")
+    // let headerDataDiv=this.kpidata //this.shadowRoot.querySelector("div#kpidata")
+    
+    // if (headerDataDiv!==undefined){
+    //   headerData=headerDataDiv[0].outerHTML
+    // }    
+//let obj=this.dataminingData
+//     let myComponent = document.querySelector('datamining-data#mydata'); // Assuming the LitElement component has a custom element tag 'my-component'
+// let headerDataDiv = myComponent.shadowRoot.querySelector('lit-datatable');
+//     if (headerDataDiv!==undefined){
+//       headerDataDiv[0].style.border="0px solid";
+//       headerData=headerDataDiv[0].outerHTML
+//     }    
+    headerData=this.dataminingData.outerHTML
+    let pagerFooter='fiiii'
+/*    let pagerFooterDiv =this.shadowRoot.querySelectorAll("div#pagefooter")
+    if (pagerFooterDiv!==undefined){
+        pagerFooter=pagerFooterDiv[0].outerHTML
+    }    
+*/
+    console.log('object to print', headerData)
+    this.printObj = {
+      header: '.', //this.documentFooter(), //this.coaForInspectionLotHeader(),
+      content: headerData, //this.coaForInspectionLotContent(),   
+      contentWithFooter: `
+      <html>
+        <head>        
+          <style>
+            @media print {          
+              title {
+                color: red;
+                display: none;
+              }
+              #print-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+              }
+              #xxxpage-footer {
+                position: fixed;
+                bottom:0;
+                right: 0;
+                font-size: 12px;                              
+              }                      
+              div.document-footer {
+                position: fixed;
+                bottom: 0px;
+                right: 0;
+                font-size: 12px;                              
+              }
+              #content2 {                
+                margin-top: calc(var(--header-height) + 10px);
+                margin-bottom: 200px; /* calc(var(--footer-height) + 10px);*/
+              }
+              #print-content{
+                margin-top: calc(var(--header-height) - 10px);
+                margin-bottom: initial;
+              }
+              #print-document-footer{
+                margin-bottom: initial;
+              }                      
+            }
+          </style>
+        </head>
+        <body>                
+            <div id="print-header"></div> 
+            <div id="print-content">${headerData}</div>
+            <div id="print-document-footer" class="print-document-footer">${pagerFooter}${this.documentFooter(data)}</div> 
+        </body>
+      </html>
+    `         
+    }
+  }    
+  documentFooter(data){
+    return ``
+  }
+  xxxprint() {
     this.setPrintContent()
     var printWindow = window.open('', '', 'fullscreen=yes');
     printWindow.document.write(this.printObj.content);
@@ -1489,6 +1806,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       printWindow.close();
     }, 500);
   }
+
 
   /**
    * Populating fetch api
@@ -2637,7 +2955,7 @@ eeee
     footerText+=`</i>`
     return footerText
   }
-  printCoa() {
+  xxxprintCoa() {
     let coaData=FakeCOA
     this.setPrintContentCoa()
     let printWindow = window.open('', '', 'fullscreen=yes');
@@ -2651,7 +2969,7 @@ eeee
   }
   
 
-  setPrintContentCoa() { 
+  xxxsetPrintContentCoa() { 
     let headerData=''
     let headerDataDiv =this.shadowRoot.querySelectorAll("div.document")
     if (headerDataDiv!==undefined){

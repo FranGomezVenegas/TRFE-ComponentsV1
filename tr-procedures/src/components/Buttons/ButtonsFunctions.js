@@ -522,27 +522,6 @@ console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action'
                 this[action.secondaryActionToPerform.name]()
             }
         })  
-        return
-        this.reqParams.actionName=action.actionName
-        if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
-            selectedItem=this[action.selObjectVariableName][0]
-        }
-        var extraParams=this.jsonParamCommons(action, selectedItem)      
-    //    if (extraParams.includes("ERROR")){return}   
-        params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
-        params=params+'?' + new URLSearchParams(this.reqParams) 
-        if (extraParams!==undefined){
-          params=params + '&' + new URLSearchParams(extraParams)
-        }
-        this.fetchApi(params).then(() => {
-          if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined){
-            this[action.dialogInfo.name].close()
-          }
-          if (action.secondaryActionToPerform!==undefined){
-            this[action.secondaryActionToPerform]()
-          }
-        })            
-
     }
 
     disabledByCertification(action){

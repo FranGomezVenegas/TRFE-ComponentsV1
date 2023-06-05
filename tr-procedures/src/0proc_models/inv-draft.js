@@ -1,9 +1,12 @@
 export const InvDraft = {
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20230408",
-	  "last_change_note_20230408": "Added min_allowed 0 and max_dp 0 to verify the functionality in ADJUST_INV_LOT_VOLUME and ADD_INV_LOT_VOLUME",
-	  "last_change_note_20230407": "Added min_allowed 0 and max_dp 0 to verify the functionality in allInventoryLots for CONSUME_INV_LOT_VOLUME",
+	  "last change on (YYYYMMDD)": "20230604",
+	  "last_change_note_20230604": "Naming Convention, replaced certif by qualif and volume by quantity",
+	  "last_change_note_20230530": "Added filter by daterange for expired lots",
+      "last_change_note_20230517": "Added new view Config References",
+	  "last_change_note_20230408": "Added min_allowed 0 and max_dp 0 to verify the functionality in ADJUST_INV_LOT_QUANTITY and ADD_INV_LOT_QUANTITY",
+	  "last_change_note_20230407": "Added min_allowed 0 and max_dp 0 to verify the functionality in allInventoryLots for CONSUME_INV_LOT_QUANTITY",
 	  "last_change_note_20230327": "Added Qualification event enter results in main inventory lots view",
 	  "last_change_note_20230327_2": "Added new view, QualificationInProgress"
   },
@@ -37,10 +40,10 @@ export const InvDraft = {
         "status": {
           "label_en": "Status", "label_es": "Estado", "sort": false, "filter": true, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -63,16 +66,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "text1", "defaultValue": ""  },
           { "argumentName": "category", "element": "list1", "defaultValue": "" },
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true},
 		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -96,7 +99,7 @@ export const InvDraft = {
 			}},
 			{"text1": { "label_en": "Reference", "label_es": "Referencia" }},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true , "min_allowed":0, "max_dp":2}},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true , "min_allowed":0, "max_dp":2}},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -104,8 +107,16 @@ export const InvDraft = {
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
 			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-            {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -226,7 +237,7 @@ export const InvDraft = {
 						"clientMethod": "enterEventResult",
 						"endPointParams": [
 							{ "argumentName": "newValue", "targetValue": true },
-							{ "argumentName": "certifId", "selObjectPropertyName": "certif_id" },
+							{ "argumentName": "qualifId", "selObjectPropertyName": "qualif_id" },
 							{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 							{ "argumentName": "category", "selObjectPropertyName": "category"},
 							{ "argumentName": "reference", "selObjectPropertyName": "reference"},
@@ -272,7 +283,7 @@ export const InvDraft = {
 			  { "argumentName": "decision", "element": "list8" }
 			]
 		},
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -288,7 +299,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir" , "min_allowed":0, "max_dp":2}}
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir" , "min_allowed":0, "max_dp":2}}
 				]
 			},
 			
@@ -296,11 +307,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -316,7 +327,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)quantity", "label_es": "(Nuevo)Cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -324,11 +335,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -344,7 +355,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}	
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}	
 					]
 			},
 			
@@ -352,8 +363,8 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
     ]
@@ -380,10 +391,10 @@ export const InvDraft = {
         "status": {
           "label_en": "Status", "label_es": "Estado", "sort": false, "filter": true, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -409,16 +420,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "list1", "defaultValue": ""  },
           { "argumentName": "category", "fixValue": "Medios de Cultivo"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
-		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true },
+		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },		  
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -444,7 +455,7 @@ export const InvDraft = {
 			  }			
 			}},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true }},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -452,8 +463,16 @@ export const InvDraft = {
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
 			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-            {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -595,7 +614,7 @@ export const InvDraft = {
 			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
 			]
 		},		
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -611,7 +630,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir", "min_allowed":0, "max_dp":2 }}		
 					]
 			},
 			
@@ -619,11 +638,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -639,7 +658,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)quantity", "label_es": "(Nuevo)Cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -647,11 +666,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -667,7 +686,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}			
 					]
 			},
 			
@@ -675,8 +694,8 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
     ]
@@ -703,10 +722,10 @@ export const InvDraft = {
         "status": {
           "label_en": "Status", "label_es": "Estado", "sort": false, "filter": true, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -732,16 +751,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "list1", "defaultValue": ""  },
           { "argumentName": "category", "fixValue": "Estándares Primarios"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true },
 		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -770,16 +789,24 @@ export const InvDraft = {
 			  }			
 			}},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true }},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
 			{"text3": { "label_en": "Vendor", "label_es": "Proveedor", "optional": true }},			
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
-			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-            {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -921,7 +948,7 @@ export const InvDraft = {
 			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
 			]
 		},		
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -937,7 +964,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir", "min_allowed":0, "max_dp":2 }}		
 					]
 			},
 			
@@ -945,11 +972,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -965,7 +992,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)quantity", "label_es": "(Nuevo)cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -973,11 +1000,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -993,7 +1020,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}			
 					]
 			},
 			
@@ -1001,8 +1028,8 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
     ]
@@ -1029,10 +1056,10 @@ export const InvDraft = {
         "status": {
           "label_en": "Status", "label_es": "Estado", "sort": false, "filter": true, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -1058,16 +1085,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "list1", "defaultValue": ""  },
           { "argumentName": "category", "fixValue": "Estándares Secundarios"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true },
 		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -1096,7 +1123,7 @@ export const InvDraft = {
 			  }			
 			}},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true }},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -1104,8 +1131,16 @@ export const InvDraft = {
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
 			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-            {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -1247,7 +1282,7 @@ export const InvDraft = {
 			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
 			]
 		},		
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1263,7 +1298,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir", "min_allowed":0, "max_dp":2 }}		
 					]
 			},
 			
@@ -1271,11 +1306,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1291,7 +1326,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)quantity", "label_es": "(Nuevo)cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -1299,11 +1334,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1319,7 +1354,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}			
 					]
 			},
 			
@@ -1327,8 +1362,8 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
     ]
@@ -1355,10 +1390,10 @@ export const InvDraft = {
         "status": {
           "label_en": "Status", "label_es": "Estado", "sort": false, "filter": true, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -1384,16 +1419,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "list1", "defaultValue": "" },
           { "argumentName": "category", "fixValue": "Material Fungible"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true },
 		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -1422,7 +1457,7 @@ export const InvDraft = {
 			  }			
 			}},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true }},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -1430,8 +1465,16 @@ export const InvDraft = {
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
 			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-            {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -1573,7 +1616,7 @@ export const InvDraft = {
 			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
 			]
 		},		
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1589,7 +1632,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir", "min_allowed":0, "max_dp":2 }}		
 					]
 			},
 			
@@ -1597,11 +1640,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1617,7 +1660,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)quantity", "label_es": "(Nuevo)Cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -1625,11 +1668,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1645,7 +1688,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}			
 					]
 			},
 			
@@ -1653,8 +1696,8 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
     ]
@@ -1681,10 +1724,10 @@ export const InvDraft = {
         "status": {
           "label_en": "Status", "label_es": "Estado", "sort": false, "filter": true, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -1710,16 +1753,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "list1", "defaultValue": ""  },
           { "argumentName": "category", "fixValue": "Otros"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true },
 		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -1748,7 +1791,7 @@ export const InvDraft = {
 			  }			
 			}},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true }},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -1756,8 +1799,16 @@ export const InvDraft = {
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
 			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-                        {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -1899,7 +1950,7 @@ export const InvDraft = {
 			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
 			]
 		},		
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1915,7 +1966,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir", "min_allowed":0, "max_dp":2 }}		
 					]
 			},
 			
@@ -1923,11 +1974,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1943,7 +1994,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)Quantity", "label_es": "(Nuevo)Cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -1951,11 +2002,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -1971,7 +2022,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}			
 					]
 			},
 			
@@ -1979,8 +2030,8 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityeUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
     ]
@@ -2012,10 +2063,10 @@ export const InvDraft = {
 		"lot_name": {
           "label_en": "Name", "label_es": "lot_id", "Nombre": false, "filter": true, "is_icon": false, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -2041,16 +2092,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "list1", "defaultValue": ""  },
           { "argumentName": "category", "fixValue": "Reactivos Comerciales"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true },
 		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -2079,7 +2130,7 @@ export const InvDraft = {
 			  }			
 			}},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true }},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -2087,8 +2138,16 @@ export const InvDraft = {
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
 			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-            {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -2230,7 +2289,7 @@ export const InvDraft = {
 			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
 			]
 		},		
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -2246,7 +2305,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir", "min_allowed":0, "max_dp":2 }}		
 					]
 			},
 			
@@ -2254,11 +2313,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -2274,7 +2333,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)quantity", "label_es": "(Nuevo)Cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -2282,11 +2341,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -2302,7 +2361,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}			
 					]
 			},
 			
@@ -2310,8 +2369,8 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
      ]
@@ -2342,10 +2401,10 @@ export const InvDraft = {
         "lot_name": {
           "label_en": "Name", "label_es": "lot_id", "Nombre": false, "filter": true, "is_icon": false, "width": "10%"
         },
-        "volume": {
-          "label_en": "volume", "label_es": "volumen", "sort": false, "filter": true, "width": "10%"
+        "quantity": {
+          "label_en": "Quantity", "label_es": "Cantidad", "sort": false, "filter": true, "width": "10%"
         },
-        "volume_uom": {
+        "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
       }
@@ -2371,16 +2430,16 @@ export const InvDraft = {
           { "argumentName": "reference", "element": "list1", "defaultValue": ""  },
           { "argumentName": "category", "fixValue": "Reactivos preparados"},
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
-		  { "argumentName": "volume", "element": "number1", "defaultValue": "" },
-		  { "argumentName": "volumeUom", "fixValue": "mL" },
-          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "" },
-		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": ""},
-		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "" },
+		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
+		  { "argumentName": "quantityUom", "fixValue": "mL" },
+          { "argumentName": "expiryDate", "element": "date1", "defaultValue": "", "optional": true },
+		  { "argumentName": "expiryDateInUse", "element": "date2", "defaultValue": "", "optional": true},
+		  { "argumentName": "retestDate", "element": "date3", "defaultValue": "", "optional": true },
 		  { "argumentName": "vendor", "element": "text3", "defaultValue": "" },
-		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "vendorReference", "element": "text5", "defaultValue": "" },
+		  { "argumentName": "vendorLot", "element": "text4", "defaultValue": "" },
 		  { "argumentName": "purity", "element": "text6", "defaultValue": "" },
-		  { "argumentName": "conservationCondition", "element": "text7", "defaultValue": "" },
+		  { "argumentName": "conservationCondition", "element": "list7", "defaultValue": "" },
           { "argumentName": "numEntries", "element": "number2", "defaultValue": "" }
         ],
         "button": {
@@ -2409,7 +2468,7 @@ export const InvDraft = {
 			  }			
 			}},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
-			{"number1": {"label_en": "Volume", "label_es": "Volumen", "optional": true }},			
+			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true }},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
             {"date3": {"label_en": "Retest Date", "label_es": "Fecha Retest", "optional": true }},
@@ -2417,8 +2476,16 @@ export const InvDraft = {
 			{"text4": { "label_en": "Vendor Lot", "label_es": "Lote de Proveedor", "optional": true }},			
 			{"text5": { "label_en": "Vendor Reference", "label_es": "Referencia de Proveedor", "optional": true }},			
 			{"text6": { "label_en": "Purity", "label_es": "Pureza", "optional": true }},			
-			{"text7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true }},
-                        {"number2": {"label_en": "Number of Entries", "label_es": "Número de entradas", "optional": true, "default_value": 1 }}		
+			{"list7": { "label_en": "Conservation Condition", "label_es": "Condición de Conservación", "optional": true ,
+				"items":[
+					{"keyName":"ROOM_TEMP", "keyValue_en":"Room temperature", "keyValue_es":"Temperatura del recinto"},
+					{"keyName":"15-25ºC", "keyValue_en":"15-25ºC", "keyValue_es":"15-25ºC"},
+					{"keyName":"NMT 30ºc", "keyValue_en":"NMT 30ºc", "keyValue_es":"NMT 30ºc"},
+					{"keyName":"2-8ºc", "keyValue_en":"2-8ºc", "keyValue_es":"2-8ºc"},
+					{"keyName":"Freezer (-20ºC)", "keyValue_en":"Freezer (-20ºC)", "keyValue_es":"Congelador (-20ºC)"}
+				]}
+			},
+            {"number2": {"label_en": "Number of Entries", "label_es": "Unidades recepcionadas", "optional": true, "default_value": 1 }}		
           ]
         }
       },
@@ -2560,7 +2627,7 @@ export const InvDraft = {
 			  { "argumentName": "turn_available_lot", "fixValue": "true" }			  
 			]
 		},		
-		{"actionName": "CONSUME_INV_LOT_VOLUME",
+		{"actionName": "CONSUME_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -2576,7 +2643,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to consume", "label_es": "Volumen a consumir", "min_allowed":0, "max_dp":2 }}		
+					{"number1": {"label_en": "Quantity to consume", "label_es": "Cantidad a consumir", "min_allowed":0, "max_dp":2 }}		
 					]
 			},
 			
@@ -2584,11 +2651,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "volume_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADJUST_INV_LOT_VOLUME",
+		{"actionName": "ADJUST_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -2604,7 +2671,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Adjust (new)volume", "label_es": "(Nuevo)Volumen a ajustar", "min_allowed":0, "max_dp":2 }}
+					{"number1": {"label_en": "Adjust (new)quantity", "label_es": "(Nuevo)Cantidad a ajustar", "min_allowed":0, "max_dp":2 }}
 				]
 			},
 			
@@ -2612,11 +2679,11 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		},		
-		{"actionName": "ADD_INV_LOT_VOLUME",
+		{"actionName": "ADD_INV_LOT_QUANTITY",
 			"requiresDialog": true,
 			"button": {
 			  "icon": "receipt-text",
@@ -2632,7 +2699,7 @@ export const InvDraft = {
 			"dialogInfo": {          
 				"name": "genericDialog",
 				"fields": [
-					{"number1": {"label_en": "Volume to add", "label_es": "Volumen a añadir", "min_allowed":0, "max_dp":2 }}			
+					{"number1": {"label_en": "Quantity to add", "label_es": "Cantidad a añadir", "min_allowed":0, "max_dp":2 }}			
 					]
 			},
 			
@@ -2640,15 +2707,15 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "volumeUom", "selObjectPropertyName": "volume_uom" },
-			  { "argumentName": "volume", "element": "number1", "defaultValue": "" }
+			  { "argumentName": "quantityUom", "selObjectPropertyName": "quantity_uom" },
+			  { "argumentName": "quantity", "element": "number1", "defaultValue": "" }
 			]
 		}	
     ]
    }
    ]
   },  
-  "Issues": {
+  "InventoryControls": {
 	"component": "DataMining",
 	"tabsListElement": {
 		"label_en": "Queries", 
@@ -2666,7 +2733,13 @@ export const InvDraft = {
 		  "filterFields":[
             {"text1": { "label_en": "Lot Name", "label_es": "Lote", "default_value": "" }},
             {"text2": { "label_en": "Reference", "label_es": "Referencia", "default_value": "REF1" }},
-            {"text3": { "label_en": "Category", "label_es": "Categoria", "default_value": "" }}		  
+            {"text3": { "label_en": "Category", "label_es": "Categoria", "default_value": "" }},
+            {"daterange1":
+              {
+              "dateStart":{ "label_en": "Expiry Start Date", "label_es": "Fecha Inicio Caducidad", "default_value": "" },
+              "dateEnd":{ "label_en": "Expiry End Date", "label_es": "Fecha Fin Caducidad", "default_value": "" }
+              }
+            }            
 		  ],
           "filterFields2":[
             {"daterange1":
@@ -2686,7 +2759,10 @@ export const InvDraft = {
 		  "endPointParams": [
 		    {"argumentName": "lotName", "element": "text1", "notAddWhenValueIsBlank": true},
 			{"argumentName": "reference", "element": "text2", "notAddWhenValueIsBlank": true},
-            {"argumentName": "category", "element": "text3", "notAddWhenValueIsBlank": true}
+            {"argumentName": "category", "element": "text3", "notAddWhenValueIsBlank": true},
+            {"argumentName": "expiry_date_start", "element": "daterange1dateStart"},
+            {"argumentName": "expiry_date_end", "element": "daterange1dateEnd"}
+           
 		  ],		  
 		  "extraParams": [],
           "extraParams2": [
@@ -2807,7 +2883,7 @@ export const InvDraft = {
 	"component": "TableWithButtons",
     "langConfig": {
       "title": {
-        "QualificationsInProgress.1": {
+        "QualificationsInProgress": {
           "label_en": "Events in progress",
           "label_es": "Eventos en curso"
         }
@@ -2884,7 +2960,7 @@ export const InvDraft = {
 						"clientMethod": "enterEventResult",
 						"endPointParams": [
 							{ "argumentName": "newValue", "targetValue": true },
-							{ "argumentName": "certifId", "selObjectPropertyName": "certif_id" },
+							{ "argumentName": "qualifId", "selObjectPropertyName": "qualif_id" },
 							{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 							{ "argumentName": "category", "selObjectPropertyName": "category"},
 							{ "argumentName": "reference", "selObjectPropertyName": "reference"},
@@ -2936,7 +3012,7 @@ export const InvDraft = {
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 			  { "argumentName": "category", "selObjectPropertyName": "category" },
 			  { "argumentName": "reference", "selObjectPropertyName": "reference" },
-			  { "argumentName": "certifId", "selObjectPropertyName": "certif_id" }
+			  { "argumentName": "qualifIdId", "selObjectPropertyName": "qualif_id" }
 			  
 			],
 			"button": {
@@ -2954,7 +3030,7 @@ export const InvDraft = {
 				"objectName": { "label_en": "Reopen event", "label_es": "Reabrir evento" }
 			  },  
 			  "listDefinition":{
-				"keyFldName":"certif_id",
+				"keyFldName":"qualif_id",
 				"eachEntryTextGenerator":[
 				  {"value": "lot_name", "type":"field"}, {"value": " (", "type":"fix"}, 
 				  {"value": "category", "type":"field"}, {"value": "-", "type":"fix"},
@@ -2994,8 +3070,8 @@ export const InvDraft = {
             }
           },
           "gridHeader": {
-            "certif_id": {
-              "label_en": "Certif Id", "label_es": "Id certif", "sort": false, "filter": true, "width": "10%"
+            "qualif_id": {
+              "label_en": "qualif Id", "label_es": "Id qualif", "sort": false, "filter": true, "width": "10%"
             },
             "lot_name": {
               "label_en": "Lot Name", "label_es": "Nombre del lote", "sort": false, "filter": true, "width": "10%"
@@ -3006,16 +3082,13 @@ export const InvDraft = {
             "category": {
               "label_en": "Category", "label_es": "Categoria", "sort": false, "filter": true, "width": "15%"
             },
-            "created_on": {
-              "label_en": "Creation", "label_es": "Creación", "width": "30px", "sort": false, "filter": true
-            },			
             "object_type": {
               "label_en": "Object Type", "label_es": "Tipo de objeto", "sort": false, "filter": true, "width": "10%"
             }
           }
         },
         "viewQuery":{
-            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
+            "actionName": "INVESTIGATION_QUALIFICATIONS_PENDING_DECISION",
             "button": {
               "icon": "refresh",
               "title": {
@@ -3034,7 +3107,7 @@ export const InvDraft = {
               "requiresGridItemSelected": true
             },
             "endPointParams": [
-				{ "argumentName": "objectToAddObjectName", "selObjectPropertyName": "certif_id" },
+				{ "argumentName": "objectToAddObjectName", "selObjectPropertyName": "qualif_id" },
 				{ "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type"}						
             ]
           },
@@ -3234,7 +3307,7 @@ export const InvDraft = {
 			{"list2": {"label_en": "min Stock Type","label_es": "Tipo Stock Mínimo", "optional":true,
 				"addBlankValueOnTop": true,
 				"items": [
-					{ "keyName": "VOLUME", "keyValue_en": "Quantity", "keyValue_es": "Cantidad" },                
+					{ "keyName": "QUANTITY", "keyValue_en": "Quantity", "keyValue_es": "Cantidad" },                
 					{ "keyName": "PB ITEMS", "keyValue_en": "Items", "keyValue_es": "Items" }
 				]
 			}},
@@ -3243,12 +3316,12 @@ export const InvDraft = {
 			{"list3": {"label_en": "Type","label_es": "Tipo", "optional":true,
 				"addBlankValueOnTop": true,
 				"items": [
-					{ "keyName": "VOLUME", "keyValue_en": "Quantity", "keyValue_es": "Cantidad" },                
+					{ "keyName": "QUANTITY", "keyValue_en": "Quantity", "keyValue_es": "Cantidad" },                
 					{ "keyName": "PB ITEMS", "keyValue_en": "Items", "keyValue_es": "Items" }
 				]			  
 			}},
 			{"checkbox3": {"label_en": "Allow Some open at a time?","label_es": "¿Permitir abrir varios a la vez?", "optional":true}},
-			{"text4": {"label_en": "Qualification Variables Set","label_es": "Conjunto Variables para Cualificación", "optional":true}},            
+			{"text4": {"label_en": "Qualification Variables Set","label_es": "Conjunto Variables para Cualificación", "optional":true}}            
           ]
         },
         "endPointParams": [
@@ -3263,10 +3336,9 @@ export const InvDraft = {
           {"argumentName": "minAvailablesForUse",       "element": "number2"  },
           {"argumentName": "minAvailablesForUseType",   "element": "list3"    },
           {"argumentName": "allowedOpeningSomeAtaTime", "element": "checkbox3"},
-          {"argumentName": "qualificationVariablesSet", "element": "text4"    },
+          {"argumentName": "qualificationVariablesSet", "element": "text4"    }
         ]
       }
     ]
   }  
-  
 }

@@ -46,7 +46,7 @@ export class DataMiningData extends DataViews(LitElement) {
   }
 
   render() {
-    console.log('render', 'activeTab', this.activeTab)
+   // console.log('render', 'activeTab', this.activeTab)
     return html`
     <div class="layout horizontal">
     ${this.activeTab&&this.activeTab.printable&&this.activeTab.printable.active===true ?

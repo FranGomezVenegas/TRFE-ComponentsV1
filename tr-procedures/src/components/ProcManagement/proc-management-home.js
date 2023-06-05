@@ -319,12 +319,6 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     }else{
       this.GetViewData(this.viewModelFromProcModel.viewQuery)
     }
-    return
-    if (this.config.local === undefined || this.config.local === true) {
-      this.allProcedures = ProceduresManagement.ProceduresFake
-    } else {
-      this.GetViewData()
-    }
   }
   resetView(){
     this.selectedProcInstance=undefined
@@ -333,25 +327,10 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     if (this.localModel){
       this.allProcedures = ProceduresManagement.ProceduresFake.all_platform_procedures_list
       this.render()
-      return
-//      this.selectedProcInstance=this.allProcedures[0]
-      //this.selectSectionView(0)
-//      this.selectedViewDefinition = this.selectedProcInstance.views[0]
-
-      if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
-        //this.objecttabsComposition.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
-        this.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
-      } else {
-        //this.objecttabsComposition.selectedItem = this.selectedProcInstance.definition
-        this.selectedItem = this.selectedProcInstance.definition
-      }
-
     }else{
       this.GetViewData(this.viewModelFromProcModel.viewQuery)
       this.render()
     }
-    return            
-    this.render()
   }  
 
   selectSectionView(index , notResetSelectedView) {
@@ -368,28 +347,16 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     console.log('this.selectedViewDefinition', this.selectedViewDefinition, 'procInstanceName', this.procInstanceName)
     if (this.objecttabsComposition == null) { return }
     this.selectedProcInstance[0]=this.selectedProcInstance
-    //this.objecttabsComposition.selectedTabModelFromProcModel = this.selectedViewDefinition.view_definition.reportElements
 
     if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
-    //  this.objecttabsComposition.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
       this.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]      
       this.selectedTabModelFromProcModel=this.selectedViewDefinition
-//      this.objecttabsComposition.kpiElementsController(this.selectedViewDefinition.view_definition.reportElements, this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data])
-
     } else {
       this.selectedTabModelFromProcModel=this.selectedViewDefinition
-    //  this.objecttabsComposition.selectedItem = this.selectedProcInstance.definition
       this.selectedItem = this.selectedProcInstance.definition
-//      this.objecttabsComposition.kpiElementsController(this.selectedViewDefinition.view_definition.reportElements, this.selectedProcInstance.definition)
     }
-    console.log('selectedItem', this.selectedItem)
-    //this.objecttabsComposition.kpiElementsController(this.selectedViewDefinition.view_definition.reportElements, this.selectedItem)
+//    console.log('selectedItem', this.selectedItem)
     this.objecttabsComposition.render()
-    //this.objecttabsComposition.render()
-//    this.selectedProcInstanceMainView()
-    // this.selectedItems=[]
-    // this.selectedItems.push(this.objecttabsComposition.selectedItem)
-
   }
 
   handleMouseMove(evt) {

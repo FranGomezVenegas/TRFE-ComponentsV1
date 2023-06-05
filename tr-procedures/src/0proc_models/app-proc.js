@@ -22,6 +22,9 @@ export const AppProc = {
   "ModuleSettings":{
 	  "actionsEndpoints":[
 		{ "name": "Instruments" , "url" : "/app/procs/InstrumentsAPIactions"}
+	  ],
+	  "queriesEndpoints":[
+		{ "name": "InventoryLot" , "url" : "/app/procs/InstrumentsAPIqueries"}
 	  ]
   },
   "PlatformInstruments": {
@@ -2277,5 +2280,119 @@ export const AppProc = {
       }
 	
   ]
-  }
+  },
+  "InstrumentReport": {
+	"component": "DataMining",
+    "tabs": [
+      { "action": "GET_INSTRUMENT_REPORT",
+        "label_en": "Instrument Report", 
+        "label_es": "Informe de Instrumento", 
+        "filter":{
+          "fixParams": {
+          },
+          "filterFields":[
+            {"text1": { "label_en": "Instrument", "label_es": "Instrumento", "default_value": "demoId2"} },
+            {"number1": { "label_en": "Num Days", "label_es": "Num días"}, "default_value": true },
+            {"daterange1":
+              {
+              "dateStart":{ "label_en": "Creation Start Date", "label_es": "Inicio Rango Creación", "default_value": "" },
+              "dateEnd":{ "label_en": "Creation End Date", "label_es": "Fin Rango Creación", "default_value": "" }
+              }
+            },
+            {"daterange2":
+              {
+              "dateStart":{ "label_en": "Closure Start Date", "label_es": "Inicio Rango Cierre", "default_value": "" },
+              "dateEnd":{ "label_en": "Closure End Date", "label_es": "Fin Rango Cierre", "default_value": "" }
+              }
+            }
+          ],
+          "endPointParams": [
+            {"argumentName": "instrumentName", "element": "text1"},
+            {"argumentName": "creationDayStart", "element": "daterange1dateStart"},
+            {"argumentName": "creationDayEnd", "element": "daterange1dateEnd"},
+            {"argumentName": "closureDayStart", "element": "daterange2dateStart"},
+            {"argumentName": "closureDayEnd", "element": "daterange2dateEnd"}
+          ]      
+        },
+        "reportElements":[
+		[
+                                {
+                                    "type": "cardSomeElementsSingleObject",
+                                    "endPointResponseObject": "procedure_info",
+                                    "title": "Main Information",
+                                    "num_columns": 4,
+                                    "fieldsToDisplay": [
+                                        {
+                                            "name": "description"
+                                        },
+                                        {
+                                            "name": "procedure_hash_code"
+                                        },
+                                        {
+                                            "name": "procedure_name"
+                                        },
+                                        {
+                                            "name": "locked_for_action"
+                                        }
+                                    ]
+                                }		
+		]
+          [
+            {"type": "grid", "title":{"label_en": "Info Matching Selection Criteria", "label_es": "Información cumpliendo el criterio de selección"}, 
+             "elementName": "datatable", "fieldsToDisplay":[
+                {"property": "id", "header": "Id"}, 
+                {"property": "created_on", "header": "Creation", "label_es":"Creación"}, 
+                {"property": "created_by", "header": "By"}, 
+                {"property": "closed_on", "header": "Closed"}, 
+                {"property": "closed_by", "header": "By"}, 
+                {"property": "external_system_name", "header": "External System Name"},
+                {"property": "external_system_id", "header": "Id"}, 
+                {"property": "capa_required", "header": "Capa Required"}, 
+                {"property": "capa_decision_by", "header": "Capa Decision By"},
+                {"property": "capa_decision_on", "header": "On"},
+                {"property": "capa_external_system_id", "header": "External CAPA Systema Name"}, 
+                {"property": "capa_external_system_name", "header": "Id"}
+             ] 
+            }          
+          ],
+  
+          [
+          {"type": "reportTitle", "title":{"label_en": "Investigations History", "label_es": "Histórico Investigaciones"}}
+          ],
+          [
+          {"type": "chart", "elementName": "capa_or_not",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"capa_or_not",
+            "chart_title":{"label_en": "Per CAPA Required", "label_es":"Por CAPA necesario"},
+            "counter_field_name":"count",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": "transparent",
+              "is3D": true,
+              "colors": ["#dfa942", "#d33737", "#bf120f"]              
+            },
+            "grouper_field_name":"capa_required",
+            "label_values_replacement":{
+              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
+              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
+              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
+            },
+            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
+            "label_item":{"label_en":"Statussss", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          }
+        ]
+        ]
+      }
+    ]
+  }   
+
  }

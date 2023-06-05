@@ -72,26 +72,21 @@ export class DataMiningTab extends LitElement {
     }
   }
   render() {
+    if(this.tabs===undefined){return html``}
+    if (this.tabs.length==1){this.tabChanged(this.tabs[0])}
     //console.log(this.tabs)
     // @change=${()=>this.tabChanged(t)}
     return html`
       <div class="layout flex vertical">
-
-      <mwc-select style="width:100%;" class="layout flex vertical" outlined id="kpiList" label="${this.listElementLabel()}" @change=${this.listObjectSelected}>
+      ${this.tabs.length==1 ?html`
+        <h2 style="text-align: center; color: #24c0eb;">${this.tabs[0]['label_'+this.lang]}</h2>
+      `:html`
+        <mwc-select style="width:100%;" class="layout flex vertical" outlined id="kpiList" label="${this.listElementLabel()}" @change=${this.listObjectSelected}>
         ${this.tabs&&this.tabs.map((p,i) => 
           html`<mwc-list-item value="${i}" ?selected=${i==0}>${p['label_'+this.lang]}</mwc-list-item>`
         )}
-      </mwc-select>      
-
-    <!--
-        <mwc-icon-button icon="navigate_before" @click=${this.prevTab} ?hidden=${!this.prev}></mwc-icon-button>
-        <div class="tabContainer">
-          ${this.tabs.map(t=>
-            html`<mwc-button class="tab-item" outlined aria-label=${t['label_'+this.lang]} label=${t['label_'+this.lang]} @click=${()=>this.tabChanged(t)}></mwc-button>`
-          )}
-        </div>
-        <mwc-icon-button icon="navigate_next" @click=${this.nextTab} ?hidden=${!this.next}></mwc-icon-button>
-        -->
+        </mwc-select>      
+      `} 
       </div>
     `;
   }
