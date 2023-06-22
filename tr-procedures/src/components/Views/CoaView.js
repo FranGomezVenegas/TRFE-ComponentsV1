@@ -13,7 +13,7 @@ export function CoaView(base) {
               }
               .document {
                 page-break-after: always;
-                width: 8.27in;
+                max-width: 8.27in;
               }   
               .title {
                 font-size: 24pt;
@@ -62,7 +62,7 @@ export function CoaView(base) {
                 }
                 .document {
                   position: static;
-                  width: 8.27in;
+                  max-width: 8.27in;
                 }
                 .header {
                   border: 0px;
