@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../procedure-management';
-//import '@zensen/pdf-viewer'
+
 
 class DemoExample extends LitElement {
   static get styles() {
