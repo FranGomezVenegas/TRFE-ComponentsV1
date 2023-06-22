@@ -25,11 +25,11 @@ export const MpRelease1 = {
   "Home": {
     "component": "ModuleEnvMonitHomeAir"
   },
-  "lotCreation": {
+  "LotCreation": {
     "component": "TableWithButtons",
     "langConfig": {
       "title": {
-        "SampleLot": {
+        "LotCreation": {
           "label_en": "Lot Creation",
           "label_es": "Creación de lotes"
         }
