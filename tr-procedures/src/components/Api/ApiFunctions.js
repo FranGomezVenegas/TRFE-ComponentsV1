@@ -214,6 +214,9 @@ export function ApiFunctions(base) {
                     curArgName=curArgName+"*"+p.fieldType
                   }
                   jsonParam[p.argumentName] = curArgName
+                } else if (p.selObjectPropertyName) {
+                  jsonParam[p.argumentName] = selGridObject[p.selObjectPropertyName] // get value from selected item
+  
                 }else{
                   if (this[p.element]===undefined||this[p.element]===null){
                     alert('Not found the html element called '+p.element+' Please talk with your System Admin')

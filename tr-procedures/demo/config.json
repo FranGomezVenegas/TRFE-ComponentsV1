@@ -174,7 +174,7 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
-  "localDefaultView123132": {
+  "localDefaultView": {
     "procName":  "mp-release1", 
     "viewName": "SampleEnterResult", 
     "filterName" :  "ER-FQ" 
@@ -185,7 +185,7 @@
     "viewName": "ReviewTesting", 
     "filterName" :  "RT-FQ" 
   },
-  "localDefaultView": {
+  "localDefaultViewasda": {
     "procName":  "mp-release1", 
     "viewName": "culture-medium", 
     "filterName" :  "culture-medium" 

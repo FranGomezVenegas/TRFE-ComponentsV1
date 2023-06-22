@@ -524,7 +524,7 @@ export function ButtonsFunctions(base) {
           }
           this[currQuery.clientMethod]()
           return
-      }moduleinsplotrm/InspLotRMAPIqueries
+      }
       console.log('GetQueryForDialogGrid', 'currQuery', currQuery)
       let APIParams=this.getAPICommonParams(currQuery)
       let viewParams=this.jsonParam(currQuery)
