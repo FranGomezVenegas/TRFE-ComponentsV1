@@ -492,8 +492,8 @@ return class extends LitElement {
               @keydown=${e => e.keyCode == 13 && this.setResult(result, e.target)}>
           `
         } else {
-          let min = result.min_allowed ? result.min_allowed : 0
-          let max = result.max_allowed && result.max_allowed
+          let min = result.min_allowed!==undefined && result.min_allowed.length>0 ? result.min_allowed : null
+          let max = result.max_allowed!==undefined && result.max_allowed.length>0 ? result.max_allowed : null
           return html`
             ${this[`${result.param_type+''+result.result_id}`]}
             <input class="enterResultVal" id="${result.param_type+''+result.result_id}" 
@@ -616,6 +616,7 @@ return class extends LitElement {
      * @param {*} elmSet which element field, optional for update the field value after action api
      */
     adjustValUndetermined(result, elmSet) {
+      console.log('adjustValUndetermined', 'result', result, 'elmSet', elmSet)
       let lbl = "", raw = ""      
       if (result.raw_value != "") {
         if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
@@ -720,8 +721,13 @@ return class extends LitElement {
       this.deactivatedObjects = []
       let APIParams=this.getAPICommonParams(queryDefinition)
       let viewParams=this.jsonParam(queryDefinition, this.selectedItems[0])
-      let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
-        + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
+      let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+      if (String(endPointUrl).toUpperCase().includes("ERROR")){
+          alert(endPointUrl)
+          return
+      }
+      let params = this.config.backendUrl + endPointUrl
+      + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
 
 //      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)

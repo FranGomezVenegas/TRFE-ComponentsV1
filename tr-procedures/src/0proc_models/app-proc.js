@@ -2315,84 +2315,150 @@ export const AppProc = {
           ]      
         },
         "reportElements":[
-		[
-                                {
-                                    "type": "cardSomeElementsSingleObject",
-                                    "endPointResponseObject": "procedure_info",
-                                    "title": "Main Information",
-                                    "num_columns": 4,
-                                    "fieldsToDisplay": [
-                                        {
-                                            "name": "description"
-                                        },
-                                        {
-                                            "name": "procedure_hash_code"
-                                        },
-                                        {
-                                            "name": "procedure_name"
-                                        },
-                                        {
-                                            "name": "locked_for_action"
-                                        }
-                                    ]
-                                }		
-		]
           [
-            {"type": "grid", "title":{"label_en": "Info Matching Selection Criteria", "label_es": "Información cumpliendo el criterio de selección"}, 
-             "elementName": "datatable", "fieldsToDisplay":[
-                {"property": "id", "header": "Id"}, 
-                {"property": "created_on", "header": "Creation", "label_es":"Creación"}, 
-                {"property": "created_by", "header": "By"}, 
-                {"property": "closed_on", "header": "Closed"}, 
-                {"property": "closed_by", "header": "By"}, 
-                {"property": "external_system_name", "header": "External System Name"},
-                {"property": "external_system_id", "header": "Id"}, 
-                {"property": "capa_required", "header": "Capa Required"}, 
-                {"property": "capa_decision_by", "header": "Capa Decision By"},
-                {"property": "capa_decision_on", "header": "On"},
-                {"property": "capa_external_system_id", "header": "External CAPA Systema Name"}, 
-                {"property": "capa_external_system_name", "header": "Id"}
-             ] 
-            }          
-          ],
-  
-          [
-          {"type": "reportTitle", "title":{"label_en": "Investigations History", "label_es": "Histórico Investigaciones"}}
+			{"type": "reportTitle", "title":{"label_en": "Instrument Report", "label_es": "Instrument Report"}}
           ],
           [
-          {"type": "chart", "elementName": "capa_or_not",
-
-            "display_chart": true,
-            "chart_type":"pie",
-            "chart_name":"capa_or_not",
-            "chart_title":{"label_en": "Per CAPA Required", "label_es":"Por CAPA necesario"},
-            "counter_field_name":"count",
-            "counterLimits":{
-              "xmin_allowed": 3,
-              "xmin_allowed_included":3,
-              "xmax_allowed":100,
-              "xmax_allowed_included":100,
-              "xvalue":0
-            },
-            "chartStyle": {
-              "backgroundColor": "transparent",
-              "is3D": true,
-              "colors": ["#dfa942", "#d33737", "#bf120f"]              
-            },
-            "grouper_field_name":"capa_required",
-            "label_values_replacement":{
-              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
-              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
-              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
-            },
-            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
-            "label_item":{"label_en":"Statussss", "label_es":"Estado"},
-            "label_value":{"label_en":"#", "label_es":"#"}   
-          }
-        ]
+			{"type": "cardSomeElementsSingleObject",
+			 "endPointPropertyArray": ["ROOT"],
+			 "num_columns": 4,
+			 "fieldsToDisplay": [
+				{"name": "name", "label_en": "Name", "label_es": "Nombre"},
+				{"name": "model_number"},
+				{"name": "responsible"},
+				{"name": "responsible_backup"},
+				{"name": "manufacturer", "label_en": "Manufacturer", "label_es": "Fabricante"},
+				{"name": "supplier", "label_en": "Supplier", "label_es": "Distribuidor"}
+			 ]
+			}			
+          ],
+          [
+			{"type": "reportTitle", "title":{"label_en": "Family definition", "label_es": "Definición de Familia"}},
+			{"type": "cardSomeElementsSingleObject",
+			 "endPointPropertyArray": ["instruments_family"],
+			 "num_columns": 4,
+			 "fieldsToDisplay": [
+				{"name": "pm_required", "label_en": "Perform PM?", "label_es": "¿Requiere MP?"},
+				{"name": "pm_turn_on_when_completed"},
+				{"name": "pm_variables_set"}
+			 ]
+			}						
+          ],
+          [
+			{"type": "reportTitle", "title":{"label_en": "Calibration Parameters", "label_es": "Parámetros de Calibración"}},
+			{"type": "readOnlyTable",
+			 "endPointPropertyArray": ["instruments_family", "calib_variables_set_detail"],
+			 "num_columns": 4,
+			 "columns": [
+				{"name": "param_name", "label_en": "Parameter", "label_es": "Parámetro"},
+				{"name": "param_type"},
+				{"name": "required"}
+			 ]
+			},
+			{"type": "reportTitle", "title":{"label_en": "Prev. Maint. Parameters", "label_es": "Parámetros de Mant. Prev."}},
+			{"type": "readOnlyTable",
+			 "endPointPropertyArray": ["instruments_family", "pm_variables_set_detail"],
+			 "num_columns": 4,
+			 "columns": [
+				{"name": "param_name", "label_en": "Parameter", "label_es": "Parámetro"},
+				{"name": "param_type"},
+				{"name": "required"}
+			 ]
+			}						
+			
+          ]
+		
         ]
       }
     ]
-  }   
+  },
+  "ConfigInstrumentFamilies": {
+	"component": "TableWithButtons",
+    "langConfig": {
+      "title": {
+        "ConfigInstrumentFamilies": {
+          "label_en": "Instrument Families",
+          "label_es": "Familias de Instrumentos"
+        }
+      },
+      "gridHeader": {
+        "name": {"label_en": "Name", "label_es": "Nombre", "sort": false, "filter": true, "is_icon": false, "width": "20%"},
+        "description": {"label_en": "Description", "label_es": "Descripción", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"},
+        "calibration_required": {"label_en": "Calib?", "label_es": "Calib?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
+        "calib_variables_set": {"label_en": "Set", "label_es": "Set", "sort": false, "filter": false, "is_icon": false, "width": "10%"},
+        "calibration_interval": {"label_en": "Inteval", "label_es": "Intervalo", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
+        "calib_system_create_new_event_when_expires": {"label_en": "Next automated?", "label_es": "¿Siguiente Automático?", "sort": false, "filter": false, "is_icon": true, "width": "10%"},
+        "calibration_turn_off_when_started": {"label_en": "off by Start?", "label_es": "¿Inactivar al crear?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
+        "calibration_turn_on_when_completed": {"label_en": "On By Complete?", "label_es": "¿Activar al completar?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
+        "pm_required": {"label_en": "Prev Maint?", "label_es": "Mant Prev?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
+        "pm_variables_set": {"label_en": "Set", "label_es": "Set", "sort": false, "filter": false, "is_icon": false, "width": "10%"},
+        "pm_interval": {"label_en": "Inteval", "label_es": "Intervalo", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
+        "pm_system_create_new_event_when_expires": {"label_en": "Next automated?", "label_es": "¿Siguiente Automático?", "sort": false, "filter": false, "is_icon": true, "width": "10%"},
+        "pm_turn_off_when_started": {"label_en": "off by Start?", "label_es": "¿Inactivar al crear?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
+        "pm_turn_on_when_completed": {"label_en": "On By Complete?", "label_es": "¿Activar al completar?", "sort": false, "filter": true, "is_icon": true, "width": "10%"}		
+      }
+    },
+    "viewQuery":{ "actionName": "instruments_family",	  
+      "clientMethod": "getFromMasterData",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload", "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      }
+    },
+	"actions": [
+		{   "actionName": "CONFIG_UPDATE_INSTRUMENT_FAMILY",
+			"requiresDialog": true,
+			"button": {
+				"icon": "create_new_folder",
+				"title": {"label_en": "New", "label_es": "Nuevo"},
+				"requiresGridItemSelected": true
+			},
+			"dialogInfo": {          
+				"name": "genericDialog", 
+				"fields":[
+					{"checkbox1": { "label_en": "Required?", "label_es": "Sección 1", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calibration_required", "optional": true }},
+					{"number1": { "label_en": "Sched offset days", "label_es": "Descripción", "min_allowed":0, "optional": true }},
+					{"list1": { "label_en": "Interval", "label_es": "Intervalo", "optional": true,
+					  "items": [
+						{ "keyName": "DAYS", "keyValue_en": "Days", "keyValue_es": "Días" },
+						{ "keyName": "MONTHS", "keyValue_en": "Months", "keyValue_es": "Meses" },
+						{ "keyName": "YEARS", "keyValue_en": "Years", "keyValue_es": "Años" }
+					  ]
+					}},					
+					{"checkbox2": { "label_en": "Turn off when started?", "label_es": "Sección 3", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calibration_turn_off_when_started" }},
+					{"checkbox3": { "label_en": "Turn on when aproved?", "label_es": "Sección 4", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calibration_turn_on_when_completed" }},
+					{"list2": {
+					  "label_en": "Variables Set", "label_es": "Conjunto de Parámetros", "optional": true,
+					  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+					  "valuesFromMasterData": {
+						"elementName":"list2",
+						"propertyNameContainer": "variables_set",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
+					  }, "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calib_variables_set"			
+					}},					
+					
+					{"checkbox4": { "label_en": "System log event when expired?", "label_es": "Descripción", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calib_system_create_new_event_when_expires" }},
+					{"number1": { "label_en": "Sched offset days", "label_es": "Descripción", "min_allowed":0, "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calib_sched_create_offset_days" }}
+					
+				]
+			},
+			"endPointParams": [
+				{ "argumentName": "instrFamilyName", "selObjectPropertyName": "name" },
+				{ "argumentName": "calibration_required", "element": "checkbox1", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
+				{ "argumentName": "calibration_turn_off_when_started", "element": "checkbox2", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
+				{ "argumentName": "calibration_turn_on_when_completed", "element": "checkbox3", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
+				{ "argumentName": "calib_system_create_new_event_when_expires", "element": "checkbox4", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
+				{ "argumentName": "description", "element": "text1", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
+				{ "argumentName": "calib_sched_create_offset_days", "element": "number1", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
+				{ "argumentName": "calib_variables_set", "element": "list2", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true }
+			]
+		}  
+	]
+  },
 
  }

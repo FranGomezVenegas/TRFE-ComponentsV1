@@ -355,6 +355,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       this.selectedTabModelFromProcModel=this.selectedViewDefinition
       this.selectedItem = this.selectedProcInstance.definition
     }
+    this.objecttabsComposition.isProcManagement=true
 //    console.log('selectedItem', this.selectedItem)
     this.objecttabsComposition.render()
   }

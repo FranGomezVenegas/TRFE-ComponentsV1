@@ -20,6 +20,19 @@ export function DialogsFunctions(base) {
           //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0])
         }
 
+        dialogAcceptForGrid(selected=true, gridSelectedObject) {
+          //console.log('dialogAccept before run credsChecker')
+          if (this.actionBeingPerformedModel.clientMethod!==undefined){
+            this[this.actionBeingPerformedModel.clientMethod]()
+            return
+          }
+          if (selected) {
+              this.credsChecker(this.actionBeingPerformedModel.actionName, this.selectedItems[0].sample_id, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0], null, gridSelectedObject), this.actionBeingPerformedModel)
+          } else {
+              this.credsChecker(this.actionBeingPerformedModel.actionName, null, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0], null, gridSelectedObject), this.actionBeingPerformedModel)
+          }
+          //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0])
+        }        
   /**
    * 
    * @param {*} actionName 
@@ -55,6 +68,9 @@ export function DialogsFunctions(base) {
    * set the justification type, generate justification list for non text type
    */
    checkProcList(isProcManagement) {
+    if (this.isProcManagement!==undefined&&this.isProcManagement===true){
+      return true
+    }
     //console.log('checkProcList')
     let bypass = true
     // this.justificationType = null

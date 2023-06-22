@@ -1,12 +1,15 @@
 import { html } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
+import { columnBodyRenderer, gridRowDetailsRenderer, contextMenuRenderer } from 'lit-vaadin-helpers';
+import {GridFunctions} from '../grid_with_buttons/GridFunctions';
+
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import {DialogsFunctions} from './DialogsFunctions';
 export function TrazitGenericDialogs(base) {
-  return class extends DialogsFunctions(base) {
+  return class extends GridFunctions(DialogsFunctions(base)) {
     static get properties() {
       return {
         selectedResults: { type: Array },
@@ -28,7 +31,9 @@ export function TrazitGenericDialogs(base) {
         fromGrid: { type: Boolean },
         fields:{type: Array},
         declineDialog:{type: Object},
-        masterData:{type: Object}
+        masterData:{type: Object},
+        genericDialogGridItems: { type: Array },
+        genericDialogGridSelectedItems: { type: Array }
       }
     }
 
@@ -44,6 +49,8 @@ export function TrazitGenericDialogs(base) {
       this.actionBeingPerformedModel={}
       this.fieldsShouldBeReset=true
       this.masterData={}
+      this.genericDialogGridItems=[]
+      this.genericDialogGridSelectedItems=[]
     }
     openThisDialog(actionModel = this.actionBeingPerformedModel){
        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
@@ -55,8 +62,31 @@ export function TrazitGenericDialogs(base) {
        //this.resetFields()
        return true 
     }
-        
-    
+
+    acceptedGenericGridDialog(e){
+
+        console.log('genericDialogGridSelectedItems', this.genericDialogGridSelectedItems)
+        if (this.genericDialogGridSelectedItems.length==0){
+            if (this.lang=="es"){
+                alert('Por favor, seleccione un elemento de la tabla')
+            }else{
+                alert('Please select one element from the list first')
+            }
+            return
+        }
+        this.dialogAcceptForGrid(false, this.genericDialogGridSelectedItems[0])
+        e.stopPropagation();
+        return
+        this.fieldsShouldBeReset=true
+        if (this.checkMandatoryFieldsNotEmpty()){
+            this.dialogAccept(false)
+        }else{
+            console.log('Accepted Generic Dialog but mandatories pending then action not performed')
+           // alert('mandatories pending')
+           e.stopPropagation();
+        }
+    }
+
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
     genericFormDialog(actionModel) {
         if (actionModel === undefined) {
@@ -110,6 +140,24 @@ export function TrazitGenericDialogs(base) {
       }       
     </style>
         <tr-dialog id="genericDialog"  @opened=${this.defaultValue}  ?open=${this.openThisDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
+        
+        ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true ?
+        html`
+            <div style="margin-top:30px;text-align:center">
+                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
+                    ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
+                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericGridDialog}>
+                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+            </div>  
+
+            <vaadin-grid .items=${this.genericDialogGridItems} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+              @active-item-changed=${e => this.genericDialogGridSelectedItems = e.detail.value ? [e.detail.value] : []}
+              .selectedItems="${this.genericDialogGridSelectedItems}" all-rows-visible>
+              ${actionModel.dialogInfo.langConfig.gridHeader.map(fld =>
+                html`<vaadin-grid-filter-column width="${fld.width}" resizable text-align="center" path="${fld.fldName}" .header="${fld["label_" + this.lang]}"></vaadin-grid-filter-column>`
+                )}
+            </vaadin-grid>            
+        `:html`
         ${!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields ?
             html``: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
@@ -199,8 +247,8 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number1" type="number" 
-                    @input=${e=>this.setValidVal(e, fld)}
-                    .value=${fld.number1.default_value ? fld.number1.default_value : ''} label="${this.fieldLabel(fld.number1)}"
+                    @input=${e=>this.setValidVal(e, fld)} label="${this.fieldLabel(fld.number1)}"
+                    .value=${this.fldDefaultValue(fld.number1)} 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -208,7 +256,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number2" type="number" @input=${e=>this.setNumberMask(e, fld.number2)} 
-                    .value=${fld.number2.default_value ? fld.number2.default_value : ''}   label="${this.fieldLabel(fld.number2)}"
+                    .value=${this.fldDefaultValue(fld.number2)}    label="${this.fieldLabel(fld.number2)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -216,7 +264,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number3" type="number" @input=${e=>this.setNumberMask(e, fld.number3)}
-                    .value=${fld.number3.default_value ? fld.number3.default_value : ''}   label="${this.fieldLabel(fld.number3)}"
+                    .value=${this.fldDefaultValue(fld.number3)}    label="${this.fieldLabel(fld.number3)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -224,7 +272,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number4" type="number" @input=${e=>this.setNumberMask(e, fld.number4)}
-                    .value=${fld.number4.default_value ? fld.number4.default_value : ''}   label="${this.fieldLabel(fld.number4)}"
+                    .value=${this.fldDefaultValue(fld.number4)}    label="${this.fieldLabel(fld.number4)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -232,7 +280,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number5" type="number" @input=${e=>this.setNumberMask(e, fld.number5)}
-                    .value=${fld.number5.default_value ? fld.number5.default_value : ''}   label="${this.fieldLabel(fld.number5)}"
+                    .value=${this.fldDefaultValue(fld.number5)}    label="${this.fieldLabel(fld.number5)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -240,7 +288,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number6" type="number" @input=${e=>this.setNumberMask(e, fld.number6)}
-                    .value=${fld.number6.default_value ? fld.number6.default_value : ''}  label="${this.fieldLabel(fld.number6)}"
+                    .value=${this.fldDefaultValue(fld.number6)}   label="${this.fieldLabel(fld.number6)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -248,7 +296,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number7" type="number" @input=${e=>this.setNumberMask(e, fld.number7)}
-                    .value=${fld.number7.default_value ? fld.number7.default_value : ''}   label="${this.fieldLabel(fld.number7)}"
+                    .value=${this.fldDefaultValue(fld.number7)}    label="${this.fieldLabel(fld.number7)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -256,7 +304,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number8" type="number" @input=${e=>this.setNumberMask(e, fld.number8)}
-                    .value=${fld.number8.default_value ? fld.number8.default_value : ''}   label="${this.fieldLabel(fld.number8)}"
+                    .value=${this.fldDefaultValue(fld.number8)}    label="${this.fieldLabel(fld.number8)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -264,7 +312,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number9" type="number" @input=${e=>this.setNumberMask(e, fld.number9)}
-                    .value=${fld.number9.default_value ? fld.number9.default_value : ''}   label="${this.fieldLabel(fld.number9)}"
+                    .value=${this.fldDefaultValue(fld.number9)}    label="${this.fieldLabel(fld.number9)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -272,7 +320,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number10" type="number" @input=${e=>this.setNumberMask(e, fld.number10)}
-                    .value=${fld.number10.default_value ? fld.number10.default_value : ''}   label="${this.fieldLabel(fld.number10)}"
+                    .value=${this.fldDefaultValue(fld.number10)}    label="${this.fieldLabel(fld.number10)}"
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -280,7 +328,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                     <mwc-formfield label="${this.fieldLabel(fld.checkbox1)}" >
                         <mwc-checkbox id="checkbox1" 
-                        ?checked=${fld.checkbox1.default_value===undefined ? false : fld.checkbox1.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox1)}
                         @change=${e => { this.checkbox1.value=this.checkbox1.checked}}
                         value="${fld.checkbox1.default_value}"
                         ></mwc-checkbox>
@@ -290,7 +338,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox2)}" >
                         <mwc-checkbox id="checkbox2" 
-                        ?checked=${fld.checkbox2.default_value===undefined ? false : fld.checkbox2.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox2)}
                         @change=${e => { this.checkbox2.value=this.checkbox2.checked}}
                         value="${fld.checkbox2.default_value}"
                     ></mwc-checkbox>
@@ -300,7 +348,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox3)}" >
                         <mwc-checkbox id="checkbox3" 
-                        ?checked=${fld.checkbox3.default_value===undefined ? false : fld.checkbox3.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox3)}
                         @change=${e => { this.checkbox3.value=this.checkbox3.checked}}
                         value="${fld.checkbox3.default_value}"
                     ></mwc-checkbox>
@@ -310,7 +358,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox4)}" >
                         <mwc-checkbox id="checkbox4" 
-                        ?checked=${fld.checkbox4.default_value===undefined ? false : fld.checkbox4.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox4)}
                         @change=${e => { this.checkbox4.value=this.checkbox4.checked}}
                         value="${fld.checkbox4.default_value}"
                     ></mwc-checkbox>
@@ -320,7 +368,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox5)}" >
                         <mwc-checkbox id="checkbox5" 
-                        ?checked=${fld.checkbox5.default_value===undefined ? false : fld.checkbox5.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox5)}
                         @change=${e => { this.checkbox5.value=this.checkbox5.checked}}
                         value="${fld.checkbox5.default_value}"
                     ></mwc-checkbox>
@@ -330,7 +378,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox6)}" >
                         <mwc-checkbox id="checkbox6" 
-                        ?checked=${fld.checkbox6.default_value===undefined ? false : fld.checkbox6.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox6)}
                         @change=${e => { this.checkbox6.value=this.checkbox6.checked}}
                         value="${fld.checkbox6.default_value}"
                     ></mwc-checkbox>
@@ -340,7 +388,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox7)}" >
                         <mwc-checkbox id="checkbox7" 
-                        ?checked=${fld.checkbox7.default_value===undefined ? false : fld.checkbox7.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox7)}
                         @change=${e => { this.checkbox7.value=this.checkbox7.checked}}
                         value="${fld.checkbox7.default_value}"
                     ></mwc-checkbox>
@@ -350,7 +398,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox8)}" >
                         <mwc-checkbox id="checkbox8" 
-                        ?checked=${fld.checkbox8.default_value===undefined ? false : fld.checkbox8.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox8)}
                         @change=${e => { this.checkbox8.value=this.checkbox8.checked}}
                         value="${fld.checkbox8.default_value}"
                     ></mwc-checkbox>
@@ -360,7 +408,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox9)}" >
                         <mwc-checkbox id="checkbox9" 
-                        ?checked=${fld.checkbox9.default_value===undefined ? false : fld.checkbox9.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox9)}
                         @change=${e => { this.checkbox9.value=this.checkbox9.checked}}
                         value="${fld.checkbox9.default_value}"
                     ></mwc-checkbox>
@@ -370,7 +418,7 @@ export function TrazitGenericDialogs(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox10)}" >
                         <mwc-checkbox id="checkbox10" 
-                        ?checked=${fld.checkbox10.default_value===undefined ? false : fld.checkbox10.default_value}
+                        ?checked=${this.fldDefaultValue(fld.checkbox10)}
                         @change=${e => { this.checkbox10.value=this.checkbox10.checked}}
                         value="${fld.checkbox10.default_value}"
                     ></mwc-checkbox>
@@ -525,6 +573,7 @@ export function TrazitGenericDialogs(base) {
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
                     ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
             </div>  
+        `})
         `}
         </tr-dialog>
     `
@@ -566,7 +615,49 @@ export function TrazitGenericDialogs(base) {
         return true
     }
 
+    async getGenericDialogGridItems(dialogInfo){
+        if (dialogInfo.masterDataEntryName===undefined&&dialogInfo.dialogQuery===undefined){
+            alert('By now, the getGenericDialogGridItems only works for master data entries or dialogQuery')
+            return []
+        }
+        let data=[]
+        if (dialogInfo.masterDataEntryName!==undefined){
+            this.getProcMasterData()
+            if (this.masterData===undefined){return []}
+            if (this.masterData[dialogInfo.masterDataEntryName]===undefined){
+                alert('the procedure instance '+this.procInstanceName+' has no one master data entry called '+dialogInfo.masterDataEntryName)
+                return [] 
+            }
+            this.genericDialogGridItems=[]
+            this.genericDialogGridItems=this.masterData[dialogInfo.masterDataEntryName]
+            console.log('new code')
+            return this.genericDialogGridItems
+        }
+        if (dialogInfo.dialogQuery!==undefined){
+            await this.GetQueryForDialogGrid(dialogInfo) 
+            return this.genericDialogGridItems
+
+        }
+        let entry = {"analysis": "hola", "method_name": "method", "method_version": 1}
+        data.push(entry)
+        console.log('genericDialogGridItems', data)
+        return data
+    }
+    gridActiveItemChanged(){
+        alert('Changed')
+
+        // <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+        // @active-item-changed=${this.gridActiveItemChanged} .items=${this.genericDialogGridItems} .selectedItems="${this.genericDialogGridSelectedItems}"
+        // ${gridRowDetailsRenderer(this.detailRenderer)} ${this.setCellListener()}            
+        // ${this.gridList(actionModel.dialogInfo)}
+        // </vaadin-grid>
+    }
+
     defaultValue(){
+        if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
+            this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+            return 
+           }
         if (this.fieldsShouldBeReset===true){
             this.resetFields()
             this.fieldsShouldBeReset=false
@@ -668,8 +759,7 @@ export function TrazitGenericDialogs(base) {
         )}
         `
     }
-    listEntriesFromMasterData(fldMDDef){
-
+    getProcMasterData(){
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
         console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
         let findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
@@ -678,15 +768,15 @@ export function TrazitGenericDialogs(base) {
         //     ProceduresModel[this.procName] = findProc[0].procModel
         //   }
         // }
-//        this.procInstanceModel=ProceduresModel[this.procName]
+    //        this.procInstanceModel=ProceduresModel[this.procName]
         if (findProc!==undefined&&findProc.length>0&&findProc[0].master_data!==undefined){
-          this.masterData=findProc[0].master_data
-          console.log('master data', this.masterData)   
+        this.masterData=findProc[0].master_data
+        console.log('master data', this.masterData)   
         }
-    
-
-
-        if (this.masterData===undefined){return entries}
+    }
+    listEntriesFromMasterData(fldMDDef){
+        this.getProcMasterData()
+        if (this.masterData===undefined){return []}
         console.log('masterData', this.masterData)
         console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
         var entries=[]
@@ -868,5 +958,66 @@ export function TrazitGenericDialogs(base) {
         }
       }
     }        
+
+    fldDefaultValue(fldDef){
+        console.log('fldDefaultValue', fldDef)
+        if (fldDef.default_value){
+            return fldDef.default_value
+        } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          
+            if (this[fldDef.internalVariableSimpleObjName]===undefined||this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
+              var msg=""
+              if (this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
+                msg='The object '+fldDef.internalVariableSimpleObjName+' has no one property called '+fldDef.internalVariableSimpleObjProperty
+                alert(msg)
+              }else{
+                msg='there is no object called '+fldDef.internalVariableSimpleObjName+' in this view'
+                alert(msg)
+              }
+              return "ERROR: "+msg
+            }  
+            return this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]          
+        } else if (fldDef.internalVariableObjName&&fldDef.internalVariableObjProperty) {          
+            if (this[fldDef.internalVariableObjName]===undefined||this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]===undefined){
+            var msg=""
+            if (this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]===undefined){
+                msg='The object '+fldDef.internalVariableObjName+' has no one property called '+fldDef.internalVariableObjProperty
+                alert(msg)
+                //console.log(msg, this[fldDef.internalVariableObjName][0])
+            }else{
+                msg='there is no object called '+fldDef.internalVariableObjName+' in this view'
+                alert(msg)
+            }
+        //    alert('No family selected')
+            return "ERROR: "+msg
+            }  
+            return this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]
+        
+        } else if (fldDef.element) {
+        
+        } else if (fldDef.defaultValue) {
+        if (fldDef.isAdhocField!==undefined&&fldDef.isAdhocField===true){
+            curArgName=jsonParam[fldDef.argumentName]
+            if (curArgName===undefined){curArgName=''}
+            if (curArgName.length>0){curArgName=curArgName+"|"}
+            curArgName=curArgName+fldDef.defaultValue
+            if (fldDef.fieldType!==undefined){
+            curArgName=curArgName+"*"+fldDef.fieldType
+            }
+            return curArgName
+        }else{
+            return fldDef.defaultValue // get value from default value (i.e incubator)
+        }
+        } else if (fldDef.selObjectPropertyName) {
+            return selObject[fldDef.selObjectPropertyName] // get value from selected item
+        } else if (fldDef.targetValue) {
+            return targetValue[fldDef.argumentName] // get value from target element passed
+        } else if (fldDef.fixValue) {
+            return fldDef.fixValue
+        } else if (fldDef.contextVariableName) {
+            return this[fldDef.contextVariableName]
+        } else {
+            return ""
+        }
+    }    
   }
 }

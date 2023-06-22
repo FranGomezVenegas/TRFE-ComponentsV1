@@ -14,7 +14,7 @@ export function ModuleEnvMonitClientMethods(base) {
             super()
             this.sopsPassed=true
             this.headerInfo = JSON.parse(sessionStorage.getItem("userSession")).header_info
-            console.log(this.headerInfo)
+            //console.log(this.headerInfo)
             this.prodLotList=[]
         }
         async getProgramList() {

@@ -31,9 +31,10 @@ import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrume
 
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 
+
 import '../Audit/audit-dialog';
 //import '../../tabs-composition';
-export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement))))))))))) {
+export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,
@@ -186,6 +187,9 @@ export class GridWithButtons extends TrazitCredentialsDialogs(AuditFunctions(Mod
       `
   }
 
+  setReady(){
+    this.ready=true
+  }
   programChangedAction(e){
     if (e===undefined){return}
     this.ready=true

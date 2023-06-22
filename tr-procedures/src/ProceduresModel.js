@@ -71,7 +71,8 @@ export const DemoViews = [
     {"proc_instance_name": "app-proc", "view_name": "PlatformInstrumentsfamilyCorrecto", "filter_name": "InstrumentsfamilyCorrecto", "title": "Instruments List FamilyCorrecto"},
     {"proc_instance_name": "app-proc", "view_name": "PlatformInstrumentsfamilyObsInterno", "filter_name": "InstrumentsfamilyObsInterno", "title": "Instruments List FamilyObsIntento"},
     {"proc_instance_name": "app-proc", "view_name": "EventsInProgress", "filter_name": "EventsER", "title": "Events In Progress"},
-    {"proc_instance_name": "app-proc", "view_name": "InstrumentReport", "filter_name": "InstrumentReport", "title": "Instrument Report"}
+    {"proc_instance_name": "app-proc", "view_name": "InstrumentReport", "filter_name": "InstrumentReport", "title": "Instrument Report"},
+    {"proc_instance_name": "app-proc", "view_name": "ConfigInstrumentFamilies", "filter_name": "ConfigInstrumentFamilies", "title": "Master: Instruments Familiy"}
 	
   ]},  
   {"label":"Instruments (app-instruments)", "proc_instance_name": "app-instruments", "views":[

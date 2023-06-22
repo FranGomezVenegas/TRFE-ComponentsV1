@@ -246,7 +246,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
         this.reload()
       })
     }
-
+ 
     inventoryLotPrintLabel(action, selectedItem ) {
       console.log('inventoryLotPrintLabel this.reqParams', this.reqParams);
       if (selectedItem === undefined || selectedItem.lot_name === undefined) {

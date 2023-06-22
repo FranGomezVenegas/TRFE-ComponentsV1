@@ -74,8 +74,8 @@ export function ApiFunctions(base) {
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
         return extraParams
       }          
-      jsonParam(action, selObject = {}, targetValue = {}) {
-        console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue)
+      jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}) {
+        console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue, 'selGridObject', selGridObject)
         let curArgName=""
         if (action===undefined){return}
           let jsonParam = {}
@@ -171,6 +171,63 @@ export function ApiFunctions(base) {
                     }
                   }
                 }
+              } else if (p.getFromGrid) {
+                if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
+                  if (selGridObject[p.argumentName]==null){
+                    if (p.notAddWhenValueIsBlank!==undefined&&p.notAddWhenValueIsBlank===true){
+                      return
+                    }else{
+                    //msg='The element '+p.element+' was not added in this dialog definition, please review the endPointParams configuration or add them to the dialog'
+                    alert(msg)
+                      jsonParam[p.argumentName] = "ERROR: "+msg
+                      return 
+                    }
+                  }
+                  if (selGridObject[p.argumentName]!==undefined&&selGridObject[p.argumentName].toString().length>0){                    
+                    if (jsonParam.fieldName===undefined){
+                      let curFldNameValue=p.argumentName                      
+                      jsonParam["fieldName"]=curFldNameValue
+                      let curFldValValue=selGridObject[p.argumentName]
+                      if (p.fieldType!==undefined){curFldValValue=curFldValValue+"*"+p.fieldType}                      
+                      jsonParam["fieldValue"]=curFldValValue
+                      
+                    }else{
+                      let curFldNameValue=jsonParam["fieldName"]
+                      if (curFldNameValue!==undefined&&curFldNameValue.length>0){curFldNameValue=curFldNameValue+"|"}   
+                      curFldNameValue=curFldNameValue+p.argumentName 
+                      jsonParam["fieldName"]=curFldNameValue
+
+                      let curFldValValue=jsonParam["fieldValue"]
+                      if (curFldValValue!==undefined&&curFldValValue.length>0){curFldValValue=curFldValValue+"|"}   
+                      curFldValValue=curFldValValue+selGridObject[p.argumentName]
+                      if (p.fieldType!==undefined){curFldValValue=curFldValValue+"*"+p.fieldType}                      
+                      jsonParam["fieldValue"]=curFldValValue
+
+                    }
+                  }
+                }else if (p.isAdhocField!==undefined&&p.isAdhocField===true){
+                  curArgName=jsonParam[p.argumentName]
+                  if (curArgName===undefined){curArgName=''}
+                  if (curArgName.length>0){curArgName=curArgName+"|"}
+                  curArgName=curArgName+this[p.element].value
+                  if (p.fieldType!==undefined){
+                    curArgName=curArgName+"*"+p.fieldType
+                  }
+                  jsonParam[p.argumentName] = curArgName
+                }else{
+                  if (this[p.element]===undefined||this[p.element]===null){
+                    alert('Not found the html element called '+p.element+' Please talk with your System Admin')
+                  }else{
+                    //console.log('element object in context content is:', this[p.element])
+                    if (this[p.element].value.length>0){
+                      jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                    }else{
+                      if (p.notAddWhenValueIsBlank===undefined||p.notAddWhenValueIsBlank===false){
+                        jsonParam[p.argumentName] = this[p.element].value // get value from field input
+                      }
+                    }
+                  }
+                }
               } else if (p.defaultValue) {
                 if (p.isAdhocField!==undefined&&p.isAdhocField===true){
                   curArgName=jsonParam[p.argumentName]
@@ -235,7 +292,7 @@ export function ApiFunctions(base) {
                 
               } else if (p.element) {
                 if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
-                  if (this[p.element].value!==undefined&&this[p.element].value.length>0){                 
+                  if (this[p.element].value!==undefined&&this[p.element].value.toString().length>0){                 
                     if (jsonParam.fieldName===undefined){
                       let curFldNameValueObj={}
                       curFldNameValueObj.push(p.argumentName)

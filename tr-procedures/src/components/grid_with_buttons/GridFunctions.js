@@ -182,15 +182,15 @@ export function GridFunctions(base) {
             <br>            
             `
         }
-        if (colDef.image_ame!==undefined&&String(colDef.image_name).toUpperCase()==="ACTIVATE_DEACTIVATE"){
+        if (colDef.image_name!==undefined&&String(colDef.image_name).toUpperCase()==="ACTIVATE_DEACTIVATE"){
             return html`<img src="/images/${sample[keyName]?'activate.svg':'deactivate.svg'}" style="width:20px">`
         }
         //[{"value": "A", "image_name": "imagenA"}, {"value": "B", "image_name": "imagenB"}, {"value": "else", "image_name": "imagenParaElResto"}]
 
         if (this.filterName == "SampleLogin") {
             return html`<img src="/images/labplanet.png" style="width:20px">`
-        } else if (String(this.viewName).toUpperCase().includes("INSTRUM")) {
-            return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
+        //} else if (String(this.viewName).toUpperCase().includes("INSTRUM")&&sample.on_line!==undefined) {
+        //    return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
         } else if (this.viewName == "EventsInProgress") {
             return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
         } else if (this.viewName == "WhiteIpList") {
@@ -200,7 +200,7 @@ export function GridFunctions(base) {
         } else if (this.viewName == "PlatformBusRules") {
             return html`<img src="/images/${sample.disabled?'activate.svg':'deactivate.svg'}" style="width:20px">`
         } else {
-            return html`<img src="/images/${this.filterName}_${sample.status?sample.status.toLowerCase():''}.png" style="width:20px">`
+            return html`<img src="/images/${sample[keyName]?'activate.svg':'deactivate.svg'}" style="width:20px">`
         }
         }
     

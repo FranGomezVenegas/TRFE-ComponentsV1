@@ -163,7 +163,12 @@ return class extends base {
         this.deactivatedObjects = []
         let APIParams=this.getAPICommonParams(queryDefinition)
         let viewParams=this.jsonParam(queryDefinition)
-        let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
+        let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+        if (String(endPointUrl).toUpperCase().includes("ERROR")){
+            alert(endPointUrl)
+            return
+        }
+        let params = this.config.backendUrl + endPointUrl
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
         this.fetchApi(params).then(j => {
           if (j && !j.is_error) {

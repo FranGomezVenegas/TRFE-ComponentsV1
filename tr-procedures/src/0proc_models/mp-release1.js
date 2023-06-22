@@ -1,7 +1,9 @@
 export const MpRelease1 = {
   "TrackingChanges": {
     "version": 0.9,
-    "last change on (YYYYMMDD)": "20230323",
+    "last change on (YYYYMMDD)": "20230620",
+	"last_change_note_20230620": "Added new button add sample analysis",
+	"last_change_note_20230601": "Record needs to be selected to create a lot",	
 	"last_change_note_20230523": "Added new section for inventory retain",
     "last_change_note_20230523_2": "Added Fake CoA as a model in LotView",
     "last_change_note_20230308": "First draft"
@@ -87,8 +89,7 @@ export const MpRelease1 = {
         "title": {
           "label_en": "Refresh",
           "label_es": "Recargar"
-        },
-        "xxxwhenDisabled": "samplesReload"
+        }
       }
     },
     "actions": [
@@ -101,7 +102,7 @@ export const MpRelease1 = {
             "label_en": "New",
             "label_es": "Nuevo"
           },
-          "requiresGridItemSelected": false
+          "requiresGridItemSelected": true
         },
         "dialogInfo": {
           "name": "genericDialog",
@@ -157,8 +158,8 @@ export const MpRelease1 = {
     "hasOwnComponent": true,
     "showTitleOnTop": true,
     "title": {
-      "fix_text_en": "Selected Inspection Lot: ",
-      "fix_text_es": "Lote de Inspección: ",
+      "fix_text_en": "Lot view",
+      "fix_text_es": "Visor de Lote",
       "name": "lot_name"
     },
     "viewQuery": {
@@ -1490,12 +1491,12 @@ export const MpRelease1 = {
         "lot_name": {
           "label_en": "Lot",
           "label_es": "Lote",
-          "filter": true,
+          "filter": true
         },
         "bulk_name": {
           "label_en": "Bulk",
           "label_es": "Bulto",
-          "filter": true,
+          "filter": true
         },
         "volume": {
           "label_en": "Volume",
@@ -1629,6 +1630,89 @@ export const MpRelease1 = {
               ]
             }
           ]
+        }
+      },
+      {
+        "actionName": "SAMPLEANALYSISADD",
+        "buttonForQuery": false,
+        "requiresDialog": true,        
+        "button": {
+          "icon": "add_task",
+          "title": {
+            "label_en": "Add Analysis",
+            "label_es": "Añadir Ensayo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+			{"argumentName": "sampleId", "selObjectPropertyName": "sample_id"},
+			{"argumentName": "analysis", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
+			{"argumentName": "method_name", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
+			{"argumentName": "method_version", "addToFieldNameAndValue": true, "fieldType": "INTEGER", "notAddWhenValueIsBlank":true, "getFromGrid": true}
+        ],
+        "dialogInfo": {
+			"name": "genericDialog",
+			"gridContent": true,
+			"masterDataEntryName": "analysis_method",
+			"langConfig": {
+				"gridHeader": [
+					{"fldName": "analysis", "label_en": "Analysis", "label_es": "Ensayo", "width": "40%",
+					  "sort": false, "filter": true, "align": "left"},
+					{"fldName": "method_name", "label_en": "Method", "label_es": "Método", "width": "40%",
+					  "sort": true,"filter": false},
+					{"fldName": "method_version", "label_en": "Version", "label_es": "Versión", "width": "20%",
+					  "sort": true, "filter": false}			
+				]
+			},
+			"automatic": true
+        }
+      },
+      {
+        "actionName": "SAMPLEANALYSISREMOVE",
+        "buttonForQuery": false,
+        "requiresDialog": true,        
+        "button": {
+          "icon": "remove_done",
+          "title": {
+            "label_en": "Remove Analysis",
+            "label_es": "Borrar Ensayo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+			{"argumentName": "testId", "selObjectPropertyName": "test_id", "getFromGrid": true},
+			{"argumentName": "analysis", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
+			{"argumentName": "method_name", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
+			{"argumentName": "method_version", "addToFieldNameAndValue": true, "fieldType": "INTEGER", "notAddWhenValueIsBlank":true, "getFromGrid": true}
+        ],
+        "dialogInfo": {
+			"name": "genericDialog",
+			"gridContent": true,
+			"dialogQuery": {
+				"actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+				"variableForData": "",
+				"endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+				"endPointParams": [
+				  {"argumentName": "sampleId", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"sample_id"}
+				],
+				"subViewFilter": {
+					"ER-FQ": [
+					],
+					"ER-MB": [
+					]
+				}
+			},					
+			"langConfig": {
+				"gridHeader": [
+					{"fldName": "analysis", "label_en": "Analysis", "label_es": "Ensayo", "width": "40%",
+					  "sort": false, "filter": true, "align": "left"},
+					{"fldName": "method_name", "label_en": "Method", "label_es": "Método", "width": "40%",
+					  "sort": true,"filter": false},
+					{"fldName": "method_version", "label_en": "Version", "label_es": "Versión", "width": "20%",
+					  "sort": true, "filter": false}			
+				]
+			},
+			"automatic": true
         }
       },
       {

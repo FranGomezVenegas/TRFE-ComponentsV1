@@ -125,7 +125,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     this.procInstanceModel=ProceduresModel[this.procName]
     if (findProc!==undefined&&findProc.length>0&&findProc[0].master_data!==undefined){
       this.masterData=findProc[0].master_data
-      console.log('master data', this.masterData)   
+      console.log('Master Data for procedure ', this.procName, this.masterData)   
     }
     this.gridItems = []
     this.viewModelFromProcModel = null
@@ -150,7 +150,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'TableWithButtons':        
         import('./components/grid_with_buttons/grid-with-buttons')
         if (this.GridWithButtons!==null){
-          this.GridWithButtons.ready=false
+          this.GridWithButtons.ready=true
         }        
         //alert('grid')
         return

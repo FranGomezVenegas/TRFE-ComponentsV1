@@ -48,11 +48,18 @@
     "viewName": "EventsInProgress", 
     "filterName" :  "EventsER" 
   },
-  "localDefaultView": {
+  "localDefaultViewrr": {
     "procName":  "app-proc", 
     "viewName": "InstrumentReport", 
     "filterName" :  "InstrumentReport" 
   },
+  "localDefaultViewxxxxa": {
+    "procName":  "app-proc", 
+    "viewName": "ConfigInstrumentFamilies", 
+    "filterName" :  "ConfigInstrumentFamilies" 
+  },
+  
+  
   "localDefaultView3321": {
     "procName":  "em-demo-a", 
     "viewName": "Incubators", 
@@ -167,11 +174,21 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
+  "localDefaultView123132": {
+    "procName":  "mp-release1", 
+    "viewName": "SampleEnterResult", 
+    "filterName" :  "ER-FQ" 
+  },
 
   "localDefaultViewsssssss": {
     "procName":  "mp-release1", 
     "viewName": "ReviewTesting", 
     "filterName" :  "RT-FQ" 
+  },
+  "localDefaultView": {
+    "procName":  "mp-release1", 
+    "viewName": "culture-medium", 
+    "filterName" :  "culture-medium" 
   }
   
  

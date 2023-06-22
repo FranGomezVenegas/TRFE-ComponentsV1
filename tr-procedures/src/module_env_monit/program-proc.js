@@ -240,8 +240,13 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
     this.selectedItems = []      
     let APIParams=this.getAPICommonParams(queryDefinition)
     let viewParams=this.jsonParam(queryDefinition)
-    let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
-      + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)    
+    let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+    if (String(endPointUrl).toUpperCase().includes("ERROR")){
+        alert(endPointUrl)
+        return
+    }
+    let params = this.config.backendUrl + endPointUrl
+    + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)    
     await this.fetchApi(params).then(j => {
       if (j && !j.is_error) {
         this.programsList = j.programsList
@@ -261,8 +266,13 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
     if (queryDefinition===undefined){return}
 
     let APIParams=this.getAPICommonParams(queryDefinition)
-    let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
-      + '?' + new URLSearchParams(APIParams)
+    let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+    if (String(endPointUrl).toUpperCase().includes("ERROR")){
+        alert(endPointUrl)
+        return
+    }
+    let params = this.config.backendUrl + endPointUrl
+        + '?' + new URLSearchParams(APIParams)
     this.fetchApi(params).then(j => {
       this.samplesReload = false
     })

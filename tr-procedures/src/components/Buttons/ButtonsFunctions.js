@@ -294,7 +294,120 @@ export function ButtonsFunctions(base) {
             alert('the dialog '+action.dialogInfo.name+' does not exist')
         }
     }   
+
+    getFromMasterData(){
+      if (this.procInstanceName===undefined){
+        alert("Proc Instance Name not found")        
+        return
+      }
+      //alert(this.procInstanceName)
+
+      if (this.masterData===undefined){return entries}
+      console.log('masterData', this.masterData)
+      console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
+      var entries=[]
       
+      if (this.masterData[this.viewModelFromProcModel.viewQuery.actionName]===undefined){
+          alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
+          return []
+      }else{
+          return this.masterData[this.viewModelFromProcModel.viewQuery.actionName]
+      }
+      // let setGrid = true
+      // if (setGrid){
+      //   if (entries && !entries.is_error) {
+      //     this.setGrid(entries)
+      //   } else {            
+      //     this.setGrid()
+      //   }
+      // }
+    }
+
+    async xxGetViewData(setGrid = true ){
+        console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
+        this.samplesReload = true
+        this.selectedItems = []    
+        let queryDefinition=this.viewModelFromProcModel.viewQuery
+        if (queryDefinition===undefined){return}
+
+
+        if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
+            //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
+            if (this[this.viewModelFromProcModel.viewQuery.clientMethod]===undefined){
+                alert('not found any clientMethod called '+this.viewModelFromProcModel.viewQuery.clientMethod)
+                return
+            }
+            let j=this[this.viewModelFromProcModel.viewQuery.clientMethod]()
+            this.setTheValues(queryDefinition, j)
+            return
+        }else if (this.config===undefined||this.config.backendUrl===undefined){
+          fetch("../../../demo/config.json").then(r => r.json()).then(j => {
+              this.config={}
+              this.config=j
+              //this.config.backendUrl=j.backendUrl
+          })          
+        }else{
+          if (this.config.backendUrl===undefined){
+            this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
+            this.config.dbName="labplanet"
+            this.config.isForTesting=false
+          }
+          //console.log('GetViewData', 'queryDefinition', queryDefinition)
+          let APIParams=this.getAPICommonParams(queryDefinition)
+          let viewParams=this.jsonParam(queryDefinition)
+          let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+          if (String(endPointUrl).toUpperCase().includes("ERROR")){
+              alert(endPointUrl)
+              return
+          }
+          let params = this.config.backendUrl + endPointUrl
+            + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
+
+          //console.log('params', params)        
+          await this.fetchApi(params).then(j => {
+            this.setTheValues(queryDefinition, j)          
+          })
+        }
+    }
+
+    setTheValues(queryDefinition, j){
+      if (queryDefinition.notUseGrid!==undefined&&queryDefinition.notUseGrid===true){
+        if (queryDefinition.variableName!==undefined){
+            if (queryDefinition.endPointResponseVariableName!==undefined){
+              this[queryDefinition.variableName]=j[queryDefinition.endPointResponseVariableName]
+            }else{
+              this[queryDefinition.variableName]=j
+            }
+        }else{
+          this.selectedItems=j   
+          this.selectedItem=this.selectedItems[0]
+          console.log('this.selectedItems', this.selectedItems)           
+          if (j && !j.is_error) {
+            this.requestData=j
+          } else {            
+            this.requestData={}
+          }
+        }
+      }else{
+        this.ready = true
+      if (this.setGrid!==undefined){
+          if (j && !j.is_error) {
+            this.setGrid(j)
+          } else {            
+            this.setGrid()
+          }
+        }else{
+          if (j && !j.is_error) {
+            this.requestData=j
+          } else {            
+            this.requestData={}
+          }
+        }                      
+      }
+      this.samplesReload = false
+    }
+
+    
     async GetViewData(setGrid = true ){
         //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
         if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
@@ -303,7 +416,8 @@ export function ButtonsFunctions(base) {
                 alert('not found any clientMethod called '+this.viewModelFromProcModel.viewQuery.clientMethod)
                 return
             }
-            this[this.viewModelFromProcModel.viewQuery.clientMethod]()
+            let j=this[this.viewModelFromProcModel.viewQuery.clientMethod]()
+            this.setTheValues(this.viewModelFromProcModel.viewQuery, j)
             return
         }
         if (this.config===undefined||this.config.backendUrl===undefined){
@@ -331,7 +445,6 @@ export function ButtonsFunctions(base) {
             return
         }
         let params = this.config.backendUrl + endPointUrl
-        //let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
         //console.log('params', params)        
@@ -383,7 +496,8 @@ export function ButtonsFunctions(base) {
         console.log('GetAlternativeViewData', 'queryDefinition', queryDefinition)
         let APIParams=this.getAPICommonParams(queryDefinition)
         let viewParams=this.jsonParam(queryDefinition, selObject)
-        let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.SampleAPIqueriesUrl)
+        let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+        let params = this.config.backendUrl + endPointUrl
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
         //console.log('params', params)        
@@ -396,7 +510,40 @@ export function ButtonsFunctions(base) {
         })
         this.samplesReload = false
     }    
+
+    async GetQueryForDialogGrid(actionDefinition){
+      console.log('GetQueryForDialogGrid', actionDefinition)
+      if (actionDefinition.dialogQuery===undefined){return}
+
+      let currQuery=actionDefinition.dialogQuery
+      if (currQuery.clientMethod!==undefined){
+          //alert('Calling '+currQuery.clientMethod+' from GetViewData')            
+          if (this[currQuery.clientMethod]===undefined){
+              alert('not found any clientMethod called '+currQuery.clientMethod)
+              return
+          }
+          this[currQuery.clientMethod]()
+          return
+      }moduleinsplotrm/InspLotRMAPIqueries
+      console.log('GetQueryForDialogGrid', 'currQuery', currQuery)
+      let APIParams=this.getAPICommonParams(currQuery)
+      let viewParams=this.jsonParam(currQuery)
+      let endPointUrl=this.getQueryAPIUrl(currQuery)
+      let params = this.config.backendUrl + endPointUrl
+        + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
+      await this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          this.genericDialogGridItems=j
+
+        } else {            
+          this.genericDialogGridItems=[]
+        }
+      })
+      
+    }
+
     async GetQueriesForDialog(actionDefinition){
+      console.log('GetQueriesForDialog', actionDefinition)
       if (actionDefinition.dialogQueries===undefined){return}
 
       let i=0
@@ -414,7 +561,9 @@ export function ButtonsFunctions(base) {
         console.log('GetQueriesForDialog', 'currQuery', currQuery)
         let APIParams=this.getAPICommonParams(currQuery)
         let viewParams=this.jsonParam(currQuery)
-        let params = this.config.backendUrl + (currQuery.endPoint ? currQuery.endPoint : this.config.SampleAPIqueriesUrl)
+        let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+        let params = this.config.backendUrl + endPointUrl        
+        //let params = this.config.backendUrl + (currQuery.endPoint ? currQuery.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
         //console.log('params', params)        
@@ -448,7 +597,11 @@ export function ButtonsFunctions(base) {
             this[action.alternativeAPIActionMethod]()
             return
         }      
-        var extraParams=this.jsonParam(action, selectedItem, targetValue)   
+        let gridSelectedItem={}
+        if (this.genericDialogGridSelectedItems!==undefined&&this.genericDialogGridSelectedItems.length>0){
+          gridSelectedItem=this.genericDialogGridSelectedItems[0]
+        }
+        var extraParams=this.jsonParam(action, selectedItem, targetValue, gridSelectedItem)   
         let APIParams=this.getAPICommonParams(action)
         let endPointUrl=this.getActionAPIUrl(action)
         if (String(endPointUrl).toUpperCase().includes("ERROR")){
@@ -503,8 +656,7 @@ console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action'
                 }else{
                   this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
                 }
-
-                  return
+                return
               }
               
               //this.actionMethodResults(this.viewModelFromProcModel.actions[3], this.selectedItems, this.selectedItems[0].sample_id)
@@ -526,7 +678,7 @@ console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action'
 
     disabledByCertification(action){
       //console.log('disabledByCertification', 'action', action)      
-      console.log('viewName', this.viewName, 'procInstanceName', this.procInstanceName)
+      //console.log('viewName', this.viewName, 'procInstanceName', this.procInstanceName)
       let sopsPassed = false
       let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
   

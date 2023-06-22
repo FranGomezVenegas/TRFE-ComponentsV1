@@ -40,7 +40,9 @@ export function DataViews(base) {
             if (elem.endPointPropertyArray.length === 0) {
               return data;
             }
-            
+            if (elem.endPointPropertyArray.length === 1 && elem.endPointPropertyArray[0].toUpperCase()==="ROOT") {
+              return data;
+            }            
             //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
             //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
             let i=0
@@ -503,6 +505,7 @@ export function DataViews(base) {
           }else{
             dataArr=this.getDataFromRoot(elem, dataArr)
           }
+          if (dataArr===undefined||!Array.isArray(dataArr)){return html``}
           return html`
           <style>
           .styled-table {
@@ -883,7 +886,7 @@ export function DataViews(base) {
           })
         }    
         kpiCardSomeElementsMain(elem, data){
-           // console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
+            console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
             return html`   
             ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title["label_"+this.lang]}</span>`}         
             ${data===undefined ? html`nothing to do` :
@@ -1100,7 +1103,7 @@ export function DataViews(base) {
         `}
 
 
-        kpiCard(elem, data=this.data, ){
+        kpiCard(elem, data=this.data, isProcManagement){
           let myDataArr=[]
           if (Array.isArray(data)){
             myDataArr=data
@@ -1154,7 +1157,7 @@ export function DataViews(base) {
                     subheading="${elem.subtitle["label_"+this.lang]===undefined ? '-' : elem.subtitle["label_"+this.lang]}">
                     <div slot="ribbon"></div>
                     <div slot="footer">
-                    <div class="layout horizontal center flex wrap">${this.getButton(elem, curData)}</div>                  
+                    <div class="layout horizontal center flex wrap">${this.getButton(elem, curData, isProcManagement)}</div>                  
                       ${elem.fieldsToDisplay.map(d =>
                         html`<li class="cardelement">
                         

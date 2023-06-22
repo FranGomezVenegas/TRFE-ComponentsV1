@@ -63,6 +63,7 @@ export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDial
       sopsPassed: { type: Boolean },
       viewName: { type: String },
       filterName: { type: String },
+      isProcManagement: { type: Boolean },
 
     }
   }

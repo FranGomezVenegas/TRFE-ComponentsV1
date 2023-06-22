@@ -25,7 +25,7 @@ return class extends DialogsFunctions(base) {
     }
 
     investigationTemplate() {
-      console.log('viewModelFromProcModel', this.viewModelFromProcModel)
+      //console.log('viewModelFromProcModel', this.viewModelFromProcModel)
       if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined
         ||this.viewModelFromProcModel.langConfig.gridHeader===undefined||this.viewModelFromProcModel.langConfig.gridHeader.created_on===undefined
         ||this.viewModelFromProcModel.filter!=="pending"){

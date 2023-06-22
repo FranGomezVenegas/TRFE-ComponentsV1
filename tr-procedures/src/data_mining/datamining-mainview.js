@@ -104,6 +104,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
       coaTab:{type: Object},
       coaReportInfo:{type: Object},
       procInstanceName: { type: String },
+      requestData: {type: Array},
     };
   }
 
@@ -129,7 +130,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
         }
       ]
     }   
-    
+    this.requestData=[]
     //this.activeTab=this.tabList[0] 
   }
 
@@ -1153,14 +1154,10 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
               </div> -->
               <div id="document" style="display:block;">
               ${this.activeTab===undefined? nothing:html`
-                <datamining-data id="mydata" .data=${this.data} .activeTab=${this.activeTab} lang=${this.lang}
-                  dbName=${this.config.dbName} procName=${this.procName}
+                <datamining-data id="mydata" .data=${this.requestData} .activeTab=${this.activeTab} lang=${this.lang}
+                  dbName=${this.config.dbName} procName=${this.procName} .procInstanceName=${this.procInstanceName} .config=${this.config}
                   @chart-images=${e=>{this.chartImgs.push(e.detail.imgUri);this.requestUpdate()}}></datamining-data>
 
-                <objecttabs-composition .selectedTabModelFromProcModel=${this.activeTab.reportElements}
-                  .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName}
-                  .filterName=${this.filterName} .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
-                </objecttabs-composition>    
               `}  
               </div>        
           </div>
@@ -1255,7 +1252,24 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     this.activeTab = e.target.selectedTab
   }
 
-
+  xxxgetQueryFilterData(e) {
+    // console.log('this.selectedItem', this.selectedItem)
+    //if (Object.keys(this.selectedItem).length === 0){
+    //if (!this.selectedItemLoaded){        
+//      if (this.lottoget!==null&& this.lottoget.value!=='' && this.selectedItemLot!=this.lottoget.value){
+      this.selectedItemLot=""
+      this.GetViewData(false)
+      if (this.requestData.length===1){
+        if (Array.isArray(this.requestData)){
+          this.selectedItem=this.requestData[0]
+        }else{
+          this.selectedItem={}
+        }
+        this.selectedItemLot=this.selectedItem.lot_name
+        this.selectedItemLoaded=true
+      }
+//      }
+  }
   getQueryFilterData() {
     console.log('getQueryFilterData')
     if (this.dataminingData!==null){
@@ -1294,6 +1308,10 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
         if (j.datatable){
           this.sampleData=j.datatable
         }
+        this.requestData=j
+        if (this.dataminingData!==null){
+          this.dataminingData.data = j
+        }    
         this.chartImgs = []
       }
     })

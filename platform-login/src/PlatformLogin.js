@@ -77,7 +77,7 @@ box-shadow: 16px 14px 20px #0000008c;
       }
       img.appLoginLogoOnTop {
         height: 5.08vmax;
-        width: 16vmax;
+        width: 17vmax;
         padding-bottom: 15px;
       }
       h2 {

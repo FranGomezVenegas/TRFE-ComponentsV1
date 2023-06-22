@@ -267,8 +267,13 @@ export function GenomaActions(base) {
             this.selectedItems = []      
             let APIParams=this.getAPICommonParams(queryDefinition)
             let viewParams=this.jsonParam(queryDefinition)
-            let params = this.config.backendUrl + (queryDefinition.endPoint ? queryDefinition.endPoint : this.config.GenomaStudyAPIqueriesUrl)
-              + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)    
+            let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+            if (String(endPointUrl).toUpperCase().includes("ERROR")){
+                alert(endPointUrl)
+                return
+            }
+            let params = this.config.backendUrl + endPointUrl
+                  + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)    
             await this.fetchApi(params).then(j => {
               if (j && !j.is_error) {
                 this.programsList = j.project
