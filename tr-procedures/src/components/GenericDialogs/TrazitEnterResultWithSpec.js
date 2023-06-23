@@ -210,12 +210,12 @@ return class extends LitElement {
         "method_title":{"label_en":"Method", "label_es":"Método"},
         "rule_title":{"label_en":"Range", "label_es":"Rango"},
         "no_rule":{"label_en":"Has no limited range", "label_es":"No tiene rango asignado"},
-        "range_evaluation":{"label_en":"Evaluation", "label_es":"Evaluación"}
+        "range_evaluation":{"label_en":"Evaluation", "label_es":"Evaluación"}        
       }
       return html`
         <div style="text-align:center;font-size:12px">
           <p>${result.spec_eval ?
-          html`${result.spec_eval == 'IN' ?
+          html`${result.spec_eval == 'IN' || (result.spec_eval!==undefined&&result.spec_eval.toUpperCase().includes("NO_SPEC_LIMIT")) ?
             html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
             html`${result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC") ?
               html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>` :
@@ -224,9 +224,9 @@ return class extends LitElement {
             }` :
           html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
         }</p>
-          <p>>${specAreaLabels.method_title["label_"+this.lang]}: ${result.method_name} (v${result.method_version})</p>
+          <p>${specAreaLabels.method_title["label_"+this.lang]}: ${result.method_name} (v${result.method_version})</p>
           <p>${specAreaLabels.rule_title["label_"+this.lang]}: ${result.spec_rule_info===undefined||result.spec_rule_info[0]===undefined||result.spec_rule_info[0].ruleRepresentation===undefined? specAreaLabels.no_rule["label_"+this.lang]:result.spec_rule_info[0].ruleRepresentation}</p>
-          <p>${specAreaLabels.range_evaluation["label_"+this.lang]}: ${result.spec_eval} (${result.spec_eval_detail})</p>
+          <p>${specAreaLabels.range_evaluation["label_"+this.lang]}: ${result.spec_eval.toUpperCase().includes("NO_SPEC_LIMIT")? specAreaLabels.no_rule["label_"+this.lang]:  result.spec_eval (result.spec_eval_detail)}</p>
           ${result.is_locked ?
           html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
         }
@@ -687,6 +687,8 @@ return class extends LitElement {
         } else {
           if (result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC")) {
             return html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
+          }else if (result.spec_eval.toUpperCase().includes("NO_SPEC_LIMIT") ) {
+            return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
           } else {
             return html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
           }
