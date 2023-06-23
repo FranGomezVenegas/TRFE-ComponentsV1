@@ -198,11 +198,19 @@ return class extends LitElement {
       `
     }
 
+
     detailRendererEnterResults(result) {
-      console.log('detailRendererEnterResults', result.sample_id, 'result', result)
+
+      //console.log('detailRendererEnterResults', result.sample_id, 'result', result)
       let labels = {
         "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
         "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
+      }
+      let specAreaLabels = {
+        "method_title":{"label_en":"Method", "label_es":"Método"},
+        "rule_title":{"label_en":"Range", "label_es":"Rango"},
+        "no_rule":{"label_en":"Has no limited range", "label_es":"No tiene rango asignado"},
+        "range_evaluation":{"label_en":"Evaluation", "label_es":"Evaluación"}
       }
       return html`
         <div style="text-align:center;font-size:12px">
@@ -216,9 +224,9 @@ return class extends LitElement {
             }` :
           html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
         }</p>
-          <p>${this.lang == "en" ? "Method" : "Método"}: ${result.method_name} (v${result.method_version})</p>
-          <p>Range Rule: ${result.spec_rule_info[0].ruleRepresentation}</p>
-          <p>Range Evaluation: ${result.spec_eval} (${result.spec_eval_detail})</p>
+          <p>>${specAreaLabels.method_title["label_"+this.lang]}: ${result.method_name} (v${result.method_version})</p>
+          <p>${specAreaLabels.rule_title["label_"+this.lang]}: ${result.spec_rule_info===undefined||result.spec_rule_info[0]===undefined||result.spec_rule_info[0].ruleRepresentation===undefined? specAreaLabels.no_rule["label_"+this.lang]:result.spec_rule_info[0].ruleRepresentation}</p>
+          <p>${specAreaLabels.range_evaluation["label_"+this.lang]}: ${result.spec_eval} (${result.spec_eval_detail})</p>
           ${result.is_locked ?
           html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
         }
@@ -227,7 +235,7 @@ return class extends LitElement {
         }
         </div>
       `
-    }
+    }    
     setCellListenerEnterResults() {
       console.log('setCellListenerEnterResults EnterResults')
       if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||

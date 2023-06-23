@@ -566,14 +566,14 @@ export function TrazitGenericDialogs(base) {
                         </mwc-select>
                 `} 
                 `            
-            )}   
+            )}
             <div style="margin-top:30px;text-align:center">
-                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
+                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}>
                     ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
                     ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-            </div>  
-        `})
+            </div>
+        `}
         `}
         </tr-dialog>
     `
