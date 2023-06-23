@@ -224,9 +224,13 @@ return class extends LitElement {
             }` :
           html`<img style="height:24px; width: 24px;" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg">`
         }</p>
-          <p>${specAreaLabels.method_title["label_"+this.lang]}: ${result.method_name} (v${result.method_version})</p>
+          <p>>${specAreaLabels.method_title["label_"+this.lang]}: ${result.method_name} (v${result.method_version})</p>
           <p>${specAreaLabels.rule_title["label_"+this.lang]}: ${result.spec_rule_info===undefined||result.spec_rule_info[0]===undefined||result.spec_rule_info[0].ruleRepresentation===undefined? specAreaLabels.no_rule["label_"+this.lang]:result.spec_rule_info[0].ruleRepresentation}</p>
-          <p>${specAreaLabels.range_evaluation["label_"+this.lang]}: ${result.spec_eval.toUpperCase().includes("NO_SPEC_LIMIT")? specAreaLabels.no_rule["label_"+this.lang]:  result.spec_eval (result.spec_eval_detail)}</p>
+          <p>${specAreaLabels.range_evaluation["label_"+this.lang]}:           
+            ${result.spec_eval.toUpperCase().includes("NO_SPEC_LIMIT") ? 
+               html`specAreaLabels.no_rule["label_"+this.lang]` :  html`${result.spec_eval} (${result.spec_eval_detail})`
+            }
+          </p >
           ${result.is_locked ?
           html`<p style="color:rgb(255 8 8)">${labels['locking_reason_label_' + this.lang]}: ${result.locking_reason["message_" + this.lang]}</p>` : nothing
         }
