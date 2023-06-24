@@ -39,7 +39,7 @@ export const ProcManagement = [
               "type": "readOnlyTable",
               "title": {
                 "label_en": "1.1) Users",
-                "label_es": "1.2) Usuarios"
+                "label_es": "1.1) Usuarios"
               },
               "endPointResponseObject": "process_accesses",
               "endPointResponseObject2": "users",
@@ -104,7 +104,7 @@ export const ProcManagement = [
               "type": "readOnlyTable",
               "title": {
                 "label_en": "1.2) Roles",
-                "label_es": "1.2) Roles"
+                "label_es": "1.2) Perfiles"
               },
               "endPointResponseObject": "process_accesses",
               "endPointResponseObject2": "roles",
@@ -169,7 +169,7 @@ export const ProcManagement = [
               "type": "readOnlyTable",
               "title": {
                 "label_en": "1.3) User Roles",
-                "label_es": "1.3) Roles de usuario"
+                "label_es": "1.3) Perfiles de usuario"
               },
               "endPointResponseObject": "process_accesses",
               "endPointResponseObject2": "user_role",
@@ -339,24 +339,51 @@ export const ProcManagement = [
             },
             {
               "type": "readOnlyTableByGroup",
+              "is_translation": true, "lang": "en",
               "title": {
                 "label_en": "3.3) View Actions",
                 "label_es": "3.3) Acciones por Pantalla"
               },
               "endPointPropertyArray": [
                 "views_info",
-                "view_actions"
+                "view_actions_en"
               ],
               "columns": [
                 {
                   "name": "pretty_name_en",
-				  "is_translation": true,
+                  "is_translation": true,
                   "label_en": "Name",
                   "label_es": "Nombre"
                 },
                 {
                   "name": "pretty_name_es",
-				  "is_translation": true,
+                  "is_translation": true,
+                  "label_en": "Name",
+                  "label_es": "Nombre"
+                }
+              ]
+            },
+            {
+              "type": "readOnlyTableByGroup",
+              "is_translation": true, "lang": "es",
+              "title": {
+                "label_en": "3.3) View Actions",
+                "label_es": "3.3) Acciones por Pantalla"
+              },
+              "endPointPropertyArray": [
+                "views_info",
+                "view_actions_es"
+              ],
+              "columns": [
+                {
+                  "name": "pretty_name_en",
+                  "is_translation": true,
+                  "label_en": "Name",
+                  "label_es": "Nombre"
+                },
+                {
+                  "name": "pretty_name_es",
+                  "is_translation": true,
                   "label_en": "Name",
                   "label_es": "Nombre"
                 }
@@ -379,6 +406,11 @@ export const ProcManagement = [
                   "name": "type",
                   "label_en": "Type",
                   "label_es": "Tipo"
+                },
+                {
+                  "name": "mode",
+                  "label_en": "Mode",
+                  "label_es": "Modo"
                 },
                 {
                   "name": "name",

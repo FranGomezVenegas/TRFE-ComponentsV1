@@ -244,7 +244,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
                 ${this.viewModelFromProcModel.filter_button["label_" + this.lang]} </sp-button>
 
                 ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
-                  ${this.genericFormElements(this.viewModelFromProcModel.filter)} `}                      
+                  ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} `}                      
               </div>
             </div>
             

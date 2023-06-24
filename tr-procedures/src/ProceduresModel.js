@@ -114,7 +114,7 @@ export const DemoViews = [
     {"proc_instance_name": "inv-draft", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
     {"proc_instance_name": "inv-draft", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLotsGeneral", "title": "InventoryLots"},
     {"proc_instance_name": "inv-draft", "view_name": "InventoryLotsReactivos", "filter_name": "InventoryLotsReactivos", "title": "InventoryLotsReactivos"},
-    {"proc_instance_name": "inv-draft", "view_name": "Issues", "filter_name": "Issues", "title": "Issues"},
+    {"proc_instance_name": "inv-draft", "view_name": "InventoryControls", "filter_name": "InventoryControls", "title": "InventoryControls"},
     {"proc_instance_name": "inv-draft", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
 	{"proc_instance_name": "inv-draft", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"}	
   ]},
