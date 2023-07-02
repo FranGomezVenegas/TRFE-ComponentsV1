@@ -18,6 +18,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '@doubletrade/lit-datatable';
+import '@google-web-components/google-chart';
 
 export function DataViews(base) {
     return class extends TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(AuditFunctions(ButtonsFunctions(base))))))))))) {
@@ -98,7 +99,7 @@ export function DataViews(base) {
         // console.log('jsonViewer', 'elem', elem, 'data', data, 'dataToDisplay', data[elem.endPointResponseObject])
         return html`
         <div style="position:relative;">
-            ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title}</span>`}
+            ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title["label_"+this.lang]}</span>`}
             ${elem===undefined||data===undefined ? nothing :  html` 
                 <json-viewer style="padding:0px; padding-left:20px; top:-15px;">${JSON.stringify(this.getDataFromRoot(elem, data))}</json-viewer>`
             }
@@ -364,6 +365,7 @@ export function DataViews(base) {
           .styled-table-bygroup thead tr headercolumns{
             background-color: 2989d870;
             color: white;
+            font-weight: bold;
           }          
 
           .styled-table-bygroup th {
@@ -373,12 +375,18 @@ export function DataViews(base) {
             color: white;
             background-color: #2989d8;
           }
-          .styled-table-bygroup td {
+          .styled-table-bygroup td groupheader {
             color: rgba(0, 0, 0, 0.71); 
             padding: 8px 15px;
             border: 1px solid #c2edf9;
             word-break: break-all;  
             font-weight: bold;         
+          }  
+          .styled-table-bygroup td {
+            color: rgba(0, 0, 0, 0.71); 
+            padding: 8px 15px;
+            border: 1px solid #c2edf9;
+            word-break: break-all;              
           }  
           .styled-table-bygroup tbody tr {
             border-bottom: 1px solid #c2edf9;
@@ -430,7 +438,7 @@ export function DataViews(base) {
                       ${elem.columns.map(fld =>
                       html`
                         ${this.fieldsToDiscard(fld) === true ? nothing :
-                          html`<td style="background-color:#7ccee6; color: white;">${fld["label_"+ this.lang]}</td>`
+                          html`<td style="background-color:#7ccee6; color: white; font-weight: bold;">${fld["label_"+ this.lang]}</td>`
                         }
                       `)}                  
                     </tr>
@@ -546,7 +554,7 @@ export function DataViews(base) {
             padding: 8px 15px;
             border: 1px solid #c2edf9;
             word-break: break-all;  
-            font-weight: bold;         
+            font-size:1.6vmin;                        
           }  
           .styled-table tbody tr {
             border-bottom: 1px solid #c2edf9;
@@ -663,7 +671,7 @@ export function DataViews(base) {
         }        
 
         rolesAndActions(elem, dataArr, isSecondLevel = false, lang) {
-          console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
+          //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
           return html`
           <style>
           .styled-table-for-rolesandactions {
@@ -701,8 +709,8 @@ export function DataViews(base) {
             color: rgba(0, 0, 0, 0.71); 
             padding: 8px 15px;
             border: 1px solid #c2edf9;
-            word-break: break-all;  
-            font-weight: bold;         
+            word-break: break-all; 
+            font-size:1.8vmin;             
           }           
           .styled-table-for-rolesandactions td.present {
             text-align: center;
@@ -732,14 +740,12 @@ export function DataViews(base) {
           .styled-table-for-rolesandactions tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
           }      
-          .styled-table-for-rolesandactions tbody tr.active-row {
-            font-weight: bold;
+          .styled-table-for-rolesandactions tbody tr.active-row {            
             color: #009879;
           }  
 
       
-          .styled-table-for-rolesandactions tbody tr.active-row {
-            font-weight: bold;
+          .styled-table-for-rolesandactions tbody tr.active-row {            
             color: #009879;
           }  
           span.cardLabel {
@@ -767,14 +773,14 @@ export function DataViews(base) {
             <table class="styled-table-for-rolesandactions">
               <thead>          
                 <tr>
-                ${dataArr===undefined||dataArr[0]===undefined ? nothing : 
+                ${dataArr===undefined||dataArr[0]===undefined ? html`${this.lang=="en"?"Not applicable":"No aplica"}` : 
                   html`
                   ${dataArr[0].map(fld =>
                     html`
                     ${typeof fld === 'object' ?
-                    html`${this.fieldsToDiscard(fld) === true ? nothing :html`<th style="text-align: center;">${fld.label}</th>`}
+                    html`${this.fieldsToDiscard(fld) === true ? nothing :html`<th style="text-align: center; color:white;">${fld.label}</th>`}
                     `:html`
-                    <th style="text-align: center;">${fld}</th>
+                    <th style="text-align: center; color:white;">${fld}</th>
                     `}
                     `
                   )} 
@@ -795,7 +801,7 @@ export function DataViews(base) {
                         html`
                           ${typeof dataArr[0][iCol] === 'object' ? 
                           html`
-                            ${this.fieldsToDiscard(dataArr[0][iCol]) === true ? nothing : html`<th>${fld}</th>`}
+                            ${this.fieldsToDiscard(dataArr[0][iCol]) === true ? nothing : html`<th style="font-size: 1.6vmin; font-weight: unset; font-family: sans-serif;">${fld}</th>`}
                           `: html `<th>${fld}</th>`
                         }`
                         : 
