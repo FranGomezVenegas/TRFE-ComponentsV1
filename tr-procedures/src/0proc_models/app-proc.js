@@ -1,7 +1,10 @@
-export const AppProc = {
+export const AppProc ={
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20230321",
+	  "last change on (YYYYMMDD)": "20230710",
+	  "last_change_note_20230710": "Added new view, EventsCalendar",
+	  "last_change_note_20230708": "InsturmentView window created to search instruments and show its information/events",
+	  "last_change_note_20230522": "Families changed to suits better names, therefore model windows have been changed to suit them too",
 	  "last_change_note_20230321": "Responsible and Responsible_backup lists added to NEW_INSTRUMENT",
 	  "last_change_note_20230226": "Added responsible and responsible_backup to the fieldName/Value argument",
 	  "last_change_note_20230202": "Endpoint Params added for REOPEN_EVENT",
@@ -18,14 +21,142 @@ export const AppProc = {
 	  "last_change_note_20220922": "Modified Decomission and Undecommision button for Instruments",
 	  "last_change_note": "replace whenDisabled by requiresGridItemSelected",
 	  "last change note_20220918": "fixed about some endpoints still using the old naming convention, frontend instead of the new one, actions/queries"
-  },	
+  },
   "ModuleSettings":{
 	  "actionsEndpoints":[
 		{ "name": "Instruments" , "url" : "/app/procs/InstrumentsAPIactions"}
 	  ],
 	  "queriesEndpoints":[
-		{ "name": "InventoryLot" , "url" : "/app/procs/InstrumentsAPIqueries"}
+		{ "name": "Instruments" , "url" : "/app/procs/InstrumentsAPIqueries"}
 	  ]
+  },
+  "InstrumentView": {
+    "component": "ObjectByTabs",
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Instrument view",
+      "fix_text_es": "Visor de Instrumentos",
+      "name": "name --- puede que sea instrument_name o instrument" 
+    },
+    "viewQuery": {
+      "actionName": "GET_INSTRUMENT_INFO",
+	  "notUseGrid": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        {
+          "argumentName": "instrumentName",
+          "element": "text1"
+        }
+      ]
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+      {
+        "text1": {
+          "label_en": "Instrument to get",
+          "label_es": "Instrumento a cargar",
+          "fixValue": "res_230323"
+        }
+      }
+    ],
+    "filter_results": {
+      "type": "readOnlyTable",
+      "title": "3.4) Menu Definition",
+      "endPointResponseObject": "user_requirements_events",
+      "columns": [
+        {
+          "name": "id",
+          "label_en": "Id",
+          "label_es": "Id"
+        }
+      ]
+    },
+    "actions": [],
+    "tabs": [
+      { "tabLabel_en": "Summary",
+        "tabLabel_es": "Inicio",
+        "view": "summary",
+        "view_definition": [
+          { "type": "readOnlyTable",
+            "endPointResponseObject": "instruments",
+            "title": {
+              "label_en": "Instrument Info",
+              "label_es": "Información del Instrumento"
+            },
+            "subtitle": {
+              "label_en": "Instrument Info",
+              "label_es": "Información del Instrumento"
+            },
+            "fieldsToDisplay": [
+              {"name": "name",
+                "label_en": "Instrument",
+                "label_es": "Instrumento"
+              },
+              {"name": "family",
+                "label_en": "Instrument Family",
+                "label_es": "Familia del instrumento"
+              },
+              {"name": "responsible",
+                "label_en": "Responsible",
+                "label_es": "Responsable"
+              },
+              { "name": "responsible_backup",   
+                "label_en": "Responsible backup",
+                "label_es": "Segundo responsable"
+              }
+            ],
+            "actions": []
+          }
+		]
+      },
+	  { "tabLabel_en": "Instrument events",
+        "tabLabel_es": "Eventos del instrumento",
+        "view": "inst_event",
+        "view_definition": [
+          { "type": "cardSomeElementsSingleObject",
+            "endPointResponseObject": "instrument_event",
+            "title": {
+              "label_en": "Instrument Events",
+              "label_es": "Eventos del Instrumento"
+            },
+            "subtitle": {
+              "label_en": "Instrument Events",
+              "label_es": "Eventos del Instrumento"
+            },
+            "fieldsToDisplay": [
+              {"name": "id",
+                "label_en": "Instrument Id",
+                "label_es": "Id del instrumento"
+              },
+              {"name": "event_type",
+                "label_en": "Event Type",
+                "label_es": "Tipo de evento"
+              },
+              {"name": "decision",
+                "label_en": "Decision",
+                "label_es": "Decisión"
+              },
+              { "name": "completed_on",   
+                "label_en": "Completed On",
+                "label_es": "Completado en"
+              }
+            ],
+            "actions": []
+          }
+		]
+      }
+    ]
   },
   "PlatformInstruments": {
 	"component": "TableWithButtons",
@@ -47,7 +178,7 @@ export const AppProc = {
           "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
         },
         "model_number": {
-          "label_en": "Model N.", "label_es": "N. Modelo", "sort": false, "filter": true, "width": "10%"
+          "label_en": "Model", "label_es": "Modelo", "sort": false, "filter": true, "width": "10%"
         },
         "serial_number": {
           "label_en": "Serial N.", "label_es": "N. Serie", "sort": false, "filter": true, "width": "10%"
@@ -105,7 +236,7 @@ export const AppProc = {
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
 		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true, "notAddWhenValueIsBlank": true, "isAdhocField": true},
 		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true, "notAddWhenValueIsBlank": true, "isAdhocField": true},
-          { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
+          { "argumentName": "poDate", "element": "date1", "defaultValue": "", "optional": true },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
         "button": {
@@ -121,16 +252,15 @@ export const AppProc = {
 			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
 			{"list1": { 
               "items": [
-                { "keyName": "familyCorrecto", "keyValue_en": "Correct", "keyValue_es": "Correcto" },
-                { "keyName": "familyIntentObs", "keyValue_en": "Attempt-Obs", "keyValue_es": "Intent-Obs" },
-                { "keyName": "familyObsCorrecto", "keyValue_en": "Correct-Obs", "keyValue_es": "Correcto-Obs" },
-                { "keyName": "familyObsIntentosCorrecto", "keyValue_en": "Corr-Attempt-Obs", "keyValue_es": "Corr-Intent-Obs" },
-                { "keyName": "familyObsIntentoCorrectoTerminado", "keyValue_en": "Corr-Attempt-Obs-End", "keyValue_es": "Corr-Intent-Obs-Term" }
+                { "keyName": "Balanzas", "keyValue_en": "Balances", "keyValue_es": "Balanzas" },
+                { "keyName": "CG", "keyValue_en": "CG", "keyValue_es": "CG" },
+                { "keyName": "HPLC", "keyValue_en": "HPLC", "keyValue_es": "HPLC" },
+                { "keyName": "UPLC", "keyValue_en": "UPLC", "keyValue_es": "UPLC" }
               ],    
               "label_en": "Family", "label_es": "Familia", "optional": true,
 			  "addBlankValueOnTop": true
             }},
-            {"text2": { "label_en": "Model Number", "label_es": "Modelo" }},
+            {"text2": { "label_en": "Model", "label_es": "Modelo" }},
 			{"list2": { 
               "items": [
                 { "keyName": "LEICA", "keyValue_en": "Leica Biosystems", "keyValue_es": "Leica Biosystems" },                
@@ -170,7 +300,6 @@ export const AppProc = {
 			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
 			  ],
 			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
-			  "disableUntilFieldsEntered":["list4"],
 			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
 			  "valuesFromMasterData": {
 				"elementName":"list5",
@@ -179,7 +308,7 @@ export const AppProc = {
 			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
 			  }			
 			}},
-            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
+            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra", "optional": true }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
         }
@@ -363,13 +492,13 @@ export const AppProc = {
       }
     ]
   },
-  "PlatformInstrumentsfamilyCorrecto": {
+  "PlatformInstrumentsBalanzas": {
 	"component": "TableWithButtons",
     "langConfig": {
       "title": {
-        "InstrumentsListFamilyCorrecto": {
-          "label_en": "Active Instruments FamilyCorrecto",
-          "label_es": "Instrumentos activos de FamilyCorrecto"
+        "InstrumentsListBalanzas": {
+          "label_en": "Active Instruments Balances",
+          "label_es": "Instrumentos activos de Balanzas"
         }
       },
       "gridHeader": {
@@ -383,7 +512,7 @@ export const AppProc = {
           "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
         },
         "model_number": {
-          "label_en": "Model N.", "label_es": "N. Modelo", "sort": false, "filter": true, "width": "10%"
+          "label_en": "Model", "label_es": "Modelo", "sort": false, "filter": true, "width": "10%"
         },
         "serial_number": {
           "label_en": "Serial N.", "label_es": "N. Serie", "sort": false, "filter": true, "width": "10%"
@@ -420,7 +549,7 @@ export const AppProc = {
     "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
 	  "endPointParams": [
-          { "argumentName": "familyName", "fixValue": "familyCorrecto"}
+          { "argumentName": "familyName", "fixValue": "Balanzas"}
       ],
       "addRefreshButton": true,
       "button": {
@@ -436,14 +565,14 @@ export const AppProc = {
 		"requiresDialog": true,
         "endPointParams": [
           { "argumentName": "instrumentName", "element": "text1", "defaultValue": "" },
-          { "argumentName": "familyName", "fixValue": "familyCorrecto"},
+          { "argumentName": "familyName", "fixValue": "Balanzas"},
           { "argumentName": "modelNumber", "element": "text2", "defaultValue": "" },
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
 		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
 		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
-          { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
+          { "argumentName": "poDate", "element": "date1", "defaultValue": "", "optional": true },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
         "button": {
@@ -457,7 +586,7 @@ export const AppProc = {
           "name": "genericDialog",
           "fields": [
 			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
-            {"text2": { "label_en": "Model Number", "label_es": "Modelo" }},
+            {"text2": { "label_en": "Model", "label_es": "Modelo" }},
 			{"list2": { 
               "items": [
                 { "keyName": "LEICA", "keyValue_en": "Leica Biosystems", "keyValue_es": "Leica Biosystems" },                
@@ -497,7 +626,7 @@ export const AppProc = {
 			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
 			  ],
 			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
-			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false, 
 			  "valuesFromMasterData": {
 				"elementName":"list5",
 				"propertyNameContainer": "users",
@@ -505,7 +634,7 @@ export const AppProc = {
 			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
 			  }			
 			}},
-            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
+            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra", "optional": true }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
         }
@@ -683,679 +812,23 @@ export const AppProc = {
 				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 },
 				{ "argumentName": "family", "fixValue": "familyCorrecto"}
 			  ]
-		  },
-          "action": [            
-          ]
+		  }
         }
       }
     ]
   },
-  "PlatformInstrumentsfamilyIntentObs": {
-	"component": "TableWithButtons",
-    "langConfig": {
-      "title": {
-        "InstrumentsListfamilyIntentObs": {
-          "label_en": "Active Instruments familyIntentObs",
-          "label_es": "Instrumentos activos de familyIntentObs"
-        }
-      },
-      "gridHeader": {
-        "name": {
-          "label_en": "Name", "label_es": "Nombre", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
-        },
-        "family": {
-          "label_en": "Family", "label_es": "Familia", "sort": false, "filter": true, "is_icon": false, "width": "20%"
-        },
-        "on_line": {
-          "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
-        },
-        "model_number": {
-          "label_en": "Model N.", "label_es": "N. Modelo", "sort": false, "filter": true, "width": "10%"
-        },
-        "serial_number": {
-          "label_en": "Serial N.", "label_es": "N. Serie", "sort": false, "filter": true, "width": "10%"
-        },
-        "supplier": {
-          "label_en": "Supplier", "label_es": "Proveedor", "sort": false, "filter": true, "width": "10%"
-        },
-        "manufacturer": {
-          "label_en": "Manufacturer", "label_es": "fabricante", "sort": false, "filter": true, "width": "10%"
-        },
-        "created_on": {
-          "label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-		"is_locked": {
-          "label_en": "Is locked?", "label_es": "¿Bloqueado?", "sort": false, "filter": false, "is_icon": false, "width": "10%"
-       },
-        "detail": {
-          "label_en": "Detail", "label_es": "Detalle", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "last_calibration": {
-          "label_en": "Last Cal", "label_es": "Última Cal", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "next_calibration": {
-          "label_en": "Next Cal", "label_es": "Próxima Cal", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "last_prev_maint": {
-          "label_en": "Last PM", "label_es": "Último MP", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "next_prev_maint": {
-          "label_en": "Next PM", "label_es": "Próximo MP", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        }
-      }
-    },
-    "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
-      "endPoint": "/app/procs/InstrumentsAPIqueries",
-	  "endPointParams": [
-          { "argumentName": "familyName", "fixValue": "familyIntentObs"}
-      ],
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
-        "title": {
-          "label_en": "Reload", "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": true
-      }
-    },
-    "actions": [
-		{"actionName": "NEW_INSTRUMENT",
-		"requiresDialog": true,
-        "endPointParams": [
-          { "argumentName": "instrumentName", "element": "text1", "defaultValue": "" },
-          { "argumentName": "familyName", "fixValue": "familyIntentObs"},
-          { "argumentName": "modelNumber", "element": "text2", "defaultValue": "" },
-          { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
-          { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
-          { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
-		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
-		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
-          { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
-          { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
-        ],
-        "button": {
-          "icon": "create_new_folder",
-          "title": {
-            "label_en": "New", "label_es": "Nuevo"
-          },
-          "requiresGridItemSelected": false
-        },
-        "dialogInfo": {          
-          "name": "genericDialog",
-          "fields": [
-			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
-            {"text2": { "label_en": "Model Number", "label_es": "Modelo" }},
-			{"list2": { 
-              "items": [
-                { "keyName": "LEICA", "keyValue_en": "Leica Biosystems", "keyValue_es": "Leica Biosystems" },                
-                { "keyName": "PB INSTRUMENTS", "keyValue_en": "PB Instruments", "keyValue_es": "PB Instruments" },                
-                { "keyName": "METTLER", "keyValue_en": "Mettler Toledo", "keyValue_es": "Mettler Toledo" },
-                { "keyName": "PERKIN ELMER", "keyValue_en": "Perkin Elmer", "keyValue_es": "Perkin Elmer" },
-                { "keyName": "AGILENT", "keyValue_en": "Agilent", "keyValue_es": "Agilent" },
-                { "keyName": "WATERS", "keyValue_en": "Waters", "keyValue_es": "Water" }
-              ],    
-              "label_en": "Supplier", "label_es": "Proveedor" 
-            }},
-            {"text3": { "label_en": "Serial Number", "label_es": "Número de Serie" }},
-			{"list3": { 
-              "items": [
-                { "keyName": "METTLER", "keyValue_en": "Mettler Toledo", "keyValue_es": "Mettler Toledo" },
-                { "keyName": "PERKIN ELMER", "keyValue_en": "Perkin Elmer", "keyValue_es": "Perkin Elmer" },
-                { "keyName": "AGILENT", "keyValue_en": "Agilent", "keyValue_es": "Agilent" },
-                { "keyName": "WATERS", "keyValue_en": "Waters", "keyValue_es": "Water" }               
-              ],    
-              "label_en": "ManufacturerName", "label_es": "Fabricante" 
-            }},
-			{"list4": {
-			  "items": [
-			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
-			  ],
-			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
-			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-			  "valuesFromMasterData": {
-				"elementName":"list4",
-				"propertyNameContainer": "users",
-				"propertyNameContainerLevelPropertyKeyName": "user",
-			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
-			  }			
-			}},
-			{"list5": {
-			  "items": [
-			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
-			  ],
-			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
-			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-			  "valuesFromMasterData": {
-				"elementName":"list5",
-				"propertyNameContainer": "users",
-				"propertyNameContainerLevelPropertyKeyName": "user",
-			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
-			  }			
-			}},
-            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
-			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
-          ]
-        }
-      },
-		{"actionName": "INSTRUMENT_AUDIT_FOR_GIVEN_INSTRUMENT",	  
-		"requiresDialog": true,
-		"endPoint": "/app/procs/InstrumentsAPIqueries",
-        "button": {
-          "icon": "rule",
-          "title": {
-            "label_en": "Instrument Audit", "label_es": "Auditoría de Instrumento"
-          },
-          "requiresGridItemSelected": true
-        },
-        "clientMethod": "getObjectAuditInfo",
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ],        
-        "dialogInfo": { 
-		  "name": "auditDialog",
-          "automatic": true,
-          "action": [
-            {
-              "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
-			  "requiresDialog": false,
-			  "notGetViewData": true,
-			  "secondaryActionToPerform": {
-				  "name": "getObjectAuditInfo",
-				  "endPointParams": [
-					{ "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-				  ]
-			  },
-			  "endPointUrl": "Samples",
-              "clientMethod": "signAudit",
-              "endPointParams": [
-				{ "argumentName": "instrumentName", "selObjectPropertyName": "name" },
-                { "argumentName": "auditId", "targetValue": true }
-              ]
-            }
-          ]
-        }
-      },
-		{"actionName": "TURN_OFF_LINE",
-		"requiresDialog": false,
-        "button": {
-          "img": "deactivate.svg",
-          "title": {
-            "label_en": "Deactivate", "label_es": "Desactivar"
-          },
-          "requiresGridItemSelected": true,
-          "showWhenSelectedItem": {
-            "column": "on_line",
-            "value": true
-          }
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "TURN_ON_LINE",
-		"requiresDialog": false,
-        "button": {
-          "img": "activate.svg",
-          "title": {
-            "label_en": "Activate", "label_es": "Activar"
-          },
-          "requiresGridItemSelected": true,
-          "showWhenSelectedItem": {
-            "column": "on_line",
-            "value": false
-          }
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_CALIBRATION",
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_calibration.svg",
-          "title": {
-            "label_en": "Start Calibration", "label_es": "Iniciar Calibración"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_PREVENTIVE_MAINTENANCE" ,
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_preventive_maintenance.svg",
-          "title": {
-            "label_en": "Start Prev Maint", "label_es": "Iniciar Mant Prev"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_SERVICE",
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_service.svg",
-          "title": {
-            "label_en": "Start Service", "label_es": "Iniciar Servicio"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_VERIFICATION",
-        "endPoint": "/app/procs/InstrumentsAPIactions",     
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_verification.svg",
-          "title": {
-            "label_en": "Start Verification", "label_es": "Iniciar Verificación"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "DECOMMISSION_INSTRUMENT",
-        "endPoint": "/app/procs/InstrumentsAPIactions",     
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ],
-		"requiresDialog": false,
-        "button": {
-          "icon": "alarm_off",
-          "title": {
-            "label_en": "Deactivate", "label_es": "Desactivar"
-          },
-          "requiresGridItemSelected": true
-        }
-      },
-		{"actionName": "UNDECOMMISSION_INSTRUMENT",
-        "endPoint": "/app/procs/InstrumentsAPIactions",  
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ],
-        "clientMethod": "openReactivateObjectDialog",
-        "button": {
-          "icon": "alarm_add",
-          "title": {
-            "label_en": "Activate", "label_es": "Activar"
-          },
-          "requiresGridItemSelected": false
-        },
-		"requiresDialog": true,
-        "dialogInfo": {          
-          "name": "reactivateObjectDialog",
-          "fieldsObject": {
-			"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
-			"objectName": { "label_en": "Instrument to reactivate", "label_es": "Lote de Producción a Reactivar" }
-          },    
-          "listDefinition":{
-            "keyFldName":"name",
-            "eachEntryTextGenerator":[
-              {"value": "Instrument: ", "type":"fix"}, {"value": "name", "type":"field"} 
-            ]
-          },
-		  "viewQuery": {
-			  "actionName": "DECOMISSIONED_INSTRUMENTS_LAST_N_DAYS",
-			  "clientMethod": "getDeactivatedObjects",
-			  "endPoint": "/app/procs/InstrumentsAPIqueries",
-			  "endPointParams": [
-				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 },
-				{ "argumentName": "family", "fixValue": "familyCorrecto"}
-			  ]
-		  },
-          "action": [            
-          ]
-        }
-      }
-    ]
-  },
-  "PlatformInstrumentsfamilyObsCorrecto": {
-	"component": "TableWithButtons",
-    "langConfig": {
-      "title": {
-        "InstrumentsListfamilyObsCorrecto": {
-          "label_en": "Active Instruments familyObsCorrecto",
-          "label_es": "Instrumentos activos de familyObsCorrecto"
-        }
-      },
-      "gridHeader": {
-        "name": {
-          "label_en": "Name", "label_es": "Nombre", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
-        },
-        "family": {
-          "label_en": "Family", "label_es": "Familia", "sort": false, "filter": true, "is_icon": false, "width": "20%"
-        },
-        "on_line": {
-          "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
-        },
-        "model_number": {
-          "label_en": "Model N.", "label_es": "N. Modelo", "sort": false, "filter": true, "width": "10%"
-        },
-        "serial_number": {
-          "label_en": "Serial N.", "label_es": "N. Serie", "sort": false, "filter": true, "width": "10%"
-        },
-        "supplier": {
-          "label_en": "Supplier", "label_es": "Proveedor", "sort": false, "filter": true, "width": "10%"
-        },
-        "manufacturer": {
-          "label_en": "Manufacturer", "label_es": "fabricante", "sort": false, "filter": true, "width": "10%"
-        },
-        "created_on": {
-          "label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-		"is_locked": {
-          "label_en": "Is locked?", "label_es": "¿Bloqueado?", "sort": false, "filter": false, "is_icon": false, "width": "10%"
-       },
-        "detail": {
-          "label_en": "Detail", "label_es": "Detalle", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "last_calibration": {
-          "label_en": "Last Cal", "label_es": "Última Cal", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "next_calibration": {
-          "label_en": "Next Cal", "label_es": "Próxima Cal", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "last_prev_maint": {
-          "label_en": "Last PM", "label_es": "Último MP", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        },
-        "next_prev_maint": {
-          "label_en": "Next PM", "label_es": "Próximo MP", "sort": false, "filter": true, "is_icon": false, "width": "10%"
-        }
-      }
-    },
-    "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
-      "endPoint": "/app/procs/InstrumentsAPIqueries",
-	  "endPointParams": [
-          { "argumentName": "familyName", "fixValue": "familyObsCorrecto"}
-      ],
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
-        "title": {
-          "label_en": "Reload", "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": true
-      }
-    },
-    "actions": [
-		{"actionName": "NEW_INSTRUMENT",
-		"requiresDialog": true,
-        "endPointParams": [
-          { "argumentName": "instrumentName", "element": "text1", "defaultValue": "" },
-          { "argumentName": "familyName", "fixValue": "familyObsCorrecto"},
-          { "argumentName": "modelNumber", "element": "text2", "defaultValue": "" },
-          { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
-          { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
-          { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
-		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
-		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
-          { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
-          { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
-        ],
-        "button": {
-          "icon": "create_new_folder",
-          "title": {
-            "label_en": "New", "label_es": "Nuevo"
-          },
-          "requiresGridItemSelected": false
-        },
-        "dialogInfo": {          
-          "name": "genericDialog",
-          "fields": [
-			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
-            {"text2": { "label_en": "Model Number", "label_es": "Modelo" }},
-			{"list2": { 
-              "items": [
-                { "keyName": "LEICA", "keyValue_en": "Leica Biosystems", "keyValue_es": "Leica Biosystems" },                
-                { "keyName": "PB INSTRUMENTS", "keyValue_en": "PB Instruments", "keyValue_es": "PB Instruments" },                
-                { "keyName": "METTLER", "keyValue_en": "Mettler Toledo", "keyValue_es": "Mettler Toledo" },
-                { "keyName": "PERKIN ELMER", "keyValue_en": "Perkin Elmer", "keyValue_es": "Perkin Elmer" },
-                { "keyName": "AGILENT", "keyValue_en": "Agilent", "keyValue_es": "Agilent" },
-                { "keyName": "WATERS", "keyValue_en": "Waters", "keyValue_es": "Water" }
-              ],    
-              "label_en": "Supplier", "label_es": "Proveedor" 
-            }},
-            {"text3": { "label_en": "Serial Number", "label_es": "Número de Serie" }},
-			{"list3": { 
-              "items": [
-                { "keyName": "METTLER", "keyValue_en": "Mettler Toledo", "keyValue_es": "Mettler Toledo" },
-                { "keyName": "PERKIN ELMER", "keyValue_en": "Perkin Elmer", "keyValue_es": "Perkin Elmer" },
-                { "keyName": "AGILENT", "keyValue_en": "Agilent", "keyValue_es": "Agilent" },
-                { "keyName": "WATERS", "keyValue_en": "Waters", "keyValue_es": "Water" }               
-              ],    
-              "label_en": "ManufacturerName", "label_es": "Fabricante" 
-            }},
-			{"list4": {
-			  "items": [
-			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
-			  ],
-			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
-			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-			  "valuesFromMasterData": {
-				"elementName":"list4",
-				"propertyNameContainer": "users",
-				"propertyNameContainerLevelPropertyKeyName": "user",
-			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
-			  }			
-			}},
-			{"list5": {
-			  "items": [
-			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
-			  ],
-			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
-			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-			  "valuesFromMasterData": {
-				"elementName":"list5",
-				"propertyNameContainer": "users",
-				"propertyNameContainerLevelPropertyKeyName": "user",
-			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
-			  }			
-			}},
-            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
-			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
-          ]
-        }
-      },
-		{"actionName": "INSTRUMENT_AUDIT_FOR_GIVEN_INSTRUMENT",	  
-		"requiresDialog": true,
-		"endPoint": "/app/procs/InstrumentsAPIqueries",
-        "button": {
-          "icon": "rule",
-          "title": {
-            "label_en": "Instrument Audit", "label_es": "Auditoría de Instrumento"
-          },
-          "requiresGridItemSelected": true
-        },
-        "clientMethod": "getObjectAuditInfo",
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ],        
-        "dialogInfo": { 
-		  "name": "auditDialog",
-          "automatic": true,
-          "action": [
-            {
-              "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
-			  "requiresDialog": false,
-			  "notGetViewData": true,
-			  "secondaryActionToPerform": {
-				  "name": "getObjectAuditInfo",
-				  "endPointParams": [
-					{ "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-				  ]
-			  },
-			  "endPointUrl": "Samples",
-              "clientMethod": "signAudit",
-              "endPointParams": [
-				{ "argumentName": "instrumentName", "selObjectPropertyName": "name" },
-                { "argumentName": "auditId", "targetValue": true }
-              ]
-            }
-          ]
-        }
-      },
-		{"actionName": "TURN_OFF_LINE",
-		"requiresDialog": false,
-        "button": {
-          "img": "deactivate.svg",
-          "title": {
-            "label_en": "Deactivate", "label_es": "Desactivar"
-          },
-          "requiresGridItemSelected": true,
-          "showWhenSelectedItem": {
-            "column": "on_line",
-            "value": true
-          }
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "TURN_ON_LINE",
-		"requiresDialog": false,
-        "button": {
-          "img": "activate.svg",
-          "title": {
-            "label_en": "Activate", "label_es": "Activar"
-          },
-          "requiresGridItemSelected": true,
-          "showWhenSelectedItem": {
-            "column": "on_line",
-            "value": false
-          }
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_CALIBRATION",
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_calibration.svg",
-          "title": {
-            "label_en": "Start Calibration", "label_es": "Iniciar Calibración"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_PREVENTIVE_MAINTENANCE" ,
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_preventive_maintenance.svg",
-          "title": {
-            "label_en": "Start Prev Maint", "label_es": "Iniciar Mant Prev"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_SERVICE",
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_service.svg",
-          "title": {
-            "label_en": "Start Service", "label_es": "Iniciar Servicio"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "START_VERIFICATION",
-        "endPoint": "/app/procs/InstrumentsAPIactions",     
-		"requiresDialog": false,
-        "button": {
-          "img": "inst_ev_type_verification.svg",
-          "title": {
-            "label_en": "Start Verification", "label_es": "Iniciar Verificación"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ]
-      },
-		{"actionName": "DECOMMISSION_INSTRUMENT",
-        "endPoint": "/app/procs/InstrumentsAPIactions",     
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ],
-		"requiresDialog": false,
-        "button": {
-          "icon": "alarm_off",
-          "title": {
-            "label_en": "Deactivate", "label_es": "Desactivar"
-          },
-          "requiresGridItemSelected": true
-        }
-      },
-		{"actionName": "UNDECOMMISSION_INSTRUMENT",
-        "endPoint": "/app/procs/InstrumentsAPIactions",  
-        "endPointParams": [
-          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
-        ],
-        "clientMethod": "openReactivateObjectDialog",
-        "button": {
-          "icon": "alarm_add",
-          "title": {
-            "label_en": "Activate", "label_es": "Activar"
-          },
-          "requiresGridItemSelected": false
-        },
-		"requiresDialog": true,
-        "dialogInfo": {          
-          "name": "reactivateObjectDialog",
-          "fieldsObject": {
-			"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
-			"objectName": { "label_en": "Instrument to reactivate", "label_es": "Lote de Producción a Reactivar" }
-          },    
-          "listDefinition":{
-            "keyFldName":"name",
-            "eachEntryTextGenerator":[
-              {"value": "Instrument: ", "type":"fix"}, {"value": "name", "type":"field"} 
-            ]
-          },
-		  "viewQuery": {
-			  "actionName": "DECOMISSIONED_INSTRUMENTS_LAST_N_DAYS",
-			  "clientMethod": "getDeactivatedObjects",
-			  "endPoint": "/app/procs/InstrumentsAPIqueries",
-			  "endPointParams": [
-				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 },
-				{ "argumentName": "family", "fixValue": "familyCorrecto"}
-			  ]
-		  },
-          "action": [            
-          ]
-        }
-      }
-    ]
-  },
-  "PlatformInstrumentsfamilyObsIntento": {
+  "PlatformInstrumentsHPLC-UPLC": {
 	"component": "Tabs",
 	"tabs": [
 	{"component": "TableWithButtons",
     "langConfig": {
 	  "tab": {
-          "label_en": "Active Instruments familyObsIntentoCorrectoTerminado", 
-          "label_es": "Instrumentos activos de familyObsIntentoCorrectoTerminado"
+          "label_en": "Active Instruments HPLC", 
+          "label_es": "Instrumentos activos de HPLC"
       },
       "title": {
-          "label_en": "Active Instruments familyObsIntentoCorrectoTerminado",
-          "label_es": "Instrumentos activos de familyObsIntentoCorrectoTerminado"
+          "label_en": "Active Instruments HPLC",
+          "label_es": "Instrumentos activos de HPLC"
       },
       "gridHeader": {
         "name": {
@@ -1368,7 +841,7 @@ export const AppProc = {
           "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
         },
         "model_number": {
-          "label_en": "Model N.", "label_es": "N. Modelo", "sort": false, "filter": true, "width": "10%"
+          "label_en": "Model", "label_es": "Modelo", "sort": false, "filter": true, "width": "10%"
         },
         "serial_number": {
           "label_en": "Serial N.", "label_es": "N. Serie", "sort": false, "filter": true, "width": "10%"
@@ -1405,7 +878,7 @@ export const AppProc = {
     "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
 	  "endPointParams": [
-          { "argumentName": "familyName", "fixValue": "familyObsIntentoCorrectoTerminado"}
+          { "argumentName": "familyName", "fixValue": "HPLC"}
       ],
       "addRefreshButton": true,
       "button": {
@@ -1421,14 +894,14 @@ export const AppProc = {
 		"requiresDialog": true,
         "endPointParams": [
           { "argumentName": "instrumentName", "element": "text1", "defaultValue": "" },
-          { "argumentName": "familyName", "fixValue": "familyObsIntentoCorrectoTerminado"},
+          { "argumentName": "familyName", "fixValue": "HPLC"},
           { "argumentName": "modelNumber", "element": "text2", "defaultValue": "" },
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
 		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
 		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
-          { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
+          { "argumentName": "poDate", "element": "date1", "defaultValue": "", "optional": true },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
         "button": {
@@ -1442,7 +915,7 @@ export const AppProc = {
           "name": "genericDialog",
           "fields": [
 			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
-            {"text2": { "label_en": "Model Number", "label_es": "Modelo" }},
+            {"text2": { "label_en": "Model", "label_es": "Modelo" }},
 			{"list2": { 
               "items": [
                 { "keyName": "LEICA", "keyValue_en": "Leica Biosystems", "keyValue_es": "Leica Biosystems" },                
@@ -1490,7 +963,7 @@ export const AppProc = {
 			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
 			  }			
 			}},
-            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
+            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra", "optional": true }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
         }
@@ -1678,12 +1151,12 @@ export const AppProc = {
 	{"component": "TableWithButtons",
     "langConfig": {
 	  "tab": {
-          "label_en": "Active Instruments familyObsIntentosCorrecto", 
-          "label_es": "Instrumentos activos de familyObsIntentosCorrecto"
+          "label_en": "Active Instruments UPLC", 
+          "label_es": "Instrumentos activos de UPLC"
       },
       "title": {
-          "label_en": "Active Instruments familyObsIntentosCorrecto",
-          "label_es": "Instrumentos activos de familyObsIntentosCorrecto"
+          "label_en": "Active Instruments UPLC",
+          "label_es": "Instrumentos activos de UPLC"
       },
       "gridHeader": {
         "name": {
@@ -1696,7 +1169,7 @@ export const AppProc = {
           "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
         },
         "model_number": {
-          "label_en": "Model N.", "label_es": "N. Modelo", "sort": false, "filter": true, "width": "10%"
+          "label_en": "Model", "label_es": "Modelo", "sort": false, "filter": true, "width": "10%"
         },
         "serial_number": {
           "label_en": "Serial N.", "label_es": "N. Serie", "sort": false, "filter": true, "width": "10%"
@@ -1733,7 +1206,7 @@ export const AppProc = {
     "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
 	  "endPointParams": [
-          { "argumentName": "familyName", "fixValue": "familyObsIntentosCorrecto"}
+          { "argumentName": "familyName", "fixValue": "UPLC"}
       ],
       "addRefreshButton": true,
       "button": {
@@ -1749,14 +1222,14 @@ export const AppProc = {
 		"requiresDialog": true,
         "endPointParams": [
           { "argumentName": "instrumentName", "element": "text1", "defaultValue": "" },
-          { "argumentName": "familyName", "fixValue": "familyObsIntentosCorrecto"},
+          { "argumentName": "familyName", "fixValue": "UPLC"},
           { "argumentName": "modelNumber", "element": "text2", "defaultValue": "" },
           { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
           { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
           { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
 		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true },
 		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true },
-          { "argumentName": "poDate", "element": "date1", "defaultValue": "" },
+          { "argumentName": "poDate", "element": "date1", "defaultValue": "", "optional": true },
           { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
         ],
         "button": {
@@ -1770,7 +1243,7 @@ export const AppProc = {
           "name": "genericDialog",
           "fields": [
 			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
-            {"text2": { "label_en": "Model Number", "label_es": "Modelo" }},
+            {"text2": { "label_en": "Model", "label_es": "Modelo" }},
 			{"list2": { 
               "items": [
                 { "keyName": "LEICA", "keyValue_en": "Leica Biosystems", "keyValue_es": "Leica Biosystems" },                
@@ -1818,7 +1291,7 @@ export const AppProc = {
 			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
 			  }			
 			}},
-            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra" }},
+            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra", "optional": true }},
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
         }
@@ -2003,6 +1476,331 @@ export const AppProc = {
 	}
    ]
   }, 
+  "PlatformInstrumentsCG": {
+	"component": "TableWithButtons",
+    "langConfig": {
+      "title": {
+        "InstrumentsListCG": {
+          "label_en": "Active Instruments CG",
+          "label_es": "Instrumentos activos de CG"
+        }
+      },
+      "gridHeader": {
+        "name": {
+          "label_en": "Name", "label_es": "Nombre", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
+        },
+        "family": {
+          "label_en": "Family", "label_es": "Familia", "sort": false, "filter": true, "is_icon": false, "width": "20%"
+        },
+        "on_line": {
+          "label_en": "On Line", "label_es": "En Linea", "sort": false, "filter": true, "is_icon": true, "width": "10%"
+        },
+        "model_number": {
+          "label_en": "Model", "label_es": "Modelo", "sort": false, "filter": true, "width": "10%"
+        },
+        "serial_number": {
+          "label_en": "Serial N.", "label_es": "N. Serie", "sort": false, "filter": true, "width": "10%"
+        },
+        "supplier": {
+          "label_en": "Supplier", "label_es": "Proveedor", "sort": false, "filter": true, "width": "10%"
+        },
+        "manufacturer": {
+          "label_en": "Manufacturer", "label_es": "fabricante", "sort": false, "filter": true, "width": "10%"
+        },
+        "created_on": {
+          "label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"
+        },
+		"is_locked": {
+          "label_en": "Is locked?", "label_es": "¿Bloqueado?", "sort": false, "filter": false, "is_icon": false, "width": "10%"
+       },
+        "detail": {
+          "label_en": "Detail", "label_es": "Detalle", "sort": false, "filter": true, "is_icon": false, "width": "10%"
+        },
+        "last_calibration": {
+          "label_en": "Last Cal", "label_es": "Última Cal", "sort": false, "filter": true, "is_icon": false, "width": "10%"
+        },
+        "next_calibration": {
+          "label_en": "Next Cal", "label_es": "Próxima Cal", "sort": false, "filter": true, "is_icon": false, "width": "10%"
+        },
+        "last_prev_maint": {
+          "label_en": "Last PM", "label_es": "Último MP", "sort": false, "filter": true, "is_icon": false, "width": "10%"
+        },
+        "next_prev_maint": {
+          "label_en": "Next PM", "label_es": "Próximo MP", "sort": false, "filter": true, "is_icon": false, "width": "10%"
+        }
+      }
+    },
+    "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
+      "endPoint": "/app/procs/InstrumentsAPIqueries",
+	  "endPointParams": [
+          { "argumentName": "familyName", "fixValue": "CG"}
+      ],
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload", "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      }
+    },
+    "actions": [
+		{"actionName": "NEW_INSTRUMENT",
+		"requiresDialog": true,
+        "endPointParams": [
+          { "argumentName": "instrumentName", "element": "text1", "defaultValue": "" },
+          { "argumentName": "familyName", "fixValue": "CG"},
+          { "argumentName": "modelNumber", "element": "text2", "defaultValue": "" },
+          { "argumentName": "supplierName", "element": "list2", "defaultValue": "" },
+          { "argumentName": "serialNumber", "element": "text3", "defaultValue": "" },
+          { "argumentName": "manufacturerName", "element": "list3", "defaultValue": "" },
+		  { "argumentName": "responsible", "element": "list4", "defaultValue": "", "addToFieldNameAndValue": true},
+		  { "argumentName": "responsible_backup", "element": "list5", "defaultValue": "", "addToFieldNameAndValue": true},
+          { "argumentName": "poDate", "element": "date1", "defaultValue": "", "optional": true },
+          { "argumentName": "installationDate", "element": "date2", "defaultValue": "" }
+        ],
+        "button": {
+          "icon": "create_new_folder",
+          "title": {
+            "label_en": "New", "label_es": "Nuevo"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {          
+          "name": "genericDialog",
+          "fields": [
+			{"text1": { "label_en": "New Instrument Name", "label_es": "Nombre para nuevo instrumento" }},
+            {"text2": { "label_en": "Model", "label_es": "Modelo" }},
+			{"list2": { 
+              "items": [
+                { "keyName": "LEICA", "keyValue_en": "Leica Biosystems", "keyValue_es": "Leica Biosystems" },                
+                { "keyName": "PB INSTRUMENTS", "keyValue_en": "PB Instruments", "keyValue_es": "PB Instruments" },                
+                { "keyName": "METTLER", "keyValue_en": "Mettler Toledo", "keyValue_es": "Mettler Toledo" },
+                { "keyName": "PERKIN ELMER", "keyValue_en": "Perkin Elmer", "keyValue_es": "Perkin Elmer" },
+                { "keyName": "AGILENT", "keyValue_en": "Agilent", "keyValue_es": "Agilent" },
+                { "keyName": "WATERS", "keyValue_en": "Waters", "keyValue_es": "Water" }
+              ],    
+              "label_en": "Supplier", "label_es": "Proveedor" 
+            }},
+            {"text3": { "label_en": "Serial Number", "label_es": "Número de Serie" }},
+			{"list3": { 
+              "items": [
+                { "keyName": "METTLER", "keyValue_en": "Mettler Toledo", "keyValue_es": "Mettler Toledo" },
+                { "keyName": "PERKIN ELMER", "keyValue_en": "Perkin Elmer", "keyValue_es": "Perkin Elmer" },
+                { "keyName": "AGILENT", "keyValue_en": "Agilent", "keyValue_es": "Agilent" },
+                { "keyName": "WATERS", "keyValue_en": "Waters", "keyValue_es": "Water" }               
+              ],    
+              "label_en": "ManufacturerName", "label_es": "Fabricante" 
+            }},
+			{"list4": {
+			  "items": [
+			  { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+			  ],
+			  "label_en": "Responsible", "label_es": "Responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+			  "valuesFromMasterData": {
+				"elementName":"list4",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+			{"list5": {
+			  "items": [
+			  { "keyName": "responsible_backup", "keyValue_en": "responsible_backup", "keyValue_es": "responsible_backup" }
+			  ],
+			  "label_en": "Responsible Backup", "label_es": "Backup del responsable", "optional": true,
+			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false, 
+			  "valuesFromMasterData": {
+				"elementName":"list5",
+				"propertyNameContainer": "users",
+				"propertyNameContainerLevelPropertyKeyName": "user",
+			    "propertyKeyName": "user", "propertyKeyValueEn": "user", "propertyKeyValueEs": "user"
+			  }			
+			}},
+            {"date1": {"label_en": "Purchase Date", "label_es": "Fecha Compra", "optional": true }},
+			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
+          ]
+        }
+      },
+		{"actionName": "INSTRUMENT_AUDIT_FOR_GIVEN_INSTRUMENT",	  
+		"requiresDialog": true,
+		"endPoint": "/app/procs/InstrumentsAPIqueries",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Instrument Audit", "label_es": "Auditoría de Instrumento"
+          },
+          "requiresGridItemSelected": true
+        },
+        "clientMethod": "getObjectAuditInfo",
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ],        
+        "dialogInfo": { 
+		  "name": "auditDialog",
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+			  "requiresDialog": false,
+			  "notGetViewData": true,
+			  "secondaryActionToPerform": {
+				  "name": "getObjectAuditInfo",
+				  "endPointParams": [
+					{ "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+				  ]
+			  },
+			  "endPointUrl": "Samples",
+              "clientMethod": "signAudit",
+              "endPointParams": [
+				{ "argumentName": "instrumentName", "selObjectPropertyName": "name" },
+                { "argumentName": "auditId", "targetValue": true }
+              ]
+            }
+          ]
+        }
+      },
+		{"actionName": "TURN_OFF_LINE",
+		"requiresDialog": false,
+        "button": {
+          "img": "deactivate.svg",
+          "title": {
+            "label_en": "Deactivate", "label_es": "Desactivar"
+          },
+          "requiresGridItemSelected": true,
+          "showWhenSelectedItem": {
+            "column": "on_line",
+            "value": true
+          }
+        },
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ]
+      },
+		{"actionName": "TURN_ON_LINE",
+		"requiresDialog": false,
+        "button": {
+          "img": "activate.svg",
+          "title": {
+            "label_en": "Activate", "label_es": "Activar"
+          },
+          "requiresGridItemSelected": true,
+          "showWhenSelectedItem": {
+            "column": "on_line",
+            "value": false
+          }
+        },
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ]
+      },
+		{"actionName": "START_CALIBRATION",
+		"requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_calibration.svg",
+          "title": {
+            "label_en": "Start Calibration", "label_es": "Iniciar Calibración"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ]
+      },
+		{"actionName": "START_PREVENTIVE_MAINTENANCE" ,
+		"requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_preventive_maintenance.svg",
+          "title": {
+            "label_en": "Start Prev Maint", "label_es": "Iniciar Mant Prev"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ]
+      },
+		{"actionName": "START_SERVICE",
+		"requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_service.svg",
+          "title": {
+            "label_en": "Start Service", "label_es": "Iniciar Servicio"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ]
+      },
+		{"actionName": "START_VERIFICATION",
+        "endPoint": "/app/procs/InstrumentsAPIactions",     
+		"requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_verification.svg",
+          "title": {
+            "label_en": "Start Verification", "label_es": "Iniciar Verificación"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ]
+      },
+		{"actionName": "DECOMMISSION_INSTRUMENT",
+        "endPoint": "/app/procs/InstrumentsAPIactions",     
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ],
+		"requiresDialog": false,
+        "button": {
+          "icon": "alarm_off",
+          "title": {
+            "label_en": "Deactivate", "label_es": "Desactivar"
+          },
+          "requiresGridItemSelected": true
+        }
+      },
+		{"actionName": "UNDECOMMISSION_INSTRUMENT",
+        "endPoint": "/app/procs/InstrumentsAPIactions",  
+        "endPointParams": [
+          { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
+        ],
+        "clientMethod": "openReactivateObjectDialog",
+        "button": {
+          "icon": "alarm_add",
+          "title": {
+            "label_en": "Activate", "label_es": "Activar"
+          },
+          "requiresGridItemSelected": false
+        },
+		"requiresDialog": true,
+        "dialogInfo": {          
+          "name": "reactivateObjectDialog",
+          "fieldsObject": {
+			"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+			"objectName": { "label_en": "Instrument to reactivate", "label_es": "Lote de Producción a Reactivar" }
+          },    
+          "listDefinition":{
+            "keyFldName":"name",
+            "eachEntryTextGenerator":[
+              {"value": "Instrument: ", "type":"fix"}, {"value": "name", "type":"field"} 
+            ]
+          },
+		  "viewQuery": {
+			  "actionName": "DECOMISSIONED_INSTRUMENTS_LAST_N_DAYS",
+			  "clientMethod": "getDeactivatedObjects",
+			  "endPoint": "/app/procs/InstrumentsAPIqueries",
+			  "endPointParams": [
+				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 },
+				{ "argumentName": "family", "fixValue": "familyCorrecto"}
+			  ]
+		  }
+        }
+      }
+    ]
+  },
   "EventsInProgress": {
 	"component": "TableWithButtons",
     "langConfig": {
@@ -2281,184 +2079,333 @@ export const AppProc = {
 	
   ]
   },
-  "InstrumentReport": {
-	"component": "DataMining",
+  "Deviation": {
+	"component":"Tabs",  
+    "abstract": true,
     "tabs": [
-      { "action": "GET_INSTRUMENT_REPORT",
-        "label_en": "Instrument Report", 
-        "label_es": "Informe de Instrumento", 
-        "filter":{
-          "fixParams": {
+      { "component":"TableWithButtons",  
+        "filter": "pending",
+        "langConfig": {
+          "tab": {
+            "label_en": "Pending Decision", 
+            "label_es": "Decisión pendiente"
           },
-          "filterFields":[
-            {"text1": { "label_en": "Instrument", "label_es": "Instrumento", "default_value": "demoId2"} },
-            {"number1": { "label_en": "Num Days", "label_es": "Num días"}, "default_value": true },
-            {"daterange1":
-              {
-              "dateStart":{ "label_en": "Creation Start Date", "label_es": "Inicio Rango Creación", "default_value": "" },
-              "dateEnd":{ "label_en": "Creation End Date", "label_es": "Fin Rango Creación", "default_value": "" }
-              }
-            },
-            {"daterange2":
-              {
-              "dateStart":{ "label_en": "Closure Start Date", "label_es": "Inicio Rango Cierre", "default_value": "" },
-              "dateEnd":{ "label_en": "Closure End Date", "label_es": "Fin Rango Cierre", "default_value": "" }
-              }
+          "title": {
+            "pending": {
+				"label_en": "Pending Decision", 
+				"label_es": "Decisión pendiente"
             }
-          ],
-          "endPointParams": [
-            {"argumentName": "instrumentName", "element": "text1"},
-            {"argumentName": "creationDayStart", "element": "daterange1dateStart"},
-            {"argumentName": "creationDayEnd", "element": "daterange1dateEnd"},
-            {"argumentName": "closureDayStart", "element": "daterange2dateStart"},
-            {"argumentName": "closureDayEnd", "element": "daterange2dateEnd"}
-          ]      
+          },
+          "gridHeader": {
+            "event_id": {
+              "label_en": "Event Id", "label_es": "Id evento", "sort": false, "filter": true, "width": "10%"
+            },
+            "instrument": {
+              "label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "width": "10%"
+            },
+            "crated_by": {
+              "label_en": "Created By", "label_es": "Creado por", "sort": true, "filter": false, "width": "15%"
+            },
+            "created_on": {
+              "label_en": "Created on", "label_es": "Fecha de creación", "sort": false, "filter": true, "width": "15%"
+            },
+            "object_type": {
+              "label_en": "Object Type", "label_es": "Tipo de objeto", "sort": false, "filter": true, "width": "10%"
+            }
+          }
         },
-        "reportElements":[
-          [
-			{"type": "reportTitle", "title":{"label_en": "Instrument Report", "label_es": "Instrument Report"}}
-          ],
-          [
-			{"type": "cardSomeElementsSingleObject",
-			 "endPointPropertyArray": ["ROOT"],
-			 "num_columns": 4,
-			 "fieldsToDisplay": [
-				{"name": "name", "label_en": "Name", "label_es": "Nombre"},
-				{"name": "model_number"},
-				{"name": "responsible"},
-				{"name": "responsible_backup"},
-				{"name": "manufacturer", "label_en": "Manufacturer", "label_es": "Fabricante"},
-				{"name": "supplier", "label_en": "Supplier", "label_es": "Distribuidor"}
-			 ]
-			}			
-          ],
-          [
-			{"type": "reportTitle", "title":{"label_en": "Family definition", "label_es": "Definición de Familia"}},
-			{"type": "cardSomeElementsSingleObject",
-			 "endPointPropertyArray": ["instruments_family"],
-			 "num_columns": 4,
-			 "fieldsToDisplay": [
-				{"name": "pm_required", "label_en": "Perform PM?", "label_es": "¿Requiere MP?"},
-				{"name": "pm_turn_on_when_completed"},
-				{"name": "pm_variables_set"}
-			 ]
-			}						
-          ],
-          [
-			{"type": "reportTitle", "title":{"label_en": "Calibration Parameters", "label_es": "Parámetros de Calibración"}},
-			{"type": "readOnlyTable",
-			 "endPointPropertyArray": ["instruments_family", "calib_variables_set_detail"],
-			 "num_columns": 4,
-			 "columns": [
-				{"name": "param_name", "label_en": "Parameter", "label_es": "Parámetro"},
-				{"name": "param_type"},
-				{"name": "required"}
-			 ]
-			},
-			{"type": "reportTitle", "title":{"label_en": "Prev. Maint. Parameters", "label_es": "Parámetros de Mant. Prev."}},
-			{"type": "readOnlyTable",
-			 "endPointPropertyArray": ["instruments_family", "pm_variables_set_detail"],
-			 "num_columns": 4,
-			 "columns": [
-				{"name": "param_name", "label_en": "Parameter", "label_es": "Parámetro"},
-				{"name": "param_type"},
-				{"name": "required"}
-			 ]
-			}						
-			
-          ]
-		
+        "viewQuery":{
+            "actionName": "INVESTIGATION_EVENTS_PENDING_DECISION",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "requiresGridItemSelected": true
+            }		
+		},
+		"actions": [
+          {"actionName": "NEW_INVESTIGATION", 
+            "alternativeAPIActionMethod": "newInvestigationAction",
+			"requiresDialog": false,
+            "button": {
+              "title": {
+                "label_en": "Create Investigation", "label_es": "Crear Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+				{ "argumentName": "fieldName", "value": "description" },
+				{ "argumentName": "fieldValue", "targetValue": true },
+				{ "argumentName": "objectsToAdd", "targetValue": true }			
+            ]
+          },
+          {"actionName": "OPEN_INVESTIGATIONS",          
+			"requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "dialogInfo": {
+			"name": "investigationDialog",
+			"subQueryName": "getOpenInvestigations",				
+              "automatic": true,
+              "action": [
+                {
+                  "actionName": "ADD_INVEST_OBJECTS",
+                  "clientMethod": "addInvestObjects",
+                  "endPointParams": [
+                    { "argumentName": "investigationId", "targetValue": true },
+                    { "argumentName": "objectsToAdd", "targetValue": true }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },	
+      { "component":"TableWithButtons",  
+        "filter": "open",
+        "langConfig": {
+          "tab": {
+            "label_en": "Investigations", 
+            "label_es": "Investigaciones"
+          },
+          "title": {
+            "open": {
+              "label_en": "In Progress Investigations", 
+              "label_es": "Investigaciones en curso"
+            }
+          },
+          "fieldText": {
+            "systemName": { "label_en": "System Name", "label_es": "Nombre Sistema" },
+            "systemId": { "label_en": "System Id", "label_es": "Id Sistema" },
+            "capa": { "label_en": "CAPA Required", "label_es": "¿Requiere CAPA?" },
+            "capaName": { "label_en": "CAPA System Name", "label_es": "Nombre Sistema CAPA" },
+            "capaId": { "label_en": "CAPA Id", "label_es": "Id CAPA" }
+          },
+          "gridHeader": {
+            "id": {
+              "label_en": "ID", "label_es": "ID", "width": "12px", "sort": false, "filter": true
+            },
+            "description": {
+              "label_en": "description", "label_es": "description", "width": "20px", "sort": false, "filter": true
+            },
+            "created_on": {
+              "label_en": "Creation", "label_es": "Creación", "width": "30px", "sort": false, "filter": true
+            },
+            "external_system_name": {
+              "label_en": "External System Name", "label_es": "Nombre Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "external_system_id": {
+              "label_en": "External System Id", "label_es": "Id Sistema Externo", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_required": {
+              "label_en": "capa_required", "label_es": "CAPA Necesario", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_name": {
+              "label_en": "CAPA System", "label_es": "Sistema para CAPAs", "width": "20px", "sort": false, "filter": true
+            },
+            "capa_external_system_id": {
+              "label_en": "CAPA System Id", "label_es": "Id en Sistema CAPAs", "width": "20px", "sort": false, "filter": true
+            }
+          }
+        },
+        "viewQuery":{
+            "actionName": "OPEN_INVESTIGATIONS",
+            "button": {
+              "icon": "refresh",
+              "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+              },
+              "requiresGridItemSelected": true
+            }
+		},
+		"actions": [
+          {"actionName": "INVESTIGATION_CAPA_DECISION",			
+			"requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Decision", "label_es": "Decisión"
+              },
+              "requiresGridItemSelected": true
+            },
+            "dialogInfo": {               
+              "name": "decisionDialog"
+            },
+            "endPointParams": [
+              { "argumentName": "investigationId", "selObjectPropertyName": "id" },
+              { "argumentName": "capaRequired", "targetValue": true },
+              { "argumentName": "capaFieldName", "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id" },
+              { "argumentName": "capaFieldValue", "targetValue": true },
+			  { "argumentName": "closeInvestigation", "value": false }				  
+            ]
+          },
+          {"actionName": "CLOSE_INVESTIGATION",
+            "clientMethod": "closeInvestigation",
+			"requiresDialog": false,
+            "button": {
+              "title": {
+                "label_en": "Close", "label_es": "Cerrar"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+              { "argumentName": "investigationId", "selObjectPropertyName": "id" }
+            ]
+          }
         ]
       }
     ]
   },
-  "ConfigInstrumentFamilies": {
-	"component": "TableWithButtons",
-    "langConfig": {
-      "title": {
-        "ConfigInstrumentFamilies": {
-          "label_en": "Instrument Families",
-          "label_es": "Familias de Instrumentos"
-        }
-      },
-      "gridHeader": {
-        "name": {"label_en": "Name", "label_es": "Nombre", "sort": false, "filter": true, "is_icon": false, "width": "20%"},
-        "description": {"label_en": "Description", "label_es": "Descripción", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"},
-        "calibration_required": {"label_en": "Calib?", "label_es": "Calib?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
-        "calib_variables_set": {"label_en": "Set", "label_es": "Set", "sort": false, "filter": false, "is_icon": false, "width": "10%"},
-        "calibration_interval": {"label_en": "Inteval", "label_es": "Intervalo", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
-        "calib_system_create_new_event_when_expires": {"label_en": "Next automated?", "label_es": "¿Siguiente Automático?", "sort": false, "filter": false, "is_icon": true, "width": "10%"},
-        "calibration_turn_off_when_started": {"label_en": "off by Start?", "label_es": "¿Inactivar al crear?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
-        "calibration_turn_on_when_completed": {"label_en": "On By Complete?", "label_es": "¿Activar al completar?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
-        "pm_required": {"label_en": "Prev Maint?", "label_es": "Mant Prev?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
-        "pm_variables_set": {"label_en": "Set", "label_es": "Set", "sort": false, "filter": false, "is_icon": false, "width": "10%"},
-        "pm_interval": {"label_en": "Inteval", "label_es": "Intervalo", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
-        "pm_system_create_new_event_when_expires": {"label_en": "Next automated?", "label_es": "¿Siguiente Automático?", "sort": false, "filter": false, "is_icon": true, "width": "10%"},
-        "pm_turn_off_when_started": {"label_en": "off by Start?", "label_es": "¿Inactivar al crear?", "sort": false, "filter": true, "is_icon": true, "width": "10%"},
-        "pm_turn_on_when_completed": {"label_en": "On By Complete?", "label_es": "¿Activar al completar?", "sort": false, "filter": true, "is_icon": true, "width": "10%"}		
-      }
-    },
-    "viewQuery":{ "actionName": "instruments_family",	  
-      "clientMethod": "getFromMasterData",
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
-        "title": {
-          "label_en": "Reload", "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": false
-      }
-    },
-	"actions": [
-		{   "actionName": "CONFIG_UPDATE_INSTRUMENT_FAMILY",
-			"requiresDialog": true,
-			"button": {
-				"icon": "create_new_folder",
-				"title": {"label_en": "New", "label_es": "Nuevo"},
-				"requiresGridItemSelected": true
-			},
-			"dialogInfo": {          
-				"name": "genericDialog", 
-				"fields":[
-					{"checkbox1": { "label_en": "Required?", "label_es": "Sección 1", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calibration_required", "optional": true }},
-					{"number1": { "label_en": "Sched offset days", "label_es": "Descripción", "min_allowed":0, "optional": true }},
-					{"list1": { "label_en": "Interval", "label_es": "Intervalo", "optional": true,
-					  "items": [
-						{ "keyName": "DAYS", "keyValue_en": "Days", "keyValue_es": "Días" },
-						{ "keyName": "MONTHS", "keyValue_en": "Months", "keyValue_es": "Meses" },
-						{ "keyName": "YEARS", "keyValue_en": "Years", "keyValue_es": "Años" }
-					  ]
-					}},					
-					{"checkbox2": { "label_en": "Turn off when started?", "label_es": "Sección 3", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calibration_turn_off_when_started" }},
-					{"checkbox3": { "label_en": "Turn on when aproved?", "label_es": "Sección 4", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calibration_turn_on_when_completed" }},
-					{"list2": {
-					  "label_en": "Variables Set", "label_es": "Conjunto de Parámetros", "optional": true,
-					  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-					  "valuesFromMasterData": {
-						"elementName":"list2",
-						"propertyNameContainer": "variables_set",
-						"propertyNameContainerLevelPropertyKeyName": "name",
-						"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
-					  }, "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calib_variables_set"			
-					}},					
-					
-					{"checkbox4": { "label_en": "System log event when expired?", "label_es": "Descripción", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calib_system_create_new_event_when_expires" }},
-					{"number1": { "label_en": "Sched offset days", "label_es": "Descripción", "min_allowed":0, "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"calib_sched_create_offset_days" }}
-					
-				]
-			},
-			"endPointParams": [
-				{ "argumentName": "instrFamilyName", "selObjectPropertyName": "name" },
-				{ "argumentName": "calibration_required", "element": "checkbox1", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
-				{ "argumentName": "calibration_turn_off_when_started", "element": "checkbox2", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
-				{ "argumentName": "calibration_turn_on_when_completed", "element": "checkbox3", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
-				{ "argumentName": "calib_system_create_new_event_when_expires", "element": "checkbox4", "fieldType": "BOOLEAN", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
-				{ "argumentName": "description", "element": "text1", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
-				{ "argumentName": "calib_sched_create_offset_days", "element": "number1", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true },
-				{ "argumentName": "calib_variables_set", "element": "list2", "addToFieldNameAndValue":true, "notAddWhenValueIsBlank":true }
-			]
-		}  
-	]
-  },
+  "EventsCalendar": {
+	"component": "CalendarData",
+	"hasOwnComponent": true,
+	"showTitleOnTop": true,
+	"title": {
+	  "fix_text_en": "Events Calendar",
+	  "fix_text_es": "Calendario de Eventos",
+	  "name": "name --- puede que sea instrument_name o instrument" 
+	},
+	"viewQuery": {
+	  "actionName": "INSTRUMENT_EVENTS_CALENDAR",
+	  "notUseGrid": true,
+	  "button": {
+		"icon": "refresh",
+		"title": {
+		  "label_en": "Reload",
+		  "label_es": "Recargar"
+		},
+		"requiresGridItemSelected": false
+	  },
+	  "endPointParams": [
+		{ "argumentName": "instrumentName", "element": "text1"},
+		{ "argumentName": "familyName", "element": "text2"},
+		{"argumentName": "startDate", "element": "daterange1dateStart"},
+		{"argumentName": "endDate", "element": "daterange1dateEnd"},
+		{"argumentName": "includeOnlyScheduledOne", "element": "checkbox1"}
+	  ]
+	},
+	"filter_button": {
+	  "label_en": "Search",
+	  "label_es": "Buscar"
+	},
+	"filter": [
+		{"daterange1":{
+			"dateStart":{ "label_en": "Sampling Start Date", "label_es": "Fecha Inicio Muestreo", "default_value": "" },
+			"dateEnd":{ "label_en": "Sampling End Date", "label_es": "Fecha Fin Muestreo", "default_value": "" }}
+		},
+		{"text1": {
+			"label_en": "Instrument to get", "label_es": "Instrumento a cargar","fixValue": ""}
+		},
+		{"text2": {
+		  "label_en": "Families to get", "label_es": "Familias a cargar", "fixValue": ""}
+		},
+		{"checkbox1": {
+		  "label_en": "Include only the planned ones", "label_es": "Incluir sólo los planificados", "fixValue": false}
+		}
 
- }
+	],
+	"filter_results": {
+	  "type": "readOnlyTable",
+	  "title": "3.4) Menu Definition",
+	  "endPointResponseObject": "user_requirements_events",
+	  "columns": [
+		{
+		  "name": "id",
+		  "label_en": "Id",
+		  "label_es": "Id"
+		}
+	  ]
+	},
+	"actions": [],
+	"tabs": [
+	  { "tabLabel_en": "Table",
+		"tabLabel_es": "Tabla",
+		"view": "summary",
+		"view_definition": [
+		  { "type": "readOnlyTable",
+			"endPointResponseObject": "ROOT",
+			"xtitle": {
+			  "label_en": "Instrument Info",
+			  "label_es": "Información del Instrumento"
+			},
+			"subtitle": {
+			  "label_en": "Instrument Info",
+			  "label_es": "Información del Instrumento"
+			},
+			"columns": [
+			  {"name": "type",
+				"label_en": "Type",
+				"label_es": "Tipo"
+			  },
+			  {"name": "name",
+				"label_en": "Instrument",
+				"label_es": "Instrumento"
+			  },
+			  {"name": "family",
+				"label_en": "Instrument Family",
+				"label_es": "Familia del instrumento"
+			  },
+			  {"name": "responsible",
+				"label_en": "Responsible",
+				"label_es": "Responsable"
+			  },
+			  { "name": "responsible_backup",   
+				"label_en": "Responsible backup",
+				"label_es": "Segundo responsable"
+			  },
+			  { "name": "next_calibration",   
+				"label_en": "Next Calibration",
+				"label_es": "Próxima Calibración"
+			  },
+			  { "name": "last_calibration",   
+				"label_en": "Last Calibration",
+				"label_es": "Última Calibración"
+			  }
+			],
+			"actions": []
+		  }
+		]
+	  },
+	  { "tabLabel_en": "Calendar",
+		"tabLabel_es": "Calendario",
+		"view": "Calendar",
+		"view_definition": [
+		  { "type": "Calendar",
+			"endPointResponseObject": "instrument_event",
+			"title": {
+			  "label_en": "Instrument Events",
+			  "label_es": "Eventos del Instrumento"
+			},
+			"subtitle": {
+			  "label_en": "Instrument Events",
+			  "label_es": "Eventos del Instrumento"
+			},
+			"fieldsToDisplay": [
+			  {"name": "id",
+				"label_en": "Instrument Id",
+				"label_es": "Id del instrumento"
+			  },
+			  {"name": "event_type",
+				"label_en": "Event Type",
+				"label_es": "Tipo de evento"
+			  },
+			  {"name": "decision",
+				"label_en": "Decision",
+				"label_es": "Decisión"
+			  },
+			  { "name": "completed_on",   
+				"label_en": "Completed On",
+				"label_es": "Completado en"
+			  }
+			],
+			"actions": []
+		  }
+		]
+	  }
+	]
+  }
+}

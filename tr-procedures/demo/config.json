@@ -58,6 +58,17 @@
     "viewName": "ConfigInstrumentFamilies", 
     "filterName" :  "ConfigInstrumentFamilies" 
   },
+  "localDefaultViewxxxxa": {
+    "procName":  "app-proc", 
+    "viewName": "Home", 
+    "filterName" :  "Home" 
+  },
+  "localDefaultView": {
+    "procName":  "app-proc", 
+    "viewName": "EventsCalendar", 
+    "filterName" :  "EventsCalendar" 
+  },
+  
   
   
   "localDefaultView3321": {
@@ -164,7 +175,12 @@
   }, 
   
   
-  "localDefaultViewxxxasda": {
+  "localDefaultViewdasda": {
+    "procName":  "mp-release1", 
+    "viewName": "LotCreation", 
+    "filterName" :  "LotCreation" 
+  },
+  "localDefaultViewxxxxxxxxxxxxx": {
     "procName":  "mp-release1", 
     "viewName": "LotView", 
     "filterName" :  "LotView" 
@@ -174,7 +190,7 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
-  "localDefaultView": {
+  "localDefaultViewdsadas": {
     "procName":  "mp-release1", 
     "viewName": "SampleEnterResult", 
     "filterName" :  "ER-FQ" 
