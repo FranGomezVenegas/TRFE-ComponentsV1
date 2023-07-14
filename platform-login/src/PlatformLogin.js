@@ -7,6 +7,7 @@ import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
 import '@spectrum-web-components/button/sp-button';
 import '@trazit/tr-dialog/tr-dialog';
+import '@material/chips';
 
 export function getUserSession() {
   let userSession = JSON.parse(sessionStorage.getItem("userSession"))
@@ -153,7 +154,50 @@ box-shadow: 16px 14px 20px #0000008c;
         .content {
           width: 100%;
         }
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+      
+        .modal-content {
+          background-color: white;
+          margin: 15% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+          max-width: 400px;
+        }
+      
+        .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+      
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }                
       }
+      .role-chip {
+        color: rgb(36, 192, 235);
+        font-family: Montserrat;
+        margin: 5px;
+        font-size: 18px;
+        border: solid;
+        border-radius: 10px;
+        padding: 5px;
+      }      
     `];
   }
 
@@ -161,7 +205,8 @@ box-shadow: 16px 14px 20px #0000008c;
     return {
       hidden: { type: Boolean, reflect: true },
       auth: { type: Boolean },
-      userRoles: { type: Array }
+      userRoles: { type: Array },
+      role: { type: String }
     };
   }
 
@@ -170,24 +215,23 @@ box-shadow: 16px 14px 20px #0000008c;
     this.hidden = true;
     this.auth = false;
     this.userRoles = [];
+    this.role= "";
   }
 
   firstUpdated() {
-    super.firstUpdated()
-    // focusing to username once rendered
+    super.firstUpdated();
     this.updateComplete.then(() => {
-      this.videoDialogSurface.style.paddingTop = "20px";
       setTimeout(() => {
-        this.user.focus()
-      }, 200)
-    })
+        this.user.focus();
+      }, 200);
+    });
   }
-
-  updated(updates) {
-    if (updates.has('config') && JSON.stringify(this.config) != "{}") {
-      this.hidden = false
+  
+  updated(changedProperties) {
+    if (changedProperties.has('config') && JSON.stringify(this.config) !== '{}') {
+      this.hidden = false;
     }
-    super.updated(updates)
+    super.updated(changedProperties);
   }
 
   render() {
@@ -201,27 +245,37 @@ box-shadow: 16px 14px 20px #0000008c;
           @keypress=${this.checkLogin}
           @click=${this.showPwd}></mwc-textfield>
           <sp-button id="access" size="xl" @click=${this.login}>${langConfig.buttonAccess["label_"+this.lang]}</sp-button>
-        <mwc-select id="role" label="${langConfig.role["label_"+this.lang]}" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
+<!--        <mwc-select id="role" label="${langConfig.role["label_"+this.lang]}" @change=${this.setRole} ?disabled=${!this.userRoles.length}>
           ${this.userRoles.map(r => 
             html`<mwc-list-item value="${r}">${r}</mwc-list-item>`
           )}
-        </mwc-select>
+        </mwc-select> -->
       </div>
       <div>
-        <mwc-icon-button id="video" icon="videocam" title="Video" @click=${()=>this.shadowRoot.querySelector("#videoDialog").open=true}></mwc-icon-button>
-        <tr-dialog id="videoDialog" @closed=${this.closeVideo}
-          @zoom-out=${()=>this.dialogZoom(true)}
-          @zoom-in=${()=>this.dialogZoom()}
-          heading=""
-          hideActions=""
-          scrimClickAction=""
-          hideMin>
+        <mwc-icon-button id="lang" @click=${this.changeLang} title="Language">${this.lang}</mwc-icon-button>
+        <tr-dialog id="rolesSelector2" @closed=${this.setRoleFromChip} >
+        </tr-dialog>
+        <tr-dialog id="rolesSelector">
           <div class="content layout vertical flex center-justified">
-            <iframe id="ytube" width="100%" height="345" src="https://www.youtube.com/embed/p-C9v-jCrcM?enablejsapi=1"></iframe>
+          ${this.lang==="en"? html`<p style="color: rgb(11, 76, 94);font-family: Montserrat; margin:5px; font-size:22px;">Select one role for this session</p>`:html`<p style="color: rgb(11, 76, 94);font-family: Montserrat; margin:5px; font-size:22px;">Selecciona un perfil para esta sesión</p>`}
+          <chips>
+          ${this.userRoles.map(
+            (r) => html`
+              <span
+                class="role-chip"
+                
+                @click=${() => this.setRoleFromChip(r)}
+                value="${r}">
+                &#8226; ${r}
+              </span>
+            `
+          )}
+        </chips>
+  
           </div>
         </tr-dialog>
-        <mwc-icon-button id="lang" @click=${this.changeLang} title="Language">${this.lang}</mwc-icon-button>
-      </div>
+
+        </div>
     </div>
     `;
   }
@@ -234,11 +288,11 @@ box-shadow: 16px 14px 20px #0000008c;
     return this.shadowRoot.querySelector("mwc-textfield#password")
   }
 
-  get role() {
+  /*get role() {
     return this.shadowRoot.querySelector("mwc-select#role")
-  }
+  }*/
 
-  get videoDialog() {
+ /* get videoDialog() {
     return this.shadowRoot.querySelector("tr-dialog#videoDialog")
   }
 
@@ -251,7 +305,7 @@ box-shadow: 16px 14px 20px #0000008c;
       event: 'command',
       func: 'stopVideo' 
     }), '*');
-  }
+  }*/
 
   clearSessionStorage() {
     window.sessionStorage.clear();
@@ -298,7 +352,11 @@ box-shadow: 16px 14px 20px #0000008c;
       await this.reqUserRoles()
       // requesting final token
       if (this.userRoles.length == 1) {
-        this.role.value = this.userRoles[0];
+        this.role = this.userRoles[0];        
+        await this.reqFinalToken();
+        this.authorized();        
+      }else{
+        this.shadowRoot.querySelector("#rolesSelector").open=true
       }
     } catch (e) {
       this.clearSessionStorage();
@@ -307,8 +365,32 @@ box-shadow: 16px 14px 20px #0000008c;
 
   async setRole(e) {
     if (e.target.value) {
+      try {
+        await this.reqFinalToken();
+        // Rest of the code after obtaining the final token
+        this.authorized();
+      } catch (error) {
+        // Handle the error appropriately
+        console.error(error);
+      }
+      //await this.reqFinalToken();
+      this.authorized();
+    }
+  }
+
+  async setRoleFromChip(value) {
+  //  const value = e.currentTarget.getAttribute('value');
+
+    if (value) {
+//      e.stopPropagation()      
+//      this.shadowRoot.querySelector("#rolesSelector").close=true
+      this.role = value;
       await this.reqFinalToken();
       this.authorized();
+      
+      //this.credDialog.close()
+    
+      
     }
   }
 
@@ -379,7 +461,7 @@ box-shadow: 16px 14px 20px #0000008c;
     let partialToken = JSON.parse(sessionStorage.getItem('partialToken'))
     let urlParams = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       myToken: partialToken.myToken,
-      userRole: this.role.value,
+      userRole: this.role,
       dbName: this.config.dbName,
       actionName: 'finaltoken',
       sizeValue: window.screen.width,
@@ -399,7 +481,7 @@ box-shadow: 16px 14px 20px #0000008c;
         sessionStorage.setItem("userSession", JSON.stringify({
           ...j,
           userName: this.user.value,
-          userRole: this.role.value
+          userRole: this.role
         }))
       } else {
         if (document.fullscreenElement) {
@@ -410,17 +492,19 @@ box-shadow: 16px 14px 20px #0000008c;
     })
   }
 
-  dialogZoom(zoom) {
-    if (zoom) {
-      this.shadowRoot.querySelector(".content").style.width = "100%"
-      this.shadowRoot.querySelector("#ytube").height = "100%"
-    } else {
-      if (this.desktop) {
-        this.shadowRoot.querySelector(".content").style.width = "480px"
-      } else {
-        this.shadowRoot.querySelector(".content").style.width = "100%"
-      }
-      this.shadowRoot.querySelector("#ytube").height = "345"
-    }
-  }
+  // dialogZoom(zoom) {
+  //   if (zoom) {
+  //     this.shadowRoot.querySelector(".content").style.width = "100%"
+  //     this.shadowRoot.querySelector("#ytube").height = "100%"
+  //   } else {
+  //     if (this.desktop) {
+  //       this.shadowRoot.querySelector(".content").style.width = "480px"
+  //     } else {
+  //       this.shadowRoot.querySelector(".content").style.width = "100%"
+  //     }
+  //     this.shadowRoot.querySelector("#ytube").height = "345"
+  //   }
+  // }
+
+
 }

@@ -1,6 +1,8 @@
 # \<platform-login>
 Component login of trazit platform
 
+v2 is basically the same flavour just that the role selection is by clicking one entry in a modal dialog instead of selecting from a list.
+
 ## Installation
 
 ```bash
