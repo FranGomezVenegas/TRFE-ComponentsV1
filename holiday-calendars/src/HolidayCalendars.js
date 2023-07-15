@@ -1,5 +1,4 @@
 import { html, css } from 'lit';
-//import { CredDialog } from '@trazit/cred-dialog';
 import { CommonCore } from '@trazit/common-core';
 import { CalendarUtilities } from './CalendarUtilities';
 import { CalendarActions } from './CalendarActions';
@@ -14,8 +13,6 @@ import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 
-//import '@alenaksu/json-viewer';
-//import '@spectrum-web-components/split-view/sp-split-view';
 
 const viewInfoDefinition = {
   grid: {
@@ -65,9 +62,6 @@ const viewInfoDefinition = {
       { "argumentName": "name", "internalVariableSimpleObjName":"selectedCalendar", "internalVariableSimpleObjProperty":"code"},
       { "argumentName": "dayName", "element": "text1" },
       { "argumentName": "newDate", "element": "date1" }
-      // { "argumentName": "fieldsNames", "value": "undefined" },
-      // { "argumentName": "fieldsValues", "value": "undefined" }
-      //individualsList
     ],
     "button": {
       "z-icdon": "refresh",
@@ -450,7 +444,7 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
     }
   }
   getHolidayCalendars() {
-    var curCalendar=this.selectedCalendar
+    let curCalendar=this.selectedCalendar
     if (curCalendar===undefined){return}
     this.fetchApi(this.config.backendUrl + this.config.HolidayCalendarAPIqueriesUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
@@ -477,56 +471,5 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
     super.authorized()
     this.getHolidayCalendars()
   }
-/*
-  apiChanged(e) {
-    this.selectedTxts.forEach(t => {
-      t.style.fontWeight = "normal"
-    })
-    this.selectedApis = []
-    this.selectedTxts = []
-    this.shadowRoot.querySelector("input#lastDate").value = ""
-    if (!e.target.value) return
-    if (e.target.value == "All") {
-      this.filterDocs = this.docs
-    } else {
-      this.filterDocs = this.docs.filter(d => d.api_name == e.target.value)
-    }
-    this.requestUpdate()
-  }
 
-  dateChanged(evt) {
-    this.selectedTxts.forEach(t => {
-      t.style.fontWeight = "normal"
-    })
-    this.selectedApis = []
-    this.selectedTxts = []
-    this.shadowRoot.querySelector("select").value = ""
-    if (evt.target.value) {
-      this.filterDocs = this.docs.filter(d => new Date(d.last_update).getTime() >= new Date(evt.target.value).getTime())
-    } else {
-      this.filterDocs = this.docs      
-    }
-    this.requestUpdate()
-  }
-
-  calendarselect(evt, api) {
-    if (evt.target.style.fontWeight == "bold") {
-      evt.target.style.fontWeight = "normal"
-      this.selectedApis = this.selectedApis.filter(a => a.title != `${api.endpoint_name} (${api.api_name} ${api.id})`)
-      this.selectedTxts = this.selectedTxts.filter(t => t.id != evt.target.id)
-    } else {
-      evt.target.style.fontWeight = "bold"
-      this.selectedApis.push({
-        title: `${api.endpoint_name} (${api.api_name} ${api.id})`,
-        date: `${api.creation_date} ${api.last_update}`,
-        arguments: api.arguments_array.map(arg => { 
-          return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
-        }),
-        output_object_types: api.output_object_types
-      })
-      this.selectedTxts.push(evt.target)
-    }
-    this.requestUpdate()
-  }
-*/  
 }

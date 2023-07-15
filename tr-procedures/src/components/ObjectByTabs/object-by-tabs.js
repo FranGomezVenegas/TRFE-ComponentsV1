@@ -134,7 +134,6 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
         this.selectedItem={}
         this.selectedItems=[]
         this.selectedItemLoaded=false
-        //this.getObjectData()
         this.desktop = true
         this.showDivider=true
         this.leftSplitDisplayed=true
@@ -204,14 +203,9 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
       `
     }
     toggleLeftSplitPane() {
-      //console.log(this.leftSplitDisplayed)
       this.leftSplitDisplayed = !this.leftSplitDisplayed
     }  
     filterPerformAction(e) {
-      // console.log('this.selectedItem', this.selectedItem)
-      //if (Object.keys(this.selectedItem).length === 0){
-      //if (!this.selectedItemLoaded){        
-//      if (this.lottoget!==null&& this.lottoget.value!=='' && this.selectedItemLot!=this.lottoget.value){
         this.selectedItemLot=""
         this.GetViewData(false)
         if (this.requestData.length===1){
@@ -223,12 +217,6 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
           this.selectedItemLot=this.selectedItem.lot_name
           this.selectedItemLoaded=true
         }
-//      }
-    }
-
-    toggleLeftSplitPane() {
-      //console.log(this.leftSplitDisplayed)
-      this.leftSplitDisplayed = !this.leftSplitDisplayed
     }
 
     render() {      
