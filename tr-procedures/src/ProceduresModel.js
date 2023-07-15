@@ -72,7 +72,8 @@ export const DemoViews = [
     {"proc_instance_name": "app-proc", "view_name": "PlatformInstrumentsfamilyObsInterno", "filter_name": "InstrumentsfamilyObsInterno", "title": "Instruments List FamilyObsIntento"},
     {"proc_instance_name": "app-proc", "view_name": "EventsInProgress", "filter_name": "EventsER", "title": "Events In Progress"},
     {"proc_instance_name": "app-proc", "view_name": "InstrumentReport", "filter_name": "InstrumentReport", "title": "Instrument Report"},
-    {"proc_instance_name": "app-proc", "view_name": "ConfigInstrumentFamilies", "filter_name": "ConfigInstrumentFamilies", "title": "Master: Instruments Familiy"}
+    {"proc_instance_name": "app-proc", "view_name": "ConfigInstrumentFamilies", "filter_name": "ConfigInstrumentFamilies", "title": "Master: Instruments Familiy"},
+	{"proc_instance_name": "app-proc", "view_name": "EventsCalendar", "filter_name": "EventsCalendar", "title": "Events Calendar"}
 	
   ]},  
   {"label":"Instruments (app-instruments)", "proc_instance_name": "app-instruments", "views":[
@@ -119,7 +120,7 @@ export const DemoViews = [
 	{"proc_instance_name": "inv-draft", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"}	
   ]},
   {"label":"Raw Material Inspection Lots (mp-release1", "proc_instance_name": "mp-release1", "views":[
-    {"proc_instance_name": "mp-release1", "view_name": "lotCreation", "filter_name": "lotCreation", "title": "lotCreation"},
+    {"proc_instance_name": "mp-release1", "view_name": "LotCreation", "filter_name": "LotCreation", "title": "lotCreation"},
     {"proc_instance_name": "mp-release1", "view_name": "LotView", "filter_name": "LotView", "title": "LotView"},
     {"proc_instance_name": "mp-release1", "view_name": "SampleEnterResult", "filter_name": "ER-FQ", "title": "ER-FQ"},
     {"proc_instance_name": "mp-release1", "view_name": "SampleEnterResult", "filter_name": "ER-MB", "title": "ER-MB"},

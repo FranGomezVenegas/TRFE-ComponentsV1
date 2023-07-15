@@ -1,7 +1,8 @@
 export const MpRelease1 = {
   "TrackingChanges": {
     "version": 0.9,
-    "last change on (YYYYMMDD)": "20230620",
+    "last change on (YYYYMMDD)": "20230625",
+    "last_change_note_20230625": "Created new form element, list1SelectedRow, for the uoms on create new lot",
 	"last_change_note_20230620": "Added new button add sample analysis",
 	"last_change_note_20230601": "Record needs to be selected to create a lot",	
 	"last_change_note_20230523": "Added new section for inventory retain",
@@ -120,9 +121,11 @@ export const MpRelease1 = {
               }
             },
             {
-              "text2": {
+              "list1SelectedRow": {
                 "label_en": "UOM",
-                "label_es": "UDM"
+                "label_es": "UDM",
+				        "the_default_value":{"selObjectPropertyName": "default_uom"},
+				        "list_values":{"selObjectPropertyName": "alternative_uoms"}
               }
             },
             {
@@ -145,7 +148,7 @@ export const MpRelease1 = {
           {            "argumentName": "lotTemplate",        "value": "template"         },
           {            "argumentName": "lotTemplateVersion",        "value": "1"         },
           {            "argumentName": "quantity",        "element": "number1"         },
-          {            "argumentName": "quantityUom",        "element": "text2"         },
+          {            "argumentName": "quantityUom",        "element": "list1SelectedRow"         },
           {            "argumentName": "materialName",        "selObjectPropertyName": "name"         },
           {            "argumentName": "numBulks",        "element": "number2"         },
           {            "argumentName": "numContainers",        "element": "number3"         }
@@ -189,7 +192,7 @@ export const MpRelease1 = {
         "text1": {
           "label_en": "Lot to get",
           "label_es": "Lote a cargar",
-          "fixValue": "CC USP 003"
+          "fixValue": "CCEP003"
         }
       }
     ],
@@ -758,38 +761,26 @@ export const MpRelease1 = {
                 "dialogInfo": {
                   "name": "genericDialog",
                   "fields": [
-                    {
-                      "number1": {
-                        "label_en": "Quantity",
-                        "label_es": "Cantidad"
-                      }
+                    { "number1": {
+						"label_en": "Quantity",
+						"label_es": "Cantidad"
+						}
                     },
                     {
-                      "text1": {
-                        "label_en": "uom",
-                        "label_es": "Unidad Medida",
-                        "optional": true
+                      "list1SelectedRow": {
+                        "label_en": "UOM",
+                        "label_es": "UDM",
+        				"the_default_value":{"selObjectPropertyName": "default_uom"},
+        				"list_values":{"selObjectPropertyName": "alternative_uoms"}
                       }
                     }
-                  ]
+                 ]
                 },
                 "endPointParams": [
-                  {
-                    "argumentName": "lotName",
-                    "selObjectPropertyName": "lot_name"
-                  },
-                  {
-                    "argumentName": "bulkId",
-                    "selObjectPropertyName": "id"
-                  },
-                  {
-                    "argumentName": "quantity",
-                    "element": "number1"
-                  },
-                  {
-                    "argumentName": "quantityUom",
-                    "element": "text1"
-                  }
+                  {"argumentName": "lotName", "selObjectPropertyName": "lot_name"},
+                  {"argumentName": "bulkId", "selObjectPropertyName": "id"},
+                  {"argumentName": "quantity", "element": "number1"},
+                  {"argumentName": "quantityUom", "element": "list1SelectedRow"}
                 ]
               },
               {
@@ -1689,9 +1680,8 @@ export const MpRelease1 = {
 			"name": "genericDialog",
 			"gridContent": true,
 			"dialogQuery": {
-				"actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+				"actionName": "GET_SAMPLE_ANALYSIS_LIST",
 				"variableForData": "",
-				"endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
 				"endPointParams": [
 				  {"argumentName": "sampleId", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"sample_id"}
 				],
