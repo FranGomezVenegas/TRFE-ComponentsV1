@@ -87,6 +87,11 @@ export function DataViews(base) {
               }
             }else{
               if (String(elem.endPointResponseObject).toUpperCase()==="ROOT"){
+                if (!Array.isArray(data)){
+                  let dataArr=[]
+                  dataArr.push(data)
+                  return dataArr
+                }
                 return data
               }else{
                 return  data[elem.endPointResponseObject]
@@ -340,6 +345,7 @@ export function DataViews(base) {
         readOnlyTableByGroup(elem, dataArr, isSecondLevel) {
           if (isSecondLevel===undefined){isSecondLevel=false}
             dataArr=this.getDataFromRoot(elem, dataArr)
+          if (dataArr===undefined){return html``}
           return html`
           <style>
           .styled-table-bygroup {
@@ -507,6 +513,7 @@ export function DataViews(base) {
           `;
         }              
         readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
+          console.log('elem', elem, 'data', dataArr)
           if (isSecondLevel===undefined){isSecondLevel=false}
           if (directData!==undefined){
             dataArr=directData
@@ -590,15 +597,15 @@ export function DataViews(base) {
 
           <div style="display: flex; flex-direction: row; text-align: center;">
             <div style="display: flex; flex-direction: column; text-align: center;">
+            ${this.getButton(elem, dataArr, true)}
             ${alternativeTitle!==undefined ? html` 
               <p><span class="title ${isSecondLevel}" >${alternativeTitle}</span></p>`
             : html`
               ${elem===undefined||elem.title===undefined ? nothing : html`
               <p><span class="title ${isSecondLevel}" >${elem.title["label_"+this.lang]}</span></p>`
               }
-            `}
-              ${this.getButton(elem, dataArr, true)}
-              ${elem.columns===undefined ? html`No columns defined` : html`
+            `}              
+              ${elem.columns===undefined ? html`${elem.hideNoDataMessage!==undefined&&elem.hideNoDataMessage?'':'No columns defined'}` : html`
                 <table class="styled-table">
                   <thead>          
                     <tr>
@@ -892,7 +899,7 @@ export function DataViews(base) {
           })
         }    
         kpiCardSomeElementsMain(elem, data){
-            console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
+            //console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
             return html`   
             ${elem===undefined||elem.title===undefined ? nothing : html`<span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;">${elem.title["label_"+this.lang]}</span>`}         
             ${data===undefined ? html`nothing to do` :
@@ -1010,7 +1017,29 @@ export function DataViews(base) {
                 iframe::shadow .pdf-viewer::content #controls ::slotted(.SwitchToReadingMode-Small14) {
                   display: none;
                 }
-                           
+                .card-container {
+                  display: flex;
+                  flex-wrap: wrap;
+                }
+                
+                .card {
+                  flex: 0 0 calc(33.33% - 20px);
+                  margin: 10px;
+                  border: 1px solid #ccc;
+                  padding: 10px;
+                }
+                
+                @media (max-width: 768px) {
+                  .card {
+                    flex: 0 0 calc(50% - 20px);
+                  }
+                }
+                
+                @media (max-width: 480px) {
+                  .card {
+                    flex: 0 0 calc(100% - 20px);
+                  }
+                }                           
                 </style>
                 <div id="main${elem.add_border!==undefined&&elem.add_border==true?'addborder': ''}" class="layout vertical flex wrap">
                 <div class="layout horizontal center flex wrap">${this.getButton(elem, data, true)}</div>
