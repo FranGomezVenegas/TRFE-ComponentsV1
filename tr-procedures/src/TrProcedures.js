@@ -163,7 +163,10 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'ObjectByTabs':
         import('./components/ObjectByTabs/object-by-tabs')
         return  
-      case 'ModuleEnvMonitHomeAir':
+        case 'CalendarData':
+          import('./components/Calendar/calendar-data')
+          return  
+        case 'ModuleEnvMonitHomeAir':
         import('./module_env_monit/home-air')
         return  
       case 'ModuleEnvMonitCultureMedium':
@@ -349,7 +352,13 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
           .model=${this.viewModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
-      `:html``}
+      `:nothing}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'CalendarData' ? html`
+        <calendar-data .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .model=${this.viewModelFromProcModel}
+          .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></calendar-data>      
+      `:nothing}
 
       
 
