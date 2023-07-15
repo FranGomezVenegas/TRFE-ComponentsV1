@@ -514,14 +514,23 @@ export function TrazitGenericDialogs(base) {
                 ${!fld.list10 ?html``: html`        
                     <mwc-select id="list10" label="${this.fieldLabel(fld.list10)}">
                         ${this.listEntries(fld.list10)}</mwc-select>`}  
-
-                    ${!fld.listMDSamplerPersonalAreas ?
-                    html``: html`        
-                        <mwc-select id="listMDSamplerPersonalAreas" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDSamplerPersonalAreas&&fld.listMDSamplerPersonalAreas["label_" + this.lang]}">
-                        ${this.masterData.samplerPersonalAreas.map((c, i) =>
-                        html`<mwc-list-item value="${c.key}" ?selected=${i == 0}>${c["label_"+this.lang]}</mwc-list-item>`
-                        )}
-                        </mwc-select>
+                ${!fld.list1SelectedRow ?html``: html`        
+                    <mwc-select id="list1SelectedRow" label="${this.fieldLabel(fld.list1SelectedRow)}">
+                        ${this.listEntriesForUom(fld.list1SelectedRow, 'list1SelectedRow')}</mwc-select>`}  
+                ${!fld.list2SelectedRow ?html``: html`        
+                    <mwc-select id="list2SelectedRow" label="${this.fieldLabel(fld.list2SelectedRow)}">
+                        ${this.listEntriesForUom(fld.list2SelectedRow, 'list2SelectedRow')}</mwc-select>`}  
+                ${!fld.list3SelectedRow ?html``: html`        
+                    <mwc-select id="list3SelectedRow" label="${this.fieldLabel(fld.list3SelectedRow)}">
+                        ${this.listEntriesForUom(fld.list3SelectedRow, 'list3SelectedRow')}</mwc-select>`}  
+                
+                ${!fld.listMDSamplerPersonalAreas ?
+                html``: html`        
+                    <mwc-select id="listMDSamplerPersonalAreas" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDSamplerPersonalAreas&&fld.listMDSamplerPersonalAreas["label_" + this.lang]}">
+                    ${this.masterData.samplerPersonalAreas.map((c, i) =>
+                    html`<mwc-list-item value="${c.key}" ?selected=${i == 0}>${c["label_"+this.lang]}</mwc-list-item>`
+                    )}
+                    </mwc-select>
                 `}           
 
                 ${!fld.listMDprocedureUsers ?
@@ -653,7 +662,7 @@ export function TrazitGenericDialogs(base) {
         // </vaadin-grid>
     }
 
-    defaultValue(){
+    defaultValue(e){
         if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
             this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
             return 
@@ -671,11 +680,14 @@ export function TrazitGenericDialogs(base) {
             let fldObj=element
             let keyName=Object.keys(fldObj)
             
-            //if (==null){            
+            //if (==null){        
+            if (this[keyName[0]]!==null&&this[keyName[0]].defval!==undefined&&this[keyName[0]].defval!==null){
+                alert(this[keyName[0]].defval)
+            }    
             if (fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
                 this[keyName[0]].value=fldObj[keyName].default_value
             }
-            if (fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null){
+            if (fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName[0]]!==null){
                 this[keyName[0]].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
             }
             if (fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
@@ -684,7 +696,7 @@ export function TrazitGenericDialogs(base) {
             }
         }
     }    
-    resetFields(){           
+    resetFields(e){           
         //alert('reset Fields now')   
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         if (dlgFlds===undefined){
@@ -697,8 +709,9 @@ export function TrazitGenericDialogs(base) {
             if (this[keyName]!==null){
                // console.log(keyName[0])
                 if (keyName[0].includes('list')){
-
-                    this[keyName[0]].value=[]
+                    if (!keyName[0].includes('SelectedRow')){
+                        this[keyName[0]].value=[]
+                    }
                 }else{
                     if (this[keyName]!==undefined&&this[keyName[0]]!==undefined){
                         this[keyName[0]].value=""
@@ -731,12 +744,11 @@ export function TrazitGenericDialogs(base) {
         //console.log(e.targetValue)
     }
     listEntries(fld){
-        console.log('listEntries')
+        //console.log('listEntries')
         var blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
         var newList=[]
         if (fld===undefined){
             return html`<mwc-list-item></mwc-list-item>`
-
         }
         if (fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true){
             newList.push(blankEmpty)
@@ -759,6 +771,81 @@ export function TrazitGenericDialogs(base) {
         )}
         `
     }
+    listEntriesForUom(fld, fldName){
+        console.log('listEntriesForUom')
+        var blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
+        let defValue=""
+        var newList=[]
+        if (fld===undefined){
+            return html`<mwc-list-item></mwc-list-item>`
+        }
+        if (fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true){
+            newList.push(blankEmpty)
+        }
+        if (fld.the_default_value!==undefined){
+            if (fld.the_default_value.default_value!==undefined&&fldObj[keyName].default_value!==null){
+                blankEmpty={keyName:fld.the_default_value.default_value, keyValue_en:fld.the_default_value.default_value, keyValue_es:fld.default_value.default_value}
+                newList.push(blankEmpty)            
+            }
+            if (fld.the_default_value.selObjectPropertyName!==undefined&&fld.the_default_value.selObjectPropertyName!==null){
+                let val=this.selectedItems[0][fld.the_default_value.selObjectPropertyName]
+                const valueArray = val.split("|");
+                valueArray.forEach((item) => {
+                  const blankEmpty = {keyName: item, keyValue_en: item, keyValue_es: item}     
+                  const isDuplicate = newList.some(item => item.keyName === item);
+                  if (!isDuplicate) {
+                    if (this[fldName]!==null&&this[fldName].value.length===0){
+                        defValue=item
+                        this[fldName].value=item
+                    }
+                    newList.push(blankEmpty);
+                  }                                               
+                })                             
+            }
+            if (fld.the_default_value.internalVariableObjName!==undefined&&fld.the_default_value.internalVariableObjName!==null&&
+                fld.internalVariableObjProperty!==undefined&&fld.internalVariableObjProperty!==null){
+                    let val=this[fld.the_default_value.internalVariableObjName][0][fld.internalVariableObjProperty]
+                    blankEmpty={keyName:val, keyValue_en:val, keyValue_es:val}
+                    const isDuplicate = newList.some(item => item.keyName === val);
+                    if (!isDuplicate) {
+                      newList.push(blankEmpty);
+                    }                             
+//                this[keyName[0]].value=this[fld.internalVariableObjName][0][fld.internalVariableObjProperty]
+                }
+        }
+        if (fld.list_values!==undefined){
+            if (fld.list_values.default_value!==undefined&&fldObj[keyName].default_value!==null){
+                blankEmpty={keyName:fld.list_values.default_value, keyValue_en:fld.list_values.default_value, keyValue_es:fld.list_values.default_value}
+                newList.push(blankEmpty)            
+            }
+            if (fld.list_values.selObjectPropertyName!==undefined&&fld.list_values.selObjectPropertyName!==null){
+                let val=this.selectedItems[0][fld.list_values.selObjectPropertyName]
+                const valueArray = val.split("|");
+                valueArray.forEach((item) => {
+                  const blankEmpty = {keyName: item, keyValue_en: item, keyValue_es: item}                
+                  const isDuplicate = newList.some(item => item.keyName === item);
+                  if (!isDuplicate) {
+                    newList.push(blankEmpty);
+                  }                             
+                })             
+            }
+            if (fld.list_values.internalVariableObjName!==undefined&&fld.list_values.internalVariableObjName!==null&&
+                fld.internalVariableObjProperty!==undefined&&fld.internalVariableObjProperty!==null){
+                    let val=this[fld.list_values.internalVariableObjName][0][fld.internalVariableObjProperty]
+                    blankEmpty={keyName:val, keyValue_en:val, keyValue_es:val}
+                    const isDuplicate = newList.some(item => item.keyName === val);
+                    if (!isDuplicate) {
+                      newList.push(blankEmpty);
+                    }                             
+            }
+        }
+        return html`
+        ${newList.map((c, i) =>
+            html`<mwc-list-item value="${c.keyName}" defval="${defValue}" ?selected=${fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true&&fld.default_value!==undefined? i == 1: i==0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+        )}
+        `
+    }   
+
     getProcMasterData(){
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
         console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
@@ -929,7 +1016,11 @@ export function TrazitGenericDialogs(base) {
     get list8() {    return this.shadowRoot.querySelector("mwc-select#list8")    }    
     get list9() {    return this.shadowRoot.querySelector("mwc-select#list9")    }    
     get list10() {    return this.shadowRoot.querySelector("mwc-select#list10")    }  
-    
+
+    get list1SelectedRow() {    return this.shadowRoot.querySelector("mwc-select#list1SelectedRow")    }  
+    get list2SelectedRow() {    return this.shadowRoot.querySelector("mwc-select#list2SelectedRow")    }  
+    get list3SelectedRow() {    return this.shadowRoot.querySelector("mwc-select#list3SelectedRow")    }  
+
     get listMDprocedureUsers() {return this.shadowRoot.querySelector("mwc-select#listMDprocedureUsers")}
     get listMDSamplerPersonalAreas() {return this.shadowRoot.querySelector("mwc-select#listMDSamplerPersonalAreas")}
     get listMDvariablesSet() {return this.shadowRoot.querySelector("mwc-select#listMDvariablesSet")}
