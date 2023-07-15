@@ -245,7 +245,11 @@ export function ApiFunctions(base) {
                   jsonParam[p.argumentName] = p.defaultValue // get value from default value (i.e incubator)
                 }
               } else if (p.selObjectPropertyName) {
-                jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
+                if (Array.isArray(selObject)){
+                  jsonParam[p.argumentName] = selObject[0][p.selObjectPropertyName] // get value from selected item
+                }else{
+                  jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
+                }
               } else if (p.targetValue) {
                 jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
               } else if (p.fixValue) {
