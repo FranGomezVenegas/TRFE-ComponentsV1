@@ -6,7 +6,8 @@ import { CommonCore } from '@trazit/common-core';
 import '../../components/ObjectByTabs/objecttabs-composition'; 
 import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
 import { ProcManagementMethods } from './ProcManagementMethods';
-export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))) {
+
+export class ProcManagementHome extends ((ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore))))) {
   static get styles() {
     return [
       css`
@@ -334,7 +335,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
   }  
 
   selectSectionView(index , notResetSelectedView) {
-    if (notResetSelectedView===undefined||notResetSelectedView==false){
+    if (notResetSelectedView===undefined||!notResetSelectedView){
       this.selectedItem ={}
     }
     this.selectedTabModelFromProcModel=[]
@@ -344,7 +345,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     this.procedureVersion = this.selectedProcInstance.procedure_version
     this.procInstanceName = this.selectedProcInstance.proc_instance_name
 
-    console.log('this.selectedViewDefinition', this.selectedViewDefinition, 'procInstanceName', this.procInstanceName)
+    //console.log('this.selectedViewDefinition', this.selectedViewDefinition, 'procInstanceName', this.procInstanceName)
     if (this.objecttabsComposition == null) { return }
     this.selectedProcInstance[0]=this.selectedProcInstance
 
@@ -637,25 +638,10 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
               ${this.selectedProcInstance.views.map((item, index) => html`              
                 <div id="section${index}" class="accordion-item">
                   <div class="layout horizontal center inline-flex wrap accordion-title">
-                    ${item.view_definition !== undefined && item.view_definition.filter !== undefined && item.view_definition.filterFields !== undefined && item.view_definition.filterFields.length > 0 ? html`
-                      <mwc-icon-button size="s" id="expand" dense raised label="" icon="${item.expanded !== undefined && item.expanded ? 'expand_less' : 'expand_more'}"  @click=${() => this.toggleLeftElements(index)}></mwc-icon-button>
-                      <div @click=${() => this.toggleLeftElements(index)} >${item.title["label_"+this.lang]}</div> 
-                    `: html`
-                    <div class="accordion-title" @click=${() => this.selectSectionView(index)} >${item.title["label_"+this.lang]}</div>
-                    `}
+                    ${this.sectionElement(item, index)}
                   </div>
-                  ${item.expanded !== undefined && item.expanded ? html`
-                    ${item.view_definition !== undefined && item.view_definition.filter !== undefined && item.view_definition.filterFields !== undefined && item.view_definition.filterFields.length > 0 ? html`
-                      <div id="section${index}_detail" class="layout horizontal center wrap accordion-content" style=${index > -1 ? 'max-height: none;' : ''}>                          
-                        <div style="margin-top:1px;text-align:center;padding-bottom:5px;">
-                        <sp-button size="m" slot="primaryAction" dialogAction="accept" .selectedViewDefinition="${item.view_definition}" .tabindex="${index}" @click=${this.filterPerformAction}>
-                          ${item.view_definition["button_label_" + this.lang]} </sp-button>
-                        </div>  
-                      ${this.genericFormElements(item.view_definition.filterFields)}
-        
-                      </div>
-                    `: nothing}                      
-                  `: nothing}
+                  ${this.sectionDetail(item, index)}
+
                 </div>
             `)}
             </div>
@@ -663,7 +649,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
             ${this.selectedProcessTitle()}
             ${this.selectedViewDefinition !== undefined && this.selectedViewDefinition.view_definition !== undefined && this.selectedViewDefinition ? html`            
-              <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
+              <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
               .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
               .selectedItem=${this.selectedItem}      
               </objecttabs-composition>              
@@ -713,6 +699,142 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       }
     `;
   }
+  sectionElement(item, index){
+    return html`
+    ${item.view_definition !== undefined && item.view_definition.hasDetail !== undefined && item.view_definition.hasDetail === true > 0 ? html`
+    <mwc-icon-button size="s" id="expand" dense raised label="" icon="${item.expanded !== undefined && item.expanded ? 'expand_less' : 'expand_more'}"  @click=${() => this.toggleLeftElements(index)}></mwc-icon-button>
+    <div @click=${() => this.toggleLeftElements(index)} >${item.title["label_"+this.lang]}</div> 
+  `: html`
+  <div class="accordion-title" @click=${() => this.selectSectionView(index)} >${item.title["label_"+this.lang]}</div>
+  `}
+    `
+  }
+  sectionDetail(item, index){
+    return html`
+    ${item.expanded !== undefined && item.expanded ? html`
+      ${item.view_definition !== undefined && item.view_definition.hasDetail !== undefined && item.view_definition.hasDetail === true ? html`        
+        <div id="section${index}_detail" class="layout horizontal center wrap accordion-content" style=${index > -1 ? 'max-height: none;' : ''}>                          
+          ${item.view_definition.detail.type!==undefined&&item.view_definition.detail.type==="actionWithFilter" ? html`
+            <div style="margin-top:1px;text-align:center;padding-bottom:5px;">
+              ${item.view_definition.detail.button===undefined ? nothing: html`
+                <sp-button size="m" slot="primaryAction" dialogAction="accept" .selectedViewDefinition="${item.view_definition}" .tabindex="${index}" @click=${this.filterPerformAction}>
+                  ${item.view_definition.detail.button["label_" + this.lang]} </sp-button>
+            `}
+            </div>  
+            ${this.genericFormElements(item.view_definition.detail.filterFields)}
+          `: nothing}
+          ${item.view_definition.detail.type!==undefined&&item.view_definition.detail.type==="objectsList" ? html`
+          ${this.testingcardSomeElementsRepititiveObjects(item, this.selectedProcInstance, true)}
+          `: nothing}
+        </div>
+      `: nothing}                      
+    `: nothing}    
+    `
+  }
+  testingcardSomeElementsRepititiveObjects(elem, data){    
+    data=this.localGetDataFromRoot(elem.view_definition.detail, data)
+    //console.log('testingcardSomeElementsRepititiveObjects', 'elem', elem, 'getDataFromRoot', data)
+    //console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
+    if (data ===undefined){return html``}
+    return html`  
+    ${Array.isArray(data) && data.length > 0 ? html`
+    <style>
+      li.no_success {
+        color : red;
+      }
+      li.success{
+        color : green;
+      }
+      
+    </style>
+    <ul>
+      ${data.map(d => 
+        html`
+        <li class="${d.run_summary.toUpperCase().includes('SUCCESS')? 'success': 'no_success'}"
+        .thisitem="${d}"  @click=${this.clickedTest} .elementdef="${elem}">
+          ${d.script_id} ${d.run_summary}<br>(${d.date_execution})
+          <hr>
+        </li>
+        `
+      )}
+    </ul>
+    `: nothing
+    }
+    ` 
+  } 
+  clickedTest(e){
+    console.log(e.currentTarget.thisitem)
+//    this.selectedItem = e.currentTarget.thisitem
+    this.selectedTabModelFromProcModel=e.currentTarget.elementdef.view_definition.detail
+    this.objecttabsComposition.isProcManagement=true
+    this.objecttabsComposition.selectedTabModelFromProcModel=this.selectedTabModelFromProcModel
+    this.objecttabsComposition.selectedItem=e.currentTarget.thisitem    
+    this.objecttabsComposition.render()
+  }
+  fieldLabel(fld){
+      return fld["label_"+this.lang]!==undefined ? fld["label_"+this.lang] : fld.name
+      
+  }  
+  localGetDataFromRoot(elem, data){
+    if (data===undefined){return undefined}
+    if (elem.endPointPropertyArray!==undefined){
+      if (elem.endPointPropertyArray.length === 0) {
+        return data;
+      }
+      if (elem.endPointPropertyArray.length === 1 && elem.endPointPropertyArray[0].toUpperCase()==="ROOT") {
+        return data;
+      }            
+      //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
+      //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
+      let i=0
+      let subJSON={}
+      //data = data[elem.endPointPropertyArray[0]][0]
+      for (i=0;i<elem.endPointPropertyArray.length;i++){
+        let propertyName=elem.endPointPropertyArray[i]
+        if (Array.isArray(data[propertyName])){
+          if (i<elem.endPointPropertyArray.length-1){
+            subJSON = data[propertyName][0];
+          }else{
+            return data[propertyName]
+          }
+        }else{
+          subJSON = data[propertyName];
+        }
+        if (typeof subJSON === 'undefined') {
+          return data
+        }else{
+          data = subJSON
+        }                
+      }
+      return data
+      if (typeof subJSON === 'undefined') {
+        return undefined;
+      } else if (elem.endPointPropertyArray.length % 2 === 0) {
+        // If the input array has an even number of elements, skip one more object level before recursing
+        return getValueFromNestedJSON(subJSON, elem.endPointPropertyArray.slice(0, numObjectsToSkip));
+      } else {
+        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
+        return getValueFromNestedJSON(subJSON, elem.endPointPropertyArray.slice(0, numObjectsToSkip));
+      }
+    }else{
+      if (elem.endPointResponseObject!==undefined&&elem.endPointResponseObject2!==undefined){
+        let dataToRet=[]
+        dataToRet=data[elem.endPointResponseObject]
+        if (dataToRet!==undefined){
+          return dataToRet[elem.endPointResponseObject2]
+        }else{
+          return []
+        }
+      }else{
+        if (String(elem.endPointResponseObject).toUpperCase()==="ROOT"){
+          return data
+        }else{
+          return  data[elem.endPointResponseObject]
+        }
+      }
+    }
+  }
+
   selectedProcessTitle() {
     return html`
       <style>
@@ -776,8 +898,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     `
   }
   filterPerformAction(e) {
-    this.selectedViewDefinition = e.currentTarget.selectedViewDefinition
-    console.log('this.selectedViewDefinition', this.selectedViewDefinition)
+    this.selectedViewDefinition = e.currentTarget.selectedViewDefinition.detail
+    //console.log('this.selectedViewDefinition', this.selectedViewDefinition)
     //alert('filterPerformAction')
     this.performActionRequestHavingDialogOrNotForProcess(e.currentTarget.tabindex, this.selectedViewDefinition, this.selectedItems)
   }
@@ -857,9 +979,6 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     item.expanded = !item.expanded;
     this.requestUpdate();
   }
-
-
-  
   get objecttabsComposition() { return this.shadowRoot.querySelector("objecttabs-composition") }
 }
 window.customElements.define('proc-management-home', ProcManagementHome);
