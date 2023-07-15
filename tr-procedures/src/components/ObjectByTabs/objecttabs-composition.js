@@ -109,7 +109,7 @@ export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDial
             ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 
-            ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2!==undefined ? 
+            ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2!==undefined&&data[elem2.endPointResponseObject]!==undefined ? 
               this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true, this.lang) : nothing}
             ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2===undefined ? 
               this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true, this.lang) : nothing}   
@@ -166,7 +166,7 @@ export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDial
 
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
     if (this.selectedItem!==undefined){
-      console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
+      //console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
     }
     return html`${data&&elemDef&&Object.keys(data).length > 0 ?
       html`
