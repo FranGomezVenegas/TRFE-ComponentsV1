@@ -1,11 +1,12 @@
 import { html, css, nothing, LitElement } from 'lit';
+import { CredDialog } from '@trazit/cred-dialog';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import '../ObjectByTabs/objecttabs-composition';
 import '@google-web-components/google-chart';
-
-export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(LitElement))) {
+import {DataViews} from '../../components/Views/DataViews';
+export class CalendarData extends DataViews(TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(CredDialog)))) {
   static get styles() {
     return css`
       :host([disabled]) {
@@ -114,9 +115,10 @@ export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(Dialo
             filterName: { type: String },
             lang: { type: String },
             procInstanceName:{type: String},
-            masterData:{ type: Object},
+            //masterData:{ type: Object},
             requestData: {type: Array},
-            selectedItem:{ type: Array},            
+            //selectedItem:{ type: Array},    
+            calendarDataInfoArr:{type: Array},        
             selectedItemLoaded:{type: Boolean},
             leftSplitDisplayed: { type: Boolean },
 
@@ -131,10 +133,11 @@ export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(Dialo
         this.selectedTabModelFromProcModel={}
         this.ready=false;
         this.config={}
-        this.masterData={} 
+        //this.masterData={} 
         this.langConfig = this.viewModelFromProcModel.langConfig
         this.requestData =[]
-        this.selectedItem=[]
+        //this.selectedItem=[]
+        this.calendarDataInfoArr=[]
         this.selectedItemLoaded=false
         //this.getObjectData()
         this.desktop = true
@@ -219,14 +222,10 @@ export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(Dialo
     }  
     filterPerformAction(e) {
         this.GetViewData(false)
-        if (this.requestData.length>0){
-          if (Array.isArray(this.requestData)){
-            this.selectedItem=this.requestData
-          }else{
-            console.log('requestData is not an Array, value is', this.requestData)
-            this.selectedItem=[]
-          }          
+        if (this.requestData!==undefined){
+          this.calendarDataInfoArr=this.requestData
           this.selectedItemLoaded=true
+          this.selectedTabContent()
         }
 //      }
     }
@@ -310,7 +309,6 @@ export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(Dialo
       if (Object.keys(this.selectedTabModelFromProcModel).length === 0){
         this.selectedTabModelFromProcModel=this.viewModelFromProcModel.tabs[0]
       }
-      let mycols=[{ type: 'date', id: 'Date' }, { type: 'number', id: 'Won/Loss' }]
       let options= {width: 2000,
               height: 720,
               redFrom: 4,
@@ -321,25 +319,25 @@ export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(Dialo
           title: "",
           calendar: {
               dayOfWeekLabel: {
-                fontName: 'Times-Roman',
+                fontName: 'Montserrat',
                 fontSize: 12,
-                color: '#76a7fa',
+                color: '#24c0eb',
                 bold: true,
                 italic: true,
               },
               dayOfWeekRightSpace: 10,
-              daysOfWeek: 'DLMXJVS',
+              daysOfWeek: 'LMXJVSD',
               yearLabel: {
-                fontName: 'Times-Roman',
+                fontName: 'Montserrat',
                 fontSize: 32,
-                color: '#76a7fa',
+                color: '#24c0eb',
                 bold: true,
                 italic: true
               },
               monthOutlineColor: {
-                stroke: '#050B33',
-                strokeOpacity: 0.8,
-                strokeWidth: 2
+                stroke: '#24c0eb',
+                strokeOpacity: 0.5,
+                strokeWidth: 3
               },
               unusedMonthOutlineColor: {
                   stroke: '#050B33',
@@ -348,28 +346,75 @@ export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(Dialo
               },                                                                           
             },
 
-          underMonthSpace: 16,     
+          underMonthSpace: 26,     
           noDataPattern: {
-            backgroundColor: '#EEF1FF',
+            backgroundColor: '#7ed2e9',
             color: '#EEF1FF'
           },
-      }      
-      //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
+      }    
+      let datas=[]
+      let datesArr=[];
+      if (this.calendarDataInfoArr!==undefined&&this.calendarDataInfoArr.dates_grouped!==undefined){
+        datas=this.calendarDataInfoArr.dates_grouped
+        console.log('datesArr for google-chart', datas)
+      }
+      let i=0
+      for (i = 0; i < datas.length; i++) { 
+          console.log('i', i, new Date(Date.parse(datas[i].calendar_date)), datas[i].calendar_date);
+          let newElement=[];
+          newElement[0]=new Date(Date.parse(datas[i].calendar_date)) //new Date(datas[i].year, datas[i].date_month-1, datas[i].date_dayOfMonth);
+          newElement[1]=datas[i].counter
+          datesArr[i]=newElement;                    
+      }
+      let cols=[]
+      cols=[{ type: 'date', id: 'Date' }, { type: 'number', id: 'Won/Loss' }]
       return html`
       ${this.selectedTabModelFromProcModel.view=='Calendar'?html`
-        <div class="layout horizontal center flex wrap">  
-        f
-          <google-chart class="calendarchart" type="calendar" .options=${options} .cols=${mycols}></google-chart>
-          g
+        <div class="layout horizontal center flex wrap">          
+          <google-chart id="mychart" .options=${options} .cols=${cols} .rows=${datesArr} class="calendarChart" type="calendar" @google-chart-select=${this.calendarDayClicked}></google-chart>          
+          <objecttabs-composition id="dayDetail" .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
+            .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
+            .selectedItem=${this.calendarDataInfoArr}  .viewModelFromProcModel=${this.viewModelFromProcModel}   
+          </objecttabs-composition>      
+  
         </div>
       `:html`
       <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
-      .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
-      .selectedItem=${this.selectedItem}  .viewModelFromProcModel=${this.viewModelFromProcModel}   
+        .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
+        .selectedItem=${this.calendarDataInfoArr}  .viewModelFromProcModel=${this.viewModelFromProcModel}   
       </objecttabs-composition>      
       `}
       `
     }
+    calendarDayClicked(e){
+      if (e.currentTarget.selection[e.currentTarget.selection.length-1].date===undefined){
+        return
+      }
+      let cellDateRaw=e.currentTarget.selection[e.currentTarget.selection.length-1].date
+      let cellDate=new Date((cellDateRaw))
+      const filteredArray = this.calendarDataInfoArr.raw_data.filter(entry => 
+        new Date(Date.parse(entry.calendar_date)).getFullYear() === cellDate.getFullYear() &&
+        new Date(Date.parse(entry.calendar_date)).getMonth() === cellDate.getMonth() &&
+        new Date(Date.parse(entry.calendar_date)).getDay() === cellDate.getDay()
+      )
+            
+      this.objecttabsCompositionDayDetail.selectedItem=filteredArray//this.calendarDataInfoArr.raw_data[0]
+      this.objecttabsCompositionDayDetail.selectedTabModelFromProcModel=this.selectedTabModelFromProcModel.day_clicked_detail
+      //alert(cellDate)
+      return
+
+    }  
+    detailElement(elem, dataArr, isSecondLevel, directData, alternativeTitle){
+      return html`
+      hola ${alternativeTitle}
+      ${elem!==undefined?html`
+        ${this.readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle)}
+      `:nothing}
+      `
+    }
+    
+
+
     tabOnOpenView() {
       // <objecttabs-composition 
       // .lang=${this.lang} .masterData=${this.masterData}
@@ -385,143 +430,21 @@ export class CalendarData extends TrazitGenericDialogs(TrazitFormsElements(Dialo
     selectTab(tab) {
       this.selectedTabModelFromProcModel=tab
       if (this.objecttabsComposition!==null){
-        this.objecttabsComposition.render()
-      }
-      if (this.chart!==null){
-        this.setGoogleCalendarChart()
+//        this.objecttabsComposition.render()
       }
     }
 
     resetView() {
       //console.log('resetView', 'tabs', this.tabsMainViewModelFromProcModel.tabs, 'master data', this.masterData)
       if (this.objecttabsComposition!==null){
-        this.objecttabsComposition.render()
+//        this.objecttabsComposition.render()
       }
     }
     get lottoget() {    return this.shadowRoot.querySelector("mwc-textfield#lottoget")    }        
     get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition")}  
-    get chart() {return this.shadowRoot.querySelector("google-chart")}
-    setGoogleCalendarChart() {
-      alert('setGoogleCalendarChart')
-      let cols=[]
-      cols=[{ type: 'date', id: 'Date' }, { type: 'number', id: 'Won/Loss' }]
-       
-      this.chart.cols=cols 
-      let options={}
-      
-      options= 
-        {width: 2000,
-                height: 720,
-                redFrom: 4,
-                redTo: 5,
-                yellowFrom:1,
-                yellowTo: 3,
-                minorTicks: 5,
-            title: "",
-            calendar: {
-                dayOfWeekLabel: {
-                  fontName: 'Times-Roman',
-                  fontSize: 12,
-                  color: '#76a7fa',
-                  bold: true,
-                  italic: true,
-                },
-                dayOfWeekRightSpace: 10,
-                daysOfWeek: 'DLMXJVS',
-                yearLabel: {
-                  fontName: 'Times-Roman',
-                  fontSize: 32,
-                  color: '#76a7fa',
-                  bold: true,
-                  italic: true
-                },
-                monthOutlineColor: {
-                  stroke: '#050B33',
-                  strokeOpacity: 0.8,
-                  strokeWidth: 2
-                },
-                unusedMonthOutlineColor: {
-                    stroke: '#050B33',
-                    strokeOpacity: 0.8,
-                    strokeWidth: 1
-                },                                                                           
-              },
-  
-            underMonthSpace: 16,     
-            noDataPattern: {
-              backgroundColor: '#EEF1FF',
-              color: '#EEF1FF'
-            },
-        }
-        if (this.selectedCalendar){
-          if (this.selectedCalendar.description){
-            options.title=this.selectedCalendar.description
-          }else{
-            options.title=this.selectedCalendar.code
-          }
-        }
-      this.chart.options=options
-      let datas=[]
-      datas=[
-          {year:2019, month:3, day: 1, value:0},
-          {year:2020, month:3, day:2, value:1},
-          {year:2019, month:3, day:3, value:2},
-          {year:2019, month:3, day:4, value:3},
-          {year:2019, month:3, day:5, value:4},
-          {year:2019, month:3, day:6, value:5},
-          {year:2019, month:3, day:7, value:6},
-          {year:2021, month:10, day:1, value:-10},
-      ]
-      //datas=this.selectedCalendar.holidays_calendar_date
-      let i;
-      let datesArr=[];
-      for (i = 0; i < datas.length; i++) { 
-          console.log('i', i, datas[i].year);
-          let newElement=[];
-          newElement[0]=new Date(datas[i].date_year, datas[i].date_month-1, datas[i].date_dayOfMonth);
-          newElement[1]=-50 //datas[i].day_name
-          datesArr[i]=newElement;                    
-      }
-      console.log('datesArr', datesArr);
-      this.chart.rows=datesArr
-      
-      let data = []
-      data.push( [ new Date(2012, 3, 1), 37032 ])
-      data.push( [ new Date(2012, 2, 1), 37032 ])
-      if (this.chart){
-        this.chart.data = JSON.stringify(data)
-        return
-        //this.chart.col = ["Date", "Won/Loss"]
-        var option2s = {
-          title: 'Red Sox Attendance',
-          height: 350,
-          calendar: {
-            dayOfWeekLabel: {
-              fontName: 'Times-Roman',
-              fontSize: 12,
-              color: '#1a8763',
-              bold: true,
-              italic: true,
-            },
-            dayOfWeekRightSpace: 10,
-            daysOfWeek: 'DLMMJVS',
-          }
-        }
-        return
-        this.chart.options=options
-    //    var dataTable = new google.visualization.DataTable();
-    //    dataTable.addColumn({ type: 'date', id: 'Date' });
-    //    dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-        console.log(data)
-        return
-        this.selectedProgram.samples_summary_by_stage.forEach(c => {
-          if (c.current_stage != "END") {
-            data.push([c.current_stage, c.COUNTER])
-          }
-        })
-        this.chart.data = JSON.stringify(data)
-      }
-    }
+    get objecttabsCompositionDayDetail() {return this.shadowRoot.querySelector("objecttabs-composition#dayDetail")}  
+    
+    get chart() {return this.shadowRoot.querySelector("google-chart#mychart")}
   
 }
 window.customElements.define('calendar-data', CalendarData);
