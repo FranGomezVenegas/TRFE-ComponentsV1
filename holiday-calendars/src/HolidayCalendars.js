@@ -35,7 +35,7 @@ const viewInfoDefinition = {
         { "isAdhocField": true, "argumentName": "fieldValue", "element": "text2", "fieldType":"STRING" }
       ],
     "button": {
-      "z-icdon": "refresh",
+      "icon": "create_new_folder",
       "title": {
         "label_en": "Create", "label_es": "Crear"
       },
@@ -49,8 +49,42 @@ const viewInfoDefinition = {
         "text2": { "label_en": "Description", "label_es": "Descripción" },
       }
     }
-    },
-
+    },    
+    { "actionName": "DEACTIVATE_CALENDAR",
+      "selObjectVariableName": "selectedCalendarDate", 
+      "endPoint": "/app/HolidayCalendarAPIactions",
+      "endPointParams": [ 
+        { "argumentName": "name", "internalVariableSimpleObjName":"selectedCalendar", "internalVariableSimpleObjProperty":"code"}              
+      ],
+      "button": {
+        "icon": "alarm_off",
+        "title": {
+          "label_en": "Deactivate", "label_es": "Desactivar"
+        },
+        requiresObjectSelected : false
+      },   
+    },    
+    { "actionName": "REACTIVATE_CALENDAR",
+      "selObjectVariableName": "selectedCalendarDate", 
+      "endPoint": "/app/HolidayCalendarAPIactions",
+      "endPointParams": [ 
+        { "argumentName": "name", "element": "text1" }
+      ],
+      "button": {
+        "icon": "alarm_add",
+        "title": {
+          "label_en": "Reactivate", "label_es": "Reactivar"
+        },
+        requiresObjectSelected : false
+      },   
+      "dialogInfo": {
+        "requiresDialog": true,
+        "name": "genericFormDialog",
+        "fields": {
+          "text1": { "label_en": "Calendar to reactivate", "label_es": "Calendario a reactivar" },          
+        }
+      }
+    }   
   ],
   calendarDateActions: [
     { "actionName": "ADD_DATE_TO_CALENDAR",
@@ -64,7 +98,7 @@ const viewInfoDefinition = {
       { "argumentName": "newDate", "element": "date1" }
     ],
     "button": {
-      "z-icdon": "refresh",
+      "icon": "event_available",
       "title": {
         "label_en": "Add Date", "label_es": "Añadir Fecha"
       },
@@ -87,13 +121,13 @@ const viewInfoDefinition = {
         { "argumentName": "date_id", "internalVariableObjName":"selectedCalendarDate", "internalVariableObjProperty":"id" },        
       ],
       "button": {
-        "z-icdon": "refresh",
+        "icon": "event_busy",
         "title": {
           "label_en": "Remove Date", "label_es": "Quitar Fecha"
         },
         requiresObjectSelected : true
       },   
-    },
+    }     
   ]
 };
 
@@ -203,8 +237,30 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
       mwc-textfield.mdc-textfield.mdc-floating-label {
         color: red; 
       }
+      mwc-select {
+        width: 600px;
+        padding: 0 6px;
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgb(47, 47, 47);
+        --mdc-select-dropdown-icon-color:rgba(36, 192, 235, 1);
+        --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
+        --mdc-notched-outline-border-color: rgba(186, 235, 248, 0.4);
+        --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
 
-      `
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+      }
+      mwc-select.outlined {        
+        --mdc-theme-primary : rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-select-ink-color: rgba(36, 192, 235, 1);
+        font-family : Montserrat;
+        font-weight : bold;
+        font-size : 19px;
+        background-color: 4fcad029;
+      }       `
     ]
   }
 
@@ -235,7 +291,6 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
   }
   calendarSelectorTitle(){
     return viewInfoDefinition.selector.title["label_"+this.lang]
-    return 'Calendar Name'
   }
   listEntryLabel(entry){
     if (entry.description&&entry.description.length>0){
@@ -244,6 +299,7 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
       return entry.code
     }
   }
+  
   render() {
     return html`
       <div class="layout horizontal center flex wrap">      
@@ -310,9 +366,6 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
     if (program.length) {
       this.selectedCalendar = []
       this.selectedCalendar=program[0]
-      //this.selectedCalendar.study = []
-      //this.selectedCalendar.study=[]
-      //console.log('this.selectedCalendar', this.selectedCalendar)
       this.grid.items=program[0].holidays_calendar_date
       this.setGoogleCalendarChart()
       this.requestUpdate()
@@ -326,123 +379,73 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
     this.chart.cols=cols 
     let options={}
     
-    options= 
-      {width: 2000,
-              height: 720,
-              redFrom: 4,
-              redTo: 5,
-              yellowFrom:1,
-              yellowTo: 3,
-              minorTicks: 5,
-          title: "",
-          calendar: {
-              dayOfWeekLabel: {
-                fontName: 'Times-Roman',
-                fontSize: 12,
-                color: '#76a7fa',
-                bold: true,
-                italic: true,
-              },
-              dayOfWeekRightSpace: 10,
-              daysOfWeek: 'DLMXJVS',
-              yearLabel: {
-                fontName: 'Times-Roman',
-                fontSize: 32,
-                color: '#76a7fa',
-                bold: true,
-                italic: true
-              },
-              monthOutlineColor: {
-                stroke: '#050B33',
-                strokeOpacity: 0.8,
-                strokeWidth: 2
-              },
-              unusedMonthOutlineColor: {
-                  stroke: '#050B33',
-                  strokeOpacity: 0.8,
-                  strokeWidth: 1
-              },                                                                           
-            },
-
-          underMonthSpace: 16,     
-          noDataPattern: {
-            backgroundColor: '#EEF1FF',
-            color: '#EEF1FF'
-          },
+    if (this.selectedCalendar){
+      if (this.selectedCalendar.description){
+        options.title=this.selectedCalendar.description
+      }else{
+        options.title=this.selectedCalendar.code
       }
-      if (this.selectedCalendar){
-        if (this.selectedCalendar.description){
-          options.title=this.selectedCalendar.description
-        }else{
-          options.title=this.selectedCalendar.code
-        }
-      }
+    }
+    options= {      
+      width: 2000,
+      height: 720,
+      redFrom: 4,
+      redTo: 5,
+      yellowFrom:1,
+      yellowTo: 3,
+      minorTicks: 5,
+      title: "",
+      calendar: {
+        dayOfWeekLabel: {
+          fontName: 'Montserrat',
+          fontSize: 12,
+          color: '#24c0eb',
+          bold: true,
+          italic: true,
+        },
+        dayOfWeekRightSpace: 10,
+        daysOfWeek: 'LMXJVSD',
+        yearLabel: {
+          fontName: 'Montserrat',
+          fontSize: 32,
+          color: '#24c0eb',
+          bold: true,
+          italic: true
+        },
+        monthOutlineColor: {
+          stroke: '#24c0eb',
+          strokeOpacity: 0.5,
+          strokeWidth: 3
+        },
+        unusedMonthOutlineColor: {
+            stroke: '#050B33',
+            strokeOpacity: 0.8,
+            strokeWidth: 1
+        },                                                                           
+      },
+      underMonthSpace: 26,     
+      noDataPattern: {
+        backgroundColor: '#7ed2e9',
+        color: '#EEF1FF'
+      },
+      legend: "none"
+    }          
     this.chart.options=options
     let datas=[]
-    datas=[
-        {year:2019, month:3, day: 1, value:0},
-        {year:2020, month:3, day:2, value:1},
-        {year:2019, month:3, day:3, value:2},
-        {year:2019, month:3, day:4, value:3},
-        {year:2019, month:3, day:5, value:4},
-        {year:2019, month:3, day:6, value:5},
-        {year:2019, month:3, day:7, value:6},
-        {year:2021, month:10, day:1, value:-10},
-    ]
     datas=this.selectedCalendar.holidays_calendar_date
-    var i;
-    var datesArr=[];
+    let i;
+    let datesArr=[];
     for (i = 0; i < datas.length; i++) { 
         console.log('i', i, datas[i].year);
-        var newElement=[];
+        let newElement=[];
         newElement[0]=new Date(datas[i].date_year, datas[i].date_month-1, datas[i].date_dayOfMonth);
-        newElement[1]=-50 //datas[i].day_name
+        newElement[1]=50 //datas[i].day_name
         datesArr[i]=newElement;                    
     }
     console.log('datesArr', datesArr);
     this.chart.rows=datesArr
-    return
-    let data = []
-    data.push( [ new Date(2012, 3, 1), 37032 ])
-    data.push( [ new Date(2012, 2, 1), 37032 ])
-    if (this.chart){
-      this.chart.data = JSON.stringify(data)
-      //this.chart.col = ["Date", "Won/Loss"]
-      var option2s = {
-        title: 'Red Sox Attendance',
-        height: 350,
-        calendar: {
-          dayOfWeekLabel: {
-            fontName: 'Times-Roman',
-            fontSize: 12,
-            color: '#1a8763',
-            bold: true,
-            italic: true,
-          },
-          dayOfWeekRightSpace: 10,
-          daysOfWeek: 'DLMMJVS',
-        }
-      }
-      this.chart.options=options
-  //    var dataTable = new google.visualization.DataTable();
-  //    dataTable.addColumn({ type: 'date', id: 'Date' });
-  //    dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-      console.log(data)
-      return
-      this.selectedProgram.samples_summary_by_stage.forEach(c => {
-        if (c.current_stage != "END") {
-          data.push([c.current_stage, c.COUNTER])
-        }
-      })
-      this.chart.data = JSON.stringify(data)
-    }
   }
 
-  getTitle() {
-    if (this.viewInfoDefinition&&this.viewInfoDefinition.title[this.filterName]) {
-      return html`<h1>${this.viewInfoDefinition.title[this.filterName]["label_"+this.lang]}</h1>`
-    }
-  }
   getHolidayCalendars() {
     let curCalendar=this.selectedCalendar
     if (curCalendar===undefined){return}
@@ -462,6 +465,7 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
           }else{
             this.grid.items=this.calendars[0].holidays_calendar_date
           }
+          this.setGoogleCalendarChart()
         }
       }
     })
