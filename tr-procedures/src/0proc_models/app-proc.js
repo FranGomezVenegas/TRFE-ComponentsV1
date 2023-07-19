@@ -1,7 +1,8 @@
 export const AppProc ={
   "TrackingChanges":{
 	  "version": 0.9,
-	  "last change on (YYYYMMDD)": "20230710",
+	  "last change on (YYYYMMDD)": "20230718",
+	  "last_change_note_20230718": "Added instr attachment for instruments and events, both",
 	  "last_change_note_20230710": "Added new view, EventsCalendar",
 	  "last_change_note_20230708": "InsturmentView window created to search instruments and show its information/events",
 	  "last_change_note_20230522": "Families changed to suits better names, therefore model windows have been changed to suit them too",
@@ -312,7 +313,7 @@ export const AppProc ={
 			{"date2": {"label_en": "Installation Date", "label_es": "Fecha Instalación" }}
           ]
         }
-      },
+		},
 		{"actionName": "INSTRUMENT_AUDIT_FOR_GIVEN_INSTRUMENT",	  
 		"requiresDialog": true,
 		"endPoint": "/app/procs/InstrumentsAPIqueries",
@@ -367,7 +368,7 @@ export const AppProc ={
         "endPointParams": [
           { "argumentName": "instrumentName", "selObjectPropertyName": "name" }
         ]
-      },
+		},
 		{"actionName": "TURN_ON_LINE",
 		"requiresDialog": false,
         "button": {
@@ -489,7 +490,111 @@ export const AppProc ={
           "action": [            
           ]
         }
-      }
+		},
+		{"actionName": "ADD_ATTACHMENT",
+			"requiresDialog": true,
+			"button": {
+				"icon": "add_link",
+				"title": {
+						"label_en": "Add Attachment", "label_es": "Añadir Adjunto"
+					},
+				"requiresGridItemSelected": true
+			},
+			"dialogInfo": {          
+				"name": "genericDialog",
+				"fields": [
+					{"text1": { "label_en": "Doc Url", "label_es": "Vínculo" }},
+					{"text2": { "label_en": "Title", "label_es": "Título", "optional": true}}
+				]
+			},
+			"endPointParams": [
+				{ "argumentName": "instrumentName", "selObjectPropertyName": "name" },
+				{ "argumentName": "fileUrl", "element": "text1", "defaultValue": "" },
+				{ "argumentName": "briefSummary", "element": "text2", "defaultValue": "" }
+				
+			]
+		},	  
+		{"actionName": "OPEN_ATTACHMENTS",
+			"requiresDialog": true,
+			"button": {
+				"icon": "attach_file",
+				"title": {
+						"label_en": "Open Attachments", "label_es": "Abrir Adjuntos"
+					},
+				"requiresGridItemSelected": true
+			},
+			"dialogInfo": {          
+				"name": "genericDialog",
+				"filesListContent": true,
+				"dialogQuery": {
+					"actionName": "GET_INSTR_ATTACHMENTS",
+					"variableForData": "",
+					"endPointParams": [
+						{"argumentName": "instrumentName", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"name"}
+					],
+					"xxxsubViewFilter": {
+						"ER-FQ": [
+						],
+						"ER-MB": [
+						]
+					}
+				},					
+				"xfields": [
+					{"text1": { "label_en": "Doc Url", "label_es": "Vínculo" }}
+				]
+			},
+			"endPointParams": [
+				{ "argumentName": "instrumentName", "selObjectPropertyName": "name" },
+				{ "argumentName": "fileUrl", "element": "text1", "defaultValue": "" }
+			]
+		},	  
+		{"actionName": "REMOVE_ATTACHMENT",
+			"requiresDialog": true,
+			"button": {
+				"icon": "link_off",
+				"title": {
+						"label_en": "Remove Attachment", "label_es": "Eliminar Adjunto"
+					},
+				"requiresGridItemSelected": true
+			},
+			"dialogInfo": {
+				"name": "genericDialog",
+				"gridContent": true,
+				"dialogQuery": {
+					"actionName": "GET_INSTR_ATTACHMENTS",
+					"variableForData": "",
+					"endPointParams": [
+						{"argumentName": "instrumentName", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"name"}
+					],
+					"xxxsubViewFilter": {
+						"ER-FQ": [
+						],
+						"ER-MB": [
+						]
+					}
+				},					
+				"langConfig": {
+					"gridHeader": [
+						{"fldName": "file_link", "label_en": "Link", "label_es": "Vínculo", "width": "40%",
+							"sort": false, "filter": true, "align": "left"},
+						{"fldName": "brief_summary", "label_en": "Title", "label_es": "Título", "width": "40%",
+							"sort": false, "filter": true, "align": "left"}
+					]
+				},
+				"automatic": true
+			},
+			
+			"dialogInfo2": {          
+				"name": "genericDialog",
+				"fields": [
+					{"text1": { "label_en": "Doc Url", "label_es": "Vínculo" }}
+				]
+			},
+			"endPointParams": [
+				{ "argumentName": "instrumentName", "selObjectPropertyName": "name" },
+				{"argumentName": "attachmentId", "selObjectPropertyName": "id", "getFromGrid": true}
+			]
+		}	  
     ]
   },
   "PlatformInstrumentsBalanzas": {
@@ -1815,24 +1920,9 @@ export const AppProc ={
         "instrument": {"label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"},
         "created_on": {"label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
         "created_by": {"label_en": "Creator", "label_es": "Creador", "sort": false, "filter": false, "is_icon": false, "width": "10%"}
-      },
-      "xxxxresultHeader": {
-        "id": {
-          "label_en": "Id", "label_es": "Id", "width": "10%"
-        },
-        "param_name": {
-          "label_en": "Parameter", "label_es": "Parámetro"
-        },
-        "value": {
-          "label_en": "Value", "label_es": "Valor"
-        }
-      },
-      "xxxresultHeaderObjectLabelTopLeft": {
-        "label_en": "Instrument Event:", "label_es": "Evento de Instrumento :"
       }
     },
     "viewQuery":{ "actionName": "INSTRUMENT_EVENTS_INPROGRESS",	  
-      "xxxclientMethod": "getSamples",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -2075,8 +2165,108 @@ export const AppProc ={
           { "argumentName": "sortFieldsName", "value": "test_id|result_id" },
           { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
         ]
-      }
-	
+      },
+		{"actionName": "ADD_ATTACHMENT",
+			"requiresDialog": true,
+			"button": {
+				"icon": "add_link",
+				"title": {
+						"label_en": "Add Attachment", "label_es": "Añadir Adjunto"
+					},
+				"requiresGridItemSelected": true
+			},
+			"dialogInfo": {          
+				"name": "genericDialog",
+				"fields": [
+					{"text1": { "label_en": "Doc Url", "label_es": "Vínculo" }},
+					{"text2": { "label_en": "Title", "label_es": "Título", "optional": true}}
+				]
+			},
+			"endPointParams": [
+				{"argumentName": "instrumentName", "xinternalVariableObjName": "selectedItems", "selObjectPropertyName":"instrument"},
+				{"argumentName": "eventId", "xinternalVariableObjName": "selectedItems", "selObjectPropertyName":"id"},
+				{ "argumentName": "fileUrl", "element": "text1", "defaultValue": "" },
+				{ "argumentName": "briefSummary", "element": "text2", "defaultValue": "" }
+				
+			]
+		},	  
+		{"actionName": "OPEN_ATTACHMENTS",
+			"requiresDialog": true,
+			"button": {
+				"icon": "attach_file",
+				"title": {
+						"label_en": "Open Attachments", "label_es": "Abrir Adjuntos"
+					},
+				"requiresGridItemSelected": true
+			},
+			"dialogInfo": {          
+				"name": "genericDialog",
+				"filesListContent": true,
+				"dialogQuery": {
+					"actionName": "GET_INSTR_ATTACHMENTS",
+					"variableForData": "",
+					"endPointParams": [
+						{"argumentName": "instrumentName", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"instrument"},
+						{"argumentName": "eventId", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"id"}
+						
+					]
+				}
+			},
+			"endPointParams": [
+				{ "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
+				{ "argumentName": "eventId", "selObjectPropertyName": "id"},
+				{ "argumentName": "fileUrl", "element": "text1", "defaultValue": "" }
+			]
+		},	  
+		{"actionName": "REMOVE_ATTACHMENT",
+			"requiresDialog": true,
+			"button": {
+				"icon": "link_off",
+				"title": {
+						"label_en": "Remove Attachment", "label_es": "Eliminar Adjunto"
+					},
+				"requiresGridItemSelected": true
+			},
+			"dialogInfo": {
+				"name": "genericDialog",
+				"gridContent": true,
+				"dialogQuery": {
+					"actionName": "GET_INSTR_ATTACHMENTS",
+					"variableForData": "",
+					"endPointParams": [
+						{"argumentName": "instrumentName", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"instrument"},
+						{"argumentName": "eventId", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"id"}
+					],
+					"xxxsubViewFilter": {
+						"ER-FQ": [
+						],
+						"ER-MB": [
+						]
+					}
+				},					
+				"langConfig": {
+					"gridHeader": [
+						{"fldName": "file_link", "label_en": "Link", "label_es": "Vínculo", "width": "40%",
+							"sort": false, "filter": true, "align": "left"},
+						{"fldName": "brief_summary", "label_en": "Title", "label_es": "Título", "width": "40%",
+							"sort": false, "filter": true, "align": "left"}
+					]
+				},
+				"automatic": true
+			},
+			
+			"dialogInfo2": {          
+				"name": "genericDialog",
+				"fields": [
+					{"text1": { "label_en": "Doc Url", "label_es": "Vínculo" }}
+				]
+			},
+			"endPointParams": [
+				{ "argumentName": "instrumentName", "selObjectPropertyName": "instrument" },
+				{ "argumentName": "eventId", "selObjectPropertyName": "id"},
+				{"argumentName": "attachmentId", "selObjectPropertyName": "id", "getFromGrid": true}
+			]
+		}	
   ]
   },
   "Deviation": {
@@ -2327,7 +2517,7 @@ export const AppProc ={
 		"view": "summary",
 		"view_definition": [
 		  { "type": "readOnlyTable",
-			"endPointResponseObject": "ROOT",
+			"endPointResponseObject": "raw_data",
 			"xtitle": {
 			  "label_en": "Instrument Info",
 			  "label_es": "Información del Instrumento"
@@ -2375,7 +2565,7 @@ export const AppProc ={
 		"view": "Calendar",
 		"view_definition": [
 		  { "type": "Calendar",
-			"endPointResponseObject": "instrument_event",
+			"endPointResponseObject": "dates_grouped",
 			"title": {
 			  "label_en": "Instrument Events",
 			  "label_es": "Eventos del Instrumento"
@@ -2404,7 +2594,55 @@ export const AppProc ={
 			],
 			"actions": []
 		  }
-		]
+		],
+		"day_clicked_detail":[
+			{ "type": "readOnlyTable",
+			"endPointResponseObject": "ROOT",
+			"xtitle": {
+			  "label_en": "Instrument Info",
+			  "label_es": "Información del Instrumento"
+			},
+			"subtitle": {
+			  "label_en": "Instrument Info",
+			  "label_es": "Información del Instrumento"
+			},
+			"columns": [
+			  {"name": "type",
+			  "label_en": "Type",
+			  "label_es": "Tipo"
+			  },
+			  {"name": "calendar_date",
+			  "label_en": "Date",
+			  "label_es": "Fecha"
+			  },
+			  {"name": "name",
+			  "label_en": "Instrument",
+			  "label_es": "Instrumento"
+			  },
+			  {"name": "family",
+			  "label_en": "Instrument Family",
+			  "label_es": "Familia del instrumento"
+			  },
+			  {"name": "responsible",
+			  "label_en": "Responsible",
+			  "label_es": "Responsable"
+			  },
+			  { "name": "responsible_backup",   
+			  "label_en": "Responsible backup",
+			  "label_es": "Segundo responsable"
+			  },
+			  { "name": "next_calibration",   
+			  "label_en": "Next Calibration",
+			  "label_es": "Próxima Calibración"
+			  },
+			  { "name": "last_calibration",   
+			  "label_en": "Last Calibration",
+			  "label_es": "Última Calibración"
+			  }
+        ],
+        "actions": []
+        }
+      ]
 	  }
 	]
   }
