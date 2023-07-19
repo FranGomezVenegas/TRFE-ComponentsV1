@@ -87,7 +87,7 @@ export function GridFunctions(base) {
             // this.gridItems=[]
             //console.log('gridList')    
             if (viewModelFromProcModel===undefined){return} 
-            if (this.gridItems.length==0){return       }
+            if (this.gridItems===undefined||this.gridItems.length==0){return       }
             return Object.entries(viewModelFromProcModel.langConfig.gridHeader).map(
                 ([key, value], i) => html`
                 ${viewModelFromProcModel.langConfig.gridHeader[key].is_icon ?
@@ -192,7 +192,7 @@ export function GridFunctions(base) {
         //} else if (String(this.viewName).toUpperCase().includes("INSTRUM")&&sample.on_line!==undefined) {
         //    return html`<img src="/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
         } else if (this.viewName == "EventsInProgress") {
-            return html`<img src="/images/inst_ev_type_${sample.event_type.toLowerCase()}.svg" style="width:20px">`
+            return html`<img src="/images/inst_ev_type_${sample.event_type!==undefined?sample.event_type.toLowerCase():''}.svg" style="width:20px">`
         } else if (this.viewName == "WhiteIpList") {
             return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
         } else if (this.viewName == "BlackIpList") {
@@ -245,6 +245,7 @@ export function GridFunctions(base) {
         }
     
         filterColumn(key, value, i, viewModelFromProcModel) {
+           // console.log('filterColumn', key, value, viewModelFromProcModel)
         return html`
             ${this.desktop ?
             html`

@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import { columnBodyRenderer, gridRowDetailsRenderer, contextMenuRenderer } from 'lit-vaadin-helpers';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
@@ -56,7 +56,10 @@ export function TrazitGenericDialogs(base) {
        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
         //alert(false)
         return false
-       }      
+       } 
+       if (actionModel.dialogInfo.name.toString().toUpperCase()==="GENERICDIALOG"){
+            return false
+       }    
        // alert(true)
        this.defaultValue()
        //this.resetFields()
@@ -86,7 +89,6 @@ export function TrazitGenericDialogs(base) {
            e.stopPropagation();
         }
     }
-
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
     genericFormDialog(actionModel) {
         if (actionModel === undefined) {
@@ -159,7 +161,16 @@ export function TrazitGenericDialogs(base) {
             </vaadin-grid>            
         `:html`
         ${!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields ?
-            html``: html`              
+            html`
+                ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.filesListContent!==undefined&&actionModel.dialogInfo.filesListContent===true ?
+                html`
+                    ${this.genericDialogGridItems.map((fld, i) =>
+                    html`
+                    <mwc-icon-button title="${fld.brief_summary!==undefined&&fld.brief_summary.length>0? fld.brief_summary: fld.file_link}" icon="picture_as_pdf" @click=${()=>window.open(fld.file_link, '_blank').focus()} ?disabled=${!fld.file_link}></mwc-icon-button>
+                    `
+                    )}
+                `:nothing}    
+            `: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
                 html`            
                 ${!fld.text1 ?
@@ -666,7 +677,11 @@ export function TrazitGenericDialogs(base) {
         if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
             this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
             return 
-           }
+        }
+        if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
+            this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+            return 
+        }
         if (this.fieldsShouldBeReset===true){
             this.resetFields()
             this.fieldsShouldBeReset=false
@@ -1051,7 +1066,7 @@ export function TrazitGenericDialogs(base) {
     }        
 
     fldDefaultValue(fldDef){
-        console.log('fldDefaultValue', fldDef)
+        //console.log('fldDefaultValue', fldDef)
         if (fldDef.default_value){
             return fldDef.default_value
         } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          

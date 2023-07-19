@@ -356,7 +356,9 @@ export function TrazitCredentialsDialogs(base) {
 
   get jst() {return this.shadowRoot.querySelector("#jst")}
 
-  get dialogSurface() {return this.credDialog.shadowRoot.querySelector(".mdc-dialog__surface")}
+  get dialogSurface() {
+    if (this.credDialog===null){return null}
+    return this.credDialog.shadowRoot.querySelector(".mdc-dialog__surface")}
 
   keyPress(e, method) {
     if (e.keyCode==13) {

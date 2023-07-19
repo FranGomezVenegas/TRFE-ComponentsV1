@@ -166,7 +166,7 @@ export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDial
 
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
     if (this.selectedItem!==undefined){
-      //console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
+    //  console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
     }
     return html`${data&&elemDef&&Object.keys(data).length > 0 ?
       html`

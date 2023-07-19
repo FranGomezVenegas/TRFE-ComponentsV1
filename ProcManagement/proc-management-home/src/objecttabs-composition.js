@@ -70,7 +70,7 @@ export class ObjecttabsComposition extends DataViews(CredDialog) {
     ` 
   }
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel.view_definition, data = this.selectedItem) {
-    //console.log('kpiElementsController', 'data', data, 'elemDef', elemDef)
+    console.log('kpiElementsController', 'data', data, 'elemDef', elemDef)
     return html`${data&&elemDef&&Object.keys(data).length > 0?       
       html`
         <div style="display:block">
