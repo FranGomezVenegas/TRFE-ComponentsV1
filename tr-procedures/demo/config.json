@@ -68,6 +68,11 @@
     "viewName": "EventsCalendar", 
     "filterName" :  "EventsCalendar" 
   },
+  "localDefaultView": {
+    "procName":  "mp-release1", 
+    "viewName": "SpecView", 
+    "filterName" :  "SpecView" 
+  },
   
   
   

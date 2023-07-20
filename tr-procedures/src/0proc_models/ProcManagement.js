@@ -15,16 +15,24 @@ export const ProcManagement = [
           "num_columns": 4,
           "fieldsToDisplay": [
             {
-              "name": "description"
+              "name": "description",
+              "label_en": "Description",
+              "label_es": "Descripcción"
             },
             {
-              "name": "procedure_hash_code"
+              "name": "procedure_hash_code",
+              "label_en": "Procedure Hash Code",
+              "label_es": "Código de comprobación"
             },
             {
-              "name": "procedure_name"
+              "name": "procedure_name",
+              "label_en": "Procedure Name",
+              "label_es": "Nombre del procedimiento"
             },
             {
-              "name": "locked_for_action"
+              "name": "locked_for_actions",
+              "label_en": "Locked for deployments",
+              "label_es": "Bloqueado para despliegues"
             }
           ]
         },
@@ -39,7 +47,7 @@ export const ProcManagement = [
               "type": "readOnlyTable",
               "title": {
                 "label_en": "1.1) Users",
-                "label_es": "1.1) Usuarios"
+                "label_es": "1.2) Usuarios"
               },
               "endPointResponseObject": "process_accesses",
               "endPointResponseObject2": "users",
@@ -104,7 +112,7 @@ export const ProcManagement = [
               "type": "readOnlyTable",
               "title": {
                 "label_en": "1.2) Roles",
-                "label_es": "1.2) Perfiles"
+                "label_es": "1.2) Roles"
               },
               "endPointResponseObject": "process_accesses",
               "endPointResponseObject2": "roles",
@@ -169,7 +177,7 @@ export const ProcManagement = [
               "type": "readOnlyTable",
               "title": {
                 "label_en": "1.3) User Roles",
-                "label_es": "1.3) Perfiles de usuario"
+                "label_es": "1.3) Roles de usuario"
               },
               "endPointResponseObject": "process_accesses",
               "endPointResponseObject2": "user_role",
@@ -339,40 +347,13 @@ export const ProcManagement = [
             },
             {
               "type": "readOnlyTableByGroup",
-              "is_translation": true, "lang": "en",
               "title": {
                 "label_en": "3.3) View Actions",
                 "label_es": "3.3) Acciones por Pantalla"
               },
               "endPointPropertyArray": [
                 "views_info",
-                "view_actions_en"
-              ],
-              "columns": [
-                {
-                  "name": "pretty_name_en",
-                  "is_translation": true,
-                  "label_en": "Name",
-                  "label_es": "Nombre"
-                },
-                {
-                  "name": "pretty_name_es",
-                  "is_translation": true,
-                  "label_en": "Name",
-                  "label_es": "Nombre"
-                }
-              ]
-            },
-            {
-              "type": "readOnlyTableByGroup",
-              "is_translation": true, "lang": "es",
-              "title": {
-                "label_en": "3.3) View Actions",
-                "label_es": "3.3) Acciones por Pantalla"
-              },
-              "endPointPropertyArray": [
-                "views_info",
-                "view_actions_es"
+                "view_actions"
               ],
               "columns": [
                 {
@@ -570,166 +551,172 @@ export const ProcManagement = [
     "expanded": false,
     "alternative_endpoint_data": "actionOutput",
     "view_definition": {
-      "actionName": "DEPLOY_REQUIREMENTS",
-      "notGetViewData": true,
       "label_en": "Deploy Requirements",
       "label_es": "Desplegar Requerimientos",
-      "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-      "button_label_en": "Run",
-      "button_label_es": "Ejecutar",
-      "filterFields": [
-        {
-          "text1": {
-            "label_en": "Proc Name",
-            "label_es": "Proceso",
-            "internalVariableSimpleObjName": "selectedProcInstance",
-            "internalVariableSimpleObjProperty": "procedure_name"
-          }
+      "hasDetail": true,
+      "detail": {
+        "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+        "actionName": "DEPLOY_REQUIREMENTS",
+        "notGetViewData": true,
+        "type": "actionWithFilter",
+        "button": {
+          "label_en": "Run",
+          "button_label_es": "Ejecutar"
         },
-        {
-          "number1": {
-            "label_en": "Version",
-            "label_es": "Proceso",
-            "internalVariableSimpleObjName": "selectedProcInstance",
-            "internalVariableSimpleObjProperty": "procedure_version"
+        "filterFields": [
+          {
+            "text1": {
+              "label_en": "Proc Name",
+              "label_es": "Proceso",
+              "internalVariableSimpleObjName": "selectedProcInstance",
+              "internalVariableSimpleObjProperty": "procedure_name"
+            }
+          },
+          {
+            "number1": {
+              "label_en": "Version",
+              "label_es": "Proceso",
+              "internalVariableSimpleObjName": "selectedProcInstance",
+              "internalVariableSimpleObjProperty": "procedure_version"
+            }
+          },
+          {
+            "text2": {
+              "label_en": "Instance Name",
+              "label_es": "Instancia",
+              "internalVariableSimpleObjName": "selectedProcInstance",
+              "internalVariableSimpleObjProperty": "proc_instance_name"
+            }
+          },
+          {
+            "text3": {
+              "label_en": "Module Name",
+              "label_es": "Nombre del Módulo",
+              "internalVariableSimpleObjName": "selectedProcInstance",
+              "internalVariableSimpleObjProperty": "module_name"
+            }
+          },
+          {
+            "checkbox1": {
+              "label_en": "Repositories and Base Tables",
+              "label_es": "Repositorios y Tablas Base",
+              "default_value": true
+            }
+          },
+          {
+            "checkbox2": {
+              "label_en": "Procedure Info",
+              "label_es": "Info de Proceso",
+              "default_value": true
+            }
+          },
+          {
+            "checkbox3": {
+              "label_en": "Procedure User & Roles",
+              "label_es": "Usuarios y Perfiles",
+              "default_value": true
+            }
+          },
+          {
+            "checkbox4": {
+              "label_en": "SOPs",
+              "label_es": "PNTs",
+              "default_value": false
+            }
+          },
+          {
+            "checkbox5": {
+              "label_en": "Assign SOPs to Users",
+              "label_es": "Asignar PNTs a usuarios",
+              "default_value": false
+            }
+          },
+          {
+            "checkbox6": {
+              "label_en": "Events",
+              "label_es": "Eventos",
+              "default_value": false
+            }
+          },
+          {
+            "checkbox7": {
+              "label_en": "Business Rules",
+              "label_es": "Reglas de Negocio",
+              "default_value": false
+            }
+          },
+          {
+            "checkbox8": {
+              "label_en": "Module Tables and Fields",
+              "label_es": "Tablas y Campos",
+              "default_value": false
+            }
+          },
+          {
+            "checkbox9": {
+              "label_en": "Master Data",
+              "label_es": "Datos Maestros",
+              "default_value": false
+            }
           }
-        },
-        {
-          "text2": {
-            "label_en": "Instance Name",
-            "label_es": "Instancia",
-            "internalVariableSimpleObjName": "selectedProcInstance",
-            "internalVariableSimpleObjProperty": "proc_instance_name"
+        ],
+        "endPointParams": [
+          {
+            "argumentName": "procedureName",
+            "element": "text1"
+          },
+          {
+            "argumentName": "procedureVersion",
+            "element": "number1"
+          },
+          {
+            "argumentName": "procInstanceName",
+            "element": "text2"
+          },
+          {
+            "argumentName": "moduleName",
+            "element": "text3"
+          },
+          {
+            "argumentName": "deployRepositoriesAndProcTbls",
+            "element": "checkbox1"
+          },
+          {
+            "argumentName": "deployProcInfo",
+            "element": "checkbox2"
+          },
+          {
+            "argumentName": "deployProcUserRoles",
+            "element": "checkbox3"
+          },
+          {
+            "argumentName": "deployProcSopMetaData",
+            "element": "checkbox4"
+          },
+          {
+            "argumentName": "deployProcSopsToUsers",
+            "element": "checkbox5"
+          },
+          {
+            "argumentName": "deployProcEvents",
+            "element": "checkbox6"
+          },
+          {
+            "argumentName": "deployProcBusinessRulesPropFiles",
+            "element": "checkbox7"
+          },
+          {
+            "argumentName": "deployModuleTablesAndFields",
+            "element": "checkbox8"
+          },
+          {
+            "argumentName": "deployMasterData",
+            "element": "checkbox9"
           }
-        },
-        {
-          "text3": {
-            "label_en": "Module Name",
-            "label_es": "Nombre del Módulo",
-            "internalVariableSimpleObjName": "selectedProcInstance",
-            "internalVariableSimpleObjProperty": "module_name"
-          }
-        },
-        {
-          "checkbox1": {
-            "label_en": "Repositories and Base Tables",
-            "label_es": "Repositorios y Tablas Base",
-            "default_value": true
-          }
-        },
-        {
-          "checkbox2": {
-            "label_en": "Procedure Info",
-            "label_es": "Info de Proceso",
-            "default_value": true
-          }
-        },
-        {
-          "checkbox3": {
-            "label_en": "Procedure User & Roles",
-            "label_es": "Usuarios y Perfiles",
-            "default_value": true
-          }
-        },
-        {
-          "checkbox4": {
-            "label_en": "SOPs",
-            "label_es": "PNTs",
-            "default_value": false
-          }
-        },
-        {
-          "checkbox5": {
-            "label_en": "Assign SOPs to Users",
-            "label_es": "Asignar PNTs a usuarios",
-            "default_value": false
-          }
-        },
-        {
-          "checkbox6": {
-            "label_en": "Events",
-            "label_es": "Eventos",
-            "default_value": false
-          }
-        },
-        {
-          "checkbox7": {
-            "label_en": "Business Rules",
-            "label_es": "Reglas de Negocio",
-            "default_value": false
-          }
-        },
-        {
-          "checkbox8": {
-            "label_en": "Module Tables and Fields",
-            "label_es": "Tablas y Campos",
-            "default_value": false
-          }
-        },
-        {
-          "checkbox9": {
-            "label_en": "Master Data",
-            "label_es": "Datos Maestros",
-            "default_value": false
-          }
+        ],
+        "filter": {
+          "fixParams": {}
         }
-      ],
-      "endPointParams": [
-        {
-          "argumentName": "procedureName",
-          "element": "text1"
-        },
-        {
-          "argumentName": "procedureVersion",
-          "element": "number1"
-        },
-        {
-          "argumentName": "procInstanceName",
-          "element": "text2"
-        },
-        {
-          "argumentName": "moduleName",
-          "element": "text3"
-        },
-        {
-          "argumentName": "deployRepositoriesAndProcTbls",
-          "element": "checkbox1"
-        },
-        {
-          "argumentName": "deployProcInfo",
-          "element": "checkbox2"
-        },
-        {
-          "argumentName": "deployProcUserRoles",
-          "element": "checkbox3"
-        },
-        {
-          "argumentName": "deployProcSopMetaData",
-          "element": "checkbox4"
-        },
-        {
-          "argumentName": "deployProcSopsToUsers",
-          "element": "checkbox5"
-        },
-        {
-          "argumentName": "deployProcEvents",
-          "element": "checkbox6"
-        },
-        {
-          "argumentName": "deployProcBusinessRulesPropFiles",
-          "element": "checkbox7"
-        },
-        {
-          "argumentName": "deployModuleTablesAndFields",
-          "element": "checkbox8"
-        },
-        {
-          "argumentName": "deployMasterData",
-          "element": "checkbox9"
-        }
-      ],
-      "filter": {
-        "fixParams": {}
       },
       "reportElements": [
         {
@@ -852,12 +839,102 @@ export const ProcManagement = [
       "label_en": "Testing Scripts",
       "label_es": "Guiones de Prueba"
     },
-    "expanded": false,
+    "expanded": true,
     "alternative_endpoint_data": "testing",
     "view_definition": {
+      "hasDetail": true,
+      "detail": {
+        "name": "TESTING_SCRIPTS",
+        "type": "objectsList",
+        "xxxtype": "xxxreadOnlyTable",
+        "endPointPropertyArray": [
+          "testing",
+          "scripts"
+        ],
+        "fieldsToDisplayInFilter": [
+          {
+            "name": "script_id",
+            "label_en": "Id",
+            "label_es": "Id"
+          },
+          {
+            "name": "run_summary",
+            "label_en": "Summary",
+            "label_es": "Resumen"
+          }
+        ],
+        "view_definition": [
+          {
+            "type": "reportTitle",
+            "title": {
+              "label_en": "1) Summary",
+              "label_es": "1) Resumen"
+            },
+            "elements": [
+              {
+                "type": "readOnlyTable",
+                "endPointResponseObject": "ROOT",
+                "columns": [
+                  {
+                    "name": "script_id",
+                    "label_en": "Id",
+                    "label_es": "Id"
+                  },
+                  {
+                    "name": "run_summary",
+                    "label_en": "Summary",
+                    "label_es": "Resumen"
+                  },
+                  {
+                    "name": "date_execution",
+                    "label_en": "Run on",
+                    "label_es": "Ejecutado en"
+                  },
+                  {
+                    "name": "eval_total_tests",
+                    "label_en": "Number of Steps",
+                    "label_es": "Número de Pasos"
+                  },
+                  {
+                    "label_en": "Sintaxis",
+                    "label_es": "Sintáxis",
+                    "fix_value_prefix": "Match: ",
+                    "name": "eval_syntaxis_match",
+                    "fix_value2_prefix": "UNmtch: ",
+                    "name2": "eval_syntaxis_unmatch",
+                    "fix_value3_prefix": "N/A:",
+                    "name3": "eval_syntaxis_undefined"
+                  },
+                  {
+                    "label_en": "Notification",
+                    "label_es": "Notificación",
+                    "fix_value_prefix": "Match: ",
+                    "name": "eval_code_match",
+                    "fix_value2_prefix": "UNmtch: ",
+                    "name2": "eval_code_unmatch",
+                    "fix_value3_prefix": "N/A:",
+                    "name3": "eval_code_undefined"
+                  },
+                  {
+                    "label_en": "Duration",
+                    "label_es": "Duración",
+                    "fix_value_prefix": "",
+                    "name": "time_consume",
+                    "fix_value2_prefix": " (",
+                    " (name2": "time_started",
+                    "fix_value3_prefix": " - ",
+                    "name3": "time_completed",
+                    "fix_value3_suffix": ") "
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
       "reportElements": [
         {
-          "type": "readOnlyTable",
+          "type": "xxxreadOnlyTable",
           "endPointResponseObject": "scripts",
           "columns": [
             {
@@ -916,6 +993,7 @@ export const ProcManagement = [
         {
           "type": "cardSomeElementsRepititiveObjects",
           "endPointResponseObject": "scripts",
+          "add_border": true,
           "fieldsToDisplay": [
             {
               "name": "script_id",

@@ -5237,4 +5237,1621 @@ export const MpRelease1 = {
       }
     ]
   }
+  ,
+  "SpecView": {
+    "component": "ObjectByTabs",
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Lot view",
+      "fix_text_es": "Visor de Lote",
+      "name": "lot_name"
+    },
+    "viewQuery": {
+      "actionName": "GET_SPECS",
+	  "notUseGrid": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        {
+          "argumentName": "specCode",
+          "element": "text1"
+        }
+      ]
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+      {
+        "text1": {
+          "label_en": "Spec to get",
+          "label_es": "Espec a cargar",
+          "fixValue": "Calcium Carbonate"
+        }
+      }
+    ],
+    "filter_results": {
+      "type": "readOnlyTable",
+      "title": "3.4) Menu Definition",
+      "endPointResponseObject": "user_requirements_events",
+      "columns": [
+        {
+          "name": "id",
+          "label_en": "Id",
+          "label_es": "Id"
+        }
+      ]
+    },
+    "actions": [],
+    "tabs": [
+      { "tabLabel_en": "Summary", "tabLabel_es": "Inicio", "view": "summary",
+        "view_definition": [
+          { "type": "cardSomeElementsSingleObject", "endPointResponseObject": "lot_info",
+            "title": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              },
+              {
+                "name": "created_on",
+                "label_en": "Creation D.",
+                "label_es": "F. Creación"
+              },
+              {
+                "name": "material_name",
+                "label_en": "Material",
+                "label_es": "Material"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "num_containers",
+                "label_en": "Num. Containers",
+                "label_es": "Núm. Contenedores"
+              },
+              {
+                "name": "bulk_decision",
+                "name2": "bulk_decision_by",
+                "name3": "bulk_decision_by",
+                "label_en": "Bulks decision",
+                "label_es": "Decisión en los bultos"
+              },
+              {
+                "name": "sampling_plan",
+                "label_en": "sampling_plan",
+                "label_es": "sampling_plan"
+              },
+              {
+                "name": "analysis_status",
+                "label_en": "analysis_status",
+                "label_es": "analysis_status"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "GET_LOT_AUDIT",
+                "requiresDialog": true,
+                "endPoint": "/moduleinsplotrm/InspLotRMAPIqueries",
+                "button": {
+                  "icon": "rule",
+                  "title": {
+                    "label_en": "Lot Audit",
+                    "label_es": "Auditoría de Lote"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "clientMethod": "getObjectAuditInfo",
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "name"
+                  }
+                ],
+                "dialogInfo": {
+                  "name": "auditDialog",
+                  "automatic": true,
+                  "action": [
+                    {
+                      "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+                      "requiresDialog": false,
+                      "notGetViewData": true,
+                      "endPointUrl": "Samples",
+                      "clientMethod": "signAudit",
+                      "endPointParams": [
+                        {
+                          "argumentName": "auditId",
+                          "targetValue": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "actionName": "LOT_ALL_BULKS_TAKE_DECISION",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Take Decision",
+                    "label_es": "Tomar Decisión"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "name"
+                  },
+                  {
+                    "argumentName": "lotBulkDecision",
+                    "element": "list1"
+                  }
+                ]
+              },
+              {
+                "actionName": "LOT_TAKE_USAGE_DECISION",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Take Usage Decision",
+                    "label_es": "Tomar Decisión de uso"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "name"
+                  },
+                  {
+                    "argumentName": "lotUsageDecision",
+                    "element": "list1"
+                  }
+                ]
+              }
+            ]
+          },
+          { "type": "cardSomeElementsRepititiveObjects", "endPointResponseObject": "inventory_retain",
+            "title": {
+              "label_en": "Inventory Retain",
+              "label_es": "Inventario Retén"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "quantity_items",
+                "label_en": "Items",
+                "label_es": "Items"
+              },			
+              {
+                "name": "amount",
+				"name2": "amount_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "quantity_items",
+                "label_en": "Items",
+                "label_es": "Items"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "LOT_RETAIN_RECEPTION",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Adjust Bulk Quantity",
+                    "label_es": "Ajustar Cantidad del Bulto"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "number1": {
+                        "label_en": "Quantity",
+                        "label_es": "Cantidad"
+                      }
+                    },
+                    {
+                      "text1": {
+                        "label_en": "uom",
+                        "label_es": "Unidad Medida",
+                        "optional": true
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "quantity",
+                    "element": "number1"
+                  },
+                  {
+                    "argumentName": "quantityUom",
+                    "element": "text1"
+                  }
+                ]
+              },
+              {
+                "actionName": "LOT_RETAIN_MOVEMENT",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "alarm_on",
+                  "title": {
+                    "label_en": "Adjust Sample Quantity",
+                    "label_es": "Ajustar Cantidad de Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "number1": {
+                        "label_en": "Quantity",
+                        "label_es": "Cantidad"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "quantity",
+                    "element": "number1"
+                  }
+                ]
+              },
+              {
+                "actionName": "LOT_RETAIN_EXTRACT",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Take Decision",
+                    "label_es": "Tomar Decisión"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "lotBulkDecision",
+                    "element": "list1"
+                  }
+                ]
+              },
+              {
+                "actionName": "LOT_RETAIN_LOCK",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Take Decision",
+                    "label_es": "Tomar Decisión"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "lotBulkDecision",
+                    "element": "list1"
+                  }
+                ]
+              },
+              {
+                "actionName": "LOT_RETAIN_UNLOCK",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Take Decision",
+                    "label_es": "Tomar Decisión"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "lotBulkDecision",
+                    "element": "list1"
+                  }
+                ]
+              }
+            ]
+          },
+          { "type": "cardSomeElementsRepititiveObjects", "endPointResponseObject": "lot_bulk",
+            "title": {
+              "label_en": "Lot Bulks",
+              "label_es": "Bultos"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "bulk_name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "sample_quantity",
+                "name2": "sample_quantity_uom",
+                "label_en": "Sample Quantity",
+                "label_es": "Cantidad de Muestra"
+              },
+              {
+                "name": "decision",
+                "label_en": "Decision",
+                "label_es": "Decisión"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "LOT_BULK_ADJUST_QUANTITY",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Adjust Bulk Quantity",
+                    "label_es": "Ajustar Cantidad del Bulto"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    { "number1": {
+						"label_en": "Quantity",
+						"label_es": "Cantidad"
+						}
+                    },
+                    {
+                      "list1SelectedRow": {
+                        "label_en": "UOM",
+                        "label_es": "UDM",
+        				"the_default_value":{"selObjectPropertyName": "default_uom"},
+        				"list_values":{"selObjectPropertyName": "alternative_uoms"}
+                      }
+                    }
+                 ]
+                },
+                "endPointParams": [
+                  {"argumentName": "lotName", "selObjectPropertyName": "lot_name"},
+                  {"argumentName": "bulkId", "selObjectPropertyName": "id"},
+                  {"argumentName": "quantity", "element": "number1"},
+                  {"argumentName": "quantityUom", "element": "list1SelectedRow"}
+                ]
+              },
+              {
+                "actionName": "LOT_BULK_ADJUST_SAMPLE_QUANTITY",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "alarm_on",
+                  "title": {
+                    "label_en": "Adjust Sample Quantity",
+                    "label_es": "Ajustar Cantidad de Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "number1": {
+                        "label_en": "Quantity",
+                        "label_es": "Cantidad"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "quantity",
+                    "element": "number1"
+                  }
+                ]
+              },
+              {
+                "actionName": "LOT_BULK_TAKE_DECISION",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Take Decision",
+                    "label_es": "Tomar Decisión"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "lotBulkDecision",
+                    "element": "list1"
+                  }
+                ]
+              }
+            ]
+          },
+          { "type": "cardSomeElementsRepititiveObjects", "endPointResponseObject": "sample",
+            "title": {
+              "label_en": "Lot Samples",
+              "label_es": "Muestras del Lote"
+            },
+            "subtitle": {
+              "label_en": "Lot Samples",
+              "label_es": "Muestras del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "bulk_name",
+                "label_en": "Bulk",
+                "label_es": "Bulto"
+              },
+              {
+                "name": "sample_id",
+                "label_en": "Id",
+                "label_es": "Id"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "logged_on",
+                "label_en": "Login Date",
+                "label_es": "F. Registro"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "GET_SAMPLE_AUDIT",
+                "buttonForQuery": true,
+                "requiresDialog": true,
+                "endPoint": "/modulesample/SampleAPIqueries",
+                "button": {
+                  "icon": "rule",
+                  "title": {
+                    "label_en": "Sample Audit",
+                    "label_es": "Auditoría de Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "clientMethod": "getObjectAuditInfo",
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  }
+                ],
+                "dialogInfo": {
+                  "name": "auditDialog",
+                  "automatic": true,
+                  "action": [
+                    {
+                      "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+                      "requiresDialog": false,
+                      "notGetViewData": true,
+                      "xxxxsecondaryActionToPerform": {
+                        "name": "getObjectAuditInfo",
+                        "endPointParams": [
+                          {
+                            "argumentName": "sampleId",
+                            "selObjectPropertyName": "sample_id"
+                          }
+                        ]
+                      },
+                      "endPointUrl": "Samples",
+                      "clientMethod": "signAudit",
+                      "endPointParams": [
+                        {
+                          "argumentName": "auditId",
+                          "targetValue": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "actionName": "ENTERRESULT",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "alertMsg": {
+                  "empty": {
+                    "label_en": "No pending results to enter result",
+                    "label_es": "No hay resultados pendientes de resultados"
+                  }
+                },
+                "button": {
+                  "icon": "document_scanner",
+                  "title": {
+                    "label_en": "Enter Result",
+                    "label_es": "Ingrese el Resultado"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "resultDialog",
+                  "subQueryName": "getResult",
+                  "viewQuery": {
+                    "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+                    "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+                    "endPointParams": [
+                      {
+                        "argumentName": "sampleId",
+                        "selObjectPropertyName": "sample_id"
+                      }
+                    ],
+                    "subViewFilter": {
+                      "ER-FQ": [
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsName",
+                          "value": "testing_group|status not in-"
+                        },
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsValue",
+                          "value": "FQ*String|REVIEWED-CANCELED*String"
+                        }
+                      ],
+                      "ER-MB": [
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsName",
+                          "value": "testing_group|status not in-"
+                        },
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsValue",
+                          "value": "MB*String|REVIEWED-CANCELED*String"
+                        }
+                      ]
+                    }
+                  },
+                  "automatic": true,
+                  "resultHeader": {
+                    "spec_eval": {
+                      "label_en": "Spec Eval",
+                      "label_es": "Eval Espec"
+                    },
+                    "result_id": {
+                      "label_en": "Result Id",
+                      "label_es": "Id Resultado"
+                    },
+                    "analysis": {
+                      "label_en": "Analysis",
+                      "label_es": "Análísis"
+                    },
+                    "param_name": {
+                      "label_en": "Parameter",
+                      "label_es": "Parámetro"
+                    },
+                    "raw_value": {
+                      "label_en": "Value",
+                      "label_es": "Valor"
+                    },
+                    "uom": {
+                      "label_en": "UOM",
+                      "label_es": "UOM"
+                    }
+                  },
+                  "resultHeaderObjectLabelTopLeft": {
+                    "label_en": "Sample: ",
+                    "label_es": "Muestra: "
+                  },
+                  "action": [
+                    {
+                      "actionName": "ENTERRESULT",
+                      "notGetViewData": true,
+                      "requiresDialog": false,
+                      "endPointUrl": "Samples",
+                      "clientMethod": "enterResult",
+                      "endPointParams": [
+                        {
+                          "argumentName": "rawValueResult",
+                          "targetValue": true
+                        },
+                        {
+                          "argumentName": "resultId",
+                          "targetValue": true
+                        }
+                      ]
+                    },
+                    {
+                      "actionName": "RESULT_CHANGE_UOM",
+                      "clientMethod": "changeUOM",
+                      "endPointParams": [
+                        {
+                          "argumentName": "newResultUom",
+                          "targetValue": true
+                        },
+                        {
+                          "argumentName": "resultId",
+                          "targetValue": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleAnalysisResultFieldToRetrieve",
+                    "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
+                  },
+                  {
+                    "argumentName": "sortFieldsName",
+                    "value": "test_id|result_id"
+                  },
+                  {
+                    "argumentName": "sampleAnalysisWhereFieldsName",
+                    "value": "testing_group|status not in"
+                  },
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  }
+                ],
+                "subViewFilter": {
+                  "ER-FQ": [
+                    {
+                      "argumentName": "sampleAnalysisWhereFieldsValue",
+                      "value": "FQ|REVIEWED*String"
+                    }
+                  ],
+                  "ER-MB": [
+                    {
+                      "argumentName": "sampleAnalysisWhereFieldsValue",
+                      "value": "MB|REVIEWED*String"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          { "type": "readOnlyTable", "endPointResponseObject": "spec_definition",
+            "endPointResponseObject2": "spec_limits",
+            "columns": [
+              {
+                "name": "variation_name",
+                "label_en": "Variation",
+                "label_es": "Variación"
+              },
+              {
+                "name": "testing_group",
+                "label_en": "Testing Group",
+                "label_es": "Grupo Analítico"
+              },
+              {
+                "name": "analysis",
+                "label_en": "Analysis",
+                "label_es": "Análisis"
+              },
+              {
+                "name": "method_name",
+                "fix_value2_prefix": "v",
+                "name2": "method_version",
+                "label_en": "Method & Version",
+                "label_es": "Método y Versión"
+              },
+              {
+                "name": "rule_type",
+                "label_en": "Rule",
+                "label_es": "Regla"
+              },
+              {
+                "name": "parameter",
+                "label_en": "Parameter",
+                "label_es": "Parámetro"
+              },
+              {
+                "name": "pretty_spec",
+                "label_en": "Specification",
+                "label_es": "Especificación"
+              }
+            ]
+          },
+          {
+            "type": "zzzjsonViewer",
+            "endPointResponseObject": "lot_info"
+          },
+          {
+            "type": "zzjsonViewer",
+            "endPointResponseObject": "spec_definition"
+          }
+        ]
+      },
+	  { "tabLabel_en": "Limits", "tabLabel_es": "Límites", "view": "summary",
+        "view_definition": [
+          {
+            "type": "readOnlyTable",
+            "endPointResponseObject": "spec_limits",
+            "columns": [
+              {
+                "name": "rule",
+                "label_en": "Rule",
+                "label_es": "Regla"
+              },
+              {
+                "name": "method_and_version",
+                "label_en": "Method & Version",
+                "label_es": "Método y Versión"
+              },
+              {
+                "name": "analysis",
+                "label_en": "Analysis",
+                "label_es": "Análisis"
+              },
+              {
+                "name": "parameter",
+                "label_en": "Parameter",
+                "label_es": "Parámetro"
+              },
+              {
+                "name": "variation",
+                "label_en": "Variation",
+                "label_es": "Variación"
+              },
+              {
+                "name": "testing_group",
+                "label_en": "Testing Group",
+                "label_es": "Grupo Analítico"
+              }
+            ]
+          }
+		]
+	  },
+	  { "tabLabel_en": "Automated Testing", "tabLabel_es": "Pruebas automáticas", "view": "summary",
+        "view_definition": [
+        {
+          "type": "readOnlyTable",
+          "endPointResponseObject": "scripts_detail",
+          "columns": [
+            {
+              "name": "script_id",
+              "label_en": "Id",
+              "label_es": "Id"
+            },
+            {
+              "name": "run_summary",
+              "label_en": "Summary",
+              "label_es": "Resumen"
+            },
+            {
+              "name": "date_execution",
+              "label_en": "Run on",
+              "label_es": "Ejecutado en"
+            },
+            {
+              "name": "eval_total_tests",
+              "label_en": "Number of Steps",
+              "label_es": "Número de Pasos"
+            },
+            {
+              "label_en": "Sintaxis",
+              "label_es": "Sintáxis",
+              "fix_value_prefix": "Match: ",
+              "name": "eval_syntaxis_match",
+              "fix_value2_prefix": "UNmtch: ",
+              "name2": "eval_syntaxis_unmatch",
+              "fix_value3_prefix": "N/A:",
+              "name3": "eval_syntaxis_undefined"
+            },
+            {
+              "label_en": "Notification",
+              "label_es": "Notificación",
+              "fix_value_prefix": "Match: ",
+              "name": "eval_code_match",
+              "fix_value2_prefix": "UNmtch: ",
+              "name2": "eval_code_unmatch",
+              "fix_value3_prefix": "N/A:",
+              "name3": "eval_code_undefined"
+            },
+            {
+              "label_en": "Duration",
+              "label_es": "Duración",
+              "fix_value_prefix": "",
+              "name": "time_consume",
+              "fix_value2_prefix": " (",
+              " (name2": "time_started",
+              "fix_value3_prefix": " - ",
+              "name3": "time_completed",
+              "fix_value3_suffix": ") "
+            }
+          ]
+        },
+        {
+          "type": "cardSomeElementsRepititiveObjects",
+          "endPointResponseObject": "scripts",
+          "fieldsToDisplay": [
+            {
+              "name": "script_id",
+              "label_en": "Id",
+              "label_es": "Id"
+            },
+            {
+              "name": "run_summary",
+              "label_en": "Summary",
+              "label_es": "Resumen"
+            },
+            {
+              "name": "date_execution",
+              "label_en": "Run on",
+              "label_es": "Ejecutado en"
+            },
+            {
+              "name": "eval_total_tests",
+              "label_en": "Number of Steps",
+              "label_es": "Número de Pasos"
+            },
+            {
+              "label_en": "Sintaxis",
+              "label_es": "Sintáxis",
+              "fix_value_prefix": "Match: ",
+              "name": "eval_syntaxis_match",
+              "fix_value2_prefix": "UNmtch: ",
+              "name2": "eval_syntaxis_unmatch",
+              "fix_value3_prefix": "N/A:",
+              "name3": "eval_syntaxis_undefined"
+            },
+            {
+              "label_en": "Notification",
+              "label_es": "Notificación",
+              "fix_value_prefix": "Match: ",
+              "name": "eval_code_match",
+              "fix_value2_prefix": "UNmtch: ",
+              "name2": "eval_code_unmatch",
+              "fix_value3_prefix": "N/A:",
+              "name3": "eval_code_undefined"
+            },
+            {
+              "label_en": "Duration",
+              "label_es": "Duración",
+              "fix_value_prefix": "",
+              "name": "time_consume",
+              "fix_value2_prefix": " (",
+              " (name2": "time_started",
+              "fix_value3_prefix": " - ",
+              "name3": "time_completed",
+              "fix_value3_suffix": ") "
+            }
+          ],
+          "actions": [
+            {
+              "actionName": "TESTING_SCRIPT_RUN",
+              "endPoint": "/testing/platform/TestingRegressionUAT",
+              "requiresDialog": false,
+              "certificationException": true,
+              "secondaryActionToPerform": {
+                "name": "testScriptPerformed",
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "name"
+                  }
+                ]
+              },
+              "button": {
+                "icon": "date_range",
+                "title": {
+                  "label_en": "Run Coverage Analysis",
+                  "label_es": "Ejecutar Análisis de Cobertura"
+                },
+                "requiresGridItemSelected": false
+              },
+              "endPointParams": [
+                {
+                  "argumentName": "scriptId",
+                  "selObjectPropertyName": "script_id"
+                },
+                {
+                  "argumentName": "procManagement",
+                  "fixValue": "true"
+                }
+              ]
+            }
+          ]
+        }
+		]
+	  },	  
+	  { "tabLabel_en": "Not Analyzed Params", "tabLabel_es": "Parametros no analizados", "view": "summary",
+        "view_definition": [
+          { "type": "readOnlyTable", "endPointResponseObject": "lot_not_analyzed_result",
+            "title": {
+              "label_en": "",
+              "label_es": ""
+            },
+            "subtitle": {
+              "label_en": "",
+              "label_es": ""
+            },
+            "columns": [
+              {
+                "name": "analysis",
+                "label_en": "Items",
+                "label_es": "Items"
+              },			
+              {
+                "name": "value",
+				"name2": "amount_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "reason",
+                "label_en": "Reason",
+                "label_es": "Motivo"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "LOT_ADD_NOTANALYZED_PARAM",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Adjust Bulk Quantity",
+                    "label_es": "Ajustar Cantidad del Bulto"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {"text1": {
+                        "label_en": "Analysis",
+                        "label_es": "Análisis",
+                        "optional": false
+                      }
+                    },
+                    {"text2": {
+                        "label_en": "Value",
+                        "label_es": "value",
+                        "optional": false
+                      }
+                    },
+                    {"text3": {
+                        "label_en": "Reason",
+                        "label_es": "Razón",
+                        "optional": false
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "analysisName",
+                    "element": "text1"
+                  },
+                  {
+                    "argumentName": "value",
+                    "element": "text2"
+                  },
+                  {
+                    "argumentName": "reason",
+                    "element": "text3"
+                  }
+                ]
+              },
+              {
+                "actionName": "LOT_RETAIN_UNLOCK",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Take Decision",
+                    "label_es": "Tomar Decisión"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "bulkId",
+                    "selObjectPropertyName": "id"
+                  },
+                  {
+                    "argumentName": "lotBulkDecision",
+                    "element": "list1"
+                  }
+                ]
+              }
+            ]
+          }
+		]
+	  },
+	  
+    ],
+    "zzzztabs": [
+      {
+        "tabLabel_en": "Summary",
+        "tabLabel_es": "Inicio",
+        "view": "summary",
+        "view_definition": [
+          {
+            "type": "cardSomeElementsRepititiveObjects",
+            "endPointResponseObject": "lot_info",
+            "title": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              },
+              {
+                "name": "created_on",
+                "label_en": "Creation D.",
+                "label_es": "F. Creación"
+              },
+              {
+                "name": "material_name",
+                "label_en": "Material",
+                "label_es": "Material"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "num_containers",
+                "label_en": "Num. Containers",
+                "label_es": "Núm. Contenedores"
+              },
+              {
+                "name": "bulk_decision",
+                "name2": "bulk_decision_by",
+                "name3": "bulk_decision_by",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "sampling_plan",
+                "label_en": "sampling_plan",
+                "label_es": "sampling_plan"
+              },
+              {
+                "name": "analysis_status",
+                "label_en": "analysis_status",
+                "label_es": "analysis_status"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "GET_SAMPLE_AUDIT",
+                "requiresDialog": true,
+                "endPoint": "/modulesample/SampleAPIqueries",
+                "button": {
+                  "icon": "rule",
+                  "title": {
+                    "label_en": "Sample Audit",
+                    "label_es": "Auditoría de Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "clientMethod": "getObjectAuditInfo",
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  }
+                ],
+                "dialogInfo": {
+                  "name": "auditDialog",
+                  "automatic": true,
+                  "action": [
+                    {
+                      "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+                      "requiresDialog": false,
+                      "notGetViewData": true,
+                      "endPointUrl": "Samples",
+                      "clientMethod": "signAudit",
+                      "endPointParams": [
+                        {
+                          "argumentName": "auditId",
+                          "targetValue": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "zzzjsonViewer",
+            "endPointResponseObject": "lot_info"
+          },
+          {
+            "type": "zzjsonViewer",
+            "endPointResponseObject": "spec_definition"
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Bulks",
+        "tabLabel_es": "Bultos",
+        "view": "lot-bulks",
+        "view_definition": [
+          {
+            "type": "cardSomeElementsRepititiveObjects",
+            "endPointResponseObject": "lot_bulk",
+            "title": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "id",
+                "label_en": "Id",
+                "label_es": "Id"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "sample_quantity",
+                "name2": "sample_quantity_uom",
+                "label_en": "Sample Quantity",
+                "label_es": "Cantidad de Muestra"
+              },
+              {
+                "name": "decision",
+                "label_en": "Decision",
+                "label_es": "Decisión"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "SETSAMPLINGDATE",
+                "endPointUrl": "Samples",
+                "requiresDialog": false,
+                "button": {
+                  "icon": "date_range",
+                  "title": {
+                    "label_en": "Set Sample Date",
+                    "label_es": "Establecer Fecha Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  }
+                ]
+              },
+              {
+                "actionName": "CHANGESAMPLINGDATE",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Change Sample Date",
+                    "label_es": "Cambiar Fecha Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "datetime1": {
+                        "label_en": "new Date",
+                        "label_es": "Nueva Fecha"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  },
+                  {
+                    "argumentName": "newDateTime",
+                    "element": "datetime1",
+                    "selObjectPropertyName": "sampling_date"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Samples",
+        "tabLabel_es": "Muestras",
+        "view": "lot-samples"
+      },
+      {
+        "tabLabel_en": "CoA Preview",
+        "Previa CdA": "Muestras",
+        "view": "lot-coa"
+      },
+      {
+        "tabLabel_en": "Parameter Limits",
+        "tabLabel_es": "Límites",
+        "view": "parameter-limits",
+        "view_definition": [
+          {
+            "type": "readOnlyTable",
+            "endPointResponseObject": "spec_definition",
+            "endPointResponseObject2": "spec_limits",
+            "columns": [
+              {
+                "name": "rule",
+                "label_en": "Rule",
+                "label_es": "Regla"
+              },
+              {
+                "name": "method_and_version",
+                "label_en": "Method & Version",
+                "label_es": "Método y Versión"
+              },
+              {
+                "name": "analysis",
+                "label_en": "Analysis",
+                "label_es": "Análisis"
+              },
+              {
+                "name": "parameter",
+                "label_en": "Parameter",
+                "label_es": "Parámetro"
+              },
+              {
+                "name": "variation",
+                "label_en": "Variation",
+                "label_es": "Variación"
+              },
+              {
+                "name": "testing_group",
+                "label_en": "Testing Group",
+                "label_es": "Grupo Analítico"
+              }
+            ]
+          },
+          {
+            "type": "zzzjsonViewer",
+            "endPointResponseObject": "spec_definition"
+          },
+          {
+            "type": "zzzgrid",
+            "title": {
+              "label_en": "Info Matching Selection Criteria",
+              "label_es": "Información cumpliendo el criterio de selección"
+            },
+            "elementName": "spec_limits",
+            "endPointResponseObject": "spec_definition",
+            "endPointResponseObject2": "spec_limits",
+            "fieldsToDisplay": [
+              {
+                "property": "method_name",
+                "header": "Method"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
