@@ -1,4 +1,5 @@
-export const ProcManagement = [
+export const ProcManagement = 
+[
   {
     "name": "URS",
     "title": {
@@ -846,7 +847,6 @@ export const ProcManagement = [
       "detail": {
         "name": "TESTING_SCRIPTS",
         "type": "objectsList",
-        "xxxtype": "xxxreadOnlyTable",
         "endPointPropertyArray": [
           "testing",
           "scripts"
@@ -867,8 +867,8 @@ export const ProcManagement = [
           {
             "type": "reportTitle",
             "title": {
-              "label_en": "1) Summary",
-              "label_es": "1) Resumen"
+              "label_en": "Summary",
+              "label_es": "Resumen"
             },
             "elements": [
               {
@@ -915,6 +915,111 @@ export const ProcManagement = [
                     "fix_value3_prefix": "N/A:",
                     "name3": "eval_code_undefined"
                   },
+                  {
+                    "label_en": "Duration",
+                    "label_es": "Duración",
+                    "fix_value_prefix": "",
+                    "name": "time_consume",
+                    "fix_value2_prefix": " (",
+                    " (name2": "time_started",
+                    "fix_value3_prefix": " - ",
+                    "name3": "time_completed",
+                    "fix_value3_suffix": ") "
+                  }
+                ],
+                "actions": [
+                    {
+                      "actionName": "TestingRegressionUAT",
+                      "endPoint": "/testing/platform/TestingRegressionUAT",
+                      "requiresDialog": false,
+                      "certificationException": true,
+                      "button": {
+                        "icon": "date_range",
+                        "title": {
+                          "label_en": "Run Testing",
+                          "label_es": "Ejecutar Prueba"
+                        },
+                        "requiresGridItemSelected": false
+                      },
+                      "endPointParams": [
+                        {
+                          "argumentName": "scriptId",
+                          "selObjectPropertyName": "script_id"
+                        },
+                        {
+                          "argumentName": "procInstanceName",
+                          "contextVariableName": "procInstanceName"
+                        },
+                        {
+                          "argumentName": "procManagement",
+                          "fixValue": "true"
+                        },
+                        {
+                          "argumentName": "outputFormat",
+                          "fixValue": "JSON"
+                        }                    
+                      ]
+                    }
+                  ]				
+              }
+            ]
+          },
+          {
+            "type": "reportTitle",
+            "title": {
+              "label_en": "Steps",
+              "label_es": "Pasos"
+            },
+            "elements": [
+              {
+                "type": "readOnlyTable",
+                "endPointResponseObject": "scripts",
+                "endPointResponseObject2": "steps",
+                "columns": [
+                  {
+                    "name": "step_id",
+                    "label_en": "Id",
+                    "label_es": "Id"
+                  },
+                  {
+                    "name": "action_name",
+                    "label_en": "Action",
+                    "label_es": "Acción"
+                  },
+                  {
+                    "name": "date_execution",
+                    "label_en": "Run on",
+                    "label_es": "Ejecutado en"
+                  },
+                  {
+                    "name": "eval_total_tests",
+                    "label_en": "Number of Steps",
+                    "label_es": "Número de Pasos"
+                  },
+                  {
+                    "label_en": "Sintaxis",
+                    "label_es": "Sintáxis",
+                    "fix_value_prefix": "Eval: ",
+                    "name": "eval_syntaxis_icon",
+                    "fix_value2_prefix": "(Expected: ",
+                    "name2": "expected_syntaxis",
+                    "fix_value2_suffix": ")",
+                    "fix_value3_prefix": " (Trazit:",
+                    "name3": "function_syntaxis",
+                    "fix_value3_suffix": ")"
+                  },
+                  {
+                    "label_en": "Notification",
+                    "label_es": "Notificación",
+                    "fix_value_prefix": "Eval: ",
+                    "name": "eval_code",
+                    "fix_value2_prefix": "(Expected: ",
+                    "name2": "expected_code",
+                    "fix_value2_suffix": ")",
+                    "fix_value3_prefix": " (Trazit:",
+                    "name3": "function_code",
+                    "fix_value3_suffix": ")"
+                  },                  
                   {
                     "label_en": "Duration",
                     "label_es": "Duración",
@@ -1053,15 +1158,6 @@ export const ProcManagement = [
               "endPoint": "/testing/platform/TestingRegressionUAT",
               "requiresDialog": false,
               "certificationException": true,
-              "secondaryActionToPerform": {
-                "name": "testScriptPerformed",
-                "endPointParams": [
-                  {
-                    "argumentName": "lotName",
-                    "selObjectPropertyName": "name"
-                  }
-                ]
-              },
               "button": {
                 "icon": "date_range",
                 "title": {
@@ -1078,7 +1174,11 @@ export const ProcManagement = [
                 {
                   "argumentName": "procManagement",
                   "fixValue": "true"
-                }
+                },
+                {
+                  "argumentName": "outputFormat",
+                  "fixValue": "JSON"
+                }                
               ]
             }
           ]

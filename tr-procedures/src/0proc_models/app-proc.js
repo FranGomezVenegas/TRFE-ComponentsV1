@@ -594,7 +594,21 @@ export const AppProc ={
 				{ "argumentName": "instrumentName", "selObjectPropertyName": "name" },
 				{"argumentName": "attachmentId", "selObjectPropertyName": "id", "getFromGrid": true}
 			]
-		}	  
+		},
+  	    {"actionName": "NEW_INVESTIGATION", 
+			"alternativeAPIActionMethod": "newInvestigationAction",
+			"requiresDialog": false,
+			"button": {
+			  "title": {
+				"label_en": "Create Investigation", "label_es": "Crear Investigación"
+			  },
+			  "requiresGridItemSelected": true
+			},
+			"endPointParams": [
+				{ "argumentName": "objectToAddObjectType", "fixValue": "instruments" },
+				{ "argumentName": "objectToAddObjectName", "selObjectPropertyName": "name" }		
+			]
+		}		
     ]
   },
   "PlatformInstrumentsBalanzas": {
