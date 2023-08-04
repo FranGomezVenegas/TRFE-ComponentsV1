@@ -5,9 +5,23 @@ import '../platform-login';
 class DemoExample extends LitElement {
   static get styles() {
     return css`
-    div[hidden] {
-      display: none;
-    }
+      div[hidden] {
+        display: none;
+      }
+      .btn {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: 1px solid rgb(36, 192, 235);
+        color: white;
+        background-color: rgb(36, 192, 235);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn:hover {
+        color: rgb(36, 192, 235);
+        background-color: white;
+        transform: scale(1.02);
+      }
     `
   }
 
@@ -32,18 +46,34 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-      <platform-login @authorized=${e=>this.auth=e.target.auth} 
-        localBusinessRules=true
-        .businessRules=${this.businessRules}></platform-login>
-      <div ?hidden="${!this.auth}">
-        <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <button @click=${()=>this.pLogin.logout()}>Logout</button>
-      </div>
+      ${
+        this.auth ? 
+        html`<div ?hidden="${!this.auth}">
+          <h1>Hi ${this.getUser()}, you are authorized</h1>
+          <button class="btn" @click=${this.logout}>Logout</button>
+        </div>`
+        :
+        html`<platform-login 
+          @authorized=${e=>this.auth=e.target.auth} 
+          .businessRules=${this.businessRules}
+          localBusinessRules=true
+        ></platform-login>`
+      }
     `;
   }
 
   get pLogin() {
     return this.shadowRoot.querySelector("platform-login")
+  }
+
+  clearSessionStorage() {
+    window.sessionStorage.clear();
+  }
+
+  logout() {
+    console.log('PlatformLogin::logout')
+    this.clearSessionStorage();
+    window.location.href = "/";
   }
 
   /**

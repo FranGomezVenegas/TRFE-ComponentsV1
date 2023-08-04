@@ -1,9 +1,9 @@
 {
   "dbName": "labplanet",
-  "dbName2023": "trazit_2023",
+  "dbNameDemo": "demo_v0_9_1",
   "isForTesting": false,
-  "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
-  "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
+  "backendUrlServer": "http://51.75.202.142:8888/LabPLANET-API",
+  "backendUrl": "http://localhost:8080/LabPLANET-API",
 
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
 
