@@ -36,7 +36,7 @@ export function DataViews(base) {
         }
 
         getDataFromRoot(elem, data){
-          if (data===undefined){return undefined}
+          if (data===null||data===undefined){return undefined}
           if (elem.endPointPropertyArray!==undefined){
             if (elem.endPointPropertyArray.length === 0) {
               return data;
@@ -50,6 +50,7 @@ export function DataViews(base) {
             let subJSON={}
             //data = data[elem.endPointPropertyArray[0]][0]
             for (i=0;i<elem.endPointPropertyArray.length;i++){
+              if (data===null){return undefined}
               let propertyName=elem.endPointPropertyArray[i]
               if (Array.isArray(data[propertyName])){
                 if (i<elem.endPointPropertyArray.length-1){
@@ -513,7 +514,7 @@ export function DataViews(base) {
           `;
         }              
         readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
-          console.log('elem', elem, 'data', dataArr)
+          //console.log('elem', elem, 'data', dataArr)
           if (isSecondLevel===undefined){isSecondLevel=false}
           if (directData!==undefined){
             dataArr=directData
@@ -593,6 +594,21 @@ export function DataViews(base) {
           span.title.false{
             font-size: 18px;
           }
+          mwc-icon-button.green{
+            color: "#4ed249";
+            width:12px;
+            height:12px;
+          }
+          mwc-icon-button.yellow{
+            color: "#FFC300";
+            width:12px;
+            height:12px;
+          }
+          mwc-icon-button.red{
+            color: "#900C3F";
+            width:12px;
+            height:12px;
+          }                    
           </style>
 
           <div style="display: flex; flex-direction: row; text-align: center;">
@@ -656,9 +672,19 @@ export function DataViews(base) {
                                 </td>           
                               `:html`
                                   <td>
-                                  ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}${p[fld.name]}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
-                                  ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}${fld.name2!==undefined ? p[fld.name2] : ''}${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
-                                  ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}${fld.name3!==undefined ? p[fld.name3] : ''}${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
+                                  ${fld.fix_value_prefix!==undefined ? fld.fix_value_prefix : ''}
+                                  ${fld.is_icon!==undefined&&fld.is_icon==true?html`
+                                    <mwc-icon-button 
+                                      class="${p[fld.icon_class]}"
+                                      icon="${p[fld.icon_name]}" 
+
+                                      >
+                                    </mwc-icon-button>
+                                  `:html`
+                                  <span>${p[fld.name]}</span>
+                                  `}${fld.fix_value_suffix!==undefined ? fld.fix_value_suffix : ''}
+                                  ${fld.fix_value2_prefix!==undefined ? fld.fix_value2_prefix : ''}<span>${fld.name2!==undefined ? p[fld.name2] : ''}</span>${fld.fix_value2_suffix!==undefined ? fld.fix_value2_suffix : ''}
+                                  ${fld.fix_value3_prefix!==undefined ? fld.fix_value3_prefix : ''}<span>${fld.name3!==undefined ? p[fld.name3] : ''}</span>${fld.fix_value3_suffix!==undefined ? fld.fix_value3_suffix : ''}
                                   </td>
                               `}
                             `}
