@@ -41,7 +41,7 @@ export function CalendarUtilities(base) {
             `
         }  
         buttonDisable(action){
-          console.log('buttonDisable')
+          //console.log('buttonDisable')
           if (action===undefined||action.button===undefined){return true}
           if (action.button.requiresObjectSelected===undefined){return true}
           if (action.button.requiresObjectSelected===null){return true}
@@ -59,8 +59,9 @@ export function CalendarUtilities(base) {
         
           buttonAction(action, selectedItem, replace = true, actionNumIdx) {
             //alert('buttonActions')
-            console.log(action, this.newStudyIndividual, action)
+            //console.log(action, this.newStudyIndividual, action)
             this.selectedAction=action
+            this.actionBeingPerformedModel=action
             if (action===undefined){return}
             if (action.clientMethod===undefined&&action.dialogInfo===undefined){
               this.buttonActionWithoutDialogNoCredChecker(action, selectedItem)
@@ -93,5 +94,32 @@ export function CalendarUtilities(base) {
             console.log('tableHeight', 'tableItemsObj', tableItemsObj, dynamicH+'px')
             return dynamicH.toString()+"px" //(tableItemsObj.length*35)+100
           }
+          async GetAlternativeViewData(queryDefinition, selObject = {}){
+            if (queryDefinition.clientMethod!==undefined){
+                //alert('Calling '+queryDefinition.clientMethod+' from GetViewData')            
+                if (this[queryDefinition.clientMethod]===undefined){
+                    alert('not found any clientMethod called '+queryDefinition.clientMethod)
+                    return
+                }
+                this[queryDefinition.clientMethod]()
+                return
+            }
+            console.log('GetAlternativeViewData', 'queryDefinition', queryDefinition)
+            let APIParams=this.getAPICommonParams(queryDefinition)
+            let viewParams=this.jsonParam(queryDefinition, selObject)
+            let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+            let params = this.config.backendUrl + endPointUrl
+              + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
+    
+            //console.log('params', params)        
+            await this.fetchApi(params).then(j => {
+              if (j && !j.is_error) {
+                this.setGrid(j)
+              } else {            
+                this.setGrid()
+              }
+            })
+            this.samplesReload = false
+        }           
     }
 }  

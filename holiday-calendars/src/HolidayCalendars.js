@@ -3,6 +3,7 @@ import { CommonCore } from '@trazit/common-core';
 import { CalendarUtilities } from './CalendarUtilities';
 import { CalendarActions } from './CalendarActions';
 import { CalendarDialogTemplate} from './CalendarDialogTemplate';
+import { TrazitReactivateObjectsDialog} from './TrazitReactivateObjectsDialog';
 import { ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions';
 import '@google-web-components/google-chart';
 import '@material/mwc-select';
@@ -65,26 +66,44 @@ const viewInfoDefinition = {
       },   
     },    
     { "actionName": "REACTIVATE_CALENDAR",
-      "selObjectVariableName": "selectedCalendarDate", 
-      "endPoint": "/app/HolidayCalendarAPIactions",
-      "endPointParams": [ 
-        { "argumentName": "name", "element": "text1" }
+      "endPoint": "/app/HolidayCalendarAPIactions",  
+      "endPointParams": [
+        { "argumentName": "name", "selObjectPropertyName": "code" }
       ],
+      "clientMethod": "openReactivateObjectDialog",
       "button": {
         "icon": "alarm_add",
         "title": {
           "label_en": "Reactivate", "label_es": "Reactivar"
         },
-        requiresObjectSelected : false
-      },   
-      "dialogInfo": {
-        "requiresDialog": true,
-        "name": "genericFormDialog",
-        "fields": {
-          "text1": { "label_en": "Calendar to reactivate", "label_es": "Calendario a reactivar" },          
-        }
+        "requiresObjectSelected": false
+      },
+      "requiresDialog": true,
+      "dialogInfo": {          
+        "name": "reactivateObjectDialog",
+        "fieldsObject": {
+          "queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+          "objectName": { "label_en": "Calendar to reactivate", "label_es": "Calendario a Reactivar" }
+        },    
+        "listDefinition":{
+          "keyFldName":"code",
+          "eachEntryTextGenerator":[
+            {"value": "Name: ", "type":"fix"}, {"value": "code", "type":"field"}, {"value": " (", "type":"fix"}, {"value": "description", "type":"field"}, {"value": ")", "type":"fix"} 
+          ]
+        },
+        "viewQuery": {
+          "actionName": "DEACTIVATED_HOLIDAY_CALENDARS_LAST_N_DAYS",
+          "clientMethod": "getDeactivatedObjects",
+          "endPoint": "/app/HolidayCalendarAPIqueries",
+          "endPointParams": [
+            { "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
+          ]
+        },
+        "action": [            
+        ]
       }
-    }   
+    },
+
   ],
   calendarDateActions: [
     { "actionName": "ADD_DATE_TO_CALENDAR",
@@ -132,7 +151,7 @@ const viewInfoDefinition = {
 };
 
  
-export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore))))) {
+export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunctions(CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore))))))) {
   static get styles() {
     return [
       css`
@@ -237,8 +256,8 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
       mwc-textfield.mdc-textfield.mdc-floating-label {
         color: red; 
       }
-      mwc-select {
-        width: 600px;
+      mwc-select {     
+        width: 400px;  
         padding: 0 6px;
         --mdc-theme-primary : rgba(36, 192, 235, 1);
         --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
@@ -274,6 +293,8 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
       selectedTxts: { type: Array },
       selectedCalendarDate: { type: Array },
       selectedCalendar: { type: Object },
+      actionBeingPerformedModel:{type: Object},
+      selectedItems: { type: Array },
     };
   }
 
@@ -286,8 +307,9 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
     this.selectedTxts = []
     this.calendars = []
     this.selectedCalendar = [{}]
-    this.selectedCalendarDate = []
-    
+    this.selectedCalendarDate = [],
+    this.actionBeingPerformedModel={}
+    this.selectedItems=[]    
   }
   calendarSelectorTitle(){
     return viewInfoDefinition.selector.title["label_"+this.lang]
@@ -304,7 +326,7 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
     return html`
       <div class="layout horizontal center flex wrap">      
         <mwc-icon-button icon="refresh" @click=${this.getHolidayCalendars}></mwc-icon-button>      
-        <mwc-select outlined id="calendarsList" label="${this.calendarSelectorTitle()}" @change=${this.calendarChanged} ?hidden=${this.calendars.length<2}>
+        <mwc-select style=" width: 600px;" outlined id="calendarsList" label="${this.calendarSelectorTitle()}" @change=${this.calendarChanged} ?hidden=${this.calendars.length<2}>
             ${this.calendars&&this.calendars.map((p,i) => 
               html`<mwc-list-item value="${p.code}" ?selected=${i==0}>${this.listEntryLabel(p)}</mwc-list-item>`
             )}
@@ -327,7 +349,8 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
         <vaadin-grid-filter-column path="created_on" .header="${viewInfoDefinition.grid.created_on["label_"+this.lang]}"></vaadin-grid-filter-column>
         <vaadin-grid-filter-column path="created_by" .header="${viewInfoDefinition.grid.created_by["label_"+this.lang]}"></vaadin-grid-filter-column>
       </vaadin-grid>
-      ${this.calendarDialogsTemplate()} 
+      ${this.calendarDialogsTemplate()}
+      ${this.reactivateObjectsDialog()} 
     `;
   }
     
@@ -359,7 +382,7 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
     }
   }  
   calendarChanged(e) {
-    console.log('calendarChanged', e.target.value)
+    //console.log('calendarChanged', e.target.value)
     let program = []
     this.selectedCalendarDate = []
     program=this.calendars.filter(p => p.code == e.target.value)
@@ -442,7 +465,7 @@ export class HolidayCalendars extends ApiFunctions(CalendarDialogTemplate(Calend
         newElement[1]=50 //datas[i].day_name
         datesArr[i]=newElement;                    
     }
-    console.log('datesArr', datesArr);
+    //console.log('datesArr', datesArr);
     this.chart.rows=datesArr
   }
 

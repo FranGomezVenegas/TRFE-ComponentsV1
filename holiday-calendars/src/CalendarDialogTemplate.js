@@ -77,9 +77,14 @@ export function CalendarDialogTemplate(base) {
         //if (this.listSelectedStudyIndividuals){this.listSelectedStudyIndividuals.value=''}
       }
     calendarDialogsTemplate() {   
-      console.log('calendarDialogsTemplate') 
+      //console.log('calendarDialogsTemplate') 
+      
       if (this.selectedAction&&this.selectedAction.dialogInfo){ 
-        console.log(this.selectedAction.actionName, this.selectedAction.dialogInfo)
+        //console.log(this.selectedAction.actionName, this.selectedAction.dialogInfo)
+        if (this.selectedAction&&this.selectedAction.dialogInfo.name==='reactivateObjectDialog'){
+          return
+        }
+        
       }
       return html`
         <tr-dialog id="genericFormDialog"         
