@@ -7,7 +7,7 @@ import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
 import '@spectrum-web-components/button/sp-button';
 import '@trazit/tr-dialog/tr-dialog';
-import '@material/chips';
+
 
 export function getUserSession() {
   let userSession = JSON.parse(sessionStorage.getItem("userSession"))
