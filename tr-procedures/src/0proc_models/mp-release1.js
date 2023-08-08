@@ -2,7 +2,9 @@ export const MpRelease1 =
 {
   "TrackingChanges": {
     "version": 0.9,
-	"last change on (YYYYMMDD)": "20230718",
+	"last change on (YYYYMMDD)": "20230808",
+	"last_change_note_20230808": "Fixed Deviation view, it requires buttons to be by entity or object_type, by now the new_inv/add to inv buttons are for lot_bulk. In case new object types will be added then buttons should be cloned and adapted accordingly.",
+	"last_change_note_20230726": "Added Deviation view",
     "last_change_note_20230718": "In LotView, added tab for non analyzed params and for inventory retain",
     "last_change_note_20230625": "Created new form element, list1SelectedRow, for the uoms on create new lot",
 	"last_change_note_20230620": "Added new button add sample analysis",
@@ -5284,18 +5286,20 @@ export const MpRelease1 =
 		},
 		"actions": [
           {"actionName": "NEW_INVESTIGATION", 
-            "alternativeAPIActionMethod": "newInvestigationAction",
 			"requiresDialog": false,
             "button": {
               "title": {
                 "label_en": "Create Investigation", "label_es": "Crear Investigación"
               },
-              "requiresGridItemSelected": true
+              "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": {
+					"column": "object_type",
+					"value": "lot_bulk"
+			  }
             },
             "endPointParams": [
-				{ "argumentName": "fieldName", "value": "description" },
-				{ "argumentName": "fieldValue", "targetValue": true },
-				{ "argumentName": "objectsToAdd", "targetValue": true }			
+				{ "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type" },	
+				{ "argumentName": "objectToAddObjectName", "selObjectPropertyName": "bulk_id" }
             ]
           },
           {"actionName": "OPEN_INVESTIGATIONS",          
@@ -5304,7 +5308,11 @@ export const MpRelease1 =
               "title": {
                 "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
               },
-              "requiresGridItemSelected": true
+              "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": {
+					"column": "object_type",
+					"value": "lot_bulk"
+			  }			  
             },
             "dialogInfo": {
 			"name": "investigationDialog",
@@ -5315,9 +5323,9 @@ export const MpRelease1 =
                   "actionName": "ADD_INVEST_OBJECTS",
                   "XclientMethod": "addInvestObjects",
                   "endPointParams": [
-                    {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "investigation_id"},
+                    {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
 					{ "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type" },
-					{ "argumentName": "objectToAddObjectName", "selObjectPropertyName": "id" }
+					{ "argumentName": "objectToAddObjectName", "selObjectPropertyName": "bulk_id" }
                   ]
                 }
               ]

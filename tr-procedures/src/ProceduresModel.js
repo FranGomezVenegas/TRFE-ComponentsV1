@@ -129,8 +129,8 @@ export const DemoViews = [
     {"proc_instance_name": "mp-release1", "view_name": "ReviewTestingGroup", "filter_name": "RTG-FQ", "title": "RTG-FQ"},
     {"proc_instance_name": "mp-release1", "view_name": "ReviewTestingGroup", "filter_name": "RTG-MB", "title": "RTG-MB"},
     {"proc_instance_name": "mp-release1", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"},
-    {"proc_instance_name": "mp-release1", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"}	
-
+    {"proc_instance_name": "mp-release1", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
+	{"proc_instance_name": "mp-release1", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"}
   ]
   }
 ]
