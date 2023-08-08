@@ -1,6 +1,7 @@
 export function ProcManagementMethods(base) {
     return class extends (base) {
-      selectedProcedureInstance(e){    
+      selectedProcedureInstance(e){ 
+        this.selectedProcInstance={}   
         this.selectedProcInstance=this.allProcedures.find(item => item.proc_instance_name === e.currentTarget.id);
         this.selectSectionView(0)
         this.render()
@@ -14,7 +15,7 @@ export function ProcManagementMethods(base) {
         this.credsChecker(this.actionBeingPerformedModel.actionName, null, this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]), this.actionBeingPerformedModel, true)
       }
       testScriptPerformed(){
-          //alert('testScriptPerformed')
+          alert('testScriptPerformed')
           let mye={}
           mye.currentTarget={}
           mye.currentTarget.id=this.procInstanceName
