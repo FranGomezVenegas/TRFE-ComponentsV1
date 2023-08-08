@@ -52,14 +52,15 @@ export function TrazitGenericDialogs(base) {
       this.genericDialogGridItems=[]
       this.genericDialogGridSelectedItems=[]
     }
-    openThisDialog(actionModel = this.actionBeingPerformedModel){
-       if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
-        //alert(false)
-        return false
-       } 
-       if (actionModel.dialogInfo.name.toString().toUpperCase()==="GENERICDIALOG"){
+    openGenericDialog(actionModel = this.actionBeingPerformedModel){
+        if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
             return false
        }    
+
+//        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
+//        //alert(false)
+//        return false
+//       } 
        // alert(true)
        this.defaultValue()
        //this.resetFields()
@@ -141,7 +142,7 @@ export function TrazitGenericDialogs(base) {
         background-color: 4fcad029;
       }       
     </style>
-        <tr-dialog id="genericDialog"  @opened=${this.defaultValue}  ?open=${this.openThisDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
+        <tr-dialog id="genericDialog"  @opened=${this.defaultValue}  ?open=${this.openGenericDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
         
         ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true ?
         html`
@@ -149,7 +150,7 @@ export function TrazitGenericDialogs(base) {
                 <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
                     ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericGridDialog}>
-                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]} grid</sp-button>
             </div>  
 
             <vaadin-grid .items=${this.genericDialogGridItems} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
@@ -591,7 +592,7 @@ export function TrazitGenericDialogs(base) {
                 <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}>
                     ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
-                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]} normal</sp-button>
             </div>
         `}
         `}

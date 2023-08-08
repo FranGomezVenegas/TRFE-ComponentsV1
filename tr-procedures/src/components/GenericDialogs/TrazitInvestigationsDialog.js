@@ -23,7 +23,20 @@ return class extends DialogsFunctions(base) {
         this.capaRequired=false
         this.targetValue={}
     }
+    openGenericDialog(actionModel = this.actionBeingPerformedModel){
+      if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
+          return false
+      }    
 
+//        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
+//        //alert(false)
+//        return false
+//       } 
+     // alert(true)
+     this.defaultValue()
+     //this.resetFields()
+     return true 
+  }
     investigationTemplate() {
       //console.log('viewModelFromProcModel', this.viewModelFromProcModel)
       if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined
@@ -152,7 +165,7 @@ return class extends DialogsFunctions(base) {
         "investigationId": this.selectedInvestigations[0].id,
         "objectsToAdd": "sample_analysis_result*" + this.selectedItems[0].result_id
       }
-      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], targetValue)
+      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], targetValue, undefined, this.selectedInvestigations[0])
     }
     newInvestigationAction() {
 //      console.log('newInvestigationAction')

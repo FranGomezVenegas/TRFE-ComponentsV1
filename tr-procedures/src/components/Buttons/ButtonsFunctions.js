@@ -592,14 +592,15 @@ export function ButtonsFunctions(base) {
         // this.performActionRequestHavingDialogOrNot(action, selectedItem)
         return
     }
-    performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs ={}){ 
+    performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs ={}, gridSelectedItem={}){ 
         if (action.alternativeAPIActionMethod!==undefined){
             this[action.alternativeAPIActionMethod]()
             return
         }      
-        let gridSelectedItem={}
-        if (this.genericDialogGridSelectedItems!==undefined&&this.genericDialogGridSelectedItems.length>0){
-          gridSelectedItem=this.genericDialogGridSelectedItems[0]
+        if (gridSelectedItem===undefined||gridSelectedItem===null){
+          if (this.genericDialogGridSelectedItems!==undefined&&this.genericDialogGridSelectedItems.length>0){
+            gridSelectedItem=this.genericDialogGridSelectedItems[0]
+          }
         }
         var extraParams=this.jsonParam(action, selectedItem, targetValue, gridSelectedItem)   
         let APIParams=this.getAPICommonParams(action)
