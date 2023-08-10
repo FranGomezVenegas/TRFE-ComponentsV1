@@ -592,7 +592,7 @@ export function TrazitGenericDialogs(base) {
                 <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}>
                     ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
-                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]} normal</sp-button>
+                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
             </div>
         `}
         `}
