@@ -185,7 +185,7 @@
     "viewName": "LotCreation", 
     "filterName" :  "LotCreation" 
   },
-  "localDefaultViewASDAS": {
+  "localDefaultView": {
     "procName":  "mp-release1", 
     "viewName": "LotView", 
     "filterName" :  "LotView" 

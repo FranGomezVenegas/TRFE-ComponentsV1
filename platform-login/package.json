@@ -3,7 +3,7 @@
   "description": "Component login of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "main": "index.js",
   "module": "index.js",
   "scripts": {

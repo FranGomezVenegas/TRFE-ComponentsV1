@@ -1459,19 +1459,72 @@ export const MpRelease1 =
             "columns": [
               {
                 "name": "analysis",
-                "label_en": "Items",
-                "label_es": "Items"
+                "label_en": "Analysis",
+                "label_es": "Análisis"
               },			
               {
                 "name": "value",
 				"name2": "amount_uom",
-                "label_en": "Quantity",
-                "label_es": "Cantidad"
+                "label_en": "Value",
+                "label_es": "Valor"
               },
               {
                 "name": "reason",
                 "label_en": "Reason",
                 "label_es": "Motivo"
+              }
+            ],
+            "row_buttons": [              
+              {
+                "actionName": "LOT_REMOVE_NOTANALYZED_PARAM",
+                "requiresDialog": false,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Remove",
+                    "label_es": "Borrar"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "xdialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Decision",
+                        "label_es": "Decisión",
+                        "items": [
+                          {
+                            "keyName": "ACCEPTED",
+                            "keyValue_en": "Accepted",
+                            "keyValue_es": "Aceptado"
+                          },
+                          {
+                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                            "keyValue_en": "Accepted with restrictions",
+                            "keyValue_es": "Aceptado con restricciones"
+                          },
+                          {
+                            "keyName": "REJECTED",
+                            "keyValue_en": "Rejected",
+                            "keyValue_es": "Rechazado"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "lotName",
+                    "selObjectPropertyName": "lot_name"
+                  },
+                  {
+                    "argumentName": "analysisName",
+                    "selObjectPropertyName": "analysis"
+                  }
+                ]
               }
             ],
             "actions": [
