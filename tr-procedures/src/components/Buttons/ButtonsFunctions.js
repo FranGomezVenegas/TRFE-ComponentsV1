@@ -7,6 +7,129 @@ import { ProcManagementMethods} from '../../components/ProcManagement/ProcManage
 
 export function ButtonsFunctions(base) {
     return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
+
+    getButtonForRows(actions, data, isProcManagement) {   
+      if (actions===undefined){actions=this.viewModelFromProcModel}   
+//      console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
+      return html`
+        <style>
+          mwc-icon-button#lang {        
+            color : rgba(36, 192, 235, 1);
+            font-family : Montserrat;
+            font-weight : bold;
+            font-size : 19px;
+          }
+          mwc-button {
+            background-color: rgba(36, 192, 235, 1);
+            font-family: Montserrat;
+            font-weight: bold;
+            font-size: 19px;
+            --mdc-theme-primary:rgba(36, 192, 235, 1);
+            border-radius: 12px;
+          }
+          mwc-button.button {        
+            color : rgba(36, 192, 235, 1);
+            font-family : Montserrat;
+            font-weight : bold;
+            font-size : 19px;
+            background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+            font-family: Montserrat;
+            font-weight: bold;
+            font-size: 19px;
+            color: white;
+            border-color: transparent !important;
+            --mdc-button-fill-color: red;
+            --mdc-button-ink-color: blue;
+            border-radius: 12px;
+          }            
+          mwc-icon-button {        
+            color : rgba(36, 192, 235, 1);
+            font-family : Montserrat;
+            font-weight : bold;
+            font-size : 19px;
+          }        
+          mwc-icon-button.disabledtrue{        
+            color : red;
+            font-family : Montserrat;
+            font-weight : bold;
+            font-size : 19px;
+          }        
+          mwc-icon-button#video {
+            color : #FFFFFF;
+            color : rgba(36, 192, 235, 1);
+          }
+          sp-button {
+            background : #24C0EB;
+            background : rgba(36, 192, 235, 1);
+            border-color : inherit !important;
+            border-radius : 35px;
+            -moz-border-radius : 35px;
+            -webkit-border-radius : 35px;
+            font-family : Montserrat;
+            font-weight : bold;
+            font-size : 19px;
+            color : #FFFFFF;
+            color : rgb(255, 255, 255);
+          }
+          mwc-textfield {
+            border-style : Solid;
+            border-color : #999999;
+            border-color : rgba(153, 153, 153, 1);        
+            border-width : 1px;
+            border-radius : 7px;
+            -moz-border-radius : 7px;
+            -webkit-border-radius : 7px;   
+            font-family : Montserrat;
+            font-weight : bold;
+            font-size : 19px;
+            background-color :  #FFFFFF;
+            background-color : rgb(255, 255, 255);     
+            background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
+          }
+          mwc-textfield.mdc-text-field {
+            background-color :  #FFFFFF;
+            background-color : rgb(255, 255, 255);     
+          }
+          mwc-textfield.mdc-textfield.mdc-floating-label {
+            color: red; 
+          }
+        </style>     
+          ${actions!==undefined&&actions.map(action =>
+          html`
+          ${this.btnHidden(action) ? nothing : 
+          html`${action.button ?
+              html`${action.button.icon ?
+              html`<mwc-icon-button 
+                  class="${action.button.class} disabled${this.btnDisabled(action, actions)}"
+                  icon="${action.button.icon}" 
+                  title="${action.button.title['label_'+this.lang]}" 
+                  ?disabled=${this.btnDisabled(action, actions)}
+                  ?hidden=${this.btnHidden(action)}
+                  @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-icon-button>` :
+              html`${action.button.img ?
+                  html`<mwc-icon-button 
+                  class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
+                  title="${action.button.title['label_'+this.lang]}" 
+                  ?disabled=${this.btnDisabled(action, actions)}
+                  ?hidden=${this.btnHidden(action)}
+                  @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}>
+                      <img class="iconBtn" src="images/${action.button.img}">
+                  </mwc-icon-button>` :
+                  html`<mwc-button dense raised 
+                  label="${action.button.title['label_'+this.lang]}" 
+                  ?disabled="${this.btnDisabled(action, actions)}"
+                  ?hidden=${this.btnHidden(action)}
+                  @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-button>`
+              }`
+              }` :
+              nothing
+            }`
+          }`
+          )}
+      `
+      }    
+        
+
     getButton(sectionModel, data, isProcManagement) {   
       if (sectionModel===undefined){sectionModel=this.viewModelFromProcModel}   
 //      console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
@@ -347,10 +470,11 @@ export function ButtonsFunctions(base) {
               //this.config.backendUrl=j.backendUrl
           })          
         }else{
-          if (this.config.backendUrl===undefined){
+          if (this.config.backendUrl===undefined){            
             this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
-            this.config.dbName="labplanet"
-            this.config.isForTesting=false
+            console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
+            //this.config.dbName="labplanet"
+            //this.config.isForTesting=false
           }
           //console.log('GetViewData', 'queryDefinition', queryDefinition)
           let APIParams=this.getAPICommonParams(queryDefinition)
@@ -429,8 +553,9 @@ export function ButtonsFunctions(base) {
         }
         if (this.config.backendUrl===undefined){
           this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
-          this.config.dbName="labplanet"
-          this.config.isForTesting=false
+          console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
+          //this.config.dbName="labplanet"
+          //this.config.isForTesting=false
         }
         let queryDefinition=this.viewModelFromProcModel.viewQuery
         if (queryDefinition===undefined){return}

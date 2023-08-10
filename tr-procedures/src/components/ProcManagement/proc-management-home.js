@@ -279,6 +279,7 @@ export class ProcManagementHome extends ProcManagementMethods(
   }
   constructor() {
     super();
+    this.config={}
     this.localModel = false;
     this.leftSplitDisplayed = true;
     this.show = false;
@@ -302,30 +303,28 @@ export class ProcManagementHome extends ProcManagementMethods(
       variableName: "allProcedures",
       endPointResponseVariableName: "all_platform_procedures_list",
     };
-    //this.viewModelFromProcModel=ProcManagement.ProcedureDefinition
-    // console.log('constructor', 'this.config', this.config, this.viewModelFromProcModel)
+  }
 
+  firstUpdated() {
     if (this.localModel) {
       this.allProcedures =
         ProceduresManagement.ProceduresFake.all_platform_procedures_list;
       this.selectedProcInstance = this.allProcedures[0];
-      //this.selectSectionView(0)
       this.selectedViewDefinition = this.selectedProcInstance.views[0];
 
       if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
-        //this.objecttabsComposition.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
         this.selectedItem =
           this.selectedProcInstance[
             this.selectedViewDefinition.alternative_endpoint_data
           ];
       } else {
-        //this.objecttabsComposition.selectedItem = this.selectedProcInstance.definition
         this.selectedItem = this.selectedProcInstance.definition;
       }
     } else {
       this.GetViewData(this.viewModelFromProcModel.viewQuery);
     }
   }
+
   resetView() {
     this.selectedProcInstance = undefined;
     this.selectedViewDefinition = undefined;
@@ -341,6 +340,7 @@ export class ProcManagementHome extends ProcManagementMethods(
   }
 
   selectSectionView(index, notResetSelectedView) {
+    console.log("section clicked");
     if (notResetSelectedView === undefined || !notResetSelectedView) {
       this.selectedItem = {};
     }
@@ -367,9 +367,25 @@ export class ProcManagementHome extends ProcManagementMethods(
       this.selectedTabModelFromProcModel = this.selectedViewDefinition;
       this.selectedItem = this.selectedProcInstance.definition;
     }
+
+    // Get from session storage
+
+    let selectedScripts = sessionStorage.getItem("selectedScripts");
+    if (selectedScripts !== undefined && selectedScripts !== null) {
+      selectedScripts = JSON.parse(selectedScripts);
+      const procScript = selectedScripts.find(
+        (script) => script.proc_instance_name === this.procInstanceName
+      );
+
+      if (procScript) {
+        this.objecttabsComposition.selectedItem = procScript;
+        this.objecttabsComposition.selectedTabModelFromProcModel =
+          this.selectedViewDefinition;
+      }
+    }
+
     this.objecttabsComposition.isProcManagement = true;
-    //    console.log('selectedItem', this.selectedItem)
-    this.objecttabsComposition.render();
+    // this.objecttabsComposition.render();
   }
 
   handleMouseMove(evt) {
@@ -382,6 +398,7 @@ export class ProcManagementHome extends ProcManagementMethods(
     const transform = `perspective(300px) scale(0.9) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
     el.style.transform = transform;
   }
+
   handleMouseOut(evt) {
     const el = evt.target;
     el.style.transform = `perspective(300px) scale(1) rotateX(0) rotateY(0)`;
@@ -401,7 +418,12 @@ export class ProcManagementHome extends ProcManagementMethods(
       }
       if (changedProperties.has("selectedProcInstance")) {
         this.selectedViewDefinition = this.selectedProcInstance.views[0];
-        this.selectSectionView(0);
+
+        // Show the default tab which has the expanded property as true
+        this.defaultView =
+          this.selectedProcInstance.views.findIndex((item) => item.expanded) ||
+          0;
+        this.selectSectionView(this.defaultView);
       }
     }
     if (changedProperties.has("this.allProcedures")) {
@@ -430,11 +452,13 @@ export class ProcManagementHome extends ProcManagementMethods(
     //console.log('procManagementHome async authorized')
     super.authorized();
   }
+
   connectedCallback() {
     super.connectedCallback();
     this.show = true;
     //this.selectedProcInstance=this.allProcedures[0]
   }
+
   fieldsToDiscard(fldName) {
     if (fldName === "navigation_icon_name") {
       return true;
@@ -442,10 +466,7 @@ export class ProcManagementHome extends ProcManagementMethods(
     if (fldName === "active") {
       return true;
     }
-    if (fldName.includes("label") && !fldName.includes(this.lang)) {
-      return true;
-    }
-    return false;
+    return fldName.includes("label") && !fldName.includes(this.lang);
   }
 
   // updated(changedProperties) {
@@ -469,6 +490,7 @@ export class ProcManagementHome extends ProcManagementMethods(
                 box-sizing: border-box;
                 font-family: Montserrat, sans-serif;
               }
+
               .container {
                 display: flex;
                 justify-content: center;
@@ -608,10 +630,11 @@ export class ProcManagementHome extends ProcManagementMethods(
                 }
               }
             </style>
+            ${this.config.dbName}
             <objecttabs-composition></objecttabs-composition>
             <div class="product_grid">
               ${this.allProcedures.map(
-                (p) =>
+                (p, index) =>
                   html`
                     <div
                       class="product_container ${this.show
@@ -877,7 +900,7 @@ export class ProcManagementHome extends ProcManagementMethods(
                 this.selectedViewDefinition.view_definition !== undefined &&
                 this.selectedViewDefinition
                   ? html`
-          <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
+          <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
             .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}     
             .selectedItem=${this.selectedProcInstance}      
           </objecttabs-composition>              
@@ -1017,22 +1040,59 @@ export class ProcManagementHome extends ProcManagementMethods(
         : nothing}
     `;
   }
+
   clickedTest(e) {
-    console.log(e.currentTarget.thisitem);
-    //    this.selectedItem = e.currentTarget.thisitem
+    console.log("script clicked");
+
     this.selectedTabModelFromProcModel =
       e.currentTarget.elementdef.view_definition.detail;
     this.objecttabsComposition.isProcManagement = true;
     this.objecttabsComposition.selectedTabModelFromProcModel =
-      this.selectedTabModelFromProcModel;
+      this.selectedTabModelFromProcModel.view_definition;
     this.objecttabsComposition.selectedItem = e.currentTarget.thisitem;
+
+    sessionStorage.setItem(
+      "selectedTabModelFromProcModel",
+      JSON.stringify(this.selectedTabModelFromProcModel)
+    );
+
+    // get selected scripts from session storage and filter
+    let selectedScripts = sessionStorage.getItem("selectedScripts");
+    if (selectedScripts === undefined || selectedScripts === null) {
+      selectedScripts = [];
+    } else {
+      selectedScripts = JSON.parse(selectedScripts);
+      selectedScripts = selectedScripts.filter(
+        (script) =>
+          script.proc_instance_name !==
+          this.selectedProcInstance.proc_instance_name
+      );
+    }
+    if (!e.currentTarget.thisitem || !this.selectedProcInstance) {
+      return;
+    }
+    const newSelectedScript = [
+      ...selectedScripts,
+      {
+        proc_instance_name: this.selectedProcInstance.proc_instance_name,
+        ...e.currentTarget.thisitem,
+      },
+    ];
+
+    sessionStorage.setItem(
+      "selectedScripts",
+      JSON.stringify(newSelectedScript)
+    );
+
     this.objecttabsComposition.render();
   }
+
   fieldLabel(fld) {
     return fld["label_" + this.lang] !== undefined
       ? fld["label_" + this.lang]
       : fld.name;
   }
+
   localGetDataFromRoot(elem, data) {
     if (data === undefined) {
       return undefined;
