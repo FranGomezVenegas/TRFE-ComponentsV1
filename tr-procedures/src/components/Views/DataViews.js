@@ -264,7 +264,7 @@ export function DataViews(base) {
               ${elem===undefined||elem.title===undefined ? nothing : html`
               <p><span class="title ${isSecondLevel}" >${elem.title}</span></p>`
               }
-              ${this.getButton(elem, dataArr, true)}
+              <div class="layout horizontal center flex wrap">${this.getButton(elem, dataArr, true)}</div>
               ${elem.columns===undefined ? html`No columns defined` : html`              
                 <table class="styled-table-bygroup">
                 ${Object.entries(dataArr).sort().map(([key, value]) =>                 
@@ -432,7 +432,7 @@ export function DataViews(base) {
             }
 
             <div style="display: flex; flex-direction: row; text-align: center; flex-wrap:wrap; ">
-              ${this.getButton(elem, dataArr, true)}
+            <div class="layout horizontal center flex wrap">${this.getButton(elem, dataArr, true)}</div>
               ${elem.columns===undefined ? html`No columns defined` : html`              
               ${Object.entries(dataArr).sort().map(([key, value]) =>                 
                 html`
@@ -613,7 +613,7 @@ export function DataViews(base) {
 
           <div style="display: flex; flex-direction: row; text-align: center;">
             <div style="display: flex; flex-direction: column; text-align: center;">
-            ${this.getButton(elem, dataArr, true)}
+            <div class="layout horizontal center flex wrap">${this.getButton(elem, dataArr, true)}</div>
             ${alternativeTitle!==undefined ? html` 
               <p><span class="title ${isSecondLevel}" >${alternativeTitle}</span></p>`
             : html`
@@ -625,6 +625,7 @@ export function DataViews(base) {
                 <table class="styled-table">
                   <thead>          
                     <tr>
+                      ${elem.row_buttons===undefined ? nothing:html`<th></th>`}
                       ${elem.columns.map(fld =>
                         html`
                         <th>${fld["label_"+ this.lang]}</th>
@@ -638,6 +639,9 @@ export function DataViews(base) {
                     ${dataArr.map(p => 
                       html`
                       <tr>
+                        ${elem.row_buttons===undefined ? nothing:html`
+                          <td><div class="layout horizontal center flex wrap">${this.getButtonForRows(elem.row_buttons, p, false)}</div></td>
+                        `}
                         ${elem.columns.map(fld =>
                           html`
                             ${fld.name==='pretty_spec' ?
