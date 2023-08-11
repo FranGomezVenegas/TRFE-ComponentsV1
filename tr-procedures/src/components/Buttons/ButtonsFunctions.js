@@ -473,8 +473,14 @@ export function ButtonsFunctions(base) {
           if (this.config.backendUrl===undefined){            
             this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
             console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
-            //this.config.dbName="labplanet"
-            //this.config.isForTesting=false
+            let sessionDbName=JSON.parse(sessionStorage.getItem("userSession")).dbName
+            if (sessionDbName!==undefined){
+              this.config.dbName=sessionDbName
+            }
+            if (this.config.dbName===undefined){
+              this.config.dbName="labplanet"
+              this.config.isForTesting=false
+            }  
           }
           //console.log('GetViewData', 'queryDefinition', queryDefinition)
           let APIParams=this.getAPICommonParams(queryDefinition)
@@ -532,7 +538,7 @@ export function ButtonsFunctions(base) {
     }
 
     
-    async GetViewData(setGrid = true ){
+    async GxxxetViewData(setGrid = true ){
         //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
         if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
             //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
@@ -554,8 +560,14 @@ export function ButtonsFunctions(base) {
         if (this.config.backendUrl===undefined){
           this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
           console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
-          //this.config.dbName="labplanet"
-          //this.config.isForTesting=false
+          let sessionDbName=JSON.parse(sessionStorage.getItem("userSession")).dbName
+          if (sessionDbName!==undefined){
+            this.config.dbName=sessionDbName
+          }
+          if (this.config.dbName===undefined){
+            this.config.dbName="labplanet"
+            this.config.isForTesting=false
+          }
         }
         let queryDefinition=this.viewModelFromProcModel.viewQuery
         if (queryDefinition===undefined){return}
@@ -608,6 +620,91 @@ export function ButtonsFunctions(base) {
         })
         this.samplesReload = false
     }
+    async GetViewData(setGrid = true, viewQuery ){
+      if (viewQuery===undefined){
+        viewQuery=this.viewModelFromProcModel.viewQuery
+      }
+      //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
+      if (viewQuery!==undefined&&viewQuery.clientMethod!==undefined){
+          //alert('Calling '+viewQuery.clientMethod+' from GetViewData')            
+          if (this[viewQuery.clientMethod]===undefined){
+              alert('not found any clientMethod called '+viewQuery.clientMethod)
+              return
+          }
+          let j=this[viewQuery.clientMethod]()
+          this.setTheValues(viewQuery, j)
+          return
+      }
+      if (this.config===undefined||this.config.backendUrl===undefined){
+        fetch("../../../demo/config.json").then(r => r.json()).then(j => {
+            this.config={}
+            this.config=j
+            //this.config.backendUrl=j.backendUrl
+        })          
+      }
+      if (this.config.backendUrl===undefined){
+        this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
+        console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
+        let sessionDbName=JSON.parse(sessionStorage.getItem("userSession")).dbName
+        if (sessionDbName!==undefined){
+          this.config.dbName=sessionDbName
+        }
+        if (this.config.dbName===undefined){
+          this.config.dbName="labplanet"
+          this.config.isForTesting=false
+        }
+      }
+      let queryDefinition=viewQuery
+      if (queryDefinition===undefined){return}
+      //console.log('GetViewData', 'queryDefinition', queryDefinition)
+      this.samplesReload = true
+      this.selectedItems = []      
+      let APIParams=this.getAPICommonParams(queryDefinition)
+      let viewParams=this.jsonParam(queryDefinition)
+      let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+      if (String(endPointUrl).toUpperCase().includes("ERROR")){
+          alert(endPointUrl)
+          return
+      }
+      let params = this.config.backendUrl + endPointUrl
+        + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
+
+      //console.log('params', params)        
+      await this.fetchApi(params).then(j => {
+        if (queryDefinition.notUseGrid!==undefined&&queryDefinition.notUseGrid===true){
+          if (queryDefinition.variableName!==undefined){
+              if (queryDefinition.endPointResponseVariableName!==undefined){
+                this[queryDefinition.variableName]=j[queryDefinition.endPointResponseVariableName]
+              }else{
+                this[queryDefinition.variableName]=j
+              }
+          }else{
+            this.selectedItems=j   
+            this.selectedItem=this.selectedItems[0]
+            console.log('this.selectedItems', this.selectedItems)           
+            if (j && !j.is_error) {
+              this.requestData=j
+            } else {            
+              this.requestData={}
+            }                
+          }
+        }
+        else if (setGrid){
+          if (j && !j.is_error) {
+            this.setGrid(j)
+          } else {            
+            this.setGrid()
+          }
+        }else{
+          if (j && !j.is_error) {
+            this.requestData=j
+          } else {            
+            this.requestData={}
+          }
+        }
+      })
+      this.samplesReload = false
+  }    
     async GetAlternativeViewData(queryDefinition, selObject = {}){
         if (queryDefinition.clientMethod!==undefined){
             //alert('Calling '+queryDefinition.clientMethod+' from GetViewData')            
@@ -740,7 +837,7 @@ export function ButtonsFunctions(base) {
         //console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
         
         this.fetchApi(params).then(() => {
-console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action', action)
+//console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action', action)
             if (action.notGetViewData===undefined||action.notGetViewData===false){
               this.GetViewData()
             }

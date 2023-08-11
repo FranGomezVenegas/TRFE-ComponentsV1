@@ -171,7 +171,7 @@ export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDial
     return html`${data&&elemDef&&Object.keys(data).length > 0 ?
       html`
         <div style="display:block">
-          ${elemDef.map((elem, i) =>           
+          ${elemDef!==undefined&&Array.isArray(elemDef)&&elemDef.map((elem, i) =>           
           html`    
             ${elem.is_translation===undefined||(elem.is_translation!==undefined&&elem.is_translation===true&&elem.lang!==undefined&&elem.lang===this.lang) ?
             html`              

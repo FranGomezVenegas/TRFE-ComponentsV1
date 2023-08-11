@@ -518,7 +518,8 @@ export class PlatformLogin extends CommonCore {
         sessionStorage.setItem("userSession", JSON.stringify({
           ...j,
           userName: this.user.value,
-          userRole: this.role
+          userRole: this.role,
+          dbName: this.config.dbName
         }))
       } else {
         if (document.fullscreenElement) {
