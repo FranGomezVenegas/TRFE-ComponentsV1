@@ -206,7 +206,7 @@ export class CommonCore extends LitElement {
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
     if (endPointResponse===undefined||endPointResponse.master_data===undefined) {
       return
-    } 
+    }     
     userSession.procedures_list.procedures[this.procInstanceName].master_data=endPointResponse.master_data
       // userSession.all_my_sops = j.all_my_sops
       // userSession.my_pending_sops = j.my_pending_sops
