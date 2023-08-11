@@ -67,6 +67,9 @@ export class ProcManagementHome extends ProcManagementMethods(
         }
         #expand {
           position: absolute;
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
         }
         div.procCard {
           width: 100%;
@@ -227,7 +230,7 @@ export class ProcManagementHome extends ProcManagementMethods(
           position: relative;
         }
         .accordion-title {
-          cursor: pointer;
+          position: relative;
           display: flex;
           padding-left: 5px;
           color: rgba(36, 192, 235, 1);
@@ -235,6 +238,7 @@ export class ProcManagementHome extends ProcManagementMethods(
           font-weight: bold;
           font-size: 18px;
           --mdc-theme-primary: rgba(36, 192, 235, 1);
+          cursor: pointer;
         }
         .accordion-content {
           max-height: 0;
@@ -279,7 +283,6 @@ export class ProcManagementHome extends ProcManagementMethods(
   }
   constructor() {
     super();
-    this.config={}
     this.localModel = false;
     this.leftSplitDisplayed = true;
     this.show = false;
@@ -303,21 +306,24 @@ export class ProcManagementHome extends ProcManagementMethods(
       variableName: "allProcedures",
       endPointResponseVariableName: "all_platform_procedures_list",
     };
-  }
+    //this.viewModelFromProcModel=ProcManagement.ProcedureDefinition
+    // console.log('constructor', 'this.config', this.config, this.viewModelFromProcModel)
 
-  firstUpdated() {
     if (this.localModel) {
       this.allProcedures =
         ProceduresManagement.ProceduresFake.all_platform_procedures_list;
       this.selectedProcInstance = this.allProcedures[0];
-      this.selectedViewDefinition = this.selectedProcInstance.views[0];
+      // this.selectSectionView(0);
+      // this.selectedViewDefinition = this.selectedProcInstance.views[0];
 
       if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
+        //this.objecttabsComposition.selectedItem = this.selectedProcInstance[this.selectedViewDefinition.alternative_endpoint_data]
         this.selectedItem =
           this.selectedProcInstance[
             this.selectedViewDefinition.alternative_endpoint_data
           ];
       } else {
+        //this.objecttabsComposition.selectedItem = this.selectedProcInstance.definition
         this.selectedItem = this.selectedProcInstance.definition;
       }
     } else {
@@ -418,12 +424,7 @@ export class ProcManagementHome extends ProcManagementMethods(
       }
       if (changedProperties.has("selectedProcInstance")) {
         this.selectedViewDefinition = this.selectedProcInstance.views[0];
-
-        // Show the default tab which has the expanded property as true
-        this.defaultView =
-          this.selectedProcInstance.views.findIndex((item) => item.expanded) ||
-          0;
-        this.selectSectionView(this.defaultView);
+        this.selectSectionView(0);
       }
     }
     if (changedProperties.has("this.allProcedures")) {
@@ -630,7 +631,6 @@ export class ProcManagementHome extends ProcManagementMethods(
                 }
               }
             </style>
-            ${this.config.dbName}
             <objecttabs-composition></objecttabs-composition>
             <div class="product_grid">
               ${this.allProcedures.map(
@@ -917,6 +917,9 @@ export class ProcManagementHome extends ProcManagementMethods(
       item.view_definition.hasDetail !== undefined &&
       item.view_definition.hasDetail === true > 0
         ? html`
+            <div @click=${() => this.selectSectionView(index)}>
+              ${item.title["label_" + this.lang]}
+            </div>
             <mwc-icon-button
               size="s"
               id="expand"
@@ -928,9 +931,6 @@ export class ProcManagementHome extends ProcManagementMethods(
                 : "expand_more"}"
               @click=${() => this.toggleLeftElements(index)}
             ></mwc-icon-button>
-            <div @click=${() => this.toggleLeftElements(index)}>
-              ${item.title["label_" + this.lang]}
-            </div>
           `
         : html`
             <div
