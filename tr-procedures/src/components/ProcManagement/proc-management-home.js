@@ -840,91 +840,51 @@ export class ProcManagementHome extends ProcManagementMethods(
             </sp-split-view>
           `
         : html`
-          <div id="mobile">
-            ${this.selectedProcessTitle()}
-
-          <div
-            id="leftSplit"
-            class="${this.leftSplitDisplayed !== undefined &&
-            this.leftSplitDisplayed
-            ? ""
-            : "collapsed"}"
-          >
+        <sp-split-view show-divider=${this.showDivider}>
+        <div
+          id="leftSplit"
+          class="${this.leftSplitDisplayed !== undefined &&
+      this.leftSplitDisplayed
+      ? ""
+      : "collapsed"}"
+        >
           <div id="endpointName">
             ${this.selectedProcInstance.views.map(
-              (item, index) => html`
+        (item, index) => html`
                 <div id="section${index}" class="accordion-item">
                   <div
-                    class="layout horizontal center flex wrap accordion-title"
+                    class="layout horizontal center inline-flex wrap accordion-title"
                   >
-                    ${item.view_definition !== undefined &&
-                  item.view_definition.filter !== undefined &&
-                  item.view_definition.filterFields !== undefined &&
-                  item.view_definition.filterFields.length > 0
-                  ? html`
-                          <mwc-button
-                            dense
-                            raised
-                            label=""
-                            icon="${item.expanded !== undefined &&
-                      item.expanded
-                      ? "expand_less"
-                      : "expand_more"}"
-                            @click=${() => this.toggleLeftElements(index)}
-                          ></mwc-button>
-                          <div
-                            @click=${() => this.toggleLeftElements(index)}
-                          >
-                            ${item.title}
-                          </div>
-                        `
-                  : html`
-                          <div
-                            @click=${() => this.selectSectionView(index)}
-                          >
-                            ${item.title}
-                          </div>
-                        `}
+                    ${this.sectionElement(item, index)}
                   </div>
-                  ${item.expanded !== undefined && item.expanded
-                  ? html`
-                        ${item.view_definition !== undefined &&
-                      item.view_definition.filter !== undefined &&
-                      item.view_definition.filterFields !== undefined &&
-                      item.view_definition.filterFields.length > 0
-                      ? html`
-                              <div
-                                id="section${index}_detail"
-                                class="accordion-content"
-                                style=${index > -1
-                          ? "max-height: none;"
-                          : ""}
-                              >
-                                ${item.name}
-                              </div>
-                            `
-                      : nothing}
-                      `
-                  : nothing}
+                  ${this.sectionDetail(item, index)}
                 </div>
               `
-            )}
+      )}
           </div>
         </div>
-        <div id="rightSplit">
+        <div
+          id="rightSplit"
+          class="${this.leftSplitDisplayed !== undefined &&
+      this.leftSplitDisplayed
+      ? ""
+      : "collapsed"}"
+        >
+          ${this.selectedProcessTitle()}
           ${this.selectedViewDefinition !== undefined &&
-            this.selectedViewDefinition.view_definition !== undefined &&
-            this.selectedViewDefinition
-            ? html`
-    <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
-      .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-      .selectedItem=${this.selectedProcInstance}      
-    </objecttabs-composition>              
-  `
-            : nothing}
+      this.selectedViewDefinition.view_definition !== undefined &&
+      this.selectedViewDefinition
+      ? html`            
+        <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
+        .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
+        .selectedItem=${this.selectedItem}      
+        </objecttabs-composition>              
+
+      `
+      : nothing}
         </div>
-      </div>
-    `}
+      </sp-split-view>
+`}
 `;
   }
 
