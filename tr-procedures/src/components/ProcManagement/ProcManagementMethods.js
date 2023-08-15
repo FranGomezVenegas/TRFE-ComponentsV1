@@ -25,21 +25,17 @@ export function ProcManagementMethods(base) {
       );
     }
 
-    testScriptPerformed() {
-      //alert('testScriptPerformed')
+    async testScriptPerformed() {
       // All actions should perform the refresh below to refresh the data in the view/window then it can do anything extra if required
-      this.refreshSelProcData()
+      await this.refreshSelProcData();
     }
 
-    coveragePerformed() {
-      //alert("coveragePerformed");
-      // All actions should perform the refresh below to refresh the data in the view/window then it can do anything extra if required
-      this.refreshSelProcData()
+    async coveragePerformed() {
+      // All actions should perform the refresh below to refresh the data in the view/winzdow then it can do anything extra if required
+      await this.refreshSelProcData();
     }
 
-    refreshSelProcData(){
-      let oldselectedProcInstance = {}
-      oldselectedProcInstance=this.selectedProcInstance
+    async refreshSelProcData() {
       let viewQuery = {
         actionName: "ONE_PROCEDURE_DEFINITION",
         label_en: "One Procedure Definition",
@@ -49,11 +45,26 @@ export function ProcManagementMethods(base) {
         variableName: "selectedProcInstance",
         endPointResponseVariableName: "all_platform_procedures_list",
       };
-      this.GetViewData(false, viewQuery);
+
+      await this.GetViewData(false, viewQuery);
       // As by the specification above, this query will run this endpoint and then moved the data from endPointResponseVariableName response entry
       // into variableName variable.
       // In our case all_platform_procedures_list is an array of one entry and this content will be moved to this.selectedProcInstance variable
-      console.log(this.selectedProcInstance)
+      let newProcInstance = this.selectedProcInstance?.[0];
+      if (!newProcInstance) return;
+
+      sessionStorage.setItem(
+        "newProcInstance",
+        JSON.stringify(this.selectedProcInstance[0])
+      );
+
+      const event = new CustomEvent("session-storage-updated", {
+        detail: {
+          key: "newProcInstance",
+          value: newProcInstance,
+        },
+      });
+      window.dispatchEvent(event);
     }
   };
 }

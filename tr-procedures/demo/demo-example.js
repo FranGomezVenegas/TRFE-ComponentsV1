@@ -85,18 +85,14 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
+    
       <platform-login @authorized=${e=>{
         this.auth=e.target.auth;
         if (this.auth) {
-        //if (this.userRole!==undefined&&this.userRole.length>0&&this.userRole!=='proc_management'){
           this.trProc.config=this.pLogin.config;
           if (this.trProcManagement){
             this.trProcManagement.config=this.pLogin.config;
             console.log('this.trProcManagement.config', this.trProcManagement.config)
-            //this.trProc.resetView()
-            //this.trProc.authorized()
-            //this.trProc.render()
-        
           }
         }
       }}></platform-login>
@@ -104,7 +100,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1 @click=${this.toggleHideAllButtonsStatus}>Hi ${this.getUser()}, you are authorized</h1>
         <button class="language" @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
-        <button @click=${()=>this.pLogin.logout()}>Logout</button><hr>
+        <button @click=${()=>this.logout()}>Logout</button><hr>
 
         ${this.userRole==="proc_management" ?
         html`
@@ -123,8 +119,7 @@ class DemoExample extends LitElement {
           </p>
           `}
         `)}
-<!--          <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
-          <button @click=${()=>this.pLogin.logout()}>Logout</button><hr> -->
+
           </div>
           <tr-procedures></tr-procedures>          
           ${this.openTestDefaultView()}
