@@ -66,7 +66,9 @@ class DemoExample extends LitElement {
     return (findProc===undefined||findProc.length==0)
   }
 
-  hideActionButton(proc){
+  hideActionButton(proc, isSpecial){
+    //console.log('hideActionButton', proc, isSpecial)
+    if (isSpecial!==undefined&&isSpecial===true) return false
     if (proc===undefined) return false
     //alert(proc)
     let sessionProcs=JSON.parse(sessionStorage.getItem("userSession"))
@@ -85,14 +87,18 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
-    
       <platform-login @authorized=${e=>{
         this.auth=e.target.auth;
         if (this.auth) {
+        //if (this.userRole!==undefined&&this.userRole.length>0&&this.userRole!=='proc_management'){
           this.trProc.config=this.pLogin.config;
           if (this.trProcManagement){
             this.trProcManagement.config=this.pLogin.config;
             console.log('this.trProcManagement.config', this.trProcManagement.config)
+            //this.trProc.resetView()
+            //this.trProc.authorized()
+            //this.trProc.render()
+        
           }
         }
       }}></platform-login>
@@ -100,7 +106,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1 @click=${this.toggleHideAllButtonsStatus}>Hi ${this.getUser()}, you are authorized</h1>
         <button class="language" @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
-        <button @click=${()=>this.logout()}>Logout</button><hr>
+        <button @click=${()=>this.pLogin.logout()}>Logout</button><hr>
 
         ${this.userRole==="proc_management" ?
         html`
@@ -113,13 +119,14 @@ class DemoExample extends LitElement {
           ${this.hideActionButtonProc(curProc.proc_instance_name) ?  html``:html`
           <div class="proctitle"><p>${curProc.label}</p></div>
           ${curProc.views.map(curView =>
-          html`<button ?hidden="${this.hideActionButton(curView.proc_instance_name)}" 
+          html`<button ?hidden="${this.hideActionButton(curView.proc_instance_name, curProc.isSpecial)}" 
             @click=${()=>this.selectMenu(curView.proc_instance_name, curView.view_name, curView.filter_name)}>${curView.title}</button>
           `)}
           </p>
           `}
         `)}
-
+<!--          <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
+          <button @click=${()=>this.pLogin.logout()}>Logout</button><hr> -->
           </div>
           <tr-procedures></tr-procedures>          
           ${this.openTestDefaultView()}

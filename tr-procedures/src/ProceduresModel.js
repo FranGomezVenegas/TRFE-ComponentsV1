@@ -8,6 +8,7 @@ import { SampleCoaRel1 } from './0proc_models/sample-coa-rel1';
 import { InvDraft } from './0proc_models/inv-draft';
 import { MpRelease1 } from './0proc_models/mp-release1';
 import { ProceduresManagement } from './0proc_models/ProceduresManagement';
+import { FakeDevelopers } from './0proc_models/fakeDevelopers';
 
 export const ProceduresModel = {
   ['em-demo-a']: EmDemoA,
@@ -19,7 +20,8 @@ export const ProceduresModel = {
   ['sample-coa-rel1']: SampleCoaRel1,
   ['inv-draft']: InvDraft,
   ['mp-release1']: MpRelease1, 
-  ['procedures-management']: ProceduresManagement
+  ['procedures-management']: ProceduresManagement,
+  ['fake-developers']: FakeDevelopers
 }
 
 export const DemoViews = [
@@ -88,8 +90,13 @@ export const DemoViews = [
     {"proc_instance_name": "app-instruments", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
     {"proc_instance_name": "app", "view_name": "WhiteIpList", "filter_name": "WhiteIpList", "title": "White Ip List"},
     {"proc_instance_name": "app", "view_name": "BlackIpList", "filter_name": "BlackIpList", "title": "Black Ip List"},
-    {"proc_instance_name": "app", "view_name": "PlatformBusRules", "filter_name": "PlatformBusRules", "title": "Platform Business Rules"},
+    {"proc_instance_name": "app", "view_name": "PlatformBusRules", "filter_name": "PlatformBusRules", "title": "Platform Business Rules"}    
   ]},  
+  
+  {"label":"fake-developers", "proc_instance_name": "app", "isSpecial":true, "views":[
+    {"proc_instance_name": "fake-developers", "view_name": "culture-medium", "filter_name": "culture-medium", "title": "ModuleEnvMonitCultureMedium"},
+    {"proc_instance_name": "fake-developers", "view_name": "tree-view", "filter_name": "tree-view", "title": "TreeView"}
+  ]},      
   {"label":"genoma (genoma-1)", "proc_instance_name": "genoma-1", "views":[
     {"proc_instance_name": "genoma-1", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
     {"proc_instance_name": "genoma-1", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
