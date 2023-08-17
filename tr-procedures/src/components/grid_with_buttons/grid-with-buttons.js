@@ -10,6 +10,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
+import '@vaadin/vaadin-context-menu';
 
 import '@trazit/cred-dialog'
 //import '../../module_env_monit/gridmodel-bottomcomp-sampleincubation';
@@ -269,7 +270,7 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
             </div>
             ${this.ready ? 
               html`
-    
+              <vaadin-context-menu .items=${[{ text: 'View' }, { text: 'Edit' }, { text: 'Delete' }]}>
               <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${this.activeItemChanged}
                 .items=${this.gridItems} .selectedItems="${this.selectedItems}"
@@ -279,7 +280,7 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
                 >
                 ${this.gridList(this.viewModelFromProcModel)}
               </vaadin-grid>
-                 
+              </vaadin-context-menu>   
               <div id="rowTooltip">&nbsp;</div>
               ` :
               html``
