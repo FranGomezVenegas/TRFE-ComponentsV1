@@ -35,8 +35,10 @@ export class ProcManagementHome extends ProcManagementMethods(
       localModel: { type: Boolean },
     };
   }
+
   constructor() {
     super();
+
     this.localModel = false;
     this.leftSplitDisplayed = true;
     this.show = false;
@@ -287,7 +289,6 @@ export class ProcManagementHome extends ProcManagementMethods(
               }
 
               .product_grid {
-                width: 100%;
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
                 gap: 24px;
@@ -557,8 +558,8 @@ export class ProcManagementHome extends ProcManagementMethods(
   }
 
   toggleLeftSplitPane() {
-    //console.log(this.leftSplitDisplayed)
     this.leftSplitDisplayed = !this.leftSplitDisplayed;
+    this.render();
   }
 
   static get styles() {
@@ -1037,12 +1038,21 @@ export class ProcManagementHome extends ProcManagementMethods(
               li.success {
                 color: green;
               }
+              li {
+                cursor: pointer;
+                font-size: 1.7vmin;
+                transition: all 0.2s ease-in-out;
+              }
+              li:hover {
+                background-color: rgba(41, 137, 216, 0.1);
+              }
             </style>
             <ul>
               ${data.map(
                 (d) =>
                   html`
                     <li
+                      role="button"
                       class="${d.run_summary.toUpperCase().includes("SUCCESS")
                         ? "success"
                         : "no_success"}"
@@ -1327,6 +1337,7 @@ export class ProcManagementHome extends ProcManagementMethods(
       "extraParams",
       extraParams
     );
+
     let log = true;
     this.fetchApi(params)
       .then((j) => {
@@ -1399,6 +1410,7 @@ export class ProcManagementHome extends ProcManagementMethods(
     item.expanded = !item.expanded;
     this.requestUpdate();
   }
+
   get objecttabsComposition() {
     return this.shadowRoot.querySelector("objecttabs-composition");
   }
