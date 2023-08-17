@@ -163,10 +163,15 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'ObjectByTabs':
         import('./components/ObjectByTabs/object-by-tabs')
         return  
-        case 'CalendarData':
-          import('./components/Calendar/calendar-data')
-          return  
-        case 'ModuleEnvMonitHomeAir':
+      case 'TreeView':
+        alert("Entered to import treeview")
+        this.windowOpenable=true
+        import('./components/Tree/app/tree-view-main')
+        return    
+      case 'CalendarData':
+        import('./components/Calendar/calendar-data')
+        return  
+      case 'ModuleEnvMonitHomeAir':
         import('./module_env_monit/home-air')
         return  
       case 'ModuleEnvMonitCultureMedium':
@@ -327,6 +332,10 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitCultureMedium' ? html`
         <culture-medium></culture-medium>
       `:html``}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'TreeView' ? html`
+        <tree-view-main></tree-view-main>
+      `:html``}
+      
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeWater' ? html`
         <home-water .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-water>
       `:html``}

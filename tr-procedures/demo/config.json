@@ -211,7 +211,7 @@
     "viewName": "culture-medium", 
     "filterName" :  "culture-medium" 
   },
-  "localDefaultViewd": {
+  "localDefaultView": {
     "procName":  "fake-developers", 
     "viewName": "tree-view", 
     "filterName" :  "tree-view" 
