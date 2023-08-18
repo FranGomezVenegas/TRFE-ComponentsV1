@@ -10,7 +10,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
-import '@vaadin/vaadin-context-menu';
+import '@vaadin/vaadin-context-menu/vaadin-context-menu';
 
 import '@trazit/cred-dialog'
 //import '../../module_env_monit/gridmodel-bottomcomp-sampleincubation';
@@ -90,20 +90,12 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
         viewName: { type: String },
         filterName: { type: String },
         lang: { type: String },
-        // langConfig: { type: Object },
-        // actions: { type: Array },
-        // samplesReload: { type: Boolean },
         selectedItems: { type: Array },
-        // selectedAction: { type: Object },
-        // prev: { type: Boolean },
-        // next: { type: Boolean },
-        // programsList: { type: Array },
-        // tabView: { type: String },
-        // windowOpenable: { type: String },
-        // sopsPassed: { type: Boolean },
         actionBeingPerformedModel:{type:Object},
         localProceduresModels: { type: Object},
-        masterData:{type: Object}
+        masterData:{type: Object},
+        contextMenuItems: { type: Array }
+
       };
     }
   
@@ -116,6 +108,7 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
       this.actionBeingPerformedModel={}
       this.localProceduresModels=ProceduresModel
       this.masterData={}
+      this.contextMenuItems=[]
     }
     resetView(){
       this.selectedItems=[]
@@ -228,8 +221,7 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
   }
   `
   }
-  activeItemChanged(e){
-    
+  activeItemChanged(e){    
     if (e===undefined){return}
     let d=true
     d=this.disabledByCertification(this.viewModelFromProcModel.langConfig.gridActionOnClick)     
@@ -244,17 +236,9 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
     }
 
   }
-  rightMouseMenu(){
-    return html `
-    </vaadin-context-menu> 
-    <vaadin-context-menu> 
-      
-
-    `
-
-  }
   abstractBlock(){
     //console.log('abstractBlock')
+    let addContextMenu=this.addContextMenu()    
   return html`
   ${this.loadDialogs()} 
   ${this.abstract ? 
@@ -270,24 +254,33 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
             </div>
             ${this.ready ? 
               html`
-              <vaadin-context-menu .items=${[{ text: 'View' }, { text: 'Edit' }, { text: 'Delete' }]}>
-              <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+              ${addContextMenu!==undefined&&addContextMenu===true?html`
+                <vaadin-context-menu .items=${this.contextMenuItems} @item-selected="${this.contextMenuAction}">
+                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                  @active-item-changed=${this.activeItemChanged}
+                  .items=${this.gridItems} .selectedItems="${this.selectedItems}"
+                  ${gridRowDetailsRenderer(this.detailRenderer)}
+                  ${this.setCellListener()}                  
+                  >
+                  ${this.gridList(this.viewModelFromProcModel)}
+                </vaadin-grid>
+                </vaadin-context-menu>`
+              :html`
+                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${this.activeItemChanged}
                 .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                 ${gridRowDetailsRenderer(this.detailRenderer)}
-                ${this.setCellListener()}
-                ${contextMenuRenderer(this.rightMouseMenu)}
+                ${this.setCellListener()}                
                 >
                 ${this.gridList(this.viewModelFromProcModel)}
-              </vaadin-grid>
-              </vaadin-context-menu>   
+              </vaadin-grid>`
+              }
+              
               <div id="rowTooltip">&nbsp;</div>
               ` :
               html``
           }
           </div>   
-         
-  
           <audit-dialog @sign-audit=${this.setAudit} .actionBeingPerformedModel=${this.actionBeingPerformedModel} 
           .filterName=${this.filterName} .lang=${this.lang} .windowOpenable=${this.windowOpenable}
           .sopsPassed=${this.sopsPassed} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName} 
@@ -299,6 +292,61 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
       `
   }    
   `
+  }
+  contextMenuAction(e){
+    //console.log(e.target)
+    let selectedItem=e.target
+    if (selectedItem) {
+      //console.log(selectedItem.item)      
+    }        
+    this.actionMethod(e.detail.value.actionDef, e.detail.value.actionDef, null, null, this.selectedItems[0], false)
+  }
+  addContextMenu(){
+    if (this.viewModelFromProcModel.enableContextMenu!==undefined||this.viewModelFromProcModel.enableContextMenu===false){
+      return false
+    }
+    this.contextMenuItems=[]    
+      let menuItem={}
+      menuItem.component='hr'
+      this.contextMenuItems.push(menuItem)
+      if (this.viewModelFromProcModel.addActionsInContextMenu!==undefined&&this.viewModelFromProcModel.addActionsInContextMenu===true){
+        this.viewModelFromProcModel.actions.forEach(action => {
+          menuItem={}
+          menuItem.text=action.button.title['label_'+this.lang]
+          if ((action.button.requiresGridItemSelected===undefined||action.button.requiresGridItemSelected===true)&&(this.selectedItems===undefined||this.selectedItems.length==0)){
+            menuItem.disabled=true
+          }
+          menuItem.actionDef=action
+          this.contextMenuItems.push(menuItem)
+        })
+      }
+      if (this.viewModelFromProcModel.actionsForContextMenu!==undefined){
+        this.viewModelFromProcModel.actionsForContextMenu.forEach(action => {
+          menuItem={}
+          menuItem.text=action.button.title['label_'+this.lang]
+          if ((action.button.requiresGridItemSelected===undefined||action.button.requiresGridItemSelected===true)&&(this.selectedItems===undefined||this.selectedItems.length==0)){
+            menuItem.disabled=true
+          }
+          menuItem.actionDef=action
+          this.contextMenuItems.push(menuItem)
+        })
+      }
+      menuItem={}
+      menuItem.component='hr'
+      this.contextMenuItems.push(menuItem)    
+    return true
+    /*
+    ${this.btnHidden(action) ? nothing : 
+      html`${action.button ?
+          html`${action.button.icon ?
+          html`<mwc-icon-button 
+              class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
+              icon="${action.button.icon}" 
+              title="${action.button.title['label_'+this.lang]}" 
+              ?disabled=${this.btnDisabled(action, sectionModel)}
+              ?hidden=${this.btnHidden(action)}
+              @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+    */
   }
 
 //  ${this.resultTemplate()}
