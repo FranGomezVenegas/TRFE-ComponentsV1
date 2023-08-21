@@ -16,6 +16,9 @@ export const FakeDevelopers = {
   "culture-medium":{
 	"component": "ModuleEnvMonitCultureMedium",  
   },
+  "prototype-elements-view-main":{
+    "component": "PrototypeElementsViewMain",  
+  },    
   "WhiteIpList": {
 	"component": "TableWithButtons",
     "langConfig": {
