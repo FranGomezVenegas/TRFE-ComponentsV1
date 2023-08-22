@@ -3,6 +3,7 @@ import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import { AuditFunctions} from '../Audit/AuditFunctions';
 import '../Audit/audit-dialog';
 
+import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
 import {ModuleEnvMonitClientMethods} from '../../module_env_monit/ModuleEnvMonitClientMethods';
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import {TrazitReactivateObjectsDialog} from '../GenericDialogs/TrazitReactivateObjectsDialog';
@@ -21,7 +22,7 @@ import '@doubletrade/lit-datatable';
 import '@google-web-components/google-chart';
 
 export function DataViews(base) {
-    return class extends TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(AuditFunctions(ButtonsFunctions(base))))))))))) {
+    return class extends TrazitFormsElements(TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(AuditFunctions(ButtonsFunctions(base)))))))))))) {
 
         kpiChartFran(elem){
             //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
