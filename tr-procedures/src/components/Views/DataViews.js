@@ -1955,12 +1955,12 @@ export function DataViews(base) {
                               ${this.loadDialogs()}
                               <div class="card">
                                 <sp-card-ext
-                                  heading="${elem.title[
+                                  heading="${elem.title===undefined?'':elem.title[
                                     "label_" + this.lang
                                   ] === undefined
                                     ? "-"
                                     : elem.title["label_" + this.lang]}"
-                                  subheading="${elem.subtitle[
+                                  subheading="${elem.subtitle===undefined?'':elem.subtitle[
                                     "label_" + this.lang
                                   ] === undefined
                                     ? "-"
@@ -1977,7 +1977,7 @@ export function DataViews(base) {
                                         isProcManagement
                                       )}
                                     </div>
-                                    ${elem.fieldsToDisplay.map(
+                                    ${elem.fieldsToDisplay===undefined?nothing:elem.fieldsToDisplay.map(
                                       (d) =>
                                         html`<li class="cardelement">
                                           ${d["label_" + this.lang]}:
