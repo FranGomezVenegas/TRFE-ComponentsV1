@@ -3,8 +3,8 @@ import './objecttabs-composition';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
-
-export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(LitElement))) {
+import { LeftPaneFilterViews } from '../Views/LeftPaneFilterViews';
+export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(LitElement)))) {
   static get styles() {
     return css`
       :host([disabled]) {
@@ -115,6 +115,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
             procInstanceName:{type: String},
             masterData:{ type: Object},
             requestData: {type: Array},
+            filterResponseData: {type: Array},
             selectedItem:{ type: Object},
             selectedItems:{ type: Array},
             selectedItemLoaded:{type: Boolean},
@@ -131,6 +132,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
         this.masterData={} 
         this.langConfig = this.viewModelFromProcModel.langConfig
         this.requestData =[]
+        this.filterResponseData=[]
         this.selectedItem={}
         this.selectedItems=[]
         this.selectedItemLoaded=false
@@ -208,6 +210,14 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
     filterPerformAction(e) {
         this.selectedItemLot=""
         this.GetViewData(false)
+        this.filterResponseData=[]
+        if (!Array.isArray(this.selectedItems)){        
+          this.filterResponseData.push(this.selectedItems)        
+        }else{
+          this.filterResponseData=this.selectedItems
+        }        
+        //this.filterElement(this.filterResponseData)
+        //console.log('filterResponseData', this.filterResponseData)
         if (this.requestData.length===1){
           if (Array.isArray(this.requestData)){
             this.selectedItem=this.requestData[0]
@@ -216,7 +226,7 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
           }
           this.selectedItemLot=this.selectedItem.lot_name
           this.selectedItemLoaded=true
-        }
+        }        
     }
 
     render() {      
@@ -234,6 +244,8 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
                 ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
                   ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} `}                      
               </div>
+              ${this.filterElement(this.filterResponseData)}
+            
             </div>
             
             <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
@@ -333,7 +345,6 @@ export class ObjectByTabs extends TrazitGenericDialogs(TrazitFormsElements(Dialo
         this.objecttabsComposition.render()
       }
     }
-    get lottoget() {    return this.shadowRoot.querySelector("mwc-textfield#lottoget")    }        
     get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition")}  
 }
 window.customElements.define('object-by-tabs', ObjectByTabs);

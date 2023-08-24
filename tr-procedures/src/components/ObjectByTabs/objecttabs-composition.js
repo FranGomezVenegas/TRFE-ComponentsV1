@@ -6,10 +6,10 @@ import '@spectrum-web-components/split-view/sp-split-view';
 
 import {DataViews} from '../../components/Views/DataViews';
 import {CoaView} from '../../components/Views/CoaView';
-import {TestScripts} from '../../components/Views/TestScripts';
+
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 
-export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDialogs(DataViews(CredDialog)))) {
+export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataViews(CredDialog))))) {
   static get styles() {
     return [
       Layouts,
@@ -170,6 +170,7 @@ export class ObjecttabsComposition extends TestScripts(CoaView(TrazitGenericDial
     }
     return html`${data&&elemDef&&Object.keys(data).length > 0 ?
       html`
+
         <div style="display:block">
           ${elemDef!==undefined&&Array.isArray(elemDef)&&elemDef.map((elem, i) =>           
           html`    

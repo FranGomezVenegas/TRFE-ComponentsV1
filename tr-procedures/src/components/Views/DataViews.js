@@ -2111,32 +2111,60 @@ export function DataViews(base) {
     getChartData(elem) {
       // console.log('getChartData', elem, 'chartData', this.data[elem.chart_name])
       var chartData = [];
-      chartData = [[elem.label_item, elem.label_value]];
+
+      if (elem.elementName==='cdatatable'){
+        var data = [
+          ['Day', 'Guardians of the Galaxy', 'The Avengers', 'Transformers: Age of Extinction'],
+          [1, 37.8, 80.8, 41.8],
+          [2, 30.9, 69.5, 32.4],
+          [3, 25.4, 57, 25.7],
+          [4, 11.7, 18.8, 10.5],
+          [5, 11.9, 17.6, 10.4],
+          [6, 8.8, 13.6, 7.7],
+          [7, 7.6, 12.3, 9.6],
+          [8, 12.3, 29.2, 10.6],
+          [9, 16.9, 42.9, 14.8],
+          [10, 12.8, 30.9, 11.6],
+          [11, 5.3, 7.9, 4.7],
+          [12, 6.6, 8.4, 5.2],
+          [13, 4.8, 6.3, 3.6],
+          [14, 4.2, 6.2, 3.4]
+        ]
+        return data    
+      }
+
+      //chartData = [[elem.label_item, elem.label_value]];
       if (this.data[elem.chart_name] !== undefined) {
         var dataForChart = this.data[elem.chart_name];
-        for (var i = 0; i < dataForChart.length; i++) {
-          if (
-            !elem.grouper_exclude_items.includes(
-              dataForChart[i][elem.grouper_field_name]
-            )
-          ) {
-            if (
-              this.addNumericValue(
-                elem.counterLimits,
-                dataForChart[i][elem.counter_field_name]
-              )
-            ) {
-              var curchtval = [];
-              chartData.push([
-                this.labelPossibleReplacement(
-                  elem,
-                  dataForChart[i][elem.grouper_field_name]
-                ),
-                dataForChart[i][elem.counter_field_name],
-              ]);
-            }
-          }
+
+        let seriesArr=[]
+        if (Array.isArray(elem.counter_field_name)){
+          seriesArr=elem.counter_field_name
+        }else{
+          seriesArr.push(elem.counter_field_name)
         }
+
+        let curchtHeader = [];
+        curchtHeader.push(elem.label_item)
+        for (var iSerie = 0; iSerie < seriesArr.length; iSerie++) {
+          curchtHeader.push(seriesArr[iSerie]);
+        }
+        chartData.push(curchtHeader);   
+        for (var iData = 0; iData < dataForChart.length; iData++) {
+          if (!elem.grouper_exclude_items.includes(dataForChart[iData][elem.grouper_field_name])) {
+            for (var iSerie = 0; iSerie < seriesArr.length; iSerie){
+            if (this.addNumericValue(elem.counterLimits,dataForChart[iData][seriesArr[iSerie]])) {              
+                let curchtval = [];
+                curchtval.push(this.labelPossibleReplacement(elem, dataForChart[iData][elem.grouper_field_name]));
+                
+                for (var iSerie = 0; iSerie < seriesArr.length; iSerie++) {
+                  curchtval.push(dataForChart[iData][seriesArr[iSerie]]); // Add each value from seriesArr as a column
+                }
+                chartData.push(curchtval);                
+              }
+            }
+          } // iSerie
+        } // iData
       }
       //console.log('getChartData', 'chartData', chartData)
       return chartData;

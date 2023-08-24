@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { commonLangConfig } from '@trazit/common-core';
+
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
@@ -813,8 +813,7 @@ export function TrazitFormsElements(base) {
     get text8() {    return this.shadowRoot.querySelector("mwc-textfield#text8")    }        
     get text9() {    return this.shadowRoot.querySelector("mwc-textfield#text9")    }        
     get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    }        
-    get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    } 
-    get checkbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox1")    }        
+     get checkbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox1")    }        
     get checkbox2() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox2")    }        
     get checkbox3() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox3")    }        
     get checkbox4() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox4")    }        
