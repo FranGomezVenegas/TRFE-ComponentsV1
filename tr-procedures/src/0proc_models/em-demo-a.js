@@ -1,4 +1,5 @@
-export const EmDemoA = {
+export const EmDemoA = 
+{
   "TrackingChanges":{
 	  "version": 0.9,
 	  "last change on (YYYYMMDD)": "20230328",
@@ -1271,6 +1272,272 @@ export const EmDemoA = {
       }
     ]
   },
+  "SampleRevision": {
+	"component": "TableWithButtons",
+    "langConfig": {
+      "title": {
+        "SampleRevisionSMP": {
+          "label_en": "Samples Pending Revision", 
+          "label_es": "Muestras pendientes de revisar"
+        },
+        "SampleRevisionPERS": {
+          "label_en": "Personnel Samples Pending Revision", 
+          "label_es": "Muestras de personal pendientes de revisar"
+        }
+      },
+      "gridHeader": {
+        "sample_id": {
+          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, "width":  "12px"
+        },
+        "identification_progress_percentage": {
+          "label_en": "", "label_es": "", "is_icon": true, "as_progress": true, "title":{"label_en": "Identification %", "label_es": "% Identificados"}, "sort": false, "filter": true, "width":  "12px"
+        },
+        "program_name": {
+          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true, "width": "20px"
+        },
+        "location_name": {
+          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "30px"
+        },
+        "sampling_date": {
+          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true, "width": "20px"
+        },
+        "raw_value": {
+          "label_en": "Reading Result", "label_es": "Recuento", "sort": false, "filter": true, "width": "20px"
+        },
+        "microorganism_count": {
+          "label_en": "# Organism Ident.", "label_es": "Num. MicroOrg. Detectados", "sort": false, "filter": true, "width": "20px"
+        },
+        "microorganism_list": {
+          "label_en": "Microorganisms", "label_es": "Microorganismos", "sort": false, "filter": true, "width": "20px"
+        }
+      },
+      "microorganismHeader": {
+        "name": {
+          "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
+        },
+        "items": {
+          "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
+        }
+      }
+    },
+    "viewQuery":
+    { "actionName": "SAMPLES_BY_STAGE",
+	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload", "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      },
+      "endPointParams": [
+        { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" }
+        
+      ],
+      "subViewFilter": {
+        "SampleRevisionSMP": [
+			{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code" },
+			{ "argumentName": "whereFieldsValue", "value": "Revision|program_smp_template" }
+		],
+        "SampleRevisionPERS": [
+			{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code" },
+			{ "argumentName": "whereFieldsValue", "value": "Revision|prog_pers_template" }
+		]
+      }
+    },
+    "actions": [
+      { "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
+		"requiresDialog": false,
+		"endPointUrl": "Samples",
+        "button": {
+          "icon": "skip_previous",
+          "title": {
+            "label_en": "Previous", "label_es": "Previo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+        ]
+      },
+      { "actionName": "SAMPLESTAGE_MOVETONEXT",
+		"requiresDialog": false,
+		"endPointUrl": "Samples",
+        "button": {
+          "icon": "skip_next",
+          "title": {
+            "label_en": "Next", "label_es": "Siguiente"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+        ]
+      },
+      { "actionName": "GET_SAMPLE_AUDIT",	  
+		"requiresDialog": true,
+		"endPoint": "/modulesample/SampleAPIqueries",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
+          },
+          "requiresGridItemSelected": true
+        },
+        "clientMethod": "getObjectAuditInfo",
+        "endPointParams": [
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+        ],        
+        "dialogInfo": { 
+		  "name": "auditDialog",
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+			  "requiresDialog": false,
+			  "notGetViewData": true,
+			  "endPointUrl": "Samples",
+              "clientMethod": "signAudit",
+              "endPointParams": [
+                { "argumentName": "auditId", "targetValue": true }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "actionName": "REVIEWSAMPLE",
+        "endPointUrl": "Samples",
+        "requiresDialog": false,
+        "xxxclientMethod": "reviewSample",
+        "button": {
+          "icon": "view_headline",
+          "title": {
+            "label_en": "Review",
+            "label_es": "Revisar"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ]
+      },      
+      { "actionName": "GET_MICROORGANISM_LIST",
+        "clientMethod": "getMicroorganism",
+        "type":"readonly",
+		    "requiresDialog": true,
+        "button": {
+          "icon": "add",
+          "title": {
+            "label_en": "Add Microorganism", "label_es": "Añadir Microorganismo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+        ],
+		"microorganismHeader": {
+			"name": {
+			  "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
+			},
+			"items": {
+			  "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
+			}
+		},		
+        "dialogInfo": { 
+          "automatic": true,
+		  "name": "microorganismDialogAdd",
+		  "clientMethod": "getMicroorganismToAdd",
+		  "subQueryName": "getMicroorganismToAdd",
+		  "viewQuery": {
+			  "actionName": "GET_MICROORGANISM_LIST",
+				"endPointParams": [				  
+				  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+				]
+		  },		  
+          "fieldText": {
+            "addhocInput": { "label_en": "Ad-hoc microorganism name", "label_es": "Nombre Ad-hoc" },
+            "addhocBtn": { "label_en": "Add Addhoc", "label_es": "Añadir Nuevo" },
+            "addBtn": { "label_en": "Add", "label_es": "Añadir" }
+          },
+              "action": [
+            {
+              "actionName": "ADD_SAMPLE_MICROORGANISM",
+              "clientMethod": "addSampleMicroorganism",
+			  "endPointUrl": "Samples",
+              "endPointParams": [
+                { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+                { "argumentName": "microorganismName", "targetValue": true },
+                { "argumentName": "numItems", "targetValue": true }
+              ]
+            },
+            {
+              "actionName": "ADD_ADHOC_SAMPLE_MICROORGANISM",
+              "clientMethod": "addSampleMicroorganism",
+			  "endPointUrl": "Samples",
+			  "requiresDialog": false,
+              "endPointParams": [
+                { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+                { "argumentName": "microorganismName", "targetValue": true },
+                { "argumentName": "numItems", "targetValue": true }
+              ]
+            }
+          ]
+        }
+      },
+      { "actionNamexxx": "GET_SAMPLE_MICROORGANISM_VIEW",
+        "clientMethod": "getMicroorganismItem",
+		"requiresDialog": true,
+        "button": {
+          "icon": "remove",
+          "title": {
+            "label_en": "Remove Microorganism", "label_es": "Borrar Microorganismo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "zzzendPointParams": [
+          { "argumentName": "whereFieldsName", "value": "sample_id" },
+          { "argumentName": "whereFieldsValue", "targetValue": true }
+        ],
+      "microorganismHeader": {
+        "name": {
+          "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
+        },
+        "items": {
+          "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
+        }
+      },		
+        "dialogInfo": { 
+          "automatic": true,
+		  "name": "microorganismDialogRemove",
+		  "subQueryName": "getMicroorganismToRemove",
+		  "viewQuery": {
+			  "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
+				"endPointParams": [
+				  { "argumentName": "whereFieldsName", "value": "sample_id" },
+				  { "argumentName": "whereFieldsValue", "targetValue": true }
+				]
+		  },
+          "action": [
+            {
+              "actionName": "REMOVE_SAMPLE_MICROORGANISM",
+              "endPointUrl": "Samples",
+              "clientMethod": "removeSampleMicroorganism",
+              "endPointParams": [
+                { "argumentName": "sampleId", "targetValue": true },
+                { "argumentName": "microorganismName", "targetValue": true },
+                { "argumentName": "numItems", "targetValue": true }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
   "SampleIncubation": {
 	"component":"ModuleEnvMonitSampleIncubation", 	  
     "abstract": true,
@@ -1738,11 +2005,11 @@ export const EmDemoA = {
 	},    
 	"actions": [],
 	"tabs": [
-		{tabLabel_en: "Summary", tabLabel_es: "Inicio", view: "summary"},
-		{tabLabel_en: "Parameter Limits", tabLabel_es: "Límites", view: "parameter-limits"},
-		{tabLabel_en: "Config Calendar", tabLabel_es: "Calendario Config", view: "config-calendar"},
-		{tabLabel_en: "Sampling Points", tabLabel_es: "Puntos de Muestreo", view: "sampling-points"},
-		{tabLabel_en: "Sampling Points Map", tabLabel_es: "Puntos de Muestreo Mapa", view: "sampling-points-map"}
+		{"tabLabel_en": "Summary", "tabLabel_es": "Inicio", "view": "summary"},
+		{"tabLabel_en": "Parameter Limits", "tabLabel_es": "Límites", "view": "parameter-limits"},
+		{"tabLabel_en": "Config Calendar", "tabLabel_es": "Calendario Config", "view": "config-calendar"},
+		{"tabLabel_en": "Sampling Points", "tabLabel_es": "Puntos de Muestreo", "view": "sampling-points"},
+		{"tabLabel_en": "Sampling Points Map", "tabLabel_es": "Puntos de Muestreo Mapa", "view": "sampling-points-map"}
 	  ]
   },
   "Deviation": {
@@ -2226,6 +2493,41 @@ export const EmDemoA = {
           {"type": "card", "title":{"label_en": "Information", "label_es": "Información"}, 
             "elementName":"production_lot", "subheadingObj": "text1"}
           ],
+		[		
+          {"type": "chart", "elementName": "datatable",
+            "display_chart": true,
+            "chart_type":"line",
+            "chart_name":"datatable",
+            "chart_title":{"label_en": "Per out of range type", "label_es":"Por tipo de fuera de rango"},
+            "counter_field_name":["raw_value_num", "speclimit_max_spec"],
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": "transparent",
+              "is3D": true,
+              "colors": ["#dfa942", "#d33737", "#bf120f"]              
+            },
+            "grouper_field_name":"sampling_date",
+            "label_values_replacement":{
+              "IN":{"label_es": "In Range", "label_en": "Dentro de Range"},
+              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
+              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
+              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
+            },
+            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
+            "label_item":{"label_en":"Statussss", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          },
+        ],
+
+
+
+
           [
           {"type": "chart", "elementName": "counter_range_eval",
 
@@ -2790,7 +3092,7 @@ export const EmDemoA = {
             "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"
           },
           "filterFields":[
-            {"text1": { "label_en": "Sample", "label_es": "Muestra", "default_value": "2029" }},
+            {"text1": { "label_en": "Sample", "label_es": "Muestra", "default_value": "2029" }}
           ],
           "endPointParams": [
             {"argumentName": "sampleId", "element": "text1"},
@@ -2830,13 +3132,13 @@ export const EmDemoA = {
               "dateStart":{ "label_en": "Sampling Start Date", "label_es": "Fecha Inicio Muestreo", "default_value": "" },
               "dateEnd":{ "label_en": "Sampling End Date", "label_es": "Fecha Fin Muestreo", "default_value": "" }
               }
-            },
+            }
           ],
           "endPointParams": [
             {"argumentName": "incubatorName", "element": "text1"},
             {"argumentName": "startDate", "element": "daterange1dateStart"},
             {"argumentName": "endDate", "element": "daterange1dateEnd"},	
-			{"argumentName": "incubatorFieldsToDisplay", "fixValue": "ALL"},
+			{"argumentName": "incubatorFieldsToDisplay", "fixValue": "ALL"}
           ]      
         },
         "printable": {
@@ -2897,7 +3199,7 @@ export const EmDemoA = {
             "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"
           },
           "filterFields":[
-            {"text1": { "label_en": "Sample", "label_es": "Muestra", "default_value": "" }},
+            {"text1": { "label_en": "Sample", "label_es": "Muestra", "default_value": "" }}
           ],
           "endPointParams": [
             {"argumentName": "batchName", "element": "text1"},
@@ -2931,7 +3233,7 @@ export const EmDemoA = {
             "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"
           },
           "filterFields":[
-            {"text1": { "label_en": "Lot", "label_es": "Lote", "default_value": "demo" }},
+            {"text1": { "label_en": "Lot", "label_es": "Lote", "default_value": "demo" }}
           ],
           "endPointParams": [
             {"argumentName": "lotName", "element": "text1"},
@@ -2958,7 +3260,7 @@ export const EmDemoA = {
         "reportElements":[
           [{"type": "Report", "reportModel": "EnvMonProductionLotBrowser"}]                   
         ]        
-      },
+      }
     ]
   }   
 }

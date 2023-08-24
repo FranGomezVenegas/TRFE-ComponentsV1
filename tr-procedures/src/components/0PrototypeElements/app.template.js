@@ -3,7 +3,7 @@ import '../uploadButton/index';
 import '../dropzone/index';
 import '../cameraview/index';
 import "../codeview/index";
-import "../qrcode-scanner/index";
+//import "../qrcode-scanner/index";
 
 
 export const template = (props) => {

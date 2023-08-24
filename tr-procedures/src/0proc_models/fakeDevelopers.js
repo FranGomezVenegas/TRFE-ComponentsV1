@@ -18,7 +18,7 @@ export const FakeDevelopers = {
   },
   "prototype-elements-view-main":{
     "component": "PrototypeElementsViewMain",  
-  },    
+  },      
   "WhiteIpList": {
 	"component": "TableWithButtons",
     "langConfig": {

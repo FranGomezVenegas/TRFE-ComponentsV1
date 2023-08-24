@@ -163,8 +163,11 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'ObjectByTabs':
         import('./components/ObjectByTabs/object-by-tabs')
         return  
-      case 'TreeView':
-        alert("Entered to import treeview")
+      case 'PrototypeElementsViewMain':
+        this.windowOpenable=true
+        import('./components/0PrototypeElements/prototype-elements-view-main')
+        return    
+      case 'TreeView':        
         this.windowOpenable=true
         import('./components/Tree/app/tree-view-main')
         return    
@@ -335,6 +338,10 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'TreeView' ? html`
         <tree-view-main></tree-view-main>
       `:html``}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'PrototypeElementsViewMain' ? html`
+        <prototype-elements-view-main></prototype-elements-view-main>
+      `:html``}
+
       
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeWater' ? html`
         <home-water .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-water>

@@ -132,7 +132,7 @@
     "viewName": "LogSamplesModuleSamples", 
     "filterName" :  "SampleLogin" 
   },
-  "localDefaultView21": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "DataMining", 
     "filterName" :  "DataMining" 
@@ -185,7 +185,7 @@
     "viewName": "LotCreation", 
     "filterName" :  "LotCreation" 
   },
-  "localDefaultView": {
+  "localDefaultViewxxxxxxxxxxxx": {
     "procName":  "mp-release1", 
     "viewName": "LotView", 
     "filterName" :  "LotView" 
@@ -195,7 +195,7 @@
     "viewName": "Browser", 
     "filterName" :  "Browser" 
   },
-  "localDefaultViewdsadas": {
+  "localDefaultViewasaaa": {
     "procName":  "mp-release1", 
     "viewName": "SampleEnterResult", 
     "filterName" :  "ER-FQ" 
@@ -206,15 +206,20 @@
     "viewName": "ReviewTesting", 
     "filterName" :  "RT-FQ" 
   },
-  "localDefaultView": {
+  "localDefaultViewadasd": {
     "procName":  "fake-developers", 
     "viewName": "culture-medium", 
     "filterName" :  "culture-medium" 
   },
-  "localDefaultView": {
+  "localDefaultViewd": {
     "procName":  "fake-developers", 
     "viewName": "tree-view", 
     "filterName" :  "tree-view" 
+  },
+  "localDefaultView": {
+    "procName":  "mp-release1", 
+    "viewName": "SpecDesign", 
+    "filterName" :  "SpecDesign" 
   }
   
   
