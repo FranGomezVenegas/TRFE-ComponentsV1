@@ -158,8 +158,6 @@ export function GridFunctions(base) {
             return titleStr
         }
         iconRenderer(sample, keyName, i ,colDef) {
-//            if (value!==undefined)
-//console.log('iconRenderer', 'sample', 'i', i, sample, 'colDef', colDef)
         if (colDef.as_progress!==undefined&&colDef.as_progress){
             return html`
             <style>
@@ -199,11 +197,33 @@ export function GridFunctions(base) {
             return html`<img src="/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
         } else if (this.viewName == "PlatformBusRules") {
             return html`<img src="/images/${sample.disabled?'activate.svg':'deactivate.svg'}" style="width:20px">`
+        } else if (sample[keyName]!==undefined&&sample[keyName]===true) {
+            return html`<img src="/images/activate.svg" style="width:20px">`
+        } else if (sample[keyName]!==undefined&&sample[keyName]===false) {
+            return html`<img src="/images/deactivate.svg" style="width:20px">`
         } else {
-            return html`<img src="/images/${sample[keyName]?'activate.svg':'deactivate.svg'}" style="width:20px">`
+            return html`<img src="/images/${this.getIconPath(sample[keyName])}" style="width:20px">`
         }
         }
     
+        getIconPath(iconName) {
+            const iconExtensions = {
+                jpg: '.jpg',
+                gif: '.gif',
+                svg: '.svg',
+                // Add more extensions if needed
+            };
+            const iconFolder = 'icons/';
+        
+            const iconExtension = iconName.split('.').pop(); // Get the extension from the icon name
+            const validExtension = iconExtensions[iconExtension.toLowerCase()];
+            if (validExtension) {
+                return iconFolder + iconName + validExtension;
+            } else {
+                console.error('Unsupported icon extension:', iconExtension);
+                return null;
+            }
+        }        
         nonIconColumn(key, value, i, viewModelFromProcModel) {
         return html`${viewModelFromProcModel.langConfig.gridHeader[key].sort ?
             this.sortColumn(key, value, i, viewModelFromProcModel) :
