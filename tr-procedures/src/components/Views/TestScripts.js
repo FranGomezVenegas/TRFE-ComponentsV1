@@ -174,7 +174,7 @@ export function TestScripts(base) {
               </div>
             `    
           }    
-          coaheaderWithStyle(data){
+          coaheaderWithStyleScripts(data){
             let coaData=data//FakeCOA
             return html`
             <style type="text/css">
@@ -264,7 +264,7 @@ export function TestScripts(base) {
             `
           }
         
-          coaResultsTable(data){
+          coaResultsTableScripts(data){
             
             let coaData=data//FakeCOA
             return html`
@@ -317,7 +317,7 @@ export function TestScripts(base) {
             `}
             `
           }  
-          coaUsageDecision(data){
+          coaUsageDecisionScripts(data){
             let coaData=data//FakeCOA
             return html`
             ${coaData==undefined||coaData.usageDecision===undefined ? nothing: html` 
@@ -348,7 +348,7 @@ export function TestScripts(base) {
             `
           }
         
-          coaSignatures(data){
+          coaSignaturesScripts(data){
             let coaData=data//FakeCOA
             return html`
             ${coaData==undefined||coaData.signatures===undefined ? nothing: html` 
@@ -413,7 +413,7 @@ export function TestScripts(base) {
             `
           }
         
-          documentFooter(data){
+          documentFooterScripts(data){
             let coaData=data//FakeCOA
             let session = JSON.parse(sessionStorage.getItem("userSession"))
             let sessionDate = session.appSessionStartDate
@@ -425,7 +425,7 @@ export function TestScripts(base) {
             footerText+=`</i>`
             return footerText
           }
-          printCoa(data){
+          printCoaScripts(data){
             let coaData=data//FakeCOA
             this.setPrintContentCoa(data)
             let printWindow = window.open('', '', 'fullscreen=yes');
@@ -439,7 +439,7 @@ export function TestScripts(base) {
             }, 500);
           }
          
-          setPrintContentCoa(data) { 
+          setPrintContentCoaScripts(data) { 
             let headerData=''
             let headerDataDiv =this.shadowRoot.querySelectorAll("div#document")
             if (headerDataDiv!==undefined){
@@ -506,7 +506,7 @@ export function TestScripts(base) {
             `         
             }
           }  
-          resultsTableExtraTables(){
+          resultsTableExtraTablesScripts(){
             if (1==1){return html``}  
             return html`
               <div class="content">
