@@ -202,7 +202,7 @@ export function GridFunctions(base) {
         } else if (sample[keyName]!==undefined&&sample[keyName]===false) {
             return html`<img src="/images/deactivate.svg" style="width:20px">`
         } else {
-            return html`<img src="/images/${this.getIconPath(sample[keyName])}" style="width:20px">`
+            return html`<img src="/images/icons/${this.getIconPath(sample[keyName])}" style="width:20px">`
         }
         }
     
@@ -218,7 +218,7 @@ export function GridFunctions(base) {
             const iconExtension = iconName.split('.').pop(); // Get the extension from the icon name
             const validExtension = iconExtensions[iconExtension.toLowerCase()];
             if (validExtension) {
-                return iconFolder + iconName + validExtension;
+                return iconName + validExtension;
             } else {
                 console.error('Unsupported icon extension:', iconExtension);
                 return null;
