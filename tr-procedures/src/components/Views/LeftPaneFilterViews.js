@@ -36,7 +36,7 @@ export function LeftPaneFilterViews(base) {
     
     filterAsList(data) {
       let elem=this.viewModelFromProcModel
-      console.log('filterAsList', elem.filterResultDetail, data)
+      //console.log('filterAsList', elem.filterResultDetail, data)
       let dataArr=[]
       if (!Array.isArray(data)){        
         dataArr.push(data)        
@@ -92,6 +92,7 @@ export function LeftPaneFilterViews(base) {
     }
     //clickedUserSessionFromList
     filterElementClicked(e){
+      if (e.targetValue===undefined){return}
       console.log(e.targetValue.elementdef)
     }
   } 

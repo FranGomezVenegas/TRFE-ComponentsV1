@@ -120,6 +120,7 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
             selectedItems:{ type: Array},
             selectedItemLoaded:{type: Boolean},
             leftSplitDisplayed: { type: Boolean },
+            filterCurrentData: {type: Object}
         }
     }
     constructor() {
@@ -139,6 +140,7 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
         this.desktop = true
         this.showDivider=true
         this.leftSplitDisplayed=true
+        this.filterCurrentData={}
         this.lotDefault='Testing 2023-03-15T21:20:55.962273'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
           }
     title() {      
@@ -207,9 +209,11 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
     toggleLeftSplitPane() {
       this.leftSplitDisplayed = !this.leftSplitDisplayed
     }  
-    filterPerformAction(e) {
+    async filterPerformAction(e) {
+        this.filterCurrentData={}
+        this.filterCurrentData.filtertext1=this.filtertext1.value
         this.selectedItemLot=""
-        this.GetViewData(false)
+        await this.GetViewData(false)
         this.filterResponseData=[]
         if (!Array.isArray(this.selectedItems)){        
           this.filterResponseData.push(this.selectedItems)        
@@ -257,6 +261,7 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
                 <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
                 .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
                 .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
+                .filterCurrentData=${this.filterCurrentData}>
                 </objecttabs-composition>              
  
               `: nothing}
@@ -276,6 +281,7 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
             <objecttabs-composition .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
               .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName} .filterName=${this.filterName} 
               .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
+              .filterCurrentData=${this.filterCurrentData}>
             </objecttabs-composition>              
           `: nothing}
         </div>
@@ -319,6 +325,7 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
       <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
       .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
       .selectedItem=${this.selectedItem}  .viewModelFromProcModel=${this.viewModelFromProcModel}   
+      .filterCurrentData=${this.filterCurrentData}>
       </objecttabs-composition>      
       `
     }

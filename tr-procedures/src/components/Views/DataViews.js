@@ -19,9 +19,9 @@ import "@vaadin/vaadin-grid/vaadin-grid-sort-column";
 import "@vaadin/vaadin-grid/vaadin-grid-filter-column";
 import "@doubletrade/lit-datatable";
 import "@google-web-components/google-chart";
-
+import {TrazitFormsElements} from '../GenericDialogs/TrazitFormsElements';
 export function DataViews(base) {
-  return class extends TrazitCredentialsDialogs(
+  return class extends TrazitFormsElements(TrazitCredentialsDialogs(
     AuditFunctions(
       ModuleInstrumentsDialogs(
         TrazitInvestigationsDialog(
@@ -31,7 +31,7 @@ export function DataViews(base) {
                 TrazitGenericDialogs(
                   ModuleEnvMonitClientMethods(
                     AuditFunctions(ButtonsFunctions(base))
-                  )
+                  ))
                 )
               )
             )
@@ -59,6 +59,11 @@ export function DataViews(base) {
     }
 
     getDataFromRoot(elem, data) {
+      if (elem!==undefined&&elem.contextVariableName!==undefined){
+        if (this[elem.contextVariableName]!==undefined){
+          data=this[elem.contextVariableName]
+        }
+      }
       if (data === null || data === undefined) {
         return undefined;
       }
@@ -863,15 +868,31 @@ export function DataViews(base) {
       `;
     }
 
-    handleTableRowClick(event, el) {
-      alert(el);
+    handleTableRowClick(event, rowSelected, elem) {
+      //alert(el);
+      
+      //if (this.selectedItemInView===undefined||Object.keys(this.selectedItemInView).length === 0){
+      //  this.selectedItemInView=undefined
+      //}else{
+        this.selectedItemInView=rowSelected
+      //}
+      // const event2 = new CustomEvent('action-performed', {
+      //   bubbles: true, // Allow the event to bubble up the DOM tree
+      //   composed: true, // Allow the event to cross the shadow DOM boundary
+      // });
+  
+      // this.dispatchEvent(event2);
+      this.render()
+
+      console.log('handleTableRowClick', this.selectedItemInView)
       const popup = this.shadowRoot.querySelector(".js-context-popup");
       if (!popup.contains(event.target)) {
         popup.style.display = "none";
       }
     }
 
-    handleOpenContextMenu(event, el) {
+    handleOpenContextMenu(event, rowSelected, elem) {
+      return
       event.preventDefault();
       const menu = document.createElement("ul");
       menu.innerHTML = `
@@ -888,7 +909,7 @@ export function DataViews(base) {
     }
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
-      //console.log('elem', elem, 'data', dataArr)
+      console.log('elem', elem, 'data', dataArr)
       if (isSecondLevel === undefined) {
         isSecondLevel = false;
       }
@@ -901,7 +922,9 @@ export function DataViews(base) {
       if (dataArr === undefined || !Array.isArray(dataArr)) {
         return html``;
       }
-
+      if (!this.dataContainsRequiredProperties(elem, dataArr)){
+        return nothing;
+      }
       return html`
         <style>
           .styled-table {
@@ -1055,9 +1078,9 @@ export function DataViews(base) {
                                 html`
                                   <tr
                                     @click=${(event) =>
-                                      this.handleTableRowClick(event, p)}
+                                      this.handleTableRowClick(event, p, elem)}
                                     @contextmenu=${(event) =>
-                                      this.handleOpenContextMenu(event, p)}
+                                      this.handleOpenContextMenu(event, p, elem)}
                                   >
                                     ${elem.row_buttons === undefined
                                       ? nothing
@@ -1461,6 +1484,19 @@ export function DataViews(base) {
           : nothing}
       `;
     }
+
+    dataContainsRequiredProperties(elem, dataArr){
+      console.log('dataContainsRequiredProperties', elem.mantadoryPropertiesInVariableName, dataArr[0])
+      if (dataArr===undefined){return false}
+      if (elem.mantadoryPropertiesInVariableName===undefined){return true}
+      //let rValue=true
+      const rValue = elem.mantadoryPropertiesInVariableName.every(curProp => {
+        return dataArr[0][curProp] !== undefined;
+      });
+      //if (rValue===undefined){return true}    
+      return rValue
+    }
+
     get dialogEl() {
       return this.shadowRoot.querySelector("div#dialog-frame");
     }

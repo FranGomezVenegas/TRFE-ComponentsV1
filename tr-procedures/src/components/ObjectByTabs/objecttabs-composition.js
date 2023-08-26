@@ -3,7 +3,6 @@ import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
-
 import {DataViews} from '../../components/Views/DataViews';
 import {CoaView} from '../../components/Views/CoaView';
 
@@ -64,16 +63,19 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
       viewName: { type: String },
       filterName: { type: String },
       isProcManagement: { type: Boolean },
-
+      filterCurrentData: {type: Object},
+      selectedItemInView:{ type: Object }
     }
   }
   constructor() {
     super()
     this.viewModelFromProcModel={}
     this.selectedItem = {}
+    this.selectedItemInView ={}
     this.selectedTabModelFromProcModel = {}
     this.config = {}
     this.sopsPassed=false    
+    this.filterCurrentData={}
   }
   render(){
 //    console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)

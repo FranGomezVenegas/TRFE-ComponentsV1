@@ -216,6 +216,14 @@ export function TrazitFormsElements(base) {
             html``: html`              
             ${fields.map((fld, i) =>             
                 html`            
+                
+                ${!fld.filtertext1 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center">
+                    <mwc-textfield class="layout flex" id="filtertext1" type="text" .value=${this.fldDefaultValue(fld.filtertext1)}  label="${this.fieldLabel(fld.filtertext1)}" 
+                        @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    </div>
+                `}          
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
@@ -803,6 +811,9 @@ export function TrazitFormsElements(base) {
     fldDisabled(){
         return true
     }   
+    
+    get filtertext1() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext1")    }    
+
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
     get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        
