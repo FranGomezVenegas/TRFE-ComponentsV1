@@ -2477,7 +2477,7 @@ export const EmDemoA =
             {"argumentName": "MicroorganismsToFind", "element": "text4"}
           ]      
         },
-        "printable": true,
+        "printable":{ "active": true},
         "download":{
           "active": true,
           "elements":[
@@ -2528,7 +2528,7 @@ export const EmDemoA =
 
 
 
-          [
+        [
           {"type": "chart", "elementName": "counter_range_eval",
 
             "display_chart": true,
@@ -2587,7 +2587,7 @@ export const EmDemoA =
             "label_item":{"label_en":"Statussss", "label_es":"Estado"},
             "label_value":{"label_en":"#", "label_es":"#"}   
           }
-        ],
+		],
         [
           {"type": "grid", "title":{"label_en": "Info Matching Selection Criteria", "label_es": "Información cumpliendo el criterio de selección"}, 
            "elementName": "datatable", "fieldsToDisplay":[

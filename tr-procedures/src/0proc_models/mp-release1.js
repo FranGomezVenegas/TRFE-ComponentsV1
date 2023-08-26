@@ -2,7 +2,9 @@ export const MpRelease1 =
 {
   "TrackingChanges": {
     "version": 0.9,
-	"last change on (YYYYMMDD)": "20230808",
+	"last change on (YYYYMMDD)": "20230825",
+	"last_change_note_20230825": "Added filterCurrentData to get filter values in context",
+	"last_change_note_20230825_2": "First approach for Spec Designer",
 	"last_change_note_20230808": "Fixed Deviation view, it requires buttons to be by entity or object_type, by now the new_inv/add to inv buttons are for lot_bulk. In case new object types will be added then buttons should be cloned and adapted accordingly.",
 	"last_change_note_20230726": "Added Deviation view",
     "last_change_note_20230718": "In LotView, added tab for non analyzed params and for inventory retain",
@@ -183,7 +185,8 @@ export const MpRelease1 =
       "endPointParams": [
         {
           "argumentName": "lotName",
-          "element": "text1"
+		  "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"
         }
       ]
     },
@@ -193,7 +196,7 @@ export const MpRelease1 =
     },
     "filter": [
       {
-        "text1": {
+        "filtertext1": {
           "label_en": "Lot to get",
           "label_es": "Lote a cargar",
           "fixValue": "CCALL001"
@@ -230,7 +233,60 @@ export const MpRelease1 =
 	  },
       { "tabLabel_en": "Summary", "tabLabel_es": "Inicio", "view": "summary",
         "view_definition": [
-		  {   
+          { "type": "cardSomeElementsSingleObject", "endPointResponseObject": "lot_info",
+            "title": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              },
+              {
+                "name": "created_on",
+                "label_en": "Creation D.",
+                "label_es": "F. Creación"
+              },
+              {
+                "name": "material_name",
+                "label_en": "Material",
+                "label_es": "Material"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "num_containers",
+                "label_en": "Num. Containers",
+                "label_es": "Núm. Contenedores"
+              },
+              {
+                "name": "bulk_decision",
+                "name2": "bulk_decision_by",
+                "name3": "bulk_decision_by",
+                "label_en": "Bulks decision",
+                "label_es": "Decisión en los bultos"
+              },
+              {
+                "name": "sampling_plan",
+                "label_en": "sampling_plan",
+                "label_es": "sampling_plan"
+              },
+              {
+                "name": "analysis_status",
+                "label_en": "analysis_status",
+                "label_es": "analysis_status"
+              }
+            ],
             "actions": [
               {
                 "actionName": "GET_LOT_AUDIT",
@@ -1597,7 +1653,7 @@ export const MpRelease1 =
     ],
     "zzzztabs": [
       {
-        "tabLabel_en": "Summary",
+        "tabLabel_en": "Summarddy",
         "tabLabel_es": "Inicio",
         "view": "summary",
         "view_definition": [
@@ -5458,7 +5514,8 @@ export const MpRelease1 =
       "endPointParams": [
         {
           "argumentName": "specCode",
-          "element": "text1"
+		  "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"          
         }
       ]
     },
@@ -5468,29 +5525,17 @@ export const MpRelease1 =
     },
     "filter": [
       {
-        "text1": {
+        "filtertext1": {
           "label_en": "Spec Name",
           "label_es": "Especificacion",
           "fixValue": "Calcium Carbonate"
         }
       }
     ],
-    "zzzzzfilter_results": {
-      "type": "readOnlyTable",
-      "title": "3.4) Menu Definition",
-      "endPointResponseObject": "user_requirements_events",
-      "columns": [
-        {
-          "name": "id",
-          "label_en": "Id",
-          "label_es": "Id"
-        }
-      ]
-    },
 	"filterResultDetail":{
 		"type":"list",
 		"detail":[
-			{"field": "lot_name"}
+			{"field": "code"}
       ]  		
 	},
     "actions": [],
@@ -5541,19 +5586,20 @@ export const MpRelease1 =
                 "label_es": "Especificación"
               }
             ]
-          },
+          }
         ]
       },
 	  { "tabLabel_en": "Testing", "tabLabel_es": "Pruebas", "view": "summary",
         "view_definition": [
               {
-                "type": "readOnlyTable",
+                "type": "readOnlyTable",				
                 "endPointResponseObject": "scripts_detail",
 				"actions": [
 					{
 					"actionName": "SUGGEST_SPEC_LIMITS_TESTING",
 					"requiresDialog": false,
 					"endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+					"variableToSetResponse": "selectedItemInView",
 					"button": {
 					  "icon": "event",
 					  "title": {
@@ -5664,119 +5710,122 @@ export const MpRelease1 =
                       ]
                     }
                   ]				
-              }
-		]
-	  },	  
-	  { "tabLabel_en": "AI Suggest Testing", "tabLabel_es": "IA Sugerir Pruebas", "view": "summary",
-        "view_definition": [
-          { "type": "title", "endPointResponseObject": "lot_not_analyzed_result",
-            "title": {
-              "label_en": "",
-              "label_es": ""
-            },
-            "subtitle": {
-              "label_en": "",
-              "label_es": ""
-            },
-            "columns": [
-              {
-                "name": "analysis",
-                "label_en": "Analysis",
-                "label_es": "Análisis"
-              },			
-              {
-                "name": "value",
-				"name2": "amount_uom",
-                "label_en": "Value",
-                "label_es": "Valor"
               },
+          {
+            "type": "reportTitle",
+            "title": {
+              "label_en": "Steps",
+              "label_es": "Pasos"
+            },
+            "elements": [
               {
-                "name": "reason",
-                "label_en": "Reason",
-                "label_es": "Motivo"
-              }
-            ],
-            "row_buttons": [              
-              {
-                "actionName": "LOT_REMOVE_NOTANALYZED_PARAM",
-                "requiresDialog": false,
-                "endPointUrl": "Samples",
-                "button": {
-                  "icon": "event",
-                  "title": {
-                    "label_en": "Remove",
-                    "label_es": "Borrar"
-                  },
-                  "requiresGridItemSelected": false
-                },
-                "xdialogInfo": {
-                  "name": "genericDialog",
-                  "fields": [
-                    {
-                      "list1": {
-                        "label_en": "Decision",
-                        "label_es": "Decisión",
-                        "items": [
-                          {
-                            "keyName": "ACCEPTED",
-                            "keyValue_en": "Accepted",
-                            "keyValue_es": "Aceptado"
-                          },
-                          {
-                            "keyName": "ACCEPTED_WITH_RESTRICTIONS",
-                            "keyValue_en": "Accepted with restrictions",
-                            "keyValue_es": "Aceptado con restricciones"
-                          },
-                          {
-                            "keyName": "REJECTED",
-                            "keyValue_en": "Rejected",
-                            "keyValue_es": "Rechazado"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
-                "endPointParams": [
+                "type": "readOnlyTable",
+				"contextVariableName": "selectedItemInView",
+				"mantadoryPropertiesInVariableName":["suggested_value"],
+				"endPointPropertyArray": ["steps"],				
+                "columns": [
                   {
-                    "argumentName": "lotName",
-                    "selObjectPropertyName": "lot_name"
+                    "name": "variation_name",
+                    "label_en": "Variation",
+                    "label_es": "Variación"
                   },
                   {
-                    "argumentName": "analysisName",
-                    "selObjectPropertyName": "analysis"
+                    "name": "method_name",
+                    "label_en": "Method",
+                    "label_es": "Método"
+                  },
+                  {
+                    "name": "analysis",
+                    "label_en": "Analysis",
+                    "label_es": "Análisis"
+                  },
+                  {
+                    "name": "suggested_value",
+                    "label_en": "Suggested Value",
+                    "label_es": "Valor sugerido"
+                  },
+                  {
+                    "name": "evaluation",
+                    "label_en": "Evaluation",
+                    "label_es": "Evaluación"
+                  },
+                  {
+                    "name": "reason",
+                    "label_en": "Explanation",
+                    "label_es": "Explicación"
                   }
                 ]
-              }
-            ],
-            "actions": [
+              },
               {
-                "actionName": "SUGGEST_SPEC_LIMITS_TESTING",
-                "requiresDialog": false,
-                "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-                "button": {
-                  "icon": "event",
-                  "title": {
-                    "label_en": "Build Testing",
-                    "label_es": "Construye una prueba"
-                  },
-                  "requiresGridItemSelected": false
-                },
-                "endPointParams": [
+                "type": "readOnlyTable",
+				"contextVariableName": "selectedItemInView",
+				"mantadoryPropertiesInVariableName":["script_id", "step_id"],
+				"endPointPropertyArray": ["steps"],				
+                "columns": [
                   {
-                    "argumentName": "spec",
-                    "selObjectPropertyName": "code"
+                    "name": "step_id",
+                    "label_en": "Id",
+                    "label_es": "Id"
                   },
                   {
-                    "argumentName": "specVersion",
-                    "selObjectPropertyName": "config_version"
+                    "name": "action_name",
+                    "label_en": "Action",
+                    "label_es": "Acción"
+                  },
+                  {
+                    "name": "date_execution",
+                    "label_en": "Run on",
+                    "label_es": "Ejecutado en"
+                  },
+                  {
+                    "name": "eval_total_tests",
+                    "label_en": "Number of Steps",
+                    "label_es": "Número de Pasos"
+                  },
+                  {
+                    "label_en": "Sintaxis",
+                    "label_es": "Sintáxis",
+                    "is_icon": true,
+                    "icon_name": "eval_syntaxis_icon",
+                    "icon_class": "eval_syntaxis_class",
+                    "fix_value2_prefix": "(Expected: ",
+                    "name2": "expected_syntaxis",
+                    "fix_value2_suffix": ")",
+                    "fix_value3_prefix": " (Trazit:",
+                    "name3": "function_syntaxis",
+                    "fix_value3_suffix": ")"
+                  },
+                  {
+                    "label_en": "Notification",
+                    "label_es": "Notificación",
+                    "is_icon": true,
+                    "icon_name": "eval_code_icon",
+                    "icon_class": "eval_code_class",
+                    "fix_value2_prefix": "(Expected: ",
+                    "name2": "expected_code",
+                    "fix_value2_suffix": ")",
+                    "fix_value3_prefix": " (Trazit:",
+                    "name3": "function_code",
+                    "fix_value3_suffix": ")"
+                  },                  
+                  {
+                    "label_en": "Duration",
+                    "label_es": "Duración",
+                    "fix_value_prefix": "",
+                    "name": "time_consume",
+                    "fix_value2_prefix": " (",
+                    " (name2": "time_started",
+                    "fix_value3_prefix": " - ",
+                    "name3": "time_completed",
+                    "fix_value3_suffix": ") "
                   }
                 ]
               }
             ]
           }
+			  
 		]
-	  }
+	  }	  
     ],
     "zzzztabs": [
       {
@@ -6066,7 +6115,5 @@ export const MpRelease1 =
         ]
       }
     ]
-  },
-  
-
+  } 
 }
