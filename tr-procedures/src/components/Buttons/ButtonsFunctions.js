@@ -446,60 +446,6 @@ export function ButtonsFunctions(base) {
       // }
     }
 
-    async xxGetViewData(setGrid = true ){
-        console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
-        this.samplesReload = true
-        this.selectedItems = []    
-        let queryDefinition=this.viewModelFromProcModel.viewQuery
-        if (queryDefinition===undefined){return}
-
-
-        if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
-            //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
-            if (this[this.viewModelFromProcModel.viewQuery.clientMethod]===undefined){
-                alert('not found any clientMethod called '+this.viewModelFromProcModel.viewQuery.clientMethod)
-                return
-            }
-            let j=this[this.viewModelFromProcModel.viewQuery.clientMethod]()
-            this.setTheValues(queryDefinition, j)
-            return
-        }else if (this.config===undefined||this.config.backendUrl===undefined){
-          fetch("../../../demo/config.json").then(r => r.json()).then(j => {
-              this.config={}
-              this.config=j
-              //this.config.backendUrl=j.backendUrl
-          })          
-        }else{
-          if (this.config.backendUrl===undefined){            
-            this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
-            console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
-            let sessionDbName=JSON.parse(sessionStorage.getItem("userSession")).dbName
-            if (sessionDbName!==undefined){
-              this.config.dbName=sessionDbName
-            }
-            if (this.config.dbName===undefined){
-              this.config.dbName="labplanet"
-              this.config.isForTesting=false
-            }  
-          }
-          //console.log('GetViewData', 'queryDefinition', queryDefinition)
-          let APIParams=this.getAPICommonParams(queryDefinition)
-          let viewParams=this.jsonParam(queryDefinition)
-          let endPointUrl=this.getQueryAPIUrl(queryDefinition)
-          if (String(endPointUrl).toUpperCase().includes("ERROR")){
-              alert(endPointUrl)
-              return
-          }
-          let params = this.config.backendUrl + endPointUrl
-            + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
-
-          //console.log('params', params)        
-          await this.fetchApi(params).then(j => {
-            this.setTheValues(queryDefinition, j)          
-          })
-        }
-    }
-
     setTheValues(queryDefinition, j){
       if (queryDefinition.notUseGrid!==undefined&&queryDefinition.notUseGrid===true){
         if (queryDefinition.variableName!==undefined){
@@ -538,89 +484,8 @@ export function ButtonsFunctions(base) {
     }
 
     
-    async GxxxetViewData(setGrid = true ){
-        //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
-        if (this.viewModelFromProcModel.viewQuery!==undefined&&this.viewModelFromProcModel.viewQuery.clientMethod!==undefined){
-            //alert('Calling '+this.viewModelFromProcModel.viewQuery.clientMethod+' from GetViewData')            
-            if (this[this.viewModelFromProcModel.viewQuery.clientMethod]===undefined){
-                alert('not found any clientMethod called '+this.viewModelFromProcModel.viewQuery.clientMethod)
-                return
-            }
-            let j=this[this.viewModelFromProcModel.viewQuery.clientMethod]()
-            this.setTheValues(this.viewModelFromProcModel.viewQuery, j)
-            return
-        }
-        if (this.config===undefined||this.config.backendUrl===undefined){
-          fetch("../../../demo/config.json").then(r => r.json()).then(j => {
-              this.config={}
-              this.config=j
-              //this.config.backendUrl=j.backendUrl
-          })          
-        }
-        if (this.config.backendUrl===undefined){
-          this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
-          console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
-          let sessionDbName=JSON.parse(sessionStorage.getItem("userSession")).dbName
-          if (sessionDbName!==undefined){
-            this.config.dbName=sessionDbName
-          }
-          if (this.config.dbName===undefined){
-            this.config.dbName="labplanet"
-            this.config.isForTesting=false
-          }
-        }
-        let queryDefinition=this.viewModelFromProcModel.viewQuery
-        if (queryDefinition===undefined){return}
-        //console.log('GetViewData', 'queryDefinition', queryDefinition)
-        this.samplesReload = true
-        this.selectedItems = []      
-        let APIParams=this.getAPICommonParams(queryDefinition)
-        let viewParams=this.jsonParam(queryDefinition)
-        let endPointUrl=this.getQueryAPIUrl(queryDefinition)
-        if (String(endPointUrl).toUpperCase().includes("ERROR")){
-            alert(endPointUrl)
-            return
-        }
-        let params = this.config.backendUrl + endPointUrl
-          + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
-
-        //console.log('params', params)        
-        await this.fetchApi(params).then(j => {
-          if (queryDefinition.notUseGrid!==undefined&&queryDefinition.notUseGrid===true){
-            if (queryDefinition.variableName!==undefined){
-                if (queryDefinition.endPointResponseVariableName!==undefined){
-                  this[queryDefinition.variableName]=j[queryDefinition.endPointResponseVariableName]
-                }else{
-                  this[queryDefinition.variableName]=j
-                }
-            }else{
-              this.selectedItems=j   
-              this.selectedItem=this.selectedItems[0]
-              console.log('this.selectedItems', this.selectedItems)           
-              if (j && !j.is_error) {
-                this.requestData=j
-              } else {            
-                this.requestData={}
-              }                
-            }
-          }
-          else if (setGrid){
-            if (j && !j.is_error) {
-              this.setGrid(j)
-            } else {            
-              this.setGrid()
-            }
-          }else{
-            if (j && !j.is_error) {
-              this.requestData=j
-            } else {            
-              this.requestData={}
-            }
-          }
-        })
-        this.samplesReload = false
-    }
     async GetViewData(setGrid = true, viewQuery ){
+      
       if (viewQuery===undefined){
         viewQuery=this.viewModelFromProcModel.viewQuery
       }
@@ -814,7 +679,7 @@ export function ButtonsFunctions(base) {
         // this.performActionRequestHavingDialogOrNot(action, selectedItem)
         return
     }
-    performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs ={}, gridSelectedItem={}){ 
+    async performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs ={}, gridSelectedItem={}){       
         if (action.alternativeAPIActionMethod!==undefined){
             this[action.alternativeAPIActionMethod]()
             return
@@ -836,7 +701,7 @@ export function ButtonsFunctions(base) {
           + '&'+ new URLSearchParams(credDialogArgs)
         //console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
         
-        this.fetchApi(params).then(() => {
+        await this.fetchApi(params).then(j => {
 //console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action', action)
             if (action.notGetViewData===undefined||action.notGetViewData===false){
               this.GetViewData()
@@ -896,6 +761,12 @@ export function ButtonsFunctions(base) {
             if (action.secondaryActionToPerform!==undefined){
                 this[action.secondaryActionToPerform.name]()
             }
+            if (action.variableToSetResponse!==undefined){
+              if (this[action.variableToSetResponse]!==undefined){
+                this[action.variableToSetResponse]=j
+              }
+            }
+
         })  
     }
 
