@@ -146,7 +146,7 @@ export class CommonCore extends LitElement {
     console.log(JSON.parse(sessionStorage.getItem("userSession")))
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
     this.headerInfo = JSON.parse(sessionStorage.getItem("userSession")).header_info
-    //console.log('this.headerInfo', this.headerInfo)
+    console.log('this.headerInfo', this.headerInfo)
 
   }
 
@@ -203,11 +203,13 @@ export class CommonCore extends LitElement {
   }
   refreshMasterData(endPointResponse) {
     console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
-    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    if (endPointResponse===undefined||endPointResponse.master_data===undefined) {
+    if (this.procInstanceName===undefined||endPointResponse===undefined||endPointResponse.master_data===undefined) {
       return
-    }     
-    userSession.procedures_list.procedures[this.procInstanceName].master_data=endPointResponse.master_data
+    }  
+    let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+    console.log(endPointResponse.master_data)
+    if (endPointResponse.master_data!==undefined){   
+      userSession.procedures_list.procedures[this.procInstanceName].master_data=endPointResponse.master_data    
       // userSession.all_my_sops = j.all_my_sops
       // userSession.my_pending_sops = j.my_pending_sops
       // // adjust the new_definition only
@@ -217,7 +219,8 @@ export class CommonCore extends LitElement {
       //   userSession.procedures_sops = j.procedures_sops
       //   userSession.sop_tree_list_element = j.sop_tree_list_element
       // })        
-    sessionStorage.setItem('userSession', JSON.stringify(userSession))
+      sessionStorage.setItem('userSession', JSON.stringify(userSession))
+    }
     return
     let apiUrl = cert.method_name ? this.config.frontEndAnalysisUrl : this.config.frontEndSopUrl
     this.fetchApi(this.config.backendUrl + apiUrl + '?' + new URLSearchParams({
