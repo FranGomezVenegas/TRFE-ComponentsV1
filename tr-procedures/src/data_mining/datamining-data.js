@@ -724,7 +724,7 @@ export class DataMiningData extends DataViews(LitElement) {
 
       <div class="page-footer">
         ${sessionUser} on ${sessionDate}<br>
-        ${this.data.report_info[0].report_information}
+        ${this.data.report_info===undefined||this.data.report_info[0].report_information===undefined?'':this.data.report_info[0].report_information}
       </div>
       <table>
       <thead>
