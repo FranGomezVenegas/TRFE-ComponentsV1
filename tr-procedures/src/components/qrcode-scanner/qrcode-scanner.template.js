@@ -1,12 +1,23 @@
 import { html } from "lit-element";
 import { nothing } from "lit-html";
 import '@granite-elements/granite-qrcode-scanner/granite-qrcode-scanner.js';
+import '@cicciosgamino/qr-code-element'
 
 export const template = (props) => {
-  const { decoded, isDetecting, handleDecoded } = props;
+  const { encoded, decoded, isDetecting, handleDecoded } = props;
   return html`
-    ${
-      isDetecting ? 
+    <div class="container">
+      <qr-code-element
+        text=${encoded}
+        graphic-element="canvas"
+        error-correction="medium"
+        mask-pattern="-1">
+      </qr-code-element>
+
+      <input type="text" id="encode" class="input" />
+    </div>
+
+    ${isDetecting ?
       html`<div class="container">
         <granite-qrcode-scanner 
           active 

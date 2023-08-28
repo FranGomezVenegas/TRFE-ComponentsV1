@@ -3,7 +3,7 @@ import '../uploadButton/index';
 import '../dropzone/index';
 import '../cameraview/index';
 import "../codeview/index";
-//import "../qrcode-scanner/index";
+import "../qrcode-scanner/index";
 
 
 export const template = (props) => {
@@ -48,7 +48,8 @@ export const template = (props) => {
     </div>
     <div class="section">
       <h3>QRCode & BarCode</h3>
-      <trazit-qrcode-scanner></trazit-qrcode-scanner>
+      <qrcode-scanner></qrcode-scanner>
+      <code-view></code-view>
     </div>
   `
 }
