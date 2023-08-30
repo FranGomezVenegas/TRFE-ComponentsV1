@@ -45,7 +45,10 @@ export const DemoViews = [
     {"proc_instance_name": "em-demo-a", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
     {"proc_instance_name": "em-demo-a", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
     {"proc_instance_name": "em-demo-a", "view_name": "DataMining", "filter_name": "DataMining", "title": "DataMining"},
-    {"proc_instance_name": "em-demo-a", "view_name": "Incubators", "filter_name": "Incubators", "title": "Incubators"}
+    {"proc_instance_name": "em-demo-a", "view_name": "Incubators", "filter_name": "Incubators", "title": "Incubators"},
+	{"proc_instance_name": "em-demo-a", "view_name": "SchedSamples", "filter_name": "SchedSamples", "title": "SchedSamples"},
+	
+	
     ]
   },
   {"label":"EM-Water (proc-deploy)", "proc_instance_name": "proc-deploy", "views":[
@@ -95,7 +98,9 @@ export const DemoViews = [
   
   {"label":"fake-developers", "proc_instance_name": "app", "isSpecial":true, "views":[
     {"proc_instance_name": "fake-developers", "view_name": "culture-medium", "filter_name": "culture-medium", "title": "ModuleEnvMonitCultureMedium"},
-    {"proc_instance_name": "fake-developers", "view_name": "tree-view", "filter_name": "tree-view", "title": "TreeView"}
+    {"proc_instance_name": "fake-developers", "view_name": "tree-view", "filter_name": "tree-view", "title": "TreeView"},
+	{"proc_instance_name": "fake-developers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"}
+	
   ]},      
   {"label":"genoma (genoma-1)", "proc_instance_name": "genoma-1", "views":[
     {"proc_instance_name": "genoma-1", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},

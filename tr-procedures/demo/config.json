@@ -137,6 +137,12 @@
     "viewName": "DataMining", 
     "filterName" :  "DataMining" 
   },
+  "localDefaultView": {
+    "procName":  "em-demo-a", 
+    "viewName": "SchedSamples", 
+    "filterName" :  "SchedSamples" 
+  },
+  
    "localDefaultView12311112333": {
     "procName":  "app", 
     "viewName": "WhiteIpList", 
@@ -185,7 +191,7 @@
     "viewName": "LotCreation", 
     "filterName" :  "LotCreation" 
   },
-  "localDefaultViewxxxxxxxxxxxx": {
+  "localDefaultViewdasdasda": {
     "procName":  "mp-release1", 
     "viewName": "LotView", 
     "filterName" :  "LotView" 
@@ -216,7 +222,13 @@
     "viewName": "tree-view", 
     "filterName" :  "tree-view" 
   },
-  "localDefaultView": {
+  "localDefaultView111231": {
+    "procName":  "fake-developers", 
+    "viewName": "prototype-elements-view-main", 
+    "filterName" :  "prototype-elements-view-main" 
+  },  
+  
+  "localDefaultView1123": {
     "procName":  "mp-release1", 
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 

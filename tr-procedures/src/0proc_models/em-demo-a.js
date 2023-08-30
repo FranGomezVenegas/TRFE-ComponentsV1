@@ -3262,6 +3262,132 @@ export const EmDemoA =
         ]        
       }
     ]
-  }   
+  },   
+  "SchedSamples": {
+    "component": "ObjectByTabs",
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Scheduled Samples Report",
+      "fix_text_es": "Informe de Muestras Programadas"      
+    },
+    "viewQuery": {
+      "actionName": "GET_SCHEDULED_SAMPLES",
+	  "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+	  "notUseGrid": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        {		
+          "argumentName": "loginDayStart",
+		  "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filterdaterange1dateStart"          
+        },
+        {		
+          "argumentName": "loginDayEnd",
+		  "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filterdaterange1dateEnd"          
+        }
+      ]
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+		{"filterdaterange1":
+		  {
+		  "dateStart":{ "label_en": "Sampling Start Date", "label_es": "Fecha Inicio Muestreo", "default_value": "2022-08-29" },
+		  "dateEnd":{ "label_en": "Sampling End Date", "label_es": "Fecha Fin Muestreo", "default_value": "2023-08-29" }
+		  }
+		}
+    ],
+	"xxxfilterResultDetail":{
+		"type":"list",
+		"detail":[
+			{"field": "date"}
+      ]  		
+	},
+	"printable": {
+		"active": true,
+		"report_info":{
+			"provisional_copy_en": "Provisional Copy", "provisional_copy_es": "Copia Provisional"
+		}
+	},
+	"download":{
+	  "active": true,
+	  "filename":{"label_en": "sched_samples", "label_es": "muestras_programadas"},
+	  "elements":[
+		{"endPointPropertyArray": ["datatable"]}
+	  ], 
+	  "fileHeader":{
+		  "traceabilityInfoTitle":{"label_en": "Traceability Info: ", "label_es":"Informacion de Trazabilidad:"},
+		  "filterTitle":{"label_en": "Filter Criteria:", "label_es":"Criterio del filtro:"},
+		  "dataTitle":{"label_en": "Data:", "label_es":"Datos:"},
+		  "system":{"label_en": "Platform", "label_es":"Plataforma"},
+		  "procedure":{"label_en": "Procedure", "label_es":"Proceso"},
+		  "reportName":{"label_en": "Report Name", "label_es":"Nombre del Informe"},
+		  "userRun1":{"label_en": "This file was created on ", "label_es":"Informe creado el "},
+		  "userRun2":{"label_en": " by ", "label_es":" por "},
+	  }
+	},	
+    "actions": [],
+    "tabs": [
+      { "tabLabel_en": "Summary", "tabLabel_es": "Inicio", "view": "summary",
+        "view_definition": [
+		  {   
+            "actions": [
+            ]
+          },
+          { "type": "readOnlyTable", "endPointResponseObject": "datatable",
+            "columns": [
+              {
+                "name": "program_name",
+                "label_en": "Program",
+                "label_es": "Programa"
+              },
+              {
+                "name": "area",
+                "label_en": "Area",
+                "label_es": "Area"
+              },
+              {
+                "name": "location_name",
+                "label_en": "Location",
+                "label_es": "Ubicación"
+              },
+			  {
+				"name": "spec_variation_name",
+				"label_en": "Variation",
+				"label_es": "Variación"
+			  },
+              {
+                "name": "date",
+                "label_en": "Date",
+                "label_es": "Fecha"
+              },
+              {
+                "name": "recursive_id",
+                "label_en": "id",
+                "label_es": "id"
+              },
+			  {
+				"name": "requires_person_ana",
+				"label_en": "Requires Pers Ana",
+				"label_es": "Requiere an. personal"
+			  },
+            ]
+          }
+        ]
+      }
+    ],
+  } 
+
 }
 

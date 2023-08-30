@@ -2,7 +2,8 @@ export const MpRelease1 =
 {
   "TrackingChanges": {
     "version": 0.9,
-	"last change on (YYYYMMDD)": "20230825",
+	"last change on (YYYYMMDD)": "20230826",
+	"last_change_note_20230826": "Get spec testing from saved testing and/or suggested script",
 	"last_change_note_20230825": "Added filterCurrentData to get filter values in context",
 	"last_change_note_20230825_2": "First approach for Spec Designer",
 	"last_change_note_20230808": "Fixed Deviation view, it requires buttons to be by entity or object_type, by now the new_inv/add to inv buttons are for lot_bulk. In case new object types will be added then buttons should be cloned and adapted accordingly.",
@@ -5571,15 +5572,15 @@ export const MpRelease1 =
                 "label_es": "Método y Versión"
               },
               {
-                "name": "rule_type",
-                "label_en": "Rule",
-                "label_es": "Regla"
-              },
-              {
                 "name": "parameter",
                 "label_en": "Parameter",
                 "label_es": "Parámetro"
               },
+			  {
+				"name": "rule_representation",
+				"label_en": "Rule",
+				"label_es": "Regla"
+			  },
               {
                 "name": "pretty_spec",
                 "label_en": "Specification",
@@ -5595,31 +5596,58 @@ export const MpRelease1 =
                 "type": "readOnlyTable",				
                 "endPointResponseObject": "scripts_detail",
 				"actions": [
-					{
-					"actionName": "SUGGEST_SPEC_LIMITS_TESTING",
-					"requiresDialog": false,
-					"endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-					"variableToSetResponse": "selectedItemInView",
-					"button": {
-					  "icon": "event",
-					  "title": {
-						"label_en": "Build Testing",
-						"label_es": "Construye una prueba"
-					  },
-					  "requiresGridItemSelected": false
+					{ "actionName": "SUGGEST_SPEC_LIMITS_TESTING",
+						"requiresDialog": false,
+						"endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+						"variableToSetResponse": "selectedItemInView",
+						"button": {
+						  "icon": "event",
+						  "title": {
+							"label_en": "Build Testing",
+							"label_es": "Construye una prueba"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "spec",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "code"
+						  },
+						  {
+							"argumentName": "specVersion",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "config_version"
+						  }
+						]
 					},
-					"endPointParams": [
-					  {
-						"argumentName": "spec",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "code"
-					  },
-					  {
-						"argumentName": "specVersion",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "config_version"
-					  }
-					]
+					{ "actionName": "SUGGEST_SPEC_LIMITS_TESTING",
+						"requiresDialog": false,
+						"endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+						"variableToSetResponse": "selectedItemInView",
+						"button": {
+						  "icon": "event",
+						  "title": {
+							"label_en": "Build Testing & Save",
+							"label_es": "Construye una prueba y guardar"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "spec",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "code"
+						  },
+						  {
+							"argumentName": "specVersion",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "config_version"
+						  },
+						  { 
+							"argumentName": "saveScript", "fixValue": "true"
+						  }
+						]
 					}
 				],
                 "columns": [
@@ -5740,12 +5768,17 @@ export const MpRelease1 =
                     "label_es": "Análisis"
                   },
                   {
+                    "name": "rule_representation",
+                    "label_en": "Rule",
+                    "label_es": "Regla"
+                  },
+                  {
                     "name": "suggested_value",
                     "label_en": "Suggested Value",
                     "label_es": "Valor sugerido"
                   },
                   {
-                    "name": "evaluation",
+                    "name": "evaluation_pretty_es",
                     "label_en": "Evaluation",
                     "label_es": "Evaluación"
                   },
