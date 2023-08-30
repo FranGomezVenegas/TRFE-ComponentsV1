@@ -1,9 +1,12 @@
-import { html, css } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
-
-export class PlatformUsersessions extends CommonCore {
+//import { TrazitFormsElements } from '@trazit/tr-procedures/src/components/GenericDialogs/TrazitFormsElements'
+//import { DataViews } from '@trazit/tr-procedures/src/components/Views/DataViews'
+import { ModelData } from './modelData';
+// DataViews(TrazitFormsElements(CommonCore)) {
+export class PlatformUsersessions extends (CommonCore) { 
   static get styles() {
     return [
       css`
@@ -12,11 +15,17 @@ export class PlatformUsersessions extends CommonCore {
       }
       #leftSplit {
         padding: 10px;
-        background-color:transparent
+        background-color:transparent;
+        width:300px;
       }
       #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar {
         display: none;
       }
+
+     
+
+
+
       #rightSplit{
         background-color:transparent
       }      
@@ -69,6 +78,13 @@ export class PlatformUsersessions extends CommonCore {
       background-color :  #FFFFFF;
       background-color : rgb(255, 255, 255);     
       }
+      json-viewer{
+        --background-color: #2a2f3a00;
+        --string-color: rgba(57, 61, 71, 0.9);
+        --property-color: rgba(57, 61, 71, 0.9);
+        --preview-color: #24C0EB;
+        --font-family: Montserrat;
+      }
       `
     ]
   }
@@ -77,10 +93,12 @@ export class PlatformUsersessions extends CommonCore {
     return {
       docs: { type: Array },
       filterDocs: { type: Array },
-      apis: { type: Array },
+      userSessionsList: { type: Array },
+      userSessionDetailInfo: { type: Array },
       endpoints: { type: Array },
       selectedApis: { type: Array },
-      selectedTxts: { type: Array }
+      selectedTxts: { type: Array },
+      viewModelFromProcModel: {type: Object}
     };
   }
 
@@ -88,36 +106,63 @@ export class PlatformUsersessions extends CommonCore {
     super()
     this.docs = []
     this.filterDocs = []
-    this.apis = []
+    this.userSessionsList = []
+    this.userSessionDetailInfo = []    
     this.selectedApis = []
     this.selectedTxts = []
+    this.desktop=true
+    this.viewModelFromProcModel=ModelData
   }
 
-  render() {
+  leftSplitOnd(){
+    return html`
+    <div id="leftSplitOld">
+    <select @change=${this.apiChanged}>
+      <option value="">-- Filter by API Name --</option>
+      ${this.userSessionsList.map(a=>
+        html`<option value=${a}>${a}</option>`
+      )}
+    </select><br>
+    Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
+    <hr>
+    <label>${this.filterDocs.length} of ${this.docs.length}</label>
+    <div id="endpointName">
+    ${this.filterDocs.map(d =>
+      html`
+        <p class="ed" id="${d.id}" @click=${e=>this.endpointSelect(e, d)}>${d.endpoint_name}</p>
+      `
+    )}
+    </div>
+  </div>    
+  `
+  }
+  render() {    
+    if (this.lang===undefined){this.lang="en"}
     return html`
       ${this.desktop ?
-        html`
-        <sp-split-view resizable splitter-pos="300">
-          <div id="leftSplit">
-            <select @change=${this.apiChanged}>
-              <option value="">-- Filter by API Name --</option>
-              ${this.apis.map(a=>
-                html`<option value=${a}>${a}</option>`
-              )}
-            </select><br>
-            Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
-            <hr>
-            <label>${this.filterDocs.length} of ${this.docs.length}</label>
-            <div id="endpointName">
-            ${this.filterDocs.map(d =>
-              html`
-                <p class="ed" id="${d.id}" @click=${e=>this.endpointSelect(e, d)}>${d.endpoint_name}</p>
-              `
-            )}
-            </div>
+        html`        
+        <sp-split-view resizable dir="ltr" splitter-pos="300">
+
+          <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
+          <div id="endpointName">                
+            <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" 
+              @click="${this.getUserSessions}">${this.viewModelFromProcModel.filter_button["label_" + this.lang]} </sp-button>
+
+            ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
+              ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} `}                      
           </div>
+          <div>
+          ${this.viewModelFromProcModel.filterResultDetail !== undefined&&this.viewModelFromProcModel.filterResultDetail.type !== undefined 
+            &&this.viewModelFromProcModel.filterResultDetail.type==="list"? html`
+              ${this.userSessionsAsList()}`: nothing}
+          
+          </div>
+          </div>          
           <div id="rightSplit">
-            ${this.selectedApis.map(s =>
+          ${this.userSessionDetailInfo===undefined?nothing:html`
+            ${this.kpiCardSomeElementsSingleObject(this.viewModelFromProcModel.detail.header, this.userSessionDetailInfo[0])}
+          `}
+            ${this.userSessionDetailInfo.map(s =>
               html`<json-viewer>${JSON.stringify(s)}</json-viewer>`
             )}
           </div>
@@ -125,112 +170,108 @@ export class PlatformUsersessions extends CommonCore {
         ` :
         html`
         <div id="mobile">
-          <div id="leftSplit">
-            <select @change=${this.apiChanged}>
-              <option value="">-- Filter by API Name --</option>
-              ${this.apis.map(a=>
-                html`<option value=${a}>${a}</option>`
-              )}
-            </select><br>
-            Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
-            <hr>
-            <label>${this.filterDocs.length} of ${this.docs.length}</label>
-            <div id="endpointName">
-            ${this.filterDocs.map(d =>
-              html`
-                <p class="ed" id="${d.id}" @click=${()=>this.shadowRoot.querySelector("#detail"+d.id).hidden=!this.shadowRoot.querySelector("#detail"+d.id).hidden}>${d.endpoint_name}</p>
-                <div id="detail${d.id}" hidden=true>
-                  <json-viewer>${this.endpointDetail(d)}</json-viewer>
-                </div>
-              `
-            )}
-            </div>
-          </div>
         </div>
         `
       }
     `;
   }
+  userSessionsAsList() {
+    let elem=this.viewModelFromProcModel
+    let data=this.userSessionsList
+    if (elem===undefined){return}
+    if (data===undefined){alert('data is undefined');return}
+    if (data === undefined) {
+      return html``;
+    }
+    return html`
+      ${Array.isArray(data) && data.length > 0
+        ? html`
+            <style>
+              li.no_success {
+                color: red;
+              }
+              li.success {
+                color: #3880d4;
+              };
+              }
+              li {
+                cursor: pointer;
+                font-size: 1.7vmin;
+                transition: all 0.2s ease-in-out;
+              }
+              li:hover {
+                background-color: rgba(41, 137, 216, 0.1);
+              }
+            </style>
+            <ul>
+            ${data===undefined?nothing:
+            html`  
+              ${data.map(
+                (d) =>
+                  html`
+                    <li
+                      role="button"
+                      class="success"
+                      .thisitem="${d}"
+                      @click=${this.clickedUserSessionFromList}
+                      .elementdef="${elem}"
+                    >
+                    ${elem.filterResultDetail.detail.map((curFld, index) => html`
+                    ${d[curFld.field]}${index !== elem.filterResultDetail.detail.length - 1 ? ' ,' : ''}
+                  `)}
+                  
+                      <hr />
+                    </li>
+                  `
+              )}
+            `}
+            </ul>
+          `
+        : nothing}
+    `;
+  }
 
-  async authorized() {
-    super.authorized()
-    await this.fetchApi(this.config.backendUrl + this.config.endpointsDocApiUrl + '?' + new URLSearchParams({
-      actionName: "USER_SESSIONS",
+  clickedUserSessionFromList(e) {
+    this.getSessionDetail(e.currentTarget.thisitem.session_id)
+    this.requestUpdate();
+  }
+
+  async getUserSessions() {    
+    let viewParams=this.jsonParam(this.viewModelFromProcModel.viewQuery)
+    //console.log(viewParams)
+    await this.fetchApi(this.config.backendUrl + "/app/UserSessionAPIqueries" + '?' + new URLSearchParams({
+      actionName: "USER_SESSIONS", //USER_SESSION_INCLUDING_AUDIT_HISTORY&userSessionId=19641
       apiName: "ALL",
+      dbName: JSON.parse(sessionStorage.getItem("userSession")).dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       person: JSON.parse(sessionStorage.getItem("userSession")).header_info.person_id,
-      date_started_start: '2023-02-01',
-      date_started_end: '2023-03-01'
+      //date_started_start: '2023-02-01',
+      //date_started_end: '2023-03-01'
+      
+    })+"&"+new URLSearchParams(viewParams), false).then(j => {
+      this.docs = this.filterDocs = j
+      //let apis = j.map(d => d.api_name)
+      //apis.unshift("All")
+      this.userSessionsList = j //apis.filter((item, index) => apis.indexOf(item) === index);
+    })
+    this.requestUpdate()
+  }
+
+  async getSessionDetail(sessionId) {    
+
+    await this.fetchApi(this.config.backendUrl + "/app/UserSessionAPIqueries" + '?' + new URLSearchParams({
+      actionName: "USER_SESSION_INCLUDING_AUDIT_HISTORY", //&=19641
+      apiName: "ALL",
+      dbName: JSON.parse(sessionStorage.getItem("userSession")).dbName,
+      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
+      userSessionId:sessionId
       
     }), false).then(j => {
       this.docs = this.filterDocs = j
-      let apis = j.map(d => d.api_name)
-      apis.unshift("All")
-      this.apis = apis.filter((item, index) => apis.indexOf(item) === index);
+      //let apis = j.map(d => d.api_name)
+      //apis.unshift("All")
+      this.userSessionDetailInfo = j //apis.filter((item, index) => apis.indexOf(item) === index);
     })
     this.requestUpdate()
-  }
-
-  apiChanged(e) {
-    return
-    this.selectedTxts.forEach(t => {
-      t.style.fontWeight = "normal"
-    })
-    this.selectedApis = []
-    this.selectedTxts = []
-    this.shadowRoot.querySelector("input#lastDate").value = ""
-    if (!e.target.value) return
-    if (e.target.value == "All") {
-      this.filterDocs = this.docs
-    } else {
-      this.filterDocs = this.docs.filter(d => d.api_name == e.target.value)
-    }
-    this.requestUpdate()
-  }
-
-  dateChanged(evt) {
-    this.selectedTxts.forEach(t => {
-      t.style.fontWeight = "normal"
-    })
-    this.selectedApis = []
-    this.selectedTxts = []
-    this.shadowRoot.querySelector("select").value = ""
-    if (evt.target.value) {
-      this.filterDocs = this.docs.filter(d => new Date(d.last_update).getTime() >= new Date(evt.target.value).getTime())
-    } else {
-      this.filterDocs = this.docs      
-    }
-    this.requestUpdate()
-  }
-
-  endpointSelect(evt, api) {
-    if (evt.target.style.fontWeight == "bold") {
-      evt.target.style.fontWeight = "normal"
-      this.selectedApis = this.selectedApis.filter(a => a.title != `${api.endpoint_name} (${api.api_name} ${api.id})`)
-      this.selectedTxts = this.selectedTxts.filter(t => t.id != evt.target.id)
-    } else {
-      evt.target.style.fontWeight = "bold"
-      this.selectedApis.push({
-        title: `${api.endpoint_name} (${api.api_name} ${api.id})`,
-        date: `${api.creation_date} ${api.last_update}`,
-        arguments: api.arguments_array.map(arg => { 
-          return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
-        }),
-        output_object_types: api.output_object_types
-      })
-      this.selectedTxts.push(evt.target)
-    }
-    this.requestUpdate()
-  }
-
-  endpointDetail(api) {
-    return JSON.stringify({
-      title: `${api.endpoint_name} (${api.api_name} ${api.id})`,
-      date: `${api.creation_date} ${api.last_update}`,
-      arguments: api.arguments_array.map(arg => { 
-        return { name: arg.name, type: arg.type, mandatory: arg['is_mandatory?'] }
-      }),
-      output_object_types: api.output_object_types
-    })
   }
 }

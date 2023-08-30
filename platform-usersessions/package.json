@@ -13,6 +13,7 @@
     "@alenaksu/json-viewer": "^0.3.4",
     "@spectrum-web-components/split-view": "^0.4.3",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
+    "@trazit/tr-procedures": "file:.yalc/@trazit/tr-procedures",
     "lit": "^2.0.2"
   },
   "devDependencies": {
