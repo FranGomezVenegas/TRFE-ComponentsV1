@@ -1,16 +1,16 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../platform-usersessions';
 
 class DemoExample extends LitElement {
-  static get styles() {
-    return css`
-        div[hidden] {
-          display: none;
-        }
-      `
-  }
+  // static get styles() {
+  //   return css`
+  //       div[hidden] {
+  //         display: none;
+  //       }
+  //     `
+  // }
 
   static get properties() {
     return {
