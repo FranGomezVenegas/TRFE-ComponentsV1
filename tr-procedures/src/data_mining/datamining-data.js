@@ -469,7 +469,7 @@ export class DataMiningData extends DataViews(LitElement) {
   }
   myFilter(){
     let content=`` 
-    console.log(this.data.filter_detail)
+    //console.log(this.data.filter_detail)
     if (this.data.filter_detail!=undefined){
       let filterContent=[]
       filterContent=this.data.filter_detail
@@ -481,7 +481,7 @@ export class DataMiningData extends DataViews(LitElement) {
     }
     return content    
   }
-  myTables(){    
+  myTables(){        
     let strContent=`` 
     let dataContentTables =this.shadowRoot.querySelectorAll("lit-datatable")
     if (dataContentTables!==undefined){
@@ -520,7 +520,7 @@ export class DataMiningData extends DataViews(LitElement) {
     strContent =this.myCharts()
     let strContent2 =`` 
     strContent2=this.myTables()
-
+    console.log('strContent2', strContent2)
     let str = `
       <style type="text/css">
       .page-header, .page-header-space {
@@ -558,38 +558,103 @@ export class DataMiningData extends DataViews(LitElement) {
       }
       .styled-table {
         display: -webkit-inline-box;
-        margin-top: 0px;
-        margin-bottom: 3px;
         color: #4285f4;
-        font-size:2vmin;
+        font-size: 2vmin;
         border-collapse: collapse;
-        margin: 25px 0;
         font-family: sans-serif;
-        min-width: 400px;
-        box-shadow: 0 0 20px #44cbe6;
-      }            
+        box-shadow: 0 0 20px #44cbe652;
+        table-layout: fixed;
+      }
+      @media screen and (min-width: 992px) {
+        .styled-table {
+          font-size: 1.8vmin;
+          margin: 2px 10px;
+        }
+      }
       .styled-table thead tr {
         background-color: #2989d8;
         color: #ffffff;
-        text-align: left;
-      }   
-      .styled-table th,
+        text-align: center;
+        border: 1px solid #c2edf9;
+      }
+      .styled-table thead tr headercolumns {
+        background-color: 2989d870;
+        color: white;
+      }
+
+      .styled-table th {
+        color: white;
+      }
+      .styled-table tbody tr:hover td {
+        color: white;
+        background-color: #2989d8;
+      }
+
       .styled-table td {
-        color: #032bbc; 
-        padding: 12px 15px;
-      }  
+        color: rgba(0, 0, 0, 0.71);
+        padding: 8px 15px;
+        // border: 1px solid #c2edf9;
+        word-break: break-word;
+        font-size: 1.6vmin;
+      }
+      .styled-table tr td:first-of-type,
+      .styled-table tr td:nth-of-type(2),
+      .styled-table tr td:nth-of-type(3) {
+        white-space: nowrap;
+      }
       .styled-table tbody tr {
-        border-bottom: 1px solid #207cca;
+        position: relative;
+        cursor: pointer;
+        border-bottom: 1px solid #c2edf9;
       }
       .styled-table tbody tr:nth-of-type(even) {
         background-color: #c2f2ff5c;
       }
       .styled-table tbody tr:last-of-type {
         border-bottom: 2px solid #009879;
-      }      
+      }
       .styled-table tbody tr.active-row {
         font-weight: bold;
         color: #009879;
+      }
+      span.cardLabel {
+        font-weight: bold;
+        color: #032bbc;
+      }
+      span.cardValue {
+        color: #009879;
+      }
+      span.title {
+        color: rgb(35, 163, 198);
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      span.title.true {
+        font-size: 18px;
+      }
+      span.title.false {
+        font-size: 18px;
+      }
+      mwc-icon-button.green {
+        color: "#4ed249";
+        width: 12px;
+        height: 12px;
+      }
+      mwc-icon-button.yellow {
+        color: "#FFC300";
+        width: 12px;
+        height: 12px;
+      }
+      mwc-icon-button.red {
+        color: "#900C3F";
+        width: 12px;
+        height: 12px;
+      }
+
+      .js-context-popup {
+        position: fixed;
+        border-radius: 4px;
+        z-index: 1000;
       }
 
       </style>
