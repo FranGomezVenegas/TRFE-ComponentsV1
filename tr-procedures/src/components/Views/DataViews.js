@@ -1565,7 +1565,7 @@ export function DataViews(base) {
               >${elem.title["label_" + this.lang]}</span
             >`}
         ${data === undefined
-          ? html`nothing to do`
+          ? html`${elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage ? "": "No columns defined"}`
           : html`
               <style>
                 ul.column-list {

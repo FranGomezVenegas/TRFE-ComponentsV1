@@ -86,6 +86,7 @@ export function TrazitFormsElements(base) {
     }
 
     fldDefaultValue(fldDef){
+        //console.log('fldDefaultValue', 'fldDef', fldDef)
         if (fldDef.default_value){
             return fldDef.default_value
         } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          
@@ -478,6 +479,13 @@ export function TrazitFormsElements(base) {
                     ${!fld.datetime10 ?html``: html`<input id="datetime10" type="datetime-local" dialogInitialFocus>`}   
 
                     
+                    ${!fld.filterdaterange1 ?
+                        html``: html`    
+                            <div style="display:flex">    
+                            <mwc-textfield id="filterdaterange1dateStart" label="${this.fieldLabel(fld.filterdaterange1.dateStart)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.dateStart)}"></mwc-textfield>
+                            <mwc-textfield id="filterdaterange1dateEnd" label="${this.fieldLabel(fld.filterdaterange1.dateEnd)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.dateEnd)}"></mwc-textfield>
+                            </div>
+                        `}                       
                     ${!fld.daterange1 ?
                     html``: html`    
                         <div style="display:flex">    
@@ -854,6 +862,10 @@ export function TrazitFormsElements(base) {
     get datetime8() {    return this.shadowRoot.querySelector("input#datetime8")    }    
     get datetime9() {    return this.shadowRoot.querySelector("input#datetime9")    }        
     get datetime10() {    return this.shadowRoot.querySelector("input#datetime10")    }    
+    
+    get filterdaterange1dateStart() {    return this.shadowRoot.querySelector("mwc-textfield#filterdaterange1dateStart")    }        
+    get filterdaterange1dateEnd() {    return this.shadowRoot.querySelector("mwc-textfield#filterdaterange1dateEnd")    }    
+
 
     get daterange1dateStart() {    return this.shadowRoot.querySelector("mwc-textfield#daterange1dateStart")    }        
     get daterange1dateEnd() {    return this.shadowRoot.querySelector("mwc-textfield#daterange1dateEnd")    }    

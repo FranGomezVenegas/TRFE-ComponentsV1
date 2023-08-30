@@ -4,7 +4,9 @@ import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import { LeftPaneFilterViews } from '../Views/LeftPaneFilterViews';
-export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(LitElement)))) {
+import { ViewDownloadable } from '../Views/ViewDownloadable';
+import { ViewReport } from '../Views/ViewReport';
+export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterViews(TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(LitElement)))))) {
   static get styles() {
     return css`
       :host([disabled]) {
@@ -211,7 +213,19 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
     }  
     async filterPerformAction(e) {
         this.filterCurrentData={}
-        this.filterCurrentData.filtertext1=this.filtertext1.value
+        //this.filterCurrentData=this.jsonParam(this.viewModelFromProcModel)
+        console.log(this.filterCurrentData)
+        //let viewParams=this.jsonParam(queryDefinition)
+        if (this.filtertext1!==null){
+          this.filterCurrentData.filtertext1=this.filtertext1.value
+        }
+        if (this.filterdaterange1dateStart!==null){
+          this.filterCurrentData.filterdaterange1dateStart=this.filterdaterange1dateStart.value
+        }
+        if (this.filterdaterange1dateEnd!==null){
+          this.filterCurrentData.filterdaterange1dateEnd=this.filterdaterange1dateEnd.value
+        }
+
         this.selectedItemLot=""
         await this.GetViewData(false)
         this.filterResponseData=[]
@@ -222,19 +236,23 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
         }        
         //this.filterElement(this.filterResponseData)
         //console.log('filterResponseData', this.filterResponseData)
-        if (this.requestData.length===1){
-          if (Array.isArray(this.requestData)){
-            this.selectedItem=this.requestData[0]
-          }else{
-            this.selectedItem={}
+        if (!Array.isArray(this.requestData)){
+          this.selectedItem=this.requestData
+        }else{
+          if (this.requestData.length===1){
+            if (Array.isArray(this.requestData)){
+              this.selectedItem=this.requestData[0]
+            }else{
+              this.selectedItem={}
+            }
+            this.selectedItemLot=this.selectedItem.lot_name
+            this.selectedItemLoaded=true
           }
-          this.selectedItemLot=this.selectedItem.lot_name
-          this.selectedItemLoaded=true
         }        
     }
 
     render() {      
-      return html`    
+      return html`
       ${this.genericFormDialog()}
         ${this.desktop ?
           html`                  
@@ -253,19 +271,30 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
             </div>
             
             <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
-
-            ${this.title()}
-            ${this.tabsBlock()}  
-    
-            ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
-                <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
-                .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
-                .filterCurrentData=${this.filterCurrentData}>
-                </objecttabs-composition>              
- 
+              <div id="document">
+              ${this.title()}
+              ${this.tabsBlock()}  
+              <div class="layout horizontal">
+              ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?
+              html`
+                <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>                
               `: nothing}
+          
+              ${this.viewModelFromProcModel&&this.viewModelFromProcModel.download&&this.viewModelFromProcModel.download.active===true ?
+                html`    
+                <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
+              `: nothing}
+              </div>
+          
+              ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
+                  <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
+                  .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
+                  .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
+                  .filterCurrentData=${this.filterCurrentData}>
+                  </objecttabs-composition>              
   
+                `: nothing}
+              </div>
             </div>
           </sp-split-view>
       ` : html`        
@@ -346,6 +375,7 @@ export class ObjectByTabs extends LeftPaneFilterViews(TrazitGenericDialogs(Trazi
       this.objecttabsComposition.render()
     }
 
+    
     resetView() {
       //console.log('resetView', 'tabs', this.tabsMainViewModelFromProcModel.tabs, 'master data', this.masterData)
       if (this.objecttabsComposition!==null){
