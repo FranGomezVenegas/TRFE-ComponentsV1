@@ -47,6 +47,8 @@ export const DemoViews = [
     {"proc_instance_name": "em-demo-a", "view_name": "DataMining", "filter_name": "DataMining", "title": "DataMining"},
     {"proc_instance_name": "em-demo-a", "view_name": "Incubators", "filter_name": "Incubators", "title": "Incubators"},
 	{"proc_instance_name": "em-demo-a", "view_name": "SchedSamples", "filter_name": "SchedSamples", "title": "SchedSamples"},
+	{"proc_instance_name": "em-demo-a", "view_name": "SampleStageTimingCapture", "filter_name": "SampleStageTimingCapture", "title": "SampleStageTimingCapture"},
+	
 	
 	
     ]

@@ -81,7 +81,7 @@
     "viewName": "Incubators", 
     "filterName" :  "Incubators" 
   },
-  "localDefaultView12311132": {
+  "localDefaultView": {
     "procName":  "em-demo-a", 
     "viewName": "SamplePendingSampling", 
     "filterName" :  "SamplingSMP" 
@@ -132,18 +132,22 @@
     "viewName": "LogSamplesModuleSamples", 
     "filterName" :  "SampleLogin" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzzzzzzz": {
     "procName":  "em-demo-a", 
     "viewName": "DataMining", 
     "filterName" :  "DataMining" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzzzzz": {
     "procName":  "em-demo-a", 
     "viewName": "SchedSamples", 
     "filterName" :  "SchedSamples" 
   },
-  
-   "localDefaultView12311112333": {
+  "localDefaultView": {
+    "procName":  "em-demo-a", 
+    "viewName": "SampleStageTimingCapture", 
+    "filterName" :  "SampleStageTimingCapture" 
+  },
+  "localDefaultView12311112333": {
     "procName":  "app", 
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
@@ -217,7 +221,7 @@
     "viewName": "culture-medium", 
     "filterName" :  "culture-medium" 
   },
-  "localDefaultViewd": {
+  "localDefaultViewdsssss": {
     "procName":  "fake-developers", 
     "viewName": "tree-view", 
     "filterName" :  "tree-view" 
