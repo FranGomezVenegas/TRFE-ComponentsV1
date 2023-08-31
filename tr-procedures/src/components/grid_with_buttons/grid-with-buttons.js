@@ -31,11 +31,12 @@ import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigations
 import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
 
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
+import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
 
 
 import '../Audit/audit-dialog';
 //import '../../tabs-composition';
-export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
+export class GridWithButtons extends TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,
@@ -154,6 +155,8 @@ export class GridWithButtons extends (TrazitCredentialsDialogs(AuditFunctions(Mo
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}
       ${this.pointTemplate()}
       ${this.resultTemplate()}
+      ${this.takePictureFormDialog()}
+      
       ${this.investigationTemplate()}
       ${this.filterName=="open" ?
         html`${this.decisionTemplate()}` : nothing
