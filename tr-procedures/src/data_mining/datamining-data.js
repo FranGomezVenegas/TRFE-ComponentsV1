@@ -119,7 +119,7 @@ export class DataMiningData extends DataViews(LitElement) {
     }
     return html`${data&&elemDef&&Object.keys(data).length > 0 ?
       html`
-        <div style="display:block">
+        <div style="display: flex; flex-wrap: wrap; padding-left:30px;">
           ${elemDef.map((elem, i) => 
             html`      
               ${elem.elements!==undefined? html`               

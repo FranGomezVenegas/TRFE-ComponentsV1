@@ -53,6 +53,7 @@ export function DataViews(base) {
                 type="${elem.chart_type}"
                 .data="${this.getChartData(elem)}"
                 .options="${this.getChartOptions(elem)}"
+                style="${elem.chart_style!==undefined?elem.chart_style: "height:400px; width: 100%;"}
               ></google-chart>
             `}
       `;
@@ -1664,7 +1665,7 @@ export function DataViews(base) {
                   left: 0;
                   width: 1000px;
                   height: 600px;
-                  background-color: rgba(0, 0, 0, 0.5);
+                  background-color: white /* rgba(0, 0, 0, 0.5); */
                 }
 
                 /* Iframe styles */
@@ -1737,13 +1738,9 @@ export function DataViews(base) {
                               ${fld.as_ppt !== undefined &&
                               (fld.as_ppt === true || fld.as_video === true)
                                 ? html`
-                                    <mwc-icon-button
-                                      icon="fullscreen"
-                                      .isvideo=${data.is_video}
-                                      .src=${data[fld.name]}
-                                      @click=${this.openDialogFrame}
-                                      .fld=${fld}
-                                    ></mwc-icon-button>
+                                    <mwc-icon-button icon="fullscreen" .isvideo=${data.is_video}
+                                      .src=${data[fld.name]} @click=${this.openDialogFrame}
+                                      .fld=${fld}></mwc-icon-button>
                                     ${data.is_video === undefined ||
                                     data.is_video === false
                                       ? html`
@@ -2105,9 +2102,9 @@ export function DataViews(base) {
     chartStyle(chartName) {
       let chartObj = this.shadowRoot.querySelector("google-chart#" + chartName);
       if (chartObj !== undefined && chartObj !== null) {
-        chartObj.style.setProperty("width", "500px");
-      }
-      //console.log('chartStyle', 'chartName', chartName, chartObj)
+        chartObj.style.setProperty("width", "1600px");
+      }      
+      console.log('chartStyle', 'chartName', chartName, chartObj)
     }
 
     addNumericValue(rule, value) {
@@ -2168,9 +2165,15 @@ export function DataViews(base) {
         ]
         return data    
       }
-
+      if (this.data===undefined||this.data[elem.chart_name]===undefined){
+        if (this.selectedItem!==undefined){
+          this.data=this.selectedItem
+        }else{
+          if (this.selectedItemInView!==undefined){this.data=this.selectedItemInView}
+        }
+      }
       //chartData = [[elem.label_item, elem.label_value]];
-      if (this.data[elem.chart_name] !== undefined) {
+      if (this.data!==undefined&&this.data[elem.chart_name] !== undefined) {
         var dataForChart = this.data[elem.chart_name];
 
         let seriesArr=[]
