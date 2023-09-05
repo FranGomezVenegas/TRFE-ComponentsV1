@@ -52,7 +52,7 @@ export function ButtonsFunctions(base) {
             color : red;
             font-family : Montserrat;
             font-weight : bold;
-            font-size : 19px;
+            font-size : 19px;            
           }        
           mwc-icon-button#video {
             color : #FFFFFF;
@@ -175,7 +175,7 @@ export function ButtonsFunctions(base) {
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
-          }        
+          }                
           mwc-icon-button#video {
             color : #FFFFFF;
             color : rgba(36, 192, 235, 1);
@@ -239,12 +239,12 @@ export function ButtonsFunctions(base) {
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
               html`${action.button.img ?
                   html`<mwc-icon-button 
-                  class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)} img"
+                  class="${this.btnDisabled(action, sectionModel)===true?'disabledtrue':'disabledfalse'}"
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}>
-                      <img class="iconBtn" src="images/${action.button.img}">
+                      <img class="iconBtn" src="images/${action.button.img.replace('.svg','_')}${this.btnDisabled(action, sectionModel)===true?'disabledtrue':'disabledfalse'}.svg">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
                   label="${action.button.title['label_'+this.lang]}" 
@@ -261,6 +261,9 @@ export function ButtonsFunctions(base) {
       }    
     
     btnDisabled(action, viewModelFromProcModel) {
+      if (this.selectedItems===undefined||this.selectedItems.length==0){
+        return true
+      }
       //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
       if (viewModelFromProcModel===undefined){viewModelFromProcModel=this.viewModelFromProcModel}
       if (action.certificationException!==undefined&&action.certificationException===true){ return false}
@@ -648,6 +651,7 @@ export function ButtonsFunctions(base) {
         console.log('GetQueriesForDialog', 'currQuery', currQuery)
         let APIParams=this.getAPICommonParams(currQuery)
         let viewParams=this.jsonParam(currQuery)
+        if (queryDefinition===undefined){return}
         let endPointUrl=this.getQueryAPIUrl(queryDefinition)
         let params = this.config.backendUrl + endPointUrl        
         //let params = this.config.backendUrl + (currQuery.endPoint ? currQuery.endPoint : this.config.SampleAPIqueriesUrl)

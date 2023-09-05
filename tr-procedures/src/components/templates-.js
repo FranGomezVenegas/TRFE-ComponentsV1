@@ -122,13 +122,16 @@ export class Templates extends GridFunctions(LitElement) {
               detail: b
             }))}></mwc-icon-button>`
         )}
-        <mwc-select outlined label="Program Name" @change=${this.programChanged} ?hidden=${this.programsList.length<2}>
-            ${this.populateProgramsList()}
-        </mwc-select>
-        ${this.programsList.length==1 ?
-          html`<h3>${this.programsList[0].name}</h3>` : nothing
-        }
-         
+        ${this.programsList===undefined?html`
+            No programs founds, please review the master data
+        `:html`
+          <mwc-select outlined label="Program Name" @change=${this.programChanged} ?hidden=${this.programsList.length<2}>
+              ${this.populateProgramsList()}
+          </mwc-select>
+          ${this.programsList.length==1 ?
+            html`<h3>${this.programsList[0].name}</h3>` : nothing
+          }
+        `} 
         ${this.getTitle()}  
       </div>
     `
