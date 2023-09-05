@@ -214,7 +214,9 @@ export function GridFunctions(base) {
                 // Add more extensions if needed
             };
             const iconFolder = 'icons/';
-        
+            if (iconName===undefined){
+                return null;
+            }
             const iconExtension = iconName.split('.').pop(); // Get the extension from the icon name
             const validExtension = iconExtensions[iconExtension.toLowerCase()];
             if (validExtension) {
