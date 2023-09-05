@@ -62,8 +62,16 @@ export function TrazitGenericDialogs(base) {
 //        return false
 //       } 
        // alert(true)
-       this.defaultValue()
+       //this.defaultValue()
        //this.resetFields()
+       if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
+        this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+        return 
+    }
+    if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
+        this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+        return 
+    }
        return true 
     }
 
@@ -150,26 +158,32 @@ export function TrazitGenericDialogs(base) {
                 <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
                     ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericGridDialog}>
-                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]} grid</sp-button>
+                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
             </div>  
-
-            <vaadin-grid .items=${this.genericDialogGridItems} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-              @active-item-changed=${e => this.genericDialogGridSelectedItems = e.detail.value ? [e.detail.value] : []}
-              .selectedItems="${this.genericDialogGridSelectedItems}" all-rows-visible>
-              ${actionModel.dialogInfo.langConfig.gridHeader.map(fld =>
-                html`<vaadin-grid-filter-column width="${fld.width}" resizable text-align="center" path="${fld.fldName}" .header="${fld["label_" + this.lang]}"></vaadin-grid-filter-column>`
-                )}
-            </vaadin-grid>            
+            ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?
+                html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
+            :html`
+                <vaadin-grid .items=${this.genericDialogGridItems} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                @active-item-changed=${e => this.genericDialogGridSelectedItems = e.detail.value ? [e.detail.value] : []}
+                .selectedItems="${this.genericDialogGridSelectedItems}" all-rows-visible>
+                ${actionModel.dialogInfo.langConfig.gridHeader.map(fld =>
+                    html`<vaadin-grid-filter-column width="${fld.width}" resizable text-align="center" path="${fld.fldName}" .header="${fld["label_" + this.lang]}"></vaadin-grid-filter-column>`
+                    )}
+                </vaadin-grid>  
+            `}                      
         `:html`
         ${!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields ?
             html`
                 ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.filesListContent!==undefined&&actionModel.dialogInfo.filesListContent===true ?
                 html`
-                    ${this.genericDialogGridItems.map((fld, i) =>
-                    html`
-                    <mwc-icon-button title="${fld.brief_summary!==undefined&&fld.brief_summary.length>0? fld.brief_summary: fld.file_link}" icon="picture_as_pdf" @click=${()=>window.open(fld.file_link, '_blank').focus()} ?disabled=${!fld.file_link}></mwc-icon-button>
-                    `
-                    )}
+                    ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
+                    :html`
+                        ${this.genericDialogGridItems.map((fld, i) =>
+                        html`
+                        <mwc-icon-button title="${fld.brief_summary!==undefined&&fld.brief_summary.length>0? fld.brief_summary: fld.file_link}" icon="picture_as_pdf" @click=${()=>window.open(fld.file_link, '_blank').focus()} ?disabled=${!fld.file_link}></mwc-icon-button>
+                        `
+                        )}
+                    `}
                 `:nothing}    
             `: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
@@ -675,14 +689,14 @@ export function TrazitGenericDialogs(base) {
     }
 
     defaultValue(e){
-        if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
-            this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-            return 
-        }
-        if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
-            this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-            return 
-        }
+        // if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
+        //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+        //     return 
+        // }
+        // if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
+        //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+        //     return 
+        // }
         if (this.fieldsShouldBeReset===true){
             this.resetFields()
             this.fieldsShouldBeReset=false
@@ -700,13 +714,13 @@ export function TrazitGenericDialogs(base) {
             if (this[keyName[0]]!==null&&this[keyName[0]].defval!==undefined&&this[keyName[0]].defval!==null){
                 alert(this[keyName[0]].defval)
             }    
-            if (fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
+            if (this[keyName[0]]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
                 this[keyName[0]].value=fldObj[keyName].default_value
             }
-            if (fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName[0]]!==null){
+            if (this[keyName[0]]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName[0]]!==null){
                 this[keyName[0]].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
             }
-            if (fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
+            if (this[keyName[0]]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
                 this[keyName[0]].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
             }
