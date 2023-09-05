@@ -150,7 +150,8 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'TableWithButtons':        
         import('./components/grid_with_buttons/grid-with-buttons')
         if (this.GridWithButtons!==null){
-          this.GridWithButtons.ready=true
+          // This line below is critical to let the system re-run the query and re-populate the variable any time new view is open by the user or jump to another view.
+          this.GridWithButtons.ready=false
         }        
         //alert('grid')
         return
@@ -410,7 +411,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           `}  
         `}        
       `:
-      nothing}
+      html` This widow cannot be open due to your are not authorized`}
     ${super.render()}    
     `;
   }
