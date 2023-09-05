@@ -2519,7 +2519,7 @@ export const EmDemoA =
 		[		
           {"type": "chart", "elementName": "datatable",
             "display_chart": true,
-            "chart_type":"line",
+            "chart_type":"line",			
             "chart_name":"datatable",
             "chart_title":{"label_en": "Per out of range type", "label_es":"Por tipo de fuera de rango"},
             "counter_field_name":["raw_value_num", "speclimit_max_spec"],
@@ -2530,6 +2530,9 @@ export const EmDemoA =
               "xmax_allowed_included":100,
               "xvalue":0
             },
+			"chart_style":"height:500px; width: 100%;",
+			"height": "300px",
+			"width": "50em",
             "chartStyle": {
               "backgroundColor": "transparent",
               "is3D": true,

@@ -34,4 +34,6 @@ This area want to track the requirements that made this web component to become 
 This area want to track the bugs identified for this Web Component that were already implemented/fixed.
 [- #201. Buttons 'ButtonHide' property name hideWhen.... not hidWhen....typo](https://github.com/FranGomezVenegas/FE-Issues/issues/201)
 
+[- #927. 2023-Sep-05 Issue for open and remove attachments within genericDialog](https://github.com/FranGomezVenegas/FETR/issues/927)
 
+[- #930. 2023-Sep-05 default value when element is not present(null) within genericDialog](https://github.com/FranGomezVenegas/FETR/issues/930)

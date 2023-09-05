@@ -106,7 +106,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1 @click=${this.toggleHideAllButtonsStatus}>Hi ${this.getUser()}, you are authorized</h1>
         <button class="language" @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
-        <button @click=${()=>this.pLogin.logout()}>Logout</button><hr>
+        <button @click=${()=>this.logout()}>Logout</button><hr>
 
         ${this.userRole==="proc_management" ?
         html`
@@ -126,13 +126,21 @@ class DemoExample extends LitElement {
           `}
         `)}
 <!--          <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
-          <button @click=${()=>this.pLogin.logout()}>Logout</button><hr> -->
+          <button @click=${()=>this.logout()}>Logout</button><hr> -->
           </div>
           <tr-procedures></tr-procedures>          
           ${this.openTestDefaultView()}
         </div>
       `}
     `;
+  }
+  logout() {
+    console.log('PlatformLogin::logout')
+    this.clearSessionStorage();
+    window.location.href = "/";
+  }
+  clearSessionStorage() {
+    window.sessionStorage.clear();
   }
 
   openTestDefaultView(){    
