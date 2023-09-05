@@ -252,7 +252,6 @@ export class GridWithButtons extends TrazitTakePictureDialog(TrazitCredentialsDi
         <div class="layout horizontal flex wrap">
             <div class="layout flex">          
             <div class="layout horizontal center flex wrap">
-            
               ${this.getButton()}
             </div>
             ${this.ready ? 
@@ -264,7 +263,7 @@ export class GridWithButtons extends TrazitTakePictureDialog(TrazitCredentialsDi
                   .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                   ${gridRowDetailsRenderer(this.detailRenderer)}
                   ${this.setCellListener()}                  
-                  >
+                >
                   ${this.gridList(this.viewModelFromProcModel)}
                 </vaadin-grid>
                 </vaadin-context-menu>`

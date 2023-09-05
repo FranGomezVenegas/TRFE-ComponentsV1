@@ -14,14 +14,15 @@ export class CameraView extends LitElement {
       viewport: { state: true },
       record: { state: true },
       capture: { state: true },
-      imageDataUrl: { type: String }
+      imageDataUrl: { type: String },
+      lang: { type: String }
     };
   }
 
   constructor() {
     super();
   }
-  
+
   firstUpdated() {
     this.video = this.shadowRoot.querySelector("#video");
     this.viewport = this.shadowRoot.querySelector("#viewport");
@@ -32,13 +33,18 @@ export class CameraView extends LitElement {
   }
 
   render() {
-    return template({});
+    return template({}, this.lang);
   }
 
   _init = () => {
     this.startBtn.addEventListener('click', this._startCamera);
-    this.uploadBtn.addEventListener('click', this._upload); 
+    this.uploadBtn.addEventListener('click', this._upload);
     this.captureBtn.addEventListener('click', this._capture);
+  }
+
+  _reset = () => {
+    this.video.srcObject = null;
+    this.viewport.getContext('2d').clearRect(0, 0, this.viewport.width, this.viewport.height);
   }
 
   _startCamera = async () => {
@@ -49,13 +55,13 @@ export class CameraView extends LitElement {
   _capture = () => {
     const width = this.viewport.width;
     const height = this.viewport.height;
-
     this.viewport.getContext('2d').drawImage(this.video, 0, 0, width, height);
     this.imageDataUrl = this.viewport.toDataURL('image/jpeg');
+    // this.viewport.getContext('2d').clearRect(0, 0, width, height);
   }
 
   _upload = async () => {
-    if(!this.imageDataUrl) {
+    if (!this.imageDataUrl) {
       console.log("Please Capture Image to upload");
       return;
     }
@@ -67,9 +73,9 @@ export class CameraView extends LitElement {
           image: this.imageDataUrl
         })
       });
-  
+
       console.log(result);
-    } catch(e) {
+    } catch (e) {
       console.log("error");
     }
   }

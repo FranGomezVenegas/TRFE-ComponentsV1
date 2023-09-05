@@ -18,6 +18,7 @@ export const styles = css`
     cursor: pointer;
     margin: 5px;
   }
+
   .button { 
     color : rgba(36, 192, 235, 1);
     font-family : Montserrat;
@@ -37,6 +38,7 @@ export const styles = css`
     cursor: pointer;
     margin: 5px;
   }
+
   .container {
     display: flex;
     justify-content: center;
@@ -49,5 +51,26 @@ export const styles = css`
     border-radius: 8px;
     background-color: rgb(255, 255, 224);
     margin: 10px;
+  }
+
+  .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+  }
+
+  @media screen and (max-width: 559px) {
+    .container {
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    .button {
+      font-size: 12px;
+      padding: 8px;
+    }
   }
 `
