@@ -1,7 +1,7 @@
 {
-  "dbName": "labplanet",
-  "dbNameDemo": "demo_v0_9_1",
-  "isForTesting": false,
+  "dbNameLabp": "labplanet",
+  "dbName": "demo_v0_9_1",
+  "isForTesting": true,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
   "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
 
