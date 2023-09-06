@@ -651,8 +651,8 @@ export function ButtonsFunctions(base) {
         console.log('GetQueriesForDialog', 'currQuery', currQuery)
         let APIParams=this.getAPICommonParams(currQuery)
         let viewParams=this.jsonParam(currQuery)
-        if (queryDefinition===undefined){return}
-        let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+        if (currQuery===undefined){return}
+        let endPointUrl=this.getQueryAPIUrl(currQuery)
         let params = this.config.backendUrl + endPointUrl        
         //let params = this.config.backendUrl + (currQuery.endPoint ? currQuery.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
