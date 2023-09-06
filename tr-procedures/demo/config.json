@@ -1,7 +1,7 @@
 {
   "dbName": "labplanet",
   "dbNameDemo": "demo_v0_9_1",
-  "isForTesting": true,
+  "isForTesting": false,
   "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
   "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
 
@@ -58,17 +58,17 @@
     "viewName": "ConfigInstrumentFamilies", 
     "filterName" :  "ConfigInstrumentFamilies" 
   },
-  "localDefaultViewxxxxa": {
+  "localDefaultViewxxxxa3": {
     "procName":  "app-proc", 
     "viewName": "Home", 
     "filterName" :  "Home" 
   },
-  "localDefaultView": {
+  "localDefaultView12312": {
     "procName":  "app-proc", 
     "viewName": "EventsCalendar", 
     "filterName" :  "EventsCalendar" 
   },
-  "localDefaultView": {
+  "localDefaultView1231": {
     "procName":  "mp-release1", 
     "viewName": "SpecView", 
     "filterName" :  "SpecView" 
@@ -142,7 +142,7 @@
     "viewName": "SchedSamples", 
     "filterName" :  "SchedSamples" 
   },
-  "localDefaultView": {
+  "localDefaultViewaa1": {
     "procName":  "em-demo-a", 
     "viewName": "SampleStageTimingCapture", 
     "filterName" :  "SampleStageTimingCapture" 

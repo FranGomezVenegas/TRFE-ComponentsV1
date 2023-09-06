@@ -14,6 +14,7 @@ import { MbEm } from './0proc_models/mb_em';
 import { MonWater } from './0proc_models/mon_water';
 import { Stock } from './0proc_models/demo_stock';
 import { DemoInstruments } from './0proc_models/demo_instruments'; 
+import { DemoLotsRaw } from './0proc_models/demo_lots_raw';
 
 export const ProceduresModel = {
   ['em-demo-a']: EmDemoA,
@@ -31,6 +32,7 @@ export const ProceduresModel = {
   ['instruments']: DemoInstruments,
   ['mon_water']: MonWater,
   ['stock']: Stock,
+  ['lots_raw']:  DemoLotsRaw,
   
   
   ['fake-developers']: FakeDevelopers
@@ -158,8 +160,8 @@ export const DemoViews = [
     {"proc_instance_name": "mp-release1", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
 	{"proc_instance_name": "mp-release1", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
 	{"proc_instance_name": "mp-release1", "view_name": "SpecDesign", "filter_name": "SpecDesign", "title": "SpecDesign"}
-	
-  ]
+	]
+
   },
   {"label":"EM_MB (mb_em)", "proc_instance_name": "mb_em", "views":[
     {"proc_instance_name": "mb_em", "view_name": "Home", "filter_name": "Home", "title": "Home"},
@@ -225,5 +227,19 @@ export const DemoViews = [
     {"proc_instance_name": "stock", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
 	{"proc_instance_name": "stock", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"}	
   ]},
-  
+ {"label":"Raw Material Inspection Lots (demo_lots_raw", "proc_instance_name": "lots_raw", "views":[
+    {"proc_instance_name": "lots_raw", "view_name": "LotCreation", "filter_name": "LotCreation", "title": "lotCreation"},
+    {"proc_instance_name": "lots_raw", "view_name": "LotView", "filter_name": "LotView", "title": "LotView"},
+    {"proc_instance_name": "lots_raw", "view_name": "SampleEnterResult", "filter_name": "ER-FQ", "title": "ER-FQ"},
+    {"proc_instance_name": "lots_raw", "view_name": "SampleEnterResult", "filter_name": "ER-MB", "title": "ER-MB"},
+    {"proc_instance_name": "lots_raw", "view_name": "ReviewTesting", "filter_name": "RT-FQ", "title": "RT-FQ"},
+    {"proc_instance_name": "lots_raw", "view_name": "ReviewTesting", "filter_name": "RT-MB", "title": "RT-MB"},
+    {"proc_instance_name": "lots_raw", "view_name": "ReviewTestingGroup", "filter_name": "RTG-FQ", "title": "RTG-FQ"},
+    {"proc_instance_name": "lots_raw", "view_name": "ReviewTestingGroup", "filter_name": "RTG-MB", "title": "RTG-MB"},
+    {"proc_instance_name": "lots_raw", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"},
+    {"proc_instance_name": "lots_raw", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
+	{"proc_instance_name": "lots_raw", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
+	{"proc_instance_name": "lots_raw", "view_name": "SpecDesign", "filter_name": "SpecDesign", "title": "SpecDesign"}
+	]}
+   
 ]

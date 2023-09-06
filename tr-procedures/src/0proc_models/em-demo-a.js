@@ -298,7 +298,7 @@ export const EmDemoA =
 		"requiresDialog": true,	  
 		"endPointUrl": "Samples",
         "button": {
-          "icon": "event",
+          "icon": "add_a_photo",
           "title": {
             "label_en": "Take Plate Picture", "label_es": "Tomar foto de Placa"
           },
