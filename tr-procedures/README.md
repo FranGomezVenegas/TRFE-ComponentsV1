@@ -40,3 +40,6 @@ This area want to track the bugs identified for this Web Component that were alr
 [- #930. 2023-Sep-05 default value when element is not present(null) within genericDialog](https://github.com/FranGomezVenegas/FETR/issues/930)
 
 [- #929. 2023-Sep-06 buttonFunction when running dialog queries had bad variable reference](https://github.com/FranGomezVenegas/FETR/issues/929)
+
+[- #929. 2023-Sep-06 Open and remove attachments dialog generating loop endpoints call, the logic should be in ButtonFunctions and not in TrazitGenericDialog itself](https://github.com/FranGomezVenegas/FETR/issues/927)
+

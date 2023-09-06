@@ -1,5 +1,4 @@
 import { html, css, nothing} from 'lit';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import { ApiFunctions } from '../Api/ApiFunctions';
 import { ClientMethod} from '../../../src/ClientMethod';
 import { ProcManagementMethods} from '../../components/ProcManagement/ProcManagementMethods';
@@ -10,7 +9,6 @@ export function ButtonsFunctions(base) {
 
     getButtonForRows(actions, data, isProcManagement) {   
       if (actions===undefined){actions=this.viewModelFromProcModel}   
-//      console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -404,7 +402,9 @@ export function ButtonsFunctions(base) {
           alert('Please select one item in the table prior')
           return
         }
-        this.GetQueriesForDialog(action)        
+        this.GetQueriesForDialog(action)  
+        this.getGenericDialogGridItems(action.dialogInfo)    
+
         //this.loadDialogs()
         if (action.dialogInfo.name==="auditDialog"){
           this[action.clientMethod]()
@@ -670,6 +670,46 @@ export function ButtonsFunctions(base) {
       }
       this.samplesReload = false
     }
+    async getGenericDialogGridItems(dialogInfo){
+
+        if ((dialogInfo.gridContent===undefined||dialogInfo.gridContent===false)
+            &&(dialogInfo.filesListContent===undefined||dialogInfo.filesListContent===false)){ //dialogInfo.gridContent===true){
+            //this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+            return []
+        }
+        // if (dialogInfo.filesListContent!==undefined&&dialogInfo.filesListContent===true){
+        //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+        //     return 
+        // }
+
+
+      if (dialogInfo.masterDataEntryName===undefined&&dialogInfo.dialogQuery===undefined&&dialogInfo.gridContent===undefined&&dialogInfo.filesListContent===undefined){
+          alert('By now, the getGenericDialogGridItems only works for master data entries or dialogQuery or gridContent or filesListContent')
+          return []
+      }
+      let data=[]
+      if (dialogInfo.masterDataEntryName!==undefined){
+          this.getProcMasterData()
+          if (this.masterData===undefined){return []}
+          if (this.masterData[dialogInfo.masterDataEntryName]===undefined){
+              alert('the procedure instance '+this.procInstanceName+' has no one master data entry called '+dialogInfo.masterDataEntryName)
+              return [] 
+          }
+          this.genericDialogGridItems=[]
+          this.genericDialogGridItems=this.masterData[dialogInfo.masterDataEntryName]
+          //console.log('new code')
+          return this.genericDialogGridItems
+      }
+      if (dialogInfo.dialogQuery!==undefined){
+          await this.GetQueryForDialogGrid(dialogInfo) 
+          return this.genericDialogGridItems
+
+      }
+      let entry = {"analysis": "hola", "method_name": "method", "method_version": 1}
+      data.push(entry)
+      console.log('genericDialogGridItems', data)
+      return data
+  }    
     actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement ) {
         console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
         this.selectedAction=action

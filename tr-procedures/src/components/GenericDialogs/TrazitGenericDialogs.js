@@ -1,6 +1,5 @@
 import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
-import { columnBodyRenderer, gridRowDetailsRenderer, contextMenuRenderer } from 'lit-vaadin-helpers';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
 
 import '@material/mwc-list/mwc-list-item';
@@ -53,6 +52,7 @@ export function TrazitGenericDialogs(base) {
       this.genericDialogGridSelectedItems=[]
     }
     openGenericDialog(actionModel = this.actionBeingPerformedModel){
+        //alert('openGenericDialog')
         if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
             return false
        }    
@@ -64,19 +64,18 @@ export function TrazitGenericDialogs(base) {
        // alert(true)
        //this.defaultValue()
        //this.resetFields()
-       if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
-        this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-        return 
-    }
-    if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
-        this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-        return 
-    }
+    //    if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
+    //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+    //     return 
+    // }
+    // if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
+    //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
+    //     return 
+    // }
        return true 
     }
 
     acceptedGenericGridDialog(e){
-
         console.log('genericDialogGridSelectedItems', this.genericDialogGridSelectedItems)
         if (this.genericDialogGridSelectedItems.length==0){
             if (this.lang=="es"){
@@ -150,7 +149,7 @@ export function TrazitGenericDialogs(base) {
         background-color: 4fcad029;
       }       
     </style>
-        <tr-dialog id="genericDialog"  @opened=${this.defaultValue}  ?open=${this.openGenericDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
+        <tr-dialog id="genericDialog"  @opened=${() => {this.defaultValue}}  ?open=${this.openGenericDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
         
         ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true ?
         html`
@@ -650,34 +649,7 @@ export function TrazitGenericDialogs(base) {
         return true
     }
 
-    async getGenericDialogGridItems(dialogInfo){
-        if (dialogInfo.masterDataEntryName===undefined&&dialogInfo.dialogQuery===undefined){
-            alert('By now, the getGenericDialogGridItems only works for master data entries or dialogQuery')
-            return []
-        }
-        let data=[]
-        if (dialogInfo.masterDataEntryName!==undefined){
-            this.getProcMasterData()
-            if (this.masterData===undefined){return []}
-            if (this.masterData[dialogInfo.masterDataEntryName]===undefined){
-                alert('the procedure instance '+this.procInstanceName+' has no one master data entry called '+dialogInfo.masterDataEntryName)
-                return [] 
-            }
-            this.genericDialogGridItems=[]
-            this.genericDialogGridItems=this.masterData[dialogInfo.masterDataEntryName]
-            console.log('new code')
-            return this.genericDialogGridItems
-        }
-        if (dialogInfo.dialogQuery!==undefined){
-            await this.GetQueryForDialogGrid(dialogInfo) 
-            return this.genericDialogGridItems
 
-        }
-        let entry = {"analysis": "hola", "method_name": "method", "method_version": 1}
-        data.push(entry)
-        console.log('genericDialogGridItems', data)
-        return data
-    }
     gridActiveItemChanged(){
         alert('Changed')
 
@@ -689,6 +661,7 @@ export function TrazitGenericDialogs(base) {
     }
 
     defaultValue(e){
+      //  alert('open')
         // if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
         //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
         //     return 
