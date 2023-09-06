@@ -29,6 +29,7 @@ This area want to track the requirements that made this web component to become 
 [- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)
 [- #198. Not allowed negative numDays for Reactivate Dialog](https://github.com/FranGomezVenegas/FE-Issues/issues/198)
 [- #199. Buttons 'buttonForQuery' was enabling the button always even when no record selected](https://github.com/FranGomezVenegas/FE-Issues/issues/199)
+
 ## Fixed Bugs Tracking
 
 This area want to track the bugs identified for this Web Component that were already implemented/fixed.
@@ -37,3 +38,5 @@ This area want to track the bugs identified for this Web Component that were alr
 [- #927. 2023-Sep-05 Issue for open and remove attachments within genericDialog](https://github.com/FranGomezVenegas/FETR/issues/927)
 
 [- #930. 2023-Sep-05 default value when element is not present(null) within genericDialog](https://github.com/FranGomezVenegas/FETR/issues/930)
+
+[- #929. 2023-Sep-06 buttonFunction when running dialog queries had bad variable reference](https://github.com/FranGomezVenegas/FETR/issues/929)
