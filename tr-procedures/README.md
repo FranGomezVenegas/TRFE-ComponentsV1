@@ -41,5 +41,8 @@ This area want to track the bugs identified for this Web Component that were alr
 
 [- #929. 2023-Sep-06 buttonFunction when running dialog queries had bad variable reference](https://github.com/FranGomezVenegas/FETR/issues/929)
 
-[- #929. 2023-Sep-06 Open and remove attachments dialog generating loop endpoints call, the logic should be in ButtonFunctions and not in TrazitGenericDialog itself](https://github.com/FranGomezVenegas/FETR/issues/927)
+[- #929. 2023-Sep-06 Open and remove attachments dialog generating loop endpoints call, the logic should be in ButtonFunctions and not in TrazitGenericDialog itself](https://github.com/FranGomezVenegas/FETR/issues/929)
+
+[- #927. 2023-Sep-07 Issue for removing attachments within genericDialog, the grid parameter not added to the API request, fixed.](https://github.com/FranGomezVenegas/FETR/issues/927)
+
 

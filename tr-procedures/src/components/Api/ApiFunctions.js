@@ -172,6 +172,10 @@ export function ApiFunctions(base) {
                   }
                 }
               } else if (p.getFromGrid) {
+                if ((selGridObject===undefined||selGridObject.length===undefined)
+                  &&(this.genericDialogGridSelectedItems!==undefined&&this.genericDialogGridSelectedItems.length>0)){
+                        selGridObject=this.genericDialogGridSelectedItems[0]
+                }                
                 if (p.addToFieldNameAndValue!==undefined&&p.addToFieldNameAndValue===true){
                   if (selGridObject[p.argumentName]==null){
                     if (p.notAddWhenValueIsBlank!==undefined&&p.notAddWhenValueIsBlank===true){
@@ -205,7 +209,17 @@ export function ApiFunctions(base) {
 
                     }
                   }
-                }else if (p.isAdhocField!==undefined&&p.isAdhocField===true){
+                }
+                else if (p.selObjectPropertyName!==undefined){
+
+                  if (selGridObject[p.selObjectPropertyName]!==null){
+                    jsonParam[p.argumentName] = selGridObject[p.selObjectPropertyName]
+                  }else{
+                    jsonParam[p.argumentName] = "undefined";
+                  }
+                  return 
+                }              
+                else if (p.isAdhocField!==undefined&&p.isAdhocField===true){
                   curArgName=jsonParam[p.argumentName]
                   if (curArgName===undefined){curArgName=''}
                   if (curArgName.length>0){curArgName=curArgName+"|"}
