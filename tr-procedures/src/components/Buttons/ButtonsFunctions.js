@@ -8,7 +8,8 @@ export function ButtonsFunctions(base) {
     return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
 
     getButtonForRows(actions, data, isProcManagement) {   
-      if (actions===undefined){actions=this.viewModelFromProcModel}   
+      if (actions===undefined){actions=this.viewModelFromProcModel}  
+      let shouldBeDisabled=this.btnDisabled(action, actions) 
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -98,24 +99,25 @@ export function ButtonsFunctions(base) {
           html`${action.button ?
               html`${action.button.icon ?
               html`<mwc-icon-button 
-                  class="${action.button.class} disabled${this.btnDisabled(action, actions)}"
+                  class="${action.button.class} disabled${shouldBeDisabled}"
                   icon="${action.button.icon}" 
                   title="${action.button.title['label_'+this.lang]}" 
-                  ?disabled=${this.btnDisabled(action, actions)}
+                  ?disabled=${shouldBeDisabled}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-icon-button>` :
               html`${action.button.img ?
                   html`<mwc-icon-button 
-                  class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
+                  class="${action.button.class} disabled${shouldBeDisabled} img"
                   title="${action.button.title['label_'+this.lang]}" 
-                  ?disabled=${this.btnDisabled(action, actions)}
+                  ?disabled=${shouldBeDisabled}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
                   label="${action.button.title['label_'+this.lang]}" 
-                  ?disabled="${this.btnDisabled(action, actions)}"
+                  class="${action.button.class} disabled${shouldBeDisabled} img"
+                  ?disabled=${shouldBeDisabled}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-button>`
               }`
@@ -130,6 +132,7 @@ export function ButtonsFunctions(base) {
 
     getButton(sectionModel, data, isProcManagement) {   
       if (sectionModel===undefined){sectionModel=this.viewModelFromProcModel}   
+       
 //      console.log('getButton', 'sectionModel', sectionModel, 'data', data)      
       return html`
         <style>
@@ -228,7 +231,7 @@ export function ButtonsFunctions(base) {
           ${this.btnHidden(action) ? nothing : 
           html`${action.button ?
               html`${action.button.icon ?
-              html`<mwc-icon-button 
+              html`<mwc-icon-button id=${action.actionName}
                   class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
                   icon="${action.button.icon}" 
                   title="${action.button.title['label_'+this.lang]}" 
@@ -236,7 +239,7 @@ export function ButtonsFunctions(base) {
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
               html`${action.button.img ?
-                  html`<mwc-icon-button 
+                  html`<mwc-icon-button  id=${action.actionName}
                   class="${this.btnDisabled(action, sectionModel)===true?'disabledtrue':'disabledfalse'}"
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
@@ -244,9 +247,9 @@ export function ButtonsFunctions(base) {
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img.replace('.svg','_')}${this.btnDisabled(action, sectionModel)===true?'disabledtrue':'disabledfalse'}.svg">
                   </mwc-icon-button>` :
-                  html`<mwc-button dense raised 
+                  html`<mwc-button dense raised id=${action.actionName}
                   label="${action.button.title['label_'+this.lang]}" 
-                  ?disabled="${this.btnDisabled(action, sectionModel)}"
+                  ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
               }`
@@ -259,13 +262,20 @@ export function ButtonsFunctions(base) {
       }    
     
     btnDisabled(action, viewModelFromProcModel) {
+      let d = false
       if (this.selectedItems===undefined||this.selectedItems.length==0){
+        if (action.button.requiresGridItemSelected!==undefined&&
+          action.button.requiresGridItemSelected===false){
+          d=this.disabledByCertification(action)
+        //console.log('btnDisabled', 'disabledByCertification returned ', d)
+          return d
+        }
         return true
       }
       //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
       if (viewModelFromProcModel===undefined){viewModelFromProcModel=this.viewModelFromProcModel}
       if (action.certificationException!==undefined&&action.certificationException===true){ return false}
-      let d = false
+      
       if (action.mode!==undefined && action.mode.toString().toUpperCase()==="READONLY") {
         return true        
       }   
