@@ -791,19 +791,22 @@ export function TrazitGenericDialogs(base) {
                 newList.push(blankEmpty)            
             }
             if (fld.the_default_value.selObjectPropertyName!==undefined&&fld.the_default_value.selObjectPropertyName!==null){
-                let val=this.selectedItems[0][fld.the_default_value.selObjectPropertyName]
-                const valueArray = val.split("|");
-                valueArray.forEach((item) => {
-                  const blankEmpty = {keyName: item, keyValue_en: item, keyValue_es: item}     
-                  const isDuplicate = newList.some(item => item.keyName === item);
-                  if (!isDuplicate) {
-                    if (this[fldName]!==null&&this[fldName].value.length===0){
-                        defValue=item
-                        this[fldName].value=item
-                    }
-                    newList.push(blankEmpty);
-                  }                                               
-                })                             
+                let val=""
+                if (this.selectedItems!==undefined&&this.selectedItems.length>0){
+                    val=this.selectedItems[0][fld.the_default_value.selObjectPropertyName]
+                    const valueArray = val.split("|");
+                    valueArray.forEach((item) => {
+                        const blankEmpty = {keyName: item, keyValue_en: item, keyValue_es: item}     
+                        const isDuplicate = newList.some(item => item.keyName === item);
+                        if (!isDuplicate) {
+                            if (this[fldName]!==null&&this[fldName].value.length===0){
+                                defValue=item
+                                this[fldName].value=item
+                            }
+                            newList.push(blankEmpty);
+                        }                                                               
+                    })                             
+                }
             }
             if (fld.the_default_value.internalVariableObjName!==undefined&&fld.the_default_value.internalVariableObjName!==null&&
                 fld.internalVariableObjProperty!==undefined&&fld.internalVariableObjProperty!==null){
