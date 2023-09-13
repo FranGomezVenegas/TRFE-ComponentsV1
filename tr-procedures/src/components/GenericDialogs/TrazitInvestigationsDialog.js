@@ -162,15 +162,19 @@ return class extends DialogsFunctions(base) {
     }
     addInvestigationAction() {
       let targetValue = {
-        "investigationId": this.selectedInvestigations[0].id,
-        "objectsToAdd": "sample_analysis_result*" + this.selectedItems[0].result_id
+        "investigationId": this.selectedInvestigations[0].id,        
+      }
+      if (this.selectedItems[0].result_id!==undefined){
+        targetValue.objectsToAdd= "sample_analysis_result*" + this.selectedItems[0].result_id
       }
       this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], targetValue, undefined, this.selectedInvestigations[0])
     }
     newInvestigationAction() {
 //      console.log('newInvestigationAction')
-      this.reqParams.fieldValue = "Investigation for " + this.selectedItems[0].result_id + "*String"
-      this.reqParams.objectsToAdd = "sample_analysis_result*" + this.selectedItems[0].result_id
+      if (this.selectedItems[0].result_id!==undefined){
+        this.reqParams.fieldValue = "Investigation for " + this.selectedItems[0].result_id + "*String"
+        this.reqParams.objectsToAdd= "sample_analysis_result*" + this.selectedItems[0].result_id
+      }
       let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)    
       let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
       if (String(endPointUrl).toUpperCase().includes("ERROR")){
@@ -220,7 +224,7 @@ console.log('getOpenInvestigations', 'params', params)
           alert(endPointUrl)
           return
       }
-      console.log('capaDecisionAction', 'reqParams', this.reqParams)
+//      console.log('capaDecisionAction', 'reqParams', this.reqParams)
       let params = this.config.backendUrl + endPointUrl   
         + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams)
       this.fetchApi(params).then(() => {
@@ -231,6 +235,14 @@ console.log('getOpenInvestigations', 'params', params)
     }
 
     closeInvestigation() {
+      let reqParams={}
+      reqParams.investigationId = this.selectedItems[0].id
+      let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)    
+      let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
+      if (String(endPointUrl).toUpperCase().includes("ERROR")){
+          alert(endPointUrl)
+          return
+      }
       if (!this.selectedItems[0].capa_decision_on) {
         this.dispatchEvent(new CustomEvent("error", {
           detail: {
@@ -244,8 +256,8 @@ console.log('getOpenInvestigations', 'params', params)
         console.log("Required set decision before close")
         return
       }
-      let params = this.config.backendUrl + this.selectedAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
+      let params = this.config.backendUrl + endPointUrl
+        + '?' + new URLSearchParams(reqParams)+ '&'+ new URLSearchParams(APIParams)
       this.fetchApi(params).then(() => {
         this.reload()
       })

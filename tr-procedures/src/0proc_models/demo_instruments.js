@@ -2339,9 +2339,8 @@ export const DemoInstruments ={
               "requiresGridItemSelected": true
             },
             "endPointParams": [
-				{ "argumentName": "fieldName", "value": "description" },
-				{ "argumentName": "fieldValue", "targetValue": true },
-				{ "argumentName": "objectsToAdd", "targetValue": true }			
+              { "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type" },	
+              { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "event_id" }		
             ]
           },
           {"actionName": "OPEN_INVESTIGATIONS",          
@@ -2361,8 +2360,9 @@ export const DemoInstruments ={
                   "actionName": "ADD_INVEST_OBJECTS",
                   "clientMethod": "addInvestObjects",
                   "endPointParams": [
-                    { "argumentName": "investigationId", "targetValue": true },
-                    { "argumentName": "objectsToAdd", "targetValue": true }
+                    {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
+					          { "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type" },
+					          { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "event_id" }
                   ]
                 }
               ]

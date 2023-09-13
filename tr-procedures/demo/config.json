@@ -236,7 +236,13 @@
     "procName":  "mp-release1", 
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
-  }
+  },
+  "localDefaultView": {
+    "procName":  "instruments", 
+    "viewName": "Deviation", 
+    "filterName" :  "Deviation" 
+  }  
+  
   
   
   

@@ -216,7 +216,8 @@ export const DemoViews = [
     {"proc_instance_name": "instruments", "view_name": "EventsInProgress", "filter_name": "EventsER", "title": "Events In Progress"},
     {"proc_instance_name": "instruments", "view_name": "InstrumentReport", "filter_name": "InstrumentReport", "title": "Instrument Report"},
     {"proc_instance_name": "instruments", "view_name": "ConfigInstrumentFamilies", "filter_name": "ConfigInstrumentFamilies", "title": "Master: Instruments Familiy"},
-	{"proc_instance_name": "instruments", "view_name": "EventsCalendar", "filter_name": "EventsCalendar", "title": "Events Calendar"}	
+  	{"proc_instance_name": "instruments", "view_name": "EventsCalendar", "filter_name": "EventsCalendar", "title": "Events Calendar"},
+    {"proc_instance_name": "instruments", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"}
   ]},  
   {"label":"Inventory Management (stock)", "proc_instance_name": "stock", "views":[
     {"proc_instance_name": "stock", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
