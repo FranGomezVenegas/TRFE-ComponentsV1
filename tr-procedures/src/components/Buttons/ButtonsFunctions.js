@@ -263,6 +263,7 @@ export function ButtonsFunctions(base) {
     
     btnDisabled(action, viewModelFromProcModel) {
       let d = false
+      if (action.certificationException!==undefined&&action.certificationException===true){ return false}
       if (this.selectedItems===undefined||this.selectedItems.length==0){
         if (action.button.requiresGridItemSelected!==undefined&&
           action.button.requiresGridItemSelected===false){
@@ -272,9 +273,10 @@ export function ButtonsFunctions(base) {
         }
         return true
       }
+      
       //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
       if (viewModelFromProcModel===undefined){viewModelFromProcModel=this.viewModelFromProcModel}
-      if (action.certificationException!==undefined&&action.certificationException===true){ return false}
+      
       
       if (action.mode!==undefined && action.mode.toString().toUpperCase()==="READONLY") {
         return true        
