@@ -1594,10 +1594,14 @@ export function DataViews(base) {
                   border-radius: 10px;
                   padding: 10px;
                   margin-right: 2px;
+                  overflow: hidden;                  
+                  height: 420px;    
+                  flex-basis: calc(33.33% - 10px);               
                 }
                 iframe {
                   width: 100%;
-                  height: 100%;
+                  height: 250px;
+                  flex: 1;
                 }
                 /* Dialog styles */
                 .dialog {
@@ -1616,6 +1620,7 @@ export function DataViews(base) {
                   width: 100%;
                   height: 100%;
                   border: none;
+                  flex: 1;
                 }
                 @keyframes slidein {
                   from {
@@ -1664,10 +1669,10 @@ export function DataViews(base) {
                   : ""}"
                 class="layout vertical flex wrap"
               >
-                <div class="layout horizontal center flex wrap">
+                <div style="flex-basis: auto; width: auto;">
                   ${this.getButton(elem, data, true)}
                 </div>
-                <ul
+                <ul style="align-items: baseline;"
                   class="column-list${elem.num_columns !== undefined
                     ? elem.num_columns
                     : ""}"
@@ -1684,10 +1689,7 @@ export function DataViews(base) {
                                     <mwc-icon-button icon="fullscreen" .isvideo=${data.is_video}
                                       .src=${data[fld.name]} @click=${this.openDialogFrame}
                                       .fld=${fld}></mwc-icon-button>
-                                    ${data.is_video === undefined ||
-                                    data.is_video === false
-                                      ? html`
-                                          -->
+                                    ${data.is_video === undefined ||data.is_video === false? html`                                          
                                           <iframe
                                             src=${data[fld.name]}
                                             @click=${this.openDialogFrame}
