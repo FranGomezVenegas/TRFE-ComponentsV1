@@ -3,8 +3,8 @@ import { classMap } from "lit/directives/class-map.js";
 import { ApiFunctions } from "../Api/ApiFunctions";
 import { ProceduresManagement } from "../../0proc_models/ProceduresManagement";
 import "@spectrum-web-components/split-view/sp-split-view";
-import { CommonCore } from "@trazit/common-core";
 import "../../components/ObjectByTabs/objecttabs-composition";
+import { CommonCore } from "@trazit/common-core";
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { ProcManagementMethods } from "./ProcManagementMethods";
 
@@ -201,6 +201,7 @@ export class ProcManagementHome extends ProcManagementMethods(
   }
 
   updated(changedProperties) {
+    // leftSplitDisplayed
     if (changedProperties.has("show")) {
       const element = this.shadowRoot.querySelector(".fade-in");
       if (this.show) {
@@ -435,11 +436,7 @@ export class ProcManagementHome extends ProcManagementMethods(
                           subheading="'this[elem.subheadingObj].value'"
                           @click=${this.selectedProcedureInstance}
                         >
-                          <div
-                            class="procCard"
-                            style="background:url(${p.navigation_icon_name ===
-                            undefined
-                              ? "trazit-logo.jpg"
+                          <div class="procCard" style="background:url(${p.navigation_icon_name ===undefined ? "trazit-logo.jpg"
                               : p.navigation_icon_name}) no-repeat center; 
                               height: 150px;
                               background-size: cover;"

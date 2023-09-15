@@ -1008,7 +1008,7 @@ export function DataViews(base) {
             font-size: 18px;
           }
           mwc-icon-button.green {
-            color: "#4ed249";
+            color: green;
             width: 12px;
             height: 12px;
           }
@@ -1028,9 +1028,88 @@ export function DataViews(base) {
             border-radius: 4px;
             z-index: 1000;
           }
+          
+          .w3-responsive {
+            display: block;
+            overflow-x: auto;
+          }
+          .w3-container,
+          .w3-panel {
+            padding: 0.01em 4px;
+          }
+          .w3-panel {
+            margin-top: 16px;
+            margin-bottom: 16px;
+          }
+          .w3-container:after,
+          .w3-container:before,
+          .w3-panel:after,
+          .w3-panel:before,
+          .w3-row:after,
+          .w3-row:before,
+          .w3-row-padding:after,
+          .w3-row-padding:before,
+          .w3-blue,
+          .w3-hover-blue:hover {
+            color: rgba(
+              7,
+              13,
+              22,
+              0.94
+            ) !important;
+            background-color: #2196f3 !important;
+          }
+          .w3-background,
+          .w3-hover-blue:hover {
+            color: rgba(
+              7,
+              13,
+              22,
+              0.94
+            ) !important;
+            background-color: #ffdedd !important;
+          }
+          .title {
+            font-size: 8px;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 1.5em;
+            padding-bottom: 15px;
+            position: relative;
+            font-family: Montserrat;
+            font-color: rgb(
+              94,
+              145,
+              186
+            );
+          }
+        
+
+          .icon-text-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .left-area,
+        .right-area {
+            flex-basis: 48%; /* Adjust the width as needed */
+        }
+        .icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1; /* Ensure the icon appears above the text */
+            width: 24px; /* Adjust the icon size as needed */
+            height: 24px;
+            margin-right: 10px;             
+        }
+
+        .text {
+            position: relative; /* To allow text to flow normally */
+            z-index: 0; /* Default z-index */
+        }          
         </style>
 
-        <div style="display: flex; flex-direction: row; text-align: center;">
+        <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
           <div
             style="display: flex; flex-direction: column; text-align: center;"
           >
@@ -1074,199 +1153,63 @@ export function DataViews(base) {
                       ${dataArr === undefined || !Array.isArray(dataArr)
                         ? html`No Data`
                         : html`
-                            ${dataArr.map(
-                              (p) =>
+                            ${dataArr.map((p) =>
+                            html`
+                              <tr @click=${(event) => this.handleTableRowClick(event, p, elem)} @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}>
+                              ${elem.row_buttons === undefined? nothing
+                              : html`
+                                  <td>
+                                    <div class="layout horizontal center flex wrap">
+                                      ${this.getButtonForRows(elem.row_buttons,p,false)}
+                                    </div>
+                                  </td>
+                              `}
+                              ${elem.columns.map((fld) =>html`
+                                ${fld.name === "pretty_spec"? 
                                 html`
-                                  <tr
-                                    @click=${(event) =>
-                                      this.handleTableRowClick(event, p, elem)}
-                                    @contextmenu=${(event) =>
-                                      this.handleOpenContextMenu(event, p, elem)}
-                                  >
-                                    ${elem.row_buttons === undefined
-                                      ? nothing
-                                      : html`
-                                          <td>
-                                            <div
-                                              class="layout horizontal center flex wrap"
-                                            >
-                                              ${this.getButtonForRows(
-                                                elem.row_buttons,
-                                                p,
-                                                false
-                                              )}
-                                            </div>
-                                          </td>
-                                        `}
-                                    ${elem.columns.map(
-                                      (fld) =>
-                                        html`
-                                          ${fld.name === "pretty_spec"
-                                            ? html`
-                                                <td>
-                                                  <span style="color:green"
-                                                    >${p[
-                                                      "spec_text_green_area_" +
-                                                        this.lang
-                                                    ]}</span
-                                                  >
-                                                  <span style="color:orange"
-                                                    >${p[
-                                                      "spec_text_yellow_area_" +
-                                                        this.lang
-                                                    ]}</span
-                                                  >
-                                                  <span style="color:red"
-                                                    >${p[
-                                                      "spec_text_red_area_" +
-                                                        this.lang
-                                                    ]}</span
-                                                  >
-                                                </td>
-                                              `
-                                            : html`
-                                                ${fld.as_progress !==
-                                                  undefined &&
-                                                fld.as_progress === true
-                                                  ? html`
-                                                      <style>
-                                                        .w3-responsive {
-                                                          display: block;
-                                                          overflow-x: auto;
-                                                        }
-                                                        .w3-container,
-                                                        .w3-panel {
-                                                          padding: 0.01em 4px;
-                                                        }
-                                                        .w3-panel {
-                                                          margin-top: 16px;
-                                                          margin-bottom: 16px;
-                                                        }
-                                                        .w3-container:after,
-                                                        .w3-container:before,
-                                                        .w3-panel:after,
-                                                        .w3-panel:before,
-                                                        .w3-row:after,
-                                                        .w3-row:before,
-                                                        .w3-row-padding:after,
-                                                        .w3-row-padding:before,
-                                                        .w3-blue,
-                                                        .w3-hover-blue:hover {
-                                                          color: rgba(
-                                                            7,
-                                                            13,
-                                                            22,
-                                                            0.94
-                                                          ) !important;
-                                                          background-color: #2196f3 !important;
-                                                        }
-                                                        .w3-background,
-                                                        .w3-hover-blue:hover {
-                                                          color: rgba(
-                                                            7,
-                                                            13,
-                                                            22,
-                                                            0.94
-                                                          ) !important;
-                                                          background-color: #ffdedd !important;
-                                                        }
-                                                        .title {
-                                                          font-size: 8px;
-                                                          font-weight: 500;
-                                                          letter-spacing: 0;
-                                                          line-height: 1.5em;
-                                                          padding-bottom: 15px;
-                                                          position: relative;
-                                                          font-family: Montserrat;
-                                                          font-color: rgb(
-                                                            94,
-                                                            145,
-                                                            186
-                                                          );
-                                                        }
-                                                      </style>
-                                                      <td>
-                                                        <div
-                                                          class="w3-container"
-                                                        >
-                                                          <div
-                                                            class="w3-background w3-round-xlarge"
-                                                            title="${this.titleLang(
-                                                              fld
-                                                            )}"
-                                                          >
-                                                            <div
-                                                              class="w3-container w3-blue w3-round-xlarge"
-                                                              style="width:${p[
-                                                                fld.name
-                                                              ]}%"
-                                                            >
-                                                              ${p[fld.name]}%
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                        <br />
-                                                      </td>
-                                                    `
-                                                  : html`
-                                                      <td>
-                                                        ${fld.fix_value_prefix !==
-                                                        undefined
-                                                          ? fld.fix_value_prefix
-                                                          : ""}
-                                                        ${fld.is_icon !==
-                                                          undefined &&
-                                                        fld.is_icon == true
-                                                          ? html`
-                                                              <mwc-icon-button
-                                                                class="${p[
-                                                                  fld.icon_class
-                                                                ]}"
-                                                                icon="${p[
-                                                                  fld.icon_name
-                                                                ]}"
-                                                              >
-                                                              </mwc-icon-button>
-                                                            `
-                                                          : html`
-                                                              <span
-                                                                >${p[
-                                                                  fld.name
-                                                                ]}</span
-                                                              >
-                                                            `}${fld.fix_value_suffix !==
-                                                        undefined
-                                                          ? fld.fix_value_suffix
-                                                          : ""}
-                                                        ${fld.fix_value2_prefix !==
-                                                        undefined
-                                                          ? fld.fix_value2_prefix
-                                                          : ""}<span>${fld.name2 !==
-                                                        undefined
-                                                          ? p[fld.name2]
-                                                          : ""}</span>${fld.fix_value2_suffix !==
-                                                        undefined
-                                                          ? fld.fix_value2_suffix
-                                                          : ""}
-                                                        ${fld.fix_value3_prefix !==
-                                                        undefined
-                                                          ? fld.fix_value3_prefix
-                                                          : ""}<span>${fld.name3 !==
-                                                        undefined
-                                                          ? p[fld.name3]
-                                                          : ""}</span>${fld.fix_value3_suffix !==
-                                                        undefined
-                                                          ? fld.fix_value3_suffix
-                                                          : ""}
-                                                      </td>
-                                                    `}
-                                              `}
-                                        `
-                                    )}
-                                  </tr>
-                                `
+                                  <td> <span style="color:green">${p["spec_text_green_area_" +this.lang]}</span>
+                                    <span style="color:orange">${p["spec_text_yellow_area_" +this.lang]}</span>
+                                    <span style="color:red">${p["spec_text_red_area_" +this.lang]}</span>
+                                  </td>
+                                `: html`
+                                    ${fld.as_progress !==undefined &&fld.as_progress === true? 
+                                    html`
+                                      <td>
+                                        <div class="w3-container">
+                                          <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                              <div class="w3-container w3-blue w3-round-xlarge"style="width:${p[fld.name]}%">
+                                                ${p[fld.name]}%
+                                              </div>
+                                          </div>
+                                        </div>
+                                        <br/>
+                                      </td>
+                                    `: html`
+                                      <td>
+                                      <div class="icon-text-container">
+                                          ${fld.is_icon !==undefined&&fld.is_icon == true? html`
+                                          <div class="left-area">
+                                            <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
+                                          </div>
+                                          `:nothing}
+                                        <div class="right-area">
+                                          <span class="text">${fld.fix_value_prefix !==undefined? fld.fix_value_prefix: ""}<span>${p[fld.name]}</span>                                                          
+                                          ${fld.fix_value_suffix !==undefined? fld.fix_value_suffix: ""}
+                                          ${fld.fix_value2_prefix !==undefined? fld.fix_value2_prefix: ""}
+                                          <span>${fld.name2 !==undefined? p[fld.name2]: ""}</span>
+                                          ${fld.fix_value2_suffix !==undefined? fld.fix_value2_suffix: ""}
+                                          ${fld.fix_value3_prefix !==undefined? fld.fix_value3_prefix: ""}
+                                          <span>${fld.name3 !==undefined? p[fld.name3]: ""}${fld.fix_value3_suffix !==undefined? fld.fix_value3_suffix: ""}</span>
+                                        </div>
+                                        </div>
+                                      </td>
+                                    `}
+                                  `}                                              
+                                `)}
+                              </tr>
+                            `
                             )}
-                          `}
+                        `}
                     </tbody>
                   </table>
                 `}
