@@ -248,7 +248,7 @@ export function ButtonsFunctions(base) {
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style!==undefined?action.button.style:''}"
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}>
-                      <img class="iconBtn" src="images/${action.button.img.replace('.svg','_')}${this.btnDisabled(action, sectionModel)===true?'disabledtrue':'disabledfalse'}.svg">
+                      <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised id=${action.actionName}
                   label="${action.button.title['label_'+this.lang]}" 
@@ -263,7 +263,12 @@ export function ButtonsFunctions(base) {
           }`
           )}
       `
-      }    
+      }   
+      giveFileName(action, sectionModel){
+        const originalExtension = action.button.img.split('.').pop();
+        let imgUrl= action.button.img.replace(/\.[^/.]+$/, `_${this.btnDisabled(action, sectionModel)===true?'disabledtrue':'disabledfalse'}.${originalExtension}`);
+        return imgUrl
+      } 
     
     btnDisabled(action, viewModelFromProcModel) {
 
