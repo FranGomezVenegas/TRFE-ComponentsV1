@@ -223,7 +223,8 @@ export function ButtonsFunctions(base) {
               class="${sectionModel.viewQuery.button.class}"
               icon="${sectionModel.viewQuery.button.icon}" 
               title="${sectionModel.viewQuery.button.title['label_'+this.lang]}"             
-              @click=${()=>this.GetViewData()}>
+              @click=${()=>this.GetViewData()}
+              style="${sectionModel.viewQuery.button.style!==undefined?sectionModel.viewQuery.button.style:''}">
           </mwc-icon-button>` : nothing
           }
           ${sectionModel!==undefined&&sectionModel.actions&&sectionModel.actions.map(action =>
@@ -237,6 +238,7 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
+                  style="${action.button.style!==undefined?action.button.style:''}"
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
               html`${action.button.img ?
                   html`<mwc-icon-button  id=${action.actionName}
@@ -244,6 +246,7 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
+                  style="${action.button.style!==undefined?action.button.style:''}"
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img.replace('.svg','_')}${this.btnDisabled(action, sectionModel)===true?'disabledtrue':'disabledfalse'}.svg">
                   </mwc-icon-button>` :
@@ -251,6 +254,7 @@ export function ButtonsFunctions(base) {
                   label="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
+                  style="${action.button.style!==undefined?action.button.style:''}"
                   @click=${()=>this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
               }`
               }` :
@@ -262,9 +266,17 @@ export function ButtonsFunctions(base) {
       }    
     
     btnDisabled(action, viewModelFromProcModel) {
+
+      //console.log(action)
+      let selRecord = []
+      if (viewModelFromProcModel.alternativeItemPropertyName!==undefined){
+        selRecord=this[viewModelFromProcModel.alternativeItemPropertyName]
+      }else{
+        selRecord=this.selectedItems
+      }
       let d = false
       if (action.certificationException!==undefined&&action.certificationException===true){ return false}
-      if (this.selectedItems===undefined||this.selectedItems.length==0){
+      if (selRecord===undefined||selRecord.length==0){
         if (action.button.requiresGridItemSelected!==undefined&&
           action.button.requiresGridItemSelected===false){
           d=this.disabledByCertification(action)
@@ -315,10 +327,10 @@ export function ButtonsFunctions(base) {
               }
             }
           }else{
-              if (this.selectedItems===undefined){
+              if (selRecord===undefined){
                 return true
               }else{
-                if (this.selectedItems[0]!==undefined){
+                if (selRecord[0]!==undefined){
                   return false
                 }else{
                   return true
