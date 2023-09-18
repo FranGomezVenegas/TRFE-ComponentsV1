@@ -15,7 +15,7 @@
     "lit": "^2.0.2"
   },
   "devDependencies": {
-    "@material/mwc-snackbar": "^0.25.3",
+    "@material/mwc-snackbar": "^0.27.0",
     "@spectrum-web-components/theme": "^0.8.14",
     "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
     "@trazit/user-profile": "file:.yalc/@trazit/user-profile",

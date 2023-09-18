@@ -302,7 +302,7 @@ export class CredDialog extends CommonCore {
    * TEXTLIST: combination of TEXT & LIST
    */
   auditField() {
-    if (this.justificationType===undefined||this.justificationType.length==0){
+    if (this.justificationType===null||this.justificationType===undefined||this.justificationType.length==0){
       this.justificationType="TEXT"
     }
     // adjust the placeholder label for changing purpose

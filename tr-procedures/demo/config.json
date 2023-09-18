@@ -1,8 +1,8 @@
 {
-  "dbNameLabp": "labplanet",
-  "dbName": "demo_v0_9_1",
+  "dbName": "labplanet",
+  "dbNameDemo": "demo_v0_9_1",
   "isForTesting": true,
-  "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
+  "backendUrl": "http://platform.trazit.net:8888/LabPLANET-API",
   "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
 
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
@@ -89,6 +89,16 @@
   "localDefaultViewzzzs": {
     "procName":  "em-demo-a", 
     "viewName": "SampleIncubation", 
+    "filterName" :  "Incubation" 
+  },
+  "localDefaultView": {
+    "procName":  "em-demo-a", 
+    "viewName": "SampleIncubation1", 
+    "filterName" :  "Incubation" 
+  },
+  "localDefaultViewzzzs": {
+    "procName":  "em-demo-a", 
+    "viewName": "SampleIncubation2", 
     "filterName" :  "Incubation" 
   },
   "localDefaultViewaaaa": {
@@ -237,7 +247,7 @@
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
   },
-  "localDefaultView": {
+  "localDefaultViewsssssssss": {
     "procName":  "instruments", 
     "viewName": "Deviation", 
     "filterName" :  "Deviation" 
