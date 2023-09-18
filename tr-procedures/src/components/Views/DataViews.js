@@ -1594,8 +1594,7 @@ export function DataViews(base) {
                   border-radius: 10px;
                   padding: 10px;
                   margin-right: 2px;
-                  overflow: hidden;                  
-                  height: 420px;    
+                  overflow: hidden;                                      
                   flex-basis: calc(33.33% - 10px);               
                 }
                 iframe {
@@ -1667,7 +1666,7 @@ export function DataViews(base) {
                 elem.add_border == true
                   ? "addborder"
                   : ""}"
-                class="layout vertical flex wrap"
+                class="layout vertical flex wrap" style="${elem.style!==undefined?elem.style:''}"
               >
                 <div style="flex-basis: auto; width: auto;">
                   ${this.getButton(elem, data, true)}
