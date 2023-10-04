@@ -635,8 +635,8 @@ export function TrazitGenericDialogs(base) {
     }
     checkMandatoryFieldsNotEmpty(){                
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
-        for (let i=0;i<dlgFlds.length;i++){            
-            let fldObj=dlgFlds[i]
+        for (let i=0;i<dlgFlds[0].length;i++){            
+            let fldObj=dlgFlds[0][i]
            // console.log('checkMandatoryFieldsNotEmpty', fldObj)
             let keyName=Object.keys(fldObj)
             let fldDef=fldObj[keyName[0]]
