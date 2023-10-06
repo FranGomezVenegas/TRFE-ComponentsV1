@@ -202,12 +202,12 @@ export class CommonCore extends LitElement {
     })
   }
   refreshMasterData(endPointResponse) {
-    console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
+    //console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
     if (this.procInstanceName===undefined||endPointResponse===undefined||endPointResponse.master_data===undefined) {
       return
     }  
     let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-    console.log(endPointResponse.master_data)
+    //console.log(endPointResponse.master_data)
     if (endPointResponse.master_data!==undefined){   
       userSession.procedures_list.procedures[this.procInstanceName].master_data=endPointResponse.master_data    
       // userSession.all_my_sops = j.all_my_sops
