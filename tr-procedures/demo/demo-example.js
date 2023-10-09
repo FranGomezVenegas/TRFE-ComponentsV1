@@ -110,7 +110,7 @@ class DemoExample extends LitElement {
 
         ${this.userRole==="proc_management" ?
         html`
-          <proc-management-home .config="${this.pLogin.config}"></proc-management-home>
+          <proc-management-home .area="app" ></proc-management-home>
         `:html` 
         <div ?hidden="${this.hideAllButtons()}" id="allButons">  
         
