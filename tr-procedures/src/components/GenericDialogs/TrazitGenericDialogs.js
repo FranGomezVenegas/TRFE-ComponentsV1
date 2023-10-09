@@ -32,7 +32,8 @@ export function TrazitGenericDialogs(base) {
         declineDialog:{type: Object},
         masterData:{type: Object},
         genericDialogGridItems: { type: Array },
-        genericDialogGridSelectedItems: { type: Array }
+        genericDialogGridSelectedItems: { type: Array },
+        area: { type: String },
       }
     }
 
@@ -101,7 +102,11 @@ export function TrazitGenericDialogs(base) {
     genericFormDialog(actionModel) {
         if (actionModel === undefined) {
             actionModel = this.actionBeingPerformedModel
+            if (actionModel!==undefined){
+                this.area=actionModel.area
+            }
         }
+        
 
          // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi 
          //     otherwise it is not compatible with actions requiring credentials dialog.
@@ -855,7 +860,12 @@ export function TrazitGenericDialogs(base) {
     getProcMasterData(){
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
         console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
-        let findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
+        let findProc =[]
+        if (this.area!==undefined){
+            findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.area)
+        }else{
+            findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
+        }
         // if (!this.config.local) {
         //   if (findProc.length) {
         //     ProceduresModel[this.procName] = findProc[0].procModel

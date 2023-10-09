@@ -78,7 +78,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
     this.filterCurrentData={}
   }
   render(){
-//    console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
+    console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
     return html`
       <div>
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
@@ -125,6 +125,8 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
             `}              
             ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}
             ${elem2.type==="testScripts" ? this.scripts(elem2, true) : nothing}
+            ${elem2.type==="buttonsOnly" ? this.buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
+
           `:nothing}
         `
       )} 
@@ -162,29 +164,38 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
       `}
       ${elem.type==="Report" ? this.ReportController(elem) : nothing}
       ${elem.type==="testScripts" ? this.scripts(elem, true) : nothing}
-      ${elem.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}    
+      ${elem.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}   
+      ${elem.type==="buttonsOnly" ? this.buttonsOnly(elem, data[elem.endPointResponseObject]) : nothing}
+ 
     `
   }
 
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
+    if (data===undefined||elemDef===undefined){return}
     if (this.selectedItem!==undefined){
     //  console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
-    }
-    return html`${data&&elemDef&&Object.keys(data).length > 0 ?
-      html`
-
+    }    
+    return  html`
         <div style="display:block">
-          ${elemDef!==undefined&&Array.isArray(elemDef)&&elemDef.map((elem, i) =>           
+          ${elemDef!==undefined&&Array.isArray(elemDef)?
           html`    
-            ${elem.is_translation===undefined||(elem.is_translation!==undefined&&elem.is_translation===true&&elem.lang!==undefined&&elem.lang===this.lang) ?
+            ${elemDef.map((elem, i) =>           
+            html`
+              ${elem.is_translation===undefined||(elem.is_translation!==undefined&&elem.is_translation===true&&elem.lang!==undefined&&elem.lang===this.lang) ?
+              html`              
+                ${elem.elements!==undefined? html` ${this.print2LevelsObject(elem, data)}`: html`${this.print1LevelObject(elem, data)}`}
+              `:nothing}
+            `                
+            )}
+          `:
+            html`
+            ${elemDef.is_translation===undefined||(elemDef.is_translation!==undefined&&elemDef.is_translation===true&&elemDef.lang!==undefined&&elemDef.lang===this.lang) ?
             html`              
-              ${elem.elements!==undefined? html` ${this.print2LevelsObject(elem, data)}`: html`${this.print1LevelObject(elem, data)}`}
+              ${elemDef.elements!==undefined? html` ${this.print2LevelsObject(elemDef, data)}`: html`${this.print1LevelObject(elemDef, data)}`}
             `:nothing}
-          `
-          )}      
+          `}
         </div>
-      `:nothing
-    }`
+    `
   }  
 }
 window.customElements.define('objecttabs-composition', ObjecttabsComposition);

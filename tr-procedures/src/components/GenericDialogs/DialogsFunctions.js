@@ -71,6 +71,9 @@ export function DialogsFunctions(base) {
     if (this.isProcManagement!==undefined&&this.isProcManagement===true){
       return true
     }
+    if (this.area!==undefined&&this.area==="app"){
+      return true
+    }
     //console.log('checkProcList')
     let bypass = true
     // this.justificationType = null

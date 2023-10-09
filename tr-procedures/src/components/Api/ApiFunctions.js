@@ -3,21 +3,7 @@ import { ProceduresModel } from '../../ProceduresModel';
 export function ApiFunctions(base) {
     return class extends (base) {
 
-      refreshMasterData(endPointResponse) {
-        if (endPointResponse===undefined||endPointResponse.master_data===undefined) {
-          return
-        } 
-        console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
-        let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-        let findProcIndex = userSession.procedures_list.procedures.findIndex(m => m.procInstanceName == this.procInstanceName)
-        if (findProcIndex !== -1) {
-          userSession.procedures_list.procedures[findProcIndex].master_data=endPointResponse.master_data
-          sessionStorage.setItem('userSession', JSON.stringify(userSession))
-          return
-        }
-        return
-      }  
-      fetchApi(urlParams, feedback=true) { 
+      fetchApi(urlParams, feedback=true, actionModel) { 
         // notification enabled by default, just turn log to false for those what requires no notification   
         let log = true
         if (urlParams.toString().toUpperCase().includes("QUERI")) {
@@ -35,7 +21,7 @@ export function ApiFunctions(base) {
             throw err
           }
         }).then(j => {
-          this.refreshMasterData(j)
+          this.refreshMasterData(j, actionModel)
           if (feedback) {
             this.dispatchEvent(new CustomEvent('success', {
               detail: {...j, log: log},
@@ -62,6 +48,26 @@ export function ApiFunctions(base) {
           }
         })
       }
+      refreshMasterData(endPointResponse, actionModel) {
+        
+        if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
+          return
+        } 
+        console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
+        let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+        let findProcIndex = 0
+        if (actionModel.area!==undefined){          
+          findProcIndex = userSession.procedures_list.procedures.findIndex(m => m.procInstanceName == actionModel.area)
+        }else{
+          findProcIndex = userSession.procedures_list.procedures.findIndex(m => m.procInstanceName == this.procInstanceName)
+        }
+        if (findProcIndex !== -1) {
+          userSession.procedures_list.procedures[findProcIndex].master_data=endPointResponse.master_data
+          sessionStorage.setItem('userSession', JSON.stringify(userSession))
+          return
+        }
+        return
+      }  
 
       getAPICommonParams(action, excludeProcInstanceName = false){
         if (action===undefined){return}

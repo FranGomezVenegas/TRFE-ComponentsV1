@@ -1113,9 +1113,6 @@ export function DataViews(base) {
           <div
             style="display: flex; flex-direction: column; text-align: center;"
           >
-            <div class="layout horizontal center flex wrap">
-              ${this.getButton(elem, dataArr, true)}
-            </div>
             ${alternativeTitle !== undefined
               ? html` <p>
                   <span class="title ${isSecondLevel}"
@@ -1131,6 +1128,9 @@ export function DataViews(base) {
                         >
                       </p>`}
                 `}
+              <div class="layout horizontal center flex wrap">
+                ${this.getButton(elem, dataArr, true)}             
+              </div>
             ${elem.columns === undefined
               ? html`${elem.hideNoDataMessage !== undefined &&
                 elem.hideNoDataMessage
@@ -1498,6 +1498,21 @@ export function DataViews(base) {
           vid.pause();
         }
       });
+    }
+    buttonsOnly(elem, data) {
+      console.log('buttonsOnly', 'elem', elem, 'data', data)
+      return html`
+        ${elem === undefined || elem.title === undefined
+          ? nothing
+          : html`<span
+              style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;"
+              >${elem.title["label_" + this.lang]}</span
+            >`}
+                <div style="flex-basis: auto; width: auto;">
+                  ${this.getButton(elem, data, true)}
+                </div>
+              </div>
+            ` 
     }
     kpiCardSomeElementsMain(elem, data) {
       //console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)

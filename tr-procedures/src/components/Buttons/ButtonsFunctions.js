@@ -9,7 +9,6 @@ export function ButtonsFunctions(base) {
 
     getButtonForRows(actions, data, isProcManagement) {   
       if (actions===undefined){actions=this.viewModelFromProcModel}  
-      let shouldBeDisabled=this.btnDisabled(action, actions) 
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -99,25 +98,25 @@ export function ButtonsFunctions(base) {
           html`${action.button ?
               html`${action.button.icon ?
               html`<mwc-icon-button 
-                  class="${action.button.class} disabled${shouldBeDisabled}"
+                  class="${action.button.class} disabled${this.btnDisabled(action, actions)}"
                   icon="${action.button.icon}" 
                   title="${action.button.title['label_'+this.lang]}" 
-                  ?disabled=${shouldBeDisabled}
+                  ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-icon-button>` :
               html`${action.button.img ?
                   html`<mwc-icon-button 
-                  class="${action.button.class} disabled${shouldBeDisabled} img"
+                  class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   title="${action.button.title['label_'+this.lang]}" 
-                  ?disabled=${shouldBeDisabled}
+                  ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
                   label="${action.button.title['label_'+this.lang]}" 
-                  class="${action.button.class} disabled${shouldBeDisabled} img"
-                  ?disabled=${shouldBeDisabled}
+                  class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
+                  ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHidden(action)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-button>`
               }`
@@ -540,8 +539,8 @@ export function ButtonsFunctions(base) {
         })          
       }
       if (this.config.backendUrl===undefined){
-        this.config.backendUrl="http://51.75.202.142:8888/LabPLANET-API"
-        console.log('this.config.backendUrlo is undefined!!! url assigned manually!', this.config.backendUrl)
+        this.config.backendUrl="http://platform.trazit.net:8888/TRAZiT-API"
+        console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
         let sessionDbName=JSON.parse(sessionStorage.getItem("userSession")).dbName
         if (sessionDbName!==undefined){
           this.config.dbName=sessionDbName
@@ -567,7 +566,7 @@ export function ButtonsFunctions(base) {
         + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
       //console.log('params', params)        
-      await this.fetchApi(params).then(j => {
+      await this.fetchApi(params, false, queryDefinition).then(j => {
         if (queryDefinition.notUseGrid!==undefined&&queryDefinition.notUseGrid===true){
           if (queryDefinition.variableName!==undefined){
               if (queryDefinition.endPointResponseVariableName!==undefined){

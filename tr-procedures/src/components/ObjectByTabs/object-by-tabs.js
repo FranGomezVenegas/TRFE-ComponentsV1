@@ -194,16 +194,18 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             margin-left: auto; /* Push right text to the very right */
           }    
         </style>    
+        ${this.viewModelFromProcModel.title === undefined ? nothing : html`
         <div class="title-banner ${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
           <span class="left-text">
           <mwc-icon-button size="s" style="left:22px;" id="expandleftpane" dense raised label=""  icon="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? 'expand_more' : 'expand_less'}"   @click=${this.toggleLeftSplitPane}></mwc-icon-button>                
-          </span>
-          <h1 class="title">
-            ${this.viewModelFromProcModel.title["fix_text_"+this.lang]===undefined ? '' :this.viewModelFromProcModel.title["fix_text_"+this.lang]}
-            ${this.selectedItem===undefined||this.selectedItem[this.viewModelFromProcModel.title.field_name]===undefined ? '' :this.selectedItem[this.viewModelFromProcModel.title.field_name]}  
-          </h1>
+          </span>          
+            <h1 class="title">
+              ${this.viewModelFromProcModel.title["fix_text_"+this.lang]===undefined ? '' :this.viewModelFromProcModel.title["fix_text_"+this.lang]}
+              ${this.selectedItem===undefined||this.selectedItem[this.viewModelFromProcModel.title.field_name]===undefined ? '' :this.selectedItem[this.viewModelFromProcModel.title.field_name]}  
+            </h1>
           <span class="right-text"></span>
         </div>
+        `}
     
   </div>
       `
@@ -255,48 +257,54 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       return html`
       ${this.genericFormDialog()}
         ${this.desktop ?
-          html`                  
-          <sp-split-view show-divider=${this.showDivider}>
-            <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
-              <div id="endpointName">      
-              
-                <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
-                ${this.viewModelFromProcModel.filter_button["label_" + this.lang]} </sp-button>
-
-                ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
-                  ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} `}                      
-              </div>
-              ${this.filterElement(this.filterResponseData)}
-            
-            </div>
-            
-            <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
-              <div id="document">
-              ${this.title()}
+          html`     
+          ${this.viewModelFromProcModel.filter === undefined ? html`
               ${this.tabsBlock()}  
-              <div class="layout horizontal">
-              ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?
-              html`
-                <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>                
-              `: nothing}
-          
-              ${this.viewModelFromProcModel&&this.viewModelFromProcModel.download&&this.viewModelFromProcModel.download.active===true ?
-                html`    
-                <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
-              `: nothing}
+
+          ` : html`             
+            <sp-split-view show-divider=${this.showDivider}>
+              <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
+                <div id="endpointName">      
+                  ${this.viewModelFromProcModel.filter_button === undefined ? nothing : html`
+                    <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
+                    ${this.viewModelFromProcModel.filter_button["label_" + this.lang]} </sp-button>
+                  `}
+                  ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
+                    ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} 
+                  `}
+                </div>
+                ${this.filterElement(this.filterResponseData)}
+              
               </div>
-          
-              ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
-                  <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
-                  .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                  .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
-                  .filterCurrentData=${this.filterCurrentData}>
-                  </objecttabs-composition>              
-  
+              
+              <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
+                <div id="document">
+                ${this.title()}
+                ${this.tabsBlock()}  
+                <div class="layout horizontal">
+                ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?
+                html`
+                  <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>                
                 `: nothing}
+            
+                ${this.viewModelFromProcModel&&this.viewModelFromProcModel.download&&this.viewModelFromProcModel.download.active===true ?
+                  html`    
+                  <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
+                `: nothing}
+                </div>
+            
+                ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
+                    <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
+                    .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
+                    .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
+                    .filterCurrentData=${this.filterCurrentData}>
+                    </objecttabs-composition>              
+    
+                  `: nothing}
+                </div>
               </div>
-            </div>
-          </sp-split-view>
+            </sp-split-view>
+          `}
       ` : html`        
           <div id="mobile">
           <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">

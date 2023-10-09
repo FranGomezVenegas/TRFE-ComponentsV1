@@ -4,13 +4,12 @@ import { ApiFunctions } from "../Api/ApiFunctions";
 import { ProceduresManagement } from "../../0proc_models/ProceduresManagement";
 import "@spectrum-web-components/split-view/sp-split-view";
 import "../../components/ObjectByTabs/objecttabs-composition";
+import "../../components/ObjectByTabs/object-by-tabs";
 import { CommonCore } from "@trazit/common-core";
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { ProcManagementMethods } from "./ProcManagementMethods";
 
-export class ProcManagementHome extends ProcManagementMethods(
-  ApiFunctions(TrazitFormsElements(CommonCore))
-) {
+export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))) {
   static get properties() {
     return {
       config: { type: Object },
@@ -33,12 +32,79 @@ export class ProcManagementHome extends ProcManagementMethods(
       leftSplitDisplayed: { type: Boolean },
       selectedTabModelFromProcModel: { type: Array },
       localModel: { type: Boolean },
+      mainview_definition: { type: Array},
+      mainViewData:{type: Array},
+      area: { type: String },
     };
   }
 
   constructor() {
     super();
+    this.mainViewData=[]
+    let data={"fake": true}
+    this.mainViewData.push(data)
+    this.mainview_definition=[]
+    let action={}
+    action = 		
+    {"name": "",
+    "title": {
+      "label_en": "",
+      "label_es": ""
+    },
+    "expanded": false,    
+      "view_definition": [
+        { "elements": [
+            { "type": "buttonsOnly",
+              "actions": [
+                { "actionName": "NEW_PROCEDURE",
+                  "area": "app",
+                  "certificationException": true,
+                  "requiresDialog": true,
+                  "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                  "endPointParams": [
+                { "argumentName": "procedureName", "element": "text1", "defaultValue": ""  },
+                { "argumentName": "procedureVersion", "fixValue": "1"},
+                { "argumentName": "newprocInstanceName", "element": "text2", "defaultValue": "" },
+                { "argumentName": "moduleName", "element": "list1", "defaultValue": "" },
+                { "argumentName": "moduleVersion", "fixValue": "1" },
+                { "argumentName": "labelEn", "element": "text3", "defaultValue": "" },
+                { "argumentName": "labelEs", "element": "text4", "defaultValue": "" }
+                  ],
+                  "button": {
+                    "icon": "create_new_folder",
+                    "title": {
+                      "label_en": "New", "label_es": "Nuevo"
+                    },
+                    "requiresGridItemSelected": false
+                  },
+                  "dialogInfo": {          
+                    "name": "genericDialog",
+                    "fields": [
+                      {"text1": { "label_en": "Process Name", "label_es": "Nombre del Proceso" }},
+                      {"text2": { "label_en": "Instance", "label_es": "Instancia" }},
+                      {"text3": { "label_en": "Label EN", "label_es": "Etiqueta EN", "optional": true }},
+                      {"text4": { "label_en": "Label ES", "label_es": "Etiqueta ES", "optional": true }},
 
+                      {"list1": {
+                        "label_en": "Module", "label_es": "Módulo", "optional": true,
+                        "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                        "valuesFromMasterData": {
+                        "propertyNameContainer": "modules",
+                        "propertyNameContainerLevelPropertyKeyName": "module_name",
+                        "propertyKeyName": "module_name", "propertyKeyValueEn": "description_en", "propertyKeyValueEs": "description_es"
+                        }			
+                      }}
+                    ]
+                  }
+                }
+              ]
+            }
+            ]
+          }
+      ]
+    }
+    this.area="app"
+    this.mainview_definition=action
     this.localModel = false;
     this.leftSplitDisplayed = true;
     this.show = false;
@@ -55,6 +121,7 @@ export class ProcManagementHome extends ProcManagementMethods(
     this.selectedTabModelFromProcModel = [];
     this.viewModelFromProcModel.viewQuery = {
       actionName: "ALL_PROCEDURES_DEFINITION",
+      area: "app",
       label_en: "All Procedures Definition",
       label_es: "Definición de todos los procesos",
       endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",
@@ -199,7 +266,13 @@ export class ProcManagementHome extends ProcManagementMethods(
     const el = evt.target;
     el.style.transform = `perspective(300px) scale(1) rotateX(0) rotateY(0)`;
   }
-
+  loadDialogs(){
+    //console.log('loadDialogs')
+    //${this.credentialsDialog()}
+    return html`    
+      ${this.genericFormDialog()}
+    `
+  }
   updated(changedProperties) {
     // leftSplitDisplayed
     if (changedProperties.has("show")) {
@@ -419,7 +492,16 @@ export class ProcManagementHome extends ProcManagementMethods(
                 }
               }
             </style>
-            <objecttabs-composition></objecttabs-composition>
+            
+            <div style="flex-basis: auto; width: auto;">            
+            <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.mainview_definition}
+              .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
+              .selectedItem=${this.mainViewData}      
+            </objecttabs-composition>  
+              
+            </div>
+            ${this.allProcedures===undefined||this.allProcedures.length==0? nothing:
+            html`
             <div class="product_grid">
               ${this.allProcedures.map(
                 (p, index) =>
@@ -542,6 +624,7 @@ export class ProcManagementHome extends ProcManagementMethods(
                   `
               )}
             </div>
+          `}
           `
         : html`
             <div>
@@ -829,6 +912,8 @@ export class ProcManagementHome extends ProcManagementMethods(
   }
 
   selectedProcInstanceMainView() {
+    let selectedItemArr=[]
+    selectedItemArr.push(this.selectedItem)
     return html`
       ${this.desktop
         ? html`
@@ -864,13 +949,20 @@ export class ProcManagementHome extends ProcManagementMethods(
               >
                 ${this.selectedProcessTitle()}
                 ${this.selectedViewDefinition !== undefined &&
-                this.selectedViewDefinition.view_definition !== undefined &&
+                (this.selectedViewDefinition.view_definition !== undefined||this.selectedViewDefinition.tabs!==undefined) &&
                 this.selectedViewDefinition
-                  ? html`            
-              <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
-              .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-              .selectedItem=${this.selectedItem}      
-              </objecttabs-composition>              
+                  ? html`    
+                ${this.selectedViewDefinition.tabs!==undefined?html`
+                  <object-by-tabs .windowOpenable=true .sopsPassed=true .lang=${this.lang}
+                  .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+                  .model=${this.selectedViewDefinition} .selectedItem=${this.selectedItem} 
+                  .viewModelFromProcModel=${this.selectedViewDefinition} .config=${this.config}></object-by-tabs>                        
+                `:html`                  
+                  <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
+                  .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
+                  .selectedItem=${this.selectedItem}      
+                  </objecttabs-composition>        
+                `}      
 
             `
                   : nothing}
@@ -997,7 +1089,7 @@ export class ProcManagementHome extends ProcManagementMethods(
                                 `}
                           </div>
                           ${this.genericFormElements(
-                            item.view_definition.detail.filterFields
+                            item.view_definition.detail.filterFields, this.area
                           )}
                         `
                       : nothing}
