@@ -163,27 +163,37 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
   handleSessionStorageUpdated(event) {
     const { key, value } = event.detail;
-
+    alert(key)
     if (key === "newProcInstance") {
-      this.selectedProcInstance = value;
 
-      let selectedScripts = sessionStorage.getItem("selectedScripts");
-      if (selectedScripts !== undefined && selectedScripts !== null) {
-        selectedScripts = JSON.parse(selectedScripts);
-        const procScript = selectedScripts.find(
-          (script) => script.proc_instance_name === this.procInstanceName
-        );
+        this.selectedProcInstance = value;
+        
+        let selectedScripts = sessionStorage.getItem("selectedScripts");
+        if (selectedScripts !== undefined && selectedScripts !== null) {
+          selectedScripts = JSON.parse(selectedScripts);
+          const procScript = selectedScripts.find(
+            (script) => script.proc_instance_name === this.procInstanceName
+          );
 
-        if (procScript) {
-          this.objecttabsComposition.selectedItem = procScript;
-          this.objecttabsComposition.selectedTabModelFromProcModel =
-            this.selectedViewDefinition;
+          if (procScript) {
+            if (this.selectedViewDefinition.tabs!==undefined){
+              this.objectByTabs.selectedItem = procScript;
+              this.objectByTabs.selectedTabModelFromProcModel =this.selectedViewDefinition;
+            }else{            
+              this.objecttabsComposition.selectedItem = procScript;
+              this.objecttabsComposition.selectedTabModelFromProcModel =this.selectedViewDefinition;
+            }
+          }
+        }
+        if (this.selectedViewDefinition.tabs!==undefined){
+          this.objectByTabs.isProcManagement = true;
+          this.objectByTabs.render();          
+        }else{
+          this.objecttabsComposition.isProcManagement = true;
+          this.objecttabsComposition.render();
         }
       }
-
-      this.objecttabsComposition.isProcManagement = true;
-      this.objecttabsComposition.render();
-    }
+    
   }
 
   resetView() {
@@ -1504,8 +1514,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     this.requestUpdate();
   }
 
-  get objecttabsComposition() {
-    return this.shadowRoot.querySelector("objecttabs-composition");
-  }
+  get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition");}
+  get objectByTabs() {return this.shadowRoot.querySelector("object-by-tabs");}
+  
 }
 window.customElements.define("proc-management-home", ProcManagementHome);
