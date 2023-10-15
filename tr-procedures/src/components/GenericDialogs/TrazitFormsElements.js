@@ -84,6 +84,12 @@ export function TrazitFormsElements(base) {
         }
         return fldLbl
     }
+    isFieldDisabled(fld){        
+        if (fld.disabled===undefined||fld.disabled===true){
+            return true
+        }
+        return false
+    }
 
     fldDefaultValue(fldDef){
         //console.log('fldDefaultValue', 'fldDef', fldDef)
@@ -228,70 +234,70 @@ export function TrazitFormsElements(base) {
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${this.fldDefaultValue(fld.text1)}  label="${this.fieldLabel(fld.text1)}" 
+                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${this.fldDefaultValue(fld.text1)}  label="${this.fieldLabel(fld.text1)}" ?disabled=${this.isFieldDisabled(fld.text1)}
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${this.fldDefaultValue(fld.text2)} label="${this.fieldLabel(fld.text2)}" 
+                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${this.fldDefaultValue(fld.text2)} label="${this.fieldLabel(fld.text2)}" ?disabled=${this.isFieldDisabled(fld.text2)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text3" type="text" .value=${this.fldDefaultValue(fld.text3)} label="${this.fieldLabel(fld.text3)}" 
+                    <mwc-textfield class="layout flex" id="text3" type="text" .value=${this.fldDefaultValue(fld.text3)} label="${this.fieldLabel(fld.text3)}" ?disabled=${this.isFieldDisabled(fld.text3)}
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}                       
                 ${!fld.text4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text4" type="text" .value=${this.fldDefaultValue(fld.text4)} label="${this.fieldLabel(fld.text4)}" 
+                    <mwc-textfield class="layout flex" id="text4" type="text" .value=${this.fldDefaultValue(fld.text4)} label="${this.fieldLabel(fld.text4)}" ?disabled=${this.isFieldDisabled(fld.text4)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text5" type="text" .value=${this.fldDefaultValue(fld.text)} label="${this.fieldLabel(fld.text5)}" 
+                    <mwc-textfield class="layout flex" id="text5" type="text" .value=${this.fldDefaultValue(fld.text)} label="${this.fieldLabel(fld.text5)}"  ?disabled=${this.isFieldDisabled(fld.text5)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text6" type="text" .value=${this.fldDefaultValue(fld.text6)} label="${this.fieldLabel(fld.text6)}" 
+                    <mwc-textfield class="layout flex" id="text6" type="text" .value=${this.fldDefaultValue(fld.text6)} label="${this.fieldLabel(fld.text6)}"  ?disabled=${this.isFieldDisabled(fld.text6)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text7" type="text" .value=${this.fldDefaultValue(fld.text7)} label="${this.fieldLabel(fld.text7)}" 
+                    <mwc-textfield class="layout flex" id="text7" type="text" .value=${this.fldDefaultValue(fld.text7)} label="${this.fieldLabel(fld.text7)}"  ?disabled=${this.isFieldDisabled(fld.text7)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text8" type="text" .value=${this.fldDefaultValue(fld.text8)}label="${this.fieldLabel(fld.text8)}"
+                    <mwc-textfield class="layout flex" id="text8" type="text" .value=${this.fldDefaultValue(fld.text8)}label="${this.fieldLabel(fld.text8)}" ?disabled=${this.isFieldDisabled(fld.text8)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text9" type="text" .value=${this.fldDefaultValue(fld.text9)} label="${this.fieldLabel(fld.text9)}"
+                    <mwc-textfield class="layout flex" id="text9" type="text" .value=${this.fldDefaultValue(fld.text9)} label="${this.fieldLabel(fld.text9)}" ?disabled=${this.isFieldDisabled(fld.text9)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text10" type="text" .value=${this.fldDefaultValue(fld.text10)} label="${this.fieldLabel(fld.text10)}"
+                    <mwc-textfield class="layout flex" id="text10" type="text" .value=${this.fldDefaultValue(fld.text10)} label="${this.fieldLabel(fld.text10)}" ?disabled=${this.isFieldDisabled(fld.text10)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}                              
@@ -299,7 +305,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number1" type="number" 
-                    @input=${e=>this.setValidVal(e, fld)} .value=${this.fldDefaultValue(fld.number1)} label="${this.fieldLabel(fld.number1)}"
+                    @input=${e=>this.setValidVal(e, fld)} .value=${this.fldDefaultValue(fld.number1)} label="${this.fieldLabel(fld.number1)}" ?disabled=${this.isFieldDisabled(fld.number1)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -307,7 +313,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number2" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number2)}   label="${this.fieldLabel(fld.number2)}"
+                    .value=${this.fldDefaultValue(fld.number2)}   label="${this.fieldLabel(fld.number2)}" ?disabled=${this.isFieldDisabled(fld.number2)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -315,7 +321,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number3" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number3)}   label="${this.fieldLabel(fld.number3)}"
+                    .value=${this.fldDefaultValue(fld.number3)}   label="${this.fieldLabel(fld.number3)}" ?disabled=${this.isFieldDisabled(fld.number3)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -323,7 +329,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number4" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number4)}   label="${this.fieldLabel(fld.number4)}"
+                    .value=${this.fldDefaultValue(fld.number4)}   label="${this.fieldLabel(fld.number4)}" ?disabled=${this.isFieldDisabled(fld.number4)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -331,7 +337,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number5" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number5)}   label="${this.fieldLabel(fld.number5)}"
+                    .value=${this.fldDefaultValue(fld.number5)}   label="${this.fieldLabel(fld.number5)}" ?disabled=${this.isFieldDisabled(fld.number5)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -339,7 +345,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number6" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number6)}  label="${this.fieldLabel(fld.number6)}"
+                    .value=${this.fldDefaultValue(fld.number6)}  label="${this.fieldLabel(fld.number6)}" ?disabled=${this.isFieldDisabled(fld.number6)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -347,7 +353,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number7" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number7)}   label="${this.fieldLabel(fld.number7)}"
+                    .value=${this.fldDefaultValue(fld.number7)}   label="${this.fieldLabel(fld.number7)}" ?disabled=${this.isFieldDisabled(fld.number7)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -355,7 +361,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number8" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number8)}   label="${this.fieldLabel(fld.number8)}"
+                    .value=${this.fldDefaultValue(fld.number8)}   label="${this.fieldLabel(fld.number8)}" ?disabled=${this.isFieldDisabled(fld.number8)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -363,7 +369,7 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number9" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number9)}   label="${this.fieldLabel(fld.number9)}"
+                    .value=${this.fldDefaultValue(fld.number9)}   label="${this.fieldLabel(fld.number9)}" ?disabled=${this.isFieldDisabled(fld.number9)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
@@ -371,14 +377,14 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number10" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number10)}   label="${this.fieldLabel(fld.number10)}"
+                    .value=${this.fldDefaultValue(fld.number10)}   label="${this.fieldLabel(fld.number10)}" ?disabled=${this.isFieldDisabled(fld.number10)}
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.checkbox1 ?
                     html``: html`        
                     <mwc-formfield label="${this.fieldLabel(fld.checkbox1)}" >
-                        <mwc-checkbox id="checkbox1" ?checked=${this.fldDefaultValue(fld.checkbox1)}
+                        <mwc-checkbox id="checkbox1" ?checked=${this.fldDefaultValue(fld.checkbox1)} ?disabled=${this.isFieldDisabled(fld.checkbox1)}
                         @change=${e => { this.checkbox1.value=this.checkbox1.checked}} value="${this.fldDefaultValue(fld.checkbox1)}"
                         ></mwc-checkbox>
                     </mwc-formfield>
@@ -386,7 +392,7 @@ export function TrazitFormsElements(base) {
                     ${!fld.checkbox2 ?
                     html``: html`        
                     <mwc-formfield label="${this.fieldLabel(fld.checkbox2)}" >
-                        <mwc-checkbox id="checkbox2" ?checked=${this.fldDefaultValue(fld.checkbox2)}
+                        <mwc-checkbox id="checkbox2" ?checked=${this.fldDefaultValue(fld.checkbox2)} ?disabled=${this.isFieldDisabled(fld.checkbox2)}
                         @change=${e => { this.checkbox2.value=this.checkbox2.checked}} value="${this.fldDefaultValue(fld.checkbox2)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
@@ -394,7 +400,7 @@ export function TrazitFormsElements(base) {
                     ${!fld.checkbox3 ?
                     html``: html`        
                     <mwc-formfield label="${this.fieldLabel(fld.checkbox3)}" >
-                        <mwc-checkbox id="checkbox3" ?checked=${this.fldDefaultValue(fld.checkbox3)}
+                        <mwc-checkbox id="checkbox3" ?checked=${this.fldDefaultValue(fld.checkbox3)} ?disabled=${this.isFieldDisabled(fld.checkbox3)}
                         @change=${e => { this.checkbox3.value=this.checkbox3.checked}} value="${this.fldDefaultValue(fld.checkbox3)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
@@ -402,7 +408,7 @@ export function TrazitFormsElements(base) {
                     ${!fld.checkbox4 ?
                     html``: html`        
                     <mwc-formfield label="${this.fieldLabel(fld.checkbox4)}" >
-                        <mwc-checkbox id="checkbox4" ?checked=${this.fldDefaultValue(fld.checkbox4)}
+                        <mwc-checkbox id="checkbox4" ?checked=${this.fldDefaultValue(fld.checkbox4)} ?disabled=${this.isFieldDisabled(fld.checkbox4)}
                         @change=${e => { this.checkbox4.value=this.checkbox4.checked}} value="${this.fldDefaultValue(fld.checkbox4)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
@@ -411,14 +417,14 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox5)}" >
                         <mwc-checkbox id="checkbox5" ?checked=${this.fldDefaultValue(fld.checkbox5)} @change=${e => { this.checkbox5.value=this.checkbox5.checked}}
-                        value="${this.fldDefaultValue(fld.checkbox5)}"
+                        value="${this.fldDefaultValue(fld.checkbox5)}" ?disabled=${this.isFieldDisabled(fld.checkbox5)}
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
                     ${!fld.checkbox6 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox6)}" >
-                        <mwc-checkbox id="checkbox6" ?checked=${this.fldDefaultValue(fld.checkbox6)}
+                        <mwc-checkbox id="checkbox6" ?checked=${this.fldDefaultValue(fld.checkbox6)} ?disabled=${this.isFieldDisabled(fld.checkbox6)}
                         @change=${e => { this.checkbox6.value=this.checkbox6.checked}} value="${this.fldDefaultValue(fld.checkbox6)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
@@ -426,7 +432,7 @@ export function TrazitFormsElements(base) {
                     ${!fld.checkbox7 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox7)}" >
-                        <mwc-checkbox id="checkbox7" ?checked=${this.fldDefaultValue(fld.checkbox7)}
+                        <mwc-checkbox id="checkbox7" ?checked=${this.fldDefaultValue(fld.checkbox7)} ?disabled=${this.isFieldDisabled(fld.checkbox7)}
                         @change=${e => { this.checkbox7.value=this.checkbox7.checked}} value="${this.fldDefaultValue(fld.checkbox7)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
@@ -434,7 +440,7 @@ export function TrazitFormsElements(base) {
                     ${!fld.checkbox8 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox8)}" >
-                        <mwc-checkbox id="checkbox8" ?checked=${this.fldDefaultValue(fld.checkbox8)}
+                        <mwc-checkbox id="checkbox8" ?checked=${this.fldDefaultValue(fld.checkbox8)} ?disabled=${this.isFieldDisabled(fld.checkbox8)}
                         @change=${e => { this.checkbox8.value=this.checkbox8.checked}} value="${this.fldDefaultValue(fld.checkbox8)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
@@ -442,7 +448,7 @@ export function TrazitFormsElements(base) {
                     ${!fld.checkbox9 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox9)}" >
-                        <mwc-checkbox id="checkbox9" ?checked=${this.fldDefaultValue(fld.checkbox9)}
+                        <mwc-checkbox id="checkbox9" ?checked=${this.fldDefaultValue(fld.checkbox9)} ?disabled=${this.isFieldDisabled(fld.checkbox9)}
                         @change=${e => { this.checkbox9.value=this.checkbox9.checked}} value="${this.fldDefaultValue(fld.checkbox9)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
@@ -450,22 +456,22 @@ export function TrazitFormsElements(base) {
                     ${!fld.checkbox10 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox10)}" >
-                        <mwc-checkbox id="checkbox10" ?checked=${this.fldDefaultValue(fld.checkbox10)}
+                        <mwc-checkbox id="checkbox10" ?checked=${this.fldDefaultValue(fld.checkbox10)} ?disabled=${this.isFieldDisabled(fld.checkbox10)}
                         @change=${e => { this.checkbox10.value=this.checkbox10.checked}} value="${this.fldDefaultValue(fld.checkbox10)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
 
-                    ${!fld.date1 ?html``: html`<mwc-textfield id="date1" label="${this.fieldLabel(fld.date1)}" type="date"></mwc-textfield>`}
-                    ${!fld.date2 ?html``: html`<mwc-textfield id="date2" label="${this.fieldLabel(fld.date2)}" type="date"></mwc-textfield>`}
-                    ${!fld.date3 ?html``: html`<mwc-textfield id="date3" label="${this.fieldLabel(fld.date3)}" type="date"></mwc-textfield>`}
-                    ${!fld.date4 ?html``: html`<mwc-textfield id="date4" label="${this.fieldLabel(fld.date4)}" type="date"></mwc-textfield>`}
-                    ${!fld.date5 ?html``: html`<mwc-textfield id="date5" label="${this.fieldLabel(fld.date5)}" type="date"></mwc-textfield>`}                           
-                    ${!fld.date6 ?html``: html`<mwc-textfield id="date6" label="${this.fieldLabel(fld.date6)}" type="date"></mwc-textfield>`} 
-                    ${!fld.date7 ?html``: html`<mwc-textfield id="date7" label="${this.fieldLabel(fld.date7)}" type="date"></mwc-textfield>`}
-                    ${!fld.date8 ?html``: html`<mwc-textfield id="date8" label="${this.fieldLabel(fld.date8)}" type="date"></mwc-textfield>`}
-                    ${!fld.date9 ?html``: html`<mwc-textfield id="date9" label="${this.fieldLabel(fld.date9)}" type="date"></mwc-textfield>`}
-                    ${!fld.date10 ?html``: html`<mwc-textfield id="date10" label="${this.fieldLabel(fld.date10)}" type="date"></mwc-textfield>`}
+                    ${!fld.date1 ?html``: html`<mwc-textfield id="date1" label="${this.fieldLabel(fld.date1)}"  ?disabled=${this.isFieldDisabled(fld.date1)} type="date"></mwc-textfield>`}
+                    ${!fld.date2 ?html``: html`<mwc-textfield id="date2" label="${this.fieldLabel(fld.date2)}"  ?disabled=${this.isFieldDisabled(fld.date2)} type="date"></mwc-textfield>`}
+                    ${!fld.date3 ?html``: html`<mwc-textfield id="date3" label="${this.fieldLabel(fld.date3)}"  ?disabled=${this.isFieldDisabled(fld.date3)} type="date"></mwc-textfield>`}
+                    ${!fld.date4 ?html``: html`<mwc-textfield id="date4" label="${this.fieldLabel(fld.date4)}"  ?disabled=${this.isFieldDisabled(fld.date4)} type="date"></mwc-textfield>`}
+                    ${!fld.date5 ?html``: html`<mwc-textfield id="date5" label="${this.fieldLabel(fld.date5)}"  ?disabled=${this.isFieldDisabled(fld.date5)} type="date"></mwc-textfield>`}                           
+                    ${!fld.date6 ?html``: html`<mwc-textfield id="date6" label="${this.fieldLabel(fld.date6)}"  ?disabled=${this.isFieldDisabled(fld.date6)} type="date"></mwc-textfield>`} 
+                    ${!fld.date7 ?html``: html`<mwc-textfield id="date7" label="${this.fieldLabel(fld.date7)}"  ?disabled=${this.isFieldDisabled(fld.date7)} type="date"></mwc-textfield>`}
+                    ${!fld.date8 ?html``: html`<mwc-textfield id="date8" label="${this.fieldLabel(fld.date8)}"  ?disabled=${this.isFieldDisabled(fld.date8)} type="date"></mwc-textfield>`}
+                    ${!fld.date9 ?html``: html`<mwc-textfield id="date9" label="${this.fieldLabel(fld.date9)}"  ?disabled=${this.isFieldDisabled(fld.date9)} type="date"></mwc-textfield>`}
+                    ${!fld.date10 ?html``: html`<mwc-textfield id="date10" label="${this.fieldLabel(fld.date10)}  ?disabled=${this.isFieldDisabled(fld.date10)}" type="date"></mwc-textfield>`}
 
                     ${!fld.datetime1 ?html``: html`<input id="datetime1" type="datetime-local" dialogInitialFocus>`}   
                     ${!fld.datetime2 ?html``: html`<input id="datetime2" type="datetime-local" dialogInitialFocus>`}   
@@ -523,34 +529,34 @@ export function TrazitFormsElements(base) {
                     `}                                   
 
                 ${!fld.list1 ?html``: html`        
-                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected} >
+                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected}  ?disabled=${this.isFieldDisabled(fld.list1)} >
                         ${this.listEntries(fld.list1)}</mwc-select>`}  
                 ${!fld.list2 ?html``: html`        
-                    <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}">
+                    <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}" ?disabled=${this.isFieldDisabled(fld.list2)} >
                         ${this.listEntries(fld.list2)}</mwc-select>`}  
                 ${!fld.list3 ?html``: html`        
-                    <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}">
+                    <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}" ?disabled=${this.isFieldDisabled(fld.list3)} >
                         ${this.listEntries(fld.list3)}</mwc-select>`}  
                 ${!fld.list4 ?html``: html`        
-                    <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}" ?disabled=${this.fldDisabled}>
+                    <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}"  ?disabled=${this.isFieldDisabled(fld.list4)} >
                         ${this.listEntries(fld.list4)}</mwc-select>`}  
                 ${!fld.list5 ?html``: html`        
-                    <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}" ?disabled=${this.fldDisabled}>
+                    <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}"  ?disabled=${this.isFieldDisabled(fld.list5)} >
                         ${this.listEntries(fld.list5)}</mwc-select>`}  
                 ${!fld.list6 ?html``: html`        
-                    <mwc-select id="list6" label="${this.fieldLabel(fld.list6)}">
+                    <mwc-select id="list6" label="${this.fieldLabel(fld.list6)}" ?disabled=${this.isFieldDisabled(fld.list6)} >
                         ${this.listEntries(fld.list6)}</mwc-select>`}  
                 ${!fld.list7 ?html``: html`        
-                    <mwc-select id="list7" label="${this.fieldLabel(fld.list7)}">
+                    <mwc-select id="list7" label="${this.fieldLabel(fld.list7)}" ?disabled=${this.isFieldDisabled(fld.list7)} >
                         ${this.listEntries(fld.list7)}</mwc-select>`}  
                 ${!fld.list8 ?html``: html`        
-                    <mwc-select id="list8" llabel="${this.fieldLabel(fld.list8)}">
+                    <mwc-select id="list8" llabel="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)} >
                         ${this.listEntries(fld.list8)}</mwc-select>`}  
                 ${!fld.list9 ?html``: html`        
-                    <mwc-select id="list9" label="${this.fieldLabel(fld.list9)}">
+                    <mwc-select id="list9" label="${this.fieldLabel(fld.list9)}" ?disabled=${this.isFieldDisabled(fld.list9)} >
                         ${this.listEntries(fld.list9)}</mwc-select>`}  
                 ${!fld.list10 ?html``: html`        
-                    <mwc-select id="list10" label="${this.fieldLabel(fld.list10)}">
+                    <mwc-select id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)} >
                         ${this.listEntries(fld.list10)}</mwc-select>`}  
 
                     ${!fld.listMDSamplerPersonalAreas ?
