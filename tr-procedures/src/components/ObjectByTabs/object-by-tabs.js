@@ -122,7 +122,10 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             selectedItems:{ type: Array},
             selectedItemLoaded:{type: Boolean},
             leftSplitDisplayed: { type: Boolean },
-            filterCurrentData: {type: Object}
+            filterCurrentData: {type: Object},
+            procedureVersion: { type: Number },
+            procedureName: { type: String }
+      
         }
     }
     constructor() {
@@ -316,7 +319,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
 
         ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`
             <objecttabs-composition .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
-              .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName} .filterName=${this.filterName} 
+              .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName} .filterName=${this.filterName} 
               .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
               .filterCurrentData=${this.filterCurrentData}>
             </objecttabs-composition>              
@@ -360,7 +363,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
       return html`
       <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
-      .lang=${this.lang} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
+      .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
       .selectedItem=${this.selectedItem}  .viewModelFromProcModel=${this.viewModelFromProcModel}   
       .filterCurrentData=${this.filterCurrentData}>
       </objecttabs-composition>      

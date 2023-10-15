@@ -41,6 +41,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
   constructor() {
     super();
     this.mainViewData=[]
+    this.procedureVersion=-1
+    this.procedureName=""
     let data={"fake": true}
     this.mainViewData.push(data)
     this.mainview_definition=[]
@@ -238,8 +240,9 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
       if (procScript) {
         this.objecttabsComposition.selectedItem = procScript;
-        this.objecttabsComposition.selectedTabModelFromProcModel =
-          this.selectedViewDefinition;
+        this.objecttabsComposition.selectedTabModelFromProcModel=this.selectedViewDefinition;
+        this.objecttabsComposition.procedureName=this.procedureName
+        this.objecttabsComposition.procedureVersion=this.procedureVersion
       }
     }
 
@@ -954,6 +957,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   ? html`    
                 ${this.selectedViewDefinition.tabs!==undefined?html`
                   <object-by-tabs .windowOpenable=true .sopsPassed=true .lang=${this.lang}
+                  .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion}
                   .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
                   .model=${this.selectedViewDefinition} .selectedItem=${this.selectedItem} 
                   .viewModelFromProcModel=${this.selectedViewDefinition} .config=${this.config}></object-by-tabs>                        
