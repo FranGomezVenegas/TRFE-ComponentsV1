@@ -99,7 +99,7 @@ export function TrazitGenericDialogs(base) {
         }
     }
     isFieldDisabled(fld){        
-        if (fld.disabled===undefined||fld.disabled===true){
+        if (fld.disabled!==undefined&&fld.disabled===true){
             return true
         }
         return false
