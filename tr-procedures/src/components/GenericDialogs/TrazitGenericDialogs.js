@@ -160,7 +160,7 @@ export function TrazitGenericDialogs(base) {
         background-color: 4fcad029;
       }       
     </style>
-        <tr-dialog id="genericDialog"  @opened=${() => {this.defaultValue}}  ?open=${this.openGenericDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
+        <tr-dialog id="genericDialog"  @opened=${() => {this.defaultValue()}}  ?open=${this.openGenericDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
         
         ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true ?
         html`
@@ -568,6 +568,8 @@ export function TrazitGenericDialogs(base) {
                     )}
                     </mwc-select>
                 `}           
+                
+                ${!fld.dynamicElement1 ? nothing: this.addTheDynamicElement(fld.dynamicElement1)}
 
                 ${!fld.listMDprocedureUsers ?
                     html``: html`        
@@ -623,6 +625,40 @@ export function TrazitGenericDialogs(base) {
         </tr-dialog>
     `
     }
+    addTheDynamicElement(fld){
+        if (fld.rule===undefined||this.selectedItemInView===undefined){return}
+        let selObj=this.selectedItemInView
+        let curValue=selObj[fld.rule.field]
+        if (curValue===undefined){return}
+        if (curValue.length===0){curValue="*NULL*"}
+        let matchingEntry = fld.rule.logic.find(entry => entry.value === curValue);
+        
+        if (matchingEntry===undefined){
+            if (curValue.length>0){curValue="*NOT_NULL*"}
+            matchingEntry = fld.rule.logic.find(entry => entry.value === curValue);
+        }
+        if (matchingEntry===undefined){return}
+        
+        if (String(matchingEntry.element).toUpperCase()==="TEXT"){
+            return html`
+            <div class="layout horizontal flex center-center">
+            <mwc-textfield class="layout flex" id="dynamicElement1" type="text" .value=${fld.default_value ? fld.default_value : ''}  label="${this.fieldLabel(fld)}"  ?disabled=${this.isFieldDisabled(fld)} 
+                @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+            </div>
+            `
+        }
+        if (String(matchingEntry.element).toUpperCase()==="LIST"){
+            fld.items=[]
+            fld.items= JSON.parse(selObj[fld.rule.field])
+            return html`
+            <div class="layout horizontal flex center-center">
+            <mwc-select id="dynamicElement1" label="${this.fieldLabel(fld)}" @selected=${this.valueSelected} ?disabled=${this.isFieldDisabled(fld)}  >
+            ${this.listEntries(fld)}</mwc-select>
+            </div>
+            `
+        }
+        return html``         
+    }
     get genericDialog() {return this.shadowRoot.querySelector("tr-dialog#genericDialog")}
     get dateDialog() {return this.shadowRoot.querySelector("tr-dialog#dateDialog")}
     get dateInput() {return this.shadowRoot.querySelector("input#dateInput")}
@@ -672,7 +708,7 @@ export function TrazitGenericDialogs(base) {
     }
 
     defaultValue(e){
-      //  alert('open')
+        //alert('open defaultValue')
         // if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
         //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
         //     return 
@@ -690,23 +726,23 @@ export function TrazitGenericDialogs(base) {
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
         }
-        for (const element of dlgFlds){
+        for (let element of dlgFlds){
             let fldObj=element
             let keyName=Object.keys(fldObj)
             
             //if (==null){        
-            if (this[keyName[0]]!==null&&this[keyName[0]].defval!==undefined&&this[keyName[0]].defval!==null){
-                alert(this[keyName[0]].defval)
+            if (this[keyName]!==null&&this[keyName].defval!==undefined&&this[keyName].defval!==null){
+                alert(this[keyName].defval)
             }    
-            if (this[keyName[0]]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
-                this[keyName[0]].value=fldObj[keyName].default_value
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
+                this[keyName].value=fldObj[keyName].default_value
             }
-            if (this[keyName[0]]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName[0]]!==null){
-                this[keyName[0]].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+                this[keyName].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
             }
-            if (this[keyName[0]]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
-                this[keyName[0]].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
+                this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
             }
         }
     }    
@@ -864,23 +900,27 @@ export function TrazitGenericDialogs(base) {
     }   
 
     getProcMasterData(){
-        let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-        console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
-        let findProc =[]
-        if (this.area!==undefined){
-            findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.area)
+        if (this.isProcManagement===undefined||this.isProcManagement!==true){
+            let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+            console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
+            let findProc =[]
+            if (this.area!==undefined){
+                findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.area)
+            }else{
+                findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
+            }
+            // if (!this.config.local) {
+            //   if (findProc.length) {
+            //     ProceduresModel[this.procName] = findProc[0].procModel
+            //   }
+            // }
+        //        this.procInstanceModel=ProceduresModel[this.procName]
+            if (findProc!==undefined&&findProc.length>0&&findProc[0].master_data!==undefined){
+            this.masterData=findProc[0].master_data
+            console.log('master data', this.masterData)   
+            }
         }else{
-            findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
-        }
-        // if (!this.config.local) {
-        //   if (findProc.length) {
-        //     ProceduresModel[this.procName] = findProc[0].procModel
-        //   }
-        // }
-    //        this.procInstanceModel=ProceduresModel[this.procName]
-        if (findProc!==undefined&&findProc.length>0&&findProc[0].master_data!==undefined){
-        this.masterData=findProc[0].master_data
-        console.log('master data', this.masterData)   
+            
         }
     }
     listEntriesFromMasterData(fldMDDef){
@@ -905,18 +945,30 @@ export function TrazitGenericDialogs(base) {
                 entries.push(blankEmpty)
             })
         }else{
-            if ((fldMDDef.elementName===undefined||fldMDDef.elementName===null)&&(fldMDDef.propertyNameContainerLevelfixValue===undefined||fldMDDef.propertyNameContainerLevelfixValue===null)){
+            if ((fldMDDef.elementName===undefined||fldMDDef.elementName===null)&&
+                (fldMDDef.propertyNameContainerLevelfixValue===undefined||fldMDDef.propertyNameContainerLevelfixValue===null)
+                (fldMDDef.contextVariableName===undefined||fldMDDef.contextVariableName===null)
+                ((fldMDDef.internalVariableSimpleObjName===undefined||fldMDDef.internalVariableSimpleObjName===null) || (fldMDDef.internalVariableSimpleObjProperty===undefined||fldMDDef.internalVariableSimpleObjProperty===null))
+                ){
                 alert('Property elementName or propertyNameContainerLevelfixValue is mandatory when filterInFirstLevel=true. Review model definition')
                 return entries
             }
             let filterValue=undefined
             if (fldMDDef.propertyNameContainerLevelfixValue!==undefined){
                 filterValue=fldMDDef.propertyNameContainerLevelfixValue                
-            }else{
+            } else if (fldMDDef.elementName!==undefined){
                 filterValue=this[fldMDDef.elementName].value
+            } else if (fldMDDef.contextVariableName!==undefined) {
+                filterValue=this[fldMDDef.contextVariableName]                
+            } else if (fldMDDef.internalVariableSimpleObjName!==undefined&&fldMDDef.internalVariableSimpleObjProperty!==undefined){
+                filterValue=this[fldMDDef.internalVariableSimpleObjName][fldMDDef.internalVariableSimpleObjProperty]
+            }
+            let filterPropertyName="name"
+            if (fldMDDef.filterPropertyName!==undefined){
+                filterPropertyName=fldMDDef.filterPropertyName
             }
             if (filterValue===undefined){return entries}
-            let result = this.masterData[fldMDDef.propertyNameContainer].find(item => item.name === filterValue);
+            let result = this.masterData[fldMDDef.propertyNameContainer].find(item => item[filterPropertyName] === filterValue);
             if (result===undefined){return entries}
             //alert(filterValue)
             // if (fldMDDef.propertyNameContainerLevel2fixValue!==undefined&&fldMDDef.propertyNameContainerLevel3){
@@ -1049,6 +1101,8 @@ export function TrazitGenericDialogs(base) {
     get listMDvariables() {return this.shadowRoot.querySelector("mwc-select#listMDvariables")}
     get listSelectedStudyIndividuals() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividuals")}
     get listSelectedStudyIndividualSamples() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividualSamples")}
+
+    get dynamicElement1() {    return this.shadowRoot.querySelector("#dynamicElement1")    } 
 
     setNumberMask(e, fieldDef) {
       if (fieldDef.min_allowed!==undefined && typeof fieldDef.min_allowed == 'number' && e.target.value < fieldDef.min_allowed) {
