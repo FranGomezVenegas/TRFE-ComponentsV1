@@ -808,6 +808,11 @@ export function TrazitGenericDialogs(base) {
             if (MDentriesArr.length>0){
                 MDentriesArr.forEach(item =>newList.push(item))
             }
+        } else if (fld.valuesFromSelectedItem!==undefined){
+            var MDentriesArr=this.listEntriesFromSelectedItem(fld.valuesFromSelectedItem)
+            if (MDentriesArr.length>0){
+                MDentriesArr.forEach(item =>newList.push(item))
+            }
         }else{
             fld.items.forEach(item =>newList.push(item))
         }
@@ -920,22 +925,76 @@ export function TrazitGenericDialogs(base) {
             console.log('master data', this.masterData)   
             }
         }else{
-            
+            let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+            this.masterData=userSession.proc_management_masterdata
         }
     }
     listEntriesFromMasterData(fldMDDef){
         this.getProcMasterData()
-        if (this.masterData===undefined){return []}
-        console.log('masterData', this.masterData)
+        return this.buildFrontListFromData(fldMDDef, this.masterData)
+    }
+
+    listEntriesFromSelectedItem(fldMDDef){     
+        
+        let data=[]
+        
+        if (fldMDDef!==null&&fldMDDef.defval!==undefined&&fldMDDef.defval!==null){
+            alert(fldMDDef.defval)
+        }    
+        if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.default_value!==undefined&&fldMDDef.default_value!==null){
+            data=fldMDDef.default_value
+        }
+        if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.selObjectPropertyName!==undefined&&fldMDDef.selObjectPropertyName!==null&&fldMDDef!==null){
+            data=this.selectedItems[0][fldMDDef.selObjectPropertyName]
+        }
+        if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.internalVariableObjName!==undefined&&fldMDDef.internalVariableObjName!==null&&
+            fldMDDef.internalVariableObjProperty!==undefined&&fldMDDef.internalVariableObjProperty!==null){
+            data=this[fldMDDef.internalVariableObjName][0][fldMDDef.internalVariableObjProperty]
+        }
+        if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.internalVariableSingleObjName!==undefined&&fldMDDef.internalVariableSingleObjName!==null&&
+            fldMDDef.internalVariableSingleObjProperty!==undefined&&fldMDDef.internalVariableSingleObjProperty!==null){
+            data=this[fldMDDef.internalVariableSingleObjName][fldMDDef.internalVariableSingleObjProperty]
+        }
+
+        var entries=[]
+        if (data!==undefined){
+            data.forEach(item =>{
+                console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
+                let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
+                blankEmpty.keyName=item[fldMDDef.propertyKeyName]
+
+                let valEn=''
+                fldMDDef.propertyKeyValueEn.forEach(item2=>{
+                    if (valEn.length>0){valEn=valEn+'-'}
+                    valEn=valEn+item[item2]
+                })
+                blankEmpty.keyValue_en=valEn
+                let valEs=''
+                fldMDDef.propertyKeyValueEn.forEach(item2=>{
+                    if (valEs.length>0){valEs=valEs+'-'}
+                    valEs=valEs+item[item2]
+                })
+                blankEmpty.keyValue_es=valEs
+                console.log('blankEmpty', blankEmpty)
+                entries.push(blankEmpty)
+            })
+        }
+        return entries        
+        //return this.buildFrontListFromData(fldMDDef, this.selectedProcedureInstance)
+    }
+
+    buildFrontListFromData(fldMDDef, data){
+        if (data===undefined){return []}
+        console.log('masterData', data)
         console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
         var entries=[]
         
-        if (this.masterData[fldMDDef.propertyNameContainer]===undefined){
+        if (data[fldMDDef.propertyNameContainer]===undefined){
             alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
             return entries
         }
         if (fldMDDef.filterInFirstLevel===undefined||fldMDDef.filterInFirstLevel!==true){
-            this.masterData[fldMDDef.propertyNameContainer].forEach(item =>{
+            data[fldMDDef.propertyNameContainer].forEach(item =>{
                // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
                 let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
                 blankEmpty.keyName=item[fldMDDef.propertyKeyName]
@@ -945,14 +1004,14 @@ export function TrazitGenericDialogs(base) {
                 entries.push(blankEmpty)
             })
         }else{
-            if ((fldMDDef.elementName===undefined||fldMDDef.elementName===null)&&
-                (fldMDDef.propertyNameContainerLevelfixValue===undefined||fldMDDef.propertyNameContainerLevelfixValue===null)
-                (fldMDDef.contextVariableName===undefined||fldMDDef.contextVariableName===null)
-                ((fldMDDef.internalVariableSimpleObjName===undefined||fldMDDef.internalVariableSimpleObjName===null) || (fldMDDef.internalVariableSimpleObjProperty===undefined||fldMDDef.internalVariableSimpleObjProperty===null))
-                ){
-                alert('Property elementName or propertyNameContainerLevelfixValue is mandatory when filterInFirstLevel=true. Review model definition')
-                return entries
-            }
+            // if ((fldMDDef.elementName===undefined||fldMDDef.elementName===null)&&
+            //     (fldMDDef.propertyNameContainerLevelfixValue===undefined||fldMDDef.propertyNameContainerLevelfixValue===null)
+            //     (fldMDDef.contextVariableName===undefined||fldMDDef.contextVariableName===null)
+            //     ((fldMDDef.internalVariableSimpleObjName===undefined||fldMDDef.internalVariableSimpleObjName===null) || (fldMDDef.internalVariableSimpleObjProperty===undefined||fldMDDef.internalVariableSimpleObjProperty===null))
+            //     ){
+            //     alert('Property elementName or propertyNameContainerLevelfixValue is mandatory when filterInFirstLevel=true. Review model definition')
+            //     return entries
+            // }
             let filterValue=undefined
             if (fldMDDef.propertyNameContainerLevelfixValue!==undefined){
                 filterValue=fldMDDef.propertyNameContainerLevelfixValue                
@@ -968,7 +1027,7 @@ export function TrazitGenericDialogs(base) {
                 filterPropertyName=fldMDDef.filterPropertyName
             }
             if (filterValue===undefined){return entries}
-            let result = this.masterData[fldMDDef.propertyNameContainer].find(item => item[filterPropertyName] === filterValue);
+            let result = data[fldMDDef.propertyNameContainer].find(item => item[filterPropertyName] === filterValue);
             if (result===undefined){return entries}
             //alert(filterValue)
             // if (fldMDDef.propertyNameContainerLevel2fixValue!==undefined&&fldMDDef.propertyNameContainerLevel3){

@@ -566,7 +566,16 @@ export function ButtonsFunctions(base) {
         + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
       //console.log('params', params)        
-      await this.fetchApi(params, false, queryDefinition).then(j => {
+      await this.fetchApi(params, false, queryDefinition).then(j => { 
+        if(queryDefinition.actionName==='ONE_PROCEDURE_DEFINITION'||queryDefinition.actionName==='ALL_PROCEDURES_DEFINITION'){
+          if (j.master_data!==undefined){
+            let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+            userSession.proc_management_masterdata={}
+            userSession.proc_management_masterdata=j.master_data
+        //    alert('added proc_management master_data in userSession, ButtonsFunctions 575')
+            sessionStorage.setItem('userSession', JSON.stringify(userSession))
+          }
+        }
         if (queryDefinition.notUseGrid!==undefined&&queryDefinition.notUseGrid===true){
           if (queryDefinition.variableName!==undefined){
               if (queryDefinition.endPointResponseVariableName!==undefined){
