@@ -24,6 +24,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       show: { type: Boolean },
       selectedViewDefinition: { type: Object },
       selectedItems: { type: Array },
+      moduleVersion: { type: Number },
+      moduleName: { type: String },
       procedureVersion: { type: Number },
       procedureName: { type: String },
       procInstanceName: { type: String }, // This one is for the buttons and should be fix to proc_management to get this procedure model
@@ -35,14 +37,18 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       mainview_definition: { type: Array},
       mainViewData:{type: Array},
       area: { type: String },
+      isProcManagement: { type: Boolean }
     };
   }
 
   constructor() {
     super();
     this.mainViewData=[]
+    this.isProcManagement=true
     this.procedureVersion=-1
     this.procedureName=""
+    this.moduleVersion=-1
+    this.moduleName=""
     let data={"fake": true}
     this.mainViewData.push(data)
     this.mainview_definition=[]
@@ -163,7 +169,6 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
   handleSessionStorageUpdated(event) {
     const { key, value } = event.detail;
-    alert(key)
     if (key === "newProcInstance") {
 
         this.selectedProcInstance = value;
@@ -186,9 +191,14 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           }
         }
         if (this.selectedViewDefinition.tabs!==undefined){
+          //.selectedItem=${this.mainViewData} 
+          this.mainViewData = {}
+          this.mainViewData=value;
+          this.objectByTabs.selectedItem = {}
+          this.objectByTabs.selectedItem = value
           this.objectByTabs.isProcManagement = true;
           this.objectByTabs.render();          
-        }else{
+        }else{          
           this.objecttabsComposition.isProcManagement = true;
           this.objecttabsComposition.render();
         }
@@ -221,6 +231,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     this.procedureName = this.selectedProcInstance.procedure_name;
     this.procedureVersion = this.selectedProcInstance.procedure_version;
     this.procInstanceName = this.selectedProcInstance.proc_instance_name;
+    this.moduleName = this.selectedProcInstance.module_name;
+    this.moduleVersion = this.selectedProcInstance.module_version;
 
     //console.log('this.selectedViewDefinition', this.selectedViewDefinition, 'procInstanceName', this.procInstanceName)
     if (this.objecttabsComposition == null) {
@@ -509,7 +521,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             <div style="flex-basis: auto; width: auto;">            
             <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.mainview_definition}
               .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-              .selectedItem=${this.mainViewData}      
+              .selectedItem=${this.mainViewData} .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}         
             </objecttabs-composition>  
               
             </div>
@@ -967,14 +979,15 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   ? html`    
                 ${this.selectedViewDefinition.tabs!==undefined?html`
                   <object-by-tabs .windowOpenable=true .sopsPassed=true .lang=${this.lang}
-                  .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion}
+                  .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} ?isProcManagement=${this.isProcManagement}
+                  .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
                   .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
                   .model=${this.selectedViewDefinition} .selectedItem=${this.selectedItem} 
                   .viewModelFromProcModel=${this.selectedViewDefinition} .config=${this.config}></object-by-tabs>                        
                 `:html`                  
                   <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
                   .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                  .selectedItem=${this.selectedItem}      
+                  .selectedItem=${this.selectedItem}     .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement} 
                   </objecttabs-composition>        
                 `}      
 
@@ -1025,8 +1038,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   ? html`            
                       <objecttabs-composition style="position:relative; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
                       .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                      .selectedItem=${this.selectedItem}      
-                      </objecttabs-composition>
+                      .selectedItem=${this.selectedItem}      .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
+                      </objecttabs-composition> 
                     `
                   : nothing}
               </div>

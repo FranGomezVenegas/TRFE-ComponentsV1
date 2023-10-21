@@ -123,6 +123,9 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             selectedItemLoaded:{type: Boolean},
             leftSplitDisplayed: { type: Boolean },
             filterCurrentData: {type: Object},
+            isProcManagement: { type: Boolean },
+            moduleVersion: { type: Number },
+            moduleName: { type: String },      
             procedureVersion: { type: Number },
             procedureName: { type: String }
       
@@ -295,11 +298,11 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
                   <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
                 `: nothing}
                 </div>
-            
                 ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
                     <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
                     .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
                     .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
+                    .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
                     .filterCurrentData=${this.filterCurrentData}>
                     </objecttabs-composition>              
     
@@ -320,6 +323,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`
             <objecttabs-composition .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
               .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName} .filterName=${this.filterName} 
+              .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
               .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
               .filterCurrentData=${this.filterCurrentData}>
             </objecttabs-composition>              
@@ -362,9 +366,11 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       }
       //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
       return html`
+
       <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
       .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
-      .selectedItem=${this.selectedItem}  .viewModelFromProcModel=${this.viewModelFromProcModel}   
+      .selectedItem=${this.selectedItem}  .viewModelFromProcModel=${this.viewModelFromProcModel} .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement} 
+      .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
       .filterCurrentData=${this.filterCurrentData}>
       </objecttabs-composition>      
       `

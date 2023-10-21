@@ -65,6 +65,8 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
       isProcManagement: { type: Boolean },
       filterCurrentData: {type: Object},
       selectedItemInView:{ type: Object },
+      moduleVersion: { type: Number },
+      moduleName: { type: String },
       procedureVersion: { type: Number },
       procedureName: { type: String }
     }
