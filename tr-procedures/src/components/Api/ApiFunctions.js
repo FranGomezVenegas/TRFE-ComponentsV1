@@ -21,14 +21,14 @@ export function ApiFunctions(base) {
             throw err
           }
         }).then(j => {
-          this.refreshMasterData(j, actionModel)
-          if (feedback) {
+          if (log) {
             this.dispatchEvent(new CustomEvent('success', {
               detail: {...j, log: log},
               bubbles: true,
               composed: true
             }))
           }
+          this.refreshMasterData(j, actionModel)
           return j
         }).catch(e => {
           if (e.message == "Unexpected end of JSON input") {

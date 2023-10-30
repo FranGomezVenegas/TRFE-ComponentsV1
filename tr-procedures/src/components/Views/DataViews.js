@@ -1106,7 +1106,10 @@ export function DataViews(base) {
         .text {
             position: relative; /* To allow text to flow normally */
             z-index: 0; /* Default z-index */
-        }          
+        }
+        .text span {
+          font-size: 14px;
+        }
         </style>
 
         <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">

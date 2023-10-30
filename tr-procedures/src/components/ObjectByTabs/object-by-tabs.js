@@ -31,7 +31,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         border-color:rgb(48, 116, 135);
         border-width: 0px 3px 3px 0px;
         --mdc-typography-button-text-transform: none;
-        --mdc-typography-button-font-size: 19px;
+        --mdc-typography-button-font-size: 14px;
         --mdc-theme-primary: rgb(3, 169, 244);       
       }
       sp-split-view {
@@ -91,7 +91,25 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       }  
       #rightSplit.collapsed {
         width: 96vw;
-      }      
+      } 
+      @media screen and (min-width: 992px) {
+        #rightSplit{
+          padding: 0px;
+          background-color:transparent;
+          width: calc(96vw - 220px);
+          transition: width 0.5s ease-in-out;
+          position: relative;
+        }  
+        #rightSplit.collapsed {
+          width: 96vw;
+        }
+      }  
+      @media screen and (max-width: 992px) {
+        #rightSplit {
+          width: 100%;
+        }
+      }
+
       #endpointName {
         box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
         overflow-y : auto;
@@ -100,7 +118,12 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         align-items: center;
         flex-direction: column;        
       }
-
+      .tabs-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding-left: 10px;
+      }
     `;
   }
     static get properties() {
@@ -297,7 +320,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
                   html`    
                   <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
                 `: nothing}
-                </div>
+                </div>                
                 ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
                     <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
                     .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
@@ -341,8 +364,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
           html`
             <div class="layout horizontal flex" style="position:relative; top:60px;">
             ${this.viewModelFromProcModel.tabs!==undefined&&this.viewModelFromProcModel.tabs.length>1 ?
-            html`
-              <div class="layout horizontal flex">
+            html`            
+            <div class="layout horizontal flex" style="position:relative; top:10px;">
                 ${this.viewModelFromProcModel.tabs.map(t => 
                   html`
                     <mwc-button class="tabBtn" dense unelevated 

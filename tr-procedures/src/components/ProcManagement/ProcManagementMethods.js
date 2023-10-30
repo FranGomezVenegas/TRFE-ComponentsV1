@@ -45,7 +45,6 @@ export function ProcManagementMethods(base) {
         variableName: "selectedProcInstance",
         endPointResponseVariableName: "all_platform_procedures_list",
       };
-
       await this.GetViewData(false, viewQuery);
       // As by the specification above, this query will run this endpoint and then moved the data from endPointResponseVariableName response entry
       // into variableName variable.
@@ -53,10 +52,7 @@ export function ProcManagementMethods(base) {
       let newProcInstance = this.selectedProcInstance?.[0];
       if (!newProcInstance) return;
 
-      sessionStorage.setItem(
-        "newProcInstance",
-        JSON.stringify(this.selectedProcInstance[0])
-      );
+      sessionStorage.setItem("newProcInstance", JSON.stringify(this.selectedProcInstance[0]));
 
       const event = new CustomEvent("session-storage-updated", {
         detail: {

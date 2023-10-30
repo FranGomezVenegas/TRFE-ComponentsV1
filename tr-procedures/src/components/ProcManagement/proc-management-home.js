@@ -24,8 +24,9 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       show: { type: Boolean },
       selectedViewDefinition: { type: Object },
       selectedItems: { type: Array },
-      moduleVersion: { type: Number },
-      moduleName: { type: String },
+      moduleeVersion: { type: Number },
+      isProcManagement: { type: Boolean },
+      moduleeName: { type: String },
       procedureVersion: { type: Number },
       procedureName: { type: String },
       procInstanceName: { type: String }, // This one is for the buttons and should be fix to proc_management to get this procedure model
@@ -43,7 +44,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
   constructor() {
     super();
-    this.mainViewData=[]
+    this.mainViewData=[]  
     this.isProcManagement=true
     this.procedureVersion=-1
     this.procedureName=""
@@ -170,16 +171,13 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
   handleSessionStorageUpdated(event) {
     const { key, value } = event.detail;
     if (key === "newProcInstance") {
-
         this.selectedProcInstance = value;
-        
         let selectedScripts = sessionStorage.getItem("selectedScripts");
         if (selectedScripts !== undefined && selectedScripts !== null) {
           selectedScripts = JSON.parse(selectedScripts);
           const procScript = selectedScripts.find(
             (script) => script.proc_instance_name === this.procInstanceName
           );
-
           if (procScript) {
             if (this.selectedViewDefinition.tabs!==undefined){
               this.objectByTabs.selectedItem = procScript;
@@ -194,16 +192,16 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           //.selectedItem=${this.mainViewData} 
           this.mainViewData = {}
           this.mainViewData=value;
-          this.objectByTabs.selectedItem = {}
-          this.objectByTabs.selectedItem = value
+          // this.objectByTabs.selectedItem = {}
+          // this.objectByTabs.selectedItem = value
+          this.selectedItem = value.definition;
           this.objectByTabs.isProcManagement = true;
-          this.objectByTabs.render();          
+          // this.objectByTabs.render();          
         }else{          
           this.objecttabsComposition.isProcManagement = true;
           this.objecttabsComposition.render();
         }
       }
-    
   }
 
   resetView() {
@@ -521,7 +519,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             <div style="flex-basis: auto; width: auto;">            
             <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.mainview_definition}
               .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-              .selectedItem=${this.mainViewData} .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}         
+              .selectedItem=${this.mainViewData}   moduleName=${this.moduleName}   moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
             </objecttabs-composition>  
               
             </div>
@@ -857,7 +855,14 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           }
           #leftSplit.collapsed {
             width: 0;
+            margin-bottom: 0;
           }
+          .mobileTitle {
+            display: none;
+          }
+          .desktopTitle {
+            display: block;
+          }          
         }
 
         #leftSplit.isMobile.collapsed {
@@ -932,6 +937,34 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           margin-top: 10px;
           font-weight: bold;
         }
+        @media screen and (max-width: 992px) {
+          #leftSplit {
+            height: 492px;
+          }
+          #leftSplit.collapsed {
+            height: 0;
+            margin-bottom: 0;
+          }
+          .mobileTitle {
+            display: block;
+            margin-bottom: 6px;
+          }
+          .desktopTitle {
+            display: none;
+          }
+          .mobileTitle.hidden {
+            display: none;
+          }
+        }     
+        @media screen and (min-width: 992px) {
+          #rightSplit {
+            width: calc(96vw - 290px);
+          }
+ 
+          #rightSplit.collapsed {
+            width: 96vw;
+          }
+        }           
       `,
     ];
   }
@@ -940,111 +973,61 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     let selectedItemArr=[]
     selectedItemArr.push(this.selectedItem)
     return html`
-      ${this.desktop
-        ? html`
-            <sp-split-view show-divider=${this.showDivider}>
-              <div
-                id="leftSplit"
-                class="${this.leftSplitDisplayed !== undefined &&
-                this.leftSplitDisplayed
-                  ? ""
-                  : "collapsed"}"
-              >
-                <div id="endpointName">
-                  ${this.selectedProcInstance.views.map(
-                    (item, index) => html`
-                      <div id="section${index}" class="accordion-item">
-                        <div
-                          class="layout horizontal center inline-flex wrap accordion-title"
-                        >
-                          ${this.sectionElement(item, index)}
-                        </div>
-                        ${this.sectionDetail(item, index)}
-                      </div>
-                    `
-                  )}
-                </div>
-              </div>
-              <div
-                id="rightSplit"
-                class="${this.leftSplitDisplayed !== undefined &&
-                this.leftSplitDisplayed
-                  ? ""
-                  : "collapsed"}"
-              >
-                ${this.selectedProcessTitle()}
-                ${this.selectedViewDefinition !== undefined &&
-                (this.selectedViewDefinition.view_definition !== undefined||this.selectedViewDefinition.tabs!==undefined) &&
-                this.selectedViewDefinition
-                  ? html`    
-                ${this.selectedViewDefinition.tabs!==undefined?html`
-                  <object-by-tabs .windowOpenable=true .sopsPassed=true .lang=${this.lang}
-                  .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} ?isProcManagement=${this.isProcManagement}
-                  .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-                  .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
-                  .model=${this.selectedViewDefinition} .selectedItem=${this.selectedItem} 
-                  .viewModelFromProcModel=${this.selectedViewDefinition} .config=${this.config}></object-by-tabs>                        
-                `:html`                  
-                  <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
-                  .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                  .selectedItem=${this.selectedItem}     .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement} 
-                  </objecttabs-composition>        
-                `}      
-
-            `
-                  : nothing}
-              </div>
-            </sp-split-view>
-          `
-        : html`
-            <sp-split-view show-divider=${this.showDivider}>
-              <div class="pane-top-mobile">
-                ${this.selectedProcessTitle()}
-                <div
-                  id="leftSplit"
-                  class="${classMap({
-                    collapsed:
-                      this.leftSplitDisplayed === undefined ||
-                      !this.leftSplitDisplayed,
-                    isMobile: true,
-                  })}"
-                >
-                  <div id="endpointName">
-                    ${this.selectedProcInstance.views.map(
-                      (item, index) => html`
-                        <div id="section${index}" class="accordion-item">
-                          <div
-                            class="layout horizontal center inline-flex wrap accordion-title"
-                          >
-                            ${this.sectionElement(item, index)}
-                          </div>
-                          ${this.sectionDetail(item, index)}
-                        </div>
-                      `
-                    )}
+      <sp-split-view show-divider=${this.showDivider}>
+        <div
+          id="leftSplit"
+          class="${this.leftSplitDisplayed !== undefined &&
+          this.leftSplitDisplayed
+            ? ""
+            : "collapsed"}"
+        >
+          <div class="mobileTitle">${this.selectedProcessTitle()}</div>
+          <div id="endpointName">
+            ${this.selectedProcInstance.views.map(
+              (item, index) => html`
+                <div id="section${index}" class="accordion-item">
+                  <div
+                    class="layout horizontal center inline-flex wrap accordion-title"
+                  >
+                    ${this.sectionElement(item, index)}
                   </div>
+                  ${this.sectionDetail(item, index)}
                 </div>
-              </div>
-              <div
-                id="rightSplit"
-                class="${this.leftSplitDisplayed !== undefined &&
-                this.leftSplitDisplayed
-                  ? ""
-                  : "collapsed"}"
-              >
-                ${this.selectedViewDefinition !== undefined &&
-                this.selectedViewDefinition.view_definition !== undefined &&
-                this.selectedViewDefinition
-                  ? html`            
-                      <objecttabs-composition style="position:relative; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
-                      .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                      .selectedItem=${this.selectedItem}      .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-                      </objecttabs-composition> 
-                    `
-                  : nothing}
-              </div>
-            </sp-split-view>
-          `}
+              `
+            )}
+          </div>
+        </div>
+        <div
+          id="rightSplit"
+          class="${this.leftSplitDisplayed !== undefined &&
+          this.leftSplitDisplayed
+            ? ""
+            : "collapsed"}"
+        >
+          <div class="desktopTitle">${this.selectedProcessTitle()}</div>
+          <div class="mobileTitle ${this.leftSplitDisplayed ? "hidden" : ""}">${this.selectedProcessTitle()}</div>
+          ${this.selectedViewDefinition !== undefined &&
+          (this.selectedViewDefinition.view_definition !== undefined||this.selectedViewDefinition.tabs!==undefined) &&
+          this.selectedViewDefinition
+            ? html`    
+          ${this.selectedViewDefinition.tabs!==undefined?html`
+            <object-by-tabs .windowOpenable=true .sopsPassed=true .lang=${this.lang}
+            .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} ?isProcManagement=${this.isProcManagement}
+            .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
+            .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName}
+            .model=${this.selectedViewDefinition} .selectedItem=${this.selectedItem}
+            .viewModelFromProcModel=${this.selectedViewDefinition} .config=${this.config}></object-by-tabs>                        
+          `:html`                  
+            <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
+            .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}    
+            .selectedItem=${this.selectedItem}     .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
+            </objecttabs-composition>        
+          `}      
+ 
+      `
+            : nothing}
+        </div>
+      </sp-split-view>
     `;
   }
 
@@ -1529,6 +1512,5 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
   get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition");}
   get objectByTabs() {return this.shadowRoot.querySelector("object-by-tabs");}
-  
 }
 window.customElements.define("proc-management-home", ProcManagementHome);

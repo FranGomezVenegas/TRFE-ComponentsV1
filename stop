@@ -1,0 +1,311 @@
+[33mcommit 4014b8ead7b142183e22104983ecec6f9745a43e[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Oct 21 04:24:55 2023 +0200
+
+    pass the module name and version info
+
+[33mcommit 760500d84442c390ddcc0c73206ef065321e3eb9[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Oct 21 04:22:59 2023 +0200
+
+    added master data for proc management and lists for master data and for selected item
+
+[33mcommit a30aad84b8965d14da22213f5818d7b2350a4d19[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Oct 21 01:42:28 2023 +0200
+
+    added dynamicFld1 and fixed issue about default values
+
+[33mcommit fcc03f0b1b6f4b3d13d5f2999f80ea5c81ce8f6e[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Oct 17 21:14:34 2023 +0200
+
+    fix issue in isDisabled logic, wrong || when &&
+
+[33mcommit fa92cda87f82b545b78f12d58fa3ab0d829a221f[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sun Oct 15 23:59:42 2023 +0200
+
+    add disabled attribute for genericDialog elements by model settings
+
+[33mcommit 54339109c3be1a9adb936fb5767f36526d7e0a2d[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sun Oct 15 23:59:07 2023 +0200
+
+    object by tabs with procName and version
+
+[33mcommit 62c004b5b0f245358145c56754c4eb194bf93081[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sun Oct 15 13:51:35 2023 +0200
+
+    fix for context variables using object-by-tabs procedureName and version
+
+[33mcommit bef6ca69b097eaf393728ef4bc1cea5e230af70c[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Oct 9 23:52:17 2023 +0200
+
+    minor changes
+
+[33mcommit c9ae07dcd0586a29d37bb340869db63f61a573dd[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Oct 9 23:51:33 2023 +0200
+
+    adapting definition area to new enhancements
+
+[33mcommit 5db3025d1845bee8682b29b06da2be5be83432a0[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Oct 7 01:10:29 2023 +0200
+
+    comment out console logs
+
+[33mcommit c2aaf46b6942eff01fa2c10dc040200427185910[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Wed Oct 4 09:43:46 2023 +0200
+
+    checkMandatoryFields is a bidimension array
+
+[33mcommit 0031e1ada2105d85b3a23906d4b1406b59e5065f[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 19 01:17:10 2023 +0200
+
+    let the img extension by any, not just svg
+
+[33mcommit c68fc0ca9c443cb94e1fefc6a2d61c533fb775fe[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Sep 18 18:50:05 2023 +0200
+
+    massive update for material design components version
+
+[33mcommit 86eea8a8e704a006e9a52e375783b70c1247d99a[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Sep 18 18:49:33 2023 +0200
+
+    styling for buttons with readonly table
+
+[33mcommit 3a0bb1cf48cc5a950b64d23c3c97349c8d4b4f1d[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Sep 18 18:48:19 2023 +0200
+
+    fix for alternativeProperty
+
+[33mcommit 57169eb4f2f76d94da358e8225111dffa091a3d6[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Sep 18 18:47:29 2023 +0200
+
+    icons for disabling mode
+
+[33mcommit 9e7b0178c74fada484b4cf241a85a734e880c422[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Sep 16 00:30:53 2023 +0200
+
+    iframes and cards, better look and feel
+
+[33mcommit 765cc948aa4e7b620f14af3e03e9ab43e3934018[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Fri Sep 15 23:14:59 2023 +0200
+
+    testing icons and tables with buttons alignment
+
+[33mcommit 6c9ffce8e0af5dbd311e5fb121c9146c106f5a07[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Fri Sep 15 23:13:57 2023 +0200
+
+    prioritize the certificationException rule
+
+[33mcommit d4ef9325fc865ebb018beb40b8b490b61e08fdb0[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Sep 14 00:46:55 2023 +0200
+
+    fixes in instruments model and improved to not add ObjectsToAdd when not required
+
+[33mcommit eead30d76e40a56a09dac82b39a61e2a31f3b342[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Sep 14 00:45:52 2023 +0200
+
+    fix for issue https://github.com/FranGomezVenegas/BackE-Issues/issues/939
+
+[33mcommit 5289874cd69ef706c30beba6e690f22f3daa8a1d[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Sep 9 23:40:55 2023 +0200
+
+    icons with svg disabled class
+
+[33mcommit 39a3292d68073823cdf0b70236116692b57c5b33[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Sep 7 16:26:22 2023 +0200
+
+    removing attachments, jsonParams not getting date from the grid, fixed
+
+[33mcommit ff729c35ba421c2661117d9b236fe221535d4d57[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Sep 7 01:01:37 2023 +0200
+
+    load local models
+
+[33mcommit 8781f8b382766cb3a1ab1628cf47cd9b5bfeb96d[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Sep 7 00:47:17 2023 +0200
+
+    open and remove attachment causing endpoints endless loop
+
+[33mcommit 9f7e3b9e6f1d08c4f359b18b6741b1a6711da7a8[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Sep 7 00:12:58 2023 +0200
+
+    wrong model passed when need to use currQuery as the rest
+
+[33mcommit dea2457d0ab21480a31ce5826dcaffd2a65d0162[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Sep 7 00:09:36 2023 +0200
+
+    wrong model passed when need to use currQuery as the rest
+
+[33mcommit cc35ff3efc23b265e4f0b1355e62b773b8867d10[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 23:38:44 2023 +0200
+
+    enable/disable svg icons
+
+[33mcommit 95a9f40dd2191a0ca65a9874e8e24ea271997964[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 23:30:13 2023 +0200
+
+    icon based on field value
+
+[33mcommit 432ecae22e5c6aa73ef4a26c610d86d78a1e9a15[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 22:14:43 2023 +0200
+
+    main and global issue for all gridWithButtons views
+
+[33mcommit 7f60db4de76fab28b8f299353d8d0c0ebadc38ba[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 22:13:44 2023 +0200
+
+    charts for data mining view
+
+[33mcommit 5bc7ac3226827c169d44e082b2f0a0d53f28e19a[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 22:12:27 2023 +0200
+
+    minor dev internal changes
+
+[33mcommit 28d58d3ec4a335144ea035357321051f72c626a8[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 22:10:49 2023 +0200
+
+    taking pictures, reset the window on closing and multilanguage labels
+
+[33mcommit 53c15eeb0af985ea43db11fec68766f6aba7d28a[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 21:51:08 2023 +0200
+
+    dev, local models
+
+[33mcommit d00f43695ae3706946b2075901944b3fc549592a[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Sep 5 18:02:20 2023 +0200
+
+    fix for attachments and element default value when not present
+
+[33mcommit 0699229381a7d37bf8ef2972440843aeca28efbb[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Aug 31 17:23:35 2023 +0200
+
+    dialog to take pictures
+
+[33mcommit 31e23e58df01f56f3fbb9bff5f16ae096b3a205d[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Aug 31 17:22:30 2023 +0200
+
+    dialog to take pictures
+
+[33mcommit 53ca5f2306884f462faf9489ef80920eb592f15f[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Aug 31 17:21:50 2023 +0200
+
+    trazit styling
+
+[33mcommit 483d4724915c0086e96431d2ae03115860058be7[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Aug 31 17:20:48 2023 +0200
+
+     minor changes
+
+[33mcommit d3081a7028983a868f5d80d7ef877bac438e389e[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Thu Aug 31 17:19:53 2023 +0200
+
+    new dialog for taking pictures
+
+[33mcommit 085d847ffbd3c07f3dd83d743f1f436e401ce787[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Wed Aug 30 10:22:36 2023 +0200
+
+    minor local dev changes
+
+[33mcommit 098aebd6b16b4827f877fa72bf3488bb02fb821c[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Wed Aug 30 10:21:03 2023 +0200
+
+    user session progress
+
+[33mcommit d27bbca2d7bafb599dc5374dd65bf0f82c94e290[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Wed Aug 30 10:20:29 2023 +0200
+
+    user session progress
+
+[33mcommit e90012a60160791be9e2ac873ba2c40d9b4fa9a0[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Wed Aug 30 10:19:02 2023 +0200
+
+    added filter components and downloadble-printable for object by tabs
+
+[33mcommit a1ef01f1743fd3774f4053e6922c384063c7e95a[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Wed Aug 30 10:17:21 2023 +0200
+
+    fix printing button issue
+
+[33mcommit 69fa042f197ce6832aba3e712f394a96e06f79f0[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Tue Aug 29 01:06:42 2023 +0200
+
+    fix for refreshMasterData to return when procInstanceName not present
+
+[33mcommit e12d3c3a2418e0662ec9f25d3e812cf01764cb1a[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Aug 28 21:59:02 2023 +0200
+
+    fix printing button bug to open preview although preview requires be refine
+
+[33mcommit f98d83629e583c31fa809cbcab929f4a7c394671[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Mon Aug 28 19:41:24 2023 +0200
+
+    qrcode scanner fixed
+
+[33mcommit 9f36877f14f79402236e705a4996b93703a514fb[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Aug 26 13:25:50 2023 +0200
+
+     added left pane results on running the filter and allow the dataviews no be dynamic by checking that the object contains certain columns by mantadoryPropertiesInVariableName array
+
+[33mcommit 1339ddbea1b7eab7bce4adec2e813f8004e6ba54[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Aug 26 13:23:12 2023 +0200
+
+    changed names do not confuse it with coa view
+
+[33mcommit c60186319c1dc1aeac08083c5e6462d11c52d467[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Aug 26 13:22:31 2023 +0200
+
+    variableToSetResponse new property to allow set one variable with the response object
+
+[33mcommit c6ce3e2dbd0218a39a81cd4c0867e86b89d6d8f9[m
+Author: frangomezvenegas <info.fran.gomez@gmail.com>
+Date:   Sat Aug 26 13:20:51 2023 +0200
+
+    images in icons folder by any field value
