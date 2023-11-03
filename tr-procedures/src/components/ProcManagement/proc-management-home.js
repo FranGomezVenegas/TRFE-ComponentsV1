@@ -70,6 +70,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   "certificationException": true,
                   "requiresDialog": true,
                   "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                  "secondaryActionToPerform": {"name": "refreshMainView"},
                   "endPointParams": [
                 { "argumentName": "procedureName", "element": "text1", "defaultValue": ""  },
                 { "argumentName": "procedureVersion", "fixValue": "1"},
@@ -133,7 +134,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       area: "app",
       label_en: "All Procedures Definition",
       label_es: "Definición de todos los procesos",
-      endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",
+      endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",      
       notUseGrid: true,
       variableName: "allProcedures",
       endPointResponseVariableName: "all_platform_procedures_list",
@@ -161,11 +162,17 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     } else {
       this.GetViewData(this.viewModelFromProcModel.viewQuery);
     }
-
+    window.addEventListener(
+      "refresh-main-view",
+      this.refreshMainView.bind(this)
+    );
     window.addEventListener(
       "session-storage-updated",
       this.handleSessionStorageUpdated.bind(this)
     );
+  }
+  refreshMainView(){
+    this.GetViewData(this.viewModelFromProcModel.viewQuery)
   }
 
   handleSessionStorageUpdated(event) {
@@ -833,7 +840,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         .splitter {
           background-color: blue;
         }
-        .sp-split-view.collapsed {
+      .sp-split-view.collapsed {
           width: 0;
         }
         .pane-top-mobile {
@@ -862,7 +869,28 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           }
           .desktopTitle {
             display: block;
-          }          
+          }
+        }
+
+        @media screen and (max-width: 992px) {
+          #leftSplit {
+            max-height: 2000px;
+            margin-bottom: 10px;
+          }
+          #leftSplit.collapsed {
+            margin-bottom: 0;
+            max-height: 0px;
+          }
+          .mobileTitle {
+            display: block;
+            margin-bottom: 6px;
+          }
+          .desktopTitle {
+            display: none;
+          }
+          .mobileTitle.hidden {
+            display: none;
+          }
         }
 
         #leftSplit.isMobile.collapsed {
@@ -900,10 +928,14 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           #rightSplit {
             width: calc(96vw - 290px);
           }
+
+          #rightSplit.collapsed {
+            width: 96vw;
+          }
         }
-        #rightSplit.collapsed {
-          width: 96vw;
-        }
+        
+       
+		 
         #endpointName {
           box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
           overflow-y: auto;
@@ -937,37 +969,38 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           margin-top: 10px;
           font-weight: bold;
         }
-        @media screen and (max-width: 992px) {
-          #leftSplit {
-            height: 492px;
-          }
-          #leftSplit.collapsed {
-            height: 0;
-            margin-bottom: 0;
-          }
-          .mobileTitle {
-            display: block;
-            margin-bottom: 6px;
-          }
-          .desktopTitle {
-            display: none;
-          }
-          .mobileTitle.hidden {
-            display: none;
-          }
-        }     
-        @media screen and (min-width: 992px) {
-          #rightSplit {
-            width: calc(96vw - 290px);
-          }
+											  
+					  
+						  
+		   
+								
+					  
+							 
+		   
+						
+						   
+							   
+		   
+						 
+						  
+		   
+							   
+						  
+		   
+			  
+											  
+					   
+									  
+		   
  
-          #rightSplit.collapsed {
-            width: 96vw;
-          }
-        }           
+								 
+						
+		   
+					
       `,
     ];
   }
+
 
   selectedProcInstanceMainView() {
     let selectedItemArr=[]

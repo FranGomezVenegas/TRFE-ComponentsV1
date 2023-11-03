@@ -34,6 +34,16 @@ export function ProcManagementMethods(base) {
       // All actions should perform the refresh below to refresh the data in the view/winzdow then it can do anything extra if required
       await this.refreshSelProcData();
     }
+    
+    async refreshMainView() { 
+      const event = new CustomEvent("refresh-main-view", {
+        detail: {
+          key: "newProcInstance",
+          value: newProcInstance,
+        },
+      });
+      window.dispatchEvent(event);
+    }
 
     async refreshSelProcData() {
       let viewQuery = {
