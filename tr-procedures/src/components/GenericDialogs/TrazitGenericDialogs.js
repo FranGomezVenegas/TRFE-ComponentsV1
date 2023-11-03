@@ -160,7 +160,8 @@ export function TrazitGenericDialogs(base) {
         background-color: 4fcad029;
       }       
     </style>
-        <tr-dialog id="genericDialog"  @opened=${() => {this.defaultValue()}}  ?open=${this.openGenericDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
+        <tr-dialog id="genericDialog"  
+            @opened=${() => {this.defaultValue()}}  ?open=${this.openGenericDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
         
         ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true ?
         html`
@@ -518,51 +519,75 @@ export function TrazitGenericDialogs(base) {
                         <mwc-textfield id="daterange5dateStart" label="${this.fieldLabel(fld.daterange5.dateStart)}" type="date"></mwc-textfield>
                         <mwc-textfield id="daterange5dateEnd" label="${this.fieldLabel(fld.daterange5.dateEnd)}" type="date"></mwc-textfield>
                         </div>
-                    `}                                   
-
-                ${!fld.list1 ?html``: html`        
-                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected} ?disabled=${this.isFieldDisabled(fld.list1)}  >
+                `}
+                ${!fld.list1 ?html``: html`       
+                <div class="layout horizontal flex center-center"> 
+                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected} ?disabled=${this.isFieldDisabled(fld.list1)}                     
+                        style="width:100%;">
                         ${this.listEntries(fld.list1)}</mwc-select>`}  
+                </div>
                 ${!fld.list2 ?html``: html`        
-                    <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}" ?disabled=${this.isFieldDisabled(fld.list2)}>
-                        ${this.listEntries(fld.list2)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list2" label="${this.fieldLabel(fld.list2)}" ?disabled=${this.isFieldDisabled(fld.list2)}>
+                        ${this.listEntries(fld.list2)}</mwc-select>`}
+                </div>  
                 ${!fld.list3 ?html``: html`        
-                    <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list3)}>
-                        ${this.listEntries(fld.list3)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list3" label="${this.fieldLabel(fld.list3)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list3)}>
+                        ${this.listEntries(fld.list3)}</mwc-select>`}
+                </div>  
                 ${!fld.list4 ?html``: html`        
-                    <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list4)}>
-                        ${this.listEntries(fld.list4)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list4" label="${this.fieldLabel(fld.list4)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list4)}>
+                        ${this.listEntries(fld.list4)}</mwc-select>`}
+                </div>  
                 ${!fld.list5 ?html``: html`        
-                    <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list5)}>
-                        ${this.listEntries(fld.list5)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list5" label="${this.fieldLabel(fld.list5)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list5)}>
+                        ${this.listEntries(fld.list5)}</mwc-select>`}
+                </div>  
                 ${!fld.list6 ?html``: html`        
-                    <mwc-select id="list6" label="${this.fieldLabel(fld.list6)}" ?disabled=${this.isFieldDisabled(fld.list6)}>
-                        ${this.listEntries(fld.list6)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list6" label="${this.fieldLabel(fld.list6)}" ?disabled=${this.isFieldDisabled(fld.list6)}>
+                        ${this.listEntries(fld.list6)}</mwc-select>`}
+                </div>  
                 ${!fld.list7 ?html``: html`        
-                    <mwc-select id="list7" label="${this.fieldLabel(fld.list7)}" ?disabled=${this.isFieldDisabled(fld.list7)}>
-                        ${this.listEntries(fld.list7)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list7" label="${this.fieldLabel(fld.list7)}" ?disabled=${this.isFieldDisabled(fld.list7)}>
+                        ${this.listEntries(fld.list7)}</mwc-select>`}
+                </div>  
                 ${!fld.list8 ?html``: html`        
-                    <mwc-select id="list8" llabel="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)}>
-                        ${this.listEntries(fld.list8)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list8" llabel="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)}>
+                        ${this.listEntries(fld.list8)}</mwc-select>`}
+                </div>  
                 ${!fld.list9 ?html``: html`        
-                    <mwc-select id="list9" label="${this.fieldLabel(fld.list9)}" ?disabled=${this.isFieldDisabled(fld.list9)}>
-                        ${this.listEntries(fld.list9)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list9" label="${this.fieldLabel(fld.list9)}" ?disabled=${this.isFieldDisabled(fld.list9)}>
+                        ${this.listEntries(fld.list9)}</mwc-select>`}
+                </div>  
                 ${!fld.list10 ?html``: html`        
-                    <mwc-select id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)}>
-                        ${this.listEntries(fld.list10)}</mwc-select>`}  
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)}>
+                        ${this.listEntries(fld.list10)}</mwc-select>`}
+                </div>  
                 ${!fld.list1SelectedRow ?html``: html`        
-                    <mwc-select id="list1SelectedRow" label="${this.fieldLabel(fld.list1SelectedRow)}">
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list1SelectedRow" label="${this.fieldLabel(fld.list1SelectedRow)}">
                         ${this.listEntriesForUom(fld.list1SelectedRow, 'list1SelectedRow')}</mwc-select>`}  
                 ${!fld.list2SelectedRow ?html``: html`        
-                    <mwc-select id="list2SelectedRow" label="${this.fieldLabel(fld.list2SelectedRow)}">
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list2SelectedRow" label="${this.fieldLabel(fld.list2SelectedRow)}">
                         ${this.listEntriesForUom(fld.list2SelectedRow, 'list2SelectedRow')}</mwc-select>`}  
                 ${!fld.list3SelectedRow ?html``: html`        
-                    <mwc-select id="list3SelectedRow" label="${this.fieldLabel(fld.list3SelectedRow)}">
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list3SelectedRow" label="${this.fieldLabel(fld.list3SelectedRow)}">
                         ${this.listEntriesForUom(fld.list3SelectedRow, 'list3SelectedRow')}</mwc-select>`}  
                 
                 ${!fld.listMDSamplerPersonalAreas ?
                 html``: html`        
-                    <mwc-select id="listMDSamplerPersonalAreas" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDSamplerPersonalAreas&&fld.listMDSamplerPersonalAreas["label_" + this.lang]}">
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="listMDSamplerPersonalAreas" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDSamplerPersonalAreas&&fld.listMDSamplerPersonalAreas["label_" + this.lang]}">
                     ${this.masterData.samplerPersonalAreas.map((c, i) =>
                     html`<mwc-list-item value="${c.key}" ?selected=${i == 0}>${c["label_"+this.lang]}</mwc-list-item>`
                     )}
