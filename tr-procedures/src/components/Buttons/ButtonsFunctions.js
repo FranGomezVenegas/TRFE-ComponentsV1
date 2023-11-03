@@ -8,6 +8,7 @@ export function ButtonsFunctions(base) {
     return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
 
     getButtonForRows(actions, data, isProcManagement) {   
+//console.log('getButtonForRows', 'actions', actions, 'data', data)
       if (actions===undefined){actions=this.viewModelFromProcModel}  
       return html`
         <style>
@@ -94,7 +95,7 @@ export function ButtonsFunctions(base) {
         </style>     
           ${actions!==undefined&&actions.map(action =>
           html`
-          ${this.btnHidden(action) ? nothing : 
+          ${this.btnHiddenForRows(action, data) ? nothing : 
           html`${action.button ?
               html`${action.button.icon ?
               html`<mwc-icon-button 
@@ -102,14 +103,14 @@ export function ButtonsFunctions(base) {
                   icon="${action.button.icon}" 
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, actions)}
-                  ?hidden=${this.btnHidden(action)}
+                  ?hidden=${this.btnHiddenForRows(action, data)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-icon-button>` :
               html`${action.button.img ?
                   html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   title="${action.button.title['label_'+this.lang]}" 
                   ?disabled=${this.btnDisabled(action, actions)}
-                  ?hidden=${this.btnHidden(action)}
+                  ?hidden=${this.btnHiddenForRows(action, data)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
@@ -117,7 +118,7 @@ export function ButtonsFunctions(base) {
                   label="${action.button.title['label_'+this.lang]}" 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
-                  ?hidden=${this.btnHidden(action)}
+                  ?hidden=${this.btnHiddenForRows(action, data)}
                   @click=${()=>this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-button>`
               }`
               }` :
@@ -343,41 +344,166 @@ export function ButtonsFunctions(base) {
           }
         }
         return d
-    }    
+    }   
+    btnHiddenForRows(action, selRow) { 
+//console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)    
+      let d = false
+      if (selRow!==undefined&&selRow["No Data"]!==undefined){return true}
+      if (action.button.showWhenSelectedItem!==undefined) {
+        //console.log('btnHidden')
+        if (selRow===undefined || selRow===undefined){return true} // keep hide when no selection
+        if (Array.isArray(action.button.showWhenSelectedItem)) {          
+          action.button.showWhenSelectedItem.forEach(rowArray => {
+            var curValue=String(rowArray.value).split('|')
+//console.log(rowArray.value, selRow[rowArray.column])
+
+          if (rowArray.value==="*NULL*"){
+
+            if (selRow[rowArray.column].length==0){
+              d=false
+            }
+          }else if (rowArray.value==="*NOT_NULL*"){
+            if (selRow[rowArray.column].length>0){
+              d=false
+            }
+          }else{
+            if (curValue.includes(selRow[rowArray.column])) {              
+              d=true              
+            }else{
+              d=false
+            }
+          }
+          })
+          return d
+        }else{ //then it is json object
+          if (action.button.showWhenSelectedItem.value==="*NULL*"){
+            if (selRow[action.button.showWhenSelectedItem.column].length==0){
+              return false
+            }else{return true}
+          }else if (action.button.showWhenSelectedItem.value==="*NOT_NULL*"){
+            if (selRow[action.button.showWhenSelectedItem.column].length>0){
+              return false
+            }else{return true}
+          }else if (selRow[action.button.showWhenSelectedItem.column] !== action.button.showWhenSelectedItem.value) {
+            return true
+          }else{
+            return false
+          }
+        }
+      }else if (action.button.hideWhenSelectedItem!==undefined) {
+        if (selRow===undefined || selRow===undefined){return true} // keep shown when no selection
+        if (Array.isArray(action.button.hideWhenSelectedItem)) {        
+          action.button.hideWhenSelectedItem.forEach(rowArray => {
+            if (rowArray.value==="*NULL*"){
+              if (selRow[rowArray.column].length==0){
+                d=true
+              }else{d=false}
+            }else if (rowArray.value==="*NOT_NULL*"){
+              if (selRow[rowArray.column].length>0){
+                d=true
+              }else{d=false}
+            }else{
+              if (selRow[rowArray.column] != rowArray.value) {
+                d=true
+              }else{d=false}
+            }
+          })
+          return !d
+        }else{ //then it is json object
+          if (action.button.hideWhenSelectedItem.value==="*NULL*"){
+            if (selRow[action.button.hideWhenSelectedItem.column].length==0){
+            return true
+          }else{
+            return false
+          }        
+          }else if (action.button.hideWhenSelectedItem.value==="*NOT_NULL*"){
+            if (selRow[action.button.hideWhenSelectedItem.column].length>0){
+              return true
+            }else{
+              return false
+            }        
+          }else if (selRow[action.button.hideWhenSelectedItem.column] === action.button.hideWhenSelectedItem.value) {
+            return true
+          }else{
+            return false
+          }        
+        }  
+      } else {
+          d = false
+      }
+      return d
+    }       
     btnHidden(action) {      
       let d = false
-      if (action.button.showWhenSelectedItem) {
+      if (action.button.showWhenSelectedItem!==undefined) {
         //console.log('btnHidden')
         if (this.selectedItems===undefined || this.selectedItems[0]===undefined){return true} // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {          
           action.button.showWhenSelectedItem.forEach(rowArray => {
             var curValue=String(rowArray.value).split('|')
 //console.log(rowArray.value, this.selectedItems[0][rowArray.column])
+
+          if (rowArray.value==="*NULL*"){
+            if (this.selectedItems[0][rowArray.column].length==0){
+              d=true
+            }
+          }else if (rowArray.value==="*NOT_NULL*"){
+            if (this.selectedItems[0][rowArray.column].length>0){
+              d=true
+            }
+          }else{
             if (curValue.includes(this.selectedItems[0][rowArray.column])) {              
               d=true              
             }else{
               d=false
             }
+          }
           })
           return d
         }else{ //then it is json object
-          if (this.selectedItems[0][action.button.showWhenSelectedItem.column] !== action.button.showWhenSelectedItem.value) {
+          if (action.button.showWhenSelectedItem.value==="*NULL*"){
+            if (this.selectedItems[0][action.button.showWhenSelectedItem.column].length==0){
+              d=true
+            }
+          }else if (action.button.showWhenSelectedItem.value==="*NOT_NULL*"){
+            if (this.selectedItems[0][action.button.showWhenSelectedItem.column].length>0){
+              d=true
+            }
+          }else if (this.selectedItems[0][action.button.showWhenSelectedItem.column] !== action.button.showWhenSelectedItem.value) {
             return true
           }else{
             return false
           }
         }
-      }else if (action.button.hideWhenSelectedItem) {
+      }else if (action.button.hideWhenSelectedItem!==undefined) {
         if (this.selectedItems===undefined || this.selectedItems[0]===undefined){return true} // keep shown when no selection
         if (Array.isArray(action.button.hideWhenSelectedItem)) {        
           action.button.hideWhenSelectedItem.forEach(rowArray => {
-            if (this.selectedItems[0][rowArray.column] != rowArray.value) {
-              d=true              
+            if (rowArray.value==="*NULL*"){
+              if (this.selectedItems[0][rowArray.column].length==0){
+                d=true
+              }
+            }else if (rowArray.value==="*NOT_NULL*"){
+              if (this.selectedItems[0][rowArray.column].length>0){
+                d=true
+              }
+            }else{
+              if (this.selectedItems[0][rowArray.column] != rowArray.value) {
+                d=true
+              }
             }
           })
           return !d
         }else{ //then it is json object
-          if (this.selectedItems[0][action.button.hideWhenSelectedItem.column] === action.button.hideWhenSelectedItem.value) {
+          if (action.button.hideWhenSelectedItem.value==="*NULL*"){
+            if (this.selectedItems[0][action.button.hideWhenSelectedItem.column].length==0){
+              d=true
+            }
+          }else if (action.button.hideWhenSelectedItem.value==="*NOT_NULL*"){
+            if (this.selectedItems[0][action.button.hideWhenSelectedItem.column].length>0){
+              d=true
+            }
+          }else if (this.selectedItems[0][action.button.hideWhenSelectedItem.column] === action.button.hideWhenSelectedItem.value) {
             return true
           }else{
             return false
