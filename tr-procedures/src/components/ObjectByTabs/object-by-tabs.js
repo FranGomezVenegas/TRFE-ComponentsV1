@@ -81,17 +81,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       /* Apply the collapse class to the left side area div when the button is clicked */
       .collapse-button:hover + #leftSplit {
         width: 0;
-      }      
-      #rightSplit{
-        padding: 0px;
-        background-color:transparent;
-        width: calc(96vw - 220px);
-        transition: width 0.5s ease-in-out;
-        position: relative;
       }  
-      #rightSplit.collapsed {
-        width: 96vw;
-      } 
       @media screen and (min-width: 992px) {
         #rightSplit{
           padding: 0px;
@@ -108,8 +98,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         #rightSplit {
           width: 100%;
         }
-      }
-
+      }  
+            
       #endpointName {
         box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
         overflow-y : auto;
@@ -308,7 +298,6 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
               
               <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
                 <div id="document">
-                ${this.title()}
                 ${this.tabsBlock()}  
                 <div class="layout horizontal">
                 ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?
@@ -320,7 +309,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
                   html`    
                   <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
                 `: nothing}
-                </div>                
+                </div>
                 ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
                     <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
                     .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
@@ -335,12 +324,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             </sp-split-view>
           `}
       ` : html`        
-          <div id="mobile">
-          <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
-          </div>
-        </div>
         <div id="rightSplit">
-        ${this.title()}
         ${this.tabsBlock()}  
 
         ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`
@@ -362,10 +346,10 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         return html`
         ${this.viewModelFromProcModel.tabs ?
           html`
-            <div class="layout horizontal flex" style="position:relative; top:60px;">
-            ${this.viewModelFromProcModel.tabs!==undefined&&this.viewModelFromProcModel.tabs.length>1 ?
-            html`            
             <div class="layout horizontal flex" style="position:relative; top:10px;">
+            ${this.viewModelFromProcModel.tabs!==undefined&&this.viewModelFromProcModel.tabs.length>1 ?
+            html`
+				<div class="tabs-container">
                 ${this.viewModelFromProcModel.tabs.map(t => 
                   html`
                     <mwc-button class="tabBtn" dense unelevated 
