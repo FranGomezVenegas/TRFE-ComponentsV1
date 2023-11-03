@@ -53,7 +53,7 @@ export function ApiFunctions(base) {
         if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
           return
         } 
-        console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
+       // console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
         let findProcIndex = 0
         if (actionModel.area!==undefined){          

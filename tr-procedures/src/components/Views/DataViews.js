@@ -910,7 +910,7 @@ export function DataViews(base) {
     }
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
-      console.log('elem', elem, 'data', dataArr)
+     // console.log('elem', elem, 'data', dataArr)
       if (isSecondLevel === undefined) {
         isSecondLevel = false;
       }
@@ -1433,7 +1433,7 @@ export function DataViews(base) {
     }
 
     dataContainsRequiredProperties(elem, dataArr){
-      console.log('dataContainsRequiredProperties', elem.mantadoryPropertiesInVariableName, dataArr[0])
+      //console.log('dataContainsRequiredProperties', elem.mantadoryPropertiesInVariableName, dataArr[0])
       if (dataArr===undefined){return false}
       if (elem.mantadoryPropertiesInVariableName===undefined){return true}
       //let rValue=true
@@ -1503,7 +1503,7 @@ export function DataViews(base) {
       });
     }
     buttonsOnly(elem, data) {
-      console.log('buttonsOnly', 'elem', elem, 'data', data)
+      //console.log('buttonsOnly', 'elem', elem, 'data', data)
       return html`
         ${elem === undefined || elem.title === undefined
           ? nothing

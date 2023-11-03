@@ -82,7 +82,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
     this.filterCurrentData={}
   }
   render(){
-    console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
+    //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
     return html`
       <div>
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
