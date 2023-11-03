@@ -98,7 +98,17 @@ export const Stock =
 				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
 			  }			
 			}},
-			{"text1": { "label_en": "Reference", "label_es": "Referencia" }},
+			{"list2": { "label_en": "Reference", "label_es": "Referencia",
+			  "valuesFromMasterData": {
+				"propertyNameContainer": "category_and_references",
+				"propertyNameContainerLevelPropertyKeyName": "name",
+				"filterDependency": ["list1"],
+				"selectedEntryFromFilterPropertyName": "inv_reference",
+				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
+			  }			
+
+			}
+			},
             {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
 			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true , "min_allowed":0, "max_dp":2}},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
