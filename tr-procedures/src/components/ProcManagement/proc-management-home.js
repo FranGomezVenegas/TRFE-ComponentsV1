@@ -1003,6 +1003,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
 
   selectedProcInstanceMainView() {
+    console.log('this.selectedItem', this.selectedItem)
     let selectedItemArr=[]
     selectedItemArr.push(this.selectedItem)
     return html`
