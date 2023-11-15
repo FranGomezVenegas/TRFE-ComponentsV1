@@ -453,6 +453,7 @@ export class PlatformLogin extends CommonCore {
     return this.fetchApiPost(urlParams, false, formData2).then(j => {
       if (j && !j.is_error) {
         sessionStorage.setItem('partialToken', JSON.stringify(j))
+        
       } else {
         if (document.fullscreenElement) {
           document.exitFullscreen();
@@ -513,13 +514,14 @@ export class PlatformLogin extends CommonCore {
         this.dispatchEvent(new CustomEvent('success', {
           detail: { ...j, urlParams: urlParams, log: false, waiting: true },
           bubbles: true,
-          composed: true
+          composed: true          
         }))
         sessionStorage.setItem("userSession", JSON.stringify({
           ...j,
           userName: this.user.value,
           userRole: this.role,
-          dbName: this.config.dbName
+          dbName: this.config.dbName,
+          backendUrl: this.config.backendUrl
         }))
       } else {
         if (document.fullscreenElement) {

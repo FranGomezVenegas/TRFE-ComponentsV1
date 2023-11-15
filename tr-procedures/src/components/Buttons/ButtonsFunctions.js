@@ -903,9 +903,15 @@ export function ButtonsFunctions(base) {
             alert(endPointUrl)
             return
         }
-        let params = this.config.backendUrl + endPointUrl
-          + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
-          + '&'+ new URLSearchParams(credDialogArgs)
+        let params = ""
+        if (this.config!==undefined&&this.config.backendUrl!==undefined){
+          params = this.config.backendUrl + endPointUrl
+        }else{
+          let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+          params = userSession.backendUrl + endPointUrl
+        }
+        params = params + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
+        + '&'+ new URLSearchParams(credDialogArgs)
         //console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
         
         await this.fetchApi(params).then(j => {

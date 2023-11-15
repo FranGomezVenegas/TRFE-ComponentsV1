@@ -73,7 +73,12 @@ export function ApiFunctions(base) {
         if (action===undefined){return}
         let extraParams={}  
         extraParams.actionName=action.actionName
-        extraParams.dbName= this.config.dbName
+        if (this.config!==undefined&&this.config.dbName!==undefined){
+          extraParams.dbName= this.config.dbName
+        }else{
+          let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+          extraParams.dbName = userSession.dbName
+        }   
         if (excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
           extraParams.procInstanceName = this.procInstanceName
         }
