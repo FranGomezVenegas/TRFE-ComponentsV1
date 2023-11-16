@@ -24,9 +24,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       show: { type: Boolean },
       selectedViewDefinition: { type: Object },
       selectedItems: { type: Array },
-      moduleeVersion: { type: Number },
-      isProcManagement: { type: Boolean },
-      moduleeName: { type: String },
+      moduleVersion: { type: Number },
+      moduleName: { type: String },
       procedureVersion: { type: Number },
       procedureName: { type: String },
       procInstanceName: { type: String }, // This one is for the buttons and should be fix to proc_management to get this procedure model
@@ -38,13 +37,17 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       mainview_definition: { type: Array},
       mainViewData:{type: Array},
       area: { type: String },
-      isProcManagement: { type: Boolean }
+      isProcManagement: { type: Boolean },
+      selectedItem: { type: Object },
+      selectedCompositionView: { type: Object },
+      selectedViewIndex: {type: Number},
+      selectedTestIndex: {type: Number}
     };
   }
 
   constructor() {
     super();
-    this.mainViewData=[]  
+    this.mainViewData=[]
     this.isProcManagement=true
     this.procedureVersion=-1
     this.procedureName=""
@@ -70,7 +73,6 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                   "certificationException": true,
                   "requiresDialog": true,
                   "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-                  "secondaryActionToPerform": {"name": "refreshMainView"},
                   "endPointParams": [
                 { "argumentName": "procedureName", "element": "text1", "defaultValue": ""  },
                 { "argumentName": "procedureVersion", "fixValue": "1"},
@@ -134,7 +136,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       area: "app",
       label_en: "All Procedures Definition",
       label_es: "Definición de todos los procesos",
-      endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",      
+      endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",
       notUseGrid: true,
       variableName: "allProcedures",
       endPointResponseVariableName: "all_platform_procedures_list",
@@ -162,29 +164,26 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     } else {
       this.GetViewData(this.viewModelFromProcModel.viewQuery);
     }
-    window.addEventListener(
-      "refresh-main-view",
-      this.refreshMainView.bind(this)
-    );
+
     window.addEventListener(
       "session-storage-updated",
       this.handleSessionStorageUpdated.bind(this)
     );
   }
-  refreshMainView(){
-    this.GetViewData(this.viewModelFromProcModel.viewQuery)
-  }
 
   handleSessionStorageUpdated(event) {
     const { key, value } = event.detail;
     if (key === "newProcInstance") {
+
         this.selectedProcInstance = value;
+        
         let selectedScripts = sessionStorage.getItem("selectedScripts");
         if (selectedScripts !== undefined && selectedScripts !== null) {
           selectedScripts = JSON.parse(selectedScripts);
           const procScript = selectedScripts.find(
             (script) => script.proc_instance_name === this.procInstanceName
           );
+
           if (procScript) {
             if (this.selectedViewDefinition.tabs!==undefined){
               this.objectByTabs.selectedItem = procScript;
@@ -209,11 +208,13 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           this.objecttabsComposition.render();
         }
       }
+      
   }
 
   resetView() {
     this.selectedProcInstance = undefined;
     this.selectedViewDefinition = undefined;
+    this.selectedCompositionView = undefined;
     //this.GetViewData(this.viewModelFromProcModel.viewQuery)
     if (this.localModel) {
       this.allProcedures =
@@ -225,8 +226,11 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     }
   }
 
-  selectSectionView(index, notResetSelectedView) {
-    console.log("sectionView", index);
+  selectSectionView(index, notResetSelectedView) {    
+    console.log('selectSectionView', index, notResetSelectedView)
+    this.selectedViewIndex = index;
+    this.selectedTestIndex = -1;
+
     if (notResetSelectedView === undefined || !notResetSelectedView) {
       this.selectedItem = {};
     }
@@ -239,13 +243,19 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     this.moduleName = this.selectedProcInstance.module_name;
     this.moduleVersion = this.selectedProcInstance.module_version;
 
-    //console.log('this.selectedViewDefinition', this.selectedViewDefinition, 'procInstanceName', this.procInstanceName)
-    if (this.objecttabsComposition == null) {
-      return;
-    }
     this.selectedProcInstance[0] = this.selectedProcInstance;
 
-    if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
+    if(!this.selectedViewDefinition.tabs) {
+      this.selectedCompositionView = this.selectedViewDefinition.view_definition.reportElements; 
+    }
+
+    //console.log('this.selectedViewDefinition', this.selectedViewDefinition, 'procInstanceName', this.procInstanceName)
+    // if (this.objecttabsComposition == null) {
+    //   return;
+    // }
+    if (this.selectedViewDefinition.alternative_endpoint_data !== undefined&&this.selectedViewDefinition.alternative_endpoint_data=="actionOutput") {
+      this.selectedItem = this.actionOutput
+    } else if (this.selectedViewDefinition.alternative_endpoint_data !== undefined) {
       this.selectedItem =
         this.selectedProcInstance[
           this.selectedViewDefinition.alternative_endpoint_data
@@ -255,25 +265,25 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       this.selectedTabModelFromProcModel = this.selectedViewDefinition;
       this.selectedItem = this.selectedProcInstance.definition;
     }
-
+    
     // Get from session storage
 
-    let selectedScripts = sessionStorage.getItem("selectedScripts");
-    if (selectedScripts !== undefined && selectedScripts !== null) {
-      selectedScripts = JSON.parse(selectedScripts);
-      const procScript = selectedScripts.find(
-        (script) => script.proc_instance_name === this.procInstanceName
-      );
+    // let selectedScripts = sessionStorage.getItem("selectedScripts");
+    // if (selectedScripts !== undefined && selectedScripts !== null) {
+    //   selectedScripts = JSON.parse(selectedScripts);
+    //   const procScript = selectedScripts.find(
+    //     (script) => script.proc_instance_name === this.procInstanceName
+    //   );
 
-      if (procScript) {
-        this.objecttabsComposition.selectedItem = procScript;
-        this.objecttabsComposition.selectedTabModelFromProcModel=this.selectedViewDefinition;
-        this.objecttabsComposition.procedureName=this.procedureName
-        this.objecttabsComposition.procedureVersion=this.procedureVersion
-      }
-    }
+    //   if (procScript) {
+    //     this.objecttabsComposition.selectedItem = procScript;
+    //     this.objecttabsComposition.selectedTabModelFromProcModel=this.selectedViewDefinition;
+    //     this.objecttabsComposition.procedureName=this.procedureName
+    //     this.objecttabsComposition.procedureVersion=this.procedureVersion
+    //   }
+    // }
 
-    this.objecttabsComposition.isProcManagement = true;
+    this.isProcManagement = true;
     // this.objecttabsComposition.render();
 
     // Scroll down to right split on mobile
@@ -524,11 +534,19 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             </style>
             
             <div style="flex-basis: auto; width: auto;">            
-            <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.mainview_definition}
-              .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-              .selectedItem=${this.mainViewData}   moduleName=${this.moduleName}   moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-            </objecttabs-composition>  
-              
+              <objecttabs-composition 
+                style="position:relative; left: 30px; top:10px; width:95%; display:block;" 
+                .selectedTabModelFromProcModel=${this.mainview_definition}
+                .lang=${this.lang} 
+                .procedureName=${this.procedureName} 
+                .procedureVersion=${this.procedureVersion} 
+                .procInstanceName=${this.procInstanceName} 
+                .config=${this.config}     
+                .selectedItem=${this.mainViewData} 
+                .moduleName=${this.moduleName} 
+                .moduleVersion=${this.moduleVersion} 
+                ?isProcManagement=${this.isProcManagement}
+              ></objecttabs-composition>        
             </div>
             ${this.allProcedures===undefined||this.allProcedures.length==0? nothing:
             html`
@@ -840,7 +858,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         .splitter {
           background-color: blue;
         }
-      .sp-split-view.collapsed {
+        .sp-split-view.collapsed {
           width: 0;
         }
         .pane-top-mobile {
@@ -848,8 +866,6 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         }
         #leftSplit {
           width: 100%;
-          margin-bottom: 40px;
-          position: relative;
           background-color: transparent;
           overflow-y: scroll;
           transition: all 0.4s ease-in-out;
@@ -858,6 +874,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           #leftSplit {
             padding: 10px;
             width: 290px;
+            overflow: hidden;
             margin-bottom: 0;
           }
           #leftSplit.collapsed {
@@ -918,6 +935,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         .collapse-button:hover + #leftSplit {
           width: 0;
         }
+
         #rightSplit {
           padding: 0px;
           background-color: transparent;
@@ -933,9 +951,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             width: 96vw;
           }
         }
-        
        
-		 
         #endpointName {
           box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
           overflow-y: auto;
@@ -969,41 +985,11 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           margin-top: 10px;
           font-weight: bold;
         }
-											  
-					  
-						  
-		   
-								
-					  
-							 
-		   
-						
-						   
-							   
-		   
-						 
-						  
-		   
-							   
-						  
-		   
-			  
-											  
-					   
-									  
-		   
- 
-								 
-						
-		   
-					
       `,
     ];
   }
 
-
   selectedProcInstanceMainView() {
-    console.log('this.selectedItem', this.selectedItem)
     let selectedItemArr=[]
     selectedItemArr.push(this.selectedItem)
     return html`
@@ -1040,38 +1026,74 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         >
           <div class="desktopTitle">${this.selectedProcessTitle()}</div>
           <div class="mobileTitle ${this.leftSplitDisplayed ? "hidden" : ""}">${this.selectedProcessTitle()}</div>
-          ${this.selectedViewDefinition !== undefined &&
-          (this.selectedViewDefinition.view_definition !== undefined||this.selectedViewDefinition.tabs!==undefined) &&
-          this.selectedViewDefinition
+          ${
+            this.selectedViewDefinition &&
+            (
+              this.selectedViewDefinition.view_definition !== undefined || 
+              this.selectedViewDefinition.tabs!==undefined
+            ) 
             ? html`    
-          ${this.selectedViewDefinition.tabs!==undefined?html`
-            <object-by-tabs .windowOpenable=true .sopsPassed=true .lang=${this.lang}
-            .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} ?isProcManagement=${this.isProcManagement}
-            .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-            .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName}
-            .model=${this.selectedViewDefinition} .selectedItem=${this.selectedItem}
-            .viewModelFromProcModel=${this.selectedViewDefinition} .config=${this.config}></object-by-tabs>                        
-          `:html`                  
-            <objecttabs-composition style="position:relative; left: 30px; top:10px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.selectedViewDefinition.view_definition.reportElements}
-            .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}    
-            .selectedItem=${this.selectedItem}     .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-            </objecttabs-composition>        
-          `}      
- 
-      `
-            : nothing}
+              ${this.selectedViewDefinition.tabs !== undefined ? 
+                html`
+                  <object-by-tabs 
+                    .windowOpenable=true 
+                    .sopsPassed=true 
+                    .lang=${this.lang}
+                    .procedureName=${this.procedureName} 
+                    .procedureVersion=${this.procedureVersion} 
+                    ?isProcManagement=${this.isProcManagement}
+                    .moduleName=${this.moduleName} 
+                    .moduleVersion=${this.moduleVersion} 
+                    ?isProcManagement=${this.isProcManagement}
+                    .procInstanceName=${this.procInstanceName} 
+                    .desktop=${this.desktop} 
+                    .viewName=${this.viewName} 
+                    .filterName=${this.filterName} 
+                    .model=${this.selectedViewDefinition} 
+                    .selectedItem=${this.selectedItem} 
+                    .viewModelFromProcModel=${this.selectedViewDefinition} 
+                    .config=${this.config}
+                  ></object-by-tabs>                        
+                ` :
+                html`                  
+                  <objecttabs-composition 
+                    style="position:relative; left: 30px; top:10px; width:95%; display:block;" 
+                    .selectedTabModelFromProcModel=${this.selectedCompositionView}
+                    .lang=${this.lang} 
+                    .procedureName=${this.procedureName} 
+                    .procedureVersion=${this.procedureVersion} 
+                    .procInstanceName=${this.procInstanceName} 
+                    .config=${this.config}     
+                    .selectedItem=${this.selectedItem}
+                    .moduleName=${this.moduleName}
+                    .moduleVersion=${this.moduleVersion}
+                    ?isProcManagement=${this.isProcManagement}
+                  ></objecttabs-composition>        
+                `
+              }      
+            ` : nothing
+          }
         </div>
       </sp-split-view>
     `;
   }
 
   sectionElement(item, index) {
+    if(index === this.selectedViewIndex) {
+      item.expanded = true;
+      if(this.selectedTestIndex === -1)
+        this.selectSectionView(this.selectedViewIndex);
+    }  
+
     return html`
       ${item.view_definition !== undefined &&
       item.view_definition.hasDetail !== undefined &&
       item.view_definition.hasDetail === true > 0
         ? html`
-            <div @click=${() => this.selectSectionView(index)}>
+            <div @click=${() => {
+              this.selectSectionView(index);
+              this.toggleLeftElements(index);
+            }}>
               ${item.title["label_" + this.lang]}
             </div>
             <mwc-icon-button
@@ -1083,13 +1105,17 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
               icon="${item.expanded !== undefined && item.expanded
                 ? "expand_less"
                 : "expand_more"}"
-              @click=${() => this.toggleLeftElements(index)}
+              @click=${() => {
+                this.toggleLeftElements(index);
+              }}
             ></mwc-icon-button>
           `
         : html`
             <div
               class="accordion-title"
-              @click=${() => this.selectSectionView(index)}
+              @click=${() => {
+                this.selectSectionView(index);
+              }}
             >
               ${item.title["label_" + this.lang]}
             </div>
@@ -1143,7 +1169,8 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
                           ${this.testingcardSomeElementsRepititiveObjects(
                             item,
                             this.selectedProcInstance,
-                            true
+                            true,
+                            index
                           )}
                         `
                       : nothing}
@@ -1154,7 +1181,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
         : nothing}
     `;
   }
-  testingcardSomeElementsRepititiveObjects(elem, data) {
+  testingcardSomeElementsRepititiveObjects(elem, data, flag, index) {
     data = this.localGetDataFromRoot(elem.view_definition.detail, data);
     //console.log('testingcardSomeElementsRepititiveObjects', 'elem', elem, 'getDataFromRoot', data)
     //console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
@@ -1173,7 +1200,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
               }
               li {
                 cursor: pointer;
-                font-size: 1.7vmin;
+                font-size: 14px;
                 transition: all 0.2s ease-in-out;
               }
               li:hover {
@@ -1182,41 +1209,54 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
             </style>
             <ul>
               ${data.map(
-                (d) =>
-                  html`
+                (d, idx) => {
+                  if(this.selectedViewIndex === index && idx === this.selectedTestIndex) {
+                    this.clickedTest(index, idx, elem, d);
+                  }
+                  return html`
                     <li
                       role="button"
                       class="${d.run_summary.toUpperCase().includes("SUCCESS")
                         ? "success"
                         : "no_success"}"
                       .thisitem="${d}"
-                      @click=${this.clickedTest}
+                      @click=${(e) => this.clickedTest(index, idx, elem, d)}
                       .elementdef="${elem}"
                     >
                       ${d.script_id} ${d.run_summary}<br />(${d.date_execution})
                       <hr />
                     </li>
                   `
-              )}
+              })}
             </ul>
           `
         : nothing}
     `;
   }
 
-  clickedTest(e) {
+  clickedTest(index, testIdx, elementdef, thisitem) {
+    this.selectSectionView(index);
+    this.selectedTestIndex = testIdx;
+    
     this.selectedTabModelFromProcModel =
-      e.currentTarget.elementdef.view_definition.detail;
-    this.objecttabsComposition.isProcManagement = true;
-    this.objecttabsComposition.selectedTabModelFromProcModel =
-      this.selectedTabModelFromProcModel.view_definition;
-    this.objecttabsComposition.selectedItem = e.currentTarget.thisitem;
-
+    elementdef.view_definition.detail;
+    // this.objecttabsComposition.isProcManagement = true;
+    // this.objecttabsComposition.selectedTabModelFromProcModel =
+    //   this.selectedTabModelFromProcModel.view_definition;
+    // this.objecttabsComposition.selectedItem = e.currentTarget.thisitem;
+    
+    // this.isProcManagement = true;
+    this.isProcManagement = true;
+    // this.selectedViewDefinition.tabs = undefined;
+    // this.selectedViewDefinition.view_definition = this.selectedTabModelFromProcModel.view_definition;
+    this.selectedCompositionView = this.selectedTabModelFromProcModel.view_definition;
+    this.selectedItem = thisitem;
+    
     sessionStorage.setItem(
       "selectedTabModelFromProcModel",
       JSON.stringify(this.selectedTabModelFromProcModel)
     );
-
+      
     // get selected scripts from session storage and filter
     let selectedScripts = sessionStorage.getItem("selectedScripts");
     if (selectedScripts === undefined || selectedScripts === null) {
@@ -1229,14 +1269,14 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
           this.selectedProcInstance.proc_instance_name
       );
     }
-    if (!e.currentTarget.thisitem || !this.selectedProcInstance) {
+    if (!thisitem || !this.selectedProcInstance) {
       return;
     }
     const newSelectedScript = [
       ...selectedScripts,
       {
         proc_instance_name: this.selectedProcInstance.proc_instance_name,
-        ...e.currentTarget.thisitem,
+        ...thisitem,
       },
     ];
 
@@ -1245,7 +1285,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       JSON.stringify(newSelectedScript)
     );
 
-    this.objecttabsComposition.render();
+    // this.objecttabsComposition.render();
 
     // Scroll down to right split on mobile
     if (this.desktop) return;
@@ -1434,7 +1474,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     );
   }
 
-  performActionRequestHavingDialogOrNotForProcess(
+  async performActionRequestHavingDialogOrNotForProcess(
     index,
     action,
     selectedItem,
@@ -1452,39 +1492,25 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
       alert(endPointUrl);
       return;
     }
-    let params =
-      this.config.backendUrl +
-      endPointUrl +
-      "?" +
-      new URLSearchParams(APIParams) +
-      "&" +
-      new URLSearchParams(extraParams) +
-      "&" +
-      new URLSearchParams(credDialogArgs);
-    console.log(
-      "performActionRequestHavingDialogOrNot",
-      "action",
-      action,
-      "selectedItem",
-      selectedItem[0],
-      "extraParams",
-      extraParams
-    );
+    let params =this.config.backendUrl +endPointUrl +"?" +new URLSearchParams(APIParams) +"&" +new URLSearchParams(extraParams) +
+      "&" +new URLSearchParams(credDialogArgs);
+    console.log("performActionRequestHavingDialogOrNot","action",action,"selectedItem",selectedItem[0],"extraParams",extraParams);
 
     let log = true;
-    this.fetchApi(params)
+    await this.fetchApi(params)
       .then((j) => {
         if (j && !j.is_error) {
-          this.actionOutput = j;
-          this.selectedItem = j;
+//console.log('j', j.json())          
+          this.actionOutput = j.json();
+          this.selectedItem = j.json();
         } else {
-          this.actionOutput = j;
-          this.selectedItem = j;
+          this.actionOutput = j.json();
+          this.selectedItem = j.json();
         }
         this.selectSectionView(index, true);
 
         //this.selectedProcInstanceMainView()
-        console.log("actionOutput", this.actionOutput);
+        //if (this.actionOutput!==undefined){console.log("actionOutput", this.actionOutput);}
       })
       .then((j) => {
         let mye = {};
@@ -1546,5 +1572,6 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
 
   get objecttabsComposition() {return this.shadowRoot.querySelector("objecttabs-composition");}
   get objectByTabs() {return this.shadowRoot.querySelector("object-by-tabs");}
+  
 }
 window.customElements.define("proc-management-home", ProcManagementHome);
