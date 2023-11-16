@@ -5,6 +5,7 @@ import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
 import {CoaView} from '../../components/Views/CoaView';
+import "../Tree/treeview/index";
 
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 
@@ -130,6 +131,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
             ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}
             ${elem2.type==="testScripts" ? this.scripts(elem2, true) : nothing}
             ${elem2.type==="buttonsOnly" ? this.buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
+            ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
 
           `:nothing}
         `
@@ -170,15 +172,24 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
       ${elem.type==="testScripts" ? this.scripts(elem, true) : nothing}
       ${elem.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}   
       ${elem.type==="buttonsOnly" ? this.buttonsOnly(elem, data[elem.endPointResponseObject]) : nothing}
+      ${elem.type==="tree" ? this.treeElement(elem, data)   : nothing}
  
     `
   }
 
+  treeElement(elem, data){
+    //console.log('treeElement', elem, data)    
+    let dataArr=[]
+      dataArr = this.getDataFromRoot(elem, data);
+    //console.log('dataArr', dataArr)  
+    return html`<tree-view .settings=${elem} .data=${dataArr}></tree-view>`
+  }
+
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
     if (data===undefined||elemDef===undefined){return}
-    if (this.selectedItem!==undefined){
-    //  console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
-    }    
+    // if (this.selectedItem!==undefined){
+    //   console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
+    // }    
     return  html`
         <div style="display:block">
           ${elemDef!==undefined&&Array.isArray(elemDef)?

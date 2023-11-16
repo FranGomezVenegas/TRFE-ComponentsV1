@@ -23,7 +23,7 @@ export class TreeView extends LitElement {
   }
 
   render() {
-    return template({
+        return template({
       data: this.data,
       selectedItems: this.selectedItems,
       handleSelectItem: this.handleSelectItem
