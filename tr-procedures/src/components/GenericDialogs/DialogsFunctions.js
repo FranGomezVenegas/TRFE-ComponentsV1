@@ -41,7 +41,7 @@ export function DialogsFunctions(base) {
    * @param {*} action ref of action object
    */
   credsChecker(actionName, objId, params={}, action, isProcManagement) {
-    //console.log('credsChecker', 'isPlatform', isPlatform)
+    console.log('credsChecker', 'isProcManagement', isProcManagement, 'action', action)
     this.actionObj = action || {}
     this.reqParams = params
     if (actionName) {
@@ -164,6 +164,10 @@ export function DialogsFunctions(base) {
   }  
 
   nextRequest(action) {
+    // This is required to get the action due to it is not being passed.
+    if (action.actionName===undefined){
+      action=this.actionBeingPerformedModel
+    }
     //alert('nextRequest')
     action = action || this.auditAction ||this.actionBeingPerformedModel;
     //console.log('nextRequest')
