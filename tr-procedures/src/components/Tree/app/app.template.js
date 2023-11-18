@@ -18,8 +18,7 @@ export const template = (props) => {
   }
 
   return html`
-    <div>
-    aaaa
+    <div>    
       <button @click=${getSelectedItems}>Selected Items</button>
       <div class="container">
         <tree-view 

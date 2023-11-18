@@ -1,7 +1,6 @@
-import { LitElement } from 'lit-element';
-import { template } from './treeview.template';
-import { styles } from './treeview.css';
-
+import {LitElement} from 'lit-element';
+import {template} from './treeview.template';
+import {styles} from './treeview.css';
 
 export class TreeView extends LitElement {
   static get styles() {
@@ -10,23 +9,29 @@ export class TreeView extends LitElement {
 
   static get properties() {
     return {
-      data: { type: Array },
-      selectedItems: { type: Object },
-      handleSelectItem: { type: Function }
+      data: {type: Array},
+      specification: {type: Array},
+      selectedItems: {type: Object},
+      handleSelectItem: {type: Function},
+      level: {type: Number},
     };
   }
 
   constructor() {
     super();
     this.data = [];
+    this.specification = [];
     this.selectedItems = [];
+    this.level = 0;
   }
 
   render() {
-        return template({
+    return template({
       data: this.data,
+      specification: this.specification,
       selectedItems: this.selectedItems,
-      handleSelectItem: this.handleSelectItem
+      handleSelectItem: this.handleSelectItem,
+      level: this.level,
     });
   }
 }

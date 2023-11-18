@@ -182,7 +182,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
     let dataArr=[]
       dataArr = this.getDataFromRoot(elem, data);
     //console.log('dataArr', dataArr)  
-    return html`<tree-view .settings=${elem} .data=${dataArr}></tree-view>`
+    return html`<tree-view .specification=${elem.view_definition} .data=${dataArr}></tree-view>`
   }
 
   kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
