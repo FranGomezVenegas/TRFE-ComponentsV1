@@ -1,6 +1,6 @@
 import { html } from "lit-element";
 import { nothing } from "lit-html";
-import '@granite-elements/granite-qrcode-scanner/granite-qrcode-scanner.js';
+// import '@granite-elements/granite-qrcode-scanner/granite-qrcode-scanner.js';
 import '@cicciosgamino/qr-code-element'
 
 export const template = (props) => {
@@ -19,11 +19,11 @@ export const template = (props) => {
 
     ${isDetecting ?
       html`<div class="container">
-        <granite-qrcode-scanner 
+        <!-- <granite-qrcode-scanner 
           active 
           continuous
           @qrcode-decoded=${handleDecoded} 
-        ></granite-qrcode-scanner>
+        ></granite-qrcode-scanner> -->
       </div>` : nothing
     }
     

@@ -1,7 +1,7 @@
 import { LitElement } from "lit-element";
 import { template } from "./qrcode-scanner.template";
 import { styles } from "./qrcode-scanner.css";
-import '@granite-elements/granite-qrcode-scanner/granite-qrcode-scanner.js';
+// import '@granite-elements/granite-qrcode-scanner/granite-qrcode-scanner.js';
 
 export class QRCodeScanner extends LitElement {
   static get styles() {
