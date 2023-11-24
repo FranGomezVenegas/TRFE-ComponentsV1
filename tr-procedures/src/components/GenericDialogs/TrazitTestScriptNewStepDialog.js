@@ -43,28 +43,7 @@ export function TrazitTestScriptNewStepDialog(base) {
        return true 
     }
 
-    acceptedGenericGridDialog(e){
-        console.log('genericDialogGridSelectedItems', this.genericDialogGridSelectedItems)
-        if (this.genericDialogGridSelectedItems.length==0){
-            if (this.lang=="es"){
-                alert('Por favor, seleccione un elemento de la tabla')
-            }else{
-                alert('Please select one element from the list first')
-            }
-            return
-        }
-        this.dialogAcceptForGrid(false, this.genericDialogGridSelectedItems[0])
-        e.stopPropagation();
-        return
-        this.fieldsShouldBeReset=true
-        if (this.checkMandatoryFieldsNotEmpty()){
-            this.dialogAccept(false)
-        }else{
-            console.log('Accepted Generic Dialog but mandatories pending then action not performed')
-           // alert('mandatories pending')
-           e.stopPropagation();
-        }
-    }
+
     isFieldDisabled(fld){        
         if (fld.disabled!==undefined&&fld.disabled===true){
             return true
@@ -135,6 +114,13 @@ export function TrazitTestScriptNewStepDialog(base) {
             ?open=${this.openTestScriptNewStepDialog(actionModel)} 
         >
             <dependency-form></dependency-form>
+            <div style="margin-top:30px;text-align:center">
+                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
+                    ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
+                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
+                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+            </div>  
+
         </tr-dialog>
     `
     }
@@ -186,13 +172,110 @@ export function TrazitTestScriptNewStepDialog(base) {
     acceptedGenericDialog(e){
         this.fieldsShouldBeReset=true
         if (this.checkMandatoryFieldsNotEmpty()){
-            this.dialogAccept(false)
+            this.performActionRequestHavingDialogOrNotForProcess()
         }else{
             console.log('Accepted Generic Dialog but mandatories pending then action not performed')
            // alert('mandatories pending')
            e.stopPropagation();
         }
     }
+
+    async performActionRequestHavingDialogOrNotForProcess(
+        index,
+        action,
+        selectedItem,
+        targetValue = {},
+        credDialogArgs = {}
+      ) {
+        if (action.alternativeAPIActionMethod !== undefined) {
+          this[action.alternativeAPIActionMethod]();
+          return;
+        }
+        var extraParams="&action="+ '/***first argument value'
+        extraParams=extraParams+"&scriptId="+selectedItem[0].script_id
+        extraParams=extraParams+"&fieldsName="+'// loop to get the dynamic elements'
+        extraParams=extraParams+"&fieldsValue="+'//loop to get teh dynamic elements values'
+        //var extraParams = this.jsonParam(action, selectedItem[0], targetValue);
+        let APIParams = this.getAPICommonParams(action, true);
+        let endPointUrl = this.getActionAPIUrl(action);
+        if (String(endPointUrl).toUpperCase().includes("ERROR")) {
+          alert(endPointUrl);
+          return;
+        }
+        let params =this.config.backendUrl +endPointUrl +"?" +new URLSearchParams(APIParams) +"&" +new URLSearchParams(credDialogArgs);
+        params=params+extraParams;
+        console.log("performActionRequestHavingDialogOrNot","action",action,"selectedItem",selectedItem[0],"extraParams",extraParams);
+    
+        let log = true;
+        await this.fetchApi(params)
+          .then((j) => {
+            if (j && !j.is_error) {
+    //console.log('j', j.json())          
+              this.actionOutput = j.json();
+              this.selectedItem = j.json();
+            } else {
+              this.actionOutput = j.json();
+              this.selectedItem = j.json();
+            }
+            this.selectSectionView(index, true);
+    
+            //this.selectedProcInstanceMainView()
+            //if (this.actionOutput!==undefined){console.log("actionOutput", this.actionOutput);}
+          })
+          .then((j) => {
+            let mye = {};
+            if (j.is_error !== undefined && j.is_error === true) {
+              //        mye = { is_error: true, message_en: "Performed with success", message_es: "Ejecutado correctamente" }
+              this.dispatchEvent(
+                new CustomEvent("error", {
+                  detail: { ...j, log: log },
+                  bubbles: true,
+                  composed: true,
+                })
+              );
+            } else {
+              mye = {
+                is_error: false,
+                message_en: "Performed with success",
+                message_es: "Ejecutado correctamente",
+              };
+              this.dispatchEvent(
+                new CustomEvent("success", {
+                  detail: { ...mye, log: log },
+                  bubbles: true,
+                  composed: true,
+                })
+              );
+            }
+            return j;
+          })
+          .catch((e) => {
+            if (e.message == "Unexpected end of JSON input") {
+              this.dispatchEvent(
+                new CustomEvent("error", {
+                  detail: { ...e },
+                  bubbles: true,
+                  composed: true,
+                })
+              );
+            } else {
+              this.dispatchEvent(
+                new CustomEvent("error", {
+                  detail: { ...e, log: log },
+                  bubbles: true,
+                  composed: true,
+                })
+              );
+              //this.error(e)
+              return e;
+            }
+          });
+    
+        return;
+      }
+    
+
+
     checkMandatoryFieldsNotEmpty(){                
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         for (let i=0;i<dlgFlds[0].length;i++){            
