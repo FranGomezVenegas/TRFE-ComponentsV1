@@ -7,6 +7,8 @@ import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import {DialogsFunctions} from './DialogsFunctions';
+import "../../components/DependencyForm/app/index";
+
 export function TrazitTestScriptNewStepDialog(base) {
   return class extends GridFunctions(DialogsFunctions(base)) {
     static get properties() {
@@ -126,8 +128,13 @@ export function TrazitTestScriptNewStepDialog(base) {
       }       
     </style>
         <tr-dialog id="testScriptNewStepDialog"  
-            @opened=${() => {this.defaultValue()}}  ?open=${this.openTestScriptNewStepDialog(actionModel)} heading="" hideActions="" scrimClickAction="">
-            hola2
+            heading="" 
+            hideActions="" 
+            scrimClickAction=""
+            @opened=${() => {this.defaultValue()}}  
+            ?open=${this.openTestScriptNewStepDialog(actionModel)} 
+        >
+            <dependency-form></dependency-form>
         </tr-dialog>
     `
     }
@@ -165,7 +172,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         }
         return html``         
     }
-    get genericDialog() {return this.shadowRoot.querySelector("tr-dialog#genericDialog")}
+    get testScriptNewStepDialog() {return this.shadowRoot.querySelector("tr-dialog#testScriptNewStepDialog")}
     get dateDialog() {return this.shadowRoot.querySelector("tr-dialog#dateDialog")}
     get dateInput() {return this.shadowRoot.querySelector("input#dateInput")}
     setNewDate() {

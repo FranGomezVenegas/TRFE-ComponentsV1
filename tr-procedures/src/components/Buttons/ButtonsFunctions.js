@@ -560,6 +560,7 @@ export function ButtonsFunctions(base) {
         this.getGenericDialogGridItems(action.dialogInfo)    
 
         //this.loadDialogs()
+        console.log(action.dialogInfo.name);
         if (action.dialogInfo.name==="auditDialog"){
           this[action.clientMethod]()
           return}

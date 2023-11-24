@@ -8,8 +8,9 @@ import {CoaView} from '../../components/Views/CoaView';
 import "../Tree/treeview/index";
 
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
+import { TrazitTestScriptNewStepDialog } from '../GenericDialogs/TrazitTestScriptNewStepDialog';
 
-export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataViews(CredDialog))))) {
+export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog)))))) {
   static get styles() {
     return [
       Layouts,
@@ -91,6 +92,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(DataVi
         `}
       </div>
       ${this.genericFormDialog()}
+      ${this.testScriptNewStepFormDialog()}
       ${super.render()}
     ` 
   }
