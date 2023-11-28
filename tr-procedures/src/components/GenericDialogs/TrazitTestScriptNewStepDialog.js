@@ -208,8 +208,16 @@ export function TrazitTestScriptNewStepDialog(base) {
 
         var extraParams="&action="+ this.getDependencyForm().endpoint;
         extraParams=extraParams+"&scriptId=" + this.selectedItem.script_id
-        extraParams=extraParams+"&fieldsName=" + fieldNames.join('|');
-        extraParams=extraParams+"&fieldsValue=" + fieldValues.join('|');
+        extraParams=extraParams+"&fieldName=" + fieldNames.join('|');
+        extraParams=extraParams+"&fieldValue=" + fieldValues.join('|');
+        extraParams=extraParams+"&procInstanceName=" + this.procInstanceName;
+        extraParams=extraParams+"&procedureName=" + this.procedureName;
+        extraParams=extraParams+"&procedureVersion=" + this.procedureVersion;
+
+        //expectedSyntaxis
+        //expectedNotification
+
+
         let APIParams = this.getAPICommonParams(actionModel, true);
         let endPointUrl = this.getActionAPIUrl(actionModel);
         if (String(endPointUrl).toUpperCase().includes("ERROR")) {
