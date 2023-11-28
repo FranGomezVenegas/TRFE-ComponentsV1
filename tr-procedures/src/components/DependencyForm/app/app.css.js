@@ -48,6 +48,10 @@ export const styles = css`
     --mdc-theme-primary: #148cfa;
   }
 
+  mwc-checkbox {
+    --mdc-theme-secondary: #148cfa;
+  }
+
   .form-fields {
     margin-top: 10px;
     display: flex;

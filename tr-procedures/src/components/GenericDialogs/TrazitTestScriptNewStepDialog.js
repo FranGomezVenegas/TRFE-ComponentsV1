@@ -213,6 +213,8 @@ export function TrazitTestScriptNewStepDialog(base) {
         extraParams=extraParams+"&procInstanceName=" + this.procInstanceName;
         extraParams=extraParams+"&procedureName=" + this.procedureName;
         extraParams=extraParams+"&procedureVersion=" + this.procedureVersion;
+        extraParams=extraParams+"&expectedSyntaxis=" + data.expectedSyntaxis;
+        extraParams=extraParams+"&expectedNotification=" + data.expectedNotification;
 
         //expectedSyntaxis
         //expectedNotification
@@ -302,7 +304,6 @@ export function TrazitTestScriptNewStepDialog(base) {
 
     validationCheck(){    
         const validity = this.getDependencyForm().checkValidity();
-        console.log(validity, this.getDependencyForm().checkValidity);
         return validity;
     }
 
@@ -444,7 +445,7 @@ export function TrazitTestScriptNewStepDialog(base) {
             newList.push(blankEmpty)
         }
     
-        console.log(newList);
+        // console.log(newList);
         return newList;
         // return html`
         //     ${newList.map((c, i) =>

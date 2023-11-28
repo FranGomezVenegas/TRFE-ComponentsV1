@@ -5,7 +5,6 @@ import "@material/mwc-list/mwc-list-item";
 import { elementTypes } from "../config";
 
 export const template = (props) => {
-  
   return html`
     <div class="container">
       <form id="#endpoint-form" action="/" method="get">
@@ -64,6 +63,16 @@ export const template = (props) => {
             }
             return html`${param.type}`;
           })}
+          <mwc-formfield label="Expected successful?">
+            <mwc-checkbox name="expectedSyntaxis"></mwc-checkbox>
+          </mwc-formfield>
+          <mwc-textfield
+            type="text"
+            required
+            label="Expected Notification"
+            name="expectedNotification"
+            @blur=${props.checkValidity}
+          ></mwc-textfield>
         </div>
       </form>
     </div>
