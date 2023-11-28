@@ -37,27 +37,21 @@ export const styles = css`
     cursor: pointer;
   }
 
-  select:hover {
-    border: 1px solid black;
+  mwc-select {     
+    --mdc-theme-primary : #148cfa;
   }
 
-  select:focus {
-    border: 2px solid #148cfa;
+  mwc-textfield {
+    font-family: Montserrat;
+    font-weight: bold;
+    font-size: 19px;
+    --mdc-theme-primary: #148cfa;
   }
 
-  .select-wrapper {
-    position: relative;
-  }
-
-  .select-wrapper::after {
-    content: "▼";
-    font-size: 10px;
-    top: 10px;
-    right: 10px;
-    position: absolute;
-  }
-
-  .select-wrapper:focus-within::after {
-    color: #148cfa;
+  .form-fields {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 `;

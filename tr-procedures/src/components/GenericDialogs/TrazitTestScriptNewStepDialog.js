@@ -103,7 +103,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         font-family : Montserrat;
         font-weight : bold;
         font-size : 19px;
-        background-color: 4fcad029;
+        background-color: #4fcad029;
       }       
     </style>
         <tr-dialog id="testScriptNewStepDialog"  
@@ -113,14 +113,29 @@ export function TrazitTestScriptNewStepDialog(base) {
             @opened=${() => {this.defaultValue()}}  
             ?open=${this.openTestScriptNewStepDialog(actionModel)} 
         >
-            <dependency-form></dependency-form>
+            <dependency-form 
+                .lang=${this.lang}
+                .endpoints=${this.listTestEntries()}
+            ></dependency-form>
             <div style="margin-top:30px;text-align:center">
-                <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline" @click=${this.declineDialog}> 
-                    ${commonLangConfig.closeDialogButton["label_" + this.lang]}</sp-button>
-                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericDialog}>
-                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
+                <sp-button 
+                    size="xl" 
+                    variant="secondary" 
+                    slot="secondaryAction" 
+                    dialogAction="decline" 
+                    @click=${this.declineDialog}
+                > 
+                    ${commonLangConfig.closeDialogButton["label_" + this.lang]}
+                </sp-button>
+                <sp-button 
+                    size="xl" 
+                    slot="primaryAction" 
+                    dialogAction="accept" 
+                    @click=${() => this.acceptedTestDialog(actionModel)}
+                >
+                    ${commonLangConfig.confirmDialogButton["label_" + this.lang]}
+                </sp-button>
             </div>  
-
         </tr-dialog>
     `
     }
@@ -142,7 +157,7 @@ export function TrazitTestScriptNewStepDialog(base) {
             return html`
             <div class="layout horizontal flex center-center">
             <mwc-textfield class="layout flex" id="dynamicElement1" type="text" .value=${fld.default_value ? fld.default_value : ''}  label="${this.fieldLabel(fld)}"  ?disabled=${this.isFieldDisabled(fld)} 
-                @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                @keypress=${e => e.keyCode == 13 && this.acceptedTestGenericDialog}></mwc-textfield>
             </div>
             `
         }
@@ -169,42 +184,41 @@ export function TrazitTestScriptNewStepDialog(base) {
     declineDialog(){
         this.fieldsShouldBeReset=true
     }
-    acceptedGenericDialog(e){
+    acceptedTestDialog(actionModel){
+        console.log("Accepted");
         this.fieldsShouldBeReset=true
-        if (this.checkMandatoryFieldsNotEmpty()){
-            this.performActionRequestHavingDialogOrNotForProcess()
+        if (this.validationCheck()){
+            this.performActionRequestHavingDialogOrNotForProcess(actionModel)
         }else{
-            console.log('Accepted Generic Dialog but mandatories pending then action not performed')
-           // alert('mandatories pending')
-           e.stopPropagation();
+            console.log('Accepted Test Dialog but mandatories pending then action not performed')
+            alert('mandatories pending')
         }
     }
 
-    async performActionRequestHavingDialogOrNotForProcess(
-        index,
-        action,
-        selectedItem,
-        targetValue = {},
-        credDialogArgs = {}
-      ) {
-        if (action.alternativeAPIActionMethod !== undefined) {
-          this[action.alternativeAPIActionMethod]();
-          return;
-        }
-        var extraParams="&action="+ '/***first argument value'
-        extraParams=extraParams+"&scriptId="+selectedItem[0].script_id
-        extraParams=extraParams+"&fieldsName="+'// loop to get the dynamic elements'
-        extraParams=extraParams+"&fieldsValue="+'//loop to get teh dynamic elements values'
-        //var extraParams = this.jsonParam(action, selectedItem[0], targetValue);
-        let APIParams = this.getAPICommonParams(action, true);
-        let endPointUrl = this.getActionAPIUrl(action);
+    async performActionRequestHavingDialogOrNotForProcess(actionModel) {
+        const data = this.getDependencyForm().getFormFields();
+        const meta = this.getDependencyForm().getFieldTypes();
+
+        const fieldNames = meta.map((info) => info.name);
+        const fieldValues = meta.map((info) => `${data[info.name]}*${info.type}`);
+
+        console.log(meta);
+        console.log(fieldNames.join('|'), fieldValues.join('|'));
+
+
+        var extraParams="&action="+ this.getDependencyForm().endpoint;
+        extraParams=extraParams+"&scriptId=" + this.selectedItem.script_id
+        extraParams=extraParams+"&fieldsName=" + fieldNames.join('|');
+        extraParams=extraParams+"&fieldsValue=" + fieldValues.join('|');
+        let APIParams = this.getAPICommonParams(actionModel, true);
+        let endPointUrl = this.getActionAPIUrl(actionModel);
         if (String(endPointUrl).toUpperCase().includes("ERROR")) {
           alert(endPointUrl);
           return;
         }
-        let params =this.config.backendUrl +endPointUrl +"?" +new URLSearchParams(APIParams) +"&" +new URLSearchParams(credDialogArgs);
+        let params =this.config.backendUrl +endPointUrl +"?" +new URLSearchParams(APIParams); // + "&" +new URLSearchParams(credDialogArgs);
         params=params+extraParams;
-        console.log("performActionRequestHavingDialogOrNot","action",action,"selectedItem",selectedItem[0],"extraParams",extraParams);
+        console.log("performActionRequestHavingDialogOrNot","actionModel",actionModel,"selectedItem",this.selectedItem,"extraParams",extraParams);
     
         let log = true;
         await this.fetchApi(params)
@@ -274,22 +288,14 @@ export function TrazitTestScriptNewStepDialog(base) {
         return;
       }
     
+    getDependencyForm() {
+        return this.shadowRoot.querySelector("dependency-form");
+    }
 
-
-    checkMandatoryFieldsNotEmpty(){                
-        let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
-        for (let i=0;i<dlgFlds[0].length;i++){            
-            let fldObj=dlgFlds[0][i]
-           // console.log('checkMandatoryFieldsNotEmpty', fldObj)
-            let keyName=Object.keys(fldObj)
-            let fldDef=fldObj[keyName[0]]
-            if ((fldDef.optional===undefined||
-                fldDef.optional===false)&&this[keyName].value.length==0){
-                alert('Field '+fldDef["label_"+this.lang]+' is mandatory')
-                return false
-            }
-        }
-        return true
+    validationCheck(){    
+        const validity = this.getDependencyForm().checkValidity();
+        console.log(validity, this.getDependencyForm().checkValidity);
+        return validity;
     }
 
 
@@ -389,23 +395,37 @@ export function TrazitTestScriptNewStepDialog(base) {
         //alert(this.actionBeingPerformedModel.dialogInfo.fields[e.target.id].valuesFromMasterData.recalculateObjectOnEntrySelected)
         //console.log(e.targetValue)
     }
-    listEntries(fld){
-        //console.log('listEntries')
-        var blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
+    // listEntries(fld){
+    listTestEntries(){
+        let fld={}
+        fld.addBlankValueOnTop=true
+        fld.valuesFromMasterData= {
+            "propertyNameContainer": "modules",
+            "filterInFirstLevel": true,
+            "filterPropertyName": "module_name",
+            "contextVariableName": "moduleName",
+            "propertyNameContainerLevel2": "module_in_solution_queries",
+            "propertyKeyName": "endpoint_name",
+            "propertyKeyValueEn": "endpoint_name",
+            "propertyKeyValueEs": "endpoint_name"
+        }
+        console.log("listEntries", fld);
+        var blankEmpty={ keyName:"", keyValue_en:"", keyValue_es:"", arguments_array: [] }
         var newList=[]
         if (fld===undefined){
-            return html`<mwc-list-item></mwc-list-item>`
+            // return html`<mwc-list-item></mwc-list-item>`
+            return [];
         }
         if (fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true){
             newList.push(blankEmpty)
         }
         if (fld.valuesFromMasterData!==undefined){
-            var MDentriesArr=this.listEntriesFromMasterData(fld.valuesFromMasterData)
+            var MDentriesArr=this.listTestEntriesFromMasterData(fld.valuesFromMasterData)
             if (MDentriesArr.length>0){
                 MDentriesArr.forEach(item =>newList.push(item))
             }
         } else if (fld.valuesFromSelectedItem!==undefined){
-            var MDentriesArr=this.listEntriesFromSelectedItem(fld.valuesFromSelectedItem)
+            var MDentriesArr=this.listTestEntriesFromSelectedItem(fld.valuesFromSelectedItem)
             if (MDentriesArr.length>0){
                 MDentriesArr.forEach(item =>newList.push(item))
             }
@@ -416,11 +436,13 @@ export function TrazitTestScriptNewStepDialog(base) {
             newList.push(blankEmpty)
         }
     
-        return html`
-        ${newList.map((c, i) =>
-            html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-        )}
-        `
+        console.log(newList);
+        return newList;
+        // return html`
+        //     ${newList.map((c, i) =>
+        //     html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+        // )}
+        // `
     }
     listEntriesForUom(fld, fldName){
         console.log('listEntriesForUom')
@@ -525,13 +547,13 @@ export function TrazitTestScriptNewStepDialog(base) {
             this.masterData=userSession.proc_management_masterdata
         }
     }
-    listEntriesFromMasterData(fldMDDef){
+
+    listTestEntriesFromMasterData(fldMDDef){
         this.getProcMasterData()
-        return this.buildFrontListFromData(fldMDDef, this.masterData)
+        return this.buildTestFrontListFromData(fldMDDef, this.masterData)
     }
 
-    listEntriesFromSelectedItem(fldMDDef){     
-        
+    listTestEntriesFromSelectedItem(fldMDDef){     
         let data=[]
         
         if (fldMDDef!==null&&fldMDDef.defval!==undefined&&fldMDDef.defval!==null){
@@ -576,10 +598,10 @@ export function TrazitTestScriptNewStepDialog(base) {
             })
         }
         return entries        
-        //return this.buildFrontListFromData(fldMDDef, this.selectedProcedureInstance)
+        //return this.buildTestFrontListFromData(fldMDDef, this.selectedProcedureInstance)
     }
 
-    buildFrontListFromData(fldMDDef, data){
+    buildTestFrontListFromData(fldMDDef, data){
         if (data===undefined){return []}
         console.log('masterData', data)
         console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
@@ -592,10 +614,11 @@ export function TrazitTestScriptNewStepDialog(base) {
         if (fldMDDef.filterInFirstLevel===undefined||fldMDDef.filterInFirstLevel!==true){
             data[fldMDDef.propertyNameContainer].forEach(item =>{
                // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
-                let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
+                let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:'', arguments_array: []}
                 blankEmpty.keyName=item[fldMDDef.propertyKeyName]
                 blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
                 blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                blankEmpty.arguments_array = item.arguments_array;
                 //console.log('blankEmpty', blankEmpty)
                 entries.push(blankEmpty)
             })
@@ -631,17 +654,16 @@ export function TrazitTestScriptNewStepDialog(base) {
             //     return entries
             // }
             result[fldMDDef.propertyNameContainerLevel2].forEach(item =>{
-                console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
-                let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
+                // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
+                let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:'', arguments_array: []}
                 blankEmpty.keyName=item[fldMDDef.propertyKeyName]
                 blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
                 blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
-                console.log('blankEmpty', blankEmpty)
+                blankEmpty.arguments_array = item.arguments_array;
                 entries.push(blankEmpty)
             })
             console.log('entries at end', entries)
             return entries
-            
         }        
         //var blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}
         //entries.push(blankEmpty)

@@ -1,7 +1,6 @@
-import {LitElement} from 'lit-element';
-import {template} from './app.template';
-import {styles} from './app.css';
-import {data} from '../mock';
+import { LitElement } from "lit-element";
+import { template } from "./app.template";
+import { styles } from "./app.css";
 
 export class DependencyForm extends LitElement {
   static get styles() {
@@ -10,29 +9,84 @@ export class DependencyForm extends LitElement {
 
   static get properties() {
     return {
-      endpoints: {type: Array},
-      params: {type: Array}
+      endpoint: { type: String },
+      endpoints: { type: Array },
+      params: { type: Array },
+      lang: { type: String },
+      isFormValid: { type: Boolean }
     };
   }
 
   constructor() {
     super();
-    this.endpoints = data;
+    this.endpoints = [];
     this.params = [];
+    this.endpoint = "";
+    this.lang = "";
   }
 
   render() {
     return template({
       endpoints: this.endpoints,
       params: this.params,
-      handleChangeEndpoint: this._handleChangeEndpoint
+      lang: this.lang,
+      checkValidity: this._checkValidity,
+      handleChangeEndpoint: this._handleChangeEndpoint,
     });
   }
 
   _handleChangeEndpoint = (e) => {
-    const idx = parseInt(e.target.value);
+    const idx = this.endpoints.findIndex(
+      (endpoint) => endpoint.keyName === e.target.value
+    );
+    if (idx === -1) return [];
+    this.endpoint = this.endpoints[idx].keyName;
     this.params = this.endpoints[idx]?.arguments_array ?? [];
+  };
+  
+  getFormFields = () => {
+    this.checkValidity();
+    if(!this.isFormValid)
+      return null;
+
+    const payload = {};
+    const fields = this.shadowRoot.querySelectorAll(
+      "mwc-textfield, mwc-select, mwc-checkbox, mwc-radio"
+    );
+
+    fields.forEach((field) => {
+      if (field.tagName === "MWC-TEXTFIELD" || field.tagName === "MWC-SELECT") {
+        payload[field.name] = field.value;
+      }
+
+      if (field.tagName === "MWC-CHECKBOX") {
+        payload[field.name] = field.checked;
+      }
+
+      if (field.tagName === "MWC-RADIO" && field.checked) {
+        payload[field.name] = field.value;
+      }
+    });
+
+    return payload;
+  };
+
+  getFieldTypes = () => {
+    return this.params;
   }
+
+  checkValidity = () => {
+    const requiredFields = this.shadowRoot.querySelectorAll("[required]");
+    const validFields = []; // stores the validity of all required fields
+
+    requiredFields.forEach((field) => {
+      validFields.push(field.validity.valid);
+    });
+
+    // if false is not in the array of validFields, then the form is valid
+    this.isFormValid = !validFields.includes(false);
+    return this.isFormValid;
+  };
 }
 
-window.customElements.define('dependency-form', DependencyForm);
+window.customElements.define("dependency-form", DependencyForm);
