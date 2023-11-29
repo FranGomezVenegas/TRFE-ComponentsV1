@@ -165,7 +165,7 @@ export function DialogsFunctions(base) {
 
   nextRequest(action) {
     // This is required to get the action due to it is not being passed.
-    if (action.actionName===undefined){
+    if (action===undefined||action.actionName===undefined){
       action=this.actionBeingPerformedModel
     }
     //alert('nextRequest')
