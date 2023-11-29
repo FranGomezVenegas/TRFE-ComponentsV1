@@ -19,19 +19,22 @@ import "@vaadin/vaadin-grid/vaadin-grid-sort-column";
 import "@vaadin/vaadin-grid/vaadin-grid-filter-column";
 import "@doubletrade/lit-datatable";
 import "@google-web-components/google-chart";
-import {TrazitFormsElements} from '../GenericDialogs/TrazitFormsElements';
+import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
+
 export function DataViews(base) {
-  return class extends TrazitFormsElements(TrazitCredentialsDialogs(
-    AuditFunctions(
-      ModuleInstrumentsDialogs(
-        TrazitInvestigationsDialog(
-          ModuleEnvMonitDialogsMicroorganism(
-            TrazitEnterResultWithSpec(
-              TrazitReactivateObjectsDialog(
-                TrazitGenericDialogs(
-                  ModuleEnvMonitClientMethods(
-                    AuditFunctions(ButtonsFunctions(base))
-                  ))
+  return class extends TrazitFormsElements(
+    TrazitCredentialsDialogs(
+      AuditFunctions(
+        ModuleInstrumentsDialogs(
+          TrazitInvestigationsDialog(
+            ModuleEnvMonitDialogsMicroorganism(
+              TrazitEnterResultWithSpec(
+                TrazitReactivateObjectsDialog(
+                  TrazitGenericDialogs(
+                    ModuleEnvMonitClientMethods(
+                      AuditFunctions(ButtonsFunctions(base))
+                    )
+                  )
                 )
               )
             )
@@ -53,16 +56,20 @@ export function DataViews(base) {
                 type="${elem.chart_type}"
                 .data="${this.getChartData(elem)}"
                 .options="${this.getChartOptions(elem)}"
-                style="${elem.chart_style!==undefined?elem.chart_style: "height:400px; width: 100%;"}
+                style="${
+                  elem.chart_style !== undefined
+                    ? elem.chart_style
+                    : "height:400px; width: 100%;"
+                }
               ></google-chart>
             `}
       `;
     }
 
     getDataFromRoot(elem, data) {
-      if (elem!==undefined&&elem.contextVariableName!==undefined){
-        if (this[elem.contextVariableName]!==undefined){
-          data=this[elem.contextVariableName]
+      if (elem !== undefined && elem.contextVariableName !== undefined) {
+        if (this[elem.contextVariableName] !== undefined) {
+          data = this[elem.contextVariableName];
         }
       }
       if (data === null || data === undefined) {
@@ -871,21 +878,21 @@ export function DataViews(base) {
 
     handleTableRowClick(event, rowSelected, elem) {
       //alert(el);
-      
+
       //if (this.selectedItemInView===undefined||Object.keys(this.selectedItemInView).length === 0){
       //  this.selectedItemInView=undefined
       //}else{
-        this.selectedItemInView=rowSelected
+      this.selectedItemInView = rowSelected;
       //}
       // const event2 = new CustomEvent('action-performed', {
       //   bubbles: true, // Allow the event to bubble up the DOM tree
       //   composed: true, // Allow the event to cross the shadow DOM boundary
       // });
-  
-      // this.dispatchEvent(event2);
-      this.render()
 
-      console.log('handleTableRowClick', this.selectedItemInView)
+      // this.dispatchEvent(event2);
+      this.render();
+
+      console.log("handleTableRowClick", this.selectedItemInView);
       const popup = this.shadowRoot.querySelector(".js-context-popup");
       if (!popup.contains(event.target)) {
         popup.style.display = "none";
@@ -893,7 +900,7 @@ export function DataViews(base) {
     }
 
     handleOpenContextMenu(event, rowSelected, elem) {
-      return
+      return;
       event.preventDefault();
       const menu = document.createElement("ul");
       menu.innerHTML = `
@@ -910,7 +917,6 @@ export function DataViews(base) {
     }
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
-     // console.log('elem', elem, 'data', dataArr)
       if (isSecondLevel === undefined) {
         isSecondLevel = false;
       }
@@ -923,90 +929,111 @@ export function DataViews(base) {
       if (dataArr === undefined || !Array.isArray(dataArr)) {
         return html``;
       }
-      if (!this.dataContainsRequiredProperties(elem, dataArr)){
+      if (!this.dataContainsRequiredProperties(elem, dataArr)) {
         return nothing;
       }
+      
+      console.log(elem.row_buttons);
+
       return html`
         <style>
-          .styled-table {
-            display: -webkit-inline-box;
-            color: #4285f4;
-            font-size: 2vmin;
+          * {
+            box-sizing: border-box;
+          }
+
+          table#${elem.endPointResponseObject} {
+            min-width: 100%;
+            width: auto;
+            flex: 1;
+            display: grid;
             border-collapse: collapse;
-            font-family: sans-serif;
-            box-shadow: 0 0 20px #44cbe652;
-            table-layout: fixed;
-          }
-          @media screen and (min-width: 992px) {
-            .styled-table {
-              font-size: 1.8vmin;
-              margin: 2px 10px;
-            }
-          }
-          .styled-table thead tr {
-            background-color: #2989d8;
-            color: #ffffff;
-            text-align: center;
-            border: 1px solid #c2edf9;
-          }
-          .styled-table thead tr headercolumns {
-            background-color: 2989d870;
-            color: white;
+            border: 1px solid #2989d8;
+            /* These are just initial values which are overriden using JavaScript when a column is resized */
+            grid-template-columns:
+              ${elem.columns.map((column) => {
+                  if(column.width)
+                    return html`minmax(${column.width.min}, ${column.width.max}) `;
+                  return html`minmax(100px, 1.5fr) `;
+                }
+              )}
+              ${elem.row_buttons ? html`minmax(100px, ${70 * elem.row_buttons.length}px)` : html``}
           }
 
-          .styled-table th {
-            color: white;
-          }
-          .styled-table tbody tr:hover td {
-            color: white;
-            background-color: #2989d8;
+          table#${elem.endPointResponseObject} thead,
+          table#${elem.endPointResponseObject} tbody,
+          table#${elem.endPointResponseObject} tr {
+            display: contents;
           }
 
-          .styled-table td {
-            color: rgba(0, 0, 0, 0.71);
-            padding: 8px 15px;
-            // border: 1px solid #c2edf9;
-            word-break: break-word;
-            font-size: 1.6vmin;
+          table#${elem.endPointResponseObject} th,
+          table#${elem.endPointResponseObject} td {
+            padding: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border-right: 1px solid #2989d8;
           }
-          .styled-table tr td:first-of-type,
-          .styled-table tr td:nth-of-type(2),
-          .styled-table tr td:nth-of-type(3) {
+
+          table#${elem.endPointResponseObject} th {
+            border-right: 1px solid white;
+            z-index: 1;
+          }
+
+          table#${elem.endPointResponseObject} th:last-child,
+          table#${elem.endPointResponseObject} td:last-child {
+            border: 0;
+          }
+
+          .right-area {
+            overflow: hidden;
+            text-overflow: ellipsis;
             white-space: nowrap;
           }
-          .styled-table tbody tr {
-            position: relative;
-            cursor: pointer;
-            border-bottom: 1px solid #c2edf9;
+
+          table#${elem.endPointResponseObject} th {
+            position: sticky;
+            top: 0;
+            background: #2989d8;
+            text-align: center;
+            font-weight: normal;
+            font-size: 16px;
+            color: white;
           }
-          .styled-table tbody tr:nth-of-type(even) {
-            background-color: #c2f2ff5c;
+
+          table#${elem.endPointResponseObject} th:last-child {
+            border: 0;
           }
-          .styled-table tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
+
+          .resize-handle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: black;
+            opacity: 0;
+            width: 3px;
+            cursor: col-resize;
           }
-          .styled-table tbody tr.active-row {
-            font-weight: bold;
-            color: #009879;
+
+          .resize-handle:hover,
+          .header--being-resized .resize-handle {
+            opacity: 0.5;
           }
-          span.cardLabel {
-            font-weight: bold;
-            color: #032bbc;
+
+          table#${elem.endPointResponseObject} th:hover .resize-handle {
+            opacity: 0.3;
           }
-          span.cardValue {
-            color: #009879;
+
+          table#${elem.endPointResponseObject} td {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            color: #808080;
           }
-          span.title {
-            color: rgb(35, 163, 198);
-            margin-top: 10px;
-            font-weight: bold;
+
+          table#${elem.endPointResponseObject} tr:nth-child(even) td {
+            background: #f8f6ff;
           }
-          span.title.true {
-            font-size: 18px;
-          }
-          span.title.false {
-            font-size: 18px;
-          }
+
           mwc-icon-button.green {
             color: green;
             width: 12px;
@@ -1028,94 +1055,27 @@ export function DataViews(base) {
             border-radius: 4px;
             z-index: 1000;
           }
-          
-          .w3-responsive {
-            display: block;
-            overflow-x: auto;
-          }
-          .w3-container,
-          .w3-panel {
-            padding: 0.01em 4px;
-          }
-          .w3-panel {
-            margin-top: 16px;
-            margin-bottom: 16px;
-          }
-          .w3-container:after,
-          .w3-container:before,
-          .w3-panel:after,
-          .w3-panel:before,
-          .w3-row:after,
-          .w3-row:before,
-          .w3-row-padding:after,
-          .w3-row-padding:before,
-          .w3-blue,
-          .w3-hover-blue:hover {
-            color: rgba(
-              7,
-              13,
-              22,
-              0.94
-            ) !important;
-            background-color: #2196f3 !important;
-          }
-          .w3-background,
-          .w3-hover-blue:hover {
-            color: rgba(
-              7,
-              13,
-              22,
-              0.94
-            ) !important;
-            background-color: #ffdedd !important;
-          }
-          .title {
-            font-size: 8px;
-            font-weight: 500;
-            letter-spacing: 0;
-            line-height: 1.5em;
-            padding-bottom: 15px;
-            position: relative;
-            font-family: Montserrat;
-            font-color: rgb(
-              94,
-              145,
-              186
-            );
-          }
-        
 
-          .icon-text-container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .left-area,
-        .right-area {
-            flex-basis: 48%; /* Adjust the width as needed */
-        }
-        .icon {
+          .icon {
             position: absolute;
             left: 0;
             top: 0;
             z-index: 1; /* Ensure the icon appears above the text */
             width: 24px; /* Adjust the icon size as needed */
             height: 24px;
-            margin-right: 10px;             
-        }
+            margin-right: 10px;
+          }
 
-        .text {
+          .text {
             position: relative; /* To allow text to flow normally */
             z-index: 0; /* Default z-index */
-        }
-        .text span {
-          font-size: 14px;
-        }
+          }
+          .text span {
+            font-size: 14px;
+          }
         </style>
-
         <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
-          <div
-            style="display: flex; flex-direction: column; text-align: center;"
-          >
+          <div style="display: flex; flex-direction: column; text-align: center;">
             ${alternativeTitle !== undefined
               ? html` <p>
                   <span class="title ${isSecondLevel}"
@@ -1131,87 +1091,103 @@ export function DataViews(base) {
                         >
                       </p>`}
                 `}
-              <div class="layout horizontal center flex wrap">
-                ${this.getButton(elem, dataArr, true)}             
-              </div>
+            <div class="layout horizontal center flex wrap">
+              ${this.getButton(elem, dataArr, true)}
+            </div>
             ${elem.columns === undefined
               ? html`${elem.hideNoDataMessage !== undefined &&
                 elem.hideNoDataMessage
                   ? ""
                   : "No columns defined"}`
               : html`
-                  <table class="styled-table read-only">
+                  <table id=${elem.endPointResponseObject} class="styled-table read-only">
                     <thead>
                       <tr>
-                        ${elem.row_buttons === undefined
-                          ? nothing
-                          : html`<th></th>`}
                         ${elem.columns.map(
-                          (fld) => html` <th>${fld["label_" + this.lang]}</th> `
+                          (fld) => html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th> `
                         )}
+                        ${elem.row_buttons === undefined ? nothing : html`<th>Actions</th>`}
                       </tr>
                     </thead>
                     <tbody>
                       <div class="js-context-popup"></div>
-                      ${dataArr === undefined || !Array.isArray(dataArr)
-                        ? html`No Data`
-                        : html`
-                            ${dataArr.map((p) =>
+                      ${dataArr === undefined || !Array.isArray(dataArr) ? 
+                        html `No Data` : 
+                        html`
+                          ${dataArr.map((p) =>
                             html`
-                              <tr @click=${(event) => this.handleTableRowClick(event, p, elem)} @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}>
-                              ${elem.row_buttons === undefined? nothing
-                              : html`
-                                  <td>
-                                    <div class="layout horizontal center flex wrap">
-                                      ${this.getButtonForRows(elem.row_buttons,p,false)}
-                                    </div>
-                                  </td>
-                              `}
-                              ${elem.columns.map((fld) =>html`
-                                ${fld.name === "pretty_spec"? 
-                                html`
-                                  <td> <span style="color:green">${p["spec_text_green_area_" +this.lang]}</span>
-                                    <span style="color:orange">${p["spec_text_yellow_area_" +this.lang]}</span>
-                                    <span style="color:red">${p["spec_text_red_area_" +this.lang]}</span>
-                                  </td>
-                                `: html`
-                                    ${fld.as_progress !==undefined &&fld.as_progress === true? 
-                                    html`
-                                      <td>
-                                        <div class="w3-container">
-                                          <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
-                                              <div class="w3-container w3-blue w3-round-xlarge"style="width:${p[fld.name]}%">
-                                                ${p[fld.name]}%
-                                              </div>
-                                          </div>
-                                        </div>
-                                        <br/>
-                                      </td>
-                                    `: html`
-                                      <td>
-                                      <div class="icon-text-container">
-                                          ${fld.is_icon !==undefined&&fld.is_icon == true? html`
-                                          <div class="left-area">
-                                            <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                                          </div>
-                                          `:nothing}
-                                        <div class="right-area">
-                                          <span class="text">${fld.fix_value_prefix !==undefined? fld.fix_value_prefix: ""}<span>${p[fld.name]}</span>                                                          
-                                          ${fld.fix_value_suffix !==undefined? fld.fix_value_suffix: ""}
-                                          ${fld.fix_value2_prefix !==undefined? fld.fix_value2_prefix: ""}
-                                          <span>${fld.name2 !==undefined? p[fld.name2]: ""}</span>
-                                          ${fld.fix_value2_suffix !==undefined? fld.fix_value2_suffix: ""}
-                                          ${fld.fix_value3_prefix !==undefined? fld.fix_value3_prefix: ""}
-                                          <span>${fld.name3 !==undefined? p[fld.name3]: ""}${fld.fix_value3_suffix !==undefined? fld.fix_value3_suffix: ""}</span>
-                                        </div>
-                                        </div>
-                                      </td>
-                                    `}
-                                  `}                                              
-                                `)}
+                              <tr
+                                @click=${(event) => this.handleTableRowClick(event, p, elem)}
+                                @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
+                              >
+                                ${elem.columns.map((fld) => 
+                                  html`
+                                    ${fld.name === "pretty_spec"
+                                      ? html`
+                                          <td>
+                                            <span style="color:green">${p["spec_text_green_area_" + this.lang]}</span>
+                                            <span style="color:orange">${p["spec_text_yellow_area_" + this.lang]}</span>
+                                            <span style="color:red">${p["spec_text_red_area_" + this.lang]}</span>
+                                          </td>
+                                        `
+                                      : html`
+                                          ${fld.as_progress !== undefined && fld.as_progress === true ? 
+                                            html`
+                                              <td>
+                                                <div class="w3-container">
+                                                  <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
+                                                    <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%">
+                                                      ${p[fld.name]}%
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <br />
+                                              </td>
+                                            `
+                                            : html`
+                                              <td>
+                                                <div class="icon-text-container">
+                                                  ${fld.is_icon !== undefined && fld.is_icon == true ? 
+                                                    html`
+                                                      <div class="left-area">
+                                                        <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
+                                                      </div>
+                                                    ` : nothing
+                                                  }
+                                                  <div class="right-area">
+                                                    <span class="text">
+                                                      ${fld.fix_value_prefix !== undefined ? fld.fix_value_prefix: ""}
+                                                    </span>
+                                                    <span>${p[fld.name]}</span>                                                          
+                                                    ${fld.fix_value_suffix !== undefined ? fld.fix_value_suffix : ""}
+                                                    ${fld.fix_value2_prefix !== undefined ? fld.fix_value2_prefix : ""}
+                                                    <span>
+                                                      ${fld.name2 !== undefined ? p[fld.name2] : ""}
+                                                    </span>
+                                                    ${fld.fix_value2_suffix !== undefined ? fld.fix_value2_suffix : ""}
+                                                    ${fld.fix_value3_prefix !== undefined ? fld.fix_value3_prefix : ""}
+                                                    <span>
+                                                      ${fld.name3 !== undefined ? p[fld.name3] : ""}
+                                                      ${fld.fix_value3_suffix !== undefined ? fld.fix_value3_suffix : ""}
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              </td>
+                                            `}
+                                        `}
+                                  `)}
+                                ${elem.row_buttons === undefined
+                                  ? nothing : 
+                                  html`
+                                    <td>
+                                      <div class="layout horizontal center flex wrap">
+                                        ${this.getButtonForRows(elem.row_buttons, p, false)}
+                                      </div>
+                                    </td>
+                                  `}
                               </tr>
                             `
-                            )}
+                          )}
                         `}
                     </tbody>
                   </table>
@@ -1432,16 +1408,20 @@ export function DataViews(base) {
       `;
     }
 
-    dataContainsRequiredProperties(elem, dataArr){
+    dataContainsRequiredProperties(elem, dataArr) {
       //console.log('dataContainsRequiredProperties', elem.mantadoryPropertiesInVariableName, dataArr[0])
-      if (dataArr===undefined){return false}
-      if (elem.mantadoryPropertiesInVariableName===undefined){return true}
+      if (dataArr === undefined) {
+        return false;
+      }
+      if (elem.mantadoryPropertiesInVariableName === undefined) {
+        return true;
+      }
       //let rValue=true
-      const rValue = elem.mantadoryPropertiesInVariableName.every(curProp => {
+      const rValue = elem.mantadoryPropertiesInVariableName.every((curProp) => {
         return dataArr[0][curProp] !== undefined;
       });
-      //if (rValue===undefined){return true}    
-      return rValue
+      //if (rValue===undefined){return true}
+      return rValue;
     }
 
     get dialogEl() {
@@ -1505,17 +1485,19 @@ export function DataViews(base) {
     buttonsOnly(elem, data) {
       //console.log('buttonsOnly', 'elem', elem, 'data', data)
       return html`
-        ${elem === undefined || elem.title === undefined
-          ? nothing
-          : html`<span
-              style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;"
-              >${elem.title["label_" + this.lang]}</span
-            >`}
+        ${
+          elem === undefined || elem.title === undefined
+            ? nothing
+            : html`<span
+                style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;"
+                >${elem.title["label_" + this.lang]}</span
+              >`
+        }
                 <div style="flex-basis: auto; width: auto;">
                   ${this.getButton(elem, data, true)}
                 </div>
               </div>
-            ` 
+            `;
     }
     kpiCardSomeElementsMain(elem, data) {
       //console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
@@ -1527,7 +1509,10 @@ export function DataViews(base) {
               >${elem.title["label_" + this.lang]}</span
             >`}
         ${data === undefined
-          ? html`${elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage ? "": "No columns defined"}`
+          ? html`${elem.hideNoDataMessage !== undefined &&
+            elem.hideNoDataMessage
+              ? ""
+              : "No columns defined"}`
           : html`
               <style>
                 ul.column-list {
@@ -1612,8 +1597,8 @@ export function DataViews(base) {
                   border-radius: 10px;
                   padding: 10px;
                   margin-right: 2px;
-                  overflow: hidden;                                      
-                  flex-basis: calc(33.33% - 10px);               
+                  overflow: hidden;
+                  flex-basis: calc(33.33% - 10px);
                 }
                 iframe {
                   width: 100%;
@@ -1629,7 +1614,7 @@ export function DataViews(base) {
                   left: 0;
                   width: 1000px;
                   height: 600px;
-                  background-color: white /* rgba(0, 0, 0, 0.5); */
+                  background-color: white; /* rgba(0, 0, 0, 0.5); */
                 }
 
                 /* Iframe styles */
@@ -1684,12 +1669,14 @@ export function DataViews(base) {
                 elem.add_border == true
                   ? "addborder"
                   : ""}"
-                class="layout vertical flex wrap" style="${elem.style!==undefined?elem.style:''}"
+                class="layout vertical flex wrap"
+                style="${elem.style !== undefined ? elem.style : ""}"
               >
                 <div style="flex-basis: auto; width: auto;">
                   ${this.getButton(elem, data, true)}
                 </div>
-                <ul style="align-items: baseline;"
+                <ul
+                  style="align-items: baseline;"
                   class="column-list${elem.num_columns !== undefined
                     ? elem.num_columns
                     : ""}"
@@ -1703,10 +1690,16 @@ export function DataViews(base) {
                               ${fld.as_ppt !== undefined &&
                               (fld.as_ppt === true || fld.as_video === true)
                                 ? html`
-                                    <mwc-icon-button icon="fullscreen" .isvideo=${data.is_video}
-                                      .src=${data[fld.name]} @click=${this.openDialogFrame}
-                                      .fld=${fld}></mwc-icon-button>
-                                    ${data.is_video === undefined ||data.is_video === false? html`                                          
+                                    <mwc-icon-button
+                                      icon="fullscreen"
+                                      .isvideo=${data.is_video}
+                                      .src=${data[fld.name]}
+                                      @click=${this.openDialogFrame}
+                                      .fld=${fld}
+                                    ></mwc-icon-button>
+                                    ${data.is_video === undefined ||
+                                    data.is_video === false
+                                      ? html`
                                           <iframe
                                             src=${data[fld.name]}
                                             @click=${this.openDialogFrame}
@@ -1950,14 +1943,16 @@ export function DataViews(base) {
                               ${this.loadDialogs()}
                               <div class="card">
                                 <sp-card-ext
-                                  heading="${elem.title===undefined?'':elem.title[
-                                    "label_" + this.lang
-                                  ] === undefined
+                                  heading="${elem.title === undefined
+                                    ? ""
+                                    : elem.title["label_" + this.lang] ===
+                                      undefined
                                     ? "-"
                                     : elem.title["label_" + this.lang]}"
-                                  subheading="${elem.subtitle===undefined?'':elem.subtitle[
-                                    "label_" + this.lang
-                                  ] === undefined
+                                  subheading="${elem.subtitle === undefined
+                                    ? ""
+                                    : elem.subtitle["label_" + this.lang] ===
+                                      undefined
                                     ? "-"
                                     : elem.subtitle["label_" + this.lang]}"
                                 >
@@ -1972,33 +1967,38 @@ export function DataViews(base) {
                                         isProcManagement
                                       )}
                                     </div>
-                                    ${elem.fieldsToDisplay===undefined?nothing:elem.fieldsToDisplay.map(
-                                      (d) =>
-                                        html`<li class="cardelement">
-                                          ${d["label_" + this.lang]}:
-                                          ${curData[
-                                            d.field_name
-                                          ]}${d.fix_value_suffix !== undefined
-                                            ? d.fix_value_suffix
-                                            : ""}
-                                          ${d.fix_value2_prefix !== undefined
-                                            ? d.fix_value2_prefix
-                                            : ""}${d.name2 !== undefined
-                                            ? curData[d.field_name2]
-                                            : ""}${d.fix_value2_suffix !==
-                                          undefined
-                                            ? d.fix_value2_suffix
-                                            : ""}
-                                          ${d.fix_value3_prefix !== undefined
-                                            ? d.fix_value3_prefix
-                                            : ""}${d.name3 !== undefined
-                                            ? curData[d.field_name3]
-                                            : ""}${d.fix_value3_suffix !==
-                                          undefined
-                                            ? d.fix_value3_suffix
-                                            : ""}
-                                        </li>`
-                                    )}
+                                    ${elem.fieldsToDisplay === undefined
+                                      ? nothing
+                                      : elem.fieldsToDisplay.map(
+                                          (d) =>
+                                            html`<li class="cardelement">
+                                              ${d["label_" + this.lang]}:
+                                              ${curData[
+                                                d.field_name
+                                              ]}${d.fix_value_suffix !==
+                                              undefined
+                                                ? d.fix_value_suffix
+                                                : ""}
+                                              ${d.fix_value2_prefix !==
+                                              undefined
+                                                ? d.fix_value2_prefix
+                                                : ""}${d.name2 !== undefined
+                                                ? curData[d.field_name2]
+                                                : ""}${d.fix_value2_suffix !==
+                                              undefined
+                                                ? d.fix_value2_suffix
+                                                : ""}
+                                              ${d.fix_value3_prefix !==
+                                              undefined
+                                                ? d.fix_value3_prefix
+                                                : ""}${d.name3 !== undefined
+                                                ? curData[d.field_name3]
+                                                : ""}${d.fix_value3_suffix !==
+                                              undefined
+                                                ? d.fix_value3_suffix
+                                                : ""}
+                                            </li>`
+                                        )}
                                   </div>
                                 </sp-card-ext>
                               </div>
@@ -2065,8 +2065,8 @@ export function DataViews(base) {
       let chartObj = this.shadowRoot.querySelector("google-chart#" + chartName);
       if (chartObj !== undefined && chartObj !== null) {
         chartObj.style.setProperty("width", "1600px");
-      }      
-      console.log('chartStyle', 'chartName', chartName, chartObj)
+      }
+      console.log("chartStyle", "chartName", chartName, chartObj);
     }
 
     addNumericValue(rule, value) {
@@ -2107,9 +2107,14 @@ export function DataViews(base) {
       // console.log('getChartData', elem, 'chartData', this.data[elem.chart_name])
       var chartData = [];
 
-      if (elem.elementName==='cdatatable'){
+      if (elem.elementName === "cdatatable") {
         var data = [
-          ['Day', 'Guardians of the Galaxy', 'The Avengers', 'Transformers: Age of Extinction'],
+          [
+            "Day",
+            "Guardians of the Galaxy",
+            "The Avengers",
+            "Transformers: Age of Extinction",
+          ],
           [1, 37.8, 80.8, 41.8],
           [2, 30.9, 69.5, 32.4],
           [3, 25.4, 57, 25.7],
@@ -2123,45 +2128,61 @@ export function DataViews(base) {
           [11, 5.3, 7.9, 4.7],
           [12, 6.6, 8.4, 5.2],
           [13, 4.8, 6.3, 3.6],
-          [14, 4.2, 6.2, 3.4]
-        ]
-        return data    
+          [14, 4.2, 6.2, 3.4],
+        ];
+        return data;
       }
-      if (this.data===undefined||this.data[elem.chart_name]===undefined){
-        if (this.selectedItem!==undefined){
-          this.data=this.selectedItem
-        }else{
-          if (this.selectedItemInView!==undefined){this.data=this.selectedItemInView}
+      if (this.data === undefined || this.data[elem.chart_name] === undefined) {
+        if (this.selectedItem !== undefined) {
+          this.data = this.selectedItem;
+        } else {
+          if (this.selectedItemInView !== undefined) {
+            this.data = this.selectedItemInView;
+          }
         }
       }
       //chartData = [[elem.label_item, elem.label_value]];
-      if (this.data!==undefined&&this.data[elem.chart_name] !== undefined) {
+      if (this.data !== undefined && this.data[elem.chart_name] !== undefined) {
         var dataForChart = this.data[elem.chart_name];
 
-        let seriesArr=[]
-        if (Array.isArray(elem.counter_field_name)){
-          seriesArr=elem.counter_field_name
-        }else{
-          seriesArr.push(elem.counter_field_name)
+        let seriesArr = [];
+        if (Array.isArray(elem.counter_field_name)) {
+          seriesArr = elem.counter_field_name;
+        } else {
+          seriesArr.push(elem.counter_field_name);
         }
 
         let curchtHeader = [];
-        curchtHeader.push(elem.label_item)
+        curchtHeader.push(elem.label_item);
         for (var iSerie = 0; iSerie < seriesArr.length; iSerie++) {
           curchtHeader.push(seriesArr[iSerie]);
         }
-        chartData.push(curchtHeader);   
+        chartData.push(curchtHeader);
         for (var iData = 0; iData < dataForChart.length; iData++) {
-          if (!elem.grouper_exclude_items.includes(dataForChart[iData][elem.grouper_field_name])) {
-            for (var iSerie = 0; iSerie < seriesArr.length; iSerie){
-            if (this.addNumericValue(elem.counterLimits,dataForChart[iData][seriesArr[iSerie]])) {              
+          if (
+            !elem.grouper_exclude_items.includes(
+              dataForChart[iData][elem.grouper_field_name]
+            )
+          ) {
+            for (var iSerie = 0; iSerie < seriesArr.length; iSerie) {
+              if (
+                this.addNumericValue(
+                  elem.counterLimits,
+                  dataForChart[iData][seriesArr[iSerie]]
+                )
+              ) {
                 let curchtval = [];
-                curchtval.push(this.labelPossibleReplacement(elem, dataForChart[iData][elem.grouper_field_name]));
-                
+                curchtval.push(
+                  this.labelPossibleReplacement(
+                    elem,
+                    dataForChart[iData][elem.grouper_field_name]
+                  )
+                );
+
                 for (var iSerie = 0; iSerie < seriesArr.length; iSerie++) {
                   curchtval.push(dataForChart[iData][seriesArr[iSerie]]); // Add each value from seriesArr as a column
                 }
-                chartData.push(curchtval);                
+                chartData.push(curchtval);
               }
             }
           } // iSerie
