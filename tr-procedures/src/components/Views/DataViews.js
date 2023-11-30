@@ -1031,7 +1031,7 @@ export function DataViews(base) {
           }
 
           table#${elem.endPointResponseObject} tr:nth-child(even) td {
-            background: #f8f6ff;
+            background:  rgba(214, 233, 248, 0.37);
           }
 
           mwc-icon-button.green {
