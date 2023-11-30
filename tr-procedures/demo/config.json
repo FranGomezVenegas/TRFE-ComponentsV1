@@ -3,6 +3,7 @@
   "dbNameDemo2": "demo_v0_9_2",
   "isForTesting": true,
   "backendUrl": "http://platform.trazit.net:8888/TRAZiT-API",
+  "backendUrlhttps": "https://platform.trazit.net:8443/TRAZiT-API",
   "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
   "backendUrlLabP": "http://platform.trazit.net:8888/LabPLANET-API",
   "backendUrlLocalLabPLANETAPI": "http://localhost:8080/LabPLANET-API",
@@ -83,17 +84,17 @@
     "viewName": "Incubators", 
     "filterName" :  "Incubators" 
   },
-  "localDefaultView": {
+  "localDefaultViewsasasa": {
     "procName":  "em-demo-a", 
     "viewName": "SamplePendingSampling", 
     "filterName" :  "SamplingSMP" 
   },
-  "localDefaultViewzzzs": {
+  "localDefaultViewzzzsaaa": {
     "procName":  "em-demo-a", 
     "viewName": "SampleIncubation", 
     "filterName" :  "Incubation" 
   },
-  "localDefaultView": {
+  "localDefaultViewsa": {
     "procName":  "em-demo-a", 
     "viewName": "SampleIncubation1", 
     "filterName" :  "Incubation" 
@@ -244,8 +245,8 @@
     "filterName" :  "prototype-elements-view-main" 
   },  
   
-  "localDefaultView1123": {
-    "procName":  "mp-release1", 
+  "localDefaultView": {
+    "procName":  "inspection_lot", 
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
   },

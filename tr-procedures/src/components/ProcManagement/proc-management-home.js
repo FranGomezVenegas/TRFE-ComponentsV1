@@ -8,8 +8,9 @@ import "../../components/ObjectByTabs/object-by-tabs";
 import { CommonCore } from "@trazit/common-core";
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { ProcManagementMethods } from "./ProcManagementMethods";
+import {TrazitTestScriptNewStepDialog} from "../GenericDialogs/TrazitTestScriptNewStepDialog";
 
-export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))) {
+export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))) {
   static get properties() {
     return {
       config: { type: Object },
@@ -311,6 +312,7 @@ export class ProcManagementHome extends (ProcManagementMethods(ApiFunctions(Traz
     //${this.credentialsDialog()}
     return html`    
       ${this.genericFormDialog()}
+      ${this.testScriptNewStepFormDialog()}
     `
   }
   updated(changedProperties) {

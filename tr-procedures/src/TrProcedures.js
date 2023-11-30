@@ -316,6 +316,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     this.selectedDialogAction = null
   }
   ownComponents(){
+    if (this.viewModelFromProcModel===null){
+      return html``
+    }
     if (this.viewModelFromProcModel!==null&&this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.component!==undefined){
       //console.log('ownComponents', 'component', this.viewModelFromProcModel.component, 'viewName', this.viewName)
     }
