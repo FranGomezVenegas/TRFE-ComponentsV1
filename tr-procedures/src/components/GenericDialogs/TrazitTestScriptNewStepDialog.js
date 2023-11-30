@@ -115,7 +115,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         >
             <dependency-form 
                 .lang=${this.lang}
-                .endpoints=${this.listTestEntries()}
+                .endpoints=${this.listTestEndpointsList()} .notifications=${this.listTestNotificationsList()}
             ></dependency-form>
             <div style="margin-top:30px;text-align:center">
                 <sp-button 
@@ -214,7 +214,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         extraParams=extraParams+"&procedureName=" + this.procedureName;
         extraParams=extraParams+"&procedureVersion=" + this.procedureVersion;
         extraParams=extraParams+"&expectedSyntaxis=" + data.expectedSyntaxis;
-        extraParams=extraParams+"&expectedNotification=" + data.expectedNotification;
+        extraParams=extraParams+"&expectedNotification=" + data.notification;
         let APIParams = this.getAPICommonParams(actionModel, true);
         let endPointUrl = this.getActionAPIUrl(actionModel);
         if (String(endPointUrl).toUpperCase().includes("ERROR")) {
@@ -226,6 +226,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         console.log("performActionRequestHavingDialogOrNot","actionModel",actionModel,"selectedItem",this.selectedItem,"extraParams",extraParams);
     
         let log = true;
+        params = params.replace(/\|/g, "%7C");
         await this.fetchApi(params)
           .then((j) => {
             if (j && !j.is_error) {
@@ -400,7 +401,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         //console.log(e.targetValue)
     }
     // listEntries(fld){
-    listTestEntries(){
+    listTestEndpointsList(){
         let fld={}
         fld.addBlankValueOnTop=true
         fld.valuesFromMasterData= {
@@ -448,6 +449,55 @@ export function TrazitTestScriptNewStepDialog(base) {
         // )}
         // `
     }
+    listTestNotificationsList(){
+        let fld={}
+        fld.addBlankValueOnTop=true
+        fld.valuesFromMasterData= {
+            "propertyNameContainer": "modules",
+            "filterInFirstLevel": true,
+            "filterPropertyName": "module_name",
+            "contextVariableName": "moduleName",
+            "propertyNameContainerLevel2": "module_error_notifications",
+            "propertyKeyName": "error_code",
+            "propertyKeyValueEn": "error_code",
+            "propertyKeyValueEs": "error_code"
+        }
+        console.log("listEntries", fld);
+        var blankEmpty={ keyName:"", keyValue_en:"", keyValue_es:"", arguments_array: [] }
+        var newList=[]
+        if (fld===undefined){
+            // return html`<mwc-list-item></mwc-list-item>`
+            return [];
+        }
+        if (fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true){
+            newList.push(blankEmpty)
+        }
+        if (fld.valuesFromMasterData!==undefined){
+            var MDentriesArr=this.listTestEntriesFromMasterData(fld.valuesFromMasterData)
+            if (MDentriesArr.length>0){
+                MDentriesArr.forEach(item =>newList.push(item))
+            }
+        } else if (fld.valuesFromSelectedItem!==undefined){
+            var MDentriesArr=this.listTestEntriesFromSelectedItem(fld.valuesFromSelectedItem)
+            if (MDentriesArr.length>0){
+                MDentriesArr.forEach(item =>newList.push(item))
+            }
+        }else{
+            fld.items.forEach(item =>newList.push(item))
+        }
+        if (fld.addBlankValueAtBottom!==undefined&&fld.addBlankValueAtBottom===true){
+            newList.push(blankEmpty)
+        }
+    
+        // console.log(newList);
+        return newList;
+        // return html`
+        //     ${newList.map((c, i) =>
+        //     html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+        // )}
+        // `
+    }
+
     listEntriesForUom(fld, fldName){
         console.log('listEntriesForUom')
         var blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}

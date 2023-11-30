@@ -11,6 +11,8 @@ export class DependencyForm extends LitElement {
     return {
       endpoint: { type: String },
       endpoints: { type: Array },
+      notification: { type: String },
+      notifications: { type: Array },      
       params: { type: Array },
       lang: { type: String },
       isFormValid: { type: Boolean }
@@ -21,6 +23,8 @@ export class DependencyForm extends LitElement {
     super();
     this.endpoints = [];
     this.params = [];
+    this.notification = "";
+    this.notifications = [];
     this.endpoint = "";
     this.lang = "";
   }
@@ -28,6 +32,7 @@ export class DependencyForm extends LitElement {
   render() {
     return template({
       endpoints: this.endpoints,
+      notifications: this.notifications,
       params: this.params,
       lang: this.lang,
       checkValidity: this._checkValidity,
@@ -43,7 +48,7 @@ export class DependencyForm extends LitElement {
     this.endpoint = this.endpoints[idx].keyName;
     this.params = this.endpoints[idx]?.arguments_array ?? [];
   };
-  
+
   getFormFields = () => {
     this.checkValidity();
     if(!this.isFormValid)

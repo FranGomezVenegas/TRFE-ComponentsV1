@@ -66,13 +66,20 @@ export const template = (props) => {
           <mwc-formfield label="Expected successful?">
             <mwc-checkbox name="expectedSyntaxis"></mwc-checkbox>
           </mwc-formfield>
-          <mwc-textfield
-            type="text"
-            required
-            label="Expected Notification"
-            name="expectedNotification"
-            @blur=${props.checkValidity}
-          ></mwc-textfield>
+          <mwc-select            
+            fixedMenuPosition            
+            id="notification"
+            name="notification"
+            label="notification"
+          >
+            ${props.notifications.map((notif, idx) => {
+              return html`
+                <mwc-list-item value=${notif.keyName}>
+                  ${notif["keyValue_" + props.lang]}
+                </mwc-list-item>
+              `;
+            })}
+          </mwc-select>
         </div>
       </form>
     </div>
