@@ -10,6 +10,7 @@ export function ApiFunctions(base) {
           log = false
         }
         log = true
+        urlParams = urlParams.replace(/\|/g, "%7C");
         //console.log('fetchApi, log', log, 'urlParams', urlParams, urlParams.toString().toUpperCase())
         urlParams += "&isForTesting="+ this.config.isForTesting
         this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))

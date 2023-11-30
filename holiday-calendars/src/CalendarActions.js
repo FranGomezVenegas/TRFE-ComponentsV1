@@ -18,7 +18,7 @@ export function CalendarActions(base) {
             if (extraParams!==undefined){
               params=params + '&' + new URLSearchParams(extraParams)
             }
-      
+            params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(() => {
                 this.getHolidayCalendars()
               //this.reload()
@@ -95,6 +95,7 @@ export function CalendarActions(base) {
             }
             //console.log(extraParams)
             //return
+            params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(() => {
               //alert('closing dialog')
               this[action.dialogInfo.name].close()
@@ -154,6 +155,7 @@ export function CalendarActions(base) {
             if (extraParams!==undefined){
               params=params + '&' + new URLSearchParams(extraParams)
             }
+            params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(() => {
               if (action!==undefined&&action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined){
                 alert('closing dialog')

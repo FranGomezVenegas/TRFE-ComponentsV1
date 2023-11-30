@@ -181,6 +181,7 @@ return class extends CalendarActions(base) {
         }
         let params = this.config.backendUrl + endPointUrl
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
+        params = params.replace(/\|/g, "%7C");
         this.fetchApi(params).then(j => {
           if (j && !j.is_error) {
             this.deactivatedObjects = j

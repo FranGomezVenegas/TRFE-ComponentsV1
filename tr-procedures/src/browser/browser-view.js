@@ -210,6 +210,7 @@ export class BrowserView extends LitElement {
     }
     let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
       + '?' + new URLSearchParams(reqParams)
+    params = params.replace(/\|/g, "%7C");
     this.fetchApi(params).then(j => {
       if (j && !j.is_error) {
         this.sampleData = j

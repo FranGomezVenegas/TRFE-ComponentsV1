@@ -416,6 +416,7 @@ export class CredDialog extends CommonCore {
       userToCheck: this.userTxtFld.value,
       passwordToCheck: this.pwd.value
     })
+    params = params.replace(/\|/g, "%7C");
     this.fetchApi(params).then(j => {
       if (j.is_error) {
         this.checkAttempt()
@@ -431,6 +432,7 @@ export class CredDialog extends CommonCore {
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       esignPhraseToCheck: this.esg.value
     })
+    params = params.replace(/\|/g, "%7C");
     this.fetchApi(params).then(j => {
       if (j.is_error) {
         this.checkAttempt()
@@ -494,6 +496,7 @@ export class CredDialog extends CommonCore {
     // if (extraParams!==undefined){
     //   params=params + '&' + new URLSearchParams(extraParams)
     // }
+    params = params.replace(/\|/g, "%7C");
     this.fetchApi(params).then(() => {
 //      this.reload()
     })

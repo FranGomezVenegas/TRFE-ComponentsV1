@@ -13,6 +13,7 @@ export function AuditFunctions(base) {
             }
             let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
               + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
+            params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(j => {
               if (j && !j.is_error) {
                 if (Array.isArray(j)){
@@ -34,6 +35,7 @@ export function AuditFunctions(base) {
         signAudit() {
         let params = this.config.backendUrl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
             + '?' + new URLSearchParams(this.reqParams)
+        params = params.replace(/\|/g, "%7C");
         this.fetchApi(params).then(() => {
             this.reloadDialog()
         })

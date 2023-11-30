@@ -111,7 +111,8 @@ export function CalendarUtilities(base) {
             let params = this.config.backendUrl + endPointUrl
               + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
     
-            //console.log('params', params)        
+            //console.log('params', params)    
+            params = params.replace(/\|/g, "%7C");    
             await this.fetchApi(params).then(j => {
               if (j && !j.is_error) {
                 this.setGrid(j)

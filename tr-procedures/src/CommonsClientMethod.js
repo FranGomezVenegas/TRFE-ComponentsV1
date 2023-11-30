@@ -28,6 +28,7 @@ export function CommonsClientMethod(base) {
       if (extraParams!==undefined){
         params=params + '&' + new URLSearchParams(extraParams)
       }
+      params = params.replace(/\|/g, "%7C");  
       this.fetchApi(params).then(() => {
         this.reload()
       })
@@ -43,6 +44,7 @@ export function CommonsClientMethod(base) {
       }
       let params = this.config.backendUrl + this.selectedAction.dialogInfo.action[0].endPoint
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(() => {
         if (this.reload!==undefined){
           this.reload()
@@ -55,6 +57,7 @@ export function CommonsClientMethod(base) {
       this.deactivatedObjects = []
       let params = this.config.backendUrl + this.selectedDialogAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.deactivatedObjects = j

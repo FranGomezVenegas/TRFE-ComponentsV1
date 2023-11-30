@@ -7,6 +7,7 @@ export function ClientMethod(base) {
 console.log('getSamples', 'actionObj', this.actionObj)      
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.frontEndEnvMonitSampleUrl)
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.setGrid(j)
@@ -19,6 +20,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
     getMicroorganism() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");        
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.microName = null
@@ -34,6 +36,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       this.sampleState = { action: JSON.stringify(this.selectedAction), sample: this.selectedSamples[0].sample_id }
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(() => {
         this.reload()
       })
@@ -50,6 +53,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id + "*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.microName = null
@@ -73,6 +77,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
     setIncubator() {
       let params = this.config.backendUrl + this.config.ApiEnvMonitUrl
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(j => {
         this.newBatchDialog.close()
         this.assignDialog.close()
@@ -83,6 +88,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
     getAssign() {
       let params = this.config.backendUrl + this.config.frontEndEnvMonitIncubationUrl
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.selectedAssigns = []
@@ -113,6 +119,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       }
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(() => {
         this.reload()
       })
@@ -124,6 +131,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
       console.log('getLots')
       let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(j => {
         this.samplesReload = false
         this.langConfig.fieldText.lot.items = j
@@ -135,6 +143,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
     logSample() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(() => {
         this.pointDialog.close()
       })
@@ -143,6 +152,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
     reviewTest() {
       let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
+      params = params.replace(/\|/g, "%7C");
       this.fetchApi(params).then(() => {
         this.reload()
       })

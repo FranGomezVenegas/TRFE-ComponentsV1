@@ -240,6 +240,7 @@ export function CommonsDialogTemplate(base) {
         this.selectedSamples = []
         let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl)
           + '?' + new URLSearchParams(this.reqParams)
+        params = params.replace(/\|/g, "%7C");
         await this.fetchApi(params).then(j => {
           if (j && !j.is_error) {
             this.setGrid(j)
@@ -302,6 +303,7 @@ export function CommonsDialogTemplate(base) {
         }
         let params = this.config.backendUrl + this.selectedAction.dialogInfo.action[0].endPoint
           + '?' + new URLSearchParams(this.reqParams)
+        params = params.replace(/\|/g, "%7C");
         this.fetchApi(params).then(() => {
           if (this.reload!==undefined){
             this.reload()
@@ -314,6 +316,7 @@ export function CommonsDialogTemplate(base) {
         this.deactivatedObjects = []
         let params = this.config.backendUrl + this.selectedDialogAction.endPoint
           + '?' + new URLSearchParams(this.reqParams)
+        params = params.replace(/\|/g, "%7C");
         this.fetchApi(params).then(j => {
           if (j && !j.is_error) {
             this.deactivatedObjects = j
