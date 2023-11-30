@@ -215,11 +215,6 @@ export function TrazitTestScriptNewStepDialog(base) {
         extraParams=extraParams+"&procedureVersion=" + this.procedureVersion;
         extraParams=extraParams+"&expectedSyntaxis=" + data.expectedSyntaxis;
         extraParams=extraParams+"&expectedNotification=" + data.expectedNotification;
-
-        //expectedSyntaxis
-        //expectedNotification
-
-
         let APIParams = this.getAPICommonParams(actionModel, true);
         let endPointUrl = this.getActionAPIUrl(actionModel);
         if (String(endPointUrl).toUpperCase().includes("ERROR")) {
@@ -612,6 +607,12 @@ export function TrazitTestScriptNewStepDialog(base) {
 
     buildTestFrontListFromData(fldMDDef, data){
         if (data===undefined){return []}
+        
+        if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name===undefined||this.actionBeingPerformedModel.dialogInfo.name.toString().toUpperCase()!=="TESTSCRIPTNEWSTEPDIALOG"){
+            return false
+       }    
+        
+        
         console.log('masterData', data)
         console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
         var entries=[]
