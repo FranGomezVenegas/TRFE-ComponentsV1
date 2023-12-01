@@ -373,13 +373,22 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       }
       //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
       return html`
-
-      <objecttabs-composition .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
-      .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}  .viewName=${this.viewName} .filterName=${this.filterName} 
-      .selectedItem=${this.selectedItem}  .viewModelFromProcModel=${this.viewModelFromProcModel} .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement} 
-      .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-      .filterCurrentData=${this.filterCurrentData}>
-      </objecttabs-composition>      
+        <objecttabs-composition 
+          .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
+          .viewModelFromProcModel=${this.viewModelFromProcModel} 
+          .lang=${this.lang} 
+          .config=${this.config}  
+          .procInstanceName=${this.procInstanceName} 
+          .selectedItem=${this.selectedItem}  
+          .viewName=${this.viewName} 
+          .procedureName=${this.procedureName} 
+          .procedureVersion=${this.procedureVersion} 
+          .filterName=${this.filterName} 
+          .moduleName=${this.moduleName} 
+          .moduleVersion=${this.moduleVersion} 
+          ?isProcManagement=${this.isProcManagement} 
+          .filterCurrentData=${this.filterCurrentData}
+        ></objecttabs-composition>     
       `
     }
     tabOnOpenView() {

@@ -93,7 +93,8 @@ export function ApiFunctions(base) {
           let jsonParam = {}
           if (action.endPointParams) {
             action.endPointParams.forEach(p => {
-              if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {          
+              if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {     
+                     
                 if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
                   var msg=""
                   if (this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){

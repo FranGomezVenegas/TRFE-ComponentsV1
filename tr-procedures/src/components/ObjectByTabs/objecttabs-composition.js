@@ -56,21 +56,22 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
   }
   static get properties() {
     return {
+      selectedTabModelFromProcModel: { type: Object },
       viewModelFromProcModel: { type: Object },
+      lang: {type: String},
       config: { type: Object },
       procInstanceName: { type: String },
       selectedItem: { type: Object },
-      selectedTabModelFromProcModel: { type: Object },
       sopsPassed: { type: Boolean },
       viewName: { type: String },
+      procedureName: { type: String },
+      procedureVersion: { type: Number },
       filterName: { type: String },
+      moduleName: { type: String },
+      moduleVersion: { type: Number },
       isProcManagement: { type: Boolean },
       filterCurrentData: {type: Object},
       selectedItemInView:{ type: Object },
-      moduleVersion: { type: Number },
-      moduleName: { type: String },
-      procedureVersion: { type: Number },
-      procedureName: { type: String }
     }
   }
   constructor() {
@@ -82,9 +83,12 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
     this.config = {}
     this.sopsPassed=false    
     this.filterCurrentData={}
+    this.lang = "";
   }
   render(){
     //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
+    console.log("composition-render", this.selectedItem);
+    console.log("composition-render", this.filterCurrentData)
     return html`
       <div>
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
