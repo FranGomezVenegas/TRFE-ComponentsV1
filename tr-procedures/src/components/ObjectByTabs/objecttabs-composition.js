@@ -6,6 +6,7 @@ import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
 import {CoaView} from '../../components/Views/CoaView';
 import "../Tree/treeview/index";
+import "../ParentReadOnlyTable/ParentReadOnlyTable";
 
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import { TrazitTestScriptNewStepDialog } from '../GenericDialogs/TrazitTestScriptNewStepDialog';
@@ -87,8 +88,6 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
   }
   render(){
     //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
-    console.log("composition-render", this.selectedItem);
-    console.log("composition-render", this.filterCurrentData)
     return html`
       <div>
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
@@ -185,7 +184,6 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
   }
 
   updated(changedProperties) {
-    console.log("changedProperties", changedProperties);
     if(changedProperties.has('selectedTabModelFromProcModel')) {
       const tables = this.shadowRoot.querySelectorAll("table");
       tables.forEach((table) => {
@@ -212,7 +210,22 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
             ${elem2.type==="chart" ? this.kpiChartFran(elem2, true) : nothing}   
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
-            ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
+            ${elem2.type==="readOnlyTable" ? 
+              this.parentReadOnlyTable(
+                elem2, 
+                data, 
+                true, 
+                undefined, 
+                undefined,
+                {
+                  elem: elem2, 
+                  dataArr: data, 
+                  isSecondLevel: true, 
+                  directData: undefined,
+                  alertnativeTitle: undefined, 
+                  child: undefined
+                }
+              ): nothing}
             ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 

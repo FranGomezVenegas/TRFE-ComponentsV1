@@ -916,7 +916,7 @@ export function DataViews(base) {
       popup.style.display = "block";
     }
 
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler) {
       if (isSecondLevel === undefined) {
         isSecondLevel = false;
       }
@@ -1117,7 +1117,12 @@ export function DataViews(base) {
                           ${dataArr.map((p) =>
                             html`
                               <tr
-                                @click=${(event) => this.handleTableRowClick(event, p, elem)}
+                                @click=${(event) => {
+                                  console.log(handler);
+                                  if(handler) 
+                                    handler(event, p, elem);
+                                  this.handleTableRowClick(event, p, elem)
+                                }}
                                 @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
                               >
                                 ${elem.columns.map((fld) => 
@@ -1194,6 +1199,13 @@ export function DataViews(base) {
                 `}
           </div>
         </div>
+      `;
+    }
+
+    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, child) {
+      return html`
+        ${this.readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handleFitler)}
+        ${child && this.parentReadOnlyTable(child.elem, child.dataArr, child.isSecondLevel, child.directData, child.alternativeTitle, child?.child)}
       `;
     }
 
