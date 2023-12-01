@@ -1203,8 +1203,16 @@ export function DataViews(base) {
     }
 
     parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, child) {
+      console.log("hello")
+
+      const handleFilter = (event, p, elem) => {
+        const data = this.getDataFromRoot(elem, dataArr);
+        const randIdx = Math.random() * data.length;
+        child.directData = data.slice(0, Math.floor(randIdx));
+      }
+
       return html`
-        ${this.readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handleFitler)}
+        ${this.readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handleFilter)}
         ${child && this.parentReadOnlyTable(child.elem, child.dataArr, child.isSecondLevel, child.directData, child.alternativeTitle, child?.child)}
       `;
     }
