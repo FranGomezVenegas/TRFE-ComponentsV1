@@ -1028,6 +1028,14 @@ export function DataViews(base) {
             color: #808080;
           }
 
+          table#${elem.endPointResponseObject} tr {
+            cursor: pointer;
+          }
+
+          table#${elem.endPointResponseObject} tr:hover td {
+            background-color: #2989d830 !important;
+          }
+
           table#${elem.endPointResponseObject} tr:nth-child(even) td {
             background:  rgba(214, 233, 248, 0.37);
           }
