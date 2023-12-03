@@ -73,6 +73,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
       isProcManagement: { type: Boolean },
       filterCurrentData: {type: Object},
       selectedItemInView:{ type: Object },
+      selectedTableIndex: { type: Object }
     }
   }
   constructor() {
@@ -85,6 +86,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
     this.sopsPassed=false    
     this.filterCurrentData={}
     this.lang = "";
+    this.selectedTableIndex = {};
   }
   render(){
     //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
@@ -197,8 +199,9 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
     return html`    
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject], false) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
-      ${elem.elements.map((elem2, i) =>
-        html`
+      ${elem.elements.map((elem2, i) => {
+        console.log(elem2);
+        return html`
           ${elem2.is_translation===undefined||(elem2.is_translation!==undefined&&elem2.is_translation===true&&elem2.lang!==undefined&&elem2.lang===this.lang) ?
           html`              
             ${elem2.type==="reportTitle" ? this.kpiReportTitleLvl2(elem2, data[elem.endPointResponseObject], true) : nothing}
@@ -211,20 +214,18 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTable" ? 
+              this.readOnlyTable(
+                elem2, 
+                data, 
+                true, 
+              ): nothing}
+            ${elem2.type==="parentReadOnlyTable" ? 
               this.parentReadOnlyTable(
                 elem2, 
                 data, 
                 true, 
                 undefined, 
                 undefined,
-                {
-                  elem: elem2, 
-                  dataArr: data, 
-                  isSecondLevel: true, 
-                  directData: undefined,
-                  alertnativeTitle: undefined, 
-                  child: undefined
-                }
               ): nothing}
             ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
@@ -248,7 +249,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
 
           `:nothing}
         `
-      )} 
+      })} 
     </div>
   `
   }

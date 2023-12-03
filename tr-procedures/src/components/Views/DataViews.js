@@ -933,8 +933,6 @@ export function DataViews(base) {
         return nothing;
       }
       
-      console.log(elem.row_buttons);
-
       return html`
         <style>
           * {
@@ -1114,13 +1112,13 @@ export function DataViews(base) {
                       ${dataArr === undefined || !Array.isArray(dataArr) ? 
                         html `No Data` : 
                         html`
-                          ${dataArr.map((p) =>
+                          ${dataArr.map((p, idx) =>
                             html`
                               <tr
                                 @click=${(event) => {
                                   console.log(handler);
                                   if(handler) 
-                                    handler(event, p, elem);
+                                    handler(event, p, elem, idx);
                                   this.handleTableRowClick(event, p, elem)
                                 }}
                                 @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
@@ -1202,18 +1200,33 @@ export function DataViews(base) {
       `;
     }
 
-    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, child) {
-      console.log("hello")
-
-      const handleFilter = (event, p, elem) => {
-        const data = this.getDataFromRoot(elem, dataArr);
-        const randIdx = Math.random() * data.length;
-        child.directData = data.slice(0, Math.floor(randIdx));
+    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
+      if (directData !== undefined) {
+        dataArr = directData;
+      } else {
+        dataArr = this.getDataFromRoot(elem, dataArr);
       }
 
+      const handleFilter = (event, p, elem, idx) => {
+        const endPointResponseObject = elem.endPointResponseObject;
+        this.selectedTableIndex = {
+          ...this.selectedTableIndex,
+          [endPointResponseObject]: idx
+        }
+      }
+      
+      const childElement = {
+        ...elem.children_definition,
+        endPointResponseObject: elem.endPointResponseObject
+      };
+      
+      const endPointResponseObject = elem.endPointResponseObject;
+      const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+      const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx]?.children : undefined;
+
       return html`
-        ${this.readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handleFilter)}
-        ${child && this.parentReadOnlyTable(child.elem, child.dataArr, child.isSecondLevel, child.directData, child.alternativeTitle, child?.child)}
+        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter)}
+        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle) : nothing}
       `;
     }
 
