@@ -157,7 +157,7 @@ return class extends base {
             this.credsCheckerCommons(action.actionName, null, this.jsonParam(action, this.selectedObjectToReactive), action)
           }
     }    
-    getDeactivatedObjects() {
+    async getDeactivatedObjects() {
         // console.log('getDeactivatedObjects')
         let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
         this.deactivatedObjects = []
@@ -170,11 +170,31 @@ return class extends base {
         }
         let params = this.config.backendUrl + endPointUrl
           + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
-        this.fetchApi(params).then(j => {
-          if (j && !j.is_error) {
-            this.deactivatedObjects = j
+        try {
+          const response =await this.fetchApi(params)
+          if (response && !response.is_error) {
+            //console.log('deactivatedObjects', j.json())            
+            this.deactivatedObjects = response
+            if (this.deactivatedObjects.length===0){
+              let log=""
+              if (this.lang==="en"){
+                log='No records found'
+              }else{
+                log='No se han encontrado objetos'
+              }
+              this.dispatchEvent(
+                new CustomEvent("error", {
+                  detail: { ...e, log: log },
+                  bubbles: true,
+                  composed: true,
+                })  
+              )
+            }
           }
-        })
+        } catch (error) {
+          console.error('Error:', error);
+          // Handle any errors that occurred during fetch or JSON parsing
+        }        
     }
   
     

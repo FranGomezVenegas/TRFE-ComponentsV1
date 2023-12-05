@@ -29,7 +29,9 @@ export function ApiFunctions(base) {
               composed: true
             }))
           }
-          this.refreshMasterData(j, actionModel)
+          if (actionModel!==undefined){
+            this.refreshMasterData(j, actionModel)
+          }
           return j
         }).catch(e => {
           if (e.message == "Unexpected end of JSON input") {
