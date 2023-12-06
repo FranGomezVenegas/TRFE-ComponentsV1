@@ -16,16 +16,24 @@ export function AuditFunctions(base) {
             params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(j => {
               if (j && !j.is_error) {
-                if (Array.isArray(j)){
-                  j.forEach(audit => {
+                let auditRecords=[]
+                if (j.audit_info!==undefined){
+                  auditRecords = j.audit_info
+                  this.audit.highlightFields = j.highlight_fields
+                }else{
+                  this.audit.highlightFields =[]
+                  auditRecords = j
+                }
+                if (Array.isArray(auditRecords)){
+                  auditRecords.forEach(audit => {
                     audit.collapse = true
                     if (audit.sublevel && audit.sublevel.length) {
                       audit.sublevel.forEach(level => {
                         level.collapse = false
                       })
                     }
-                  })
-                  this.audit.audits = j
+                  })                
+                  this.audit.audits = auditRecords
                   this.audit.requestUpdate()
                // this.audit.auditDialog.show()
               }
@@ -35,8 +43,8 @@ export function AuditFunctions(base) {
         signAudit() {
         let params = this.config.backendUrl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
             + '?' + new URLSearchParams(this.reqParams)
-        params = params.replace(/\|/g, "%7C");
-        this.fetchApi(params).then(() => {
+            params = params.replace(/\|/g, "%7C");
+            this.fetchApi(params).then(() => {
             this.reloadDialog()
         })
         }

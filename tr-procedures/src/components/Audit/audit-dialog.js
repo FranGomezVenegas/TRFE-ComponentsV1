@@ -69,15 +69,15 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
           background: transparent;
         }
         .column-list {
-          -webkit-columns: 4; /* Number of columns */
-          -moz-columns: 4;
-          columns: 4;
+          -webkit-columns: 2; /* Number of columns */
+          -moz-columns: 2;
+          columns: 2;
           -webkit-column-gap: 10px; /* Spacing between columns */
           -moz-column-gap: 10px;
           column-gap: 10px;
           list-style-type: none;
-          padding: 0;
-          margin: 0;
+          padding: 10px 0px 0px;
+          margin: 0px;
         }
         
         .column-list li {
@@ -87,6 +87,10 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
           margin-left:30px;
           hyphens: auto;
           word-break: break-all;          
+        }
+        .highlighed{
+          color:rgb(76, 175, 80);
+          font-size:1.21em;
         }
         span.relevantlabel{
           font-weight: bold;
@@ -105,12 +109,15 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
         .text-group {
           display: flex;
           align-items: center;
+          margin:4px 0px;
+          font-size:1.32em;
         }        
         .tglabelaction {
-          font-size: 1.2em;
-          width: 100px;
+          font-size: 1em;
+          width: 120px;
           text-align: right;
           margin-right: 20px;
+          flex-shrink:0;
         }
         .tglabel {
           font-size: 1.2em;
@@ -190,6 +197,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
       viewModelFromProcModel: { type: Object},
       objectId: {type: String},
       ObjectType: {type: String},
+      highlightFields: {type: Array}
     };
   }
 
@@ -205,6 +213,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
     this.config={}
     this.localProceduresModels=ProceduresModel
     this.viewModelFromProcModel={}
+    this.highlightFields=[]
   }
 
   updated(updates) {
@@ -431,7 +440,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
                      
               <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${a.audit_id}</div>
               <div class="feldsupdatedregion">
-                <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list"> ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+                <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list"> ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(a, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
               </div>
               ${a.sublevel.length&&a.sublevel[0].date?
               html`${a.sublevel.map((s,si)=>
@@ -473,6 +482,21 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
       )}
     </tr-dialog>
     `;
+  }
+  fieldToBeHighlighted(auditRow, rowFldName){
+    //console.log('fieldToBeHighlighted', auditRow, rowFldName)
+    if (this.highlightFields.length==0){return "";}
+    if (auditRow.table_name===undefined){return "";}
+    if (auditRow.action_name===undefined){return "";}
+    // Busca un registro en highlightFields que coincida con los criterios
+    for (let record of this.highlightFields) {
+      if ((record.table_name === auditRow.table_name && record.field_name === rowFldName &&
+          (record.action_name === auditRow.action_name || record.action_name === 'ALL'))) {
+          return "highlighed";
+      }
+    }
+    // Si no se encuentra ninguna coincidencia, retorna una cadena vacía
+    return "";    
   }
 
   signAudit(id) {
