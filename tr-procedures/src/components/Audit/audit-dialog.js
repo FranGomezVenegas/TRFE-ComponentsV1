@@ -467,7 +467,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
                         ${s.reviewed?html`<span class="relevantlabel">Reviewed On: </span>${s.reviewed_on}<br>`:null}
                         <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${s.audit_id}</div>
                         <div class="feldsupdatedregion">
-                          <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list">${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+                          <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list">${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(s, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
                         </div>
                       </div>
                     </sp-tooltip>
