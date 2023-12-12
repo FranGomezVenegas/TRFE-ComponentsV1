@@ -916,7 +916,7 @@ export function DataViews(base) {
       popup.style.display = "block";
     }
 
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement) {
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, primary = false) {
 
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
@@ -1150,7 +1150,7 @@ export function DataViews(base) {
                   ? ""
                   : "No columns defined"}`
               : html`
-                  <table id=${elem.endPointResponseObject} class="styled-table read-only primary">
+                  <table id=${elem.endPointResponseObject} class="styled-table read-only ${primary ? "primary" : ""}">
                     <thead>
                       <tr>
                         ${elem.columns.map(
@@ -1325,8 +1325,8 @@ export function DataViews(base) {
       const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx]?.children : undefined;
 
       return html`
-        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement)}
-        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem) : nothing}
+        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, primary)}
+        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem, primary) : nothing}
       `;
     }
 
