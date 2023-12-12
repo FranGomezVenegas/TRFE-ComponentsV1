@@ -916,7 +916,11 @@ export function DataViews(base) {
       popup.style.display = "block";
     }
 
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler) {
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement) {
+
+      const endPointResponseObject = elem.endPointResponseObject;
+      const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+
       if (isSecondLevel === undefined) {
         isSecondLevel = false;
       }
@@ -1040,6 +1044,20 @@ export function DataViews(base) {
             background:  rgba(214, 233, 248, 0.37);
           }
 
+          table#${elem.endPointResponseObject} tr.hidden {
+            display: none;
+          }
+
+          table#${elem.endPointResponseObject} tr.selected td {
+            background: rgba(214, 255, 248, 1);
+          }
+
+          table#${elem.endPointResponseObject} .resetBtn {
+            color: white;
+            width: 12px;
+            height: 12px;
+          }
+
           mwc-icon-button.green {
             color: green;
             width: 12px;
@@ -1110,7 +1128,22 @@ export function DataViews(base) {
                     <thead>
                       <tr>
                         ${elem.columns.map(
-                          (fld) => html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th> `
+                          (fld, idx) => {
+                            if(idx === 0 && parentElement !== null && parentElement !== undefined) {
+                              return html` 
+                                <th>
+                                  <mwc-icon-button 
+                                    class="icon resetBtn" 
+                                    icon="refresh" 
+                                    @click=${() => handleResetParentFilter(parentElement)}
+                                  ></mwc-icon-button>
+
+                                  ${fld["label_" + this.lang]} <span class="resize-handle"></span>
+                                </th>
+                              `;
+                            }
+                            return html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th>`;
+                          }
                         )}
                         ${elem.row_buttons === undefined ? nothing : html`<th>Actions</th>`}
                       </tr>
@@ -1130,6 +1163,7 @@ export function DataViews(base) {
                                   this.handleTableRowClick(event, p, elem)
                                 }}
                                 @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
+                                class="${selectedIdx === idx ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"
                               >
                                 ${elem.columns.map((fld) => 
                                   html`
@@ -1208,7 +1242,23 @@ export function DataViews(base) {
       `;
     }
 
-    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle) {
+    resetFilterIndex(elem) {
+      const endPointResponseObject = elem.endPointResponseObject;
+      this.selectedTableIndex = {
+        ...this.selectedTableIndex,
+        [endPointResponseObject]: undefined
+      }
+
+      if(elem.children_definition) {
+        const childElement = {
+          ...elem.children_definition,
+          endPointResponseObject: elem.endPointResponseObject + "_child"
+        };
+        this.resetFilterIndex(childElement);
+      }
+    }
+
+    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement) {
       if (directData !== undefined) {
         dataArr = directData;
       } else {
@@ -1217,15 +1267,24 @@ export function DataViews(base) {
 
       const handleFilter = (event, p, elem, idx) => {
         const endPointResponseObject = elem.endPointResponseObject;
-        this.selectedTableIndex = {
-          ...this.selectedTableIndex,
-          [endPointResponseObject]: idx
+        const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
+        this.resetFilterIndex(elem);
+
+        if(!isToggling) {
+          this.selectedTableIndex = {
+            ...this.selectedTableIndex,
+            [endPointResponseObject]: idx
+          }
         }
+      }
+
+      const handleResetParentFilter = (elem) => {
+        this.resetFilterIndex(elem);
       }
       
       const childElement = {
         ...elem.children_definition,
-        endPointResponseObject: elem.endPointResponseObject
+        endPointResponseObject: elem.endPointResponseObject + "_child"
       };
       
       const endPointResponseObject = elem.endPointResponseObject;
@@ -1233,8 +1292,8 @@ export function DataViews(base) {
       const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx]?.children : undefined;
 
       return html`
-        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter)}
-        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle) : nothing}
+        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement)}
+        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem) : nothing}
       `;
     }
 
