@@ -985,6 +985,7 @@ export function ButtonsFunctions(base) {
     }
 
     disabledByCertification(action){
+      return false;
       //console.log('disabledByCertification', 'action', action)      
       //console.log('viewName', this.viewName, 'procInstanceName', this.procInstanceName)
       let sopsPassed = false

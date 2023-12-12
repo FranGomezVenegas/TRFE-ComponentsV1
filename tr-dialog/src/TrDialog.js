@@ -97,6 +97,7 @@ export class TrDialog extends Dialog {
     <style>
       :host {
         --mdc-shape-medium: ${this.dialogShape};
+        --mdc-dialog-z-index: ${this.zIndex};
       }
     </style>
     <div class="mdc-dialog ${classMap(classes)}" role="alertdialog" aria-modal="true" aria-labelledby="title"
@@ -148,7 +149,8 @@ export class TrDialog extends Dialog {
       zoomLabel: { type: String },
       expandLabel: { type: String },
       hideMin: { type: Boolean, reflect: true },
-      hideZoom: { type: Boolean, reflect: true }
+      hideZoom: { type: Boolean, reflect: true },
+      zIndex: { type: Number }
     };
   }
 
@@ -163,6 +165,7 @@ export class TrDialog extends Dialog {
     this.left = "0px";
     this.width = "0px";
     this.height = "0px";
+    this.zIndex = 7;
   }
 
   firstUpdated() {

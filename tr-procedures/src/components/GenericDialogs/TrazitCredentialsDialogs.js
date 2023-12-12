@@ -140,8 +140,10 @@ export function TrazitCredentialsDialogs(base) {
         font-weight : bold;
         font-size : 19px;
         background-color: 4fcad029;
-      }       
-
+      }
+      tr-dialog#confirmDialog {
+        --mdc-dialog-z-index: 9;
+      }
       `
     ];
   }
@@ -254,7 +256,9 @@ export function TrazitCredentialsDialogs(base) {
           <tr-dialog id="confirmDialog" 
             heading=""
             hideActions=""
-            scrimClickAction="">
+            scrimClickAction=""
+            .zIndex=${9}
+          >
             <div class="layout vertical flex center-justified">
               <div>${commonLangConfig.confirmActionPhrase["label_" + this.lang]} ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName}?</div>
               <div style="margin-top:30px;text-align:center">
