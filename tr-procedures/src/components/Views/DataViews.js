@@ -1002,6 +1002,8 @@ export function DataViews(base) {
             color: white;
           }
 
+         
+
           table#${elem.endPointResponseObject} th:last-child {
             border: 0;
           }
@@ -1058,10 +1060,29 @@ export function DataViews(base) {
             height: 12px;
           }
 
+          table#${elem.endPointResponseObject}.primary th,
+          table#${elem.endPointResponseObject}.primary td {
+            background: white !important;
+            color: rgb(94, 145, 186);
+            border-right: 0px;
+            border-bottom: 1px solid #D2DFEF;
+          }
+
+          table#${elem.endPointResponseObject}.primary tr.selected td {
+            background: #E8F1FE !important;
+          }
+
+          table#${elem.endPointResponseObject}.primary .resetBtn {
+            color: rgb(94, 145, 186);
+            width: 12px;
+            height: 12px;
+          }
+
           table#${elem.endPointResponseObject} mwc-icon-button {
             --mdc-icon-button-size: 24px;
             --mdc-icon-size: 16px;
           }
+          
 
           mwc-icon-button.green {
             color: green;
@@ -1129,7 +1150,7 @@ export function DataViews(base) {
                   ? ""
                   : "No columns defined"}`
               : html`
-                  <table id=${elem.endPointResponseObject} class="styled-table read-only">
+                  <table id=${elem.endPointResponseObject} class="styled-table read-only primary">
                     <thead>
                       <tr>
                         ${elem.columns.map(
