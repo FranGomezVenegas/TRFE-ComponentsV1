@@ -193,6 +193,12 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
         this.initTableResize(table)
       });    
     }
+    if(changedProperties.has('selectedTableIndex')) {
+      const tables = this.shadowRoot.querySelectorAll("table");
+      tables.forEach((table) => {
+        this.initTableResize(table)
+      });  
+    }
   }
 
   print2LevelsObject(elem, data){    

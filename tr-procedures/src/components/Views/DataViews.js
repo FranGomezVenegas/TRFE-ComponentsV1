@@ -1145,7 +1145,14 @@ export function DataViews(base) {
                             return html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th>`;
                           }
                         )}
-                        ${elem.row_buttons === undefined ? nothing : html`<th>Actions</th>`}
+                        ${elem.row_buttons === undefined
+                          ? nothing 
+                          : html`
+                            <th>
+                              ${this.lang === "en" ? "Actions" : "Acciones"} 
+                              <span class="resize-handle"></span>
+                            </th>
+                          `}
                       </tr>
                     </thead>
                     <tbody>
