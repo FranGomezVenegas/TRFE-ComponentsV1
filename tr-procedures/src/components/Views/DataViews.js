@@ -1058,6 +1058,11 @@ export function DataViews(base) {
             height: 12px;
           }
 
+          table#${elem.endPointResponseObject} mwc-icon-button {
+            --mdc-icon-button-size: 24px;
+            --mdc-icon-size: 16px;
+          }
+
           mwc-icon-button.green {
             color: green;
             width: 12px;
