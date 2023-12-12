@@ -1291,7 +1291,7 @@ export function DataViews(base) {
       }
     }
 
-    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement) {
+    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, primary = false) {
       if (directData !== undefined) {
         dataArr = directData;
       } else {
