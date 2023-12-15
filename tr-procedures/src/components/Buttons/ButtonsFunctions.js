@@ -666,7 +666,8 @@ export function ButtonsFunctions(base) {
         })          
       }
       if (this.config.backendUrl===undefined){
-        this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
+        // this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
+        this.config.backendUrl="http://51.75.202.142:8888/TRAZiT-API"
         console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
         let sessionDbName=JSON.parse(sessionStorage.getItem("userSession")).dbName
         if (sessionDbName!==undefined){
