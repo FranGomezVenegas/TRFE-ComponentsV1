@@ -729,7 +729,7 @@ return class extends LitElement {
 
 
     getResult() {
-      console.log('getResult', 'SampleAPIqueriesUrl', 'this.selectedItems[0]', this.selectedItems[0])
+      console.log('getResult', 'SampleAPIqueriesUrl', 'this.selectedItems[0]', this.selectedItems[0], 'action', this.actionBeingPerformedModel)
 
       let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
       this.deactivatedObjects = []
