@@ -2212,7 +2212,7 @@ export const DemoInspectionLot =
           "subQueryName": "getResult",
           "viewQuery": {
             "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
-            "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+            "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
             "endPointParams": [
               {
                 "argumentName": "sampleId",
@@ -2278,7 +2278,7 @@ export const DemoInspectionLot =
               "actionName": "ENTERRESULT",
               "notGetViewData": true,
               "requiresDialog": false,
-              "endPointUrl": "Samples",
+              "zzzendPointUrl": "Samples",
               "clientMethod": "enterResult",
               "endPointParams": [
                 {

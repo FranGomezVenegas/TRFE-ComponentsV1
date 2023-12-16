@@ -1,4 +1,4 @@
-export const DemoLotsRaw = 
+export const Demo1LotsRaw = 
 {
   "TrackingChanges": {
     "version": 0.9,
@@ -609,8 +609,8 @@ export const DemoLotsRaw =
                 "button": {
                   "icon": "event",
                   "title": {
-                    "label_en": "Take Decision",
-                    "label_es": "Tomar Decisión"
+                    "label_en": "Lock lot",
+                    "label_es": "Bloquear lote"
                   },
                   "requiresGridItemSelected": false
                 },
@@ -664,8 +664,8 @@ export const DemoLotsRaw =
                 "button": {
                   "icon": "event",
                   "title": {
-                    "label_en": "Take Decision",
-                    "label_es": "Tomar Decisión"
+                    "label_en": "Unlock lot",
+                    "label_es": "Desbloquear lote"
                   },
                   "requiresGridItemSelected": false
                 },
@@ -2212,7 +2212,7 @@ export const DemoLotsRaw =
           "subQueryName": "getResult",
           "viewQuery": {
             "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
-            "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+            "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
             "endPointParams": [
               {
                 "argumentName": "sampleId",
@@ -2278,7 +2278,7 @@ export const DemoLotsRaw =
               "actionName": "ENTERRESULT",
               "notGetViewData": true,
               "requiresDialog": false,
-              "zzzendPointUrl": "Samples",
+              "endPointUrl": "Samples",
               "clientMethod": "enterResult",
               "endPointParams": [
                 {
