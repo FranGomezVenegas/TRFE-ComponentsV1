@@ -161,7 +161,7 @@ export function TrazitGenericDialogs(base) {
       }       
     </style>
         <tr-dialog id="genericDialog"  
-            @opened=${() => {this.defaultValue()}}  ?open=${this.openGenericDialog(actionModel)} @closed=${() => this.fieldsShouldBeReset = true} heading="" hideActions="" scrimClickAction="">
+            @opened=${() => {this.defaultValue()}}  ?open=${this.openGenericDialog(actionModel)}  heading="" hideActions="" scrimClickAction="">
         
         ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true ?
         html`
