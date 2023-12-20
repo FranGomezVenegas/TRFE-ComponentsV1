@@ -188,64 +188,52 @@ export class HomeWater extends navigator(LitElement) {
       >
         <path d="M 170 300 q 15 -60 60 -100" fill="none" />
         <path d="M 170 300 q 15 60 60 100" fill="none" />
-        <rect x="770" y="195" width="60" height="10" />
-        <rect x="770" y="395" width="60" height="10" />
-        <path d="M 970 200 q 15 -30 60 100" fill="none" />
-        <path d="M 970 400 q 15 30 60 -100" fill="none" />
-        <path d="M 370 200 q 15 -30 60 100" fill="none" />
-        <path d="M 370 400 q 15 30 60 -100" fill="none" />
-        <path d="M 570 300 q 15 -60 60 -100" fill="none" />
-        <path d="M 570 300 q 15 60 60 100" fill="none" />
+        <rect x="570" y="195" width="60" height="10" />
+        <rect x="570" y="395" width="60" height="10" />
+        <path d="M 770 200 q 15 -30 60 100" fill="none" />
+        <path d="M 770 400 q 15 30 60 -100" fill="none" />
+        <rect x="370" y="195" width="60" height="10" />
+        <rect x="370" y="395" width="60" height="10" />
 
         <circle cx="30" cy="300" r="20" />
         <circle cx="170" cy="300" r="20" />
         <circle class="sample" cx="100" cy="300" r="70" @click=${() => this.elementClicked("LogSamples", "SampleLogin")} />
-        <text x="100" y="290" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>Program</text>
-        <text x="100" y="310" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>Definition</text>
-
-        <circle cx="430" cy="300" r="20" />
-        <circle cx="570" cy="300" r="20" />
-        <circle class="sample" cx="500" cy="300" r="70" />
-        <text x="500" y="300">Incubate</text>
+        <text x="100" y="300" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>NEW SAMPLES</text>
 
         <circle cx="230" cy="200" r="20" />
         <circle cx="370" cy="200" r="20" />
         <circle class="results" cx="300" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}/>
-        <text x="300" y="200" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} >Sampling</text>
+        <text x="300" y="200" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} >TESTING GROUP</text>
+
+        <circle cx="430" cy="200" r="20" />
+        <circle cx="570" cy="200" r="20" />
+        <circle class="testing" cx="500" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} />
+        <text x="500" y="200" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>REVIEW</text>
 
         <circle cx="630" cy="200" r="20" />
         <circle cx="770" cy="200" r="20" />
-        <circle class="testing" cx="700" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} />
-        <text x="700" y="190" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Plate</text>
-        <text x="700" y="210" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Reading</text>
-
-        <circle cx="830" cy="200" r="20" />
-        <circle cx="970" cy="200" r="20" />
-        <circle class="testing" cx="900" cy="200" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}/>
-        <text x="900" y="190" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>Identification of</text>
-        <text x="900" y="210" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>microorganism</text>
+        <circle class="testing" cx="700" cy="200" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}/>
+        <text x="700" y="200" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>ENTER RESULTS</text>
 
         <circle cx="230" cy="400" r="20" />
         <circle cx="370" cy="400" r="20" />
         <circle class="results" cx="300" cy="400" r="70" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}/>
-        <text x="300" y="400" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}>Sampling</text>
+        <text x="300" y="400" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}>TESTING GROUP</text>
+
+        <circle cx="430" cy="400" r="20" />
+        <circle cx="570" cy="400" r="20" />
+        <circle class="testing" cx="500" cy="400" r="70" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")} />
+        <text x="500" y="400" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>REVIEW</text>
 
         <circle cx="630" cy="400" r="20" />
         <circle cx="770" cy="400" r="20" />
-        <circle class="testing" cx="700" cy="400" r="70" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")} />
-        <text x="700" y="390" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Plate</text>
-        <text x="700" y="410" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Reading</text>
+        <circle class="testing" cx="700" cy="400" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")} />
+        <text x="700" y="400" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>ENTER RESULTS</text>
 
-        <circle cx="830" cy="400" r="20" />
-        <circle cx="970" cy="400" r="20" />
-        <circle class="testing" cx="900" cy="400" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")} />
-        <text x="900" y="390" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>Identification of</text>
-        <text x="900" y="410" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>microorganism</text>
-
-        <circle cx="1030" cy="300" r="20" />
-        <circle cx="1170" cy="300" r="20" />
-        <circle class="sample" cx="1100" cy="300" r="70" @click=${() => this.elementClicked("ReviewSample", "")} />
-        <text x="1100" y="300" @click=${() => this.elementClicked("ReviewSample", "")}>Inquires</text>
+        <circle cx="830" cy="300" r="20" />
+        <circle cx="970" cy="300" r="20" />
+        <circle class="sample" cx="900" cy="300" r="70" @click=${() => this.elementClicked("ReviewSample", "")} />
+        <text x="900" y="300" @click=${() => this.elementClicked("ReviewSample", "")}>REVIEW SAMPLE</text>
       </svg>
       <!-- <div class="maindiv">
         <div

@@ -7,423 +7,130 @@ import { navigator } from 'lit-element-router';
 export class HomeAir extends navigator(LitElement) {
   static get styles() {
     return css`
-    .flow {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 50px;
-    }
-    
-    .node {
-      position: relative;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background-color: #ccc;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-    
-    .node.start:before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-top: 1px solid #ccc;
-      border-right: 1px solid #ccc;
-      transform: translate(-50%, -50%) rotate(-45deg);
-    }
-    
-    .node.end:after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-bottom: 1px solid #ccc;
-      border-left: 1px solid #ccc;
-      transform: translate(50%, -50%) rotate(-45deg);
-    }
-    
-    .node:hover {
-      background-color: #555;
-    }
-    
-    .node:active {
-      transform: scale(0.9);
-    }
-    
-    .maindiv{
-      width: 1250px;
+      :host([disabled]) {
+        opacity: 0.5;
+        pointer: none;
+      }
+      .maindiv {
+        width: 850px;
       }
       .btn-2 {
-      filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.6));
-    }
-    .btn-2 {
-      display:inline-block;
-      position: relative;
-      color: #fff;
-    border: 15px #C0080B;
-      font-weight: 500;
-      font-family: "Arial";
-      text-decoration: none;
-      text-transform: uppercase;
-      padding: 15px 50px;
-      text-align: center;
-      clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-      background-color: #7ED8F2;
-    border: 10px;
-    }
-    .btn-2:hover {cursor: pointer;}
-    .btn-1 {
-      display:inline-block;
-      position: relative;
-      color: #fff;
-      font-family: "Arial";
-      font-weight: 500;
-      text-decoration: none;
-      text-transform: uppercase;
-      padding: 30px 30px;
-      text-align: center;
-      clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-      background-color: #D9F8FA;
-    }
-    
-    .start-end {
-      display:inline-block;
-      position: relative;
-      color: #7ED8F2;
-      font-family: "Arial";
-      font-weight: 500;
-      text-decoration: none;
-      text-transform: uppercase;
-      padding: 30px 30px;
-      text-align: center;
-      clip-path: polygon(20% 0, 82% 0, 100% 50%, 80% 100%, 40% 150%, 0 50%);
-      background-color: #D9F8FA;
-    }
-    .start-end:hover {cursor: pointer;}
-    .block-background {
-      display:inline-block;
-      position: relative;
-      color: #fff;
-      font-family: "Arial";
-      font-weight: 500;
-      text-decoration: none;
-      text-transform: uppercase;
-      padding: 10px 5px 0px 35px;
-      text-align: center;
-      clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-      background-color: #D9F8FA;
-    }
-    .node {
-      filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.6));
-    }
-    .node {
-      display:inline-block;
-      position: relative;
-      color: #fff;
-    border: 15px #C0080B;
-      font-weight: 500;
-      font-family: "Arial";
-      text-decoration: none;
-      text-transform: uppercase;
-      padding: 0px 30px;
-      text-align: center;
-      clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-      background-color: #7ED8F2;
-    border: 10px;
-    }    
-    .node:hover {cursor: pointer;}
-		.container {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-		}
-	.left-element {
-		width: 50%;
-		height: 400px;
-		clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-		background-color: #1a237e;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		padding: 20px;
-		color: #fff;
-		font-size: 2rem;
-		font-weight: bold;
-	}
+        filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.6));
+      }
+      .btn-2 {
+        display: inline-block;
+        position: relative;
+        color: #fff;
+        border: 15px #c0080b;
+        font-weight: 500;
+        font-family: "Arial";
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 15px 50px;
+        text-align: center;
+        clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+        background-color: #7ed8f2;
+        border: 10px;
+      }
+      .btn-1 {
+        display: inline-block;
+        position: relative;
+        color: #fff;
+        font-family: "Arial";
+        font-weight: 500;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 30px 30px;
+        text-align: center;
+        clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
+        background-color: #d9f8fa;
+      }
 
-	.left-element .inner-elements {
-		width: 100%;
-		height: 50%;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-	}
+      .start-end {
+        display: inline-block;
+        position: relative;
+        color: #7ed8f2;
+        font-family: "Arial";
+        font-weight: 500;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 30px 30px;
+        text-align: center;
+        clip-path: polygon(20% 0, 82% 0, 100% 50%, 80% 100%, 40% 150%, 0 50%);
+        background-color: #d9f8fa;
+      }
+      .block-background {
+        display: inline-block;
+        position: relative;
+        color: #fff;
+        font-family: "Arial";
+        font-weight: 500;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 15px 35px 0px 20px;
+        text-align: center;
+        clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
+        background-color: #d9f8fa;
+      }
+      .node {
+        filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.6));
+      }
+      .node {
+        display: inline-block;
+        position: relative;
+        color: #fff;
+        border: 15px #c0080b;
+        font-weight: 500;
+        font-family: "Arial";
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 0px 30px;
+        text-align: center;
+        clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+        background-color: #7ed8f2;
+        border: 10px;
+      }
 
-	.left-element .inner-elements .blue-box {
-		width: 80%;
-		height: 45%;
-		background-color: #90caf9;
-		clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		color: #1a237e;
-		font-size: 1.5rem;
-		font-weight: bold;
-		text-align: center;
-	}
+      .container {
+        max-width: 1024px;
+      }
 
-	.right-element {
-		width: 50%;
-		height: 400px;
-		clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-		background-color: #1a237e;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		padding: 20px;
-		color: #fff;
-		font-size: 2rem;
-		font-weight: bold;
-	}
-    `
-    // return css`
-    //   .maindiv{
-    //     position: relative;
-    //   }
-    //   html, body {
-    //     --color: hsla( 020, 075%, 050%, 1.0 );
-    //     display: block;
-    //     width: 100vw;
-    //     height: 100vh;
-    //     background-color: hsla( 180, 025%, 025%, 1.0 );
-    //     font-family: 'MS PGothic';
-    //     color: white;
-    //     margin: 0;
-    //     text-align: center;
-    //   }
-      
-    //   .blocks-background {
-    //     /* display:inline-block; */
-    //     position: relative;
-    //     color: #fff;
-    //     font-family: "Arial";
-    //     font-weight: 500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 30px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-    //     background-color: #D9F8FA;
-    //   }
+      text {
+        cursor: pointer;
+      }
 
-    //   p {
-    //     position: absolute;
-    //     top: 40vmin;
-    //     width: 100vw;
-    //     font-size: 5vmin;
-    //   }
-      
-    //   node {
-    //     display: inline-block;
-    //     /* margin-top: 5vmin; */
-    //     border: 1px solid var( --color );
-    //     height: attr(elementh);
-    //     width: 13vmin;    
-    //     content-align: center;
-    //     font-color:white;    
-    //     padding: 30px;
-    //   }
-    //   div.node {
-    //     display: inline-block;
-    //     margin-top: vmin;
-    //     border: 1px solid var( --color );
-    //     height: attr(elementh);
-    //     width: 15vmin;    
-    //     content-align: center;
-    //     font-color:white;    
-    //     padding: 10px;
-    //   }
-    //   div.node:hover{
-    //     font-color:red;    
-    //     background-color: red;
-    //     -webkit-transition: all 0.2s ease-in;
-    //     transition: all 0.2s ease-in;
-    //   }
-    //   div.node:before {        
-    //     content: attr(title);
-    //     clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-    //     height: 100%;
-    //     width: 100%;
-    //     display:inline-block;
-    //     position: relative;
-    //     color: rgb(255, 255, 255);
-    //     font-family: "Arial";
-    //     font-weight: 1500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 30px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(20% 0, 82% 0, 100% 50%, 80% 100%, 40% 150%, 0 50%);
-    //     background-color: rgb(126, 216, 242);
-    //   }      
-      
-    //   node:before {        
-    //     content: attr(title);
-    //     clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-    //     height: 100%;
-    //     width: 100%;
-    //     display:inline-block;
-    //     position: relative;
-    //     color: rgb(255, 255, 255);
-    //     font-family: "Arial";
-    //     font-weight: 1500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 30px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(20% 0, 82% 0, 100% 50%, 80% 100%, 40% 150%, 0 50%);
-    //     background-color: rgb(126, 216, 242);
-    //   }      
-    //   .btn-2 {
-    //     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.6));
-    //   }
-    //   .btn-2 {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #fff;
-    //     border: 15px #C0080B;
-    //     font-weight: 500;
-    //     font-family: "Arial";
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 15px 50px;
-    //     text-align: center;
-    //     clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-    //     background-color: #7ED8F2;
-    //   border: 10px;
-    //   }
-    //   .btn-1 {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #fff;
-    //     font-family: "Arial";
-    //     font-weight: 500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 30px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-    //     background-color: #D9F8FA;
-    //   } 
-    //   .btn-1a {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #7ED8F2;
-    //     font-family: "Arial";
-    //     font-weight: 500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 30px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(20% 0, 82% 0, 100% 50%, 80% 100%, 40% 150%, 0 50%);
-    //     background-color: #D9F8FA;
-    //   }
+      circle {
+        cursor: pointer;
+      }
 
-    //   .maindiv{
-    //     width: 1050px;
-    //     }
-    //     .btn-2 {
-    //     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.6));
-    //   }
-    //   .btn-2 {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #fff;
-    //   border: 15px #C0080B;
-    //     font-weight: 500;
-    //     font-family: "Arial";
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 15px 50px;
-    //     text-align: center;
-    //     clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-    //     background-color: #7ED8F2;
-    //   border: 10px;
-    //   }
-    //   .btn-1 {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #fff;
-    //     font-family: "Arial";
-    //     font-weight: 500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 30px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-    //     background-color: #D9F8FA;
-    //   }
-      
-    //   .start-end {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #7ED8F2;
-    //     font-family: "Arial";
-    //     font-weight: 500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 30px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(20% 0, 82% 0, 100% 50%, 80% 100%, 40% 150%, 0 50%);
-    //     background-color: #D9F8FA;
-    //   }
-    //   .block-background {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #fff;
-    //     font-family: "Arial";
-    //     font-weight: 500;
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 10px 5px 0px 35px;
-    //     text-align: center;
-    //     clip-path: polygon(4% 0, 94% 0, 100% 50%, 90% 130%, 8% 150%, 0 50%);
-    //     background-color: #D9F8FA;
-    //   }
-    //   .node {
-    //     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.6));
-    //   }
-    //   .node {
-    //     display:inline-block;
-    //     position: relative;
-    //     color: #fff;
-    //   border: 15px #C0080B;
-    //     font-weight: 500;
-    //     font-family: "Arial";
-    //     text-decoration: none;
-    //     text-transform: uppercase;
-    //     padding: 0px 30px;
-    //     text-align: center;
-    //     clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
-    //     background-color: #7ED8F2;
-    //   border: 10px;
-    //   }      
-    // `;
+      .container.primary circle,
+      .container.primary rect {
+        fill: #18a4fe;
+        stroke: #18a4fea0;
+      }
+
+      .container.primary circle {
+        stroke-width: 10;
+      }
+
+      .container.primary circle:hover {
+        fill: #18a4fed0;
+      }
+
+      .container.primary path {
+        stroke: #18a4fe;
+        stroke-width: 10;
+      }
+
+      .container.primary text {
+        font-size: 20px;
+        font-weight: bold;
+        fill: white;
+        font-family: Montserrat;
+        text-anchor: middle;
+        alignment-baseline: middle;
+      }
+    `;
   }
 
     static get properties() {
@@ -445,7 +152,7 @@ export class HomeAir extends navigator(LitElement) {
         super()
         this.viewModelFromProcModel={} 
         this.tabsMainViewModelFromProcModel={}
-console.log('constructor flowchart')
+        console.log('constructor flowchart')
         this.ready=false;
         this.config={}
   
@@ -460,14 +167,72 @@ console.log('constructor flowchart')
     }
     render() {
       return html`
-        <div class="flow">
-          <div class="node start">Start</div>
-          <div class="node location">Location 1</div>
-          <div class="node location">Location 2</div>
-          <div class="node person">Person 1</div>
-          <div class="node person">Person 2</div>
-          <div class="node end">End</div>
-        </div>
+      <svg
+      class="container primary"
+      viewBox="0 0 1200 600"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M 170 300 q 15 -60 60 -100" fill="none" />
+      <path d="M 170 300 q 15 60 60 100" fill="none" />
+      <rect x="770" y="195" width="60" height="10" />
+      <rect x="770" y="395" width="60" height="10" />
+      <path d="M 970 200 q 15 -30 60 100" fill="none" />
+      <path d="M 970 400 q 15 30 60 -100" fill="none" />
+      <path d="M 370 200 q 15 -30 60 100" fill="none" />
+      <path d="M 370 400 q 15 30 60 -100" fill="none" />
+      <path d="M 570 300 q 15 -60 60 -100" fill="none" />
+      <path d="M 570 300 q 15 60 60 100" fill="none" />
+
+      <circle cx="30" cy="300" r="20" />
+      <circle cx="170" cy="300" r="20" />
+      <circle class="sample" cx="100" cy="300" r="70" @click=${() => this.elementClicked("LogSamples", "SampleLogin")} />
+      <text x="100" y="290" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>Program</text>
+      <text x="100" y="310" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>Definition</text>
+
+      <circle cx="430" cy="300" r="20" />
+      <circle cx="570" cy="300" r="20" />
+      <circle class="sample" cx="500" cy="300" r="70" />
+      <text x="500" y="300">Incubate</text>
+
+      <circle cx="230" cy="200" r="20" />
+      <circle cx="370" cy="200" r="20" />
+      <circle class="results" cx="300" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}/>
+      <text x="300" y="200" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} >Sampling</text>
+
+      <circle cx="630" cy="200" r="20" />
+      <circle cx="770" cy="200" r="20" />
+      <circle class="testing" cx="700" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} />
+      <text x="700" y="190" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Plate</text>
+      <text x="700" y="210" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Reading</text>
+
+      <circle cx="830" cy="200" r="20" />
+      <circle cx="970" cy="200" r="20" />
+      <circle class="testing" cx="900" cy="200" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}/>
+      <text x="900" y="190" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>Identification of</text>
+      <text x="900" y="210" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>microorganism</text>
+
+      <circle cx="230" cy="400" r="20" />
+      <circle cx="370" cy="400" r="20" />
+      <circle class="results" cx="300" cy="400" r="70" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}/>
+      <text x="300" y="400" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}>Sampling</text>
+
+      <circle cx="630" cy="400" r="20" />
+      <circle cx="770" cy="400" r="20" />
+      <circle class="testing" cx="700" cy="400" r="70" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")} />
+      <text x="700" y="390" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Plate</text>
+      <text x="700" y="410" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Reading</text>
+
+      <circle cx="830" cy="400" r="20" />
+      <circle cx="970" cy="400" r="20" />
+      <circle class="testing" cx="900" cy="400" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")} />
+      <text x="900" y="390" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>Identification of</text>
+      <text x="900" y="410" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>microorganism</text>
+
+      <circle cx="1030" cy="300" r="20" />
+      <circle cx="1170" cy="300" r="20" />
+      <circle class="sample" cx="1100" cy="300" r="70" @click=${() => this.elementClicked("ReviewSample", "")} />
+      <text x="1100" y="300" @click=${() => this.elementClicked("ReviewSample", "")}>Inquires</text>
+    </svg>
       `;
     }
     renderFran() {          
