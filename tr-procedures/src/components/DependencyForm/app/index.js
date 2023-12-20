@@ -12,10 +12,11 @@ export class DependencyForm extends LitElement {
       endpoint: { type: String },
       endpoints: { type: Array },
       notification: { type: String },
-      notifications: { type: Array },      
+      notifications: { type: Array },
       params: { type: Array },
       lang: { type: String },
-      isFormValid: { type: Boolean }
+      isFormValid: { type: Boolean },
+      toggles: { type: Object },
     };
   }
 
@@ -23,22 +24,56 @@ export class DependencyForm extends LitElement {
     super();
     this.endpoints = [];
     this.params = [];
+    //   [
+    //     {
+    //         "dev_comment_tags": "",
+    //         "is_mandatory?": false,
+    //         "dev_comment": "",
+    //         "name": "category",
+    //         "type": "STRINGARR",
+    //         "testing arg posic": 6
+    //     },
+    //     {
+    //         "dev_comment_tags": "",
+    //         "is_mandatory?": false,
+    //         "dev_comment": "",
+    //         "name": "reference",
+    //         "type": "STRINGARR",
+    //         "testing arg posic": 7
+    //     }
+    // ]
     this.notification = "";
     this.notifications = [];
     this.endpoint = "";
     this.lang = "";
+    this.toggles = {};
   }
 
   render() {
+    console.log(typeof this.toggles);
     return template({
       endpoints: this.endpoints,
       notifications: this.notifications,
       params: this.params,
       lang: this.lang,
       checkValidity: this._checkValidity,
+      toggles: this.toggles,
       handleChangeEndpoint: this._handleChangeEndpoint,
+      toggleChanged: this._toggleChanged,
+      handleChangeStep: this._handleChangeStep,
     });
   }
+
+  _handleChangeStep = (name) => (e) => {
+    const stepValue = e.target.value;
+    console.log(11111111, name, stepValue);
+    
+  };
+
+  _toggleChanged = (name) => () => {
+    this.toggles[name] = !this.toggles[name];
+    this.requestUpdate();
+  };
 
   _handleChangeEndpoint = (e) => {
     const idx = this.endpoints.findIndex(
@@ -51,8 +86,7 @@ export class DependencyForm extends LitElement {
 
   getFormFields = () => {
     this.checkValidity();
-    if(!this.isFormValid)
-      return null;
+    if (!this.isFormValid) return null;
 
     const payload = {};
     const fields = this.shadowRoot.querySelectorAll(
@@ -78,7 +112,7 @@ export class DependencyForm extends LitElement {
 
   getFieldTypes = () => {
     return this.params;
-  }
+  };
 
   checkValidity = () => {
     const requiredFields = this.shadowRoot.querySelectorAll("[required]");

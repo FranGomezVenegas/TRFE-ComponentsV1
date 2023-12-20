@@ -1,7 +1,9 @@
 import { html } from "lit-element";
 import "@material/mwc-select";
 import "@material/mwc-textfield";
+import "@material/mwc-switch";
 import "@material/mwc-list/mwc-list-item";
+
 import { elementTypes } from "../config";
 
 export const template = (props) => {
@@ -29,8 +31,17 @@ export const template = (props) => {
         <div class="form-fields">
           ${props.params.map((param, idx) => {
             const required = param["is_mandatory?"];
+
+            const str = html`<mwc-switch
+              name=${param.name}
+              @click=${props.toggleChanged(param.name)}
+            />`;
+
+            const new_category =
+              param.name == "category" ? html`<mwc-select></mwc-select>` : ``;
             if (param.type === elementTypes.Number) {
               return html`
+                ${str}
                 <mwc-textfield
                   ?required=${required}
                   outlined
@@ -42,23 +53,59 @@ export const template = (props) => {
               `;
             } else if (param.type === elementTypes.Text) {
               return html`
-                <mwc-textfield
-                  ?required=${required}
-                  type="text"
-                  label=${param.name}
-                  name=${param.name}
-                  @blur=${props.checkValidity}
-                ></mwc-textfield>
+                <mwc-formfield>
+                  ${str}
+                  <mwc-textfield
+                    ?required=${required}
+                    type="text"
+                    label=${param.name}
+                    name=${param.name}
+                    @blur=${props.checkValidity}
+                    style="width: 100%"
+                  ></mwc-textfield>
+                </mwc-formfield>
               `;
             } else if (param.type === elementTypes.TextArr) {
               return html`
-                <mwc-textfield
-                  type="text"
-                  ?required=${required}
-                  label=${param.name}
-                  name=${param.name}
-                  @blur=${props.checkValidity}
-                ></mwc-textfield>
+                <mwc-formfield>
+                  ${str}
+                  ${props.toggles[param.name]
+                    ? html`
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${"Step"}
+                          name=${param.name + "_step"}
+                          style="width: 100%"
+                          @change=${props.handleChangeStep(param.name)}
+                        ></mwc-textfield>
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${"Object Type"}
+                          name=${param.name + "_object_type"}
+                          style="width: 100%"
+                        ></mwc-textfield>
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${"Object Posic"}
+                          name=${param.name + "_object_posic"}
+                          style="width: 100%"
+                          defaultValue=${1}
+                        ></mwc-textfield>
+                      `
+                    : html`
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${param.name}
+                          name=${param.name}
+                          @blur=${props.checkValidity}
+                          style="width: 100%"
+                        ></mwc-textfield>
+                      `}
+                </mwc-formfield>
               `;
             }
             return html`${param.type}`;
@@ -66,8 +113,8 @@ export const template = (props) => {
           <mwc-formfield label="Expected successful?">
             <mwc-checkbox name="expectedSyntaxis"></mwc-checkbox>
           </mwc-formfield>
-          <mwc-select            
-            fixedMenuPosition            
+          <mwc-select
+            fixedMenuPosition
             id="notification"
             name="notification"
             label="notification"

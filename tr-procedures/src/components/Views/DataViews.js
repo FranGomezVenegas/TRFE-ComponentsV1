@@ -226,7 +226,7 @@ export function DataViews(base) {
     readOnlyTableByGroupOrig(elem, dataArr, isSecondLevel = false) {
       console.log("readOnlyTableByGroup", elem, dataArr);
       dataArr = this.getDataFromRoot(elem, dataArr);
-      return html`
+      console.log("Mejori",dataArr);      return html`
         <style>
           .table-group-container {
             display: grid;
@@ -915,8 +915,11 @@ export function DataViews(base) {
       popup.appendChild(menu);
       popup.style.display = "block";
     }
+     
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "") {
+
+      console.log("2.77pxccccccccc", dataArr);
 
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
@@ -1190,7 +1193,7 @@ export function DataViews(base) {
                             html`
                               <tr
                                 @click=${(event) => {
-                                  console.log(handler);
+                                  console.log("qqqqqqqqqqqqqqqqqqq", p.steps);
                                   if(handler) 
                                     handler(event, p, elem, idx);
                                   this.handleTableRowClick(event, p, elem)

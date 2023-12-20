@@ -206,7 +206,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject], false) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
       ${elem.elements.map((elem2, i) => {
-        console.log(elem2);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", elem2.type);
         return html`
           ${elem2.is_translation===undefined||(elem2.is_translation!==undefined&&elem2.is_translation===true&&elem2.lang!==undefined&&elem2.lang===this.lang) ?
           html`              
