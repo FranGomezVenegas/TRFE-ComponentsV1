@@ -17,6 +17,7 @@ export class DependencyForm extends LitElement {
       lang: { type: String },
       isFormValid: { type: Boolean },
       toggles: { type: Object },
+      objectTypes: {type : Array}
     };
   }
 
@@ -24,29 +25,12 @@ export class DependencyForm extends LitElement {
     super();
     this.endpoints = [];
     this.params = [];
-    //   [
-    //     {
-    //         "dev_comment_tags": "",
-    //         "is_mandatory?": false,
-    //         "dev_comment": "",
-    //         "name": "category",
-    //         "type": "STRINGARR",
-    //         "testing arg posic": 6
-    //     },
-    //     {
-    //         "dev_comment_tags": "",
-    //         "is_mandatory?": false,
-    //         "dev_comment": "",
-    //         "name": "reference",
-    //         "type": "STRINGARR",
-    //         "testing arg posic": 7
-    //     }
-    // ]
     this.notification = "";
     this.notifications = [];
     this.endpoint = "";
     this.lang = "";
     this.toggles = {};
+    this.objectTypes = [];
   }
 
   render() {
@@ -58,6 +42,7 @@ export class DependencyForm extends LitElement {
       lang: this.lang,
       checkValidity: this._checkValidity,
       toggles: this.toggles,
+      objectTypes: this.objectTypes,
       handleChangeEndpoint: this._handleChangeEndpoint,
       toggleChanged: this._toggleChanged,
       handleChangeStep: this._handleChangeStep,
@@ -65,9 +50,14 @@ export class DependencyForm extends LitElement {
   }
 
   _handleChangeStep = (name) => (e) => {
+    this.objectTypes = [];
     const stepValue = e.target.value;
-    console.log(11111111, name, stepValue);
-    
+    let steps = JSON.parse(sessionStorage.getItem("steps"));
+    const tmp = JSON.parse(steps[stepValue - 1].dynamic_data);
+    tmp.map((step, i) => {
+      this.objectTypes.push(step.object_type);
+    });
+    this.requestUpdate();
   };
 
   _toggleChanged = (name) => () => {
@@ -76,12 +66,14 @@ export class DependencyForm extends LitElement {
   };
 
   _handleChangeEndpoint = (e) => {
+    this.toggles = {};
     const idx = this.endpoints.findIndex(
       (endpoint) => endpoint.keyName === e.target.value
     );
     if (idx === -1) return [];
     this.endpoint = this.endpoints[idx].keyName;
     this.params = this.endpoints[idx]?.arguments_array ?? [];
+    this.requestUpdate();
   };
 
   getFormFields = () => {

@@ -9,6 +9,7 @@ import { elementTypes } from "../config";
 export const template = (props) => {
   return html`
     <div class="container">
+      
       <form id="#endpoint-form" action="/" method="get">
         <div class="item-container">
           <mwc-select
@@ -28,20 +29,18 @@ export const template = (props) => {
             })}
           </mwc-select>
         </div>
+
         <div class="form-fields">
           ${props.params.map((param, idx) => {
             const required = param["is_mandatory?"];
-
             const str = html`<mwc-switch
-              name=${param.name}
-              @click=${props.toggleChanged(param.name)}
-            />`;
-
+                name=${param.name}
+                @click=${props.toggleChanged(param.name)}
+              />`;
             const new_category =
               param.name == "category" ? html`<mwc-select></mwc-select>` : ``;
             if (param.type === elementTypes.Number) {
               return html`
-                ${str}
                 <mwc-textfield
                   ?required=${required}
                   outlined
@@ -79,13 +78,33 @@ export const template = (props) => {
                           style="width: 100%"
                           @change=${props.handleChangeStep(param.name)}
                         ></mwc-textfield>
-                        <mwc-textfield
-                          type="text"
-                          ?required=${required}
-                          label=${"Object Type"}
+                        ${props.objectTypes.length > 0 ? 
+                          html`
+                         <mwc-select
+                          required
+                          fixedMenuPosition
+                          id="objectType"
                           name=${param.name + "_object_type"}
-                          style="width: 100%"
-                        ></mwc-textfield>
+                          label="objectType"
+                        >
+                          ${props.objectTypes.map((objectType, idx) => {
+                            return html`
+                              <mwc-list-item value=${objectType}>
+                                ${objectType}
+                              </mwc-list-item>
+                            `;
+                          })}
+                          </mwc-select>
+                          ` : html ` <mwc-textfield
+                                type="text"
+                                ?required=${required}
+                                label=${"Object Type"}
+                                name=${param.name + "_object_posic"}
+                                style="width: 100%"
+                                value=${props.objectTypes}
+                              ></mwc-textfield>`
+                        }
+                       
                         <mwc-textfield
                           type="text"
                           ?required=${required}

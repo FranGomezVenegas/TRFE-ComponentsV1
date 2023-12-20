@@ -919,8 +919,6 @@ export function DataViews(base) {
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "") {
 
-      console.log("2.77pxccccccccc", dataArr);
-
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
 
@@ -932,14 +930,17 @@ export function DataViews(base) {
       } else {
         dataArr = this.getDataFromRoot(elem, dataArr);
       }
-
-      if (dataArr === undefined || !Array.isArray(dataArr)) {
-        return html``;
-      }
       if (!this.dataContainsRequiredProperties(elem, dataArr)) {
         return nothing;
       }
-      
+
+      if (dataArr === undefined || !Array.isArray(dataArr)) {
+        return html``;
+      } else {
+        if(dataArr.length > 0 && dataArr[0].action_name) {
+          sessionStorage.setItem('steps', JSON.stringify(dataArr))
+        }
+      }
       return html`
         <style>
           * {
