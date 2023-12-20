@@ -130,6 +130,24 @@ export class HomeAir extends navigator(LitElement) {
         text-anchor: middle;
         alignment-baseline: middle;
       }
+
+      .container.primary text.up-title {
+        font-size: 24px;
+        fill: orange;
+      }
+
+      .container.primary text.lo-title {
+        font-size: 24px;
+        fill: blue;
+      }
+
+      .container.primary text.text-orange {
+        fill: orange;
+      }
+
+      .container.primary text.text-blue {
+        fill: blue;
+      }
     `;
   }
 
@@ -176,12 +194,18 @@ export class HomeAir extends navigator(LitElement) {
       <path d="M 170 300 q 15 60 60 100" fill="none" />
       <rect x="770" y="195" width="60" height="10" />
       <rect x="770" y="395" width="60" height="10" />
+      <rect x="650" y="300" width="300" height="10" />
+      <rect x="220" y="300" width="150" height="10" />
       <path d="M 970 200 q 15 -30 60 100" fill="none" />
       <path d="M 970 400 q 15 30 60 -100" fill="none" />
       <path d="M 370 200 q 15 -30 60 100" fill="none" />
       <path d="M 370 400 q 15 30 60 -100" fill="none" />
       <path d="M 570 300 q 15 -60 60 -100" fill="none" />
       <path d="M 570 300 q 15 60 60 100" fill="none" />
+
+      <text x="100" y="180" class="up-title">Locations</text>
+
+      <text x="100" y="420" class="lo-title">Personnel</text>
 
       <circle cx="30" cy="300" r="20" />
       <circle cx="170" cy="300" r="20" />
@@ -197,36 +221,36 @@ export class HomeAir extends navigator(LitElement) {
       <circle cx="230" cy="200" r="20" />
       <circle cx="370" cy="200" r="20" />
       <circle class="results" cx="300" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}/>
-      <text x="300" y="200" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} >Sampling</text>
+      <text x="300" y="200" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} >Sampling</text>
 
       <circle cx="630" cy="200" r="20" />
       <circle cx="770" cy="200" r="20" />
       <circle class="testing" cx="700" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} />
-      <text x="700" y="190" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Plate</text>
-      <text x="700" y="210" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Reading</text>
+      <text x="700" y="190" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Plate</text>
+      <text x="700" y="210" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Reading</text>
 
       <circle cx="830" cy="200" r="20" />
       <circle cx="970" cy="200" r="20" />
       <circle class="testing" cx="900" cy="200" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}/>
-      <text x="900" y="190" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>Identification of</text>
-      <text x="900" y="210" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>microorganism</text>
+      <text x="900" y="190" class="text-orange" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>Identification of</text>
+      <text x="900" y="210" class="text-orange" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>microorganism</text>
 
       <circle cx="230" cy="400" r="20" />
       <circle cx="370" cy="400" r="20" />
       <circle class="results" cx="300" cy="400" r="70" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}/>
-      <text x="300" y="400" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}>Sampling</text>
+      <text x="300" y="400" class="text-blue" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}>Sampling</text>
 
       <circle cx="630" cy="400" r="20" />
       <circle cx="770" cy="400" r="20" />
       <circle class="testing" cx="700" cy="400" r="70" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")} />
-      <text x="700" y="390" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Plate</text>
-      <text x="700" y="410" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Reading</text>
+      <text x="700" y="390" class="text-blue" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Plate</text>
+      <text x="700" y="410" class="text-blue" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Reading</text>
 
       <circle cx="830" cy="400" r="20" />
       <circle cx="970" cy="400" r="20" />
       <circle class="testing" cx="900" cy="400" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")} />
-      <text x="900" y="390" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>Identification of</text>
-      <text x="900" y="410" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>microorganism</text>
+      <text x="900" y="390" class="text-blue" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>Identification of</text>
+      <text x="900" y="410" class="text-blue" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>microorganism</text>
 
       <circle cx="1030" cy="300" r="20" />
       <circle cx="1170" cy="300" r="20" />
