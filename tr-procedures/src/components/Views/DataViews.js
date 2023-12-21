@@ -917,7 +917,7 @@ export function DataViews(base) {
     }
      
 
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "") {
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "TRAZiT-DefinitionArea") {
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
 
@@ -971,12 +971,11 @@ export function DataViews(base) {
           }
 
           table#${elem.endPointResponseObject} th,
-          table#${elem.endPointResponseObject} td {
+          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea td {
             padding: 15px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            border-right: 1px solid #2989d8;
           }
 
           table#${elem.endPointResponseObject} th {
@@ -995,14 +994,14 @@ export function DataViews(base) {
             white-space: nowrap;
           }
 
-          table#${elem.endPointResponseObject} th {
+          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea th {
             position: sticky;
             top: 0;
             background: #2989d8;
             text-align: center;
             font-weight: normal;
             font-size: 16px;
-            color: white;
+            color: white !important;
           }
 
          
@@ -1065,7 +1064,6 @@ export function DataViews(base) {
 
           table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea th,
           table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea td {
-            background: white !important;
             color: rgb(94, 145, 186);
             border-right: 0px;
             border-bottom: 1px solid #D2DFEF;
