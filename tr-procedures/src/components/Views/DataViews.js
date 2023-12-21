@@ -918,7 +918,6 @@ export function DataViews(base) {
      
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "") {
-
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
 
@@ -1064,19 +1063,19 @@ export function DataViews(base) {
             height: 12px;
           }
 
-          table#${elem.endPointResponseObject}.primary th,
-          table#${elem.endPointResponseObject}.primary td {
+          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea th,
+          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea td {
             background: white !important;
             color: rgb(94, 145, 186);
             border-right: 0px;
             border-bottom: 1px solid #D2DFEF;
           }
 
-          table#${elem.endPointResponseObject}.primary tr.selected td {
+          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea tr.selected td {
             background: #E8F1FE !important;
           }
 
-          table#${elem.endPointResponseObject}.primary .resetBtn {
+          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea .resetBtn {
             color: rgb(94, 145, 186);
             width: 12px;
             height: 12px;
