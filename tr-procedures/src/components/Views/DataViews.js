@@ -1034,6 +1034,7 @@ export function DataViews(base) {
             padding-top: 10px;
             padding-bottom: 10px;
             color: #808080;
+            border-right: 1px solid;
           }
 
           table#${elem.endPointResponseObject} tr {
@@ -1065,7 +1066,7 @@ export function DataViews(base) {
           table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea th,
           table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea td {
             color: rgb(94, 145, 186);
-            border-right: 0px;
+            border-right: 1px solid #D2DFEF;
             border-bottom: 1px solid #D2DFEF;
           }
 
@@ -1077,6 +1078,10 @@ export function DataViews(base) {
             color: rgb(94, 145, 186);
             width: 12px;
             height: 12px;
+          }
+
+          table td {
+            border-right: 1px solid;
           }
 
           table#${elem.endPointResponseObject} mwc-icon-button {
@@ -1344,8 +1349,8 @@ export function DataViews(base) {
             border-collapse: collapse;
             margin: 2px 10px;
             font-family: sans-serif;
+            border: 1px solid #2989d8;
             /* min-width: 400px; */
-            box-shadow: 0 0 20px #44cbe6;
           }
           .styled-table-for-rolesandactions thead tr {
             background-color: #2989d8;
@@ -1360,11 +1365,13 @@ export function DataViews(base) {
           .styled-table-for-rolesandactions th {
             color: rgba(0, 0, 0, 0.71);
             text-align: right;
-            font-size: 15px;
+            font-size: 16px;
+            border-right: 1px solid;
+            padding: 15px;
           }
           .styled-table-for-rolesandactions th:hover {
             color: white;
-            background-color: #2989d8;
+            background-color: #298988;
           }
           .styled-table-for-rolesandactions td {
             color: rgba(0, 0, 0, 0.71);
@@ -1397,9 +1404,6 @@ export function DataViews(base) {
           }
           .styled-table-for-rolesandactions tbody tr:nth-of-type(even) {
             background-color: #c2f2ff5c;
-          }
-          .styled-table-for-rolesandactions tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
           }
           .styled-table-for-rolesandactions tbody tr.active-row {
             color: #009879;
