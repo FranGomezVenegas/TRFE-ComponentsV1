@@ -58,4 +58,22 @@ export const styles = css`
     flex-direction: column;
     gap: 10px;
   }
+
+  mwc-switch {
+    --mdc-switch-selected-handle-color: #24C0EB;
+    --mdc-switch-selected-track-color: #24C0EB;
+    --mdc-switch-unselected-icon-color: gray;
+    --mdc-switch-selected-pressed-state-layer-color: #24C0EB;
+    --mdc-theme-primary: #24C0EB;
+    --mdc-ripple-hover-state-layer-color: gray;
+
+    --mdc-switch-selected-hover-track-color: #24C0EB;
+    --mdc-switch-selected-hover-handle-color: #24C0EB;
+
+    --mdc-switch-selected-focus-track-color: #24C0EB;
+    --mdc-switch-selected-focus-handle-color: #24C0EB;
+
+    --mdc-switch-selected-pressed-track-color: #24C0EB;
+    --mdc-switch-selected-pressed-handle-color: #24C0EB;
+  }
 `;
