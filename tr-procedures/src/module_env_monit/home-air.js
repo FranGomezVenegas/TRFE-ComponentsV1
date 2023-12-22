@@ -133,7 +133,7 @@ export class HomeAir extends navigator(LitElement) {
 
       .container.primary text.up-title {
         font-size: 24px;
-        fill: orange;
+        fill: #7b5817;
       }
 
       .container.primary text.lo-title {
@@ -142,7 +142,7 @@ export class HomeAir extends navigator(LitElement) {
       }
 
       .container.primary text.text-orange {
-        fill: orange;
+        fill: #7b5817;
       }
 
       .container.primary text.text-blue {
