@@ -69,15 +69,31 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
           background: transparent;
         }
         .column-list {
-          -webkit-columns: 2; /* Number of columns */
-          -moz-columns: 2;
-          columns: 2;
+          -webkit-columns: 3; /* Number of columns */
+          -moz-columns: 3;
+          columns: 3;
           -webkit-column-gap: 10px; /* Spacing between columns */
           -moz-column-gap: 10px;
           column-gap: 10px;
           list-style-type: none;
           padding: 10px 0px 0px;
           margin: 0px;
+        }
+
+        @media screen and (max-width: 890px) {
+          .column-list {
+            -webkit-columns: 2; /* Number of columns */
+            -moz-columns: 2;
+            columns: 2;
+          }
+        }
+
+        @media screen and (max-width: 530px) {
+          .column-list {
+            -webkit-columns: 1; /* Number of columns */
+            -moz-columns: 1;
+            columns: 1;
+          }
         }
         
         .column-list li {
@@ -109,21 +125,23 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
         .text-group {
           display: flex;
           align-items: center;
-          margin:4px 0px;
-          font-size:1.32em;
+          margin-top: 2px;
+          margin-bottom: 4px;
+          font-size:1em;
         }        
         .tglabelaction {
-          font-size: 1em;
-          width: 120px;
+          font-size: 1.2em;
+          width: 124px;
           text-align: right;
-          margin-right: 20px;
+          margin-right: 8px;
           flex-shrink:0;
         }
         .tglabel {
           font-size: 1.2em;
-          width: 124px;
+          width: 124px; 
           text-align: right;
-          margin-right: 20px;
+          margin-right: 8px;
+          flex-shrink:0;
         }
         .tgvalue {
           font-size: 1.0em;
@@ -419,7 +437,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
             style="color:${a.ballState=="open"?'#3f51b5':a.ballState=="hide"?'#eee':'#aaa'}">radio_button_checked</mwc-icon>
           <sp-tooltip open placement="right" variant="info" id="tooltip-${a.audit_id}">
           
-            <div class="layout horizontal flex center">
+            <div class="layout horizontal flex">
               ${a.reviewed?
                 html`
                 <div class="text-group"><mwc-icon title="${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}">grading</mwc-icon></div>
@@ -429,51 +447,54 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
                   @click=${()=>this.signAudit(a.audit_id)} ?hidden=${!this.sampleAuditRevisionMode}>edit_note</mwc-icon>
                 `
               }
-              <div class="text-group"><div class="tglabelaction">${langConfig.actionName["label_"+this.lang]}: </div><b>${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</b></div>
-            </div>
-            <div class="text-group">
-              <div class="tglabel">${langConfig.performedOn["label_"+this.lang]}: </div>${a.date} ${langConfig.by["label_"+this.lang]} ${a.person}
-            </div>
-            <div id="audit-${a.audit_id}" hidden=true>
-            
-              <div class="text-group">${a.reviewed?html`<br><div class="tglabel">${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}: </div>${a.reviewed_on}`:null}</div>
-                     
-              <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${a.audit_id}</div>
-              <div class="feldsupdatedregion">
-                <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list"> ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(a, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+              <div>
+                <div class="text-group"><div class="tglabelaction">${langConfig.actionName["label_"+this.lang]}: </div><b>${a.action_pretty_en ? a['action_pretty_'+ this.lang] : a.action_name}</b></div>
+                <div class="text-group">
+                  <div class="tglabel">${langConfig.performedOn["label_"+this.lang]}: </div>${a.date} ${langConfig.by["label_"+this.lang]} ${a.person}
+                </div>
+
+                <div id="audit-${a.audit_id}">
+                  <div class="text-group">${a.reviewed?html`<br><div class="tglabel">${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}: </div>${a.reviewed_on}`:null}</div>
+                  <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${a.audit_id}</div>
+                  <div class="feldsupdatedregion">
+                    <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list"> ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(a, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+                  </div>
+                  ${a.sublevel.length&&a.sublevel[0].date?
+                  html`${a.sublevel.map((s,si)=>
+                    html`
+                      <div id="wrap-${s.audit_id}" class="layout horizontal flex center" style="margin:5px">
+                        <mwc-icon class="ball"
+                          @click=${()=>this.showSubItem(s,i,si)}
+                          style="color:${s.ballState=="hide"?'#eee':s.ballState=="close"?'#aaa':'#3f51b5'}">radio_button_checked</mwc-icon>
+                        <sp-tooltip class="sub" open placement="right" variant="info" id="tooltip-${s.audit_id}">
+                          <div class="layout horizontal flex">
+                            ${s.reviewed?
+                              html`
+                              <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
+                              `:
+                              html`
+                              <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}" 
+                                @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}>edit_note</mwc-icon>
+                              `
+                            }
+                            <div>
+                              <div class="text-group"><div class="tglabelaction">${langConfig.actionName["label_"+this.lang]}: </div>${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>
+                              <div class="text-group"><div class="tglabel">${langConfig.performedOn["label_"+this.lang]}: </div>${s.date} ${langConfig.by["label_"+this.lang]} ${s.person}</div>
+                              <div id="audit-${s.audit_id}">
+                                ${s.reviewed?html`<span class="relevantlabel">Reviewed On: </span>${s.reviewed_on}<br>`:null}
+                                <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${s.audit_id}</div>
+                                <div class="feldsupdatedregion">
+                                  <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list">${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(s, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+                                </div>
+                              </div>
+                            </div>  
+                          </div>
+                        </sp-tooltip>
+                      </div>`
+                  )}
+                  `: null}
+                </div>
               </div>
-              ${a.sublevel.length&&a.sublevel[0].date?
-              html`${a.sublevel.map((s,si)=>
-                html`
-                  <div id="wrap-${s.audit_id}" class="layout horizontal flex center" style="margin:5px">
-                    <mwc-icon class="ball"
-                      @click=${()=>this.showSubItem(s,i,si)}
-                      style="color:${s.ballState=="hide"?'#eee':s.ballState=="close"?'#aaa':'#3f51b5'}">radio_button_checked</mwc-icon>
-                    <sp-tooltip class="sub" open placement="right" variant="info" id="tooltip-${s.audit_id}">
-                      <div class="layout horizontal flex center">
-                        ${s.reviewed?
-                          html`
-                          <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
-                          `:
-                          html`
-                          <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}" 
-                            @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}>edit_note</mwc-icon>
-                          `
-                        }
-                        <div class="text-group"><div class="tglabelaction">${langConfig.actionName["label_"+this.lang]}: </div>${s.action_pretty_en ? s['action_pretty_'+ this.lang] : s.action_name}</div>
-                      </div>
-                      <div class="text-group"><div class="tglabel">${langConfig.performedOn["label_"+this.lang]}: </div>${s.date} ${langConfig.by["label_"+this.lang]} ${s.person}</div>
-                      <div id="audit-${s.audit_id}">
-                        ${s.reviewed?html`<span class="relevantlabel">Reviewed On: </span>${s.reviewed_on}<br>`:null}
-                        <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${s.audit_id}</div>
-                        <div class="feldsupdatedregion">
-                          <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list">${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(s, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
-                        </div>
-                      </div>
-                    </sp-tooltip>
-                  </div>`
-              )}
-              `: null}
             </div>
           </sp-tooltip>
         
