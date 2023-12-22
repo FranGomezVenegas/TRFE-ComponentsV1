@@ -281,7 +281,7 @@ export function DataViews(base) {
             font-size: 1.8vmin;
             border-collapse: collapse;
             margin: 2px 10px;
-            font-family: sans-serif;
+            font-family: Montserrat;
             /* min-width: 400px; */
             box-shadow: 0 0 20px #44cbe652;
             table-layout: fixed;
@@ -568,7 +568,7 @@ export function DataViews(base) {
             font-size: 1.8vmin;
             border-collapse: collapse;
             margin: 2px 10px;
-            font-family: sans-serif;
+            font-family: Montserrat;
             /* min-width: 400px; */
             box-shadow: 0 0 20px #44cbe652;
             table-layout: fixed;
@@ -1348,7 +1348,7 @@ export function DataViews(base) {
             font-size: 2vmin;
             border-collapse: collapse;
             margin: 2px 10px;
-            font-family: sans-serif;
+            font-family: Montserrat;
             border: 1px solid #2989d8;
             /* min-width: 400px; */
           }
@@ -1364,12 +1364,12 @@ export function DataViews(base) {
 
           .styled-table-for-rolesandactions th {
             color: rgba(0, 0, 0, 0.71);
-            text-align: right;
+            text-align: center;
             font-size: 16px;
             border-right: 1px solid;
             padding: 15px;
           }
-          .styled-table-for-rolesandactions th:hover {
+          .styled-table-for-rolesandactions tbody th:hover {
             color: white;
             background-color: #298988;
           }
@@ -1452,12 +1452,12 @@ export function DataViews(base) {
                               ? html`${this.fieldsToDiscard(fld) === true
                                   ? nothing
                                   : html`<th
-                                      style="text-align: center; color:white;"
+                                      style="text-align: center; color:white; font-weight:normal;"
                                     >
                                       ${fld.label}
                                     </th>`} `
                               : html`
-                                  <th style="text-align: center; color:white;">
+                                  <th style="text-align: center; color:white; font-weight:normal;">
                                     ${fld}
                                   </th>
                                 `}
@@ -1489,7 +1489,7 @@ export function DataViews(base) {
                                                   ) === true
                                                     ? nothing
                                                     : html`<th
-                                                        style="font-size: 1.6vmin; font-weight: unset; font-family: sans-serif;"
+                                                        style="font-size: 1.6vmin; font-weight: unset; font-family: Montserrat;"
                                                       >
                                                         ${fld}
                                                       </th>`}
