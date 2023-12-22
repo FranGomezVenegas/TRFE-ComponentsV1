@@ -104,6 +104,11 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
           hyphens: auto;
           word-break: break-all;          
         }
+
+        .d-flex {
+          display:flex !important;
+        }
+
         .highlighed{
           color:rgb(76, 175, 80);
           font-size:1.21em;
@@ -112,8 +117,11 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
           font-weight: bold;
           font-size: 16px;
         }          
-        span.label{
+        div.label{
           font-weight: bold;         
+          width:124px;
+          text-align:right;
+          margin-right: 8px;
         }
         p{
             font-weight: bold;
@@ -343,8 +351,6 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
         width: 100%;
         margin-bottom: 10px;
       }
-
-            
       </style>
 
       <div class="page-header" style="text-align: center; font-weight: bold;">
@@ -457,7 +463,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
                   <div class="text-group">${a.reviewed?html`<br><div class="tglabel">${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}: </div>${a.reviewed_on}`:null}</div>
                   <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${a.audit_id}</div>
                   <div class="feldsupdatedregion">
-                    <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list"> ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(a, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+                    <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list"> ${a.fields_updated ? Object.entries(a.fields_updated).map(([key, value], i) => html`<li class="d-flex ${this.fieldToBeHighlighted(a, key)}"><div class="label">${key}:</div> <div>${value}</div></li>`) : ''}</ul>
                   </div>
                   ${a.sublevel.length&&a.sublevel[0].date?
                   html`${a.sublevel.map((s,si)=>
@@ -484,7 +490,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
                                 ${s.reviewed?html`<span class="relevantlabel">Reviewed On: </span>${s.reviewed_on}<br>`:null}
                                 <div class="text-group"><div class="tglabel">${langConfig.auditId["label_"+this.lang]}: </div>${s.audit_id}</div>
                                 <div class="feldsupdatedregion">
-                                  <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list">${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li class="${this.fieldToBeHighlighted(s, key)}"><span class="label">${key}:</span> ${value}</li>`) : ''}</ul>
+                                  <p>${langConfig.fieldsUpdate["label_"+this.lang]}: </p> <ul class="column-list">${s.fields_updated ? Object.entries(s.fields_updated).map(([key, value], i) => html`<li class="d-flex ${this.fieldToBeHighlighted(s, key)}"><div class="label">${key}:</div> <div>${value} </div></li>`) : ''}</ul>
                                 </div>
                               </div>
                             </div>  
