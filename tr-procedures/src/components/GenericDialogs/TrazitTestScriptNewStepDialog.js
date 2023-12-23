@@ -501,7 +501,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         filterInFirstLevel: true,
         filterPropertyName: "module_name",
         contextVariableName: "moduleName",
-        propertyNameContainerLevel2: "module_in_solution_queries",
+        propertyNameContainerLevel2: "module_in_solution_actions",
         propertyKeyName: "endpoint_name",
         propertyKeyValueEn: "endpoint_name",
         propertyKeyValueEs: "endpoint_name",
