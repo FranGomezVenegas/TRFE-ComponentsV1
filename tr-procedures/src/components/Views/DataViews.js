@@ -1328,7 +1328,7 @@ export function DataViews(base) {
       
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
-      const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx]?.children : undefined;
+      const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
 
       return html`
         ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme)}
@@ -1506,7 +1506,7 @@ export function DataViews(base) {
                                                       ? this.lang === "es"
                                                         ? "TODOS"
                                                         : "ALL"
-                                                      : "X"}
+                                                      : fld}
                                                   </td>`
                                                 : html`<td
                                                     class="absent"
