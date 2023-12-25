@@ -1336,8 +1336,14 @@ export function DataViews(base) {
       `;
     }
 
-    rolesAndActions(elem, dataArr, isSecondLevel = false, lang) {
+    rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData) {
       //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
+      if (directData !== undefined) {
+        dataArr = directData;
+      } else {
+        dataArr = this.getDataFromRoot(elem, dataArr);
+      }
+
       return html`
         <style>
           .styled-table-for-rolesandactions {
@@ -1439,6 +1445,10 @@ export function DataViews(base) {
                   >${elem.title["label_" + this.lang]}</span
                 >
               </p>`}
+          <div class="layout horizontal center flex wrap">
+            ${this.getButton(elem, dataArr, true)}
+          </div>
+
           <table class="styled-table-for-rolesandactions">
             <thead>
               <tr>
