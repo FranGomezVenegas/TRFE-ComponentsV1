@@ -250,12 +250,17 @@
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
   },
+  "localDefaultView": {
+    "procName":  "inspection_lot", 
+    "viewName": "analysisDesign", 
+    "filterName" :  "analysisDesign" 
+  },
   "localDefaultViewsssssssss": {
     "procName":  "instruments", 
     "viewName": "Deviation", 
     "filterName" :  "Deviation" 
   },
-  "localDefaultView": {
+  "localDefaultViewsss": {
     "procName":  "instruments", 
     "viewName": "PlatformInstruments", 
     "filterName" :  "InstrumentsList" 

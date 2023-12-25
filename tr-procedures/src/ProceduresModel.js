@@ -244,6 +244,7 @@ export const DemoViews = [
     {"proc_instance_name": "inspection_lot", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"},
     {"proc_instance_name": "inspection_lot", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
 	{"proc_instance_name": "inspection_lot", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
+  {"proc_instance_name": "inspection_lot", "view_name": "analysisDesign", "filter_name": "analysisDesign", "title": "analysisDesign"},
 	{"proc_instance_name": "inspection_lot", "view_name": "SpecDesign", "filter_name": "SpecDesign", "title": "SpecDesign"}
 	]}
    

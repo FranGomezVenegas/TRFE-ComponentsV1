@@ -6148,5 +6148,196 @@ export const DemoLotsRaw =
         ]
       }
     ]
-  } 
+  },
+  "analysisDesign": {
+    "component": "ObjectByTabs",
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Spec Designer",
+      "fix_text_es": "Diseño de especificaciones",
+      "name": "lot_name"
+    },
+    "viewQuery": {
+      "actionName": "GET_ANALYSIS",
+	    "notUseGrid": true,
+      "responseArray": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },      
+      "endPointParams": [
+        {
+          "argumentName": "code",
+		  "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"          
+        },
+		{
+			"argumentName": "includeMethodsCertification",
+			"value": true
+		}
+      ]
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+      {
+        "filtertext1": {
+          "label_en": "Analysis",
+          "label_es": "Análisis",
+          "fixValue": "ALL"
+        }
+      }
+    ],
+	"zzzfilterResultDetail":{
+		"type":"list",
+		"detail":[
+			{"field": "code"}
+      ]  		
+	},
+    "actions": [],
+    "tabs": [
+      { "tabLabel_en": "Analysis", "tabLabel_es": "Análisis", "view": "summary",
+        "view_definition": [
+		  {   
+            "actions": [
+            ]
+          },
+          { "type": "parentReadOnlyTable", 
+		    "endPointResponseObject": "analysis",
+            "columns": [
+              {
+                "name": "code",
+                "label_en": "Code",
+                "label_es": "Código"
+              },
+              {
+                "name": "testing_group",
+                "label_en": "Testing Group",
+                "label_es": "Grupo Analítico"
+              }			  
+            ],
+            "actions":[],
+            "row_buttons":[],
+            "children":"analysis_method",
+            "children_definition":{
+                "columns": [
+                  {
+                    "name": "method_name",
+                    "label_en": "Code",
+                    "label_es": "Código"
+                  },
+                  {
+                    "name": "testing_group",
+                    "label_en": "Testing Group",
+                    "label_es": "Grupo Analítico"
+                  }			  
+                ],
+                "children":"analysis_method_params",
+                "children_definition":{
+                  "columns": [
+                    {
+                      "name": "param_name",
+                      "label_en": "Code",
+                      "label_es": "Código"
+                    },
+                    {
+                      "name": "param_type",
+                      "label_en": "Testing Group",
+                      "label_es": "Grupo Analítico"
+                    }			  
+                  ]
+      
+                }
+            }
+          }
+        ]
+      },
+      { "tabLabel_en": "Certification", 
+		"tabLabel_es": "Certificación", 
+		"view": "summary",
+        "view_definition": [          
+			{
+			"type": "rolesAndActions",
+			"title": {
+				"label_en": "Methods by user",
+				"label_es": "Métodos por usuario"
+			},
+			"endPointResponseObject": "certifications_info",
+			"actions": [
+                {
+                  "actionName": "CERTIFY_ASSIGN_METHOD_TO_USER",
+                  "notGetViewData": true,
+                  "requiresDialog": true,
+                  "certificationException": true,
+                  "button": {
+                    "icon": "person_add",
+                    "title": {
+                      "label_en": "Assign Method Certification to User",
+                      "label_es": "Asignar Certificación de Método a Usuario"
+                    },
+                    "requiresGridItemSelected": false
+                  },
+                  "dialogInfo": {
+                    "name": "genericDialog",
+                    "fields": [
+                      {
+                        "list1": {
+                          "label_en": "Method",
+                          "label_es": "Método",
+                          "addBlankValueOnTop": true,
+                          "addBlankValueAtBottom": false,
+						  "valuesFromMasterData": {
+							"propertyNameContainer": "methods",
+							"filterInFirstLevel": false, 
+							"propertyKeyName": "code", 
+							"propertyKeyValueEn": "code", 
+							"propertyKeyValueEs": "code",
+                          }
+                        }
+                      },
+                      {
+                        "list2": {
+                          "label_en": "User",
+                          "label_es": "Usuario",
+                          "addBlankValueOnTop": true,
+                          "addBlankValueAtBottom": false,
+						  "valuesFromMasterData": {
+							"propertyNameContainer": "users",
+							"filterInFirstLevel": false, 
+							"propertyKeyName": "user", 
+							"propertyKeyValueEn": "user", 
+							"propertyKeyValueEs": "user",
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "endPointParams": [
+                    {
+                      "argumentName": "methodName",
+                      "element": "list1",
+                      "defaultValue": ""
+                    },
+                    {
+                      "argumentName": "userName",
+                      "element": "list2",
+                      "defaultValue": ""
+                    }
+                  ]
+                }			
+            ]
+          }
+			
+			
+        ]
+      }
+    ]
+  }
 }
