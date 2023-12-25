@@ -268,6 +268,9 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             }
             this.selectedItemLot=this.selectedItem.lot_name
             this.selectedItemLoaded=true
+          }else{
+            this.selectedItem=[]
+            this.selectedItem=this.selectedItems
           }
         }        
     }
@@ -277,7 +280,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       ${this.genericFormDialog()}
         ${this.desktop ?
           html`     
-          ${this.viewModelFromProcModel.filter === undefined ? html`
+          ${this.viewModelFromProcModel.filter === undefined ? html`              
               ${this.tabsBlock()}  
 
           ` : html`             

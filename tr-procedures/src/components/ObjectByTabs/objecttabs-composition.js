@@ -273,6 +273,15 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
       ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
       ${elem.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem, data, true): nothing}
 
+      ${elem.type==="parentReadOnlyTable" ? 
+      this.parentReadOnlyTable(
+        elem, 
+        data, 
+        true, 
+        undefined, 
+        undefined,
+      ): nothing}
+
       ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
         this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true, this.lang) : nothing}
       ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2===undefined ? 
