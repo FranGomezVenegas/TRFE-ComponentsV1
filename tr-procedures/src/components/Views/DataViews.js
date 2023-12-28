@@ -1338,12 +1338,12 @@ export function DataViews(base) {
 
     rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData) {
       //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
-      if (directData !== undefined) {
+/*      if (directData !== undefined) {
         dataArr = directData;
       } else {
         dataArr = this.getDataFromRoot(elem, dataArr);
       }
-
+*/
       return html`
         <style>
           .styled-table-for-rolesandactions {
