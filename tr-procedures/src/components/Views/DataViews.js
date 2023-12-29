@@ -917,7 +917,11 @@ export function DataViews(base) {
     }
      
 
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "TRAZiT-UsersArea") {
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
+      let tmp = theme;
+      if(!theme) {
+        tmp = "TRAZiT-UsersArea";
+      }
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
 
@@ -1044,7 +1048,7 @@ export function DataViews(base) {
                   ? ""
                   : "No columns defined"}`
               : html`
-                  <table id=${elem.endPointResponseObject} class="styled-table read-only ${theme}">
+                  <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
                     <thead>
                       <tr>
                         ${elem.columns.map(
