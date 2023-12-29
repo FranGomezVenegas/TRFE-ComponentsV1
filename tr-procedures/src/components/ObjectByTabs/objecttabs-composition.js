@@ -206,7 +206,6 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject], false) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
       ${elem.elements.map((elem2, i) => {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", elem2.type);
         return html`
           ${elem2.is_translation===undefined||(elem2.is_translation!==undefined&&elem2.is_translation===true&&elem2.lang!==undefined&&elem2.lang===this.lang) ?
           html`              
@@ -224,6 +223,12 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
                 elem2, 
                 data, 
                 true, 
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                elem2.theme,
               ): nothing}
             ${elem2.type==="parentReadOnlyTable" ? 
               this.parentReadOnlyTable(
@@ -259,7 +264,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
     </div>
   `
   }
-  print1LevelObject(elem, data){    
+  print1LevelObject(elem, data){   
     return html`    
       ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="card" ? this.kpiCard(elem, data[elem.endPointResponseObject]) : nothing}
@@ -280,6 +285,8 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
         true, 
         undefined, 
         undefined,
+        undefined,
+        elem.theme,
       ): nothing}
 
       ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
