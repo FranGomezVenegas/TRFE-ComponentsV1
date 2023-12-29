@@ -917,7 +917,7 @@ export function DataViews(base) {
     }
      
 
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "TRAZiT-DefinitionArea") {
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme = "TRAZiT-UsersArea") {
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
 
@@ -946,190 +946,78 @@ export function DataViews(base) {
             box-sizing: border-box;
           }
 
-          table#${elem.endPointResponseObject} {
-            min-width: 100%;
-            width: auto;
-            flex: 1;
-            display: grid;
+          table.TRAZiT-DefinitionArea thead tr th {
+            background-color: #2989d8;
+            color: white;
+          }
+
+          table.TRAZiT-UsersArea thead tr th {
+            background-color: white;
+            color: gray;
+          }
+
+          table {
             border-collapse: collapse;
-            border: 1px solid #2989d8;
-            /* These are just initial values which are overriden using JavaScript when a column is resized */
-            grid-template-columns:
-              ${elem.columns.map((column) => {
-                  if(column.width)
-                    return html`minmax(${column.width.min}, ${column.width.max}) `;
-                  return html`minmax(100px, 1.5fr) `;
-                }
-              )}
-              ${elem.row_buttons ? html`minmax(100px, ${70 * elem.row_buttons.length}px)` : html``}
-          }
-
-          table#${elem.endPointResponseObject} thead,
-          table#${elem.endPointResponseObject} tbody,
-          table#${elem.endPointResponseObject} tr {
-            display: contents;
-          }
-
-          table#${elem.endPointResponseObject} th,
-          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea td {
-            padding: 15px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-
-          table#${elem.endPointResponseObject} th {
-            border-right: 1px solid white;
-            z-index: 1;
-          }
-
-          table#${elem.endPointResponseObject} th:last-child,
-          table#${elem.endPointResponseObject} td:last-child {
-            border: 0;
-          }
-
-          .right-area {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-
-          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea th {
-            position: sticky;
-            top: 0;
-            background: #2989d8;
-            text-align: center;
-            font-weight: normal;
+            width: 100%;
+            font-family: Montserrat;
             font-size: 16px;
-            color: white !important;
           }
 
-         
-
-          table#${elem.endPointResponseObject} th:last-child {
-            border: 0;
+          table.TRAZiT-UsersArea tr {
+            border: none; 
+            border-bottom: 1px solid #dddddd;
           }
 
-          .resize-handle {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            background: black;
-            opacity: 0;
-            width: 3px;
-            cursor: col-resize;
-          }
-
-          .resize-handle:hover,
-          .header--being-resized .resize-handle {
-            opacity: 0.5;
-          }
-
-          table#${elem.endPointResponseObject} th:hover .resize-handle {
-            opacity: 0.3;
-          }
-
-          table#${elem.endPointResponseObject} td {
-            padding-top: 10px;
-            padding-bottom: 10px;
+          tr {
+            border: 1px solid #dddddd;
+            text-align: center;
             color: #808080;
-            border-right: 1px solid;
           }
 
-          table#${elem.endPointResponseObject} tr {
+          table.TRAZiT-UsersArea tr:nth-child(even) {
+            background-color: white;
+          }
+
+          table.TRAZiT-UsersArea tr:last-child {
+            border: none;
+          }
+       
+          table.TRAZiT-UsersArea thead {
+            border-bottom: 1px solid #dddddd;
+          }
+
+          tr:nth-child(even) {
+            background-color: rgba(214, 233, 248, 0.37);
+          }
+
+          table.TRAZiT-DefinitionArea th {
+            padding: 16px 20px;
+            border: 1px solid #dddddd !important;
+          }
+
+          td, th {
+            padding: 16px 20px;
+            border: 1px solid #dddddd !important;
+          }
+
+          table.TRAZiT-UsersArea td, th {
+            border: none !important;
+          }
+
+          tr {
             cursor: pointer;
           }
 
-          table#${elem.endPointResponseObject} tr:hover td {
+          table tr:hover td {
             background-color: #2989d830 !important;
           }
 
-          table#${elem.endPointResponseObject} tr:nth-child(even) td {
-            background:  rgba(214, 233, 248, 0.37);
-          }
-
-          table#${elem.endPointResponseObject} tr.hidden {
-            display: none;
-          }
-
-          table#${elem.endPointResponseObject} tr.selected td {
-            background: rgba(214, 255, 248, 1);
-          }
-
-          table#${elem.endPointResponseObject} .resetBtn {
-            color: white;
-            width: 12px;
-            height: 12px;
-          }
-
-          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea th,
-          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea td {
-            color: rgb(94, 145, 186);
-            border-right: 1px solid #D2DFEF;
-            border-bottom: 1px solid #D2DFEF;
-          }
-
-          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea tr.selected td {
-            background: #E8F1FE !important;
-          }
-
-          table#${elem.endPointResponseObject}.TRAZiT-DefinitionArea .resetBtn {
-            color: rgb(94, 145, 186);
-            width: 12px;
-            height: 12px;
-          }
-
-          table td {
-            border-right: 1px solid;
-          }
-
-          table#${elem.endPointResponseObject} mwc-icon-button {
+          mwc-icon-button {
             --mdc-icon-button-size: 24px;
             --mdc-icon-size: 16px;
           }
-          
 
-          mwc-icon-button.green {
-            color: green;
-            width: 12px;
-            height: 12px;
-          }
-          mwc-icon-button.yellow {
-            color: "#FFC300";
-            width: 12px;
-            height: 12px;
-          }
-          mwc-icon-button.red {
-            color: "#900C3F";
-            width: 12px;
-            height: 12px;
-          }
-
-          .js-context-popup {
-            position: fixed;
-            border-radius: 4px;
-            z-index: 1000;
-          }
-
-          .icon {
-            position: absolute;
-            left: 0;
-            top: 0;
-            z-index: 1; /* Ensure the icon appears above the text */
-            width: 24px; /* Adjust the icon size as needed */
-            height: 24px;
-            margin-right: 10px;
-          }
-
-          .text {
-            position: relative; /* To allow text to flow normally */
-            z-index: 0; /* Default z-index */
-          }
-          .text span {
-            font-size: 14px;
-          }
-        </style>
+          </style>
         <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
           <div style="display: flex; flex-direction: column; text-align: center;">
             ${alternativeTitle !== undefined
