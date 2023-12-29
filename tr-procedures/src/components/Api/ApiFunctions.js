@@ -293,6 +293,11 @@ export function ApiFunctions(base) {
           }
           //console.log('jsonParam', 'action', action, 'filterName', this.filterName)
           if (action.subViewFilter!==undefined&&this.filterName!==undefined){
+            if (action.subViewFilter[this.filterName]===undefined){
+              alert('This view filter is '+this.filterName+' and the action has subViewFilter but none of them with this name')
+              jsonParam[p.argumentName] = "ERROR: "+msg
+              return jsonParam[p.argumentName]
+            }
             action.subViewFilter[this.filterName].forEach(p => {
               if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {          
                 if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
