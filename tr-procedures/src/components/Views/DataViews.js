@@ -1224,7 +1224,7 @@ export function DataViews(base) {
       `;
     }
 
-    rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData) {
+    rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData, theme) {
       //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
 /*      if (directData !== undefined) {
         dataArr = directData;
@@ -1234,96 +1234,27 @@ export function DataViews(base) {
 */
       return html`
         <style>
-          .styled-table-for-rolesandactions {
-            display: -webkit-inline-box;
-            margin-top: 0px;
-            margin-bottom: 3px;
-            color: #4285f4;
-            font-size: 2vmin;
-            border-collapse: collapse;
-            margin: 2px 10px;
-            font-family: Montserrat;
-            border: 1px solid #2989d8;
-            /* min-width: 400px; */
-          }
-          .styled-table-for-rolesandactions thead tr {
-            background-color: #2989d8;
-            color: #ffffff;
-            text-align: left;
-          }
-          .styled-table-for-rolesandactions thead tr headercolumns {
-            background-color: 2989d870;
-            color: white;
+          table.styled-table-for-rolesandactions th{
+            color:gray !important;
           }
 
-          .styled-table-for-rolesandactions th {
-            color: rgba(0, 0, 0, 0.71);
-            text-align: center;
-            font-size: 16px;
-            border-right: 1px solid;
-            padding: 15px;
-          }
-          .styled-table-for-rolesandactions tbody th:hover {
-            color: white;
-            background-color: #298988;
-          }
-          .styled-table-for-rolesandactions td {
-            color: rgba(0, 0, 0, 0.71);
-            padding: 8px 15px;
-            border: 1px solid #c2edf9;
-            word-break: break-all;
-            font-size: 1.8vmin;
-          }
-          .styled-table-for-rolesandactions td.present {
-            text-align: center;
-            background-color: #5e80003d;
-            font-size: 11px;
-          }
-          .styled-table-for-rolesandactions tr:hover td.present {
-            text-align: center;
-            background-color: #5e800073;
-            font-size: 11px;
-          }
-          .styled-table-for-rolesandactions td.absent {
-            background-color: #e0121257;
-            font-size: 11px;
-          }
-          .styled-table-for-rolesandactions tr:hover td.absent {
-            background-color: #e012127d;
-            font-size: 11px;
+          table.styled-table-for-rolesandactions th, td{
+            border: none !important;
           }
 
-          .styled-table-for-rolesandactions tbody tr {
-            border-bottom: 1px solid #207cca;
-          }
-          .styled-table-for-rolesandactions tbody tr:nth-of-type(even) {
-            background-color: #c2f2ff5c;
-          }
-          .styled-table-for-rolesandactions tbody tr.active-row {
-            color: #009879;
+          table.styled-table-for-rolesandactions tr:nth-child(even) {
+            background-color: white !important;
           }
 
-          .styled-table-for-rolesandactions tbody tr.active-row {
-            color: #009879;
+          table.styled-table-for-rolesandactions tr {
+            border: none;
+            border-bottom: 1px solid #dddddd;
           }
-          span.cardLabel {
-            font-weight: bold;
-            color: #032bbc;
+          
+          table.styled-table-for-rolesandactions tr:last-child {
+            border: none;
           }
-          span.cardValue {
-            color: #009879;
-          }
-          span.title {
-            color: rgb(20, 115, 230);
-            margin-top: 10px;
-            font-weight: bold;
-          }
-          span.title.true {
-            font-size: 18px;
-          }
-          span.title.false {
-            font-size: 18px;
-          }
+
         </style>
         <div style="display: flex; flex-direction: column; text-align: center;">
           ${elem === undefined || elem.title === undefined
@@ -1337,7 +1268,7 @@ export function DataViews(base) {
             ${this.getButton(elem, dataArr, true)}
           </div>
 
-          <table class="styled-table-for-rolesandactions">
+          <table class="styled-table-for-rolesandactions" >
             <thead>
               <tr>
                 ${dataArr === undefined || dataArr[0] === undefined
@@ -1386,13 +1317,13 @@ export function DataViews(base) {
                                                     dataArr[0][iCol]
                                                   ) === true
                                                     ? nothing
-                                                    : html`<th
+                                                    : html`<td
                                                         style="font-size: 1.6vmin; font-weight: unset; font-family: Montserrat;"
                                                       >
                                                         ${fld}
-                                                      </th>`}
+                                                      </td>`}
                                                 `
-                                              : html`<th>${fld}</th>`}`
+                                              : html`<td>${fld}</td>`}`
                                           : html`
                                               ${fld !== undefined &&
                                               fld.length > 0
