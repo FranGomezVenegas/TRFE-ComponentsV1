@@ -920,8 +920,9 @@ export function DataViews(base) {
      
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
-      console.log("themethemethemethemetheme", theme);
-      let tmp = theme;
+      let tmp = elem.theme;
+      console.log("elem.endPointResponseObject",elem.endPointResponseObject)
+      console.log("elem.themeelem.themeelem.theme", elem);
       if(typeof(tmp) == undefined) {
         tmp = "TRAZiT-UsersArea";
       }
