@@ -920,6 +920,7 @@ export function DataViews(base) {
      
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
+      console.log("themethemethemethemetheme", theme);
       let tmp = theme;
       if(typeof(tmp) == undefined) {
         tmp = "TRAZiT-UsersArea";
@@ -1014,7 +1015,7 @@ export function DataViews(base) {
             cursor: pointer;
           }
 
-          table tr:hover td {
+          table#${elem.endPointResponseObject} tr:hover td {
             background-color: #2989d830 !important;
           }
 
@@ -1335,13 +1336,17 @@ export function DataViews(base) {
           cursor: pointer;
         }
 
-        table tr:hover td {
-          background-color: #2989d830 !important;
-        }
-
         mwc-icon-button {
           --mdc-icon-button-size: 24px;
           --mdc-icon-size: 16px;
+        }
+        
+        td.absent {
+          background-color: #e0121257;
+        }
+        
+        td.present {
+          background-color: #5e80003d;
         }
 
         </style>
