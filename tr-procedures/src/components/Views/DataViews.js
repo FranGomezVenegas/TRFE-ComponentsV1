@@ -921,10 +921,15 @@ export function DataViews(base) {
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
       let tmp = elem.theme;
-      console.log("elem.endPointResponseObject",elem.endPointResponseObject)
-      console.log("elem.themeelem.themeelem.theme", elem);
+      if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
+        tmp = sessionStorage.getItem('tableTheme');
+      }
+      if(typeof(tmp) != undefined) {
+        sessionStorage.setItem('tableTheme', tmp);
+      }
       if(typeof(tmp) == undefined) {
         tmp = "TRAZiT-UsersArea";
+        sessionStorage.setItem('tableTheme', tmp);
       }
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
