@@ -890,6 +890,8 @@ export function DataViews(base) {
       // });
 
       // this.dispatchEvent(event2);
+      console.log("rowSelected", rowSelected);
+
       this.render();
 
       console.log("handleTableRowClick", this.selectedItemInView);
@@ -1019,6 +1021,10 @@ export function DataViews(base) {
           mwc-icon-button {
             --mdc-icon-button-size: 24px;
             --mdc-icon-size: 16px;
+          }
+
+          .hidden {
+            display: none;
           }
 
           </style>
