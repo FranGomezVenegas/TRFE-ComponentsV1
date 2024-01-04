@@ -919,7 +919,7 @@ export function DataViews(base) {
 
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
       let tmp = theme;
-      if(!theme) {
+      if(typeof(tmp) == undefined) {
         tmp = "TRAZiT-UsersArea";
       }
       const endPointResponseObject = elem.endPointResponseObject;
@@ -1189,7 +1189,7 @@ export function DataViews(base) {
       }
     }
 
-    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme = "") {
+    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme) {
       if (directData !== undefined) {
         dataArr = directData;
       } else {
@@ -1229,6 +1229,10 @@ export function DataViews(base) {
     }
 
     rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData, theme) {
+      let tmp = elem.theme
+      if(typeof(tmp) == undefined) {
+        tmp = "TRAZiT-UsersArea";
+      }
       //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
 /*      if (directData !== undefined) {
         dataArr = directData;
@@ -1259,6 +1263,81 @@ export function DataViews(base) {
             border: none;
           }
 
+          * {
+            box-sizing: border-box;
+          }
+
+        table.TRAZiT-DefinitionArea thead tr th {
+          background-color: #2989d8;
+          color: white !important;
+        }
+
+        table.TRAZiT-UsersArea thead tr th {
+          background-color: white;
+          color: gray;
+        }
+
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          font-family: Montserrat;
+          font-size: 16px;
+        }
+
+        table.TRAZiT-UsersArea tr {
+          border: none; 
+          border-bottom: 1px solid #dddddd;
+        }
+
+        tr {
+          border: 1px solid #dddddd;
+          text-align: center;
+          color: #808080;
+        }
+
+        table.TRAZiT-UsersArea tr:nth-child(even) {
+          background-color: white;
+        }
+
+        table.TRAZiT-UsersArea tr:last-child {
+          border: none;
+        }
+     
+        table.TRAZiT-UsersArea thead {
+          border-bottom: 1px solid #dddddd;
+        }
+
+        table.TRAZiT-DefinitionArea tr:nth-child(even) {
+          background-color: rgba(214, 233, 248, 0.37) !important;
+        }
+
+        table.TRAZiT-DefinitionArea th {
+          padding: 16px 20px;
+          border: 1px solid #dddddd !important;
+        }
+
+        td, th {
+          padding: 16px 20px;
+          border: 1px solid #dddddd !important;
+        }
+
+        table.TRAZiT-UsersArea td, th {
+          border: none !important;
+        }
+
+        tr {
+          cursor: pointer;
+        }
+
+        table tr:hover td {
+          background-color: #2989d830 !important;
+        }
+
+        mwc-icon-button {
+          --mdc-icon-button-size: 24px;
+          --mdc-icon-size: 16px;
+        }
+
         </style>
         <div style="display: flex; flex-direction: column; text-align: center;">
           ${elem === undefined || elem.title === undefined
@@ -1272,7 +1351,7 @@ export function DataViews(base) {
             ${this.getButton(elem, dataArr, true)}
           </div>
 
-          <table class="styled-table-for-rolesandactions" >
+          <table class="styled-table-for-rolesandactions ${tmp}" >
             <thead>
               <tr>
                 ${dataArr === undefined || dataArr[0] === undefined
