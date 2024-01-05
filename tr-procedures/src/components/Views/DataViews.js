@@ -972,7 +972,7 @@ export function DataViews(base) {
           table {
             border-collapse: collapse;
             width: 100%;
-            font-family: Montserrat;
+            font-family: Oxygen;
             font-size: 16px;
           }
 
@@ -1293,7 +1293,7 @@ export function DataViews(base) {
         table {
           border-collapse: collapse;
           width: 100%;
-          font-family: Montserrat;
+          font-family: Oxygen;
           font-size: 16px;
         }
 
@@ -1418,7 +1418,7 @@ export function DataViews(base) {
                                                   ) === true
                                                     ? nothing
                                                     : html`<td
-                                                        style="font-size: 1.6vmin; font-weight: unset; font-family: Montserrat;"
+                                                        style="font-size: 1.6vmin; font-weight: unset; font-family: Oxygen;"
                                                       >
                                                         ${fld}
                                                       </td>`}
