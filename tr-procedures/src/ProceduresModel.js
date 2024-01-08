@@ -15,6 +15,7 @@ import { MonWater } from './0proc_models/mon_water';
 import { Stock } from './0proc_models/demo_stock';
 import { DemoInstruments } from './0proc_models/demo_instruments'; 
 import { DemoLotsRaw } from './0proc_models/demo_lots_raw';
+import { DiseaseStudy } from './0proc_models/disease-study';
 
 export const ProceduresModel = {
   ['em-demo-a']: EmDemoA,
@@ -33,6 +34,7 @@ export const ProceduresModel = {
   ['mon_water']: MonWater,
   ['stock']: Stock,
   ['inspection_lot']: DemoLotsRaw,
+  ['DiseaseStudies']: DiseaseStudy,
   
   
   
@@ -246,6 +248,9 @@ export const DemoViews = [
 	{"proc_instance_name": "inspection_lot", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
   {"proc_instance_name": "inspection_lot", "view_name": "analysisDesign", "filter_name": "analysisDesign", "title": "analysisDesign"},
 	{"proc_instance_name": "inspection_lot", "view_name": "SpecDesign", "filter_name": "SpecDesign", "title": "SpecDesign"}
+	]},
+  {"label":"Disease Study", "proc_instance_name": "DiseaseStudies", "views":[
+    {"proc_instance_name": "DiseaseStudies", "view_name": "MyStudies", "filter_name": "MyStudies", "title": "My Studies"},
 	]}
-   
+     
 ]
