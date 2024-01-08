@@ -5529,7 +5529,7 @@ export const DemoLotsRaw =
         "filtertext1": {
           "label_en": "Spec Name",
           "label_es": "Especificacion",
-          "fixValue": "Calcium Carbonate"
+          "fixValue": "%m%"
         }
       }
     ],
