@@ -3,6 +3,7 @@ import { html, css, nothing, LitElement } from "lit";
 // import './tabs-composition';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { navigator } from "lit-element-router";
+import './Dashboard';
 export class HomeWater extends navigator(LitElement) {
   static get styles() {
     return css`
@@ -161,6 +162,7 @@ export class HomeWater extends navigator(LitElement) {
       filterName: { type: String },
       lang: { type: String },
       procInstanceName: { type: String },
+      params: { type: Object },
     };
   }
   constructor() {
@@ -170,6 +172,71 @@ export class HomeWater extends navigator(LitElement) {
     console.log("constructor flowchart");
     this.ready = false;
     this.config = {};
+    this.params = {
+      title1_en: "FQ",
+      title1_es: "FQ",
+      title2_en: "MB",
+      title2_es: "MB",
+      nodes: [
+        {
+          title_en: "New Samples",
+          title_es: "Nuevas muestras",
+          viewName:"LogSamples",
+          filterName: "SampleLogin",
+        },
+        {
+          title_en: "Review Samples",
+          title_es: "Revisar muestras",
+          viewName:"LogSamples",
+          filterName: "SampleLogin",
+        },
+      ],
+      leaves: [
+        {
+          group1: [
+            {
+              title_en: "Sampling",
+              title_es: "Muestreo",
+              viewName:"ReviewTesting",
+              filterName: "FQ Testing",
+            },
+            {
+              title_en: "Review",
+              title_es: "Revisar",
+              viewName:"ReviewTesting",
+              filterName: "FQ Testing",
+            },
+            {
+              title_en: "Enter Results",
+              title_es: "Ingresar resultados",
+              viewName:"ReviewTestingGroup",
+              filterName: "FQ Testing",
+            },
+          ],
+          group2: [
+            {
+              title_en: "Testing Group",
+              title_es: "Grupo de prueba",
+              viewName:"SampleEnterResult",
+              filterName: "MB Testing",
+            },
+            {
+              title_en: "Review",
+              title_es: "Revisar",
+              viewName:"ReviewTesting",
+              filterName: "MB Testing",
+            },
+            {
+              title_en: "Enter Results",
+              title_es: "Ingresar resultados",
+              viewName:"ReviewTestingGroup",
+              filterName: "MB Testing",
+            },
+
+          ]
+        }
+      ],
+    }
   }
   render() {
     return html` ${this.viewModelFromProcModel
@@ -198,64 +265,8 @@ export class HomeWater extends navigator(LitElement) {
     console.log("Flowchart");
     //this.resetView()
     return html`
-      <svg
-        class="container primary"
-        viewBox="0 0 1200 600"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M 170 300 q 15 -60 60 -100" fill="none" />
-        <path d="M 170 300 q 15 60 60 100" fill="none" />
-        <rect x="570" y="195" width="60" height="10" />
-        <rect x="570" y="395" width="60" height="10" />
-        <path d="M 770 200 q 15 -30 60 100" fill="none" />
-        <path d="M 770 400 q 15 30 60 -100" fill="none" />
-        <rect x="370" y="195" width="60" height="10" />
-        <rect x="370" y="395" width="60" height="10" />
-        <rect x="250" y="300" width="500" height="10" />
-
-        <text x="100" y="180" class="up-title">FQ</text>
-        <text x="100" y="420" class="lo-title">MB</text>
-
-        <circle cx="30" cy="300" r="20" />
-        <circle cx="170" cy="300" r="20" />
-        <circle class="sample" cx="100" cy="300" r="70" @click=${() => this.elementClicked("LogSamples", "SampleLogin")} />
-        <text x="100" y="300" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>NEW SAMPLES</text>
-
-        <circle cx="230" cy="200" r="20" />
-        <circle cx="370" cy="200" r="20" />
-        <circle class="results" cx="300" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}/>
-        <text x="300" y="200" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} >TESTING GROUP</text>
-
-        <circle cx="430" cy="200" r="20" />
-        <circle cx="570" cy="200" r="20" />
-        <circle class="testing" cx="500" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} />
-        <text x="500" y="200" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>REVIEW</text>
-
-        <circle cx="630" cy="200" r="20" />
-        <circle cx="770" cy="200" r="20" />
-        <circle class="testing" cx="700" cy="200" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}/>
-        <text x="700" y="200" class="text-orange" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>ENTER RESULTS</text>
-
-        <circle cx="230" cy="400" r="20" />
-        <circle cx="370" cy="400" r="20" />
-        <circle class="results" cx="300" cy="400" r="70" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}/>
-        <text x="300" y="400" class="text-blue" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}>TESTING GROUP</text>
-
-        <circle cx="430" cy="400" r="20" />
-        <circle cx="570" cy="400" r="20" />
-        <circle class="testing" cx="500" cy="400" r="70" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")} />
-        <text x="500" y="400" class="text-blue" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>REVIEW</text>
-
-        <circle cx="630" cy="400" r="20" />
-        <circle cx="770" cy="400" r="20" />
-        <circle class="testing" cx="700" cy="400" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")} />
-        <text x="700" y="400" class="text-blue" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>ENTER RESULTS</text>
-
-        <circle cx="830" cy="300" r="20" />
-        <circle cx="970" cy="300" r="20" />
-        <circle class="sample" cx="900" cy="300" r="70" @click=${() => this.elementClicked("ReviewSample", "")} />
-        <text x="900" y="300" @click=${() => this.elementClicked("ReviewSample", "")}>REVIEW SAMPLE</text>
-      </svg>
+      
+      <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
       <!-- <div class="maindiv">
         <div
           @click=${() => this.elementClicked("LogSamples", "SampleLogin")}

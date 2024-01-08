@@ -2,7 +2,7 @@ import { html, css, nothing, LitElement } from 'lit';
 // import('../grid_with_buttons/grid-with-buttons');
 // import './tabs-composition';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
-
+import './Dashboard';
 import { navigator } from 'lit-element-router';
 export class HomeAir extends navigator(LitElement) {
   static get styles() {
@@ -155,7 +155,6 @@ export class HomeAir extends navigator(LitElement) {
         return {
             tabsMainViewModelFromProcModel: {type: Object},
             viewModelFromProcModel: {type: Object},        
-
             config: { type: Object },
             procName: { type: String },
             ready:{type: Boolean},
@@ -163,7 +162,7 @@ export class HomeAir extends navigator(LitElement) {
             filterName: { type: String },
             lang: { type: String },
             procInstanceName:{type: String},
-    
+            params: { type: Object },
         }
     }
     constructor() {
@@ -173,7 +172,82 @@ export class HomeAir extends navigator(LitElement) {
         console.log('constructor flowchart')
         this.ready=false;
         this.config={}
-  
+        this.params = {
+          title1_en: "Locations",
+          title1_es: "Ubicaciones",
+          title2_en: "Personnel",
+          title2_es: "Personal",
+          nodes: [
+            {
+              title_en: "Program",
+              title_es: "Programa",
+              viewName:"LogSamples",
+              filterName: "SampleLogin",
+            },
+            {
+              title_en: "Incubate",
+              title_es: "Incubar",
+              viewName:"LogSamples",
+              filterName: "SampleLogin",
+            },
+            {
+              title_en: "Inquires",
+              title_es: "Consultas",
+              viewName:"LogSamples",
+              filterName: "SampleLogin",
+            },
+          ],
+          leaves: [
+            {
+              group1: [
+                {
+                  title_en: "Sampling",
+                  title_es: "Muestreo",
+                  viewName:"ReviewTesting",
+                  filterName: "FQ Testing",
+                },
+              ],
+              group2: [
+                {
+                  title_en: "Testing Group",
+                  title_es: "Grupo de prueba",
+                  viewName:"SampleEnterResult",
+                  filterName: "MB Testing",
+                },
+              ]
+            },
+            {
+              group1: [
+                {
+                  title_en: "Plate Reading",
+                  title_es: "Lectura de placas",
+                  viewName:"ReviewTesting",
+                  filterName: "FQ Testing",
+                },
+                {
+                  title_en: "Identification",
+                  title_es: "Identificación",
+                  viewName:"ReviewTesting",
+                  filterName: "FQ Testing",
+                },
+              ],
+              group2: [
+                {
+                  title_en: "Plate Reading",
+                  title_es: "Lectura de placas",
+                  viewName:"ReviewTestingGroup",
+                  filterName: "MB Testing",
+                },
+                {
+                  title_en: "Identification",
+                  title_es: "Identificación",
+                  viewName:"ReviewTestingGroup",
+                  filterName: "MB Testing",
+                },
+              ]
+            }
+          ],
+        }
     }
     firstUpdated() {
       const nodes = this.shadowRoot.querySelectorAll('.node');
@@ -185,78 +259,7 @@ export class HomeAir extends navigator(LitElement) {
     }
     render() {
       return html`
-      <svg
-      class="container primary"
-      viewBox="0 0 1200 600"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M 170 300 q 15 -60 60 -100" fill="none" />
-      <path d="M 170 300 q 15 60 60 100" fill="none" />
-      <rect x="770" y="195" width="60" height="10" />
-      <rect x="770" y="395" width="60" height="10" />
-      <rect x="650" y="300" width="300" height="10" />
-      <rect x="220" y="300" width="150" height="10" />
-      <path d="M 970 200 q 15 -30 60 100" fill="none" />
-      <path d="M 970 400 q 15 30 60 -100" fill="none" />
-      <path d="M 370 200 q 15 -30 60 100" fill="none" />
-      <path d="M 370 400 q 15 30 60 -100" fill="none" />
-      <path d="M 570 300 q 15 -60 60 -100" fill="none" />
-      <path d="M 570 300 q 15 60 60 100" fill="none" />
-
-      <text x="100" y="180" class="up-title">Locations</text>
-
-      <text x="100" y="420" class="lo-title">Personnel</text>
-
-      <circle cx="30" cy="300" r="20" />
-      <circle cx="170" cy="300" r="20" />
-      <circle class="sample" cx="100" cy="300" r="70" @click=${() => this.elementClicked("LogSamples", "SampleLogin")} />
-      <text x="100" y="290" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>Program</text>
-      <text x="100" y="310" @click=${() => this.elementClicked("LogSamples", "SampleLogin")}>Definition</text>
-
-      <circle cx="430" cy="300" r="20" />
-      <circle cx="570" cy="300" r="20" />
-      <circle class="sample" cx="500" cy="300" r="70" />
-      <text x="500" y="300">Incubate</text>
-
-      <circle cx="230" cy="200" r="20" />
-      <circle cx="370" cy="200" r="20" />
-      <circle class="results" cx="300" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}/>
-      <text x="300" y="200" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} >Sampling</text>
-
-      <circle cx="630" cy="200" r="20" />
-      <circle cx="770" cy="200" r="20" />
-      <circle class="testing" cx="700" cy="200" r="70" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")} />
-      <text x="700" y="190" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Plate</text>
-      <text x="700" y="210" class="text-orange" @click=${() => this.elementClicked("ReviewTesting", "FQ Testing")}>Reading</text>
-
-      <circle cx="830" cy="200" r="20" />
-      <circle cx="970" cy="200" r="20" />
-      <circle class="testing" cx="900" cy="200" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}/>
-      <text x="900" y="190" class="text-orange" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>Identification of</text>
-      <text x="900" y="210" class="text-orange" @click=${() => this.elementClicked("ReviewTestingGroup", "FQ Testing")}>microorganism</text>
-
-      <circle cx="230" cy="400" r="20" />
-      <circle cx="370" cy="400" r="20" />
-      <circle class="results" cx="300" cy="400" r="70" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}/>
-      <text x="300" y="400" class="text-blue" @click=${() => this.elementClicked("SampleEnterResult", "MB Testing")}>Sampling</text>
-
-      <circle cx="630" cy="400" r="20" />
-      <circle cx="770" cy="400" r="20" />
-      <circle class="testing" cx="700" cy="400" r="70" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")} />
-      <text x="700" y="390" class="text-blue" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Plate</text>
-      <text x="700" y="410" class="text-blue" @click=${() => this.elementClicked("ReviewTesting", "MB Testing")}>Reading</text>
-
-      <circle cx="830" cy="400" r="20" />
-      <circle cx="970" cy="400" r="20" />
-      <circle class="testing" cx="900" cy="400" r="70" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")} />
-      <text x="900" y="390" class="text-blue" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>Identification of</text>
-      <text x="900" y="410" class="text-blue" @click=${() => this.elementClicked("ReviewTestingGroup", "MB Testing")}>microorganism</text>
-
-      <circle cx="1030" cy="300" r="20" />
-      <circle cx="1170" cy="300" r="20" />
-      <circle class="sample" cx="1100" cy="300" r="70" @click=${() => this.elementClicked("ReviewSample", "")} />
-      <text x="1100" y="300" @click=${() => this.elementClicked("ReviewSample", "")}>Inquires</text>
-    </svg>
+        <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
       `;
     }
     renderFran() {          

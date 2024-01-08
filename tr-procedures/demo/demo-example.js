@@ -197,6 +197,7 @@ class DemoExample extends LitElement {
   }
 
   changeLang() {
+    sessionStorage.setItem('language', this.flag);
     if (this.trProc!==undefined&&this.trProc!==null){
       this.flag = this.trProc.changeLang()
     }
