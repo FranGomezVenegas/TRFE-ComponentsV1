@@ -6288,32 +6288,40 @@ export const DemoLotsRaw =
                     "name": "genericDialog",
                     "fields": [
                       {
-                        "list1": {
-                          "label_en": "Method",
-                          "label_es": "Método",
-                          "addBlankValueOnTop": true,
-                          "addBlankValueAtBottom": false,
-						  "valuesFromMasterData": {
-							"propertyNameContainer": "methods",
-							"filterInFirstLevel": false, 
-							"propertyKeyName": "code", 
-							"propertyKeyValueEn": "code", 
-							"propertyKeyValueEs": "code",
-                          }
-                        }
-                      },
-                      {
                         "list2": {
                           "label_en": "User",
                           "label_es": "Usuario",
                           "addBlankValueOnTop": true,
                           "addBlankValueAtBottom": false,
-						  "valuesFromMasterData": {
-							"propertyNameContainer": "users",
-							"filterInFirstLevel": false, 
-							"propertyKeyName": "user", 
-							"propertyKeyValueEn": "user", 
-							"propertyKeyValueEs": "user",
+                          "valuesFromSelectedItem": {
+                            "internalVariableSingleObjName": "selectedItem",
+                            "internalVariableSingleObjProperty": "procedure_users",
+                            "propertyKeyName": "user_name",
+                            "propertyKeyValueEn": [
+                              "user_name"
+                            ],
+                            "propertyKeyValueEs": [
+                              "user_name"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "list1": {
+                          "label_en": "Method",
+                          "label_es": "Método",
+                          "addBlankValueOnTop": true,
+                          "addBlankValueAtBottom": false,
+                          "valuesFromSelectedItem": {
+                            "internalVariableSingleObjName": "selectedItem",
+                            "internalVariableSingleObjProperty": "procedure_roles",
+                            "propertyKeyName": "role_name",
+                            "propertyKeyValueEn": [
+                              "role_name"
+                            ],
+                            "propertyKeyValueEs": [
+                              "role_name"
+                            ]
                           }
                         }
                       }
