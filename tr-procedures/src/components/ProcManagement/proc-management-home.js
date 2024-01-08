@@ -74,6 +74,9 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
                   "certificationException": true,
                   "requiresDialog": true,
                   "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                  "secondaryActionToPerform":{
+                    "name":"refreshAllProceduresView"
+                  },                  
                   "endPointParams": [
                 { "argumentName": "procedureName", "element": "text1", "defaultValue": ""  },
                 { "argumentName": "procedureVersion", "fixValue": "1"},
@@ -170,6 +173,12 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
       "session-storage-updated",
       this.handleSessionStorageUpdated.bind(this)
     );
+
+    window.addEventListener(
+      "refresh-all-procedures",
+      this.resetView.bind(this)
+    );
+    
   }
 
   handleSessionStorageUpdated(event) {

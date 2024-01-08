@@ -72,5 +72,25 @@ export function ProcManagementMethods(base) {
       });
       window.dispatchEvent(event);
     }
+
+    async refreshAllProceduresView() {
+      let viewQuery = {
+        actionName: "ALL_PROCEDURES_DEFINITION",
+        area: "app",
+        label_en: "All Procedures Definition",
+        label_es: "Definición de todos los procesos",
+        endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",
+        notUseGrid: true,
+        variableName: "allProcedures",
+        endPointResponseVariableName: "all_platform_procedures_list",
+      };
+      //alert('refreshAllProceduresView')
+      await this.GetViewData(false, viewQuery);
+      const event = new CustomEvent("refresh-all-procedures", {
+      });
+      window.dispatchEvent(event);      
+    }
+
+
   };
 }
