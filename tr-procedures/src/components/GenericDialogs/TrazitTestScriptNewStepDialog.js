@@ -506,7 +506,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         propertyKeyValueEn: "endpoint_name",
         propertyKeyValueEs: "endpoint_name",
       };
-      console.log("listEntries", fld);
+      //console.log("listEntries", fld);
       var blankEmpty = {
         keyName: "",
         keyValue_en: "",
