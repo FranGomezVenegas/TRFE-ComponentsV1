@@ -11,6 +11,7 @@ export class Dashboard extends navigator(LitElement) {
     return {
       params: { type: Object },
       procName: { type: String },
+      lang: { type: String },
     };
   }
 
@@ -18,6 +19,7 @@ export class Dashboard extends navigator(LitElement) {
     super();
     this.procName = "mon_water";
     this.index = 0;
+    this.lang = "en";
   }
 
   render() {
@@ -25,7 +27,15 @@ export class Dashboard extends navigator(LitElement) {
       params: this.params,
       selectedMenu: this._selectedMenu,
       elementClicked: this._elementClicked,
+      lang: this.lang
     });
+  }
+
+  firstUpdated = () => {
+    setInterval(() => {
+      this.lang = sessionStorage.getItem("language");
+    }, 1000);
+    this.requestUpdate();
   }
   
   _selectedMenu = (route) => {

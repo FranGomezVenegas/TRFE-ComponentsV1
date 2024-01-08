@@ -173,21 +173,26 @@ export class HomeAir extends navigator(LitElement) {
         this.ready=false;
         this.config={}
         this.params = {
-          title1: "Locations",
-          title2: "Personnel",
+          title1_en: "Locations",
+          title1_es: "Ubicaciones",
+          title2_en: "Personnel",
+          title2_es: "Personal",
           nodes: [
             {
-              title: "Program",
+              title_en: "Program",
+              title_es: "Programa",
               viewName:"LogSamples",
               filterName: "SampleLogin",
             },
             {
-              title: "Incubate",
+              title_en: "Incubate",
+              title_es: "Incubar",
               viewName:"LogSamples",
               filterName: "SampleLogin",
             },
             {
-              title: "Inquires",
+              title_en: "Inquires",
+              title_es: "Consultas",
               viewName:"LogSamples",
               filterName: "SampleLogin",
             },
@@ -196,14 +201,16 @@ export class HomeAir extends navigator(LitElement) {
             {
               group1: [
                 {
-                  title: "Sampling",
+                  title_en: "Sampling",
+                  title_es: "Muestreo",
                   viewName:"ReviewTesting",
                   filterName: "FQ Testing",
                 },
               ],
               group2: [
                 {
-                  title: "Testing Group",
+                  title_en: "Testing Group",
+                  title_es: "Grupo de prueba",
                   viewName:"SampleEnterResult",
                   filterName: "MB Testing",
                 },
@@ -212,24 +219,28 @@ export class HomeAir extends navigator(LitElement) {
             {
               group1: [
                 {
-                  title: "Plate Reading",
+                  title_en: "Plate Reading",
+                  title_es: "Lectura de placas",
                   viewName:"ReviewTesting",
                   filterName: "FQ Testing",
                 },
                 {
-                  title: "Identification",
+                  title_en: "Identification",
+                  title_es: "Identificación",
                   viewName:"ReviewTesting",
                   filterName: "FQ Testing",
                 },
               ],
               group2: [
                 {
-                  title: "Plate Reading",
+                  title_en: "Plate Reading",
+                  title_es: "Lectura de placas",
                   viewName:"ReviewTestingGroup",
                   filterName: "MB Testing",
                 },
                 {
-                  title: "Identification",
+                  title_en: "Identification",
+                  title_es: "Identificación",
                   viewName:"ReviewTestingGroup",
                   filterName: "MB Testing",
                 },

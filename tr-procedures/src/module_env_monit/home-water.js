@@ -173,16 +173,20 @@ export class HomeWater extends navigator(LitElement) {
     this.ready = false;
     this.config = {};
     this.params = {
-      title1: "FQ",
-      title2: "MB",
+      title1_en: "FQ",
+      title1_es: "FQ",
+      title2_en: "MB",
+      title2_es: "MB",
       nodes: [
         {
-          title: "New Samples",
+          title_en: "New Samples",
+          title_es: "Nuevas muestras",
           viewName:"LogSamples",
           filterName: "SampleLogin",
         },
         {
-          title: "Review Samples",
+          title_en: "Review Samples",
+          title_es: "Revisar muestras",
           viewName:"LogSamples",
           filterName: "SampleLogin",
         },
@@ -191,34 +195,40 @@ export class HomeWater extends navigator(LitElement) {
         {
           group1: [
             {
-              title: "Sampling",
+              title_en: "Sampling",
+              title_es: "Muestreo",
               viewName:"ReviewTesting",
               filterName: "FQ Testing",
             },
             {
-              title: "Review",
+              title_en: "Review",
+              title_es: "Revisar",
               viewName:"ReviewTesting",
               filterName: "FQ Testing",
             },
             {
-              title: "Enter Results",
+              title_en: "Enter Results",
+              title_es: "Ingresar resultados",
               viewName:"ReviewTestingGroup",
               filterName: "FQ Testing",
             },
           ],
           group2: [
             {
-              title: "Testing Group",
+              title_en: "Testing Group",
+              title_es: "Grupo de prueba",
               viewName:"SampleEnterResult",
               filterName: "MB Testing",
             },
             {
-              title: "Review",
+              title_en: "Review",
+              title_es: "Revisar",
               viewName:"ReviewTesting",
               filterName: "MB Testing",
             },
             {
-              title: "Enter Results",
+              title_en: "Enter Results",
+              title_es: "Ingresar resultados",
               viewName:"ReviewTestingGroup",
               filterName: "MB Testing",
             },
