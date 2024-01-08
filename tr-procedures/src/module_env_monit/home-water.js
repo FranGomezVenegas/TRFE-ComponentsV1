@@ -162,6 +162,7 @@ export class HomeWater extends navigator(LitElement) {
       filterName: { type: String },
       lang: { type: String },
       procInstanceName: { type: String },
+      params: { type: Object },
     };
   }
   constructor() {
@@ -171,6 +172,61 @@ export class HomeWater extends navigator(LitElement) {
     console.log("constructor flowchart");
     this.ready = false;
     this.config = {};
+    this.params = {
+      title1: "FQ",
+      title2: "MB",
+      nodes: [
+        {
+          title: "New Samples",
+          viewName:"LogSamples",
+          filterName: "SampleLogin",
+        },
+        {
+          title: "Review Samples",
+          viewName:"LogSamples",
+          filterName: "SampleLogin",
+        },
+      ],
+      leaves: [
+        {
+          group1: [
+            {
+              title: "Sampling",
+              viewName:"ReviewTesting",
+              filterName: "FQ Testing",
+            },
+            {
+              title: "Review",
+              viewName:"ReviewTesting",
+              filterName: "FQ Testing",
+            },
+            {
+              title: "Enter Results",
+              viewName:"ReviewTestingGroup",
+              filterName: "FQ Testing",
+            },
+          ],
+          group2: [
+            {
+              title: "Testing Group",
+              viewName:"SampleEnterResult",
+              filterName: "MB Testing",
+            },
+            {
+              title: "Review",
+              viewName:"ReviewTesting",
+              filterName: "MB Testing",
+            },
+            {
+              title: "Enter Results",
+              viewName:"ReviewTestingGroup",
+              filterName: "MB Testing",
+            },
+
+          ]
+        }
+      ],
+    }
   }
   render() {
     return html` ${this.viewModelFromProcModel
@@ -200,7 +256,7 @@ export class HomeWater extends navigator(LitElement) {
     //this.resetView()
     return html`
       
-      <dynamic-dashboard> </dynamic-dashboard>
+      <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
       <!-- <div class="maindiv">
         <div
           @click=${() => this.elementClicked("LogSamples", "SampleLogin")}
