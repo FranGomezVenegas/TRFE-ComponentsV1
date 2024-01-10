@@ -959,6 +959,12 @@ export function DataViews(base) {
             box-sizing: border-box;
           }
 
+          .title {
+            color: #2989d8;
+            font-size: 18px;
+            font-weight: bold;
+          }
+
           table.TRAZiT-DefinitionArea thead tr th {
             background-color: #2989d8;
             color: white;
@@ -1257,6 +1263,12 @@ export function DataViews(base) {
         <style>
           table.styled-table-for-rolesandactions th{
             color:gray !important;
+          }
+
+          .title {
+            color: #2989d8;
+            font-size: 18px;
+            font-weight: bold;
           }
 
           table.styled-table-for-rolesandactions th, td{
