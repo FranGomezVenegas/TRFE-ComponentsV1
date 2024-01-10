@@ -20,13 +20,20 @@ export const template = (props) => {
             name="endpoint"
             label="endpoint"
           >
-            ${props.endpoints.map((endpoint, idx) => {
-              return html`
+            ${props.endpoints.map((endpoint, idx) => 
+              // endpoint.keyName ==  sessionStorage.getItem('rowSelectedData').action_name ?
+              endpoint.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name ?
+              html`
+                <mwc-list-item value=${endpoint.keyName} selected>
+                  ${endpoint["keyValue_" + props.lang]}
+                </mwc-list-item>
+              ` :
+              html `
                 <mwc-list-item value=${endpoint.keyName}>
                   ${endpoint["keyValue_" + props.lang]}
                 </mwc-list-item>
-              `;
-            })}
+              `
+            )}
           </mwc-select>
         </div>
 
@@ -48,9 +55,11 @@ export const template = (props) => {
                   label=${param.name}
                   name=${param.name}
                   @blur=${props.checkValidity}
+                  value=3
                 ></mwc-textfield>
               `;
             } else if (param.type === elementTypes.Text) {
+              let arg = "argument_0" + (idx + 1);
               return html`
                 <mwc-formfield>
                   ${str}
@@ -60,6 +69,7 @@ export const template = (props) => {
                     label=${param.name}
                     name=${param.name}
                     @blur=${props.checkValidity}
+                    value=${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? JSON.parse(sessionStorage.getItem('rowSelectedData'))[arg] : ""}
                     style="width: 100%"
                   ></mwc-textfield>
                 </mwc-formfield>

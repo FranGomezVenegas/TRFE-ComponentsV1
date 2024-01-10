@@ -890,7 +890,7 @@ export function DataViews(base) {
       // });
 
       // this.dispatchEvent(event2);
-      console.log("rowSelected", rowSelected);
+      sessionStorage.setItem('rowSelectedData', JSON.stringify(rowSelected));
 
       this.render();
 
