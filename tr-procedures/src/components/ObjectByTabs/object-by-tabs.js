@@ -232,10 +232,10 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
     toggleLeftSplitPane() {
       this.leftSplitDisplayed = !this.leftSplitDisplayed
     }  
-    async filterPerformAction(e) {
+    async filterPerformAction(e, flag) {
         this.filterCurrentData={}
         //this.filterCurrentData=this.jsonParam(this.viewModelFromProcModel)
-        console.log(this.filterCurrentData)
+        console.log("this.filterCurrentData", this.filterCurrentData)
         //let viewParams=this.jsonParam(queryDefinition)
         if (this.filtertext1!==null){
           this.filterCurrentData.filtertext1=this.filtertext1.value
@@ -352,7 +352,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             <div class="layout horizontal flex" style="position:relative; top:10px;">
             ${this.viewModelFromProcModel.tabs!==undefined&&this.viewModelFromProcModel.tabs.length>1 ?
             html`
-				<div class="tabs-container">
+				      <div class="tabs-container">
                 ${this.viewModelFromProcModel.tabs.map(t => 
                   html`
                     <mwc-button class="tabBtn" dense unelevated 
@@ -374,7 +374,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       if (Object.keys(this.selectedTabModelFromProcModel).length === 0){
         this.selectedTabModelFromProcModel=this.viewModelFromProcModel.tabs[0]
       }
-      //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
+      console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
+      console.log("this.filterCurrentData", this.filterCurrentData);
       return html`
         <objecttabs-composition 
           .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}

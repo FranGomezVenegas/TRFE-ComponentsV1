@@ -223,7 +223,6 @@ export function TrazitFormsElements(base) {
             html``: html`              
             ${fields.map((fld, i) =>             
                 html`            
-                
                 ${!fld.filtertext1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
