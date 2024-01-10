@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 import { CredDialog } from '@trazit/cred-dialog';
 import '@material/mwc-icon';
@@ -208,8 +208,8 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
     return {
       lang: { type: String },
       audits: { type: Array },
-      sampleAuditRevisionMode: { type: Boolean },
-      sampleAuditChildRevisionRequired: { type: Boolean },
+      objectAuditParentRevisionMode: { type: Boolean },
+      objectAuditChildRevisionRequired: { type: Boolean },
       selectedItems:{type: Array},
       actionBeingPerformedModel:{type: Object},
       auditAction:{type: Object},
@@ -231,8 +231,8 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
     super();
     this.lang = "en";
     this.audits = [];
-    this.sampleAuditRevisionMode = true;
-    this.sampleAuditChildRevisionRequired = true;
+    this.objectAuditParentRevisionMode = true;
+    this.objectAuditChildRevisionRequired = true;
     this.selectedItems=[]
     this.actionBeingPerformedModel={}
     this.auditAction={}
@@ -410,20 +410,27 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
     })
   }
 
-  signButtonsMode(){    
+  signButtonsMode(){        
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
 
     if (this.procInstanceName===undefined||procList===undefined){return}
     
     let whichProc = procList.filter(p => p.procInstanceName == this.procInstanceName)            
     if (whichProc===undefined||whichProc[0]===undefined){
-      this.sampleAuditRevisionMode=true
-      this.sampleAuditChildRevisionRequired=true
+      this.objectAuditParentRevisionMode=true
+      this.objectAuditChildRevisionRequired=true
       return
     }
-    this.sampleAuditRevisionMode = whichProc[0].audit_sign_mode.sampleAuditRevisionMode == "DISABLE" ? false : true
-    this.sampleAuditChildRevisionRequired = whichProc[0].audit_sign_mode.sampleAuditChildRevisionRequired == "FALSE" ? false : true
-//    alert('signButtonsMode '+this.procInstanceName+' sampleAuditRevisionMode: '+this.sampleAuditRevisionMode+' sampleAuditChildRevisionRequired: '+this.sampleAuditChildRevisionRequired )
+    console.log('signButtonsMode', 'whichProc[0].audit_sign_mode', whichProc[0].audit_sign_mode)
+    this.objectAuditParentRevisionMode=true
+    this.objectAuditChildRevisionRequired =true
+    if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.parentAuditBusinessRuleName!==undefined){
+      this.objectAuditParentRevisionMode = whichProc[0].audit_sign_mode[this.actionBeingPerformedModel.parentAuditBusinessRuleName] == "DISABLED" ? false : true
+    }
+    if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.childAuditBusinessRuleName!==undefined){
+      this.objectAuditChildRevisionRequired = whichProc[0].audit_sign_mode[this.actionBeingPerformedModel.childAuditBusinessRuleName] == "NO" ? false : true
+    }
+//    alert('signButtonsMode '+this.procInstanceName+' objectAuditParentRevisionMode: '+this.objectAuditParentRevisionMode+' objectAuditChildRevisionRequired: '+this.objectAuditChildRevisionRequired )
   }  
   render() {
     this.signButtonsMode()
@@ -441,16 +448,18 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
           <mwc-icon class="ball"
             @click=${()=>this.showItem(a,i)}
             style="color:${a.ballState=="open"?'#3f51b5':a.ballState=="hide"?'#eee':'#aaa'}">radio_button_checked</mwc-icon>
-          <sp-tooltip open placement="right" variant="info" id="tooltip-${a.audit_id}">
-          
+          <sp-tooltip open placement="right" variant="info" id="tooltip-${a.audit_id}">            
             <div class="layout horizontal flex">
               ${a.reviewed?
                 html`
-                <div class="text-group"><mwc-icon title="${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}">grading</mwc-icon></div>
+                  ${this.objectAuditParentRevisionMode==true?html`
+                    <div class="text-group"><mwc-icon title="${langConfig.reviewedOn["label_"+this.lang]}: ${a.reviewed_on}">grading</mwc-icon></div>
+                  `:nothing}  
                 `:
                 html`
-                <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}" 
-                  @click=${()=>this.signAudit(a.audit_id)} ?hidden=${!this.sampleAuditRevisionMode}>edit_note</mwc-icon>
+                  ${this.objectAuditParentRevisionMode==true?html`
+                    <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}"  @click=${()=>this.signAudit(a.audit_id)}>edit_note</mwc-icon>
+                  `:nothing}  
                 `
               }
               <div>
@@ -476,11 +485,15 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
                           <div class="layout horizontal flex">
                             ${s.reviewed?
                               html`
-                              <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
+                                ${this.objectAuditParentRevisionMode==true?html`
+                                  <mwc-icon title="reviewed_on: ${s.reviewed_on}">grading</mwc-icon>
+                                `:nothing}
                               `:
                               html`
-                              <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}" 
-                                @click=${()=>this.signAudit(s.audit_id)} ?hidden=${!this.sampleAuditRevisionMode||!this.sampleAuditChildRevisionRequired}>edit_note</mwc-icon>
+                                ${this.objectAuditParentRevisionMode==true?html`
+                                  <mwc-icon class="sign" title="${langConfig.sign["label_"+this.lang]}" 
+                                    @click=${()=>this.signAudit(s.audit_id)}>edit_note</mwc-icon>
+                                `:nothing}
                               `
                             }
                             <div>

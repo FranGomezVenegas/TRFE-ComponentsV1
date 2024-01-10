@@ -132,6 +132,8 @@ export const Stock =
         }
       },
 		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -150,19 +152,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
@@ -487,7 +489,10 @@ export const Stock =
           ]
         }
       },
-		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+		{
+			"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -506,19 +511,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
@@ -821,7 +826,9 @@ export const Stock =
           ]
         }
       },
-		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+		{	"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -840,19 +847,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
@@ -1156,6 +1163,8 @@ export const Stock =
         }
       },
 		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -1174,19 +1183,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
@@ -1490,6 +1499,8 @@ export const Stock =
         }
       },
 		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -1508,19 +1519,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
@@ -1824,6 +1835,8 @@ export const Stock =
         }
       },
 		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -1842,19 +1855,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
@@ -2163,6 +2176,8 @@ export const Stock =
         }
       },
 		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -2181,19 +2196,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
@@ -2501,6 +2516,8 @@ export const Stock =
         }
       },
 		{"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",	  
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",		
 			"requiresDialog": true,
 			"endPoint": "/app/procs/InvTrackingAPIqueries",
 			"button": {
@@ -2519,19 +2536,19 @@ export const Stock =
 				"automatic": true,
 				"action": [
 				{
-				  "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
 				  "requiresDialog": false,
 				  "notGetViewData": true,
 				  "secondaryActionToPerform": {
 					  "name": "getObjectAuditInfo",
 					  "endPointParams": [
-						{ "argumentName": "lotName", "selObjectPropertyName": "name" }
+						{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
 					  ]
 				  },
 				  "endPointUrl": "Samples",
 				  "clientMethod": "signAudit",
 				  "endPointParams": [
-					{ "argumentName": "lotName", "selObjectPropertyName": "name" },
+					{ "argumentName": "lotName", "selObjectPropertyName": "lot_name" },
 					{ "argumentName": "auditId", "targetValue": true }
 				  ]
 				}
