@@ -295,69 +295,69 @@ export function TrazitTestScriptNewStepDialog(base) {
       params = params.replace(/\|/g, "%7C");
 
       console.log("add data extraParams", JSON.stringify(extraParams));
-      //     await this.fetchApi(params)
-      //       .then((j) => {
-      //         if (j && !j.is_error) {
-      // //console.log('j', j.json())
-      //           this.actionOutput = j.json();
-      //           this.selectedItem = j.json();
-      //         } else {
-      //           this.actionOutput = j.json();
-      //           this.selectedItem = j.json();
-      //         }
-      //         this.selectSectionView(index, true);
+          await this.fetchApi(params)
+            .then((j) => {
+              if (j && !j.is_error) {
+      //console.log('j', j.json())
+                this.actionOutput = j.json();
+                this.selectedItem = j.json();
+              } else {
+                this.actionOutput = j.json();
+                this.selectedItem = j.json();
+              }
+              this.selectSectionView(index, true);
 
-      //         //this.selectedProcInstanceMainView()
-      //         //if (this.actionOutput!==undefined){console.log("actionOutput", this.actionOutput);}
-      //       })
-      //       .then((j) => {
-      //         let mye = {};
-      //         if (j.is_error !== undefined && j.is_error === true) {
-      //           //        mye = { is_error: true, message_en: "Performed with success", message_es: "Ejecutado correctamente" }
-      //           this.dispatchEvent(
-      //             new CustomEvent("error", {
-      //               detail: { ...j, log: log },
-      //               bubbles: true,
-      //               composed: true,
-      //             })
-      //           );
-      //         } else {
-      //           mye = {
-      //             is_error: false,
-      //             message_en: "Performed with success",
-      //             message_es: "Ejecutado correctamente",
-      //           };
-      //           this.dispatchEvent(
-      //             new CustomEvent("success", {
-      //               detail: { ...mye, log: log },
-      //               bubbles: true,
-      //               composed: true,
-      //             })
-      //           );
-      //         }
-      //         return j;
-      //       })
-      //       .catch((e) => {
-      //         if (e.message == "Unexpected end of JSON input") {
-      //           this.dispatchEvent(
-      //             new CustomEvent("error", {
-      //               detail: { ...e },
-      //               bubbles: true,
-      //               composed: true,
-      //             })
-      //           );
-      //         } else {
-      //           this.dispatchEvent(
-      //             new CustomEvent("error", {
-      //               detail: { ...e, log: log },
-      //               bubbles: true,
-      //               composed: true,
-      //             })
-      //           );
-      //           //this.error(e)
-      //           return e;
-      //         }
-      //       });
+              //this.selectedProcInstanceMainView()
+              //if (this.actionOutput!==undefined){console.log("actionOutput", this.actionOutput);}
+            })
+            .then((j) => {
+              let mye = {};
+              if (j.is_error !== undefined && j.is_error === true) {
+                //        mye = { is_error: true, message_en: "Performed with success", message_es: "Ejecutado correctamente" }
+                this.dispatchEvent(
+                  new CustomEvent("error", {
+                    detail: { ...j, log: log },
+                    bubbles: true,
+                    composed: true,
+                  })
+                );
+              } else {
+                mye = {
+                  is_error: false,
+                  message_en: "Performed with success",
+                  message_es: "Ejecutado correctamente",
+                };
+                this.dispatchEvent(
+                  new CustomEvent("success", {
+                    detail: { ...mye, log: log },
+                    bubbles: true,
+                    composed: true,
+                  })
+                );
+              }
+              return j;
+            })
+            .catch((e) => {
+              if (e.message == "Unexpected end of JSON input") {
+                this.dispatchEvent(
+                  new CustomEvent("error", {
+                    detail: { ...e },
+                    bubbles: true,
+                    composed: true,
+                  })
+                );
+              } else {
+                this.dispatchEvent(
+                  new CustomEvent("error", {
+                    detail: { ...e, log: log },
+                    bubbles: true,
+                    composed: true,
+                  })
+                );
+                //this.error(e)
+                return e;
+              }
+            });
 
       return;
     }
