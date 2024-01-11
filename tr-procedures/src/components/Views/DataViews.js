@@ -1376,10 +1376,7 @@ export function DataViews(base) {
                   >${elem.title["label_" + this.lang]}</span
                 >
               </p>`}
-          <div class="layout horizontal center flex wrap">
-            ${this.getButton(elem, dataArr, true)}
-          </div>
-
+       
           <table class="styled-table-for-rolesandactions ${tmp}" >
             <thead>
               <tr>
