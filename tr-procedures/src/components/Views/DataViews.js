@@ -1367,6 +1367,13 @@ export function DataViews(base) {
           background-color: #5e80003d;
         }
 
+        table tr:hover td.title1 {
+          background-color: #2989d830 !important;
+        }
+        table td {
+          font-size: 16px !important;
+          font-family: "Oxygen";
+        }
         </style>
         <div style="display: flex; flex-direction: column; text-align: center;">
           ${elem === undefined || elem.title === undefined
@@ -1377,7 +1384,7 @@ export function DataViews(base) {
                 >
               </p>`}
        
-          <table class="styled-table-for-rolesandactions ${tmp}" >
+          <table class="styled-table-for-rolesandactions ${tmp}" style="margin-top:24px;">
             <thead>
               <tr>
                 ${dataArr === undefined || dataArr[0] === undefined
@@ -1427,6 +1434,7 @@ export function DataViews(base) {
                                                   ) === true
                                                     ? nothing
                                                     : html`<td
+                                                        class="title1"
                                                         style="font-size: 1.6vmin; font-weight: unset; font-family: Oxygen;"
                                                       >
                                                         ${fld}
