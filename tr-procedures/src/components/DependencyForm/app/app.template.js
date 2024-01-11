@@ -7,11 +7,14 @@ import "@material/mwc-list/mwc-list-item";
 import { elementTypes } from "../config";
 
 export const template = (props) => {
+  let items = [];
+  items = sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.endpoints.find((item) => item.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name)?.arguments_array : props.params;
   return html`
     <div class="container">
       
       <form id="#endpoint-form" action="/" method="get">
         <div class="item-container">
+         ${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? html `` : html`
           <mwc-select
             required
             fixedMenuPosition
@@ -20,25 +23,22 @@ export const template = (props) => {
             name="endpoint"
             label="endpoint"
           >
-            ${props.endpoints.map((endpoint, idx) => 
-              // endpoint.keyName ==  sessionStorage.getItem('rowSelectedData').action_name ?
-              endpoint.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name ?
-              html`
-                <mwc-list-item value=${endpoint.keyName} selected>
-                  ${endpoint["keyValue_" + props.lang]}
-                </mwc-list-item>
-              ` :
-              html `
-                <mwc-list-item value=${endpoint.keyName}>
-                  ${endpoint["keyValue_" + props.lang]}
-                </mwc-list-item>
-              `
-            )}
+           ${ props.endpoints.map((endpoint, idx) => 
+                html `
+                  <mwc-list-item value=${endpoint.keyName}>
+                    ${endpoint["keyValue_" + props.lang]}
+                  </mwc-list-item>
+                `
+              )
+            }
           </mwc-select>
+          `
+         }
         </div>
 
         <div class="form-fields">
-          ${props.params.map((param, idx) => {
+          ${
+            items.map((param, idx) => {
             const required = param["is_mandatory?"];
             const str = html`<mwc-switch
                 name=${param.name}
@@ -69,7 +69,7 @@ export const template = (props) => {
                     label=${param.name}
                     name=${param.name}
                     @blur=${props.checkValidity}
-                    value=${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? JSON.parse(sessionStorage.getItem('rowSelectedData'))[arg] : ""}
+                    value=${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? JSON.parse(sessionStorage.getItem('rowSelectedData'))[arg] ? JSON.parse(sessionStorage.getItem('rowSelectedData'))[arg] : "" : ""}
                     style="width: 100%"
                   ></mwc-textfield>
                 </mwc-formfield>
@@ -138,7 +138,8 @@ export const template = (props) => {
               `;
             }
             return html`${param.type}`;
-          })}
+            })
+          }
           <mwc-formfield label="Expected successful?">
             <mwc-checkbox name="expectedSyntaxis"></mwc-checkbox>
           </mwc-formfield>

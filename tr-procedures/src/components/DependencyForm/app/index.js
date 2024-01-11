@@ -34,7 +34,6 @@ export class DependencyForm extends LitElement {
   }
 
   render() {
-    console.log(typeof this.toggles);
     return template({
       endpoints: this.endpoints,
       notifications: this.notifications,
