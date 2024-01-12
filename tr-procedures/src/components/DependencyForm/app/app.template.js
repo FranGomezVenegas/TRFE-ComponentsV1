@@ -49,7 +49,7 @@ export const template = (props) => {
               />`;
             const new_category =
               param.name == "category" ? html`<mwc-select></mwc-select>` : ``;
-            if (param.type === elementTypes.Number) {
+            if ((param.type === elementTypes.Number) || (param.type === elementTypes.Integer) ) {
               return html`
                 <mwc-textfield
                   ?required=${required}
@@ -61,7 +61,7 @@ export const template = (props) => {
                   value=3
                 ></mwc-textfield>
               `;
-            } else if (param.type === elementTypes.Text) {
+            } else if ((param.type === elementTypes.Text) || (param.type === elementTypes.TextArr) || (param.type === elementTypes.TextObjectsArr) ) {
               let arg = "argument_0" + (idx + 1);
               console.log("props.rowSelectedData[arg]", props.rowSelectedData && props.rowSelectedData[arg] ? "exist" : "undefind");
               return html`
@@ -78,7 +78,7 @@ export const template = (props) => {
                   ></mwc-textfield>
                 </mwc-formfield>
               `;
-            } else if (param.type === elementTypes.TextArr) {
+            } else if (param.type === elementTypes.TextArr2) {
               return html`
                 <mwc-formfield>
                   ${str}

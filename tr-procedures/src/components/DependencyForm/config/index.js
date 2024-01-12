@@ -1,5 +1,8 @@
 export const elementTypes = {
-  Number: 'INTEGER',
+  Integer: 'INTEGER',
+  Number: 'BIGDECIMAL',
   Text: 'STRING',
-  TextArr: "STRINGARR"
+  TextArr: "STRINGARR",
+  TextObjectsArr: "STRINGOFOBJECTS"
+
 }
