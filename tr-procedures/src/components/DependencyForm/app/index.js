@@ -17,7 +17,8 @@ export class DependencyForm extends LitElement {
       lang: { type: String },
       isFormValid: { type: Boolean },
       toggles: { type: Object },
-      objectTypes: {type : Array}
+      objectTypes: {type : Array},
+      rowSelectedData: { type: Object }
     };
   }
 
@@ -31,6 +32,7 @@ export class DependencyForm extends LitElement {
     this.lang = "";
     this.toggles = {};
     this.objectTypes = [];
+    this.rowSelectedData = {};
   }
 
   render() {
@@ -45,6 +47,7 @@ export class DependencyForm extends LitElement {
       handleChangeEndpoint: this._handleChangeEndpoint,
       toggleChanged: this._toggleChanged,
       handleChangeStep: this._handleChangeStep,
+      rowSelectedData: this.rowSelectedData
     });
   }
 
@@ -65,6 +68,8 @@ export class DependencyForm extends LitElement {
   };
 
   _handleChangeEndpoint = (e) => {
+    this.rowSelectedData = undefined;
+    this.willUpdateData = undefined;
     this.toggles = {};
     const idx = this.endpoints.findIndex(
       (endpoint) => endpoint.keyName === e.target.value

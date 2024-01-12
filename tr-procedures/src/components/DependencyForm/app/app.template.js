@@ -9,12 +9,11 @@ import { elementTypes } from "../config";
 export const template = (props) => {
   let items = [];
   items = sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.endpoints.find((item) => item.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name)?.arguments_array : props.params;
+  console.log("afdsafdsafsdasdf", props.rowSelectedData);
   return html`
     <div class="container">
-      
       <form id="#endpoint-form" action="/" method="get">
         <div class="item-container">
-         ${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? html `` : html`
           <mwc-select
             required
             fixedMenuPosition
@@ -24,16 +23,20 @@ export const template = (props) => {
             label="endpoint"
           >
            ${ props.endpoints.map((endpoint, idx) => 
+                endpoint.keyName != props.rowSelectedData?.action_name ?
                 html `
                   <mwc-list-item value=${endpoint.keyName}>
                     ${endpoint["keyValue_" + props.lang]}
+                  </mwc-list-item>
+                ` : 
+                html `
+                  <mwc-list-item value=${props.rowSelectedData.action_name} selected activated>
+                    ${props.rowSelectedData.action_name}
                   </mwc-list-item>
                 `
               )
             }
           </mwc-select>
-          `
-         }
         </div>
 
         <div class="form-fields">
@@ -60,6 +63,7 @@ export const template = (props) => {
               `;
             } else if (param.type === elementTypes.Text) {
               let arg = "argument_0" + (idx + 1);
+              console.log("props.rowSelectedData[arg]", props.rowSelectedData && props.rowSelectedData[arg] ? "exist" : "undefind");
               return html`
                 <mwc-formfield>
                   ${str}
@@ -69,7 +73,7 @@ export const template = (props) => {
                     label=${param.name}
                     name=${param.name}
                     @blur=${props.checkValidity}
-                    value=${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? JSON.parse(sessionStorage.getItem('rowSelectedData'))[arg] ? JSON.parse(sessionStorage.getItem('rowSelectedData'))[arg] : "" : ""}
+                    value=${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.rowSelectedData && props.rowSelectedData[arg] ? props.rowSelectedData[arg] : "" : ""}
                     style="width: 100%"
                   ></mwc-textfield>
                 </mwc-formfield>

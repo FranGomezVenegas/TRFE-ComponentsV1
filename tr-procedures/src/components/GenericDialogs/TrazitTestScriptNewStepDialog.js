@@ -122,6 +122,7 @@ export function TrazitTestScriptNewStepDialog(base) {
             .lang=${this.lang}
             .endpoints=${this.listTestEndpointsList()}
             .notifications=${this.listTestNotificationsList()}
+            .rowSelectedData=${JSON.parse(sessionStorage.getItem ('rowSelectedData'))}
           ></dependency-form>
           <div style="margin-top:30px;text-align:center">
             <sp-button
@@ -129,7 +130,7 @@ export function TrazitTestScriptNewStepDialog(base) {
               variant="secondary"
               slot="secondaryAction"
               dialogAction="decline"
-              @click=${this.declineDialog}
+              @click=${() => this.declineDialog()}
             >
               ${commonLangConfig.closeDialogButton["label_" + this.lang]}
             </sp-button>
@@ -221,8 +222,10 @@ export function TrazitTestScriptNewStepDialog(base) {
         this.dialogAccept(false);
       }
     }
-    declineDialog() {
+    declineDialog = () => {
       this.fieldsShouldBeReset = true;
+      console.log("closedialog");
+      sessionStorage.setItem('rowSelectedData', {})
     }
     acceptedTestDialog(actionModel) {
       console.log("Accepted");
@@ -264,8 +267,11 @@ export function TrazitTestScriptNewStepDialog(base) {
 
       let actionName = sessionStorage.getItem('actionName');
       var extraParams = "&action=" + this.getDependencyForm().endpoint;
+      
       if (actionName == "SCRIPT_UPDATE_STEP") {
-        extraParams = "SCRIPT_UPDATE_STEP";
+        extraParams += "&actionName=SCRIPT_UPDATE_STEP";
+      } else {
+        extraParams += "&actionName=SCRIPT_NEW_STEP";
       }
       extraParams = extraParams + "&scriptId=" + this.selectedItem.script_id;
       extraParams = extraParams + "&fieldName=" + fieldNames.join("|");
