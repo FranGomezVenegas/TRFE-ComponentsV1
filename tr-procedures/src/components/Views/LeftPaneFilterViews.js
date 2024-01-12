@@ -118,7 +118,8 @@ export function LeftPaneFilterViews(base) {
 
 
     filterElementClicked = (i) => {
-      sessionStorage.setItem('specificSearchIndex', i);
+      this.selectedItem=this.requestData[i]
+      this.render()
     }
   } 
 }
