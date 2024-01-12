@@ -1502,7 +1502,11 @@ export function DataViews(base) {
       }
       //let rValue=true
       const rValue = elem.mantadoryPropertiesInVariableName.every((curProp) => {
-        return dataArr[0][curProp] !== undefined;
+        if (Array.isArray(dataArr)){
+          return dataArr[0]!==undefined && dataArr[0][curProp] !== undefined;
+        }else{
+          return dataArr[curProp] !== undefined;
+        }
       });
       //if (rValue===undefined){return true}
       return rValue;
