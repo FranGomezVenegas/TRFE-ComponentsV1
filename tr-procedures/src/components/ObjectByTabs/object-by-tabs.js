@@ -258,21 +258,23 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         //this.filterElement(this.filterResponseData)
         //console.log('filterResponseData', this.filterResponseData)
         console.log("this.selectedItems", this.selectedItems);
+        console.log("66226622662266262");
         if (!Array.isArray(this.requestData)){
-          this.selectedItem=this.requestData
+          this.selectedItem=this.requestData;
+          console.log("6272tw6es6es");
         }else{
           if (this.requestData.length===1){
             if (Array.isArray(this.requestData)){
-              console.log("this.requestData[0]", this.requestData[0]);
+              console.log("this.requestData[0]", this.requestData);
               this.selectedItem=this.requestData[0]
             }else{
+              console.log("4325432532532532");
               this.selectedItem={}
             }
             this.selectedItemLot=this.selectedItem.lot_name
             this.selectedItemLoaded=true
           }else{
-            this.selectedItem=[]
-            this.selectedItem=this.selectedItems
+            this.selectedItem=this.requestData[sessionStorage.getItem('specificSearchIndex')];
           }
         }        
     }
