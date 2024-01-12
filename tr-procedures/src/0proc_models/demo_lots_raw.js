@@ -5550,6 +5550,11 @@ export const DemoLotsRaw =
           { "type": "readOnlyTable", "endPointResponseObject": "spec_limits",
             "columns": [
               {
+                "name": "code",
+                "label_en": "Code",
+                "label_es": "Código"
+              },
+              {
                 "name": "variation_name",
                 "label_en": "Variation",
                 "label_es": "Variación"
