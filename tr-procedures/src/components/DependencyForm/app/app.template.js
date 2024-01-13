@@ -30,7 +30,7 @@ export const template = (props) => {
                   </mwc-list-item>
                 ` : 
                 html `
-                  <mwc-list-item value=${props.rowSelectedData.action_name} selected activated>
+                  <mwc-list-item value=${props.rowSelectedData.action_name}>
                     ${props.rowSelectedData.action_name}
                   </mwc-list-item>
                 `

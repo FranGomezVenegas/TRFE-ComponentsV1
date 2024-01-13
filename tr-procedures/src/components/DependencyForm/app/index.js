@@ -68,6 +68,7 @@ export class DependencyForm extends LitElement {
   };
 
   _handleChangeEndpoint = (e) => {
+    sessionStorage.setItem('actionName',"SCRIPT_ADD_STEP");
     this.rowSelectedData = undefined;
     this.willUpdateData = undefined;
     this.toggles = {};

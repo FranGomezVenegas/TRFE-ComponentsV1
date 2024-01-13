@@ -1,4 +1,4 @@
-import { html, css, nothing, LitElement } from 'lit';
+import { html, css, nothing, LitElement, getCompatibleStyle } from 'lit';
 import './objecttabs-composition';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
@@ -257,11 +257,13 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         }        
         //this.filterElement(this.filterResponseData)
         //console.log('filterResponseData', this.filterResponseData)
+        console.log("this.selectedItems", this.selectedItems);
         if (!Array.isArray(this.requestData)){
           this.selectedItem=this.requestData
         }else{
           if (this.requestData.length===1){
             if (Array.isArray(this.requestData)){
+              console.log("this.requestData[0]", this.requestData[0]);
               this.selectedItem=this.requestData[0]
             }else{
               this.selectedItem={}
