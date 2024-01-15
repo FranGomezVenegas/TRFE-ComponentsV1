@@ -231,11 +231,9 @@ export function CoaView(base) {
               }
             
               .title-copy {
-                margin-top: 4px;
-                margin-right: 8px;
-                display: block;
+                position: absolute;
+                right: 16px;
                 color: red;
-                text-align: right;
               }
 
               </style>  
