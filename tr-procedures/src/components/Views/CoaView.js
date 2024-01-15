@@ -187,15 +187,13 @@ export function CoaView(base) {
                 font-size: 24pt;
                 font-weight: bold;
                 text-align: center;
-                position: relative;
-                top:-90px;
               }
               #firstline-header {
-                height:120px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
               }
               .logo-header {
-                margin-left:5px;
-                margin-bottom: 20px;
                 width: 1.5in;
                 height: auto;    
               }
@@ -231,42 +229,52 @@ export function CoaView(base) {
               .form-fields span {
                 justify-self: start;
               }
-              .title {
-                display: none;
+            
+              .title-copy {
+                margin-top: 4px;
+                margin-right: 8px;
+                display: block;
+                color: red;
+                text-align: right;
               }
+
               </style>  
               ${coaData === undefined ? nothing : html`
-              <div class="header-header">
-              <div id="firstline-header">
-              <div class="title">${coaData.report_info["provisional_copy_" + this.lang]}</div>
-                ${coaData === undefined || coaData.report_info.logo === undefined ? nothing : html`<img class="logo-header" src="${coaData.report_info.logo}" alt="Logo">`}      
-                
-                ${coaData.report_info["title2_" + this.lang] === undefined ? html`<h2 class="title-header">${coaData.report_info["title_" + this.lang]}</h2>`
-              : html`<h2 class="title-header">${coaData.report_info["title_" + this.lang]}<br>${coaData.report_info["title2_" + this.lang]}</h2>`}
-              </div>  
-              ${coaData.header === undefined ? nothing : html`
-                <div class="form-header">
-                  ${coaData.header.column === undefined ? nothing : html`        
-                    <div class="form-fields col1">
-                    ${coaData.header.column.map(fld => html`
-                      <label for="field1">${fld["label_" + this.lang]}</label>
-                      <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
-                    `)}
-                    </div>    
+                <div class="header-header">
+                  <div class="title-copy">${coaData.report_info["provisional_copy_" + this.lang]}</div>
+                  <div id="firstline-header">
+                    <div>
+                      ${coaData === undefined || coaData.report_info.logo === undefined ? nothing : html`<img class="logo-header" src="${coaData.report_info.logo}" alt="Logo">`}      
+                    </div>
+                    <div>
+                      ${coaData.report_info["title2_" + this.lang] === undefined ? html`<h2 class="title-header">${coaData.report_info["title_" + this.lang]}</h2>`
+                      : html`<h2 class="title-header">${coaData.report_info["title_" + this.lang]}<br>${coaData.report_info["title2_" + this.lang]}</h2>`}
+                    </div>
+                    <div style="width: 144px;">
+                    </div>
+                    </div>  
+                    ${coaData.header === undefined ? nothing : html`
+                    <div class="form-header">
+                      ${coaData.header.column === undefined ? nothing : html`        
+                        <div class="form-fields col1">
+                        ${coaData.header.column.map(fld => html`
+                          <label for="field1">${fld["label_" + this.lang]}</label>
+                          <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
+                        `)}
+                        </div>    
+                      `}
+                      ${coaData.header.column2 === undefined ? nothing : html`
+                        <div class="form-fields col2">
+                        ${coaData.header.column2.map(fld => html`
+                          <label for="field1">${fld["label_" + this.lang]}</label>
+                          <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
+                        `)}
+                        </div>    
+                      `}
+                    </div>  
                   `}
-                  ${coaData.header.column2 === undefined ? nothing : html`
-                    <div class="form-fields col2">
-                    ${coaData.header.column2.map(fld => html`
-                      <label for="field1">${fld["label_" + this.lang]}</label>
-                      <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
-                    `)}
-                    </div>    
-                  `}
-          
-                </div>  
+                </div>
               `}
-            </div>
-            `}
               `
       }
   
