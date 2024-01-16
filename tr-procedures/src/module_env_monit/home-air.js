@@ -3,6 +3,7 @@ import { html, css, nothing, LitElement } from 'lit';
 // import './tabs-composition';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import './Dashboard';
+import './MultiSelect';
 import { navigator } from 'lit-element-router';
 export class HomeAir extends navigator(LitElement) {
   static get styles() {
@@ -260,6 +261,7 @@ export class HomeAir extends navigator(LitElement) {
     render() {
       return html`
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
+        <multi-select> </multi-select>
       `;
     }
     renderFran() {          
