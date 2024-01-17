@@ -9,7 +9,7 @@ import { elementTypes } from "../config";
 export const template = (props) => {
   let items = [];
   items = sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.endpoints.find((item) => item.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name)?.arguments_array : props.params;
-  console.log("afdsafdsafsdasdf", props.rowSelectedData);
+  console.log("afdsafdsafsdasdf", props.endpoints, 'items', items);
   return html`
     <div class="container">
       <form id="#endpoint-form" action="/" method="get">
@@ -21,15 +21,17 @@ export const template = (props) => {
             id="endpoint"
             name="endpoint"
             label="endpoint"
+            value=${props!==undefined&&props.rowSelectedData!==null&&props.rowSelectedData!==undefined&&props.rowSelectedData.action_name!==undefined?
+              props.rowSelectedData.action_name:''}
           >
            ${ props.endpoints.map((endpoint, idx) => 
                 endpoint.keyName != props.rowSelectedData?.action_name ?
-                html `
+                html `                
                   <mwc-list-item value=${endpoint.keyName}>
-                    ${endpoint["keyValue_" + props.lang]}
+                    ${endpoint.keyName}
                   </mwc-list-item>
                 ` : 
-                html `
+                html `                
                   <mwc-list-item value=${props.rowSelectedData.action_name}>
                     ${props.rowSelectedData.action_name}
                   </mwc-list-item>
@@ -63,7 +65,6 @@ export const template = (props) => {
               `;
             } else if ((param.type === elementTypes.Text) || (param.type === elementTypes.TextArr) || (param.type === elementTypes.TextObjectsArr) ) {
               let arg = "argument_0" + (idx + 1);
-              console.log("props.rowSelectedData[arg]", props.rowSelectedData && props.rowSelectedData[arg] ? "exist" : "undefind");
               return html`
                 <mwc-formfield>
                   ${str}

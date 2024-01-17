@@ -530,7 +530,7 @@ export function ButtonsFunctions(base) {
         return
       }
   
-      if (action.dialogInfo.name == "testScriptUpdateStepDialog") {
+      if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
         action.actionName = "SCRIPT_UPDATE_STEP";
         action.dialogInfo.name = "testScriptNewStepDialog";
       }
@@ -566,22 +566,26 @@ export function ButtonsFunctions(base) {
 
       //this.loadDialogs()
       console.log("action.dialogInfo.name", action.dialogInfo.name);
-      if (action.dialogInfo.name === "auditDialog") {
+      if (action.dialogInfo!==undefined&&action.dialogInfo.name === "auditDialog") {
         this[action.clientMethod]()
         return
       }
-      if (this[action.dialogInfo.name]) {
+      if (action.dialogInfo!==undefined&&this[action.dialogInfo.name]) {
         if (action.dialogInfo.subQueryName) {
           this[action.dialogInfo.subQueryName]()
         } else {
           this[action.dialogInfo.name].show();
         }
       }
-      else if (action.dialogInfo.name == "testScriptUpdateStepDialog") {
+      else if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
         this["testScriptNewStepDialog"].show();
       }
       else {
-        alert('the dialog ' + action.dialogInfo.name + ' does not exist')
+        if (action.dialogInfo!==undefined){
+          alert('the action ' + action.actionName + ' has no dialog defined')
+        }else{  
+          alert('the dialog ' + action.dialogInfo.name + ' does not exist')
+        }
       }
     }
 

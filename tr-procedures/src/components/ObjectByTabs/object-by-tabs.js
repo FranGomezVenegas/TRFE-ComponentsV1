@@ -180,8 +180,12 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
 
     firstUpdated() {
       const resizer = this.shadowRoot.getElementById("dragMe");
-      const leftSide = resizer.previousElementSibling;
-      const rightSide = resizer.nextElementSibling;
+      const leftSide = 0
+      const rightSide = 0
+      if (resizer!==null&resizer!==undefined){
+        leftSide = resizer.previousElementSibling;
+        rightSide = resizer.nextElementSibling;
+      }
       let x = 0;
       let y = 0;
       let leftWidth = 0;
@@ -228,7 +232,9 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         document.removeEventListener('mousemove', mouseMoveHandler);
         document.removeEventListener('mouseup', mouseUpHandler);
       };
-      resizer.addEventListener('mousedown', mouseDownHandler);
+      if (resizer!==null&&resizer!==undefined){
+        resizer.addEventListener('mousedown', mouseDownHandler);
+      }
     }
 
     title() {      

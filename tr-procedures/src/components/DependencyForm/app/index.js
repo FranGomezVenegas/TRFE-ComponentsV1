@@ -91,6 +91,7 @@ export class DependencyForm extends LitElement {
     );
 
     fields.forEach((field) => {
+      console.log('field', field)
       if (field.tagName === "MWC-TEXTFIELD" || field.tagName === "MWC-SELECT") {
         payload[field.name] = field.value;
       }

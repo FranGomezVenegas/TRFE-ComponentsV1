@@ -61,7 +61,13 @@ export function TrazitTestScriptNewStepDialog(base) {
           this.area = actionModel.area;
         }
       }
-
+      let rowData={}
+      
+      let rowSelectedRowStr=sessionStorage.getItem ('rowSelectedData')
+      if (rowSelectedRowStr!==undefined&& rowSelectedRowStr !== "[object Object]" ){
+        rowData=JSON.parse(rowSelectedRowStr)
+      }
+      console.log(rowData)
       // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi
       //     otherwise it is not compatible with actions requiring credentials dialog.
       return html`
@@ -122,7 +128,7 @@ export function TrazitTestScriptNewStepDialog(base) {
             .lang=${this.lang}
             .endpoints=${this.listTestEndpointsList()}
             .notifications=${this.listTestNotificationsList()}
-            .rowSelectedData=${JSON.parse(sessionStorage.getItem ('rowSelectedData'))}
+            .rowSelectedData=${rowData}
           ></dependency-form>
           <div style="margin-top:30px;text-align:center">
             <sp-button
