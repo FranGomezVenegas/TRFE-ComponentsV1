@@ -35,7 +35,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         --mdc-theme-primary: rgb(3, 169, 244);       
       }
       sp-split-view {
-        height: calc(100vh - 100px); 
+        height: calc(100vh - 100px);
+        width: 100%;
         --spectrum-dragbar-handle-width:0px;       
       }
       #splitter{
@@ -50,15 +51,21 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       #leftSplit {
         padding: 10px;
         background-color:transparent;
-        /* overflow: hidden; */
         overflow-y: scroll;
-        width:220px;
-        /* top:30px; */
-        position:relative;
-        transition: width 0.5s ease-in-out;
+        width: 20%;
+        display: flex;
+        align-items: start;
       }
+      
       #leftSplit.collapsed {
         width: 0;
+      }
+
+      .resizer {
+        background-color: #cbd5e0;
+        cursor: ew-resize;
+        height: 100%;
+        width: 2px;
       }
 
       div#leftSplit::-webkit-scrollbar {
@@ -86,9 +93,10 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         #rightSplit{
           padding: 0px;
           background-color:transparent;
-          width: calc(96vw - 220px);
           transition: width 0.5s ease-in-out;
-          position: relative;
+          flex: 1;
+          display: flex;
+          justify-content: start;
         }  
         #rightSplit.collapsed {
           width: 96vw;
@@ -104,15 +112,19 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
         overflow-y : auto;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;        
+        flex-direction: column;      
+        width: 100%;  
+        gap: 12px;  
+        padding: 0px 20px;
       }
       .tabs-container {
         display: flex;
         flex-wrap: wrap;
         gap: 4px;
         padding-left: 10px;
+      }
+      mwc-textfield {
+        width: 100%;
       }
     `;
   }
@@ -163,7 +175,61 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         this.leftSplitDisplayed=true
         this.filterCurrentData={}
         this.lotDefault='Testing 2023-03-15T21:20:55.962273'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
-          }
+    }
+
+    firstUpdated() {
+      const resizer = this.shadowRoot.getElementById("dragMe");
+      const leftSide = resizer.previousElementSibling;
+      const rightSide = resizer.nextElementSibling;
+      let x = 0;
+      let y = 0;
+      let leftWidth = 0;
+      const mouseDownHandler = function (e) {
+        // Get the current mouse position
+        x = e.clientX;
+        y = e.clientY;
+        leftWidth = leftSide.getBoundingClientRect().width;
+
+        // Attach the listeners to document
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      };
+
+      const mouseMoveHandler = function (e) {
+        // How far the mouse has been moved
+        const dx = e.clientX - x;
+        const dy = e.clientY - y;
+
+        const newLeftWidth = ((leftWidth + dx) * 100) / resizer.parentNode.getBoundingClientRect().width;
+        leftSide.style.width = newLeftWidth + '%';
+
+        resizer.style.cursor = 'col-resize';
+        document.body.style.cursor = 'col-resize';
+
+        leftSide.style.userSelect = 'none';
+        leftSide.style.pointerEvents = 'none';
+
+        rightSide.style.userSelect = 'none';
+        rightSide.style.pointerEvents = 'none';
+      };
+
+      const mouseUpHandler = function () {
+        resizer.style.removeProperty('cursor');
+        document.body.style.removeProperty('cursor');
+
+        leftSide.style.removeProperty('user-select');
+        leftSide.style.removeProperty('pointer-events');
+
+        rightSide.style.removeProperty('user-select');
+        rightSide.style.removeProperty('pointer-events');
+
+        // Remove the handlers of mousemove and mouseup
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+      };
+      resizer.addEventListener('mousedown', mouseDownHandler);
+    }
+
     title() {      
       return html`
         <style>
@@ -275,6 +341,60 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         }        
     }
 
+    resize(e) {
+      const resizer = this.shadowRoot.getElementById("dragMe");
+      console.log("resize", resizer);
+      const leftSide = resizer.previousElementSibling;
+      const rightSide = resizer.nextElementSibling;
+      let x = 0;
+      let y = 0;
+      let leftWidth = 0;
+      const mouseDownHandler = function (e) {
+        // Get the current mouse position
+        x = e.clientX;
+        y = e.clientY;
+        leftWidth = leftSide.getBoundingClientRect().width;
+
+        // Attach the listeners to document
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      };
+
+      const mouseMoveHandler = function (e) {
+        // How far the mouse has been moved
+        const dx = e.clientX - x;
+        const dy = e.clientY - y;
+
+        const newLeftWidth = ((leftWidth + dx) * 100) / resizer.parentNode.getBoundingClientRect().width;
+        leftSide.style.width = newLeftWidth + '%';
+
+        resizer.style.cursor = 'col-resize';
+        document.body.style.cursor = 'col-resize';
+
+        leftSide.style.userSelect = 'none';
+        leftSide.style.pointerEvents = 'none';
+
+        rightSide.style.userSelect = 'none';
+        rightSide.style.pointerEvents = 'none';
+      };
+
+      const mouseUpHandler = function () {
+        resizer.style.removeProperty('cursor');
+        document.body.style.removeProperty('cursor');
+
+        leftSide.style.removeProperty('user-select');
+        leftSide.style.removeProperty('pointer-events');
+
+        rightSide.style.removeProperty('user-select');
+        rightSide.style.removeProperty('pointer-events');
+
+        // Remove the handlers of mousemove and mouseup
+        document.removeEventListener('mousemove', mouseMoveHandler);
+        document.removeEventListener('mouseup', mouseUpHandler);
+      };
+      resizer.addEventListener('mousedown', mouseDownHandler);
+    }
+
     render() {      
       return html`
       ${this.genericFormDialog()}
@@ -285,43 +405,49 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
 
           ` : html`             
             <sp-split-view show-divider=${this.showDivider}>
-              <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
-                <div id="endpointName">      
-                  ${this.viewModelFromProcModel.filter_button === undefined ? nothing : html`
-                    <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
-                    ${this.viewModelFromProcModel.filter_button["label_" + this.lang]} </sp-button>
-                  `}
-                  ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
-                    ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} 
-                  `}
+              <div style="display:flex; width: 100%; background:transparent;">
+                <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__left">
+                  <div id="endpointName">      
+                    ${this.viewModelFromProcModel.filter_button === undefined ? nothing : html`
+                      <div style="display:flex; justify-content:center;">
+                        <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
+                          ${this.viewModelFromProcModel.filter_button["label_" + this.lang]} 
+                        </sp-button>
+                      </div>
+                    `}
+                    ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
+                      ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} 
+                    `}
+                  </div>
+                  ${this.filterElement(this.filterResponseData)}
                 </div>
-                ${this.filterElement(this.filterResponseData)}
-              
-              </div>
-              
-              <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'}">
-                <div id="document">
-                ${this.tabsBlock()}  
-                <div class="layout horizontal">
-                ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?
-                html`
-                  <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>                
-                `: nothing}
-            
-                ${this.viewModelFromProcModel&&this.viewModelFromProcModel.download&&this.viewModelFromProcModel.download.active===true ?
-                  html`    
-                  <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
-                `: nothing}
-                </div>
-                ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
-                    <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
-                    .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                    .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
-                    .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-                    .filterCurrentData=${this.filterCurrentData}>
-                    </objecttabs-composition>              
-    
-                  `: nothing}
+
+                <div class="resizer" id="dragMe" style="width: 3px;"></div>
+
+                <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__right">
+                  <div id="document">
+                    ${this.tabsBlock()}  
+                    <div class="layout horizontal">
+                    ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?
+                    html`
+                      <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>                
+                    `: nothing}
+                
+                    ${this.viewModelFromProcModel&&this.viewModelFromProcModel.download&&this.viewModelFromProcModel.download.active===true ?
+                      html`    
+                      <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
+                    `: nothing}
+                    </div>
+                  ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
+                      <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
+                      .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
+                      .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
+                      .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
+                      .filterCurrentData=${this.filterCurrentData}>
+                      </objecttabs-composition>              
+      
+                    `: nothing}
+                  </div>
                 </div>
               </div>
             </sp-split-view>
