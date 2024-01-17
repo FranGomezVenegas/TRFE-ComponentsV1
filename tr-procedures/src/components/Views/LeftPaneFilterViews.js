@@ -79,6 +79,7 @@ export function LeftPaneFilterViews(base) {
                   border-radius: 12px;
                   cursor: pointer;
                   color: white;
+                  width: 100%;
                 }
                 .search-item {
                   text-align: center;
