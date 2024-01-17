@@ -75,7 +75,6 @@ export function LeftPaneFilterViews(base) {
                   background-color: #54CCEF;
                   border: 1px solid #03A9F4;
                   display: flex;
-                  margin-bottom: 8px;
                   border-radius: 12px;
                   cursor: pointer;
                   color: white;

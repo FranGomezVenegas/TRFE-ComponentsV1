@@ -56,7 +56,6 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 8px;
       }
       
       #leftSplit.collapsed {
