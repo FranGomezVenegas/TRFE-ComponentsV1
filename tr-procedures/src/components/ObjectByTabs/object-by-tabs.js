@@ -180,9 +180,9 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
 
     firstUpdated() {
       const resizer = this.shadowRoot.getElementById("dragMe");
-      const leftSide = 0
-      const rightSide = 0
-      if (resizer!==null&resizer!==undefined){
+      let leftSide = undefined
+      let rightSide = undefined
+      if (resizer!==null && resizer!==undefined){
         leftSide = resizer.previousElementSibling;
         rightSide = resizer.nextElementSibling;
       }
