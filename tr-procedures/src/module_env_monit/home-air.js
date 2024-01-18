@@ -4,6 +4,7 @@ import { html, css, nothing, LitElement } from 'lit';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import './Dashboard';
 import './MultiSelect';
+import './DragDropBox'
 import { navigator } from 'lit-element-router';
 export class HomeAir extends navigator(LitElement) {
   static get styles() {
@@ -259,9 +260,11 @@ export class HomeAir extends navigator(LitElement) {
       });
     }
     render() {
+      // <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
       return html`
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
         <multi-select> </multi-select>
+        <dragdrop-box> </dragdrop-box>
       `;
     }
     renderFran() {          
