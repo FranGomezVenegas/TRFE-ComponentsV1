@@ -1,4 +1,5 @@
 import { html } from 'lit-element';
+import '@material/mwc-icon';
 
 export const template = (props) => {
     let cols = [], rows = [];
@@ -14,7 +15,7 @@ export const template = (props) => {
         <div style="width: fit-content; gap: 4px; display: flex; flex-direction: column;">
             <div style="display:flex; justify-content: space-between;"> 
                 <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
-                    <div> COPY </div>
+                    <mwc-icon style="color:#54CCEF; cursor:pointer;"> content_copy </mwc-icon>
                     <div class="view-btn ${props.viewMode == 1 ? "active" : ""}" @click=${() => props.setViewMode(1)}> Box View </div>
                     <div class="view-btn ${props.viewMode == 2 ? "active" : ""}" @click=${() => props.setViewMode(2)}> List View </div>
                 </div>
@@ -47,7 +48,7 @@ export const template = (props) => {
                 <div style="display:flex; justify-content: center;">
                     ${props.selectedIndex1 ? html `<div class="selected-cell-content"> Cell selected: ${props.selectedIndex1} </div>` : null} 
                 </div>
-                ${props.selectedIndex2 ? html `<div style="text-align: center"> ${props.selectedIndex2}:Sample box </div>` : null} 
+                ${props.selectedIndex2 ? html `<div style="text-align: center; color: white;"> ${props.selectedIndex2}:Sample box </div>` : null} 
             </div>
         </div>
     `;

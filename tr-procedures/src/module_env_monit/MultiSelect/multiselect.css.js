@@ -64,5 +64,6 @@ export const styles = css`
     top: 0;
     right: 0;
     padding: 8px;
+    transform: translateY(-3px);
 }
 `

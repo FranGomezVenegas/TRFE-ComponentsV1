@@ -10,25 +10,26 @@ export const styles = css`
   .box-content {
     width: fit-content;
     border-radius: 4px;
-    background-color: #ACACAC;
+    background-color: #42BFF7;
     padding: 4px;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    border: 2px solid rgb(220,220,220);
+    border: 2px solid #03A9F4;
   }
 
   .box {
     width: 80px;
     height: 80px;
-    background-color: #ACACAC;
-    border: 2px solid #757575;
+    background-color: #42BFF7;  
+    border: 2px solid #03A9F4;
     padding: 2px;
     color: white;
     cursor: pointer;
   }
 
   .row-num {
+    color: white;
     width: 20px;
     height: 80px;
     display: flex;
@@ -36,6 +37,7 @@ export const styles = css`
   }
 
   .col-num {
+    color: white;
     width: 80px;
     height: 20px;
     text-align: center;
@@ -69,11 +71,12 @@ export const styles = css`
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    background-color: #757575;
+    background-color: white;
     text-align: center;
     font-weight: bold;
     font-size: 20px;
-    color: #ACACAC;
+    color: #03A9F4;
+
   }
 
   .accept-btn {
@@ -87,31 +90,31 @@ export const styles = css`
   }
 
   .view-btn {
-    border: 2px solid #757575;
-    background-color: #ACACAC;
+    border: 2px solid #24C0EB;
+    background-color: #54CCEF;
+    border-radius: 4px;
     padding: 8px 12px;  
-    color: #EBEBEB;
+    color: white;
     font-weight: bold;
     font-size: 16px;
     cursor: pointer;
   }
 
   .view-btn.active {
-    color: red;
-    background-color: rgb(220,220,220);
+    color: #FF5F7F;
+    background-color: #8DDDF4;
   }
 
   .box.active {
-    background-color: rgb(220,220,220);
+    background-color: #C0E9FC;
   }
 
   .selected-cell-content {
-    color: #FF8E00;
-    border: 2px solid #ACACAC;
+    color: #FF5F7F;
+    border: 2px solid #03A9F4;
     border-radius: 8px;
-    background-color: rgb(220,220,220);
+    background-color: #42BFF7;
     text-align: left;
     padding: 4px 8px;
-
   }
 `
