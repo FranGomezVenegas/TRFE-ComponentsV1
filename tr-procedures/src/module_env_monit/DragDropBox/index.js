@@ -10,17 +10,58 @@ export class DragDropBox extends navigator(LitElement) {
   static get properties() {
     return {
       data: { type: Object },
+      viewMode: { type: Number},
+      selectedIndex1: { type: String },
+      selectedIndex2: { type: Number}
     };
   }
 
   constructor() {
     super();
     this.selectedIndex1 = "";
-    this.selectedIndex2 = "";
+    this.selectedIndex2 = 0;
     this.viewMode = 1;
     this.data = {
-      cols: 8,
-      rows: 5,
+      cols: 5,
+      rows: 3,
+      datas: [
+        {
+          id: 1, 
+          name: "Sample1",
+          description: "Hello",
+          study: "Sample here",
+          temperature: "aaa",
+          result1: 1,
+          result2: 2,
+          posX: 2,
+          posY: 1,
+          stored_on: "2024-01-19"
+        },
+        {
+          id: 2, 
+          name: "Sample2",
+          description: "Hello2",
+          study: "Sample here2",
+          temperature: "bbb",
+          result1: 1,
+          result2: 2,
+          posX: 3,
+          posY: 2,
+          stored_on: "2024-01-17"
+        },
+        {
+          id: 3, 
+          name: "Sample3",
+          description: "Hello3",
+          study: "Sample here3",
+          temperature: "ccc",
+          result1: 1,
+          result2: 2,
+          posX: 5,
+          posY: 3,
+          stored_on: "2024-01-16"
+        }
+      ]
     }
   }
 
@@ -33,6 +74,10 @@ export class DragDropBox extends navigator(LitElement) {
       setSelectBoxIndex: this._setSelectBoxIndex,
       setViewMode: this._setViewMode,
     });
+  }
+
+  firstUpdated = () => {
+
   }
 
   _setSelectBoxIndex = (first, second)  => {

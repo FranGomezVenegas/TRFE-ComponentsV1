@@ -6,11 +6,12 @@ export const template = (props) => {
     for(let i = 0; i < props.data.cols; i++) {
         cols.push(i);
     }
+
     let letter = "A";
     for(let i = 0; i < props.data.rows; i++) {
         rows.push(String.fromCharCode(letter.charCodeAt(0) + (i)));
     }
-    console.log("rows", rows);
+    let activeData = null;
     return html`
         <div style="width: fit-content; gap: 4px; display: flex; flex-direction: column;">
             <div style="display:flex; justify-content: space-between;"> 
@@ -22,34 +23,70 @@ export const template = (props) => {
                 <div class="accept-btn"> Accept </div>
             </div>
             <div class="box-content">
-                <div class="row-content"> 
-                    <div class="first-item"> </div>
-                    ${cols.map((item, i) => html `
-                    <div class="col-num"> ${item + 1} </div>
-                    `)}
-                </div>
-                ${rows.map((item ,i) => html `
-                <div class="row-content"> 
-                    <div class="row-num"> ${item} </div>
-                    ${cols.map((item1 ,j) => html `
-                    <div class="box ${props.selectedIndex1 == item + (j + 1) ? "active" : ""}" @click=${() => props.setSelectBoxIndex(item + (j + 1), i * cols.length + (j + 1))}> 
-                        <div class="data-view">
-                            ${props.selectedIndex1 == item + (j + 1) ? "" : html `<div class="add-circle"> + </div>` }
-                            
+                ${props.viewMode == 1 ? html `
+                <div> 
+                    <div class="row-content"> 
+                        <div class="first-item"> </div>
+                        ${cols.map((colN, i) => html `
+                        <div class="col-num"> ${colN + 1} </div>
+                        `)}
+                    </div>
+                    ${rows.map((rowN ,i) => html `
+                    <div class="row-content"> 
+                        <div class="row-num"> ${rowN} </div>
+                        ${cols.map((item1 ,j) => html `
+                        <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))}> 
+                            <div class="data-view">
+                                ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ? props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)).name : html `<div class="add-circle"> + </div>`}
+                            </div>
+                            <div class="position">
+                                <span> ${rowN + (j + 1)} </span>
+                                <span> ${ i * cols.length + (j + 1) } </span>
+                            </div>
                         </div>
-                        <div class="position">
-                            <span> ${item + (j + 1)} </span>
-                            <span> ${ i * cols.length + (j + 1) } </span>
-                        </div>
+                        `)}
                     </div>
                     `)}
+                    <div style="display:flex; justify-content: center;">
+                        ${props.selectedIndex1 ? html `<div class="selected-cell-content"> Cell selected: ${props.selectedIndex1} </div>` : null} 
+                    </div>
+                    ${props.selectedIndex2 ? html `<div style="text-align: center; color: white;"> ${props.selectedIndex2}:Sample box </div>` : null} 
                 </div>
-                `)}
-                <div style="display:flex; justify-content: center;">
-                    ${props.selectedIndex1 ? html `<div class="selected-cell-content"> Cell selected: ${props.selectedIndex1} </div>` : null} 
+                ` : 
+
+                props.data.datas.length > 0 ?
+                html `
+                <div style="width:${80 * props.data.cols}px; min-width:470px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Name</th>
+                                <th>Vol</th>
+                                <th>Stor.comments</th>
+                                <th>Description</th>
+                                <th>Date created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${props.data.datas.map((data, i) => html`
+                            <tr>
+                                <td>${ String.fromCharCode(data.posY + 64) + data.posX}</td>
+                                <td>${data.name}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>${data.stored_on}</td>
+                            </tr>
+                            `)}
+                        </tbody>
+                    </table>
                 </div>
-                ${props.selectedIndex2 ? html `<div style="text-align: center; color: white;"> ${props.selectedIndex2}:Sample box </div>` : null} 
+                ` : 
+                null}
             </div>
         </div>
     `;
 };
+
+// <div class="add-circle"> + </div>

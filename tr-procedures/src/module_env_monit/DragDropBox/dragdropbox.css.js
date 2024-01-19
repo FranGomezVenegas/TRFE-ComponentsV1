@@ -64,6 +64,7 @@ export const styles = css`
     display: flex;
     align-items: center;
     justify-content: center;
+    word-break: break-word;
   }
 
   .add-circle {
@@ -106,7 +107,7 @@ export const styles = css`
   }
 
   .box.active {
-    background-color: #C0E9FC;
+    border-color: #FF8E00;
   }
 
   .selected-cell-content {
@@ -117,4 +118,25 @@ export const styles = css`
     text-align: left;
     padding: 4px 8px;
   }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    color: white;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #04AA6D;
+    color: white;
+  }
+
+  table, td, th {
+    border: 1px solid #03A9F4;
+  }
+
 `
