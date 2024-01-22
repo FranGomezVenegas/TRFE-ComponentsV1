@@ -91,9 +91,8 @@ export class DragDropBox extends navigator(LitElement) {
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
     };
-
-    this.dragElement.innerHTML = currentElement.innerHTML;
-    currentElement.innerHTML = this.selectedBox;
+    this.dragElement.innerHTML =  currentElement.childNodes[1].childNodes[1].innerHTML;
+    currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
   }
 
   _dragBox = (e) => {
@@ -101,8 +100,8 @@ export class DragDropBox extends navigator(LitElement) {
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
     }
-    this.dragElement = currentElement;
-    this.selectedBox = currentElement.innerHTML;
+    this.dragElement = e.target.childNodes[1];
+    this.selectedBox = e.target.childNodes[1].innerHTML;
   }
 
   _setSelectBoxIndex = (first, second)  => {
