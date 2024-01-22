@@ -21,6 +21,7 @@ export class DragDropBox extends navigator(LitElement) {
     this.selectedIndex1 = "";
     this.selectedIndex2 = 0;
     this.viewMode = 1;
+    this.selectedBox = undefined;
     this.data = {
       cols: 5,
       rows: 3,
@@ -62,7 +63,8 @@ export class DragDropBox extends navigator(LitElement) {
           stored_on: "2024-01-16"
         }
       ]
-    }
+    };
+    this.dragElement = undefined;
   }
 
   render() {
@@ -73,11 +75,34 @@ export class DragDropBox extends navigator(LitElement) {
       viewMode: this.viewMode,
       setSelectBoxIndex: this._setSelectBoxIndex,
       setViewMode: this._setViewMode,
+      dropBox: this._dropBox,
+      allowDrop: this._allowDrop,
+      dragBox: this._dragBox,
     });
   }
 
-  firstUpdated = () => {
+  _allowDrop = (e) => {
+    e.preventDefault();
+  }
 
+  _dropBox = (e) => {
+    e.preventDefault();
+    let currentElement = e.target;
+    while (currentElement && !currentElement.classList.contains('box')) {
+        currentElement = currentElement.parentElement;
+    };
+
+    this.dragElement.innerHTML = currentElement.innerHTML;
+    currentElement.innerHTML = this.selectedBox;
+  }
+
+  _dragBox = (e) => {
+    let currentElement = e.target;
+    while (currentElement && !currentElement.classList.contains('box')) {
+        currentElement = currentElement.parentElement;
+    }
+    this.dragElement = currentElement;
+    this.selectedBox = currentElement.innerHTML;
   }
 
   _setSelectBoxIndex = (first, second)  => {
