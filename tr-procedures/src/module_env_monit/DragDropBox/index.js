@@ -25,12 +25,16 @@ export class DragDropBox extends navigator(LitElement) {
     this.data = {
       cols: 5,
       rows: 3,
+      views:[
+        ["id", "study"],
+        ["id", "temperature"],
+      ],
       datas: [
         {
           id: 1, 
           name: "Sample1",
           description: "Hello",
-          study: "Sample here",
+          study: undefined,
           temperature: "aaa",
           result1: 1,
           result2: 2,
@@ -42,7 +46,7 @@ export class DragDropBox extends navigator(LitElement) {
           id: 2, 
           name: "Sample2",
           description: "Hello2",
-          study: "Sample here2",
+          study: "here2",
           temperature: "bbb",
           result1: 1,
           result2: 2,
@@ -54,7 +58,7 @@ export class DragDropBox extends navigator(LitElement) {
           id: 3, 
           name: "Sample3",
           description: "Hello3",
-          study: "Sample here3",
+          study: "here13",
           temperature: "ccc",
           result1: 1,
           result2: 2,
@@ -65,6 +69,8 @@ export class DragDropBox extends navigator(LitElement) {
       ]
     };
     this.dragElement = undefined;
+    this.viewBoxMode = 0;
+    this.listBoxViewMode = false;
   }
 
   render() {
@@ -73,12 +79,27 @@ export class DragDropBox extends navigator(LitElement) {
       selectedIndex1: this.selectedIndex1,
       selectedIndex2: this.selectedIndex2,
       viewMode: this.viewMode,
+      listBoxViewMode: this.listBoxViewMode,
+      viewBoxMode: this.viewBoxMode,
       setSelectBoxIndex: this._setSelectBoxIndex,
       setViewMode: this._setViewMode,
       dropBox: this._dropBox,
       allowDrop: this._allowDrop,
       dragBox: this._dragBox,
+      setShowBoxViewModeList: this._setShowBoxViewModeList,
+      setViewBoxMode:this._setViewBoxMode,
     });
+  }
+
+  _setViewBoxMode = (mode) => {
+    console.log("viewmode", mode);
+    this.viewBoxMode = mode;
+    this.requestUpdate();
+  }
+
+  _setShowBoxViewModeList = () => {
+    this.listBoxViewMode = !this.listBoxViewMode;
+    this.requestUpdate();
   }
 
   _allowDrop = (e) => {
@@ -91,9 +112,8 @@ export class DragDropBox extends navigator(LitElement) {
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
     };
-
-    this.dragElement.innerHTML = currentElement.innerHTML;
-    currentElement.innerHTML = this.selectedBox;
+    this.dragElement.innerHTML =  currentElement.childNodes[1].childNodes[1].innerHTML;
+    currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
   }
 
   _dragBox = (e) => {
@@ -101,8 +121,8 @@ export class DragDropBox extends navigator(LitElement) {
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
     }
-    this.dragElement = currentElement;
-    this.selectedBox = currentElement.innerHTML;
+    this.dragElement = e.target.childNodes[1];
+    this.selectedBox = e.target.childNodes[1].innerHTML;
   }
 
   _setSelectBoxIndex = (first, second)  => {

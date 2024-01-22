@@ -65,6 +65,8 @@ export const styles = css`
     align-items: center;
     justify-content: center;
     word-break: break-word;
+    text-align: center;
+    flex-direction: column;
   }
 
   .add-circle {
