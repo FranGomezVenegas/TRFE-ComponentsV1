@@ -110,7 +110,7 @@ export const template = (props) => {
                 ${props.listBoxViewMode ? html `
                     ${props.data.views.map((view, i) => html `
                     <div class="display:flex; flex-direction:row;">
-                        <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}">
+                        <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => props.setViewBoxMode(i)}>
                         <label for="${view[1]}" @click=${() => props.setViewBoxMode(i)}> id, ${view[1]} </label><br>
                     </div>
                     `)}
