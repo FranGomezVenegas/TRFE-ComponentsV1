@@ -29,6 +29,9 @@ export class DragDropBox extends navigator(LitElement) {
         ["id", "study"],
         ["id", "temperature"],
       ],
+      readOnly: true,
+      allow_move_objects: true,
+      max_num_objects_per_position: 1,
       datas: [
         {
           id: 1, 
