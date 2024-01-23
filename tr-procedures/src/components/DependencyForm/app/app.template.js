@@ -68,18 +68,48 @@ export const template = (props) => {
               return html`
                 <mwc-formfield>
                   ${str}
-                  <mwc-textfield
-                    ?required=${required}
-                    type="text"
-                    label=${param.name}
-                    name=${param.name}
-                    @blur=${props.checkValidity}
-                    value=${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.rowSelectedData && props.rowSelectedData[arg] ? props.rowSelectedData[arg] : "" : ""}
-                    style="width: 100%"
-                  ></mwc-textfield>
+                  ${props.toggles[param.name]
+                    ? html`
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${"Step"}
+                          name=${param.name + "_step"}
+                          style="width: 100%"
+                          @change=${props.handleChangeStep(param.name)}
+                        ></mwc-textfield>
+                         <mwc-textfield
+                            type="text"
+                            ?required=${required}
+                            label=${"Object Type"}
+                            name=${param.name + "_object_posic"}
+                            style="width: 100%"
+                            value=${props.objectTypes}
+                          ></mwc-textfield>                       
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${"Object Posic"}
+                          name=${param.name + "_object_posic"}
+                          style="width: 100%"
+                          defaultValue=${1}
+                        ></mwc-textfield>
+                      `
+                    :
+                    html `
+                    <mwc-textfield
+                      ?required=${required}
+                      type="text"
+                      label=${param.name}
+                      name=${param.name}
+                      @blur=${props.checkValidity}
+                      value=${sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.rowSelectedData && props.rowSelectedData[arg] ? props.rowSelectedData[arg] : "" : ""}
+                      style="width: 100%"
+                    ></mwc-textfield> ` }
                 </mwc-formfield>
               `;
             } else if (param.type === elementTypes.TextArr2) {
+              console.log("elementTypes.TextArr2");
               return html`
                 <mwc-formfield>
                   ${str}
