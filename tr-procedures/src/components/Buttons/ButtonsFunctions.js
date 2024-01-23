@@ -104,14 +104,14 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${() => this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement)}></mwc-icon-button>` :
                 html`${action.button.img ?
                   html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${() => this.actionMethod(action, actions, null, null, data, isProcManagement)}>
+                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
@@ -119,7 +119,7 @@ export function ButtonsFunctions(base) {
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${() => this.actionMethod(action, actions, null, null, data, isProcManagement)}></mwc-button>`
+                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement)}></mwc-button>`
                   }`
                 }` :
               nothing
@@ -132,7 +132,8 @@ export function ButtonsFunctions(base) {
 
     getButton(sectionModel, data, isProcManagement) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
-      console.log('getButton', 'sectionModel', sectionModel, 'data', data)
+      console.log("getButtondatasectionModel", sectionModel);
+      console.log('getButtondata', data)
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -238,7 +239,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${() => this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                  @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
                   html`${action.button.img ?
                     html`<mwc-icon-button  id=${action.actionName}
                   class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
@@ -246,7 +247,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${() => this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}>
+                  @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                   </mwc-icon-button>` :
                     html`<mwc-button dense raised id=${action.actionName}
@@ -254,7 +255,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${() => this.actionMethod(action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+                  @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
                     }`
                   }` :
                 nothing
@@ -513,7 +514,8 @@ export function ButtonsFunctions(base) {
       }
       return d
     }
-    actionMethod(action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
+    actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
+      e.stopPropagation();
       sessionStorage.setItem('actionName', action.actionName);
       selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
       console.log('actionMethod', this.selectedProcInstance, isProcManagement)
