@@ -104,7 +104,7 @@ export const styles = css`
   }
 
   .view-btn.active {
-    color: #FF5F7F;
+    color: rgb(19,11,111);
     background-color: #8DDDF4;
   }
 
@@ -113,7 +113,7 @@ export const styles = css`
   }
 
   .selected-cell-content {
-    color: #FF5F7F;
+    color: rgb(19,11,111);
     border: 2px solid #03A9F4;
     border-radius: 8px;
     background-color: #42BFF7;
