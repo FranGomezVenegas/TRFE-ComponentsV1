@@ -1177,12 +1177,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
                     ${item.view_definition.detail.type !== undefined &&
                     item.view_definition.detail.type === "objectsList"
                       ? html`
-                          ${this.testingcardSomeElementsRepititiveObjects(
-                            item,
-                            this.selectedProcInstance,
-                            true,
-                            index
-                          )}
+                          ${this.genericList(item, this.selectedProcInstance, true, index)}
                         `
                       : nothing}
                   </div>
@@ -1191,6 +1186,96 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
           `
         : nothing}
     `;
+  }
+
+  detailObjectsList(elem, data, flag, index){
+    if (elem.view_definition.detail==undefined||elem.view_definition.detail.paneName===undefined){
+      return html``
+    }
+    const func = this[elem.view_definition.detail.paneName];
+    if (typeof func === 'function') {
+      return func(elem, data, flag, index);
+    } else {
+      // Handle the case where it's not a function or doesn't exist
+      console.error('Invalid function:', elem.view_definition.detail.paneName);
+      return null; // or any other appropriate default action
+    }    
+    //this[elem.view_definition.detail.paneName](elem, data, flag, index)
+
+  }
+  genericList(elem, data, flag, index) {
+    data = this.localGetDataFromRoot(elem.view_definition.detail, data);
+    if (data === undefined) {
+      return html``;
+    }
+    return html`
+      ${Array.isArray(data) && data.length > 0
+        ? html`
+            <style>
+            li.no_success {
+              color: red;
+            }
+            li.success {
+              color: green;
+            }
+            li {
+              cursor: pointer;
+              font-size: 14px;
+              transition: all 0.2s ease-in-out;
+            }
+            li:hover {
+              background-color: rgba(41, 137, 216, 0.1);
+            }
+          </style>
+          <ul>
+            ${data.map((d, idx) => {
+              return html`              
+              <li role="button" class="${this.conditionalClass(elem.view_definition.detail, d)}" .thisitem="${d}"
+                @click=${(e) => this.clickItemAction(index, idx, elem, d)} .elementdef="${elem}">
+                ${elem.view_definition.detail.fieldsToDisplayInFilter===undefined?html`detail requires fieldsToDisplayInFilter property def`:
+                  html`${this.genericListLabelToDisplay(elem.view_definition.detail.fieldsToDisplayInFilter, d)}`
+                  
+                } 
+                 
+                <hr />
+              </li>
+              `
+            })}
+
+        `:nothing}
+    `
+  }
+  conditionalClass(elemDef, thisitem){
+    if (elemDef===undefined){return 'success'}
+    if (elemDef.conditionalColor===undefined){return 'success'}
+    if (elemDef.conditionalColor.field===undefined||elemDef.conditionalColor.includedWord===undefined||
+      elemDef.conditionalColor.classForTrue===undefined||elemDef.conditionalColor.classForFalse===undefined){return 'success'}
+    if (thisitem[elemDef.conditionalColor.field].includes(elemDef.conditionalColor.includedWord)){
+      return elemDef.conditionalColor.classForTrue
+    }else{
+      return elemDef.conditionalColor.classForFalse
+    }
+    //    "conditionalColor":{"field": "run_summary", "includedWord": "SUCCESS", "classForTrue": "success", "classForFalse":"no_success"}
+  }
+  genericListLabelToDisplay(elemFlds, data){
+    const labelSuffix = this.lang === 'en' ? '_en' : '_es';
+
+    // Map each element in elemFlds to its corresponding value in data
+    const values = elemFlds.map(elem => {
+        // Get the label
+        const label = elem['label' + labelSuffix];
+
+        // Get the value from data
+        const value = data[elem.name];
+
+        // Combine label and value
+        return `${label}: ${value}`;
+    });
+
+    // Join the label-value pairs into a string
+    const combinedValues = values.join(', ');
+
+    return combinedValues; 
   }
   testingcardSomeElementsRepititiveObjects(elem, data, flag, index) {
     data = this.localGetDataFromRoot(elem.view_definition.detail, data);
@@ -1227,9 +1312,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
                   return html`
                     <li
                       role="button"
-                      class="${d.run_summary.toUpperCase().includes("SUCCESS")
-                        ? "success"
-                        : "no_success"}"
+                      class="${d.run_summary.toUpperCase().includes("SUCCESS")? "success": "no_success"}"
                       .thisitem="${d}"
                       @click=${(e) => this.clickedTest(index, idx, elem, d)}
                       .elementdef="${elem}"
@@ -1245,6 +1328,24 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
     `;
   }
 
+  clickItemAction(index, testIdx, elementdef, thisitem){
+    alert(elementdef.view_definition.detail.clickItemAction)
+    //this[elementdef.view_definition.detail.clickItemAction](index, testIdx, elementdef, thisitem)
+    const func = this[elementdef.view_definition.detail.clickItemAction];
+    if (typeof func === 'function') {
+      this[elementdef.view_definition.detail.clickItemAction](index, testIdx, elementdef, thisitem);
+      return
+    } else {
+      // Handle the case where it's not a function or doesn't exist
+      console.error('Invalid function:', elem.view_definition.detail.paneName);
+      return null; // or any other appropriate default action
+    }      
+  }
+
+  viewDesignerAction(index, testIdx, elementdef, thisitem){
+    return html`I'm the view X`
+
+  }
   clickedTest(index, testIdx, elementdef, thisitem) {
     this.selectSectionView(index);
     this.selectedTestIndex = testIdx;
