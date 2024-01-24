@@ -245,7 +245,7 @@
     "filterName" :  "prototype-elements-view-main" 
   },  
   
-  "localDefaultView33": {
+  "localDefaultView": {
     "procName":  "inspection_lot", 
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
@@ -255,7 +255,7 @@
     "viewName": "analysisDesign", 
     "filterName" :  "analysisDesign" 
   },
-  "localDefaultView": {
+  "localDefaultViewqwqwqw": {
     "procName":  "DiseaseStudies", 
     "viewName": "MyStudies", 
     "filterName" :  "MyStudies" 

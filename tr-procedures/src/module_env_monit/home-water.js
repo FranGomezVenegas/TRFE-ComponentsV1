@@ -3,7 +3,7 @@ import { html, css, nothing, LitElement } from "lit";
 // import './tabs-composition';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { navigator } from "lit-element-router";
-import './Dashboard';
+import '../components/Dashboard';
 export class HomeWater extends navigator(LitElement) {
   static get styles() {
     return css`

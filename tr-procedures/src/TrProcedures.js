@@ -155,6 +155,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         }        
         //alert('grid')
         return
+      case 'Dashboard':        
+        import('./components/Dashboard/dashboard.template')  
+        return
       case 'Tabs':
         import('./components/Tabs/tabs-main-view')
         return
@@ -373,6 +376,14 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           .model=${this.viewModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
       `:nothing}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'Dashboard' ? html`
+        <dynamic-dashboard .params=${this.viewModelFromProcModel.data}  .lang=${this.lang} .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .model=${this.viewModelFromProcModel} .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}
+        > </dynamic-dashboard>
+      `:nothing}
+
+      
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'CalendarData' ? html`
         <calendar-data .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 

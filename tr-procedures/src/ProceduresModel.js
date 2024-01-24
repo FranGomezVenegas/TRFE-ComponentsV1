@@ -235,7 +235,8 @@ export const DemoViews = [
 	{"proc_instance_name": "stock", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"}	
   ]},
  {"label":"Raw Material Inspection Lots (demo_lots_raw", "proc_instance_name": "inspection_lot", "views":[
-    {"proc_instance_name": "inspection_lot", "view_name": "LotCreation", "filter_name": "LotCreation", "title": "lotCreation"},
+  {"proc_instance_name": "inspection_lot", "view_name": "Home", "filter_name": "Home", "title": "Home"},
+  {"proc_instance_name": "inspection_lot", "view_name": "LotCreation", "filter_name": "LotCreation", "title": "lotCreation"},
     {"proc_instance_name": "inspection_lot", "view_name": "LotView", "filter_name": "LotView", "title": "LotView"},
     {"proc_instance_name": "inspection_lot", "view_name": "SampleEnterResult", "filter_name": "ER-FQ", "title": "ER-FQ"},
     {"proc_instance_name": "inspection_lot", "view_name": "SampleEnterResult", "filter_name": "ER-MB", "title": "ER-MB"},
@@ -251,6 +252,10 @@ export const DemoViews = [
 	]},
   {"label":"Disease Study", "proc_instance_name": "DiseaseStudies", "views":[
     {"proc_instance_name": "DiseaseStudies", "view_name": "MyStudies", "filter_name": "MyStudies", "title": "My Studies"},
+	]},
+  {"label":"Fake developers", "proc_instance_name": "fakeDevelopers", "isSpecial":true, "views":[
+    {"proc_instance_name": "fakeDevelopers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "prototype-elements-view-main", "isSpecial": true},
+    {"proc_instance_name": "fakeDevelopers", "view_name": "culture-medium", "filter_name": "culture-medium", "title": "culture-medium", "isSpecial": true},
 	]}
      
 ]

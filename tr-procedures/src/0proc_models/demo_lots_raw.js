@@ -31,7 +31,30 @@ export const DemoLotsRaw =
     ]
   },
   "Home": {
-    "component": "ModuleEnvMonitHomeAir"
+    "component": "Dashboard",
+    "data":{
+      title1:"demo",
+      title2:"demo2",
+      nodes:[
+        {
+          title: "Program",
+          viewName:"LogSamples",
+          filterName: "SampleLogin",
+        },
+        {
+          title: "Incubate",
+          viewName:"LogSamples",
+          filterName: "SampleLogin",
+        },
+        {
+          title: "Inquires",
+          viewName:"LogSamples",
+          filterName: "SampleLogin",
+        },        
+      ],
+      leaves:[]
+    }
+
   },
   "LotCreation": {
     "component": "TableWithButtons",

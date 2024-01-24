@@ -56,9 +56,10 @@ class DemoExample extends LitElement {
     this.flag = "es";
     this.userRole='';
   }
-  hideActionButtonProc(proc){
+  hideActionButtonProc(proc, isSpecial){
     if (proc===undefined) return false
     //alert(proc)
+    if (isSpecial!==undefined&&isSpecial===true) return false
     let sessionProcs=JSON.parse(sessionStorage.getItem("userSession"))
     if (sessionProcs===null) return false
     let findProc = sessionProcs.procedures_list.procedures.filter(m => m.procInstanceName == proc)
@@ -116,7 +117,7 @@ class DemoExample extends LitElement {
         
         ${DemoViews.map(curProc =>          
           html`
-          ${this.hideActionButtonProc(curProc.proc_instance_name) ?  html``:html`
+          ${this.hideActionButtonProc(curProc.proc_instance_name, curProc.isSpecial) ?  html``:html`
           <div class="proctitle"><p>${curProc.label}</p></div>
           ${curProc.views.map(curView =>
           html`<button ?hidden="${this.hideActionButton(curView.proc_instance_name, curProc.isSpecial)}" 

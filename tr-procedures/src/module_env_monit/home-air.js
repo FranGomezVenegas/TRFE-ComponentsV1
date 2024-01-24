@@ -2,7 +2,7 @@ import { html, css, nothing, LitElement } from 'lit';
 // import('../grid_with_buttons/grid-with-buttons');
 // import './tabs-composition';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
-import './Dashboard';
+import '../components/Dashboard';
 import './MultiSelect';
 import './DragDropBox'
 import { navigator } from 'lit-element-router';
