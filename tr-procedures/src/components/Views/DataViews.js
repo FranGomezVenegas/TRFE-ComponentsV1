@@ -22,6 +22,8 @@ import "@google-web-components/google-chart";
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 
 export function DataViews(base) {
+
+  let contextMenu = undefined;
   return class extends TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(
@@ -901,26 +903,68 @@ export function DataViews(base) {
       }
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+      document.addEventListener('keydown', this.handleKeyDown);
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      document.removeEventListener('keydown', this.handleKeyDown);
+    }
+
+    handleKeyDown(event) {
+      console.log("fdfdfd", contextMenu);
+      if (event.key === 'Escape') {
+        contextMenu.style.display = "none";
+      }
+    }
+
     handleOpenContextMenu(event, rowSelected, elem) {
       event.preventDefault();
       const popup = this.shadowRoot.querySelector(".js-context-popup");
+      contextMenu = popup;
       popup.innerHTML = "";
       elem.row_buttons.map((item, i) => {
-        console.log("item", item);
-        const newIcon = document.createElement('mwc-icon-button');
+        let newIcon = document.createElement('mwc-icon-button');
         newIcon.setAttribute('icon', item.button.icon);
         newIcon.style.color = "white";
-        newIcon.addEventListener('click', (e) => this.actionMethod(e, item, elem.row_buttons, null, null, rowSelected, false));
-        popup.appendChild(newIcon);
+
+        let newLabel = document.createElement('label');
+        if(item.button.icon == "person_remove") {
+          newLabel.textContent = "Remove User";
+        }
+        else if(item.button.icon == "manage_accounts"){
+          newLabel.textContent = "Edit User";
+        }
+        else {
+          newLabel.textContent = "Copy";
+        }
+
+        let newDiv = document.createElement('div');
+        newDiv.style.display = "flex";
+        newDiv.style.flexDirection = "row";
+        newDiv.style.alignItems =  "center";
+        newDiv.style.cursor = "pointer"
+        newDiv.appendChild(newIcon);
+        newDiv.appendChild(newLabel);
+        newDiv.addEventListener('click', (e) => this.actionMethod(e, item, elem.row_buttons, null, null, rowSelected, false));
+
+        popup.appendChild(newDiv);
       })
       popup.addEventListener('click', () => this.contextMenuItemAction(popup));
       popup.style.left = `${event.clientX}px`;
       popup.style.top = `${event.clientY}px`;
-      popup.style.display = "block";
+      popup.style.display = "flex";
+      popup.style.flexDirection = "column";
+      document.body.addEventListener('click', this.closeContextMenu);
     }
     
+    closeContextMenu(e) {
+      contextMenu.style.display = "none";
+    }
+
     contextMenuItemAction(e) {
-      console.log("itme click");
       e.style.display = "none";
     }
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
@@ -1047,7 +1091,7 @@ export function DataViews(base) {
           .js-context-popup {
             background-color: #24C0EB;
             color: white;
-            width: 72px;
+            width: 130px;
             position: fixed;
             z-index: 10;
             display:none;
