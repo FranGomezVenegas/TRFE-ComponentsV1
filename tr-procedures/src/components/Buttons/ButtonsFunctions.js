@@ -515,7 +515,6 @@ export function ButtonsFunctions(base) {
       return d
     }
     actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
-      e.stopPropagation();
       sessionStorage.setItem('actionName', action.actionName);
       selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
       console.log('actionMethod', this.selectedProcInstance, isProcManagement)

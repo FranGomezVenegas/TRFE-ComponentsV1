@@ -902,23 +902,27 @@ export function DataViews(base) {
     }
 
     handleOpenContextMenu(event, rowSelected, elem) {
-      return;
       event.preventDefault();
-      const menu = document.createElement("ul");
-      menu.innerHTML = `
-          <li @click=${() => alert("Edit")}>Edit</li>
-          <li @click=${() => alert(`Delete ${p}`)}>Delete</li>
-      `;
       const popup = this.shadowRoot.querySelector(".js-context-popup");
+      popup.innerHTML = "";
+      elem.row_buttons.map((item, i) => {
+        console.log("item", item);
+        const newIcon = document.createElement('mwc-icon-button');
+        newIcon.setAttribute('icon', item.button.icon);
+        newIcon.style.color = "white";
+        newIcon.addEventListener('click', (e) => this.actionMethod(e, item, elem.row_buttons, null, null, rowSelected, false));
+        popup.appendChild(newIcon);
+      })
+      popup.addEventListener('click', () => this.contextMenuItemAction(popup));
       popup.style.left = `${event.clientX}px`;
       popup.style.top = `${event.clientY}px`;
-      popup.style.background = "white";
-      popup.innerHTML = "";
-      popup.appendChild(menu);
       popup.style.display = "block";
     }
-     
-
+    
+    contextMenuItemAction(e) {
+      console.log("itme click");
+      e.style.display = "none";
+    }
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
       let tmp = elem.theme;
       if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
@@ -1040,6 +1044,22 @@ export function DataViews(base) {
             display: none;
           }
 
+          .js-context-popup {
+            background-color: #24C0EB;
+            color: white;
+            width: 72px;
+            position: fixed;
+            z-index: 10;
+            display:none;
+          }
+          .js-context-popup div {
+            padding: 8px 12px;
+            border: 2px solid #03A9F4;
+            cursor: pointer;
+          }
+          .js-context-popup div:first-child {
+            border-botton: none !important;
+          }
           </style>
         <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
           <div style="display: flex; flex-direction: column; text-align: center;">
@@ -1099,7 +1119,8 @@ export function DataViews(base) {
                       </tr>
                     </thead>
                     <tbody>
-                      <div class="js-context-popup"></div>
+                      <div class="js-context-popup">
+                      </div>
                       ${dataArr === undefined || !Array.isArray(dataArr) ? 
                         html `No Data` : 
                         html`
