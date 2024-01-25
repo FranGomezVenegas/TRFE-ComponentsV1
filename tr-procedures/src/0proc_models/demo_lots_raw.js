@@ -6347,6 +6347,17 @@ export const DemoLotsRaw =
                 "label_es": "Código"
               },
               {
+                "name": "active",
+                "label_en": "Active",
+                "label_es": "Activo"
+              },
+              {
+                "name": "active",
+                "label_en": "Active",
+                "label_es": "Activo",
+                "is_icon": true
+              },
+              {
                 "name": "testing_group",
                 "label_en": "Testing Group",
                 "label_es": "Grupo Analítico"
