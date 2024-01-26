@@ -17,6 +17,7 @@ export function CalendarUtilities(base) {
                     html`<mwc-icon-button 
                       class="${action.button.class}"
                       icon="${action.button.icon}" 
+                      id="${action.actionName}" 
                       title="${action.button.title['label_'+this.lang]}" 
                       ?disabled=${this.buttonDisable(action)}
                       @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}></mwc-icon-button>` :
