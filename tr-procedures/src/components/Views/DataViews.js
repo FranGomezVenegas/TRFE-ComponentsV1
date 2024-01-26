@@ -1207,18 +1207,36 @@ export function DataViews(base) {
                                             : html`
                                               <td>
                                                 <div class="icon-text-container">
+                                                  
                                                   ${fld.is_icon !== undefined && fld.is_icon == true ? 
-                                                    html`
-                                                      <div class="left-area">
-                                                        <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                                                      </div>
-                                                    ` : nothing
+                                                    fld.icon_class ?
+                                                      html`
+                                                        <div class="left-area">
+                                                          <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
+                                                        </div>
+                                                      ` :
+                                                      html `
+                                                        <img src="/images/activate.svg" style="width:20px">
+                                                      ` 
+                                                    :  null
                                                   }
+                                                  ${console.log("fld.is_icon", fld.is_icon)}
                                                   <div class="right-area">
                                                     <span class="text">
                                                       ${fld.fix_value_prefix !== undefined ? fld.fix_value_prefix: ""}
                                                     </span>
-                                                    <span>${p[fld.name]}</span>                                                          
+                                                    ${fld.is_icon !== undefined && fld.is_icon == true ? 
+                                                      fld.icon_class ?
+                                                        html`
+                                                        <span>${ p[fld.name] }</span>    
+                                                        ` :
+                                                        html `
+                                                        ` 
+                                                      :  html`
+                                                      <span>${ p[fld.name] }</span>    
+                                                      `
+                                                    }
+                                                                                                          
                                                     ${fld.fix_value_suffix !== undefined ? fld.fix_value_suffix : ""}
                                                     ${fld.fix_value2_prefix !== undefined ? fld.fix_value2_prefix : ""}
                                                     <span>
@@ -1231,6 +1249,7 @@ export function DataViews(base) {
                                                       ${fld.fix_value3_suffix !== undefined ? fld.fix_value3_suffix : ""}
                                                     </span>
                                                   </div>
+                                                      
                                                 </div>
                                               </td>
                                             `}
