@@ -100,7 +100,7 @@ export function ButtonsFunctions(base) {
               html`${action.button.icon ?
                 html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)}"
-                  icon="${action.button.icon}" 
+                  icon="${action.button.icon}" id="${action.actionName}" 
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
@@ -108,14 +108,14 @@ export function ButtonsFunctions(base) {
                 html`${action.button.img ?
                   html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
-                  title="${action.button.title['label_' + this.lang]}" 
+                  title="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
                   @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
-                  label="${action.button.title['label_' + this.lang]}" 
+                  label="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
@@ -221,7 +221,7 @@ export function ButtonsFunctions(base) {
           html`
           <mwc-icon-button 
               class="${sectionModel.viewQuery.button.class}"
-              icon="${sectionModel.viewQuery.button.icon}" 
+              icon="${sectionModel.viewQuery.button.icon}" id="${action.actionName}" 
               title="${sectionModel.viewQuery.button.title['label_' + this.lang]}"             
               @click=${() => this.GetViewData()}
               style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
@@ -234,7 +234,7 @@ export function ButtonsFunctions(base) {
                 html`${action.button.icon ?
                   html`<mwc-icon-button id=${action.actionName}
                   class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
-                  icon="${action.button.icon}" 
+                  icon="${action.button.icon}" id="${action.actionName}" 
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
@@ -243,7 +243,7 @@ export function ButtonsFunctions(base) {
                   html`${action.button.img ?
                     html`<mwc-icon-button  id=${action.actionName}
                   class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
-                  title="${action.button.title['label_' + this.lang]}" 
+                  title="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
@@ -251,7 +251,7 @@ export function ButtonsFunctions(base) {
                       <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                   </mwc-icon-button>` :
                     html`<mwc-button dense raised id=${action.actionName}
-                  label="${action.button.title['label_' + this.lang]}" 
+                  label="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"

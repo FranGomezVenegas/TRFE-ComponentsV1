@@ -264,14 +264,14 @@ export class GridmodelBottomcompSampleincubationxxx extends ((CredDialog)) {
             html`${action.actionName ?
               html`<mwc-icon-button style="color:${action.button.color}"
                 class="${action.button.class}"
-                icon="${action.button.icon}" 
+                icon="${action.button.icon}" id="${action.actionName}" 
                 title="${action.button.title['label_'+this.lang]}${action.button.title.extra ? ` (${this[action.button.title.extra]})` : null}" 
                 ?disabled=${this.btnDisabled(action)}
                 ?hidden=${action.button.whenHidden&&!this[action.button.whenHidden]}
                 @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
               html`<mwc-icon-button style="color:${action.button.color}" 
                 class="${action.button.class}"
-                icon="${action.button.icon}" 
+                icon="${action.button.icon}" id="${action.actionName}" 
                 title="${action.button.title['label_'+this.lang]}" 
                 ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this[action.clientMethod](action.filterState)}></mwc-icon-button>`
@@ -279,12 +279,12 @@ export class GridmodelBottomcompSampleincubationxxx extends ((CredDialog)) {
             html`${action.button.img ?
               html`<mwc-icon-button class="${action.button.class} img" 
                 title="${action.button.title['label_'+this.lang]}"
-                ?disabled=${this.btnDisabled(action)}
+                ?disabled=${this.btnDisabled(action)} id="${action.actionName}" 
                 @click=${()=>this[action.clientMethod](action.filterState)}>
                   <img class="iconBtn" src="/images/${action.button.img}">
                 </mwc-icon-button>` :
               html`<mwc-button dense raised 
-                label="${action.button.title['label_'+this.lang]}" 
+                label="${action.button.title['label_'+this.lang]}" id="${action.actionName}" 
                 ?disabled=${this.btnDisabled(action)}
                 @click=${()=>this.actionMethod(action)}></mwc-button>`
             }`

@@ -23,14 +23,14 @@ export function CalendarUtilities(base) {
                       @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}></mwc-icon-button>` :
                     html`${action.button.img ?
                       html`<mwc-icon-button 
-                        class="${action.button.class} img"
+                        class="${action.button.class} img" id="${action.actionName}" 
                         title="${action.button.title['label_'+this.lang]}" 
                         ?disabled=${this.buttonDisable(action)}
                         ?hidden=${this.btnHidden(action)}
                         @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}>
                           <img class="iconBtn" src="images/${action.button.img}">
                         </mwc-icon-button>` :
-                      html`<mwc-button dense raised 
+                      html`<mwc-button dense raised  id="${action.actionName}" 
                         label="${action.button.title['label_'+this.lang]}" 
                         ?disabled=${this.buttonDisable(action)}
                         @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}></mwc-button>`
