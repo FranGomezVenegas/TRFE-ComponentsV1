@@ -9,7 +9,6 @@ import { elementTypes } from "../config";
 export const template = (props) => {
   let items = [];
   items = sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.endpoints.find((item) => item.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name)?.arguments_array : props.params;
-  console.log("afdsafdsafsdasdf", props.endpoints, 'items', items);
   return html`
     <div class="container">
       <form id="#endpoint-form" action="/" method="get">
