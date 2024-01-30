@@ -221,7 +221,7 @@ export function ButtonsFunctions(base) {
           html`
           <mwc-icon-button 
               class="${sectionModel.viewQuery.button.class}"
-              icon="${sectionModel.viewQuery.button.icon}" id="${action.actionName}" 
+              icon="${sectionModel.viewQuery.button.icon}" id="refresh" 
               title="${sectionModel.viewQuery.button.title['label_' + this.lang]}"             
               @click=${() => this.GetViewData()}
               style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
@@ -435,6 +435,7 @@ export function ButtonsFunctions(base) {
     }
     btnHidden(action) {
       let d = false
+      if (action===undefined||action.button===undefined){return d}
       if (action.button.showWhenSelectedItem !== undefined) {
         //console.log('btnHidden')
         if (this.selectedItems === undefined || this.selectedItems[0] === undefined) { return true } // keep hide when no selection
