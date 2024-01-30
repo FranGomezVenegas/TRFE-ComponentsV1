@@ -906,40 +906,47 @@ export function DataViews(base) {
     connectedCallback() {
       super.connectedCallback();
       document.addEventListener('keydown', this.handleKeyDown);
+      // window.addEventListener('scroll', this.handleScroll);
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
       document.removeEventListener('keydown', this.handleKeyDown);
+      // window.removeEventListener('scroll', this.handleScroll);
     }
 
     handleKeyDown(event) {
-      console.log("fdfdfd", contextMenu);
       if (event.key === 'Escape') {
         contextMenu.style.display = "none";
       }
     }
-
+    // handleScroll(event) {
+    //   const popup = this.shadowRoot.querySelector(".js-context-popup");
+    //   contextMenu = popup;
+    //   contextMenu.style.display = "none";
+    // }
     handleOpenContextMenu(event, rowSelected, elem) {
+      console.log('elem', elem)
       event.preventDefault();
       const popup = this.shadowRoot.querySelector(".js-context-popup");
       contextMenu = popup;
       popup.innerHTML = "";
-      elem.row_buttons.map((item, i) => {
+      let menuOptionsArr=[]
+      if (elem.rowButtonsAsContextMenu!==undefined&&elem.rowButtonsAsContextMenu===true){
+        menuOptionsArr=elem.row_buttons
+      }else{
+        if (elem.contextmenu_buttons!==undefined){
+          menuOptionsArr=elem.contextmenu_buttons
+        }
+      }
+      
+      menuOptionsArr.map((item, i) => {
         let newIcon = document.createElement('mwc-icon-button');
         newIcon.setAttribute('icon', item.button.icon);
         newIcon.style.color = "white";
 
         let newLabel = document.createElement('label');
-        if(item.button.icon == "person_remove") {
-          newLabel.textContent = "Remove User";
-        }
-        else if(item.button.icon == "manage_accounts"){
-          newLabel.textContent = "Edit User";
-        }
-        else {
-          newLabel.textContent = "Copy";
-        }
+        newLabel.textContent = item.button.title["label_"+this.lang]
 
         let newDiv = document.createElement('div');
         newDiv.style.display = "flex";
@@ -948,7 +955,7 @@ export function DataViews(base) {
         newDiv.style.cursor = "pointer"
         newDiv.appendChild(newIcon);
         newDiv.appendChild(newLabel);
-        newDiv.addEventListener('click', (e) => this.actionMethod(e, item, elem.row_buttons, null, null, rowSelected, false));
+        newDiv.addEventListener('click', (e) => this.actionMethod(e, item, menuOptionsArr, null, null, rowSelected, false));
 
         popup.appendChild(newDiv);
       })
@@ -1172,7 +1179,6 @@ export function DataViews(base) {
                             html`
                               <tr
                                 @click=${(event) => {
-                                  console.log("qqqqqqqqqqqqqqqqqqq", p.steps);
                                   if(handler) 
                                     handler(event, p, elem, idx);
                                   this.handleTableRowClick(event, p, elem)
@@ -1220,7 +1226,6 @@ export function DataViews(base) {
                                                       ` 
                                                     :  null
                                                   }
-                                                  ${console.log("fld.is_icon", fld.is_icon)}
                                                   <div class="right-area">
                                                     <span class="text">
                                                       ${fld.fix_value_prefix !== undefined ? fld.fix_value_prefix: ""}
