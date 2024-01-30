@@ -25,7 +25,7 @@ export const DiseaseStudy = {
 		  "name": "study"
 		},
 		"viewQuery": {
-		  "actionName": "ALL_ACTIVE_PROJECTS",
+		  "actionName": "ALL_MY_ACTIVE_STUDIES",
 		  "notUseGrid": true,
 		  "button": {
 			"icon": "refresh",
@@ -37,8 +37,8 @@ export const DiseaseStudy = {
 		  },
 		  "endPointParams": [
 			{
-			  "argumentName": "specCode",
-			  "internalVariableSimpleObjName": "filterCurrentData",
+			  "argumentName": "projectName",
+			  "internalVariableSimpleObjName": "projectName",
 			  "internalVariableSimpleObjProperty": "filtertext1"          
 			}
 		  ]
@@ -49,11 +49,8 @@ export const DiseaseStudy = {
 		},
 		"filter": [
 		  {
-			"filtertext1": {
-			  "label_en": "Project",
-			  "label_es": "Proyecto",
-			  "fixValue": ""
-			}
+			"filtertext1": {"label_en": "Project", "label_es": "Proyecto","fixValue": ""},
+			"filtertext2": {"label_en": "Study", "label_es": "Estudio","fixValue": ""}
 		  }
 		],
 		"filterResultDetail":{
@@ -64,201 +61,6 @@ export const DiseaseStudy = {
 		},
 		"actions": [],
 		"tabs": [
-			{ "tabLabel_en": "Studies", "tabLabel_es": "Inicio", "view": "summary",
-				"view_definition": [
-					{   "type": "parentReadOnlyTable", 
-						"endPointPropertyArray": ["project", "study"],
-						"columns": [
-							{
-								"name": "name",
-								"label_en": "Study",
-								"label_es": "Estudio"
-							}
-						],
-						"children":"study_individual",
-						"children_definition":{
-							"columns": [
-							{
-								"name": "individual_id",
-								"label_en": "Id",
-								"label_es": "Id"
-							},
-							{
-								"name": "individual_name",
-								"label_en": "Name",
-								"label_es": "Nombre"
-							}			  
-							],
-							"children":"study_individual_sample",
-							"children_definition":{
-								"columns": [
-								{
-									"name": "sample_id",
-									"label_en": "Id",
-									"label_es": "Id"
-								},
-								{
-									"name": "created_on",
-									"label_en": "Creation",
-									"label_es": "Creación"
-								}			  
-								]
-							}
-			
-						}
-					}
-				]
-			},
-			{"tabLabel_en": "Project", "tabLabel_es": "Proyecto", "view": "projectmain", "display": true,
-				"view_definition":[
-					{   "type": "readOnlyTable", 
-						"endPointPropertyArray": ["project", "project_users"],
-						"columns": [
-							{
-								"name": "person",
-								"label_en": "Person",
-								"label_es": "Persona"
-							},
-							{
-								"name": "roles",
-								"label_en": "Roles",
-								"label_es": "Roles"
-							},
-							{
-								"name": "created_by",
-								"label_en": "Creator",
-								"label_es": "Creador"
-							},
-							{
-								"name": "created_on",
-								"label_en": "Creation Date",
-								"label_es": "F.Creación"
-							}
-						],
-						"actions":[
-							{ "actionName": "PROJECT_NEW",
-							  "requiresDialog": true,
-								"selObjectVariableName": "selectedProject",
-								"endPointUrl": "Projects",
-								"endPointParams": [
-								  { "argumentName": "projectName", "element": "text1" }
-								],
-								"button": {
-								  "xicon": "new",
-								  "title": {
-									"label_en": "New Project", "label_es": "Nuevo Proyecto"
-								  },
-								  requiresObjectSelected : false
-								},   
-								"dialogInfo": {
-								  "name": "genericDialog",
-								  "fields": [
-									{ "text1": { "label_en": "new Project Name", "label_es": "Nombre nuevo Proyecto" }}
-								  ]
-								}
-							},
-							{ "actionName": "PROJECT_ADD_USER",
-							  "requiresDialog": true,
-							  "clientMethod": "newStudyIndividual",
-							  "selObjectVariableName": "selectedProjectUser", 
-							  "endPointUrl": "Projects",
-							  "endPointParams": [ 
-								{ "argumentName": "projectName", "internalVariableSimpleObjName":"selectedProject", "internalVariableSimpleObjProperty":"name", "ZZZselObjectPropertyName": "study"},
-								{ "argumentName": "userName", "element": "listMDprocedureUsers" },
-								{ "argumentName": "userRole", "element": "list1" }
-							  // { "argumentName": "fieldsNames", "value": "undefined" },
-							  // { "argumentName": "fieldsValues", "value": "undefined" }
-							  //individualsList
-							  ],
-							  "button": {
-								"z-icdon": "refresh",
-								"title": {"label_en": "Add User", "label_es": "Añadir Usuario"},
-							  requiresObjectSelected : false
-							  },   
-							  "dialogInfo": {
-									"name": "genericDialog",
-									"fields":[ 
-										{ "listMDprocedureUsers": { "label_en": "User", "label_es": "Usuario" }},
-										{"list1": { "label_en": "Role", "label_es": "Rol",
-											"items": [
-												{ "keyName": "read-only", "keyValue_en": "Read Only", "keyValue_es": "Solo Lectura" },
-												{ "keyName": "edit", "keyValue_en": "Edit", "keyValue_es": "Editar" },
-											]            
-										}}
-									]
-							  }
-							},
-							{ "actionName": "PROJECT_USER_ACTIVATE",
-								"endPoint": "/modulegenoma/GenomaProjectAPIactions",
-								"endPointParams": [
-								{ "argumentName": "projectName", "internalVariableSimpleObjName":"selectedProject", "internalVariableSimpleObjProperty":"name", "ZZZselObjectPropertyName": "study"},
-								{ "argumentName": "userName", "selObjectPropertyName": "person" }
-								],
-								"clientMethod": "openReactivateObjectDialog",
-								"button": {
-								"icon": "alarm_add",
-								"title": {
-									"label_en": "Activate", "label_es": "Activar"
-								},
-								"requiresGridItemSelected": false
-								},
-								"requiresDialog": true,
-								"dialogInfo": {          
-								"name": "reactivateObjectDialog",
-								"fieldsObject": {
-									"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
-									"objectName": { "label_en": "Project User to reactivate", "label_es": "Usuario de Proyecto a Reactivar" }
-								},    
-								"listDefinition":{
-									"keyFldName":"person",
-									"eachEntryTextGenerator":[
-									{"value": "Name: ", "type":"fix"}, {"value": "person", "type":"field"}, {"value": " (", "type":"fix"}, {"value": "roles", "type":"field"}, {"value": ")", "type":"fix"}  
-									]
-								},
-								"viewQuery": {
-									"actionName": "DEACTIVATED_PROJECT_USERS_LAST_N_DAYS",
-									"clientMethod": "getDeactivatedObjects",
-									"endPoint": "/modulegenoma/GenomaStudyAPIqueries",
-									"endPointParams": [
-										{ "argumentName": "projectName", "internalVariableSimpleObjName": "selectedProject", "internalVariableSimpleObjProperty": "name"},
-										{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }							
-									]
-								},
-								"action": [            
-								]
-								}
-							},
-						],
-						"row_buttons":[
-							{ "actionName": "PROJECT_USER_DEACTIVATE",
-								"requiresDialog": false,
-								"xxxclientMethod": "buttonActionWithoutDialog",
-								"selObjectVariableName": "selectedProjectUser",
-								"endPointUrl": "Projects",
-								"endPointParams": [
-								{ "argumentName": "projectName", "selObjectPropertyName": "project" },
-								{ "argumentName": "userName", "selObjectPropertyName": "person" },
-								{ "argumentName": "userRole", "selObjectPropertyName": "roles" }
-								],
-								"button": {
-								"z-icon": "refresh",
-								"title": {
-									"label_en": "Deactivate", "label_es": "Desactivar"
-								},
-								requiresObjectSelected : true
-								},    
-						  	},
-						]
-					}
-				]
-			},
-			{"tabLabel_en": "Users", "tabLabel_es": "Usuarios", "view": "studyusers",
-				"view_definition":[
-					{
-						
-					}
-				]
-			},
 			{"tabLabel_en": "Variable Values", "tabLabel_es": "Valores de Variables", "view": "studyvariablevalues",
 			"view_definition":[
 				{   "type": "parentReadOnlyTable", 
@@ -358,8 +160,349 @@ export const DiseaseStudy = {
 		}
 		],
 	  },
-
-
+	"MyProjects":{
+	"component": "ObjectByTabs",
+	"hasOwnComponent": true,
+	"showTitleOnTop": true,
+	"title": {
+		"fix_text_en": "My Projects",
+		"fix_text_es": "Mis Proyectos",
+		"name": "study"
+	},
+	"viewQuery": {
+		"actionName": "ALL_ACTIVE_PROJECTS",
+		"notUseGrid": true,
+		"button": {
+		"icon": "refresh",
+		"title": {
+			"label_en": "Reload",
+			"label_es": "Recargar"
+		},
+		"requiresGridItemSelected": false
+		},
+		"endPointParams": [
+		{
+			"argumentName": "specCode",
+			"internalVariableSimpleObjName": "filterCurrentData",
+			"internalVariableSimpleObjProperty": "filtertext1"          
+		}
+		]
+	},
+	"filter_button": {
+		"label_en": "Search",
+		"label_es": "Buscar"
+	},
+	"filter": [
+		{
+		"filtertext1": {
+			"label_en": "Project",
+			"label_es": "Proyecto",
+			"fixValue": ""
+		}
+		}
+	],
+	"filterResultDetail":{
+		"type":"list",
+		"detail":[
+			{"field": "name"}
+		]  		
+	},
+	"actions": [],
+	"tabs": [
+		{ "tabLabel_en": "Studies", "tabLabel_es": "Inicio", "view": "summary",
+			"view_definition": [
+				{   "type": "parentReadOnlyTable", 
+					"endPointPropertyArray": ["project", "study"],
+					"columns": [
+						{
+							"name": "name",
+							"label_en": "Study",
+							"label_es": "Estudio"
+						}
+					],
+					"children":"study_individual",
+					"children_definition":{
+						"columns": [
+						{
+							"name": "individual_id",
+							"label_en": "Id",
+							"label_es": "Id"
+						},
+						{
+							"name": "individual_name",
+							"label_en": "Name",
+							"label_es": "Nombre"
+						}			  
+						],
+						"children":"study_individual_sample",
+						"children_definition":{
+							"columns": [
+							{
+								"name": "sample_id",
+								"label_en": "Id",
+								"label_es": "Id"
+							},
+							{
+								"name": "created_on",
+								"label_en": "Creation",
+								"label_es": "Creación"
+							}			  
+							]
+						}
+		
+					}
+				}
+			]
+		},
+		{"tabLabel_en": "Project", "tabLabel_es": "Proyecto", "view": "projectmain", "display": true,
+			"view_definition":[
+				{   "type": "readOnlyTable", 
+					"endPointPropertyArray": ["project", "project_users"],
+					"columns": [
+						{
+							"name": "person",
+							"label_en": "Person",
+							"label_es": "Persona"
+						},
+						{
+							"name": "roles",
+							"label_en": "Roles",
+							"label_es": "Roles"
+						},
+						{
+							"name": "created_by",
+							"label_en": "Creator",
+							"label_es": "Creador"
+						},
+						{
+							"name": "created_on",
+							"label_en": "Creation Date",
+							"label_es": "F.Creación"
+						}
+					],
+					"actions":[
+						{ "actionName": "PROJECT_NEW",
+							"requiresDialog": true,
+							"selObjectVariableName": "selectedProject",
+							"endPointUrl": "Projects",
+							"endPointParams": [
+								{ "argumentName": "projectName", "element": "text1" }
+							],
+							"button": {
+								"xicon": "new",
+								"title": {
+								"label_en": "New Project", "label_es": "Nuevo Proyecto"
+								},
+								requiresObjectSelected : false
+							},   
+							"dialogInfo": {
+								"name": "genericDialog",
+								"fields": [
+								{ "text1": { "label_en": "new Project Name", "label_es": "Nombre nuevo Proyecto" }}
+								]
+							}
+						},
+						{ "actionName": "PROJECT_ADD_USER",
+							"requiresDialog": true,
+							"clientMethod": "newStudyIndividual",
+							"selObjectVariableName": "selectedProjectUser", 
+							"endPointUrl": "Projects",
+							"endPointParams": [ 
+							{ "argumentName": "projectName", "internalVariableSimpleObjName":"selectedProject", "internalVariableSimpleObjProperty":"name", "ZZZselObjectPropertyName": "study"},
+							{ "argumentName": "userName", "element": "listMDprocedureUsers" },
+							{ "argumentName": "userRole", "element": "list1" }
+							// { "argumentName": "fieldsNames", "value": "undefined" },
+							// { "argumentName": "fieldsValues", "value": "undefined" }
+							//individualsList
+							],
+							"button": {
+							"z-icdon": "refresh",
+							"title": {"label_en": "Add User", "label_es": "Añadir Usuario"},
+							requiresObjectSelected : false
+							},   
+							"dialogInfo": {
+								"name": "genericDialog",
+								"fields":[ 
+									{ "listMDprocedureUsers": { "label_en": "User", "label_es": "Usuario" }},
+									{"list1": { "label_en": "Role", "label_es": "Rol",
+										"items": [
+											{ "keyName": "read-only", "keyValue_en": "Read Only", "keyValue_es": "Solo Lectura" },
+											{ "keyName": "edit", "keyValue_en": "Edit", "keyValue_es": "Editar" },
+										]            
+									}}
+								]
+							}
+						},
+						{ "actionName": "PROJECT_USER_ACTIVATE",
+							"endPoint": "/modulegenoma/GenomaProjectAPIactions",
+							"endPointParams": [
+							{ "argumentName": "projectName", "internalVariableSimpleObjName":"selectedProject", "internalVariableSimpleObjProperty":"name", "ZZZselObjectPropertyName": "study"},
+							{ "argumentName": "userName", "selObjectPropertyName": "person" }
+							],
+							"clientMethod": "openReactivateObjectDialog",
+							"button": {
+							"icon": "alarm_add",
+							"title": {
+								"label_en": "Activate", "label_es": "Activar"
+							},
+							"requiresGridItemSelected": false
+							},
+							"requiresDialog": true,
+							"dialogInfo": {          
+							"name": "reactivateObjectDialog",
+							"fieldsObject": {
+								"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+								"objectName": { "label_en": "Project User to reactivate", "label_es": "Usuario de Proyecto a Reactivar" }
+							},    
+							"listDefinition":{
+								"keyFldName":"person",
+								"eachEntryTextGenerator":[
+								{"value": "Name: ", "type":"fix"}, {"value": "person", "type":"field"}, {"value": " (", "type":"fix"}, {"value": "roles", "type":"field"}, {"value": ")", "type":"fix"}  
+								]
+							},
+							"viewQuery": {
+								"actionName": "DEACTIVATED_PROJECT_USERS_LAST_N_DAYS",
+								"clientMethod": "getDeactivatedObjects",
+								"endPoint": "/modulegenoma/GenomaStudyAPIqueries",
+								"endPointParams": [
+									{ "argumentName": "projectName", "internalVariableSimpleObjName": "selectedProject", "internalVariableSimpleObjProperty": "name"},
+									{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }							
+								]
+							},
+							"action": [            
+							]
+							}
+						},
+					],
+					"row_buttons":[
+						{ "actionName": "PROJECT_USER_DEACTIVATE",
+							"requiresDialog": false,
+							"xxxclientMethod": "buttonActionWithoutDialog",
+							"selObjectVariableName": "selectedProjectUser",
+							"endPointUrl": "Projects",
+							"endPointParams": [
+							{ "argumentName": "projectName", "selObjectPropertyName": "project" },
+							{ "argumentName": "userName", "selObjectPropertyName": "person" },
+							{ "argumentName": "userRole", "selObjectPropertyName": "roles" }
+							],
+							"button": {
+							"z-icon": "refresh",
+							"title": {
+								"label_en": "Deactivate", "label_es": "Desactivar"
+							},
+							requiresObjectSelected : true
+							},    
+						},
+					]
+				}
+			]
+		},
+		{"tabLabel_en": "Users", "tabLabel_es": "Usuarios", "view": "studyusers",
+			"view_definition":[
+				{
+					
+				}
+			]
+		},
+		{"tabLabel_en": "Variable Values", "tabLabel_es": "Valores de Variables", "view": "studyvariablevalues",
+		"view_definition":[
+			{   "type": "parentReadOnlyTable", 
+				"endPointPropertyArray": ["project", "study", "study_variable_values"],
+				"columns": [
+					{
+						"name": "owner_table",
+						"label_en": "Entity",
+						"label_es": "Entidad"
+					},
+					{
+						"name": "owner_id",
+						"label_en": "Object",
+						"label_es": "Objeto"
+					},
+					{
+						"name": "individual",
+						"label_en": "Individual",
+						"label_es": "Individuo"
+					},
+					{
+						"name": "variable_set",
+						"label_en": "Variable Set",
+						"label_es": "Grupo de variables"
+					},
+					{
+						"name": "name",
+						"label_en": "Name",
+						"label_es": "Nombre"
+					},
+					{
+						"name": "value",
+						"label_en": "Value",
+						"label_es": "Valor"
+					}
+				]
+			}
+		]
+		},  
+		{"tabLabel_en": "Individuals", "tabLabel_es": "Individuos", "view": "studyindividuals",
+		"view_definition":[
+			{   "type": "parentReadOnlyTable", 
+			"endPointPropertyArray": ["project", "study"],
+			"columns": [
+				{
+					"name": "name",
+					"label_en": "Study",
+					"label_es": "Estudio"
+				}
+			],
+			"children":"study_individual",
+			"children_definition":{
+				"columns": [
+				{
+					"name": "individual_id",
+					"label_en": "Id",
+					"label_es": "Id"
+				},
+				{
+					"name": "individual_name",
+					"label_en": "Name",
+					"label_es": "Nombre"
+				}			  
+				],
+				"children":"study_individual_sample",
+				"children_definition":{
+					"columns": [
+					{
+						"name": "sample_id",
+						"label_en": "Id",
+						"label_es": "Id"
+					},
+					{
+						"name": "created_on",
+						"label_en": "Creation",
+						"label_es": "Creación"
+					}			  
+					]
+				}	
+			}
+			}
+		]
+	},
+		{"tabLabel_en": "Families", "tabLabel_es": "Familias", "view": "studyfamilies",
+		"view_definition":[
+			{
+				
+			}
+		]
+	},
+		{"tabLabel_en": "Samples Set", "tabLabel_es": "Agrupador Muestras", "view": "studysamplesset",
+		"view_definition":[
+			{
+				
+			}
+		]
+	}
+	],
+	},
 
 	"ProjectManagerTabs":{
 		"component":"Tabs",

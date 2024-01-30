@@ -221,7 +221,7 @@ export const DemoViews = [
     {"proc_instance_name": "instruments", "view_name": "PlatformInstrumentsfamilyObsInterno", "filter_name": "InstrumentsfamilyObsInterno", "title": "Instruments List FamilyObsIntento"},
     {"proc_instance_name": "instruments", "view_name": "EventsInProgress", "filter_name": "EventsER", "title": "Events In Progress"},
     {"proc_instance_name": "instruments", "view_name": "InstrumentReport", "filter_name": "InstrumentReport", "title": "Instrument Report"},
-    {"proc_instance_name": "instruments", "view_name": "ConfigInstrumentFamilies", "filter_name": "ConfigInstrumentFamilies", "title": "Master: Instruments Familiy"},
+    {"proc_instance_name": "instruments", "view_name": "InstrumentFamilyList", "filter_name": "InstrumentFamilyList", "title": "Master: Instruments Familiy"},
   	{"proc_instance_name": "instruments", "view_name": "EventsCalendar", "filter_name": "EventsCalendar", "title": "Events Calendar"},
     {"proc_instance_name": "instruments", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"}
   ]},  
@@ -252,6 +252,7 @@ export const DemoViews = [
 	]},
   {"label":"Disease Study", "proc_instance_name": "DiseaseStudies", "views":[
     {"proc_instance_name": "DiseaseStudies", "view_name": "MyStudies", "filter_name": "MyStudies", "title": "My Studies"},
+    {"proc_instance_name": "DiseaseStudies", "view_name": "MyProjects", "filter_name": "MyProjects", "title": "My Projects"},
 	]},
   {"label":"Fake developers", "proc_instance_name": "fakeDevelopers", "isSpecial":true, "views":[
     {"proc_instance_name": "fakeDevelopers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "prototype-elements-view-main", "isSpecial": true},

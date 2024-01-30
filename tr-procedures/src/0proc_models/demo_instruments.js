@@ -2659,5 +2659,250 @@ export const DemoInstruments ={
       ]
 	  }
 	]
+  },
+  "InstrumentFamilyList":{
+    "component": "TableWithButtons",
+    "langConfig": {
+      "gridHeader": {
+        "name": {
+          "label_en": "Name",
+          "label_es": "Nombre",
+          "sort": true,
+          "filter": true,
+          "is_icon": false,
+          "width": "20%"
+        },
+        "description": {
+          "label_en": "Description",
+          "label_es": "Descripcion",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "20%",
+          "align": "left"
+        },
+        "spec_code": {
+          "label_en": "Spec Code",
+          "label_es": "Codigo especificacion",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "modelNumber": {
+          "label_en": "Model Number",
+          "label_es": "Numero modelo",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "serialNumber": {
+          "label_en": "Serial Number",
+          "label_es": "Numero serie",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "supplierName": {
+          "label_en": "Supplier Name",
+          "label_es": "Nombre proveedor",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "manufacturerName": {
+          "label_en": "Manufacturer Name",
+          "label_es": "Nombre fabricante",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "calibration_required": {
+          "label_en": "Calibration required?",
+          "label_es": "Necesita calibracion",
+          "sort": false,
+          "filter": true,
+          "is_icon": true,
+          "width": "10%"
+        },
+        "pm_required": {
+          "label_en": "PM required?",
+          "label_es": "Necesita PM?",
+          "sort": false,
+          "filter": true,
+          "is_icon": true,
+          "width": "10%"
+        },
+        "calib_variables_set": {
+          "label_en": "Calibration Variables Set",
+          "label_es": "Set variables calibracion",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        }
+      },
+      "title": {
+        "label_en": "",
+        "label_es": ""
+      }
+    },
+    "viewQuery": {
+      "actionName": "GET_INSTRUMENT_FAMILY_LIST",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      },
+      "endPointParams": []
+    },
+    "row_buttons": [],
+    "enableContextMenu": true,
+    "addActionsInContextMenu": false,
+    "actions": [
+      {
+        "actionName": "CONFIG_UPDATE_INSTRUMENT_FAMILY",
+        "requiresDialog": true,
+        "button": {
+          "icon": "create_new_folder",
+          "title": {
+            "label_en": "Update instrument family",
+            "label_es": "Actualizar familia de instrumentos"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrFamilyName",
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "fieldName",
+            "value": "description"
+          },
+          {
+            "argumentName": "fieldValue",
+            "element": "text1"
+          }
+        ],
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "Description",
+                "label_es": "Descripción",
+                "selObjectPropertyName": "description",
+                "defaultValue": " "
+              }
+            }
+          ]
+        }
+      },
+      {
+        "actionName": "CONFIG_NEW_INSTRUMENT_FAMILY",
+        "requiresDialog": true,
+        "button": {
+          "icon": "create_new_folder",
+          "title": {
+            "label_en": "New instrument family",
+            "label_es": "Nueva familia de instrumento"
+          },
+          "requiresGridItemSelected": false
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrFamilyName",
+            "element": "text1"
+          },
+          {
+            "argumentName": "calibration_required",
+            "element": "checkbox1",
+            "addToFieldNameAndValue": true,
+            "fieldType": "BOOLEAN",
+            "defaultValue": false,
+            "notAddWhenValueIsBlank": true
+          },
+          {
+            "argumentName": "pm_required",
+            "element": "checkbox2",
+            "addToFieldNameAndValue": true,
+            "fieldType": "BOOLEAN",
+            "defaultValue": false,
+            "notAddWhenValueIsBlank": true
+          },
+          {
+            "argumentName": "verif_same_day_required",
+            "element": "checkbox3",
+            "addToFieldNameAndValue": true,
+            "fieldType": "BOOLEAN",
+            "defaultValue": false,
+            "notAddWhenValueIsBlank": true
+          },
+          {
+            "argumentName": "service_required",
+            "element": "checkbox4",
+            "addToFieldNameAndValue": true,
+            "fieldType": "BOOLEAN",
+            "defaultValue": false,
+            "notAddWhenValueIsBlank": true
+          }
+        ],
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "New Instrument Family Name",
+                "label_es": "Nombre para nueva familia de instrumentos"
+              }
+            },
+            {
+              "text2": {
+                "label_en": "Description",
+                "label_es": "Descripción"
+              }
+            },
+            {
+              "checkbox1": {
+                "label_en": "Calibration required?",
+                "label_es": "¿Necesita calibración?",
+                "default_value": true
+              }
+            },
+            {
+              "checkbox2": {
+                "label_en": "Preventive maintenance required?",
+                "label_es": "¿Necesita mantenimiento preventivo?",
+                "default_value": true
+              }
+            },
+            {
+              "checkbox3": {
+                "label_en": "Verification required?",
+                "label_es": "¿Necesita verificación?",
+                "default_value": true
+              }
+            },
+            {
+              "checkbox4": {
+                "label_en": "Service required?",
+                "label_es": "¿Necesita servicio?",
+                "default_value": true
+              }
+            }
+          ]
+        }
+      },
+      ""
+    ]
   }
 }
