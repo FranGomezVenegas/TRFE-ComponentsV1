@@ -95,24 +95,6 @@ export function CoaView(base) {
                   margin-bottom:0.05in;
                   padding-bottom: 10px;
                 }  
-                .form-fields {
-                  display: grid;
-                  grid-template-columns: max-content 1fr; 
-                  grid-gap: 10px;
-                  text-align: right;
-                  left:20px;
-                  position: relative;  
-                }
-                .form-fields.col2 {
-                  grid-column: 2;
-                }
-                .form-fields label {
-                  text-align: left;
-                }
-              
-                .form-fields span {
-                  justify-self: start;
-                }
               
                 body {
                   margin: 0;
@@ -207,17 +189,17 @@ export function CoaView(base) {
               .form-header {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                grid-gap: 20px;
                 margin-bottom:0.05in;
-                padding-bottom: 20px;
+                padding-bottom: 12px;
+                padding-top: 12px;
               }  
               .form-fields {
                 display: grid;
                 grid-template-columns: max-content 1fr; 
                 grid-gap: 10px;
                 text-align: right;
-                left:20px;
                 position: relative;  
+                padding-left: 20px;
               }
               .form-fields.col2 {
                 grid-column: 2;
@@ -237,6 +219,7 @@ export function CoaView(base) {
               }
 
               </style>  
+              ${console.log("coaData", coaData)}
               ${coaData === undefined ? nothing : html`
                 <div class="header-header">
                   <div class="title-copy">${coaData.report_info["provisional_copy_" + this.lang]}</div>
@@ -252,24 +235,26 @@ export function CoaView(base) {
                     </div>
                     </div>  
                     ${coaData.header === undefined ? nothing : html`
-                    <div class="form-header">
-                      ${coaData.header.column === undefined ? nothing : html`        
-                        <div class="form-fields col1">
-                        ${coaData.header.column.map(fld => html`
-                          <label for="field1">${fld["label_" + this.lang]}</label>
-                          <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
-                        `)}
-                        </div>    
-                      `}
-                      ${coaData.header.column2 === undefined ? nothing : html`
-                        <div class="form-fields col2">
-                        ${coaData.header.column2.map(fld => html`
-                          <label for="field1">${fld["label_" + this.lang]}</label>
-                          <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
-                        `)}
-                        </div>    
-                      `}
-                    </div>  
+                    <div style="padding: 0px 20px;">
+                      <div class="form-header" style=${coaData.report_info.display_header_box_border ? `border: 1px solid black;` : ""}>
+                        ${coaData.header.column === undefined ? nothing : html`        
+                          <div class="form-fields col1">
+                          ${coaData.header.column.map(fld => html`
+                            <label for="field1">${fld["label_" + this.lang]}</label>
+                            <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
+                          `)}
+                          </div>    
+                        `}
+                        ${coaData.header.column2 === undefined ? nothing : html`
+                          <div class="form-fields col2">
+                          ${coaData.header.column2.map(fld => html`
+                            <label for="field1">${fld["label_" + this.lang]}</label>
+                            <span>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</span>
+                          `)}
+                          </div>    
+                        `}
+                      </div>  
+                    </div>
                   `}
                 </div>
               `}
@@ -279,46 +264,32 @@ export function CoaView(base) {
       coaResultsTable(data) {
   
         let coaData = data//FakeCOA
+        console.log("coaData", coaData);
         return html`
+
               ${coaData == undefined || coaData.resultsTable === undefined ? nothing : html` 
-                <style>
-                .table-container-results {
-                  width: 100%;
+              <style>
+                table, th, td {
+                  border-collapse: collapse;
                 }
-              
-                .table-container-results table {
-                  width: inherit;
-                  border: 0px solid black;
-                  /* Additional styles for the table */
-                }  
-                table{      
-                  width: calc(var(--header-width);
-                  border-top:0.5px solid black;
-                }
-                .table-container-results table thead{
-                  border: 0px solid black;
-                }
-                tr{
-                  border: 1px solid black;
-                }  
-                </style>     
+                </style>
                 <div class="table-container-results">   
-                  <table>
+                  <table style=${coaData.report_info.display_result_box_border ? `border: 1px solid black;` : ""}>
                     <thead>
                       <tr>
                       ${coaData.resultsTable.header === undefined ? nothing : html` 
                         ${coaData.resultsTable.header.map(fld => html`
-                          <th style="font-weight: bold; font-size:18px; border-bottom: 5px double black;">${fld["label_" + this.lang] === undefined ? fld.label : fld["label_" + this.lang]}</th>
+                          <th style="font-weight: bold; font-size:18px;">${fld["label_" + this.lang] === undefined ? fld.label : fld["label_" + this.lang]}</th>
                         `)}
                       `}
                       </tr>
                     </thead>
                     <tbody>          
                       ${coaData.resultsTable.values === undefined ? nothing : html`           
-                        ${coaData.resultsTable.values.map(spec => html`
+                        ${coaData.resultsTable.values.map((spec, i) => html`
                         <tr>
                           ${spec.map(fld => html`
-                          <td style="padding:5px;">${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</td>
+                          <td style=${`padding:5px; ${i != 0 ? coaData.report_info.display_result_box_column_bars ? "border-left:1px solid black;" : "" : ""} ${coaData.report_info.display_result_box_rows_bars ? "border-bottom:1px solid black;" : ""} `}>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</td>
                           `)}
                         </tr>   
                         `)}           
@@ -482,7 +453,6 @@ export function CoaView(base) {
                 #firstline-header .title {
                   display: block;
                   color: red;
-                  padding: 10px 20px 20px;
                   text-align: right;
                 }
   

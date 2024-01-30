@@ -37,7 +37,7 @@ export const template = (props) => {
                             <div class="row-num"> ${rowN} </div>
                             ${props.data.allow_move_objects ? 
                             cols.map((item1 ,j) => html `
-                            <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))} @dragover=${(e) => props.allowDrop(e)} @drop=${(e) => props.dropBox(e)}> 
+                            <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``}  @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))} @dragover=${(e) => props.allowDrop(e)} @drop=${(e) => props.dropBox(e)}> 
                                 <div draggable="true"  @dragstart=${(e) => props.dragBox(e)} class="draggable-box">
                                     <div class="data-view" >
                                         <div> ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ? `id: ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)).id}` : html``} </div>
