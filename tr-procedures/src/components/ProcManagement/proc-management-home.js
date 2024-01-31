@@ -1330,7 +1330,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
   }
 
   clickItemAction(index, testIdx, elementdef, thisitem){
-    alert(elementdef.view_definition.detail.clickItemAction)
+    console.log("clickItemAction",elementdef.view_definition.detail.clickItemAction);
     //this[elementdef.view_definition.detail.clickItemAction](index, testIdx, elementdef, thisitem)
     const func = this[elementdef.view_definition.detail.clickItemAction];
     if (typeof func === 'function') {
@@ -1343,14 +1343,89 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
     }      
   }
 
-  viewDesignerAction(index, testIdx, elementdef, thisitem){
-    return html`I'm the view X`
-
-  }
-  clickedTest(index, testIdx, elementdef, thisitem) {
+  viewDesignerAction(index, testIdx, elementdef, thisitem) {
     this.selectSectionView(index);
     this.selectedTestIndex = testIdx;
     
+    this.selectedTabModelFromProcModel =
+    elementdef.view_definition.detail;
+    // this.objecttabsComposition.isProcManagement = true;
+    // this.objecttabsComposition.selectedTabModelFromProcModel =
+    //   this.selectedTabModelFromProcModel.view_definition;
+    // this.objecttabsComposition.selectedItem = e.currentTarget.thisitem;
+    
+    // this.isProcManagement = true;
+    this.isProcManagement = true;
+    // this.selectedViewDefinition.tabs = undefined;
+    // this.selectedViewDefinition.view_definition = this.selectedTabModelFromProcModel.view_definition;
+
+    var tmp = [];
+    this.selectedTabModelFromProcModel.view_definition.map((data, i) => {
+      if(i == 0) {
+        var reData = {
+          elements: [],
+          title: {},
+          type: ""
+        };
+        reData.elements.push({actions: data.actions, columns: data.columns, endPointResponseObject: data.endPointResponseObject, theme: data.theme, type: data.type, row_buttons: data.row_buttons});
+        reData.title = data.title;
+        reData.type = data.type;
+        tmp.push(reData);
+      }
+      else {
+        tmp.push(data);
+      }
+    })
+    this.selectedCompositionView = tmp;
+
+    console.log("in data", this.selectedCompositionView);
+
+    this.selectedItem = thisitem;
+    
+    sessionStorage.setItem(
+      "selectedTabModelFromProcModel",
+      JSON.stringify(this.selectedTabModelFromProcModel)
+    );
+      
+    // get selected scripts from session storage and filter
+    let selectedScripts = sessionStorage.getItem("selectedScripts");
+    if (selectedScripts === undefined || selectedScripts === null) {
+      selectedScripts = [];
+    } else {
+      selectedScripts = JSON.parse(selectedScripts);
+      selectedScripts = selectedScripts.filter(
+        (script) =>
+          script.proc_instance_name !==
+          this.selectedProcInstance.proc_instance_name
+      );
+    }
+    if (!thisitem || !this.selectedProcInstance) {
+      return;
+    }
+    const newSelectedScript = [
+      ...selectedScripts,
+      {
+        proc_instance_name: this.selectedProcInstance.proc_instance_name,
+        ...thisitem,
+      },
+    ];
+
+    sessionStorage.setItem(
+      "selectedScripts",
+      JSON.stringify(newSelectedScript)
+    );
+
+    // this.objecttabsComposition.render();
+
+    // Scroll down to right split on mobile
+    if (this.desktop) return;
+    this.scrollToSection("#rightSplit");
+  }
+
+  clickedTest(index, testIdx, elementdef, thisitem) {
+    this.selectSectionView(index);
+    this.selectedTestIndex = testIdx;
+    console.log("in clickedtest func", elementdef.view_definition.detail);
     this.selectedTabModelFromProcModel =
     elementdef.view_definition.detail;
     // this.objecttabsComposition.isProcManagement = true;
