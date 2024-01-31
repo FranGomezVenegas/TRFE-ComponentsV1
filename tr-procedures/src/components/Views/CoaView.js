@@ -442,7 +442,7 @@ export function CoaView(base) {
         const lastItemsLeft = 14 - lastItemsCount;
         const pageStr = this.lang === "en" ? "Page" : "Página";
         const ofStr = this.lang === "en" ? "of" : "de";
-  
+
         this.printObj = {
           header: '.', //this.documentFooter(), //this.coaForInspectionLotHeader(),
           content: headerData, //this.coaForInspectionLotContent(),   
@@ -504,7 +504,7 @@ export function CoaView(base) {
 
                   tr:nth-child(14n + 14) {
                     position: relative;
-                    border-bottom: 1px solid black;
+                    border-bottom: ${ data.report_info.display_result_box_border ? `1px solid black;` : `none;`}
                     page-break-after: always;
                   }
   

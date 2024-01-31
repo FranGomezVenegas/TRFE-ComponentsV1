@@ -2,6 +2,7 @@
   "dependencies": {
     "@cicciosgamino/qr-code-element": "^0.1.0",
     "@collaborne/lit-flexbox-literals": "^0.2.2",
-    "@trazit/proc-management-home": "file:ProcManagement/proc-management-home"
+    "@trazit/proc-management-home": "file:ProcManagement/proc-management-home",
+    "lit": "^3.1.0"
   }
 }

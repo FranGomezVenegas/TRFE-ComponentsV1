@@ -3,12 +3,12 @@ import '@material/mwc-icon';
 
 export const template = (props) => {
     let cols = [], rows = [];
-    for(let i = 0; i < props.data.cols; i++) {
+    for(let i = 0; i < props.data.boxDefinition.cols; i++) {
         cols.push(i);
     }
 
     let letter = "A";
-    for(let i = 0; i < props.data.rows; i++) {
+    for(let i = 0; i < props.data.boxDefinition.rows; i++) {
         rows.push(String.fromCharCode(letter.charCodeAt(0) + (i)));
     }
     let activeData = null;
@@ -35,13 +35,13 @@ export const template = (props) => {
                         ${rows.map((rowN ,i) => html `
                         <div class="row-content"> 
                             <div class="row-num"> ${rowN} </div>
-                            ${props.data.allow_move_objects ? 
+                            ${props.data.boxDefinition.allow_move_objects ? 
                             cols.map((item1 ,j) => html `
-                            <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``}  @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))} @dragover=${(e) => props.allowDrop(e)} @drop=${(e) => props.dropBox(e)}> 
+                            <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``}  @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))} @dragover=${(e) => props.allowDrop(e)} @drop=${(e) => props.dropBox(e)}> 
                                 <div draggable="true"  @dragstart=${(e) => props.dragBox(e)} class="draggable-box">
                                     <div class="data-view" >
-                                        <div> ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ? `id: ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)).id}` : html``} </div>
-                                        <div> ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ?  `${[props.data.views[props.viewBoxMode][1]]}: ${ props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1))[props.data.views[props.viewBoxMode][1]] ? props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1))[props.data.views[props.viewBoxMode][1]] : "???"}` : html `<div class="add-circle"> + </div>`} </div>
+                                        <div> ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ? `id: ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)).id}` : html``} </div>
+                                        <div> ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ?  `${[props.data.boxDefinition.views[props.viewBoxMode][1]]}: ${ props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1))[props.data.boxDefinition.views[props.viewBoxMode][1]] ? props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1))[props.data.boxDefinition.views[props.viewBoxMode][1]] : "???"}` : html `<div class="add-circle"> + </div>`} </div>
                                     </div>
                                     <div class="position">
                                         <span> ${rowN + (j + 1)} </span>
@@ -54,8 +54,8 @@ export const template = (props) => {
                             <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))}> 
                                 <div class="draggable-box">
                                     <div class="data-view" >
-                                        <div> ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ? `id: ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)).id}` : html``} </div>
-                                        <div> ${props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1)) ?  `${[props.data.views[props.viewBoxMode][1]]}: ${ props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1))[props.data.views[props.viewBoxMode][1]] ? props.data.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.cols) == i * cols.length + (j + 1))[props.data.views[props.viewBoxMode][1]] : "???"}` : html `<div class="add-circle"> + </div>`} </div>
+                                        <div> ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ? `id: ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)).id}` : html``} </div>
+                                        <div> ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ?  `${[props.data.boxDefinition.views[props.viewBoxMode][1]]}: ${ props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1))[props.data.boxDefinition.views[props.viewBoxMode][1]] ? props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1))[props.data.boxDefinition.views[props.viewBoxMode][1]] : "???"}` : html `<div class="add-circle"> + </div>`} </div>
                                     </div>
                                     <div class="position">
                                         <span> ${rowN + (j + 1)} </span>
@@ -73,9 +73,9 @@ export const template = (props) => {
                     </div>
                     ` : 
 
-                    props.data.datas.length > 0 ?
+                    props.data.boxDefinition.datas.length > 0 ?
                     html `
-                    <div style="width:${80 * props.data.cols}px; min-width:470px;">
+                    <div style="width:${80 * props.data.boxDefinition.cols}px; min-width:470px;">
                         <table>
                             <thead>
                                 <tr>
@@ -88,7 +88,7 @@ export const template = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${props.data.datas.map((data, i) => html`
+                                ${props.data.boxDefinition.datas.map((data, i) => html`
                                 <tr>
                                     <td>${ String.fromCharCode(data.posY + 64) + data.posX}</td>
                                     <td>${data.name}</td>
@@ -108,7 +108,7 @@ export const template = (props) => {
             <div >
                 <mwc-icon style="color:#54CCEF; cursor:pointer; margin-top:42px;" @click=${() => props.setShowBoxViewModeList()}> view_agenda </mwc-icon>
                 ${props.listBoxViewMode ? html `
-                    ${props.data.views.map((view, i) => html `
+                    ${props.data.boxDefinition.views.map((view, i) => html `
                     <div class="display:flex; flex-direction:row;">
                         <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => props.setViewBoxMode(i)}>
                         <label for="${view[1]}" @click=${() => props.setViewBoxMode(i)}> id, ${view[1]} </label><br>
