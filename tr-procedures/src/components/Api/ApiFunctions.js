@@ -141,7 +141,7 @@ export function ApiFunctions(base) {
                       return 
                     }
                   }
-                  if (this[p.element].value!==undefined&&this[p.element].value.length>0){                    
+                  if (this[p.element].value!==undefined&&String(this[p.element].value).length>0){                     //
                     if (jsonParam.fieldName===undefined){
                       let curFldNameValue=p.argumentName                      
                       jsonParam["fieldName"]=curFldNameValue
