@@ -6538,6 +6538,82 @@ export const DemoLotsRaw =
                     "selObjectPropertyName": "config_version"
                   }
                 ]
+              }              
+            ],
+            "rowButtonsAsContextMenu": false,
+            "contextmenu_buttons":[
+              {
+                "actionName": "ANALYSIS_ADD_METHOD",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "playlist_add",
+                  "title": {
+                    "label_en": "Add Analysis Method",
+                    "label_es": "Añadir método analítico"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Method Code",
+                        "label_es": "Código de método",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "methods",
+                          "filterInFirstLevel": false,
+                          "propertyNameContainerLevelPropertyKeyName": "code",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": "code",
+                          "propertyKeyValueEs": "code"
+                        }
+                      }
+                    },
+                    {
+                      "text2": {
+                        "label_en": "Method version",
+                        "label_es": "Versión del método",
+                        "optional": false
+                      }
+                    },
+                    {
+                      "text3": {
+                        "label_en": "Expiry Interval Info",
+                        "label_es": "Información del intervalo de caducidad",
+                        "optional": true
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "methodName",
+                    "element": "list1"
+                  },
+                  {
+                    "argumentName": "methodVersion",
+                    "element": "text2",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "expiryIntervalInfo",
+                    "element": "text3",
+                    "defaultValue": ""
+                  }
+                ]
               }
             ],
             "children": "analysis_method",

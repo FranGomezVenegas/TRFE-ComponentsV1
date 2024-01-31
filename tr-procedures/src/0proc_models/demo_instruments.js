@@ -2901,8 +2901,7 @@ export const DemoInstruments ={
             }
           ]
         }
-      },
-      ""
+      }      
     ]
   }
 }
