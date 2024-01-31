@@ -232,26 +232,26 @@ export function ButtonsFunctions(base) {
           ${this.btnHidden(action) ? nothing :
               html`${action.button ?
                 html`${action.button.icon ?
-                  html`<mwc-icon-button id=${action.actionName}
+                  html`<mwc-icon-button id="${action.actionName}"
                   class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
-                  icon="${action.button.icon}" id="${action.actionName}" 
+                  icon="${action.button.icon}" 
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
                   @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
                   html`${action.button.img ?
-                    html`<mwc-icon-button  id=${action.actionName}
+                    html`<mwc-icon-button  id="${action.actionName}"
                   class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
-                  title="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
+                  title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
                   @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                   </mwc-icon-button>` :
-                    html`<mwc-button dense raised id=${action.actionName}
-                  label="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
+                    html`<mwc-button dense raised id="${action.actionName}"
+                  label="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
