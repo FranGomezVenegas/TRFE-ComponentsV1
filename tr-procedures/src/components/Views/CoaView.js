@@ -275,11 +275,11 @@ export function CoaView(base) {
                 </style>
                 <div class="table-container-results">   
                   <table style=${coaData.report_info.display_result_box_border ? `border: 1px solid black;` : ""}>
-                    <thead>
+                    <thead style="border-bottom: 3px double black;">
                       <tr>
                       ${coaData.resultsTable.header === undefined ? nothing : html` 
                         ${coaData.resultsTable.header.map(fld => html`
-                          <th style="font-weight: bold; font-size:18px;">${fld["label_" + this.lang] === undefined ? fld.label : fld["label_" + this.lang]}</th>
+                          <th style="font-weight: bold; font-size:18px; padding-top:6px; padding-bottom:6px;">${fld["label_" + this.lang] === undefined ? fld.label : fld["label_" + this.lang]}</th>
                         `)}
                       `}
                       </tr>
@@ -289,7 +289,7 @@ export function CoaView(base) {
                         ${coaData.resultsTable.values.map((spec, i) => html`
                         <tr>
                           ${spec.map(fld => html`
-                          <td style=${`padding:5px; ${i != 0 ? coaData.report_info.display_result_box_column_bars ? "border-left:1px solid black;" : "" : ""} ${coaData.report_info.display_result_box_rows_bars ? "border-bottom:1px solid black;" : ""} `}>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</td>
+                          <td style=${`padding:5px; ${i != -1 ? coaData.report_info.display_result_box_column_bars ? "border-left:1px solid black;" : "" : ""} ${coaData.report_info.display_result_box_rows_bars ? "border-bottom:1px solid black;" : ""} `}>${fld["value_" + this.lang] === undefined ? fld.value : fld["value_" + this.lang]}</td>
                           `)}
                         </tr>   
                         `)}           
@@ -497,8 +497,14 @@ export function CoaView(base) {
                     margin: 0;
                   }
   
+                  .page-break-row {
+                    border-bottom: 1px solid black;
+                    page-break-after: always; /* This ensures the page breaks after this row */
+                  }
+
                   tr:nth-child(14n + 14) {
                     position: relative;
+                    border-bottom: 1px solid black;
                     page-break-after: always;
                   }
   
