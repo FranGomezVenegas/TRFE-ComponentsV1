@@ -275,10 +275,7 @@ export function TrazitTestScriptNewStepDialog(base) {
       var extraParams = "&action=" + this.getDependencyForm().endpoint;
       
       if (actionName == "SCRIPT_UPDATE_STEP") {
-        //extraParams += "&actionName=SCRIPT_UPDATE_STEP";
         extraParams = extraParams + "&stepId=" + this.selectedItems[0].step_id;
-      } else {
-        //extraParams += "&actionName=SCRIPT_NEW_STEP";
       }
       extraParams = extraParams + "&scriptId=" + this.selectedItem.script_id;
       extraParams = extraParams + "&fieldName=" + fieldNames.join("|");
