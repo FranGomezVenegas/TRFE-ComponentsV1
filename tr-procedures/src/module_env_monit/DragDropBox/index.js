@@ -22,6 +22,7 @@ export class DragDropBox extends navigator(LitElement) {
     this.selectedIndex2 = 0;
     this.viewMode = 1;
     this.selectedBox = undefined;
+    this.selectedTr = undefined;
     this.data = {
       boxDefinition:{
         cols: 5,
@@ -74,12 +75,11 @@ export class DragDropBox extends navigator(LitElement) {
       },
       tableData:[
         {id: "1", study:"Study 1", temperature: "10º", "extraField":"demo"},
-        {id: "2", study:"Study 1", temperature: "20º", "extraField":"demo"},
-        {id: "3", study:"Study 2", temperature: "30º", "extraField":"demo"},
+        {id: "2", study:"Study 2", temperature: "20º", "extraField":"demo"},
+        {id: "3", study:"Study 3", temperature: "30º", "extraField":"demo"},
         {id: "4", study:"Study 10", temperature: "40º", "extraField":"demo"}
       ],
-      tableDefinition:
-      {
+      tableDefinition: {
         "type": "readOnlyTable",
         "dragEnable": true,
         "dropEnable": true,
@@ -315,6 +315,7 @@ export class DragDropBox extends navigator(LitElement) {
     this.dragElement = undefined;
     this.viewBoxMode = 0;
     this.listBoxViewMode = false;
+    this.dragTr = false;
   }
 
   render() {
@@ -329,10 +330,35 @@ export class DragDropBox extends navigator(LitElement) {
       setViewMode: this._setViewMode,
       dropBox: this._dropBox,
       allowDrop: this._allowDrop,
+      dropTableTr: this._dropTableTr,
+      allowDropTr: this._allowDropTr,
       dragBox: this._dragBox,
+      dragTableTr: this._dragTableTr,
       setShowBoxViewModeList: this._setShowBoxViewModeList,
       setViewBoxMode:this._setViewBoxMode,
     });
+  }
+
+  _dragTableTr = (e) => {
+    this.dragTr = true;
+    let currentElement = e.target;
+    
+    while (currentElement && !currentElement.classList.contains('dragdropabletr')) {
+      currentElement = currentElement.parentElement;
+    };
+
+    this.selectedTr = `<td> ${currentElement.children[0].innerHTML} </td><td> ${currentElement.children[1].innerHTML} </td><td>${currentElement.children[2].innerHTML} </td>`
+
+    let currentID = currentElement.childNodes[1].childNodes[1].textContent;
+    currentID -= 1;
+    let str = "";
+    if(this.viewBoxMode == 0) {
+      str =`<div>id: ${this.data.tableData[currentID].id}</div><div> study: ${this.data.tableData[currentID].study}</div>`
+    } 
+    else {
+      str =`<div>id: ${this.data.tableData[currentID].id}</div><div> temperature: ${this.data.tableData[currentID].temperature}</div>`
+    }
+    this.selectedBox = str;
   }
 
   _setViewBoxMode = (mode) => {
@@ -356,11 +382,25 @@ export class DragDropBox extends navigator(LitElement) {
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
     };
-    this.dragElement.innerHTML =  currentElement.childNodes[1].childNodes[1].innerHTML;
+    if(!this.dragTr) {
+      this.dragElement.innerHTML =  currentElement.childNodes[1].childNodes[1].innerHTML;
+    }
     currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
   }
 
+  _allowDropTr = (e) => {
+    e.preventDefault();
+  }
+
+  _dropTableTr = (e) => {
+    e.preventDefault();
+    let currentElement = e.target;
+    console.log("_dropTableTr", currentElement.parentNode);
+    currentElement.parentNode.innerHTML = this.selectedTr;
+  }
+
   _dragBox = (e) => {
+    this.dragTr = false;
     let currentElement = e.target;
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
