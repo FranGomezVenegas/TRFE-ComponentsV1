@@ -5,6 +5,7 @@ import { html, css, nothing, LitElement } from 'lit';
 import '../components/Dashboard';
 import './MultiSelect';
 import './DragDropBox'
+import './DragDropTable'
 import { navigator } from 'lit-element-router';
 export class HomeAir extends navigator(LitElement) {
   static get styles() {
@@ -265,6 +266,7 @@ export class HomeAir extends navigator(LitElement) {
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
         <multi-select> </multi-select>
         <dragdrop-box> </dragdrop-box>
+        <dragdrop-table> </dragdrop-table>
       `;
     }
     renderFran() {          
