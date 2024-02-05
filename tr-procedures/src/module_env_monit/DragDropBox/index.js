@@ -316,6 +316,9 @@ export class DragDropBox extends navigator(LitElement) {
     this.viewBoxMode = 0;
     this.listBoxViewMode = false;
     this.dragTr = false;
+    this.dragBackgroundColor = undefined;
+    this.dropBackgroundColor = undefined;
+    this.dragParentElement = undefined;
   }
 
   render() {
@@ -382,9 +385,16 @@ export class DragDropBox extends navigator(LitElement) {
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
     };
+    this.dropBackgroundColor = currentElement.style.backgroundColor;
+    console.log("dropbox", this.dropBackgroundColor);
     if(!this.dragTr) {
       this.dragElement.innerHTML =  currentElement.childNodes[1].childNodes[1].innerHTML;
+      this.dragParentElement.style.backgroundColor = "";
+      if(this.dropBackgroundColor) {
+        this.dragParentElement.style.backgroundColor = this.dropBackgroundColor;
+      }
     }
+    currentElement.style.backgroundColor = this.dragBackgroundColor;
     currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
   }
 
@@ -395,7 +405,6 @@ export class DragDropBox extends navigator(LitElement) {
   _dropTableTr = (e) => {
     e.preventDefault();
     let currentElement = e.target;
-    console.log("_dropTableTr", currentElement.parentNode);
     currentElement.parentNode.innerHTML = this.selectedTr;
   }
 
@@ -404,7 +413,9 @@ export class DragDropBox extends navigator(LitElement) {
     let currentElement = e.target;
     while (currentElement && !currentElement.classList.contains('box')) {
         currentElement = currentElement.parentElement;
-    }
+    };
+    this.dragParentElement = currentElement;
+    this.dragBackgroundColor = currentElement.style.backgroundColor;
     this.dragElement = e.target.childNodes[1];
     this.selectedBox = e.target.childNodes[1].innerHTML;
   }
