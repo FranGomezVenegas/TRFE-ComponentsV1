@@ -592,7 +592,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
                                   ${p.cardData.title === undefined
                                     ? nothing
                                     : html`<p"><span style="font-weight: bold; font-size:18px;">${
-                                        p.cardData.title
+                                        p["label_"+this.lang] 
                                       }</span>
                   ${
                     p.cardData.subtitle === undefined

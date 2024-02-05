@@ -200,9 +200,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'DataMining':
         import('./data_mining/datamining-mainview')
         return
-      case 'ModuleGenomaProjectWindow':
-        import('./module_genoma/genoma-project')
-        return
       case 'ModuleSampleLogSample':
         import('./module_sample/log-sample-module-sample')
         return
