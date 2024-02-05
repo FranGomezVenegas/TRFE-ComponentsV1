@@ -879,6 +879,9 @@ export function DataViews(base) {
     }
 
     handleTableRowClick(event, rowSelected, elem) {
+      if(rowSelected.children == 0) {
+        alert("There is no data");
+      }
       //alert(el);
 
       //if (this.selectedItemInView===undefined||Object.keys(this.selectedItemInView).length === 0){
@@ -893,10 +896,7 @@ export function DataViews(base) {
 
       // this.dispatchEvent(event2);
       sessionStorage.setItem('rowSelectedData', JSON.stringify(rowSelected));
-
       this.render();
-
-      console.log("handleTableRowClick", this.selectedItemInView);
       const popup = this.shadowRoot.querySelector(".js-context-popup");
       if (!popup.contains(event.target)) {
         popup.style.display = "none";
@@ -1008,6 +1008,7 @@ export function DataViews(base) {
           sessionStorage.setItem('steps', JSON.stringify(dataArr))
         }
       }
+      
       return html`
         <style>
           * {
@@ -1111,6 +1112,17 @@ export function DataViews(base) {
           .js-context-popup div:first-child {
             border-botton: none !important;
           }
+
+          .circle {
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            background-color: #24C0EB;
+            border-radius: 50%;
+            color: white;
+            float: left;
+          }
           </style>
         <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
           <div style="display: flex; flex-direction: column; text-align: center;">
@@ -1175,18 +1187,22 @@ export function DataViews(base) {
                       ${dataArr === undefined || !Array.isArray(dataArr) ? 
                         html `No Data` : 
                         html`
-                          ${dataArr.map((p, idx) =>
-                            html`
+                         
+                          ${dataArr.map((p, idx) => {
+                            return html`
                               <tr
                                 @click=${(event) => {
-                                  if(handler) 
-                                    handler(event, p, elem, idx);
+                                  if(handler) {
+                                    if(p.children && p.children.length > 0) {
+                                      handler(event, p, elem, idx);
+                                    }
+                                  }
                                   this.handleTableRowClick(event, p, elem)
                                 }}
                                 @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
                                 class="${selectedIdx === idx ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"
                               >
-                                ${elem.columns.map((fld) => 
+                                ${elem.columns.map((fld, index) => 
                                   html`
                                     ${fld.name === "pretty_spec"
                                       ? html`
@@ -1227,6 +1243,11 @@ export function DataViews(base) {
                                                     :  null
                                                   }
                                                   <div class="right-area">
+                                                    ${index == 0 && p.children && p.children.length > 0 ? html `
+                                                    <div class="circle"> 
+                                                      ${p.children.length} 
+                                                    </div>
+                                                    ` : html``}
                                                     <span class="text">
                                                       ${fld.fix_value_prefix !== undefined ? fld.fix_value_prefix: ""}
                                                     </span>
@@ -1241,7 +1262,6 @@ export function DataViews(base) {
                                                       <span>${ p[fld.name] }</span>    
                                                       `
                                                     }
-                                                                                                          
                                                     ${fld.fix_value_suffix !== undefined ? fld.fix_value_suffix : ""}
                                                     ${fld.fix_value2_prefix !== undefined ? fld.fix_value2_prefix : ""}
                                                     <span>
@@ -1270,7 +1290,7 @@ export function DataViews(base) {
                                     </td>
                                   `}
                               </tr>
-                            `
+                            `}
                           )}
                         `}
                     </tbody>
