@@ -1347,8 +1347,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
     this.selectSectionView(index);
     this.selectedTestIndex = testIdx;
     
-    this.selectedTabModelFromProcModel =
-    elementdef.view_definition.detail;
+    this.selectedTabModelFromProcModel = elementdef.view_definition.detail;
     // this.objecttabsComposition.isProcManagement = true;
     // this.objecttabsComposition.selectedTabModelFromProcModel =
     //   this.selectedTabModelFromProcModel.view_definition;
@@ -1356,30 +1355,60 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
     
     // this.isProcManagement = true;
     this.isProcManagement = true;
-    // this.selectedViewDefinition.tabs = undefined;
-    // this.selectedViewDefinition.view_definition = this.selectedTabModelFromProcModel.view_definition;
+    // // this.selectedViewDefinition.tabs = undefined;
+    // // this.selectedViewDefinition.view_definition = this.selectedTabModelFromProcModel.view_definition;
 
-    var tmp = [];
-    this.selectedTabModelFromProcModel.view_definition.map((data, i) => {
-      if(i == 0) {
-        var reData = {
-          elements: [],
-          title: {},
-          type: ""
-        };
-        reData.elements.push({actions: data.actions, columns: data.columns, endPointResponseObject: data.endPointResponseObject, theme: data.theme, type: data.type, row_buttons: data.row_buttons});
-        reData.title = data.title;
-        reData.type = data.type;
-        tmp.push(reData);
+    // var tmp = [];
+    // this.selectedTabModelFromProcModel.view_definition.map((data, i) => {
+    //   if(i == 0) {
+    //     var reData = {
+    //       elements: [],
+    //       title: {},
+    //       type: ""
+    //     };
+    //     reData.elements.push({actions: data.actions, columns: data.columns, endPointResponseObject: data.endPointResponseObject, theme: data.theme, type: data.type, row_buttons: data.row_buttons});
+    //     reData.title = data.title;
+    //     reData.type = data.type;
+    //     tmp.push(reData);
+    //   }
+    //   else {
+    //     tmp.push(data);
+    //   }
+    // })
+    // this.selectedCompositionView = tmp;
+
+    console.log("model", this.selectedCompositionView, 'data', thisitem);
+    this.selectedItem = thisitem;      
+    //this.selectedTabModelFromProcModel=this.selectedCompositionView
+
+    return
+    if (thisitem) {
+      if (this.selectedCompositionView.tabs!==undefined){
+        this.objectByTabs.selectedItem = thisitem;
+        this.objectByTabs.selectedTabModelFromProcModel =this.selectedCompositionView;
+      }else{            
+        //this.objecttabsComposition.selectedItem = thisitem;
+        //this.objecttabsComposition.selectedTabModelFromProcModel =this.selectedCompositionView;
       }
-      else {
-        tmp.push(data);
+    }
+    if (this.selectedCompositionView.tabs!==undefined){
+      //.selectedItem=${this.mainViewData} 
+      this.mainViewData = {}
+      this.mainViewData=value;
+      // this.objectByTabs.selectedItem = {}
+      // this.objectByTabs.selectedItem = value
+      this.selectedItem = thisitem;//value.definition;
+      this.objectByTabs.isProcManagement = true;
+      // this.objectByTabs.render();          
+    }else{    
+      this.selectedItem = thisitem;      
+      this.selectedTabModelFromProcModel=this.selectedCompositionView
+      //this.objecttabsComposition.isProcManagement = true;
+      if (this.objecttabsComposition!==null&&this.objecttabsComposition!==undefined){
+        this.objecttabsComposition.render();
       }
-    })
-    this.selectedCompositionView = tmp;
-
-    console.log("in data", this.selectedCompositionView);
-
+    }    
+    return;
     this.selectedItem = thisitem;
     
     sessionStorage.setItem(

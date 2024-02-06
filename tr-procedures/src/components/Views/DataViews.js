@@ -185,9 +185,12 @@ export function DataViews(base) {
             `;
     }
     kpiReportTitleLvl2(elem) {
+      if (elem.title===undefined||elem.title.label_en===undefined){
+        return html``
+      }
       return html`    
-          <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">${
-            elem.title["label_" + this.lang]
+          <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">${            
+              elem.title["label_" + this.lang]
           }</p>
           `;
     }
@@ -1881,6 +1884,8 @@ export function DataViews(base) {
                     ? elem.num_columns
                     : ""}"
                 >
+                ${elem.fieldsToDisplay===undefined?nothing:
+                html`
                   ${elem.fieldsToDisplay.map(
                     (fld, i) =>
                       html`
@@ -2054,6 +2059,7 @@ export function DataViews(base) {
                             `}
                       `
                   )}
+                `}
                 </ul>
               </div>
             `}
