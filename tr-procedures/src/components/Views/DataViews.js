@@ -880,7 +880,9 @@ export function DataViews(base) {
 
     handleTableRowClick(event, rowSelected, elem) {
       if(rowSelected.children == 0) {
-        alert("There is no data");
+        if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
+          alert("There is no data");
+        }
       }
       //alert(el);
 
@@ -1194,7 +1196,9 @@ export function DataViews(base) {
                                 @click=${(event) => {
                                   if(handler) {
                                     if(p.children && p.children.length > 0) {
-                                      handler(event, p, elem, idx);
+                                      if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
+                                        handler(event, p, elem, idx);
+                                      }
                                     }
                                   }
                                   this.handleTableRowClick(event, p, elem)
@@ -1229,7 +1233,6 @@ export function DataViews(base) {
                                             : html`
                                               <td>
                                                 <div class="icon-text-container">
-                                                  
                                                   ${fld.is_icon !== undefined && fld.is_icon == true ? 
                                                     fld.icon_class ?
                                                       html`
