@@ -8,7 +8,7 @@ export const template = (props) => {
                 <span class="sellect-trigger sellect-item" style="display: inherit;"> ${option} <mwc-icon class="sellect-close-icon" style="font-size:8px" @click=${() => props.removeActiveOption(i)}> close </mwc-icon> </span>
             `)}
         </div>
-        <input type="text" id="my-element" class="sellect-element"  @keyup=${(e) => props.setSearchResultOptions(e)} @click=${() => props.setOpenTrue()}>
+        <input type="text" id="my-element" class="sellect-element"  @change=${(e) => props.pressEnter(e) } @click=${() => props.setOpenTrue()}>
         <div class="sellect-origin-list ${props.open ? "open" : ""}">
             ${props.searchOptions.map((option, i) => html `
                 <span class="sellect-trigger sellect-item" style="display: inherit;" @click=${() => props.removeOption(i)}> ${option} <i class="fa fa-times sellect-close-icon"> </i> </span>

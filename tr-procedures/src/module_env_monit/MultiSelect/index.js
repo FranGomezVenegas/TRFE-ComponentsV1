@@ -1,6 +1,6 @@
 import {LitElement} from 'lit-element';
 import {template} from './multiselect.template';
-import {styles} from './multiselect.css';
+import { styles } from './multiselect.css';
 import { navigator } from "lit-element-router";
 export class MultiSelect extends navigator(LitElement) {
   static get styles() {
@@ -33,14 +33,18 @@ export class MultiSelect extends navigator(LitElement) {
       setOpen: this._setOpen,
       removeActiveOption: this._removeActiveOption,
       removeOption: this._removeOption,
-      setSearchResultOptions: this._setSearchResultOptions,
       setOpenTrue: this._setOpenTrue,
+      pressEnter: this._pressEnter,
     });
+  }
+
+  _pressEnter = (e) => {
+    this.searchOptions.push(e.target.value);
+    this.requestUpdate();
   }
 
   firstUpdated = () => {
     this.searchOptions = this.options;
-    console.log("first", this.searchOptions);
     this.requestUpdate();
   }
 
@@ -56,28 +60,15 @@ export class MultiSelect extends navigator(LitElement) {
   }
 
   _removeOption = (index) => {
-    console.log("index", index);
     this.activeOptions.push(this.searchOptions[index]);
     this.searchOptions.splice(index, 1);
-    this.requestUpdate();
-  }
-
-  _setSearchResultOptions = (e) => {
-    this.searchOptions = [];
-    this.options.map((option, i) => {
-      if(option.search(e.target.value) >= 0) {
-        this.searchOptions.push(option);
-      }
-    });
-    if(e.target.value == "") {
-      this.searchOptions = this.options;
-    }
     this.requestUpdate();
   }
 
   _setOpenTrue = () => {
     this.open = true;
     this.requestUpdate();
+    
   }
 }
 
