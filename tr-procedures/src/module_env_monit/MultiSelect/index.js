@@ -22,6 +22,7 @@ export class MultiSelect extends navigator(LitElement) {
     this.activeOptions = ["hello", "moon"];
     this.open = false;
     this.searchOptions = [];
+    this.allowAdhocEntries = true;
   }
 
   render() {
@@ -30,6 +31,7 @@ export class MultiSelect extends navigator(LitElement) {
       options: this.options,
       open: this.open,
       searchOptions: this.searchOptions,
+      allowAdhocEntries: this.allowAdhocEntries,
       setOpen: this._setOpen,
       removeActiveOption: this._removeActiveOption,
       removeOption: this._removeOption,
