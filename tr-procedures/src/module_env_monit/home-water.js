@@ -4,6 +4,7 @@ import { html, css, nothing, LitElement } from "lit";
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { navigator } from "lit-element-router";
 import '../components/Dashboard';
+import './StagesView'
 export class HomeWater extends navigator(LitElement) {
   static get styles() {
     return css`
@@ -267,6 +268,7 @@ export class HomeWater extends navigator(LitElement) {
     return html`
       
       <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
+      <stages-view> </stages-view>
       <!-- <div class="maindiv">
         <div
           @click=${() => this.elementClicked("LogSamples", "SampleLogin")}
