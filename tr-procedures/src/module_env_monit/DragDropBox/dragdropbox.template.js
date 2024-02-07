@@ -81,7 +81,7 @@ export const template = (props) => {
                         props.data.boxDefinition.datas.length > 0 ?
                         html `
                         <div style="width: min-width: 556px;">
-                            <table>
+                            <table class="TRAZiT-DefinitionArea dragdropable">
                                 <thead>
                                     <tr>
                                         <th>Pos</th>
@@ -140,7 +140,6 @@ export const template = (props) => {
                         </div>
                         `)}
                     `: 
-                    
                     html ``}
                 </div>
                 ${props.viewTable ? html `

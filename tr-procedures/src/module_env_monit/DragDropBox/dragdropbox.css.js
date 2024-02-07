@@ -123,8 +123,6 @@ export const styles = css`
 
   table {
     border-collapse: collapse;
-    width: 100%;
-    color: white;
   }
   
   th, td {
@@ -137,6 +135,9 @@ export const styles = css`
     color: white;
   }
 
+  tr {
+    background-color: white;
+  }
   table, td, th {
     border: 1px solid #03A9F4;
   }
@@ -184,7 +185,7 @@ export const styles = css`
   }
 
   table.dragdropable tr:nth-child(even) {
-    background-color: rgba(214, 233, 248, 0.37);
+    background-color: rgb(214, 233, 248);
   }
 
   table.dragdropable.TRAZiT-DefinitionArea th {
