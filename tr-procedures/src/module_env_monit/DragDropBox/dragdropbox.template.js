@@ -22,8 +22,12 @@ export const template = (props) => {
                             <div class="view-btn ${props.viewMode == 1 ? "active" : ""}" @click=${() => props.setViewMode(1)}> Box View </div>
                             <div class="view-btn ${props.viewMode == 2 ? "active" : ""}" @click=${() => props.setViewMode(2)}> List View </div>
                         </div>
-                        <div class="accept-btn"> Accept </div>
+                        <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;">
+                            <mwc-icon @click=${() => props.setViewTableBox()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
+                            <div class="accept-btn" @click=${() => props.setViewTable()}> Accept </div>
+                        </div>
                     </div>
+                    ${!props.viewTableBox ? html `
                     <div class="box-content">
                         ${props.viewMode == 1 ? html `
                         <div> 
@@ -105,6 +109,26 @@ export const template = (props) => {
                         ` : 
                         null}
                     </div>
+                    ` :
+                    props.data.boxContents && props.data.boxContents.length > 0 ?
+                    html `
+                    <table class="dragdropable TRAZiT-DefinitionArea">
+                        <thead> 
+                            <th> Name </th>
+                            <th> Cols </th>
+                            <th> Rows </th>
+                        </thead>
+                        <tbody>
+                            ${props.data.boxContents.map((row, i) => html `
+                            <tr @click=${() => props.showBoxContent(row)}> 
+                                <td> box ${ i + 1 } </td>
+                                <td> ${row.cols} </td>
+                                <td> ${row.rows} </td>
+                            </tr>
+                            `)}
+                        </tbody>
+                    </table>
+                    `: null}
                 </div>
                 <div >
                     <mwc-icon style="color:#54CCEF; cursor:pointer; margin-top:42px;" @click=${() => props.setShowBoxViewModeList()}> view_agenda </mwc-icon>
@@ -119,13 +143,13 @@ export const template = (props) => {
                     
                     html ``}
                 </div>
+                ${props.viewTable ? html `
                 <div style="margin-top:42px">
                     <table class="dragdropable TRAZiT-DefinitionArea"> 
                         <thead>
                                 ${props.data.tableDefinition.columns.map((column, i) => html`
                                     <th>${column.label_en}</th>
                                 `)}
-                            <tr>
                         </thead>
                         <tbody>
                             ${props.data.tableData.map((data, i) => html`
@@ -137,7 +161,8 @@ export const template = (props) => {
                             `)}
                         </tbody>
                     </table>
-                </div>
+                </div> 
+                `: null}
             </div>
         </div>
     `;

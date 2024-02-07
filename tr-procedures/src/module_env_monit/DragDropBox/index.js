@@ -309,8 +309,12 @@ export class DragDropBox extends navigator(LitElement) {
             ]
           }
         ]
-      }
-  
+      },
+      boxContents: [
+        {cols: 5, rows: 5},
+        {cols: 9, rows: 4},
+        {cols: 11, rows: 6}
+      ]
     };
     this.dragElement = undefined;
     this.viewBoxMode = 0;
@@ -319,6 +323,8 @@ export class DragDropBox extends navigator(LitElement) {
     this.dragBackgroundColor = undefined;
     this.dropBackgroundColor = undefined;
     this.dragParentElement = undefined;
+    this.viewTable = true;
+    this.viewTableBox = true;
   }
 
   render() {
@@ -329,6 +335,8 @@ export class DragDropBox extends navigator(LitElement) {
       viewMode: this.viewMode,
       listBoxViewMode: this.listBoxViewMode,
       viewBoxMode: this.viewBoxMode,
+      viewTable: this.viewTable,
+      viewTableBox: this.viewTableBox,
       setSelectBoxIndex: this._setSelectBoxIndex,
       setViewMode: this._setViewMode,
       dropBox: this._dropBox,
@@ -339,7 +347,27 @@ export class DragDropBox extends navigator(LitElement) {
       dragTableTr: this._dragTableTr,
       setShowBoxViewModeList: this._setShowBoxViewModeList,
       setViewBoxMode:this._setViewBoxMode,
+      setViewTable: this._setViewTable,
+      setViewTableBox: this._setViewTableBox,
+      showBoxContent: this._showBoxContent,
     });
+  }
+
+  _showBoxContent = (data) => {
+    this.data.boxDefinition.cols = data.cols;
+    this.data.boxDefinition.rows = data.rows;
+    this.viewTableBox = false;
+    this.requestUpdate();
+  }
+
+  _setViewTableBox = () => {
+    this.viewTableBox = !this.viewTableBox;
+    this.requestUpdate();
+  }
+
+  _setViewTable = () => {
+    this.viewTable = !this.viewTable;
+    this.requestUpdate();
   }
 
   _dragTableTr = (e) => {

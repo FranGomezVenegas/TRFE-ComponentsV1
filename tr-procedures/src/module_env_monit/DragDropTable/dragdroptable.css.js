@@ -99,4 +99,8 @@ export const styles = css`
   table.dragdropable.TRAZiT-UsersArea tr:hover td {
     background-color: #2989d830 !important;
   }
+
+  .undropable {
+    cursor: no-drop !important;
+  }
 `

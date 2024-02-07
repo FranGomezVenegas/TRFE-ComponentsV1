@@ -19,17 +19,26 @@ export class DragDropTable extends navigator(LitElement) {
   constructor() {
     super();
     this.selectedTr = undefined;
+    this.dragData = undefined;
     this.data = {
       tableData:[
-        {id: "1", study:"Study 1", temperature: "10º", "extraField":"demo"},
-        {id: "2", study:"Study 2", temperature: "20º", "extraField":"demo"},
-        {id: "3", study:"Study 3", temperature: "30º", "extraField":"demo"},
-        {id: "4", study:"Study 10", temperature: "40º", "extraField":"demo"}
+        [
+          {id: "1", study:"Study 1", temperature: "10º", "extraField":"demo"},
+          {id: "2", study:"Study 2", temperature: "20º", "extraField":"demo"},
+          {id: "3", study:"Study 3", temperature: "30º", "extraField":"demo"},
+          {id: "4", study:"Study 4", temperature: "40º", "extraField":"demo"}
+        ],
+        [
+          {id: "5", study:"Study 5", temperature: "50º", "extraField":"demo"},
+          {id: "6", study:"Study 6", temperature: "60º", "extraField":"demo"},
+          {id: "7", study:"Study 7", temperature: "70º", "extraField":"demo"},
+          {id: "8", study:"Study 8", temperature: "80º", "extraField":"demo"}
+        ]
       ],
       tableDefinition: {
         "type": "readOnlyTable",
-        "dragEnable": true,
-        "dropEnable": true,
+        "dragEnable": [true, false],
+        "dropEnable": [false, true],
         "dropObjectPropertiesRequired":["id", "study", "temperature"],
         "title": {
           "label_en": "1.1) Roles",
@@ -269,39 +278,28 @@ export class DragDropTable extends navigator(LitElement) {
       dropTableTr: this._dropTableTr,
       allowDropTr: this._allowDropTr,
       dragTableTr: this._dragTableTr,
+      unavaiableToDrop: this._unavaiableToDrop
     });
   }
 
-  _dragTableTr = (e) => {
-    this.dragTr = true;
-    let currentElement = e.target;
-    
-    while (currentElement && !currentElement.classList.contains('dragdropabletr')) {
-      currentElement = currentElement.parentElement;
-    };
+  _unavaiableToDrop = () => {
+    alert("Not available to drop");
+  }
 
-    this.selectedTr = `<td> ${currentElement.children[0].innerHTML} </td><td> ${currentElement.children[1].innerHTML} </td><td>${currentElement.children[2].innerHTML} </td>`
-
-    let currentID = currentElement.childNodes[1].childNodes[1].textContent;
-    currentID -= 1;
-    let str = "";
-    if(this.viewBoxMode == 0) {
-      str =`<div>id: ${this.data.tableData[currentID].id}</div><div> study: ${this.data.tableData[currentID].study}</div>`
-    } 
-    else {
-      str =`<div>id: ${this.data.tableData[currentID].id}</div><div> temperature: ${this.data.tableData[currentID].temperature}</div>`
-    }
-    this.selectedBox = str;
+  _dragTableTr = (e, ii, index) => {
+    this.data.tableData[ii].splice(index, 1);
+    this.dragData = this.data.tableData[ii][index];
+    this.requestUpdate();
   }
 
   _allowDropTr = (e) => {
     e.preventDefault();
   }
 
-  _dropTableTr = (e) => {
+  _dropTableTr = (e, ii, index) => {
     e.preventDefault();
-    let currentElement = e.target;
-    currentElement.parentNode.innerHTML = this.selectedTr;
+    this.data.tableData[ii].push(this.dragData);
+    this.requestUpdate();
   }
 
 }
