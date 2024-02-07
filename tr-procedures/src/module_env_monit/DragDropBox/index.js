@@ -423,7 +423,11 @@ export class DragDropBox extends navigator(LitElement) {
       }
     }
     currentElement.style.backgroundColor = this.dragBackgroundColor;
+    if(this.dragTr) {
+      currentElement.style.backgroundColor = "rgb(80, 220, 247)"
+    }
     currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
+    alert("Success to Drop");
   }
 
   _allowDropTr = (e) => {

@@ -299,6 +299,7 @@ export class DragDropTable extends navigator(LitElement) {
   _dropTableTr = (e, ii, index) => {
     e.preventDefault();
     this.data.tableData[ii].push(this.dragData);
+    alert("Success to Drop");
     this.requestUpdate();
   }
 
