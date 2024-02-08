@@ -41,7 +41,8 @@ export class MultiSelect extends navigator(LitElement) {
   }
 
   _pressEnter = (e) => {
-    this.searchOptions.push(e.target.value);
+    this.activeOptions.push(e.target.value);
+    this.inputValue = "";
     this.requestUpdate();
   }
 
