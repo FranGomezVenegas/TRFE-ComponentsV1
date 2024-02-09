@@ -6340,6 +6340,24 @@ export const DemoLotsRaw =
           {
             "type": "parentReadOnlyTable",
             "endPointResponseObject": "analysis",
+            "expandSection": true,
+            "expandSectionDetail":{
+              "type": "cardSomeElementsSingleObject",
+              "endPointResponseObject": "ROOT",			  
+              "num_columns": 2,
+              "fieldsToDisplay": [
+              {
+                "name": "code",
+                "label_en": "code Expanded",
+                "label_es": "code Expanded"
+              },
+              {
+                "name": "code",
+                "label_en": "code Expanded rep2",
+                "label_es": "code Expanded rep2"
+              }
+              ]
+            },
             "columns": [
               {
                 "name": "code",
