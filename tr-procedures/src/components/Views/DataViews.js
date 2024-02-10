@@ -332,10 +332,10 @@ export function DataViews(base) {
           }
           span.cardLabel {
             font-weight: bold;
-            color: #032bbc;
+            color: rgb(41, 137, 216); /* #032bbc; */
           }
-          span.cardValue {
-            color: #009879;
+          span.cardValue {            
+            color: rgba(214, 233, 248, 0.37); /* #009879; */
           }
           span.title {
             color: rgb(35, 163, 198);
@@ -373,8 +373,12 @@ export function DataViews(base) {
                   <thead>          
                     <tr>
                     <th style="color:#24c0eb; background-color: #d6e9f8; text-transform:uppercase; font-size:16px;" colspan=" ${
-                      elem.columns.length
-                    } ">${key}</th>
+                      elem.columns.length} ">
+                      
+                      ${elem.showGroupEntryObjectName!==undefined&&elem.showGroupEntryObjectName===true?
+                      html`${key} ${ Object.keys(value)[0]}`: 
+                      html`${key}`
+                      }</th>
                     </tr>
                     <tr class="headercolumns">
                       ${elem.columns.map(
@@ -626,10 +630,10 @@ export function DataViews(base) {
           }
           span.cardLabel {
             font-weight: bold;
-            color: #032bbc;
+            color: rgb(41, 137, 216); /* #032bbc; */
           }
           span.cardValue {
-            color: #009879;
+            color: rgba(214, 233, 248, 0.37); /* #009879; */
           }
           span.title {
             color: rgb(35, 163, 198);
@@ -1127,6 +1131,15 @@ export function DataViews(base) {
             border-radius: 50%;
             color: white;
             float: left;
+          }
+          .green {
+            color: green;
+          }
+          .red { 
+            color: red;
+          }
+          .yellow {
+            color: orange;
           }
           </style>
         <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
@@ -2000,6 +2013,13 @@ export function DataViews(base) {
                                               font-family: Montserrat;
                                               font-color: rgb(94, 145, 186);
                                             }
+                                            span.cardMainLabel {
+                                              font-weight: bold;
+                                              color: rgb(41, 137, 216); /* #032bbc; */
+                                            }
+                                            span.cardMainValue {            
+                                              color: rgba(214, 233, 248, 0.37); /* #009879; */
+                                            }
                                           </style>
                                           <div class="w3-container">
                                             <div
@@ -2027,31 +2047,15 @@ export function DataViews(base) {
                                             <span class="cardLabel">
                                               ${this.fieldLabel(fld)}:
                                             </span>
-                                            <span class="cardValue"
-                                              >${data[
-                                                fld.name
-                                              ]}${fld.fix_value_suffix !==
-                                              undefined
-                                                ? fld.fix_value_suffix
-                                                : ""}
-                                              ${fld.fix_value2_prefix !==
-                                              undefined
-                                                ? fld.fix_value2_prefix
-                                                : ""}${fld.name2 !== undefined
-                                                ? data[fld.name2]
-                                                : ""}${fld.fix_value2_suffix !==
-                                              undefined
-                                                ? fld.fix_value2_suffix
-                                                : ""}
-                                              ${fld.fix_value3_prefix !==
-                                              undefined
-                                                ? fld.fix_value3_prefix
-                                                : ""}${fld.name3 !== undefined
-                                                ? data[fld.name3]
-                                                : ""}${fld.fix_value3_suffix !==
-                                              undefined
-                                                ? fld.fix_value3_suffix
-                                                : ""}
+                                            <span class="cardValue">
+                                              ${data[fld.name]}
+                                              ${fld.fix_value_suffix !==undefined? fld.fix_value_suffix: ""}
+                                              ${fld.fix_value2_prefix !==undefined? fld.fix_value2_prefix: ""}
+                                              ${fld.name2 !== undefined? data[fld.name2]: ""}
+                                              ${fld.fix_value2_suffix !==undefined? fld.fix_value2_suffix: ""}
+                                              ${fld.fix_value3_prefix !==undefined? fld.fix_value3_prefix: ""}
+                                              ${fld.name3 !== undefined? data[fld.name3]: ""}
+                                              ${fld.fix_value3_suffix !==undefined? fld.fix_value3_suffix: ""}
                                             </span>
                                           </li>
                                         `}

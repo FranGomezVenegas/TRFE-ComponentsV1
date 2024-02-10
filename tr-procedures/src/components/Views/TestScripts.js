@@ -3,7 +3,179 @@ export function TestScripts(base) {
     return class extends (((((((((((base))))))))))) {
 
 
-        scripts(elem, data) {
+      specScripts(elem, data) {
+        console.log('data',data)
+          return html`
+          
+            <style type="text/css">
+            :host {
+              font-family: Montserrat;
+            }
+            .document {
+              page-break-after: always;
+            }   
+            .title {
+              font-size: 24pt;
+              font-weight: bold;
+              text-align: center;
+              position: relative;
+              top:-90px;
+            }
+            #firstline {
+              height:120px;
+            }        
+            .footer {
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              height: 0.5in;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          
+            @media print {
+              body * {
+                visibility: hidden;
+              }
+              .header {
+                position: fixed;
+                top: 0;
+                left: 0;
+              }
+              .footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+              }    
+              .document, .document * {
+                visibility: visible;
+              }
+          
+              .header, .footer {
+                visibility: visible;
+              }
+              .content {
+                margin-top: calc(var(--header-height) + 0.5in);
+              }
+              .document {
+                position: static;
+              }
+              .header {
+                border: 0px;
+              }
+            }  
+          
+            .container {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+            }
+          
+            .logo {
+              margin-left:5px;
+              margin-bottom: 20px;
+              width: 1.2in;
+              height: auto;    
+            }
+            .header {
+              position:relative;
+              top: 0;
+              left: 0;
+              right: 0;
+              justify-content: center;
+              /* margin-bottom: 0.5in; */        
+            }
+            .form-header {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              grid-gap: 20px;
+              margin-bottom:0.05in;
+              padding-bottom: 10px;
+            }  
+            .form-fields {
+              display: grid;
+              grid-template-columns: max-content 1fr; 
+              grid-gap: 10px;
+              text-align: right;
+              left:20px;
+              position: relative;  
+            }
+            .form-fields.col2 {
+              grid-column: 2;
+            }
+            .form-fields label {
+              text-align: left;
+            }
+          
+            .form-fields span {
+              justify-self: start;
+            }
+          
+            body {
+              margin: 0;
+            }
+          
+            .content {
+              margin-top: calc(var(--header-height) + 0.5in);
+            }
+            .table-container {
+              width: 100%;
+            }
+          
+            .table-container table {
+              width: inherit;
+              /* Additional styles for the table */
+            }  
+            table.pageformattable{
+              border: 0px solid black;
+              width: calc(var(--header-width);
+              /* border-top:0.5px solid black; */
+            }
+            .pageformattable.table-container table thead{
+              /*border: 1px solid black;*/
+            }
+            .pageformattable.tr{
+              /*border: 1px solid black;*/
+            }  
+            .pageformattable.td{
+              /*border: 1px solid black;*/
+            }        
+            </style>
+            <mwc-icon-button icon="print" @click=${()=>{this.printCoa(data)}}></mwc-icon-button>   
+
+            <div id="document" class="document">
+              <div class="page-header" style="text-align: center; font-weight: bold;"></div>
+              <div class="page-footer"></div>
+              <table class="pageformattable">
+                <thead>
+                  <tr><td>
+                    <div class="page-header-space">${this.coaheaderWithStyle(data)}</div>
+                  </td></tr>
+                </thead>
+                <tbody>
+                  <tr><td>            
+                      <div class="page">
+                        ${this.coaResultsTable(data)} ${this.resultsTableExtraTables(data)}                   
+                      </div>
+                  </td></tr>
+                </tbody>
+                <tfoot>
+                  <tr><td>
+                    
+                  </td></tr>
+                </tfoot>
+              </table>
+            </div>
+            <div id="pagefooter" class="document">
+            <div class="page-footer-space">${this.coaUsageDecision(data)}${this.coaSignatures(data)}</div>
+            </div>
+          `    
+        }    
+
+      scripts(elem, data) {
           console.log('data',data)
             return html`
             
@@ -174,6 +346,9 @@ export function TestScripts(base) {
               </div>
             `    
           }    
+
+
+
           coaheaderWithStyleScripts(data){
             let coaData=data//FakeCOA
             return html`
@@ -306,7 +481,7 @@ export function TestScripts(base) {
                       ${coaData.resultsTable.values.map(spec =>html`
                       <tr>
                         ${spec.map(fld =>html`
-                        <td style="padding:5px;">${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</td>
+                        <td id="restables_${fld.name}"  style="padding:5px;">${fld["value_"+this.lang]===undefined ? fld.value: fld["value_"+this.lang]}</td>
                         `)}
                       </tr>   
                       `)}           
