@@ -3,6 +3,7 @@ import { html, css, nothing, LitElement } from 'lit';
 // import './tabs-composition';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import '../components/Dashboard';
+import './StagesView';
 import './MultiSelect';
 import './DragDropBox'
 import './DragDropTable'
@@ -166,6 +167,8 @@ export class HomeAir extends navigator(LitElement) {
             lang: { type: String },
             procInstanceName:{type: String},
             params: { type: Object },
+            multiselectOptions: {type: Array},
+            multiselectActiveOptions:{type: Array}
         }
     }
     constructor() {
@@ -175,6 +178,11 @@ export class HomeAir extends navigator(LitElement) {
         console.log('constructor flowchart')
         this.ready=false;
         this.config={}
+        this.multiselectOptions=[]
+        this.multiselectOptions.push('hello')
+        this.multiselectOptions.push('goodbye')
+        this.multiselectActiveOptions=[]
+        this.multiselectActiveOptions.push('hello')
         this.params = {
           title1_en: "Locations",
           title1_es: "Ubicaciones",
@@ -264,9 +272,10 @@ export class HomeAir extends navigator(LitElement) {
       // <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
       return html`
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
-        <multi-select> </multi-select>
+        <multi-select .options=${this.multiselectOptions} .activeOptions=${this.multiselectActiveOptions}> </multi-select>
         <dragdrop-box> </dragdrop-box>
         <dragdrop-table> </dragdrop-table>
+        <stages-view> </stages-view>
       `;
     }
     renderFran() {          

@@ -2,7 +2,9 @@ import {LitElement} from 'lit-element';
 import {template} from './dragdroptable.template';
 import {styles} from './dragdroptable.css';
 import { navigator } from "lit-element-router";
-export class DragDropTable extends navigator(LitElement) {
+import { ButtonsFunctions} from '../../components/Buttons/ButtonsFunctions';
+
+export class DragDropTable extends ButtonsFunctions(navigator(LitElement)) {
   static get styles() {
     return styles;
   }
@@ -300,6 +302,54 @@ export class DragDropTable extends navigator(LitElement) {
     e.preventDefault();
     this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");
+    let action={}
+
+    action={"actionName": "REMOVE_ROLE",
+    "notGetViewData": true,
+    "clientMethod": "procMngRequirementsMethod",
+    "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+    "selectedItemPropertyName": "selectedItems",
+    "requiresDialog": false,
+    "certificationException": true,
+    "secondaryActionToPerform": {
+      "name": "refreshSelProcData"
+    },
+    "button": {
+      "icon": "person_remove",
+      "title": {
+        "label_en": "Remove role",
+        "label_es": "Borrar perfil"
+      },
+      "requiresGridItemSelected": false
+    },
+    "endPointParams": [
+      {
+        "argumentName": "procedureName",
+        "contextVariableName": "procedureName"
+      },
+      {
+        "argumentName": "procedureVersion",
+        "contextVariableName": "procedureVersion"
+      },
+      {
+        "argumentName": "procInstanceName",
+        "contextVariableName": "procInstanceName"
+      },
+      {
+        "argumentName": "roleName",
+        "selObjectPropertyName": "role_name"
+      }
+    ]
+  }   
+  // this.performActionRequestHavingDialogOrNotForProcess(
+  //   -1,
+  //   action,
+  //   this.dragData,
+  //   {}, //targetValue
+  //   {} //credDialogArgs 
+  // )  
+    this.actionMethod(e, action, true, undefined, undefined, this.dragData, false) 
+    
     this.requestUpdate();
   }
 

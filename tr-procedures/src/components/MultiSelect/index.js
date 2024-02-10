@@ -18,14 +18,18 @@ export class MultiSelect extends navigator(LitElement) {
 
   constructor() {
     super();
-    this.options = ["apple", "red", "green", "trazit", "nothing", "someone", "dog"];
-    this.activeOptions = ["hello", "moon"];
+    this.options = [];
+    this.activeOptions = [];
     this.open = false;
     this.searchOptions = [];
     this.allowAdhocEntries = true;
   }
 
   render() {
+    if (this.activeOptions===undefined){this.activeOptions=[]}
+    if (this.searchOptions===undefined){this.searchOptions=[]}
+    if (this.allowAdhocEntries===undefined){this.allowAdhocEntries=false}
+
     return template({
       activeOptions: this.activeOptions,
       options: this.options,
@@ -40,7 +44,7 @@ export class MultiSelect extends navigator(LitElement) {
     });
   }
 
-  _pressEnter = (e) => {
+  _pressEnter = (e) => {+
     this.activeOptions.push(e.target.value);
     this.inputValue = "";
     this.requestUpdate();

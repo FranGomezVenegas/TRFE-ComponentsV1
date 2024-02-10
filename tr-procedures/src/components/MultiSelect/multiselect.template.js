@@ -1,6 +1,9 @@
 import { html } from 'lit-element';
 import '@material/mwc-icon';
 export const template = (props) => {
+    if (props.activeOptions===undefined){ props.activeOptions=[]}
+    if (props.allowAdhocEntries===undefined){ props.allowAdhocEntries=false}
+    if (props.searchOptions===undefined){ props.searchOptions=[]}
     return html`
     <div class="sellect-container">
         <div class="sellect-destination-list">
