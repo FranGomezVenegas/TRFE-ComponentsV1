@@ -255,6 +255,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
             `}              
             ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}
             ${elem2.type==="testScripts" ? this.scripts(elem2, true) : nothing}
+            ${elem2.type==="spectestScripts" ? this.specScripts(elem2, true) : nothing}
             ${elem2.type==="buttonsOnly" ? this.buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
             ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
 
@@ -306,6 +307,7 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
       `}
       ${elem.type==="Report" ? this.ReportController(elem) : nothing}
       ${elem.type==="testScripts" ? this.scripts(elem, true) : nothing}
+      ${elem.type==="spectestScripts" ? this.specScripts(elem, true) : nothing}
       ${elem.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}   
       ${elem.type==="buttonsOnly" ? this.buttonsOnly(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="tree" ? this.treeElement(elem, data)   : nothing}
