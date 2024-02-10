@@ -855,6 +855,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
         }
         sp-split-view {
           height: calc(100vh - 100px);
+          width: 100%;
           --spectrum-dragbar-handle-width: 0px;
         }
         @media screen and (max-width: 992px) {
@@ -1000,7 +1001,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
       `,
     ];
   }
-
+  
   selectedProcInstanceMainView() {
     let selectedItemArr=[]
     selectedItemArr.push(this.selectedItem)
@@ -1028,7 +1029,9 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
               `
             )}
           </div>
+          <div class="resizer" id="dragMe" style="width: 3px;"></div>
         </div>
+        
         <div
           id="rightSplit"
           class="${this.leftSplitDisplayed !== undefined &&
@@ -1219,6 +1222,9 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
             li.success {
               color: green;
             }
+            li.default {
+              color: #0d0c0c;
+            }
             li {
               cursor: pointer;
               font-size: 14px;
@@ -1247,8 +1253,13 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
     `
   }
   conditionalClass(elemDef, thisitem){
-    if (elemDef===undefined){return 'success'}
-    if (elemDef.conditionalColor===undefined){return 'success'}
+    if (elemDef===undefined){return 'default'}
+    if (elemDef.conditionalColor===undefined){
+      if (elemDef.colorClass!==undefined){
+        return elemDef.colorClass
+      }  
+      return 'default'
+    }
     if (elemDef.conditionalColor.field===undefined||elemDef.conditionalColor.includedWord===undefined||
       elemDef.conditionalColor.classForTrue===undefined||elemDef.conditionalColor.classForFalse===undefined){return 'success'}
     if (thisitem[elemDef.conditionalColor.field].includes(elemDef.conditionalColor.includedWord)){
@@ -1294,6 +1305,9 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
               }
               li.success {
                 color: green;
+              }
+              li.default {
+                color: #0d0c0c;
               }
               li {
                 cursor: pointer;
