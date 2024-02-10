@@ -86,11 +86,13 @@ export const MbEm=
         "dialogInfo": {          
           "name": "genericDialog",
           "fields": [
-			{"text1": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" }}
+			      {"text1": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" }},
+            {"multiselectlist1": { "label_en": "New Production Lot Name", "label_es": "Nombre para nuevo lote de producción" }}
+            
           ]
         },
         "endPointParams": [
-          { "argumentName": "lotName", "element": "text1" },
+          { "argumentName": "lotName", "element": "multiselectlist1" },
           { "argumentName": "fieldName", "value": "active" },
           { "argumentName": "fieldValue", "value": "true*Boolean" }
         ]
