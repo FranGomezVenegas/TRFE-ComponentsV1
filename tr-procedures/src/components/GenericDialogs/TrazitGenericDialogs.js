@@ -6,6 +6,8 @@ import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
+import '../MultiSelect';
+
 import {DialogsFunctions} from './DialogsFunctions';
 export function TrazitGenericDialogs(base) {
   return class extends GridFunctions(DialogsFunctions(base)) {
@@ -571,6 +573,13 @@ export function TrazitGenericDialogs(base) {
                     <mwc-select style="width:100%;" id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)}>
                         ${this.listEntries(fld.list10)}</mwc-select>`}
                 </div>  
+                ${!fld.multiselectlist1 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center">
+                      <multi-select id="multiselectlist1" .options=${fld.multiselectlist1.multiselectOptions} .activeOptions=${fld.multiselectlist1.multiselectActiveOptions}
+                      label="${fld.multiselectlist1["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                  `}                   
                 ${!fld.list1SelectedRow ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
                     <mwc-select style="width:100%;" id="list1SelectedRow" label="${this.fieldLabel(fld.list1SelectedRow)}">
@@ -1185,6 +1194,8 @@ export function TrazitGenericDialogs(base) {
     get listMDvariables() {return this.shadowRoot.querySelector("mwc-select#listMDvariables")}
     get listSelectedStudyIndividuals() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividuals")}
     get listSelectedStudyIndividualSamples() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividualSamples")}
+
+    get multiselectlist1() {    return this.shadowRoot.querySelector("multi-select#multiselectlist1")    }
 
     get dynamicElement1() {    return this.shadowRoot.querySelector("#dynamicElement1")    } 
 
