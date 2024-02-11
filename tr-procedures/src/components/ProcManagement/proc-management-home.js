@@ -880,7 +880,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
           width: 100%;
           background-color: transparent;
           overflow-y: scroll !important;
-          height: 800px;
+          height: 100%;
           transition: all 0.4s ease-in-out;
         }
         @media screen and (min-width: 992px) {
