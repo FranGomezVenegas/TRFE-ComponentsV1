@@ -1346,13 +1346,17 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
   clickItemAction(index, testIdx, elementdef, thisitem){
     console.log("clickItemAction",elementdef.view_definition.detail.clickItemAction);
     //this[elementdef.view_definition.detail.clickItemAction](index, testIdx, elementdef, thisitem)
+    if (elementdef.view_definition.detail.clickItemAction===undefined){
+      alert("The detail section of this model has no the property clickItemAction to set the click action")
+      return null;
+    }
     const func = this[elementdef.view_definition.detail.clickItemAction];
     if (typeof func === 'function') {
       this[elementdef.view_definition.detail.clickItemAction](index, testIdx, elementdef, thisitem);
       return
-    } else {
+    } else {      
       // Handle the case where it's not a function or doesn't exist
-      console.error('Invalid function:', elem.view_definition.detail.paneName);
+      console.error('Invalid function:', elementdef.view_definition.detail.clickItemAction);
       return null; // or any other appropriate default action
     }      
   }
