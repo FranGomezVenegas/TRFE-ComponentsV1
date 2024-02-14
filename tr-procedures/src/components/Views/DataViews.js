@@ -1654,7 +1654,7 @@ export function DataViews(base) {
       console.log(e.currentTarget.isvideo);
       this.dialogEl.style.display = "block";
       const { width, height } = this.dialogEl.getBoundingClientRect();
-      const marginTop = height / 2 - 80;
+      const marginTop = height / 2 - 200;
       const marginLeft = width / 2;
       if (
         e.currentTarget.isvideo === undefined ||

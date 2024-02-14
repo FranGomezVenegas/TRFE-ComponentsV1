@@ -301,6 +301,7 @@ export const ProcManagement = [
                   "clientMethod": "openSop",
                   "selectedItemPropertyName": "selectedItems",
                   "requiresDialog": false,
+                  "fieldWithUrl": "report_url",
                   "certificationException": true,
                   "button": {
                     "icon": "picture_as_pdf",

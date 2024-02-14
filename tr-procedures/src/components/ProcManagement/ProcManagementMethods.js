@@ -11,7 +11,12 @@ export function ProcManagementMethods(base) {
 
     openSop(e) {
       if (window) {
-        window.open(this.selectedItems[0].file_link, "_blank").focus();
+        let urlVal="file_link"
+        console.log(e)
+        if (this.actionBeingPerformedModel.fieldWithUrl!==undefined){
+          urlVal=this.actionBeingPerformedModel.fieldWithUrl
+        }
+        window.open(this.selectedItems[0][urlVal], "_blank").focus();
       }
     }
 
