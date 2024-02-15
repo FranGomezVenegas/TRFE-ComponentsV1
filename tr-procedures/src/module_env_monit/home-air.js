@@ -3,10 +3,10 @@ import { html, css, nothing, LitElement } from 'lit';
 // import './tabs-composition';
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import '../components/Dashboard';
-import './StagesView';
-import './MultiSelect';
-import './DragDropBox'
-import './DragDropTable'
+import '../components/StagesView';
+import '../components/MultiSelect';
+import '../components/DragDropBox'
+import '../components/DragDropTable'
 import { navigator } from 'lit-element-router';
 export class HomeAir extends navigator(LitElement) {
   static get styles() {

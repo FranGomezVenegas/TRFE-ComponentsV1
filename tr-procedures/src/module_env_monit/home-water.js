@@ -4,7 +4,7 @@ import { html, css, nothing, LitElement } from "lit";
 // import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { navigator } from "lit-element-router";
 import '../components/Dashboard';
-import './StagesView'
+import '../components/StagesView'
 export class HomeWater extends navigator(LitElement) {
   static get styles() {
     return css`
