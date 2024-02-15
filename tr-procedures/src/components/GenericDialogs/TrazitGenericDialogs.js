@@ -193,7 +193,7 @@ export function TrazitGenericDialogs(base) {
                     :html`
                         ${this.genericDialogGridItems.map((fld, i) =>
                         html`
-                        <mwc-icon-button title="${fld.brief_summary!==undefined&&fld.brief_summary.length>0? fld.brief_summary: fld.file_link}" icon="picture_as_pdf" @click=${()=>window.open(fld.file_link, '_blank').focus()} ?disabled=${!fld.file_link}></mwc-icon-button>
+                        <mwc-icon-button title="${fld.brief_summary!==undefined&&fld.brief_summary.length>0? fld.brief_summary: fld.file_link}" icon="picture_as_pdf" @click=${()=>window.open(fld.file_link!==undefined?fld.file_link:fld.report_url, '_blank').focus()} ?disabled=${!fld.file_link}></mwc-icon-button>
                         `
                         )}
                     `}
