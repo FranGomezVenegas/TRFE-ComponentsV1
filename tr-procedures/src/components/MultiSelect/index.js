@@ -23,6 +23,7 @@ export class MultiSelect extends navigator(LitElement) {
     this.open = false;
     this.searchOptions = [];
     this.allowAdhocEntries = true;
+    this.activeValues = undefined;
   }
 
   render() {
@@ -46,12 +47,28 @@ export class MultiSelect extends navigator(LitElement) {
 
   _pressEnter = (e) => {+
     this.activeOptions.push(e.target.value);
+    this.activeOptions.map((value, i) => {
+      if(i == 0) {
+        this.activeValues = value;
+      }
+      else {
+        this.activeValues += "|" + value;
+      }
+    })
     this.inputValue = "";
     this.requestUpdate();
   }
 
   firstUpdated = () => {
     this.searchOptions = this.options;
+    this.activeOptions.map((value, i) => {
+      if(i == 0) {
+        this.activeValues = value;
+      }
+      else {
+        this.activeValues += "|" + value;
+      }
+    })
     this.requestUpdate();
   }
 
@@ -63,11 +80,27 @@ export class MultiSelect extends navigator(LitElement) {
   _removeActiveOption = (index) => {
     this.searchOptions.push(this.activeOptions[index]);
     this.activeOptions.splice(index, 1);
+    this.activeOptions.map((value, i) => {
+      if(i == 0) {
+        this.activeValues = value;
+      }
+      else {
+        this.activeValues += "|" + value;
+      }
+    })
     this.requestUpdate();
   }
 
   _removeOption = (index) => {
     this.activeOptions.push(this.searchOptions[index]);
+    this.activeOptions.map((value, i) => {
+      if(i == 0) {
+        this.activeValues = value;
+      }
+      else {
+        this.activeValues += "|" + value;
+      }
+    })
     this.searchOptions.splice(index, 1);
     this.requestUpdate();
   }
@@ -75,7 +108,6 @@ export class MultiSelect extends navigator(LitElement) {
   _setOpenTrue = () => {
     this.open = true;
     this.requestUpdate();
-    
   }
 }
 
