@@ -23,7 +23,7 @@ export class MultiSelect extends navigator(LitElement) {
     this.open = false;
     this.searchOptions = [];
     this.allowAdhocEntries = true;
-    this.activeValues = undefined;
+    this.value = undefined;
   }
 
   render() {
@@ -49,10 +49,10 @@ export class MultiSelect extends navigator(LitElement) {
     this.activeOptions.push(e.target.value);
     this.activeOptions.map((value, i) => {
       if(i == 0) {
-        this.activeValues = value;
+        this.value = value;
       }
       else {
-        this.activeValues += "|" + value;
+        this.value += "|" + value;
       }
     })
     this.inputValue = "";
@@ -63,10 +63,10 @@ export class MultiSelect extends navigator(LitElement) {
     this.searchOptions = this.options;
     this.activeOptions.map((value, i) => {
       if(i == 0) {
-        this.activeValues = value;
+        this.value = value;
       }
       else {
-        this.activeValues += "|" + value;
+        this.value += "|" + value;
       }
     })
     this.requestUpdate();
@@ -82,10 +82,10 @@ export class MultiSelect extends navigator(LitElement) {
     this.activeOptions.splice(index, 1);
     this.activeOptions.map((value, i) => {
       if(i == 0) {
-        this.activeValues = value;
+        this.value = value;
       }
       else {
-        this.activeValues += "|" + value;
+        this.value += "|" + value;
       }
     })
     this.requestUpdate();
@@ -95,10 +95,10 @@ export class MultiSelect extends navigator(LitElement) {
     this.activeOptions.push(this.searchOptions[index]);
     this.activeOptions.map((value, i) => {
       if(i == 0) {
-        this.activeValues = value;
+        this.value = value;
       }
       else {
-        this.activeValues += "|" + value;
+        this.value += "|" + value;
       }
     })
     this.searchOptions.splice(index, 1);
