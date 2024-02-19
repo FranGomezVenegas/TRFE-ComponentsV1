@@ -66,4 +66,10 @@ export const styles = css`
     padding: 8px;
     transform: translateY(-3px);
 }
+
+label {
+    font-weight: bold;
+    color: rgb(24, 164, 254);
+    font-family: Montserrat;
+}
 `

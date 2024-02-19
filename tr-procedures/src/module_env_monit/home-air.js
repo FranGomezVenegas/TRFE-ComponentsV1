@@ -179,6 +179,7 @@ export class HomeAir extends navigator(LitElement) {
         this.ready=false;
         this.config={}
         this.multiselectOptions=[]
+        this.purpose = "multiselect-purpose";
         this.multiselectOptions.push('hello')
         this.multiselectOptions.push('goodbye')
         this.multiselectActiveOptions=[]
@@ -272,7 +273,7 @@ export class HomeAir extends navigator(LitElement) {
       // <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
       return html`
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
-        <multi-select .options=${this.multiselectOptions} .activeOptions=${this.multiselectActiveOptions}> </multi-select>
+        <multi-select .label=${this.purpose} .options=${this.multiselectOptions} .activeOptions=${this.multiselectActiveOptions}> </multi-select>
         <dragdrop-box> </dragdrop-box>
         <dragdrop-table> </dragdrop-table>
         <stages-view> </stages-view>

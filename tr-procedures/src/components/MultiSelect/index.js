@@ -41,11 +41,11 @@ export class MultiSelect extends navigator(LitElement) {
       removeActiveOption: this._removeActiveOption,
       removeOption: this._removeOption,
       setOpenTrue: this._setOpenTrue,
-      pressEnter: this._pressEnter,
-    });
+      pressEnter: this._pressEnter, 
+    }, this.label);
   }
 
-  _pressEnter = (e) => {+
+  _pressEnter = (e) => {
     this.activeOptions.push(e.target.value);
     this.activeOptions.map((value, i) => {
       if(i == 0) {
