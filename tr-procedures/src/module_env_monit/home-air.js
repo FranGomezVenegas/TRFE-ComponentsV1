@@ -178,12 +178,9 @@ export class HomeAir extends navigator(LitElement) {
         console.log('constructor flowchart')
         this.ready=false;
         this.config={}
-        this.multiselectOptions=[]
+        this.multiselectOptions=['hello', 'goodbye']
         this.purpose = "multiselect-purpose";
-        this.multiselectOptions.push('hello')
-        this.multiselectOptions.push('goodbye')
         this.multiselectActiveOptions=[]
-        this.multiselectActiveOptions.push('hello')
         this.params = {
           title1_en: "Locations",
           title1_es: "Ubicaciones",

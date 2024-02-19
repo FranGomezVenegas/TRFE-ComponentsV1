@@ -1,5 +1,7 @@
 import { html } from 'lit-element';
 import '@material/mwc-icon';
+import "@material/mwc-textfield";
+
 export const template = (props, label) => {
     if (props.activeOptions===undefined){ props.activeOptions=[]}
     if (props.allowAdhocEntries===undefined){ props.allowAdhocEntries=false}
@@ -16,9 +18,9 @@ export const template = (props, label) => {
                 `)}
             </div>
             ${props.allowAdhocEntries ? html `
-            <input type="text" id="my-element" class="sellect-element"  @change=${(e) => props.pressEnter(e) } @click=${() => props.setOpenTrue()}>
+            <mwc-textfield @click=${() => props.setOpenTrue()} id="my-element" type="text" label=${"multiselect"}  @change=${(e) => props.pressEnter(e) }></mwc-textfield>
             ` : html `
-            <input type="text" id="my-element" class="sellect-element"  @click=${() => props.setOpenTrue()}>
+            <mwc-textfield @click=${() => props.setOpenTrue()} id="my-element" type="text" label=${"multiselect"}></mwc-textfield>
             `}
             <div class="sellect-origin-list ${props.open ? "open" : ""}">
                 ${props.searchOptions.map((option, i) => html `

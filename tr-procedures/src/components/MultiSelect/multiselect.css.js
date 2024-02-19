@@ -14,6 +14,7 @@ export const styles = css`
 }
 .sellect-destination-list {
     display: inline-block;
+    transform: translateY(-8px);
 }
 .sellect-destination-list .sellect-item {
     padding-top: 3px;
@@ -26,7 +27,9 @@ export const styles = css`
     border: 1px solid #ccc;
     cursor: pointer;
     border-radius: 2px;
-    padding: 0 5px 2px;
+    padding: 8px 5px;
+    text-align: center;
+    line-height: 32px;
     display: inline-block;
 }
 .sellect-destination-list .sellect-item .sellect-close-icon {
