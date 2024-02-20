@@ -82,6 +82,7 @@ export const styles = css`
 .first {
     color: gray;
     position: absolute;
+    font-size: 14px;
 }
 
 .second {
