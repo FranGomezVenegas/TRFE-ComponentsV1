@@ -179,7 +179,7 @@ export class HomeAir extends navigator(LitElement) {
         this.ready=false;
         this.config={}
         this.multiselectOptions=['hello', 'goodbye']
-        this.purpose = "multiselect-purpose";
+        this.purpose = "* New Production Lot Name";
         this.multiselectActiveOptions=[]
         this.params = {
           title1_en: "Locations",

@@ -24,6 +24,7 @@ export class MultiSelect extends navigator(LitElement) {
     this.searchOptions = [];
     this.allowAdhocEntries = true;
     this.value = undefined;
+    this.clickedContainer = false;
   }
 
   render() {
@@ -37,12 +38,27 @@ export class MultiSelect extends navigator(LitElement) {
       open: this.open,
       searchOptions: this.searchOptions,
       allowAdhocEntries: this.allowAdhocEntries,
+      clickedContainer: this.clickedContainer,
       setOpen: this._setOpen,
       removeActiveOption: this._removeActiveOption,
       removeOption: this._removeOption,
       setOpenTrue: this._setOpenTrue,
       pressEnter: this._pressEnter, 
+      clickContainer: this._clickContainer,
+      inputFocusOut: this._inputFocusOut,
     }, this.label);
+  }
+
+  _inputFocusOut = () => {
+    this.clickedContainer = false;
+    this.open = false;
+    this.requestUpdate();
+  }
+
+  _clickContainer = (e) => {
+    this.clickedContainer = true;
+    this.open = true;
+    this.requestUpdate();
   }
 
   _pressEnter = (e) => {
@@ -72,8 +88,13 @@ export class MultiSelect extends navigator(LitElement) {
     this.requestUpdate();
   }
 
-  _setOpen = () => {
+  _setOpen = (e) => {
+    e.stopPropagation();
     this.open = !this.open;
+    this.clickedContainer = false;
+    if(this.open) {
+      this.clickedContainer = true;
+    }
     this.requestUpdate();
   }
 
@@ -88,6 +109,10 @@ export class MultiSelect extends navigator(LitElement) {
         this.value += "|" + value;
       }
     })
+    if(this.activeOptions.length == 0) {
+      this.clickedContainer = false;
+      this.open = false;
+    }
     this.requestUpdate();
   }
 
