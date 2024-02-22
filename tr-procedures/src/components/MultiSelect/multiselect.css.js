@@ -86,12 +86,7 @@ export const styles = css`
 }
 
 .second {
-    top: -10px;
-    left: -12px;
-    position: absolute;
-    background-color: white;
-    transform: scale(0.8);
-    color: #18a4fe;
+    display: none;
 }
 
 label {
