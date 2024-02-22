@@ -50,7 +50,9 @@ export class MultiSelect extends navigator(LitElement) {
   }
 
   _inputFocusOut = () => {
-    this.clickedContainer = false;
+    if(this.activeOptions.length == 0) {
+      this.clickedContainer = false;
+    }
     this.open = false;
     this.requestUpdate();
   }

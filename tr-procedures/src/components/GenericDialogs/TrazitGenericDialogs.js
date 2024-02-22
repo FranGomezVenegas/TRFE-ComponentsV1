@@ -575,7 +575,7 @@ export function TrazitGenericDialogs(base) {
                 </div>  
                 ${!fld.multiselectlist1 ?
                     html``: html`        
-                    <div class="layout horizontal flex center-center">
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
                       <multi-select style="width: 100%;" id="multiselectlist1" .options=${fld.multiselectlist1.multiselectOptions} .activeOptions=${fld.multiselectlist1.multiselectActiveOptions}
                       .label="${fld.multiselectlist1["label_" + this.lang]}"> </multi-select> 
                     </div>

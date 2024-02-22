@@ -24,7 +24,7 @@ export const styles = css`
 }
 
 .sellect-destination-list .sellect-item {
-    margin: 0 5px 5px 0;
+    margin: 5px 5px 5px 0;
     background-color: #e5e5e5;
     border: 1px solid #ccc;
     cursor: pointer;
