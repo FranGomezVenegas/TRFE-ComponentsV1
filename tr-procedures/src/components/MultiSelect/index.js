@@ -93,9 +93,12 @@ export class MultiSelect extends navigator(LitElement) {
   _setOpen = (e) => {
     e.stopPropagation();
     this.open = !this.open;
-    this.clickedContainer = false;
     if(this.open) {
       this.clickedContainer = true;
+    } else {
+      if(this.activeOptions.length == 0) {
+        this.clickedContainer = false;
+      }
     }
     this.requestUpdate();
   }
