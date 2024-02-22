@@ -33,22 +33,36 @@ export class DependencyForm extends LitElement {
     this.toggles = {};
     this.objectTypes = [];
     this.rowSelectedData = {};
+    this.notificationChecked = false;
+    this.tmpNotification = [];
   }
 
   render() {
     return template({
       endpoints: this.endpoints,
       notifications: this.notifications,
+      tmpNotifications: this.tmpNotifications,
       params: this.params,
       lang: this.lang,
       checkValidity: this._checkValidity,
       toggles: this.toggles,
       objectTypes: this.objectTypes,
+      rowSelectedData: this.rowSelectedData,
+      notificationChecked: this.notificationChecked,
       handleChangeEndpoint: this._handleChangeEndpoint,
       toggleChanged: this._toggleChanged,
       handleChangeStep: this._handleChangeStep,
-      rowSelectedData: this.rowSelectedData
+      visibleNotification: this._visibleNotification,
     });
+  }
+
+  _visibleNotification = (e) =>  {
+    this.notificationChecked = !this.notificationChecked;
+    this.notifications = this.tmpNotifications;
+    if(this.notificationChecked) {
+      this.notifications = [];
+    }
+    this.requestUpdate();
   }
 
   _handleChangeStep = (name) => (e) => {

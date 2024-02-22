@@ -9,6 +9,7 @@ import { elementTypes } from "../config";
 export const template = (props) => {
   let items = [];
   items = sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.endpoints.find((item) => item.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name)?.arguments_array : props.params;
+
   return html`
     <div class="container">
       <form id="#endpoint-form" action="/" method="get">
@@ -175,8 +176,9 @@ export const template = (props) => {
             })
           }
           <mwc-formfield label="Expected successful?">
-            <mwc-checkbox name="expectedSyntaxis"></mwc-checkbox>
+            <mwc-checkbox name="expectedSyntaxis" @change=${(e) => props.visibleNotification(e)}></mwc-checkbox>
           </mwc-formfield>
+          ${!props.notificationChecked ? html `
           <mwc-select
             fixedMenuPosition
             id="notification"
@@ -191,6 +193,7 @@ export const template = (props) => {
               `;
             })}
           </mwc-select>
+          `: null}
         </div>
       </form>
     </div>

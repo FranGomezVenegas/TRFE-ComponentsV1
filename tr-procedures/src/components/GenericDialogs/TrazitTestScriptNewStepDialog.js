@@ -128,6 +128,7 @@ export function TrazitTestScriptNewStepDialog(base) {
             .lang=${this.lang}
             .endpoints=${this.listTestEndpointsList()}
             .notifications=${this.listTestNotificationsList()}
+            .tmpNotifications=${this.listTestNotificationsList()}
             .rowSelectedData=${rowData}
           ></dependency-form>
           <div style="margin-top:30px;text-align:center">
