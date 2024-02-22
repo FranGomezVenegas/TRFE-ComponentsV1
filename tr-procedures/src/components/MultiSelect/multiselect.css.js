@@ -6,7 +6,7 @@ export const styles = css`
 }
 .sellect-container {
     border: 1px solid #ccc;
-    padding: 8px 5px 0 5px;
+    padding: 16px 5px 0 5px;
     border-radius: 3px;
     margin-top: 5px;
     position: relative;
@@ -83,10 +83,15 @@ export const styles = css`
     color: gray;
     position: absolute;
     font-size: 14px;
+    top: 8px;
 }
 
 .second {
-    display: none;
+    top: 0px;
+    left: -12px;
+    position: absolute;
+    transform: scale(0.8);
+    color: #18a4fe;
 }
 
 label {
