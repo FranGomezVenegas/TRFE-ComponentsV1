@@ -1654,7 +1654,7 @@ export function DataViews(base) {
       console.log(e.currentTarget.isvideo);
       this.dialogEl.style.display = "block";
       const { width, height } = this.dialogEl.getBoundingClientRect();
-      const marginTop = height / 2 - 200;
+      const marginTop = height / 2;
       const marginLeft = width / 2;
       if (
         e.currentTarget.isvideo === undefined ||
@@ -1670,10 +1670,18 @@ export function DataViews(base) {
         this.videosourceEl.src = mimeUrl;
       }
 
-      this.dialogEl.style.marginTop = `${marginTop}px`;
-      this.dialogEl.style.marginLeft = `${marginLeft}px`;
+      console.log(" window.innerWidth;",  window.innerWidth);
+
+      this.dialogEl.style.marginTop = `200px`;
+      this.dialogEl.style.marginLeft = `316px`;
+      if(window.innerWidth < 800) {
+        this.dialogEl.style.marginLeft = `100px`;
+      }
+      this.dialogEl.style.border = "1px solid rgb(36, 192, 235)";
+      this.dialogEl.style.width = `${window.innerWidth * 0.65}px`;
       //this.dialogEl.style.display = 'block';
     }
+
     closeDialogFrame() {
       this.dialogEl.style.display = "none";
     }
