@@ -53,15 +53,47 @@ export const template = (props) => {
               param.name == "category" ? html`<mwc-select></mwc-select>` : ``;
             if ((param.type === elementTypes.Number) || (param.type === elementTypes.Integer) ) {
               return html`
-                <mwc-textfield
-                  ?required=${required}
-                  outlined
-                  type="number"
-                  label=${param.name}
-                  name=${param.name}
-                  @blur=${props.checkValidity}
-                  value=3
-                ></mwc-textfield>
+              <mwc-formfield>
+                  ${str}
+                  ${props.toggles[param.name]
+                    ? html`
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${"Step"}
+                          name=${param.name + "_step"}
+                          style="width: 100%"
+                          @change=${props.handleChangeStep(param.name)}
+                        ></mwc-textfield>
+                         <mwc-textfield
+                            type="text"
+                            ?required=${required}
+                            label=${"Object Type"}
+                            name=${param.name + "_object_posic"}
+                            style="width: 100%"
+                            value=${props.objectTypes}
+                          ></mwc-textfield>                       
+                        <mwc-textfield
+                          type="text"
+                          ?required=${required}
+                          label=${"Object Posic"}
+                          name=${param.name + "_object_posic"}
+                          style="width: 100%"
+                          defaultValue=${1}
+                        ></mwc-textfield>
+                      `
+                    :
+                    html `
+                    <mwc-textfield
+                    ?required=${required}
+                    outlined
+                    type="number"
+                    label=${param.name}
+                    name=${param.name}
+                    @blur=${props.checkValidity}
+                    value=3
+                  ></mwc-textfield>` }
+                </mwc-formfield>
               `;
             } else if ((param.type === elementTypes.Text) || (param.type === elementTypes.TextArr) || (param.type === elementTypes.TextObjectsArr) ) {
               let arg = "argument_0" + (idx + 1);
