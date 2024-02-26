@@ -158,7 +158,8 @@ export class HomeAir extends navigator(LitElement) {
     static get properties() {
         return {
             tabsMainViewModelFromProcModel: {type: Object},
-            viewModelFromProcModel: {type: Object},        
+            viewModelFromProcModel: {type: Object},      
+            actionModel: {type: Object},  
             config: { type: Object },
             procName: { type: String },
             ready:{type: Boolean},
@@ -172,9 +173,26 @@ export class HomeAir extends navigator(LitElement) {
         }
     }
     constructor() {
-        super()
+        super()        
         this.viewModelFromProcModel={} 
         this.tabsMainViewModelFromProcModel={}
+        this.actionModel={}
+        this.actionModel={ 
+          "actionName": "DragAndDropEM_DEACTIVATE_PRODUCTION_LOT",
+          "endPoint": "/moduleenvmon/EnvMonProdLotAPIactions",     
+          "endPointParams": [
+            { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
+          ],
+          "requiresDialog": false,
+          "button": {
+            "icon": "alarm_off",
+            "title": {
+              "label_en": "Deactivate", "label_es": "Desactivar"
+            },
+            "requiresGridItemSelected": true
+          }
+        }
+
         console.log('constructor flowchart')
         this.ready=false;
         this.config={}
@@ -271,8 +289,8 @@ export class HomeAir extends navigator(LitElement) {
       return html`
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
         <multi-select .label=${this.purpose} .options=${this.multiselectOptions} .activeOptions=${this.multiselectActiveOptions}> </multi-select>
-        <dragdrop-box> </dragdrop-box>
-        <dragdrop-table> </dragdrop-table>
+        <dragdrop-box .action=${this.actionModel}> </dragdrop-box>
+        <dragdrop-table .action=${this.actionModel}> </dragdrop-table>
         <stages-view> </stages-view>
       `;
     }

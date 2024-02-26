@@ -7,6 +7,7 @@ import { ProcManagementMethods } from '../../components/ProcManagement/ProcManag
 export function ButtonsFunctions(base) {
   return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
 
+
     getButtonForRows(actions, data, isProcManagement) {
       // console.log('getButtonForRows', 'actions', actions, 'data', data)
       if (actions === undefined) { actions = this.viewModelFromProcModel }
@@ -515,6 +516,84 @@ export function ButtonsFunctions(base) {
       }
       return d
     }
+    
+    actionMethodForDragAndDrop(e, action, data, dataFromDestination, dataFromOrigin={}, isProcManagement) {
+      e.stopPropagation();
+      sessionStorage.setItem('actionName', action.actionName);
+      selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
+      console.log('actionMethod', this.selectedProcInstance, isProcManagement)
+      //this.loadDialogs()  
+      if (data !== undefined) {
+        if (Object.keys(data).length > 0) {
+          this.selectedItems = []
+          this.selectedItems.push(data)
+        }
+      }
+      console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems)
+      if (action === undefined) {
+        alert('action not passed as argument')
+        return
+      }
+  
+      if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
+        action.actionName = "SCRIPT_UPDATE_STEP";
+        action.dialogInfo.name = "testScriptNewStepDialog";
+      }
+      this.actionBeingPerformedModel = action;
+      if (action.requiresDialog === undefined) {
+        alert('The action ' + action.actionName + ' has no requiresDialog property which is mandatory')
+        return
+      }
+      if (action.requiresDialog === false) {
+        if (action.clientMethod !== undefined) {
+          this[action.clientMethod](action, this[selectedItemPropertyName][0])
+          return
+        } else {
+          if (this[selectedItemPropertyName] === undefined) {
+            if (data === undefined) {
+              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement)
+            } else {
+              this.actionWhenRequiresNoDialogForDragAndDrop(action, data, dataFromDestination, dataFromOrigin, null, isProcManagement)
+            }
+          } else {
+            this.actionWhenRequiresNoDialogForDragAndDrop(action, this[selectedItemPropertyName][0], dataFromDestination, dataFromOrigin, null, isProcManagement)
+          }
+          return
+        }
+      }
+      if (action.requiresGridItemSelected !== undefined && action.requiresGridItemSelected === true &&
+        (this[selectedItemPropertyName] === undefined || this[selectedItemPropertyName][0] === undefined)) {
+        alert('Please select one item in the table prior')
+        return
+      }
+      this.GetQueriesForDialog(action)
+      this.getGenericDialogGridItems(action.dialogInfo)
+
+      //this.loadDialogs()
+      console.log("action.dialogInfo.name", action.dialogInfo.name);
+      if (action.dialogInfo!==undefined&&action.dialogInfo.name === "auditDialog") {
+        this[action.clientMethod]()
+        return
+      }
+      if (action.dialogInfo!==undefined&&this[action.dialogInfo.name]) {
+        if (action.dialogInfo.subQueryName) {
+          this[action.dialogInfo.subQueryName]()
+        } else {
+          this[action.dialogInfo.name].show();
+        }
+      }
+      else if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
+        this["testScriptNewStepDialog"].show();
+      }
+      else {
+        if (action.dialogInfo!==undefined){
+          alert('the action ' + action.actionName + ' has no dialog defined')
+        }else{  
+          alert('the dialog ' + action.dialogInfo.name + ' does not exist')
+        }
+      }
+    }
+
     actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
       e.stopPropagation();
       sessionStorage.setItem('actionName', action.actionName);
@@ -682,8 +761,8 @@ export function ButtonsFunctions(base) {
         })
       }
       if (this.config.backendUrl === undefined) {
-        // this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
-        this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
+        this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
+        //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
         console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
         let sessionDbName = JSON.parse(sessionStorage.getItem("userSession")).dbName
         if (sessionDbName !== undefined) {
@@ -904,6 +983,20 @@ export function ButtonsFunctions(base) {
       // this.performActionRequestHavingDialogOrNot(action, selectedItem)
       return
     }
+    actionWhenRequiresNoDialogForDragAndDrop(action, selectedItem, dataFromDestination, dataFromOrigin, targetValue, isProcManagement) {
+      console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
+      this.selectedAction = action
+      if (targetValue === undefined) { targetValue = {} }
+      if (this.itemId) {
+        this.credsChecker(action.actionName, this.itemId, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
+      } else {
+        this.credsChecker(action.actionName, selectedItem, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
+      }
+      // Comentado para habilitar confirmDialogs
+      // this.performActionRequestHavingDialogOrNot(action, selectedItem)
+      return
+    }
+
     async performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}) {
       if (action.alternativeAPIActionMethod !== undefined) {
         this[action.alternativeAPIActionMethod]()
