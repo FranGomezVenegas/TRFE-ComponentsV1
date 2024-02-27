@@ -518,10 +518,10 @@ export function ButtonsFunctions(base) {
     }
     
     actionMethodForDragAndDrop(e, action, data, dataFromDestination, dataFromOrigin={}, isProcManagement) {
+      console.log("actionMethodForDragAndDrop", data, dataFromDestination);
       e.stopPropagation();
       sessionStorage.setItem('actionName', action.actionName);
-      selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
-      console.log('actionMethod', this.selectedProcInstance, isProcManagement)
+
       //this.loadDialogs()  
       if (data !== undefined) {
         if (Object.keys(data).length > 0) {
@@ -549,16 +549,7 @@ export function ButtonsFunctions(base) {
           this[action.clientMethod](action, this[selectedItemPropertyName][0])
           return
         } else {
-          if (this[selectedItemPropertyName] === undefined) {
-            if (data === undefined) {
-              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement)
-            } else {
-              this.actionWhenRequiresNoDialogForDragAndDrop(action, data, dataFromDestination, dataFromOrigin, null, isProcManagement)
-            }
-          } else {
-            this.actionWhenRequiresNoDialogForDragAndDrop(action, this[selectedItemPropertyName][0], dataFromDestination, dataFromOrigin, null, isProcManagement)
-          }
-          return
+          this.actionWhenRequiresNoDialogForDragAndDrop(action, data, dataFromDestination, dataFromOrigin, null, isProcManagement)
         }
       }
       if (action.requiresGridItemSelected !== undefined && action.requiresGridItemSelected === true &&

@@ -176,9 +176,8 @@ export class HomeAir extends navigator(LitElement) {
         super()        
         this.viewModelFromProcModel={} 
         this.tabsMainViewModelFromProcModel={}
-        this.actionModel={}
         this.actionModel={ 
-          "actionName": "DragAndDropEM_DEACTIVATE_PRODUCTION_LOT",
+          "actionName": "EM_DEACTIVATE_PRODUCTION_LOT",
           "endPoint": "/moduleenvmon/EnvMonProdLotAPIactions",     
           "endPointParams": [
             { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }

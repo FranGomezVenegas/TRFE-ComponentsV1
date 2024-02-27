@@ -2,7 +2,10 @@ import {LitElement} from 'lit-element';
 import {template} from './dragdropbox.template';
 import {styles} from './dragdropbox.css';
 import { navigator } from "lit-element-router";
-export class DragDropBox extends navigator(LitElement) {
+import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
+
+export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
+
   static get styles() {
     return styles;
   }
@@ -23,6 +26,8 @@ export class DragDropBox extends navigator(LitElement) {
     this.viewMode = 1;
     this.selectedBox = undefined;
     this.selectedTr = undefined;
+    this.dragBoxData = {id: undefined, x:"", y: ""};
+    this.dropBoxData = {id: undefined, x:"", y: ""};  
     this.data = {
       boxDefinition:{
         cols: 5,
@@ -350,10 +355,10 @@ export class DragDropBox extends navigator(LitElement) {
       setViewTable: this._setViewTable,
       setViewTableBox: this._setViewTableBox,
       showBoxContent: this._showBoxContent,
-    });
+    }, this.action);
   }
 
-  _showBoxContent = (data) => {
+   _showBoxContent = (data) => {
     this.data.boxDefinition.cols = data.cols;
     this.data.boxDefinition.rows = data.rows;
     this.viewTableBox = false;
@@ -407,7 +412,15 @@ export class DragDropBox extends navigator(LitElement) {
     e.preventDefault();
   }
 
-  _dropBox = (e) => {
+  _dropBox = (e, x, y) => {
+    this.dropBoxData.x = x;
+    this.dropBoxData.y = y;
+    this.data.boxDefinition.datas.map((item, index) => {
+      if(item.posX == x && item.posY == y) {
+        this.dropBoxData.id = item.id;
+      }
+    })
+    console.log("_dropBox", this.dropBoxData);
     e.preventDefault();
     let currentElement = e.target;
     while (currentElement && !currentElement.classList.contains('box')) {
@@ -427,7 +440,8 @@ export class DragDropBox extends navigator(LitElement) {
       currentElement.style.backgroundColor = "rgb(80, 220, 247)"
     }
     currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
-    alert("Success to Drop");
+    
+    this.actionMethodForDragAndDrop(e, this.action, this.dragBoxData, this.dropBoxData, null, null);
   }
 
   _allowDropTr = (e) => {
@@ -440,7 +454,15 @@ export class DragDropBox extends navigator(LitElement) {
     currentElement.parentNode.innerHTML = this.selectedTr;
   }
 
-  _dragBox = (e) => {
+  _dragBox = (e, x, y) => {
+    this.dragBoxData.x = x;
+    this.dragBoxData.y = y;
+    this.data.boxDefinition.datas.map((item, index) => {
+      if(item.posX == x && item.posY == y) {
+        this.dragBoxData.id = item.id;
+      }
+    })
+    console.log("asdf", this.dragBoxData);
     this.dragTr = false;
     let currentElement = e.target;
     while (currentElement && !currentElement.classList.contains('box')) {

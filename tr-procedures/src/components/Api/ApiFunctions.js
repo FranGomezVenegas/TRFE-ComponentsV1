@@ -409,7 +409,7 @@ export function ApiFunctions(base) {
       jsonParamForDragAndDrop(action, selObject = {}, dataFromDestination, dataFromOrigin, targetValue = {}, selGridObject = {}) {
         console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', 
            'dataFromDestination', dataFromDestination, 'dataFromOrigin', dataFromOrigin, targetValue, 'selGridObject', selGridObject)
-        let curArgName=""
+        let curArgName="";
         if (action===undefined){return}
           let jsonParam = {}
           if (action.endPointParams) {

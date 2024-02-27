@@ -1,7 +1,7 @@
 import { html } from 'lit-element';
 import '@material/mwc-icon';
 
-export const template = (props) => {
+export const template = (props, action) => {
     let cols = [], rows = [];
     for(let i = 0; i < props.data.boxDefinition.cols; i++) {
         cols.push(i);
@@ -12,6 +12,7 @@ export const template = (props) => {
         rows.push(String.fromCharCode(letter.charCodeAt(0) + (i)));
     }
     let activeData = null;
+
     return html`    
         <div style="display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; flex-direction:row; gap:12px;">
@@ -42,8 +43,8 @@ export const template = (props) => {
                                 <div class="row-num"> ${rowN} </div>
                                 ${props.data.boxDefinition.allow_move_objects ? 
                                 cols.map((item1 ,j) => html `
-                                <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``}  @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))} @dragover=${(e) => props.allowDrop(e)} @drop=${(e) => props.dropBox(e)}> 
-                                    <div draggable="true"  @dragstart=${(e) => props.dragBox(e)} class="draggable-box">
+                                <div class="box ${props.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``}  @click=${() => props.setSelectBoxIndex(rowN + (j + 1), i * cols.length + (j + 1))} @dragover=${(e) => props.allowDrop(e)} @drop=${(e) => props.dropBox(e, j + 1, i + 1)}> 
+                                    <div draggable="true"  @dragstart=${(e) => props.dragBox(e, j + 1, i + 1)} class="draggable-box">
                                         <div class="data-view" >
                                             <div> ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ? `id: ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)).id}` : html``} </div>
                                             <div> ${props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1)) ?  `${[props.data.boxDefinition.views[props.viewBoxMode][1]]}: ${ props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1))[props.data.boxDefinition.views[props.viewBoxMode][1]] ? props.data.boxDefinition.datas.find((item, index) => item.posX + ((item.posY - 1) * props.data.boxDefinition.cols) == i * cols.length + (j + 1))[props.data.boxDefinition.views[props.viewBoxMode][1]] : "???"}` : html `<div class="add-circle"> + </div>`} </div>
