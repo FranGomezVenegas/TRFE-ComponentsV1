@@ -558,31 +558,7 @@ export function ButtonsFunctions(base) {
         return
       }
       this.GetQueriesForDialog(action)
-      this.getGenericDialogGridItems(action.dialogInfo)
-
       //this.loadDialogs()
-      console.log("action.dialogInfo.name", action.dialogInfo.name);
-      if (action.dialogInfo!==undefined&&action.dialogInfo.name === "auditDialog") {
-        this[action.clientMethod]()
-        return
-      }
-      if (action.dialogInfo!==undefined&&this[action.dialogInfo.name]) {
-        if (action.dialogInfo.subQueryName) {
-          this[action.dialogInfo.subQueryName]()
-        } else {
-          this[action.dialogInfo.name].show();
-        }
-      }
-      else if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
-        this["testScriptNewStepDialog"].show();
-      }
-      else {
-        if (action.dialogInfo!==undefined){
-          alert('the action ' + action.actionName + ' has no dialog defined')
-        }else{  
-          alert('the dialog ' + action.dialogInfo.name + ' does not exist')
-        }
-      }
     }
 
     actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
@@ -921,6 +897,7 @@ export function ButtonsFunctions(base) {
       }
       this.samplesReload = false
     }
+
     async getGenericDialogGridItems(dialogInfo) {
 
       if ((dialogInfo.gridContent === undefined || dialogInfo.gridContent === false)
@@ -961,6 +938,7 @@ export function ButtonsFunctions(base) {
       console.log('genericDialogGridItems', data)
       return data
     }
+
     actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement) {
       console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
       this.selectedAction = action
@@ -981,7 +959,7 @@ export function ButtonsFunctions(base) {
       if (this.itemId) {
         this.credsChecker(action.actionName, this.itemId, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
       } else {
-        this.credsChecker(action.actionName, selectedItem, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
+        // this.credsChecker(action.actionName, selectedItem, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
       }
       // Comentado para habilitar confirmDialogs
       // this.performActionRequestHavingDialogOrNot(action, selectedItem)
