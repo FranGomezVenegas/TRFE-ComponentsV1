@@ -28,6 +28,7 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     this.selectedTr = undefined;
     this.dragBoxData = {id: undefined, x:"", y: ""};
     this.dropBoxData = {id: undefined, x:"", y: ""};  
+    this.dragTrData = {id: undefined};
     this.data = {
       boxDefinition:{
         cols: 5,
@@ -375,7 +376,7 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     this.requestUpdate();
   }
 
-  _dragTableTr = (e) => {
+  _dragTableTr = (e, id) => {
     this.dragTr = true;
     let currentElement = e.target;
     
@@ -395,6 +396,7 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
       str =`<div>id: ${this.data.tableData[currentID].id}</div><div> temperature: ${this.data.tableData[currentID].temperature}</div>`
     }
     this.selectedBox = str;
+    this.dragTrData.id = id;
   }
 
   _setViewBoxMode = (mode) => {
@@ -420,7 +422,6 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
         this.dropBoxData.id = item.id;
       }
     })
-    console.log("_dropBox", this.dropBoxData);
     e.preventDefault();
     let currentElement = e.target;
     while (currentElement && !currentElement.classList.contains('box')) {
@@ -434,14 +435,15 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
       if(this.dropBackgroundColor) {
         this.dragParentElement.style.backgroundColor = this.dropBackgroundColor;
       }
+      this.actionMethodForDragAndDrop(e, this.action, this.dragBoxData, this.dropBoxData, null, null);
     }
     currentElement.style.backgroundColor = this.dragBackgroundColor;
     if(this.dragTr) {
-      currentElement.style.backgroundColor = "rgb(80, 220, 247)"
+      currentElement.style.backgroundColor = "rgb(80, 220, 247)";
+      this.actionMethodForDragAndDrop(e, this.action, this.dragTrData, this.dropBoxData, null, null);
     }
     currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
     
-    this.actionMethodForDragAndDrop(e, this.action, this.dragBoxData, this.dropBoxData, null, null);
   }
 
   _allowDropTr = (e) => {
