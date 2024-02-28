@@ -518,7 +518,6 @@ export function ButtonsFunctions(base) {
     }
     
     actionMethodForDragAndDrop(e, action, data, dataFromDestination, dataFromOrigin={}, isProcManagement) {
-      console.log("actionMethodForDragAndDrop", data, dataFromDestination);
       e.stopPropagation();
       sessionStorage.setItem('actionName', action.actionName);
 
@@ -957,6 +956,7 @@ export function ButtonsFunctions(base) {
       this.selectedAction = action
       if (targetValue === undefined) { targetValue = {} }
       if (this.itemId) {
+        conso
         this.credsChecker(action.actionName, this.itemId, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
       } else {
         // this.credsChecker(action.actionName, selectedItem, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)

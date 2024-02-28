@@ -153,7 +153,7 @@ export const template = (props, action) => {
                         </thead>
                         <tbody>
                             ${props.data.tableData.map((data, i) => html`
-                            <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, data.id)}>
+                            <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, data.id, data.study, data.temperature)}>
                                 <td> ${data.id} </td>
                                 <td> ${data.study} </td>
                                 <td> ${data.temperature} </td>

@@ -26,9 +26,9 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     this.viewMode = 1;
     this.selectedBox = undefined;
     this.selectedTr = undefined;
-    this.dragBoxData = {id: undefined, x:"", y: ""};
-    this.dropBoxData = {id: undefined, x:"", y: ""};  
-    this.dragTrData = {id: undefined};
+    this.dragBoxData = {id: undefined, x:"", y: "", name:"", temperature:"", study:""};
+    this.dropBoxData = {id: undefined, x:"", y: "", name:"", temperature:"", study:""};  
+    this.dragTrData = {id: undefined, temperature:"", study:""};
     this.data = {
       boxDefinition:{
         cols: 5,
@@ -376,7 +376,7 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     this.requestUpdate();
   }
 
-  _dragTableTr = (e, id) => {
+  _dragTableTr = (e, id, study, temperature) => {
     this.dragTr = true;
     let currentElement = e.target;
     
@@ -397,6 +397,8 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     }
     this.selectedBox = str;
     this.dragTrData.id = id;
+    this.dragTrData.study = study;
+    this.dragTrData.temperature =temperature;
   }
 
   _setViewBoxMode = (mode) => {
@@ -420,6 +422,9 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     this.data.boxDefinition.datas.map((item, index) => {
       if(item.posX == x && item.posY == y) {
         this.dropBoxData.id = item.id;
+        this.dropBoxData.name = item.name;
+        this.dropBoxData.temperature = item.temperature;
+        this.dropBoxData.study = item.study
       }
     })
     e.preventDefault();
@@ -443,7 +448,7 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
       this.actionMethodForDragAndDrop(e, this.action, this.dragTrData, this.dropBoxData, null, null);
     }
     currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
-    
+    console.log("dropbox", this.dragBoxData, this.dropBoxData); 
   }
 
   _allowDropTr = (e) => {
@@ -462,6 +467,9 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     this.data.boxDefinition.datas.map((item, index) => {
       if(item.posX == x && item.posY == y) {
         this.dragBoxData.id = item.id;
+        this.dragBoxData.name = item.name;
+        this.dragBoxData.temperature = item.temperature;
+        this.dragBoxData.study = item.study
       }
     })
     console.log("asdf", this.dragBoxData);
