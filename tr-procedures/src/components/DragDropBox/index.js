@@ -359,10 +359,11 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
     }, this.action);
   }
 
-   _showBoxContent = (data) => {
+   _showBoxContent = (data, i) => {
     this.data.boxDefinition.cols = data.cols;
     this.data.boxDefinition.rows = data.rows;
     this.viewTableBox = false;
+    
     this.requestUpdate();
   }
 

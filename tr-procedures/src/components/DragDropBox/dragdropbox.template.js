@@ -121,7 +121,7 @@ export const template = (props, action) => {
                         </thead>
                         <tbody>
                             ${props.data.boxContents.map((row, i) => html `
-                            <tr @click=${() => props.showBoxContent(row)}> 
+                            <tr @click=${() => props.showBoxContent(row, i)}> 
                                 <td> box ${ i + 1 } </td>
                                 <td> ${row.cols} </td>
                                 <td> ${row.rows} </td>
