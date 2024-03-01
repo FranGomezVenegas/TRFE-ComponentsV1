@@ -36,11 +36,6 @@ export const DiseaseStudy = {
 			"requiresGridItemSelected": false
 		  },
 		  "endPointParams": [
-			{
-			  "argumentName": "projectName",
-			  "internalVariableSimpleObjName": "projectName",
-			  "internalVariableSimpleObjProperty": "filtertext1"          
-			}
 		  ]
 		},
 		"filter_button": {
@@ -48,10 +43,6 @@ export const DiseaseStudy = {
 		  "label_es": "Buscar"
 		},
 		"filter": [
-		  {
-			"filtertext1": {"label_en": "Project", "label_es": "Proyecto","fixValue": ""},
-			"filtertext2": {"label_en": "Study", "label_es": "Estudio","fixValue": ""}
-		  }
 		],
 		"filterResultDetail":{
 			"type":"list",
