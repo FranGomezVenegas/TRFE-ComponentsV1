@@ -886,7 +886,7 @@ export function DataViews(base) {
     }
 
     handleTableRowClick(event, rowSelected, elem) {
-      if(rowSelected.children == 0) {
+      if(rowSelected[elem.children] == 0) {
         if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
           alert("There is no data");
         }
@@ -1211,7 +1211,7 @@ export function DataViews(base) {
                               <tr
                                 @click=${(event) => {
                                   if(handler) {
-                                    if(p.children && p.children.length > 0) {
+                                    if(p[elem.children] && p[elem.children].length > 0) {
                                       if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
                                         handler(event, p, elem, idx);
                                       }
@@ -1262,9 +1262,9 @@ export function DataViews(base) {
                                                     :  null
                                                   }
                                                   <div class="right-area">
-                                                    ${index == 0 && p.children && p.children.length > 0 ? html `
+                                                    ${index == 0 && p[elem.children] && p[elem.children].length > 0 ? html `
                                                     <div class="circle"> 
-                                                      ${p.children.length} 
+                                                      ${p[elem.children].length} 
                                                     </div>
                                                     ` : html``}
                                                     <span class="text">
@@ -1342,7 +1342,7 @@ export function DataViews(base) {
       } else {
         dataArr = this.getDataFromRoot(elem, dataArr);
       }
-
+      console.log(elem, dataArr)
       const handleFilter = (event, p, elem, idx) => {
         const endPointResponseObject = elem.endPointResponseObject;
         const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
@@ -1368,7 +1368,7 @@ export function DataViews(base) {
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
       const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
-
+console.log('childDataArr', childDataArr)
       return html`
         ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme)}
         ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem, theme) : nothing}
