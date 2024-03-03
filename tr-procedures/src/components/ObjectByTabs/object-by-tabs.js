@@ -507,8 +507,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       if (Object.keys(this.selectedTabModelFromProcModel).length === 0){
         this.selectedTabModelFromProcModel=this.viewModelFromProcModel.tabs[0]
       }
-      console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
-      console.log("this.filterCurrentData", this.filterCurrentData);
+      //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
+      //console.log("this.filterCurrentData", this.filterCurrentData);
       return html`
         <objecttabs-composition 
           .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}

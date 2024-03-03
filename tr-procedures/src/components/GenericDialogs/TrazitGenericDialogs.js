@@ -941,7 +941,7 @@ export function TrazitGenericDialogs(base) {
     getProcMasterData(){
         if (this.isProcManagement===undefined||this.isProcManagement!==true){
             let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-            console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
+            //console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
             let findProc =[]
             if (this.area!==undefined){
                 findProc = userSession.procedures_list.procedures.filter(m => m.procInstanceName == this.area)
@@ -956,7 +956,7 @@ export function TrazitGenericDialogs(base) {
         //        this.procInstanceModel=ProceduresModel[this.procName]
             if (findProc!==undefined&&findProc.length>0&&findProc[0].master_data!==undefined){
             this.masterData=findProc[0].master_data
-            console.log('master data', this.masterData)   
+            //console.log('master data', this.masterData)   
             }
         }else{
             let userSession = JSON.parse(sessionStorage.getItem("userSession"))

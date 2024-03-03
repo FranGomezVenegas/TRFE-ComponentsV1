@@ -67,7 +67,7 @@ export function TrazitTestScriptNewStepDialog(base) {
       if (rowSelectedRowStr!==undefined&& rowSelectedRowStr !== "[object Object]" ){
         rowData=JSON.parse(rowSelectedRowStr)
       }
-      console.log(rowData)
+//      console.log(rowData)
       // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi
       //     otherwise it is not compatible with actions requiring credentials dialog.
       return html`
@@ -580,7 +580,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         propertyKeyValueEn: "error_code",
         propertyKeyValueEs: "error_code",
       };
-      console.log("listEntries", fld);
+      //console.log("listEntries", fld);
       var blankEmpty = {
         keyName: "",
         keyValue_en: "",
