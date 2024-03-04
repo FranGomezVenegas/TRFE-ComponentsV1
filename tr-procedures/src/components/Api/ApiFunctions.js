@@ -88,17 +88,20 @@ export function ApiFunctions(base) {
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
         return extraParams
       }          
-      jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}) {
+      jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElement) {
         console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue, 'selGridObject', selGridObject)
         let curArgName=""
         if (action===undefined){return}
           let jsonParam = {}
           if (action.endPointParams) {
             action.endPointParams.forEach(p => {
+              if (p.parentElementProperty){
+                jsonParam[p.argumentName] = parentElement[p.parentElementProperty]
+              }
               if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {     
                      
                 if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
-                  var msg=""
+                  let msg=""
                   if (this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
                     msg='The object '+p.internalVariableSimpleObjName+' has no one property called '+p.internalVariableSimpleObjProperty
                     alert(msg)
@@ -417,7 +420,7 @@ export function ApiFunctions(base) {
               if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {     
                      
                 if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
-                  var msg=""
+                  let msg=""
                   if (this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
                     msg='The object '+p.internalVariableSimpleObjName+' has no one property called '+p.internalVariableSimpleObjProperty
                     alert(msg)

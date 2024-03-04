@@ -4,7 +4,7 @@ import { ApiFunctions } from '../Api/ApiFunctions';
 export function AuditFunctions(base) {
     return class extends ApiFunctions(base) {
         getObjectAuditInfo(dataElement = this.selectedItems[0]) {
-            var extraParams=this.jsonParam(this.actionBeingPerformedModel, dataElement, {})   
+            let extraParams=this.jsonParam(this.actionBeingPerformedModel, dataElement, {})   
             let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)
             let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
             if (String(endPointUrl).toUpperCase().includes("ERROR")){

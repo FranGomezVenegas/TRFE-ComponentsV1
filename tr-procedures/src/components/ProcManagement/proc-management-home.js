@@ -1380,10 +1380,10 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
     // // this.selectedViewDefinition.tabs = undefined;
     // // this.selectedViewDefinition.view_definition = this.selectedTabModelFromProcModel.view_definition;
 
-    // var tmp = [];
+    // let tmp = [];
     // this.selectedTabModelFromProcModel.view_definition.map((data, i) => {
     //   if(i == 0) {
-    //     var reData = {
+    //     let reData = {
     //       elements: [],
     //       title: {},
     //       type: ""
@@ -1724,7 +1724,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
       this[action.alternativeAPIActionMethod]();
       return;
     }
-    var extraParams = this.jsonParam(action, selectedItem[0], targetValue);
+    let extraParams = this.jsonParam(action, selectedItem[0], targetValue);
     let APIParams = this.getAPICommonParams(action, true);
     let endPointUrl = this.getActionAPIUrl(action);
     if (String(endPointUrl).toUpperCase().includes("ERROR")) {

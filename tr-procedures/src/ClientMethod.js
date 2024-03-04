@@ -264,7 +264,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
         return
       } 
 
-      var extraParams=this.jsonParam(action,  selectedItem)   
+      let extraParams=this.jsonParam(action,  selectedItem)   
       let APIParams=this.getAPICommonParams(action)
       let endPointUrl=this.getActionAPIUrl(action)
       if (String(endPointUrl).toUpperCase().includes("ERROR")){
@@ -284,7 +284,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
         if (j && !j.is_error) {          
           console.log(j.zpl_code)
           //this.setPrintContent()          
-          var printWindow = window.open('', '', 'fullscreen=yes');
+          let printWindow = window.open('', '', 'fullscreen=yes');
           printWindow.document.write(j.zpl_code);
 //          printWindow.document.title = this.printObj.header;
           printWindow.document.close();
@@ -303,7 +303,7 @@ console.log('getSamples', 'actionObj', this.actionObj)
         if (j && j.is_error===undefined) {
           console.log(j.zpl_code)
           this.setPrintContent()
-          var printWindow = window.open('', '', 'fullscreen=yes');
+          let printWindow = window.open('', '', 'fullscreen=yes');
           printWindow.document.write(j.zpl_code);
 //          printWindow.document.title = this.printObj.header;
           printWindow.document.close();

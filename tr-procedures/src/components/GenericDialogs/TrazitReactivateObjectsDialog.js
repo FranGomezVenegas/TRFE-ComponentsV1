@@ -123,9 +123,9 @@ return class extends base {
             //console.log('this.actionBeingPerformedModel', this.actionBeingPerformedModel)
             return entry["name"]
         }
-        var lFlds=this.actionBeingPerformedModel.dialogInfo.listDefinition.eachEntryTextGenerator
-        var textToDisplay=''
-        for (var i = 0; i < lFlds.length; i++) {
+        let lFlds=this.actionBeingPerformedModel.dialogInfo.listDefinition.eachEntryTextGenerator
+        let textToDisplay=''
+        for (let i = 0; i < lFlds.length; i++) {
             if (lFlds[i].type=='fix'){textToDisplay=textToDisplay+lFlds[i].value}
             if (lFlds[i].type=='field'){textToDisplay=textToDisplay+entry[lFlds[i].value]}
         }

@@ -273,7 +273,7 @@ export function TrazitTestScriptNewStepDialog(base) {
       console.log("uuuuuuuuuuuuuuuuu",{ fieldNames, fieldValues });
 
       let actionName = actionModel.actionName; //sessionStorage.getItem('actionName');
-      var extraParams = "&action=" + this.getDependencyForm().endpoint;
+      let extraParams = "&action=" + this.getDependencyForm().endpoint;
       
       if (actionName == "SCRIPT_UPDATE_STEP") {
         extraParams = extraParams + "&stepId=" + this.selectedItems[0].step_id;
@@ -484,7 +484,7 @@ export function TrazitTestScriptNewStepDialog(base) {
       return; // The code below is there only for trying to make lists depending on another list, does not work yet
       //alert('ds '+ e.target.id+this[e.target.id].value)
 
-      // var triggeredElem=this.actionBeingPerformedModel.dialogInfo.fields.filter(p => p == e.target.id)
+      // let triggeredElem=this.actionBeingPerformedModel.dialogInfo.fields.filter(p => p == e.target.id)
 
       let cleanParams = {};
       // Object.entries(this.actionBeingPerformedModel.dialogInfo.fields).map(([key, value]) => {
@@ -493,7 +493,7 @@ export function TrazitTestScriptNewStepDialog(base) {
       //   }
       // })
       // console.log('cleanParams', cleanParams)
-      var fld = this.actionBeingPerformedModel.dialogInfo.fields[1].list2; //(([key, value]) =>{
+      let fld = this.actionBeingPerformedModel.dialogInfo.fields[1].list2; //(([key, value]) =>{
       //cleanParams=value
       //})
       console.log("fld", fld);
@@ -518,13 +518,13 @@ export function TrazitTestScriptNewStepDialog(base) {
         propertyKeyValueEs: "endpoint_name",
       };
       //console.log("listEntries", fld);
-      var blankEmpty = {
+      let blankEmpty = {
         keyName: "",
         keyValue_en: "",
         keyValue_es: "",
         arguments_array: [],
       };
-      var newList = [];
+      let newList = [];
       if (fld === undefined) {
         // return html`<mwc-list-item></mwc-list-item>`
         return [];
@@ -536,14 +536,14 @@ export function TrazitTestScriptNewStepDialog(base) {
         newList.push(blankEmpty);
       }
       if (fld.valuesFromMasterData !== undefined) {
-        var MDentriesArr = this.listTestEntriesFromMasterData(
+        let MDentriesArr = this.listTestEntriesFromMasterData(
           fld.valuesFromMasterData
         );
         if (MDentriesArr.length > 0) {
           MDentriesArr.forEach((item) => newList.push(item));
         }
       } else if (fld.valuesFromSelectedItem !== undefined) {
-        var MDentriesArr = this.listTestEntriesFromSelectedItem(
+        let MDentriesArr = this.listTestEntriesFromSelectedItem(
           fld.valuesFromSelectedItem
         );
         if (MDentriesArr.length > 0) {
@@ -581,13 +581,13 @@ export function TrazitTestScriptNewStepDialog(base) {
         propertyKeyValueEs: "error_code",
       };
       //console.log("listEntries", fld);
-      var blankEmpty = {
+      let blankEmpty = {
         keyName: "",
         keyValue_en: "",
         keyValue_es: "",
         arguments_array: [],
       };
-      var newList = [];
+      let newList = [];
       if (fld === undefined) {
         // return html`<mwc-list-item></mwc-list-item>`
         return [];
@@ -599,14 +599,14 @@ export function TrazitTestScriptNewStepDialog(base) {
         newList.push(blankEmpty);
       }
       if (fld.valuesFromMasterData !== undefined) {
-        var MDentriesArr = this.listTestEntriesFromMasterData(
+        let MDentriesArr = this.listTestEntriesFromMasterData(
           fld.valuesFromMasterData
         );
         if (MDentriesArr.length > 0) {
           MDentriesArr.forEach((item) => newList.push(item));
         }
       } else if (fld.valuesFromSelectedItem !== undefined) {
-        var MDentriesArr = this.listTestEntriesFromSelectedItem(
+        let MDentriesArr = this.listTestEntriesFromSelectedItem(
           fld.valuesFromSelectedItem
         );
         if (MDentriesArr.length > 0) {
@@ -633,9 +633,9 @@ export function TrazitTestScriptNewStepDialog(base) {
 
     listEntriesForUom(fld, fldName) {
       console.log("listEntriesForUom");
-      var blankEmpty = { keyName: "", keyValue_en: "", keyValue_es: "" };
+      let blankEmpty = { keyName: "", keyValue_en: "", keyValue_es: "" };
       let defValue = "";
-      var newList = [];
+      let newList = [];
       if (fld === undefined) {
         return html`<mwc-list-item></mwc-list-item>`;
       }
@@ -873,7 +873,7 @@ export function TrazitTestScriptNewStepDialog(base) {
           ];
       }
 
-      var entries = [];
+      let entries = [];
       if (data !== undefined) {
         data.forEach((item) => {
           console.log(
@@ -926,7 +926,7 @@ export function TrazitTestScriptNewStepDialog(base) {
 
       console.log("masterData", data);
       console.log("actionBeingPerformedModel", this.actionBeingPerformedModel);
-      var entries = [];
+      let entries = [];
 
       if (data[fldMDDef.propertyNameContainer] === undefined) {
         alert(
@@ -1015,7 +1015,7 @@ export function TrazitTestScriptNewStepDialog(base) {
         console.log("entries at end", entries);
         return entries;
       }
-      //var blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}
+      //let blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}
       //entries.push(blankEmpty)
       return entries;
     }
@@ -1349,7 +1349,7 @@ export function TrazitTestScriptNewStepDialog(base) {
             fldDef.internalVariableSimpleObjProperty
           ] === undefined
         ) {
-          var msg = "";
+          let msg = "";
           if (
             this[fldDef.internalVariableSimpleObjName][
               fldDef.internalVariableSimpleObjProperty
@@ -1383,7 +1383,7 @@ export function TrazitTestScriptNewStepDialog(base) {
             fldDef.internalVariableObjProperty
           ] === undefined
         ) {
-          var msg = "";
+          let msg = "";
           if (
             this[fldDef.internalVariableObjName][0][
               fldDef.internalVariableObjProperty

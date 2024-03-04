@@ -405,8 +405,8 @@ export class DataMiningData extends DataViews(LitElement) {
       let dataContent=this.shadowRoot.querySelector("div#kpidata")
       let dataContentChart =this.shadowRoot.querySelector("google-chart#counter_range_eval")
       console.log(dataContentChart.innerHTML)
-      //var mywindow = window.open('', 'PRINT', 'height=400,width=600');
-      var mywindow = window.open('', '', 'fullscreen=yes');
+      //let mywindow = window.open('', 'PRINT', 'height=400,width=600');
+      let mywindow = window.open('', '', 'fullscreen=yes');
       mywindow.document.write('<html><head><title>' + document.title  + '</title>');
       mywindow.document.write('</head><body >');
       mywindow.document.write('<h1>' + document.title  + '</h1>');
@@ -459,7 +459,7 @@ export class DataMiningData extends DataViews(LitElement) {
     if (dataContentChart!==undefined){
       //let imgs = `` // ${this.kpiStyleByStringAttribute("div", undefined)}
       content += `<div style="display:flex;">`  
-      for (var i=0;i<dataContentChart.length;i++){
+      for (let i=0;i<dataContentChart.length;i++){
         content += `<img src="${dataContentChart[i].imageURI}" style="margin-bottom=10px;"><br>`
       }
       content += `</div>`
@@ -474,7 +474,7 @@ export class DataMiningData extends DataViews(LitElement) {
       let filterContent=[]
       filterContent=this.data.filter_detail
       content += `<div style="display:flex;">` 
-      for (var i=0;i<filterContent.length;i++){
+      for (let i=0;i<filterContent.length;i++){
         content += `${filterContent[i].filter_name}:${filterContent[i].value}`
       }    
       content += `</div>`
@@ -485,7 +485,7 @@ export class DataMiningData extends DataViews(LitElement) {
     let strContent=`` 
     let dataContentTables =this.shadowRoot.querySelectorAll("lit-datatable")
     if (dataContentTables!==undefined){
-      for (var i=0;i<dataContentTables.length;i++){
+      for (let i=0;i<dataContentTables.length;i++){
 //        strContent += `<table border="1" cellpadding="3" style="border-collapse: collapse; width: 100%;">`
         strContent += `<table class="styled-table" >`
         strContent += `<tr>`
@@ -498,8 +498,8 @@ export class DataMiningData extends DataViews(LitElement) {
         //strContent += `</td><td>`
         dataContentTables[i].table.forEach(row => {
           strContent += `<tr>`
-          for (var col=0;col<row.columns.length;col++){
-            var valToDisp=''                  
+          for (let col=0;col<row.columns.length;col++){
+            let valToDisp=''                  
             if (row.columns[col].innerText) {
               valToDisp=row.columns[col].innerText
             }

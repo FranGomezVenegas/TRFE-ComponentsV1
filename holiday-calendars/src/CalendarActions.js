@@ -7,7 +7,7 @@ export function CalendarActions(base) {
             this.selectedAction=action
             console.log('buttonActionWithoutDialogNoCredChecker')
 
-            var extraParams=this.jsonParam(action, selectedItem)   
+            let extraParams=this.jsonParam(action, selectedItem)   
             extraParams.actionName=action.actionName
             extraParams.dbName= this.config.dbName
             extraParams.procName = "app"
@@ -36,7 +36,7 @@ export function CalendarActions(base) {
             return
                 //console.log('buttonActionWithoutDialog')
                 this.reqParams.actionName=action.actionName
-                var extraParams=this.jsonParam(action, selectedItem)   
+                let extraParams=this.jsonParam(action, selectedItem)   
             //    if (extraParams.includes("ERROR")){return}   
                 let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
                 params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -82,7 +82,7 @@ export function CalendarActions(base) {
             if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
                 selectedItem=this[action.selObjectVariableName][0]
             }
-            var extraParams=this.jsonParam(action, selectedItem)      
+            let extraParams=this.jsonParam(action, selectedItem)      
             extraParams.actionName=action.actionName
             extraParams.dbName= this.config.dbName
             extraParams.procName = "app"
@@ -117,7 +117,7 @@ export function CalendarActions(base) {
             }
             return
             this.reqParams.actionName=action.actionName
-            var extraParams=this.jsonParam(action, selectedItem)      
+            let extraParams=this.jsonParam(action, selectedItem)      
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -148,7 +148,7 @@ export function CalendarActions(base) {
             if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
                 selectedItem=this[action.selObjectVariableName][0]
             }
-            var extraParams=this.jsonParam(action, selectedItem)      
+            let extraParams=this.jsonParam(action, selectedItem)      
         //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
@@ -213,8 +213,8 @@ export function CalendarActions(base) {
 /*          
           async getHolidayCalendars() {
             this.samplesReload = true
-            var curProject = this.selectedProject 
-            var curStudy = this.selectedStudy 
+            let curProject = this.selectedProject 
+            let curStudy = this.selectedStudy 
             this.selectedProject={}
             this.selectedStudy={}
             this.reqParams.actionName="ALL_ACTIVE_PROJECTS"

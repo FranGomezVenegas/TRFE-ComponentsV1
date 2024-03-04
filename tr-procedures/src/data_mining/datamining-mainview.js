@@ -1275,7 +1275,7 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
     if (this.dataminingData!==null){
       this.dataminingData.data = {}
     }
-    var extraParams=this.jsonParam(this.activeTab.filter) 
+    let extraParams=this.jsonParam(this.activeTab.filter) 
     let reqParams = {
       procInstanceName: this.procName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
@@ -1815,7 +1815,7 @@ printWindow.print();
   }
   xxxprint() {
     this.setPrintContent()
-    var printWindow = window.open('', '', 'fullscreen=yes');
+    let printWindow = window.open('', '', 'fullscreen=yes');
     printWindow.document.write(this.printObj.content);
     printWindow.document.title = this.printObj.header;
     printWindow.document.close();
@@ -2241,7 +2241,7 @@ eeee
     if (dataContentChart!==undefined){
       //let imgs = `` // ${this.kpiStyleByStringAttribute("div", undefined)}
       content += `<div style="display:flex;">`  
-      for (var i=0;i<dataContentChart.length;i++){
+      for (let i=0;i<dataContentChart.length;i++){
         content += `<img src="${dataContentChart[i].imageURI}" style="margin-bottom=10px;"><br>`
       }
       content += `</div>`
@@ -2256,7 +2256,7 @@ eeee
       let filterContent=[]
       filterContent=this.data.filter_detail
       content += `<div style="display:flex;">` 
-      for (var i=0;i<filterContent.length;i++){
+      for (let i=0;i<filterContent.length;i++){
         content += `${filterContent[i].filter_name}:${filterContent[i].value}`
       }    
       content += `</div>`
@@ -2268,7 +2268,7 @@ eeee
     let strContent=`` 
     let dataContentTables =this.shadowRoot.querySelectorAll("lit-datatable")
     if (dataContentTables!==undefined){
-      for (var i=0;i<dataContentTables.length;i++){
+      for (let i=0;i<dataContentTables.length;i++){
 //        strContent += `<table border="1" cellpadding="3" style="border-collapse: collapse; width: 100%;">`
         strContent += `<table class="styled-table" >`
         strContent += `<tr>`
@@ -2281,8 +2281,8 @@ eeee
         //strContent += `</td><td>`
         dataContentTables[i].table.forEach(row => {
           strContent += `<tr>`
-          for (var col=0;col<row.columns.length;col++){
-            var valToDisp=''                  
+          for (let col=0;col<row.columns.length;col++){
+            let valToDisp=''                  
             if (row.columns[col].innerText) {
               valToDisp=row.columns[col].innerText
             }

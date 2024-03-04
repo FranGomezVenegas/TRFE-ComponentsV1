@@ -305,7 +305,7 @@ openRemoveDialog(){
         //numItems: this.microGrid.selectedItems[0].items - this.microItems.value
       }
       console.log('addSampleMicroorganism', 'targetValue', this.targetValue)      
-      var extraParams=this.jsonParam(queryDefinition, this.selectedItems[0], this.targetValue) 
+      let extraParams=this.jsonParam(queryDefinition, this.selectedItems[0], this.targetValue) 
       let APIParams=this.getAPICommonParams(queryDefinition)
       let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
         + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
@@ -347,7 +347,7 @@ openRemoveDialog(){
       this.microItems.hidden = true
       console.log('removeSampleMicroorganismAction 20221013', 'targetValue', this.targetValue, 'queryDefinition', queryDefinition)      
       let APIParams=this.getAPICommonParams(queryDefinition)
-      var extraParams=this.jsonParam(queryDefinition, this.selectedItems[0], this.targetValue)  
+      let extraParams=this.jsonParam(queryDefinition, this.selectedItems[0], this.targetValue)  
       let endPointUrl=this.getActionAPIUrl(queryDefinition) 
       let params = this.config.backendUrl + endPointUrl
         + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams)+ '&'+ new URLSearchParams(extraParams)

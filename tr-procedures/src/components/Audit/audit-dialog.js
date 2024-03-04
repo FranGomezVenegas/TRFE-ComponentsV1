@@ -391,7 +391,7 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredD
   }
 
   auditPrint() {
-    var printWindow = window.open('', '', 'fullscreen=yes');
+    let printWindow = window.open('', '', 'fullscreen=yes');
     printWindow.document.write(this.printObj.content);
     printWindow.document.title = this.printObj.header;
     printWindow.document.close();

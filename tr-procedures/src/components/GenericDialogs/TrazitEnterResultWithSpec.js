@@ -438,7 +438,7 @@ return class extends LitElement {
 
 
     valRenderer(result) {
-      var rawValue=''
+      let rawValue=''
       if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
         rawValue = result.sar2_raw_value
       }else{
@@ -826,7 +826,7 @@ return class extends LitElement {
      
     setResult(result, target) {
       //alert('TrazitEnterResultWithSpec line 798-setResult')
-      var resId=''
+      let resId=''
       if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
 
         if (result.sar2_result_id===undefined||result.sar2_result_id.length==0){
@@ -859,7 +859,7 @@ return class extends LitElement {
       this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
       let act = JSON.stringify(this.actionBeingPerformedModel.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
-      var rawValue=''
+      let rawValue=''
       if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){
         rawValue = result.sar2_raw_value
       }else{

@@ -210,8 +210,8 @@ export function DataViews(base) {
     }
     kpiGrid(elem, data = this.data) {
       //console.log('kpiGrid', elem, "data", this.data[elem.elementName])
-      var fldsToDisplay = [];
-      for (var i = 0; i < elem.fieldsToDisplay.length; i++) {
+      let fldsToDisplay = [];
+      for (let i = 0; i < elem.fieldsToDisplay.length; i++) {
         if (elem.fieldsToDisplay[i]["label_" + this.lang] !== undefined) {
           elem.fieldsToDisplay[i].header =
             elem.fieldsToDisplay[i]["label_" + this.lang];
@@ -983,7 +983,8 @@ export function DataViews(base) {
     contextMenuItemAction(e) {
       e.style.display = "none";
     }
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme) {
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
+      console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
       let tmp = elem.theme;
       if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
         tmp = sessionStorage.getItem('tableTheme');
@@ -1304,7 +1305,7 @@ export function DataViews(base) {
                                   html`
                                     <td>
                                       <div class="layout horizontal center flex wrap">
-                                        ${this.getButtonForRows(elem.row_buttons, p, false)}
+                                        ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}
                                       </div>
                                     </td>
                                   `}
@@ -1336,7 +1337,7 @@ export function DataViews(base) {
       }
     }
 
-    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme) {
+    parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme, parentData) {
       if (directData !== undefined) {
         dataArr = directData;
       } else {
@@ -1368,10 +1369,15 @@ export function DataViews(base) {
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
       const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
-console.log('childDataArr', childDataArr)
+      //const calcParentData = selectedIdx === undefined ? dataArr[0] : undefined;
+      alert(parentData)      
+      if (parentData===undefined){
+        parentData= selectedIdx !== undefined ? dataArr[0] : undefined;
+      }
+//console.log('childDataArr', childDataArr)
       return html`
-        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme)}
-        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem, theme) : nothing}
+        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme, parentData)}
+        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem, theme, parentData) : nothing}
       `;
     }
 
@@ -2244,7 +2250,7 @@ console.log('childDataArr', childDataArr)
             `;
     }
     kpiStyleByStringAttribute(elType, elem) {
-      var defaultOptions = "";
+      let defaultOptions = "";
       if ((elType = "title")) {
         defaultOptions = "width:300px;color:blue;";
       }
@@ -2254,7 +2260,7 @@ console.log('childDataArr', childDataArr)
       let chartObj = this.shadowRoot.querySelector(
         elType + "#" + elem.elementName
       );
-      var chartOptions = {};
+      let chartOptions = {};
       if (elem.style === undefined) {
         return defaultOptions; //"color:red;"
       } else {
@@ -2323,10 +2329,10 @@ console.log('childDataArr', childDataArr)
     }
     getChartData(elem) {
       // console.log('getChartData', elem, 'chartData', this.data[elem.chart_name])
-      var chartData = [];
+      let chartData = [];
 
       if (elem.elementName === "cdatatable") {
-        var data = [
+        let data = [
           [
             "Day",
             "Guardians of the Galaxy",
@@ -2361,7 +2367,7 @@ console.log('childDataArr', childDataArr)
       }
       //chartData = [[elem.label_item, elem.label_value]];
       if (this.data !== undefined && this.data[elem.chart_name] !== undefined) {
-        var dataForChart = this.data[elem.chart_name];
+        let dataForChart = this.data[elem.chart_name];
 
         let seriesArr = [];
         if (Array.isArray(elem.counter_field_name)) {
@@ -2372,17 +2378,17 @@ console.log('childDataArr', childDataArr)
 
         let curchtHeader = [];
         curchtHeader.push(elem.label_item);
-        for (var iSerie = 0; iSerie < seriesArr.length; iSerie++) {
+        for (let iSerie = 0; iSerie < seriesArr.length; iSerie++) {
           curchtHeader.push(seriesArr[iSerie]);
         }
         chartData.push(curchtHeader);
-        for (var iData = 0; iData < dataForChart.length; iData++) {
+        for (let iData = 0; iData < dataForChart.length; iData++) {
           if (
             !elem.grouper_exclude_items.includes(
               dataForChart[iData][elem.grouper_field_name]
             )
           ) {
-            for (var iSerie = 0; iSerie < seriesArr.length; iSerie) {
+            for (let iSerie = 0; iSerie < seriesArr.length; iSerie) {
               if (
                 this.addNumericValue(
                   elem.counterLimits,
@@ -2397,7 +2403,7 @@ console.log('childDataArr', childDataArr)
                   )
                 );
 
-                for (var iSerie = 0; iSerie < seriesArr.length; iSerie++) {
+                for (let iSerie = 0; iSerie < seriesArr.length; iSerie++) {
                   curchtval.push(dataForChart[iData][seriesArr[iSerie]]); // Add each value from seriesArr as a column
                 }
                 chartData.push(curchtval);
@@ -2411,7 +2417,7 @@ console.log('childDataArr', childDataArr)
     }
     labelPossibleReplacement(elem, labelValue) {
       if (elem.label_values_replacement !== undefined) {
-        var fld = elem.label_values_replacement[labelValue];
+        let fld = elem.label_values_replacement[labelValue];
         if (fld !== undefined) {
           return fld["label_" + this.lang];
         }
@@ -2420,12 +2426,12 @@ console.log('childDataArr', childDataArr)
       return labelValue;
     }
     getChartOptions(elem) {
-      var defaultChartOptions = {
+      let defaultChartOptions = {
         width: "300px",
         backgroundColor: "transparent",
         is3D: true,
       };
-      var chartOptions = {};
+      let chartOptions = {};
       if (elem.chart_title !== undefined) {
         chartOptions.title = elem.chart_title["label_" + this.lang];
       }

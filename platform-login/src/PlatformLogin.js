@@ -375,7 +375,7 @@ export class PlatformLogin extends CommonCore {
         } else if (typeof window.ActiveXObject !== "undefined") {
 
           // Older IE.
-          var wscript = new ActiveXObject("WScript.Shell");
+          let  wscript = new ActiveXObject("WScript.Shell");
 
           if (wscript !== null) {
             wscript.SendKeys("{F11}");

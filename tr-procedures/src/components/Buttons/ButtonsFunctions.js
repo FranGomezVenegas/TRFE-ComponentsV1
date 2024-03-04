@@ -8,8 +8,8 @@ export function ButtonsFunctions(base) {
   return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
 
 
-    getButtonForRows(actions, data, isProcManagement) {
-      // console.log('getButtonForRows', 'actions', actions, 'data', data)
+    getButtonForRows(actions, data, isProcManagement, parentData) {
+      console.log('getButtonForRows', 'actions', actions, 'data', data, 'parentData', parentData)
       if (actions === undefined) { actions = this.viewModelFromProcModel }
       return html`
         <style>
@@ -105,14 +105,14 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-icon-button>` :
                 html`${action.button.img ?
                   html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   title="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement)}>
+                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement, parentData)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
@@ -120,7 +120,7 @@ export function ButtonsFunctions(base) {
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement)}></mwc-button>`
+                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-button>`
                   }`
                 }` :
               nothing
@@ -355,7 +355,7 @@ export function ButtonsFunctions(base) {
         if (selRow === undefined || selRow === undefined) { return true } // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {
           action.button.showWhenSelectedItem.forEach(rowArray => {
-            var curValue = String(rowArray.value).split('|')
+            let curValue = String(rowArray.value).split('|')
             //console.log(rowArray.value, selRow[rowArray.column])
 
             if (rowArray.value === "*NULL*") {
@@ -442,7 +442,7 @@ export function ButtonsFunctions(base) {
         if (this.selectedItems === undefined || this.selectedItems[0] === undefined) { return true } // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {
           action.button.showWhenSelectedItem.forEach(rowArray => {
-            var curValue = String(rowArray.value).split('|')
+            let curValue = String(rowArray.value).split('|')
             //console.log(rowArray.value, this.selectedItems[0][rowArray.column])
 
             if (rowArray.value === "*NULL*") {
@@ -560,7 +560,7 @@ export function ButtonsFunctions(base) {
       //this.loadDialogs()
     }
 
-    actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement) {
+    actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData) {
       e.stopPropagation();
       sessionStorage.setItem('actionName', action.actionName);
       selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
@@ -572,7 +572,7 @@ export function ButtonsFunctions(base) {
           this.selectedItems.push(data)
         }
       }
-      console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems)
+      console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems, 'parentData', parentData)
       if (action === undefined) {
         alert('action not passed as argument')
         return
@@ -594,12 +594,12 @@ export function ButtonsFunctions(base) {
         } else {
           if (this[selectedItemPropertyName] === undefined) {
             if (data === undefined) {
-              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement)
+              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement, parentData)
             } else {
-              this.actionWhenRequiresNoDialog(action, data, null, isProcManagement)
+              this.actionWhenRequiresNoDialog(action, data, null, isProcManagement, parentData)
             }
           } else {
-            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement)
+            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement, parentData)
           }
           return
         }
@@ -647,7 +647,7 @@ export function ButtonsFunctions(base) {
       if (this.masterData === undefined) { return entries }
       console.log('masterData', this.masterData)
       console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
-      var entries = []
+      let entries = []
 
       if (this.masterData[this.viewModelFromProcModel.viewQuery.actionName] === undefined) {
         alert('Property ' + fldMDDef.propertyNameContainer + ' not found in Master Data')
@@ -938,14 +938,14 @@ export function ButtonsFunctions(base) {
       return data
     }
 
-    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement) {
+    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement, parentData) {
       console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
       this.selectedAction = action
       if (targetValue === undefined) { targetValue = {} }
       if (this.itemId) {
-        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue), action, null, null, isProcManagement)
+        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, parentData), action, null, null, isProcManagement)
       } else {
-        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue), action, null, null, isProcManagement)
+        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, parentData), action, null, null, isProcManagement)
       }
       // Comentado para habilitar confirmDialogs
       // this.performActionRequestHavingDialogOrNot(action, selectedItem)
@@ -976,7 +976,7 @@ export function ButtonsFunctions(base) {
           gridSelectedItem = this.genericDialogGridSelectedItems[0]
         }
       }
-      var extraParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem)
+      let extraParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem)
       let APIParams = this.getAPICommonParams(action)
       let endPointUrl = this.getActionAPIUrl(action)
       if (String(endPointUrl).toUpperCase().includes("ERROR")) {

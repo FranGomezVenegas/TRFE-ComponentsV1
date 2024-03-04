@@ -75,7 +75,7 @@ export function CalendarUtilities(base) {
             this.selectedAction = action
           //this.newStudyIndividual.show()
         
-            var propName = ""
+            let propName = ""
             this.actionMethod(action)
           }        
           tableHeight(tableItemsObj){            
@@ -83,9 +83,9 @@ export function CalendarUtilities(base) {
               console.log('tableHeight', 'tableItemsObj', tableItemsObj, '100px')
               return "85px"
             }
-            var l=[]
+            let l=[]
             l=tableItemsObj
-            var dynamicH=l.length
+            let dynamicH=l.length
             dynamicH=dynamicH*35
             dynamicH=dynamicH+100
             if (dynamicH>350){

@@ -22,7 +22,7 @@ export function CommonsClientMethod(base) {
         alert('Action with no endPoint property, cannot continue')
         return
       }
-      var extraParams=this.jsonParam(this.selectedAction, this.selectedSamples[0])      
+      let extraParams=this.jsonParam(this.selectedAction, this.selectedSamples[0])      
       let params = this.config.backendUrl + this.selectedAction.endPoint
         + '?' + new URLSearchParams(this.reqParams) 
       if (extraParams!==undefined){

@@ -114,7 +114,7 @@ export class GridmodelBottomcompChart extends ((CredDialog)) {
     `;
   }
   lineData() {
-    var allData=[[]]
+    let allData=[[]]
     //console.log('lineData', 'selectedItems', this.selectedItems)
     allData[0][0]=this.model.data.chartValuesHeader[this.lang][0]
     allData[0][1]=this.model.data.chartValuesHeader[this.lang][1]
@@ -124,12 +124,12 @@ export class GridmodelBottomcompChart extends ((CredDialog)) {
     if (this.selectedItems[0][this.model.data.objectArrayValuesName]===undefined||this.selectedItems[0][this.model.data.objectArrayValuesName]==="No readings"||this.selectedItems[0][this.model.data.objectArrayValuesName].length==0){
       return allData  
     }
-    var valuesArr=this.selectedItems[0][this.model.data.objectArrayValuesName]
+    let valuesArr=this.selectedItems[0][this.model.data.objectArrayValuesName]
     if (valuesArr==="No readings"||valuesArr.length==0){
       return allData  
     }
-    for (var i = 0; i < this.selectedItems[0][this.model.data.objectArrayValuesName].length; i++) {
-      var curReading=[]
+    for (let i = 0; i < this.selectedItems[0][this.model.data.objectArrayValuesName].length; i++) {
+      let curReading=[]
       curReading[0]=this.selectedItems[0][this.model.data.objectArrayValuesName][i][this.model.data.valuesFirstPropertyName]
       curReading[1]=this.selectedItems[0][this.model.data.objectArrayValuesName][i][this.model.data.valuesSecondPropertyName]
       allData.push(curReading)

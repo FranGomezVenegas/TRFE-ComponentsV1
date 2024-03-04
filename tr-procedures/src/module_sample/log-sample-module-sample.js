@@ -125,7 +125,7 @@ export class LogSampleModuleSample extends (ApiFunctions(CredDialog)) {
           jsonParam[p.argumentName] = this.selectedProject.name
         } else if (p.internalVariableObjName&&p.internalVariableObjProperty) {          
             if (this[p.internalVariableObjName]===undefined||this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
-              var msg=""
+              let msg=""
               if (this[p.internalVariableObjName][0][p.internalVariableObjProperty]===undefined){
                 msg='The object '+p.internalVariableObjName+' has no one property called '+p.internalVariableObjProperty
                 alert(msg)

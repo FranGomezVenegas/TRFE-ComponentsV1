@@ -145,7 +145,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
             date: {
                 type: Object,
                 value: () => {
-                    var d = new Date();
+                    let d = new Date();
                     return {
                         year: d.getFullYear(),
                         month: d.getMonth() + 1,
@@ -268,22 +268,22 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
         super.connectedCallback();
         this._addListeners();
 
-        var labelList = JSON.parse(JSON.stringify(this.dayLabels));
+        let labelList = JSON.parse(JSON.stringify(this.dayLabels));
 
         if (this.firstDayOfWeek != 0) {
             this.dayLabels = [];
 
-            for (var i = 0; i < labelList.length; i++) {
-                var dayName = (i + this.firstDayOfWeek) % 7;
+            for (let i = 0; i < labelList.length; i++) {
+                let dayName = (i + this.firstDayOfWeek) % 7;
                 this.dayLabels.push(labelList[dayName])
             }
         }
 
         this.yearList = [];
 
-        var d = new Date();
-        var minYear = d.getFullYear() - this.minYear;
-        var maxYear = d.getFullYear() + this.maxYear;
+        let d = new Date();
+        let minYear = d.getFullYear() - this.minYear;
+        let maxYear = d.getFullYear() + this.maxYear;
 
         for (minYear; minYear <= maxYear; minYear++) {
             this.yearList.push(minYear);
@@ -340,7 +340,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
 
     _checkChosen() {
         if (this.chosen !== "" && this.chosen !== undefined) {
-            var date = new Date(this.chosen);
+            let date = new Date(this.chosen);
             this.showDate.year = date.getFullYear();
 
             this.date = {
@@ -357,8 +357,8 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
         if (e.target.getAttribute('data-date') == null)
             return;
 
-        var dataDate = e.target.getAttribute("data-date");
-        var dateObj = new Date(dataDate);
+        let dataDate = e.target.getAttribute("data-date");
+        let dateObj = new Date(dataDate);
 
         this.chosen = dataDate;
         this.showDate.year = dateObj.getFullYear();
@@ -372,11 +372,11 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
     }
 
     _chosenHandler(e) {
-        var chosenDate = new Date(e);
-        var chosenMonth = chosenDate.getMonth();
+        let chosenDate = new Date(e);
+        let chosenMonth = chosenDate.getMonth();
 
         if (chosenMonth == this.date.date.getMonth()) {
-            var selection = dom(this.$.cldDays).querySelector('.selected');
+            let selection = dom(this.$.cldDays).querySelector('.selected');
             if (selection) {
                 selection.classList.remove('selected');
             }
@@ -385,7 +385,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
             }
             else {
                 this.chosen = e;
-                var days = dom(this.$.mpCalendar).querySelectorAll('.day');
+                let days = dom(this.$.mpCalendar).querySelectorAll('.day');
 
                 days.forEach((e, i) => {
                     if (this.chosen == e.getAttribute('data-date')) {
@@ -462,10 +462,10 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
     }
 
     _dateChanged(newDate, oldDate) {
-        var date = new Date();
-        var month = parseInt(newDate.month) || 1;
-        var year = parseInt(newDate.year) || date.getFullYear();
-        var day = parseInt(newDate.day) || 1;
+        let date = new Date();
+        let month = parseInt(newDate.month) || 1;
+        let year = parseInt(newDate.year) || date.getFullYear();
+        let day = parseInt(newDate.day) || 1;
 
         this.date.month = month;
         this.date.year = year;
@@ -496,7 +496,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
     }
 
     goToCurrentDate(e) {
-        var today = new Date();
+        let today = new Date();
 
         this.date = {
             date: today,
@@ -513,12 +513,12 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
     }
 
     _initCalandar(month, year) {
-        var today = new Date();
-        var thisDay = today.getDate();
-        var thisMonth = today.getMonth() + 1;
-        var dayOfMonthStart = new Date(year, month, 1).getDay() == 0 ? 7 : new Date(year, month, 1).getDay(); // which day the month starts (0 - 6)
-        var calendarElem = dom(this.$.mpCalendar);
-        var previousMonth, previousYear, nextMonth, nextYear, previousMonthDays, disDays;
+        let today = new Date();
+        let thisDay = today.getDate();
+        let thisMonth = today.getMonth() + 1;
+        let dayOfMonthStart = new Date(year, month, 1).getDay() == 0 ? 7 : new Date(year, month, 1).getDay(); // which day the month starts (0 - 6)
+        let calendarElem = dom(this.$.mpCalendar);
+        let previousMonth, previousYear, nextMonth, nextYear, previousMonthDays, disDays;
 
         this.$.cldDays.innerHTML = '';
 
@@ -546,23 +546,23 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
             previousMonthDays = this._numberOfDays(month, year);
         }
 
-        var currentMonthDays = this._numberOfDays(month + 1, year);
-        var nextMonthDays = this._numberOfDays(month + 2, year);
+        let currentMonthDays = this._numberOfDays(month + 1, year);
+        let nextMonthDays = this._numberOfDays(month + 2, year);
 
         // define default day variables
-        var dayN = 1;
-        var dayOfNextMonth = 1;
-        var days = this.$.cldDays;
+        let dayN = 1;
+        let dayOfNextMonth = 1;
+        let days = this.$.cldDays;
 
-        var showDaysInMonth = this.showDaysInMonth;
+        let showDaysInMonth = this.showDaysInMonth;
         if (dayOfMonthStart >= 5 && this.showDaysInMonth < 37 && currentMonthDays > 29) {
             showDaysInMonth = 42
         }
-        for (var i = 0; i < showDaysInMonth; i++) {
-            var day = document.createElement('span');
+        for (let i = 0; i < showDaysInMonth; i++) {
+            let day = document.createElement('span');
             // separated into weeks
             if (i % 7 === 0) {
-                var week = document.createElement('div');
+                let week = document.createElement('div');
                 week.className += "mp-cld-week";
                 week.setAttribute("week", i / 7);
 
@@ -588,13 +588,13 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
                     day.className += " disabled";
                 }
                 else {
-                    var number = this._dayNumber((previousMonthDays - dayOfMonthStart) + (i + 1 + this.firstDayOfWeek), previousMonth + 1, previousYear, day);
+                    let number = this._dayNumber((previousMonthDays - dayOfMonthStart) + (i + 1 + this.firstDayOfWeek), previousMonth + 1, previousYear, day);
                 }
             }
 
             else if (dayN <= currentMonthDays) {
                 day.className += "mp-cld-day currMonth";
-                var number = this._dayNumber(dayN++, month + 1, year, day);
+                let number = this._dayNumber(dayN++, month + 1, year, day);
 
                 // If today
                 if ((dayN - 1) == thisDay && month == thisMonth - 1 && this.date.year == year) {
@@ -615,7 +615,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
                             this.disabledDays.forEach((disDay, i) => {
                                 this.dayLabels.forEach((labDay, d) => {
                                     if (disDay === labDay) {
-                                        var date = new Date();
+                                        let date = new Date();
                                         date.setDate(d);
                                         date.setMonth(month);
 
@@ -657,7 +657,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
                     day.className += " disabled";
                 }
                 else {
-                    var number = this._dayNumber(dayOfNextMonth++, nextMonth + 1, nextYear, day);
+                    let number = this._dayNumber(dayOfNextMonth++, nextMonth + 1, nextYear, day);
                 }
             }
 
@@ -679,10 +679,10 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
 
     // modify each day with 2 digit number and add attributes
     _dayNumber(dayDate, month, year, dayElem) {
-        var span = document.createElement('span');
-        var dd = (dayDate < 10 ? '0' : '') + dayDate;
-        var mm = (month < 10 ? '0' : '') + month;
-        var dataDate = (year + "-" + mm + "-" + dd);
+        let span = document.createElement('span');
+        let dd = (dayDate < 10 ? '0' : '') + dayDate;
+        let mm = (month < 10 ? '0' : '') + month;
+        let dataDate = (year + "-" + mm + "-" + dd);
 
         dayElem.className += " day";
         dayElem.innerHTML += dayDate;
@@ -693,11 +693,11 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
     }
 
     _getDisabledDays(day, month, year) {
-        var disDays = [];
-        var monthDays = this._numberOfDays(month, year);
+        let disDays = [];
+        let monthDays = this._numberOfDays(month, year);
 
-        for (var i = 0; i <= monthDays; i++) {
-            var date = new Date(year, month, i, 0);
+        for (let i = 0; i <= monthDays; i++) {
+            let date = new Date(year, month, i, 0);
             if (date.getDay() == day) {
                 disDays.push(date);
             }
@@ -706,7 +706,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
     }
 
     _getJSON(url, callback) {
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
                 callback(JSON.parse(xhr.responseText));
@@ -717,21 +717,21 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
     }
 
     _findAllEvents(events) {
-        var today = new Date();
-        var dd = (today.getDate() < 10 ? '0' : '') + today.getDate();
-        var mm = (today.getMonth() < 10 ? '0' : '') + (today.getMonth() + 1);
-        var isoToday = (today.getFullYear() + "-" + mm + "-" + dd);
+        let today = new Date();
+        let dd = (today.getDate() < 10 ? '0' : '') + today.getDate();
+        let mm = (today.getMonth() < 10 ? '0' : '') + (today.getMonth() + 1);
+        let isoToday = (today.getFullYear() + "-" + mm + "-" + dd);
 
         events.forEach((item) => {
-            var selector = '.day[data-date="' + item.date + '"]';
-            var result = this.$.content.querySelector(selector);
-            var event = '';
-            var dayEvents = [];
-            var weight = 0;
-            var color = '';
+            let selector = '.day[data-date="' + item.date + '"]';
+            let result = this.$.content.querySelector(selector);
+            let event = '';
+            let dayEvents = [];
+            let weight = 0;
+            let color = '';
 
             if (result != undefined || result != null) {
-                for (var i in events) {
+                for (let i in events) {
                     if (events[i].date === result.getAttribute('data-date')) {
                         dayEvents.push(events[i]);
                     }
@@ -746,9 +746,9 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
                 }
 
                 if (weight > 0) {
-                    var boxShadow = '';
+                    let boxShadow = '';
 
-                    for (var i in dayEvents) {
+                    for (let i in dayEvents) {
                         if (boxShadow != '') {
                             boxShadow += ',';
                         }
@@ -773,7 +773,7 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
                     dom(result).innerHTML += event;
                 }
                 else {
-                    for (var i = 0; i < result.children.length; i++) {
+                    for (let i = 0; i < result.children.length; i++) {
                         event += '<span class="separator"></span><div class="event">'
                             + '<h3 class="' + item.category + '" ' + (item.color ? ('style="color:' + item.color + '"') : '') + '>' + item.title + ''
                             + '<i>' + (item.sample_id!=="" ? 'Sample: '+item.sample_id : 'No Sample logged yet') + '</i>'                             + '</h3>'
@@ -793,8 +793,8 @@ class mpCalendarExt extends GestureEventListeners(PolymerElement) {
 
     // check if event falls out of the parent div
     horizontallyBound(parentDiv, childDiv) {
-        var parentRect = parentDiv.getBoundingClientRect();
-        var childRect = childDiv.getBoundingClientRect();
+        let parentRect = parentDiv.getBoundingClientRect();
+        let childRect = childDiv.getBoundingClientRect();
 
         if ((childRect.left + childRect.width) > parentRect.width) {
             childDiv.classList.remove("mp-cld-event");

@@ -97,7 +97,7 @@ export function TrazitFormsElements(base) {
             return fldDef.default_value
         } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          
             if (this[fldDef.internalVariableSimpleObjName]===undefined||this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
-              var msg=""
+              let msg=""
               if (this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
                 msg='The object '+fldDef.internalVariableSimpleObjName+' has no one property called '+fldDef.internalVariableSimpleObjProperty
                 alert(msg)
@@ -110,7 +110,7 @@ export function TrazitFormsElements(base) {
             return this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]          
         } else if (fldDef.internalVariableObjName&&fldDef.internalVariableObjProperty) {          
             if (this[fldDef.internalVariableObjName]===undefined||this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]===undefined){
-            var msg=""
+            let msg=""
             if (this[fldDef.internalVariableObjName][0][fldDef.internalVariableObjProperty]===undefined){
                 msg='The object '+fldDef.internalVariableObjName+' has no one property called '+fldDef.internalVariableObjProperty
                 alert(msg)
@@ -704,7 +704,7 @@ export function TrazitFormsElements(base) {
         return // The code below is there only for trying to make lists depending on another list, does not work yet
         //alert('ds '+ e.target.id+this[e.target.id].value)
 
-        // var triggeredElem=fields.filter(p => p == e.target.id)
+        // let triggeredElem=fields.filter(p => p == e.target.id)
 
         let cleanParams = {}
         // Object.entries(fields).map(([key, value]) => {
@@ -713,7 +713,7 @@ export function TrazitFormsElements(base) {
         //   }
         // })
         // console.log('cleanParams', cleanParams)
-        var fld =fields[1].list2//(([key, value]) =>{
+        let fld =fields[1].list2//(([key, value]) =>{
             //cleanParams=value
         //})
         console.log('fld', fld)
@@ -725,8 +725,8 @@ export function TrazitFormsElements(base) {
     }
     listEntries(fld){
         console.log('listEntries')
-        var blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
-        var newList=[]
+        let blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
+        let newList=[]
         if (fld===undefined){
             return html`<mwc-list-item></mwc-list-item>`
 
@@ -735,7 +735,7 @@ export function TrazitFormsElements(base) {
             newList.push(blankEmpty)
         }
         if (fld.valuesFromMasterData!==undefined){
-            var MDentriesArr=this.listEntriesFromMasterData(fld.valuesFromMasterData)
+            let MDentriesArr=this.listEntriesFromMasterData(fld.valuesFromMasterData)
             if (MDentriesArr.length>0){
                 MDentriesArr.forEach(item =>newList.push(item))
             }
@@ -756,7 +756,7 @@ export function TrazitFormsElements(base) {
         if (this.masterData===undefined){return entries}
         console.log('masterData', this.masterData)
         console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
-        var entries=[]
+        let entries=[]
         
         if (this.masterData[fldMDDef.propertyNameContainer]===undefined){
             alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
@@ -804,7 +804,7 @@ export function TrazitFormsElements(base) {
             return entries
             
         }        
-        //var blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}
+        //let blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}
         //entries.push(blankEmpty)
         return entries
     }

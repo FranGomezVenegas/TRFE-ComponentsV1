@@ -393,7 +393,7 @@ export function DialogTemplate(base) {
     }
 
     valRenderer(result) {
-      var rawValue=''
+      let rawValue=''
       if (this.selectedAction.actionName.toUpperCase().includes('SECOND')){
         rawValue = result.sar2_raw_value
       }else{
@@ -620,7 +620,7 @@ export function DialogTemplate(base) {
     }
 
     setResult(result, target) {
-      var resId=''
+      let resId=''
       if (this.selectedAction.actionName.toUpperCase().includes('SECOND')){
         resId = result.sar2_result_id
       }else{
@@ -639,7 +639,7 @@ export function DialogTemplate(base) {
       this.curResultRef = { elm: target, resId: result.result_id, evtId: result.event_id }
       let act = JSON.stringify(this.selectedAction.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
-      var rawValue=''
+      let rawValue=''
       if (this.selectedAction.actionName.toUpperCase().includes('SECOND')){
         rawValue = result.sar2_raw_value
       }else{

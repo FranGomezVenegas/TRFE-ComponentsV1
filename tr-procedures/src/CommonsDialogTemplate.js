@@ -81,9 +81,9 @@ export function CommonsDialogTemplate(base) {
         console.log('this.selectedAction', this.selectedAction)
         return entry["name"]
       }
-      var lFlds=this.selectedAction.dialogInfo.listDefinition.eachEntryTextGenerator
-      var textToDisplay=''
-      for (var i = 0; i < lFlds.length; i++) {
+      let lFlds=this.selectedAction.dialogInfo.listDefinition.eachEntryTextGenerator
+      let textToDisplay=''
+      for (let i = 0; i < lFlds.length; i++) {
         if (lFlds[i].type=='fix'){textToDisplay=textToDisplay+lFlds[i].value}
         if (lFlds[i].type=='field'){textToDisplay=textToDisplay+entry[lFlds[i].value]}
       }
@@ -104,9 +104,9 @@ export function CommonsDialogTemplate(base) {
         alert('This selected action has no the requirements, requieres dialogInfo.eachEntryTextGenerator property, check the console')
         return entry["name"]
       }
-      var lFlds=fieldDef.eachEntryTextGenerator
-      var textToDisplay=''
-      for (var i = 0; i < lFlds.length; i++) {
+      let lFlds=fieldDef.eachEntryTextGenerator
+      let textToDisplay=''
+      for (let i = 0; i < lFlds.length; i++) {
         if (lFlds[i].type=='fix'){textToDisplay=textToDisplay+lFlds[i].value}
         if (lFlds[i].type=='field'){textToDisplay=textToDisplay+entry[lFlds[i].value]}
       }
@@ -200,7 +200,7 @@ export function CommonsDialogTemplate(base) {
           this.selectedAction = action
         }
         if (actionNumIdx!==undefined) {
-          var viewDef=ProceduresModel[this.procName][this.viewName]
+          let viewDef=ProceduresModel[this.procName][this.viewName]
           action = viewDef.actions[actionNumIdx]
           this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[actionNumIdx]
         }else{
@@ -257,7 +257,7 @@ export function CommonsDialogTemplate(base) {
       //     alert('Action with no endPoint property, cannot continue')
       //     return
       //   }
-      //   var extraParams=this.jsonParam(this.selectedAction, this.selectedSamples[0])      
+      //   let extraParams=this.jsonParam(this.selectedAction, this.selectedSamples[0])      
       //   let params = this.config.backendUrl + this.selectedAction.endPoint
       //     + '?' + new URLSearchParams(this.reqParams) 
       //   if (extraParams!==undefined){

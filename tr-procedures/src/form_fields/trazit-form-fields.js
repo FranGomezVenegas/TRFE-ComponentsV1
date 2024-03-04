@@ -808,7 +808,7 @@ export class TrazitFormFields extends LitElement {
 
   print() {
     this.setPrintContent()
-    var printWindow = window.open('', '', 'fullscreen=yes');
+    let printWindow = window.open('', '', 'fullscreen=yes');
     printWindow.document.write(this.printObj.content);
     printWindow.document.title = this.printObj.header;
     printWindow.document.close();
