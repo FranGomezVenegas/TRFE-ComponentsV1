@@ -1,15 +1,9 @@
-import { html, css, LitElement, nothing } from 'lit';
-//import '@trazit/tr-procedures/src/browser/sp-card-ext';
+import { html, css, nothing } from 'lit';
 import {ProcManagement} from '@trazit/tr-procedures/src/0proc_models/proc-management-model';
-//import './trazit-filter-view';
-//import {ApiFunctions } from '@trazit/tr-procedures/src/components/Api/ApiFunctions';
-//import {ButtonsFunctions} from '@trazit/tr-procedures/src/components/Buttons/ButtonsFunctions';
 import { ProceduresManagement } from '../ProceduresManagement'
 import '@spectrum-web-components/split-view/sp-split-view';
 import { CommonCore } from '@trazit/common-core';
-//import '@trazit/tr-procedures/src/components/ObjectByTabs/objecttabs-composition';
 
-//export class ProcManagementHome extends ((ButtonsFunctions(ApiFunctions(CommonCore)))) {
 export class ProcManagementHome extends ((((CommonCore)))) {
     static get styles() {
     return [

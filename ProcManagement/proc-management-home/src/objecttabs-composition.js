@@ -1,21 +1,5 @@
-import { html, css, nothing, LitElement } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
-//import { Layouts } from '@collaborne/lit-flexbox-literals';
-// import { columnBodyRenderer } from 'lit-vaadin-helpers';
-
-// import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
-// import {GridFunctions} from '../grid_with_buttons/GridFunctions';
-// import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
-// import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
-
-// import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
-// import { AuditFunctions} from '../Audit/AuditFunctions';
-// import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
-//import('../grid_with_buttons/grid-with-buttons');
-//import '@doubletrade/lit-datatable';
-//import {DataViews} from '../../components/Views/DataViews';
-
-//export class ObjecttabsComposition extends TrazitCredentialsDialogs(AuditFunctions(TrazitGenericDialogs(ButtonsFunctions(GridFunctions(DialogsFunctions(TrazitInvestigationsDialog(CredDialog))))))) {
 export class ObjecttabsComposition extends DataViews(CredDialog) {
   static get styles() {
     return [
