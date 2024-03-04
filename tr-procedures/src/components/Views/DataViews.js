@@ -989,10 +989,10 @@ export function DataViews(base) {
       if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
         tmp = sessionStorage.getItem('tableTheme');
       }
-      if(typeof(tmp) != undefined) {
+      if(typeof(tmp) != "undefined") {
         sessionStorage.setItem('tableTheme', tmp);
       }
-      if(typeof(tmp) == undefined) {
+      if(typeof(tmp) == "undefined") {
         tmp = "TRAZiT-UsersArea";
         sessionStorage.setItem('tableTheme', tmp);
       }
@@ -1383,7 +1383,7 @@ export function DataViews(base) {
 
     rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData, theme) {
       let tmp = elem.theme
-      if(typeof(tmp) == undefined) {
+      if(typeof(tmp) == "undefined") {
         tmp = "TRAZiT-UsersArea";
       }
       //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
