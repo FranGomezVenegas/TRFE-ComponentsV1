@@ -1,5 +1,3 @@
-import { html, css } from 'lit';
-
 export function CalendarActions(base) {
     return class extends base {
 

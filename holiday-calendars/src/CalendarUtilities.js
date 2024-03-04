@@ -1,4 +1,4 @@
-import { html, css } from 'lit';
+import { html } from 'lit';
 
 export function CalendarUtilities(base) {
     return class extends base {

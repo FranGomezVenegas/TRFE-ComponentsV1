@@ -1,5 +1,4 @@
 import { html, nothing } from 'lit';
-import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
@@ -10,12 +9,6 @@ export function CalendarDialogTemplate(base) {
   return class extends base {
     static get properties() {
       return {
-        // targetValue: { type: Object },
-        // selectedDialogAction: { type: Object },
-        // numDays: { type: Number },
-        // deactivatedObjects: { type: Array },
-        // dataForDialog: { type: Object },
-        // fromGrid: { type: Boolean }
         selectedAction: {type: Array}
       }
     }
@@ -23,15 +16,11 @@ export function CalendarDialogTemplate(base) {
     constructor() {
       super()
       this.selectedAction = []
-    //   this.numDays = 7
-    //   this.deactivatedObjects = []
-    //   this.fromGrid = false
     }
 
 
 
     defaultValue(){
-        //console.log('defaultValue')
         this.resetFields()
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         if (dlgFlds===undefined){
@@ -42,7 +31,6 @@ export function CalendarDialogTemplate(base) {
             let fldObj=dlgFlds[i]
             let keyName=Object.keys(fldObj)
             
-            //if (==null){            
             if (fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
                 this[keyName[0]].value=fldObj[keyName].default_value
             }
@@ -56,10 +44,8 @@ export function CalendarDialogTemplate(base) {
         }
     }    
     resetFields(){           
-        //alert('reset Fields now')   
         let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         if (dlgFlds===undefined){
-            //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
         }
         for (let i=0;i<dlgFlds.length;i++){
@@ -73,11 +59,8 @@ export function CalendarDialogTemplate(base) {
     cleanFormFields(){
         if (this.text1){this.text1.value=''}
         if (this.number1){this.number1.value=''}
-        //if (this.list1){this.list1.value=[]}
-        //if (this.listSelectedStudyIndividuals){this.listSelectedStudyIndividuals.value=''}
       }
     calendarDialogsTemplate() {   
-      //console.log('calendarDialogsTemplate') 
       
       if (this.selectedAction&&this.selectedAction.dialogInfo){ 
         //console.log(this.selectedAction.actionName, this.selectedAction.dialogInfo)
@@ -178,8 +161,7 @@ export function CalendarDialogTemplate(base) {
         if (lFlds[i].type=='fix'){textToDisplay=textToDisplay+lFlds[i].value}
         if (lFlds[i].type=='field'){textToDisplay=textToDisplay+entry[lFlds[i].value]}
       }
-      return textToDisplay
-      //return entry["description"]+' ('+entry["name"]+')'
+      return textToDisplay      
     }
     listItemValueToGet(fieldDef, entry){
       console.log('fieldDef', fieldDef, 'entry', entry)      
@@ -201,8 +183,7 @@ export function CalendarDialogTemplate(base) {
         if (lFlds[i].type=='fix'){textToDisplay=textToDisplay+lFlds[i].value}
         if (lFlds[i].type=='field'){textToDisplay=textToDisplay+entry[lFlds[i].value]}
       }
-      return textToDisplay
-      //return entry["description"]+' ('+entry["name"]+')'
+      return textToDisplay      
     }
    
   }
