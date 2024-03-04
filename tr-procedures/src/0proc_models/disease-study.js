@@ -328,7 +328,7 @@ export const DiseaseStudy = {
 						  },
 						  {
 							"argumentName": "individualId",
-							"element": "individual_id"
+							"selObjectPropertyName": "individual_id"
 						  }
 						],
 						"button": {

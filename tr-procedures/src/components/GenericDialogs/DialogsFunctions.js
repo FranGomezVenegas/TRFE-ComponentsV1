@@ -40,8 +40,8 @@ export function DialogsFunctions(base) {
    * @param {*} params ref of this.reqParams
    * @param {*} action ref of action object
    */
-  credsChecker(actionName, objId, params={}, action, isProcManagement) {
-    console.log('credsChecker', 'isProcManagement', isProcManagement, 'action', action)
+  credsChecker(actionName, objId, params={}, action, isProcManagement, parentData) {
+    console.log('credsChecker', 'isProcManagement', isProcManagement, 'action', action, 'parentData', parentData)
     this.actionObj = action || {}
     this.reqParams = params
     if (actionName) {
@@ -52,7 +52,7 @@ export function DialogsFunctions(base) {
         this.objectId = objId
         let noNeedCreds = this.checkProcList(isProcManagement)
         if (noNeedCreds) {
-          this.nextRequest(action)
+          this.nextRequest(action, parentData)
         } else {
           if (this.type == "confirm") {
             this.confirmDialog.show()
@@ -163,14 +163,14 @@ export function DialogsFunctions(base) {
     if (bypass) return true
   }  
 
-  nextRequest(action) {
+  nextRequest(action, parentData) {
     // This is required to get the action due to it is not being passed.
     if (action===undefined||action.actionName===undefined){
       action=this.actionBeingPerformedModel
     }
     //alert('nextRequest')
     action = action || this.auditAction ||this.actionBeingPerformedModel;
-    //console.log('nextRequest')
+    console.log('nextRequest', 'parentData', parentData)
     let credArguments = {}
     if (this.userName) {credArguments.userToCheck=this.userName}
     if (this.userTxtFld) {credArguments.userToCheck=this.userTxtFld.value}
@@ -202,7 +202,7 @@ export function DialogsFunctions(base) {
       this.targetValue={}
     }
     if (action!==undefined){//&&action.alternativeItemPropertyName!==undefined){
-      this.performActionRequestHavingDialogOrNot(action, this.selectedItems[0], this.targetValue, credArguments)
+      this.performActionRequestHavingDialogOrNot(action, this.selectedItems[0], this.targetValue, credArguments, this.selectedItems[0], parentData)
     }
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {

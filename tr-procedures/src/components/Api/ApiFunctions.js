@@ -95,9 +95,6 @@ export function ApiFunctions(base) {
           let jsonParam = {}
           if (action.endPointParams) {
             action.endPointParams.forEach(p => {
-              if (p.parentElementProperty){
-                jsonParam[p.argumentName] = parentElement[p.parentElementProperty]
-              }
               if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {     
                      
                 if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
@@ -288,6 +285,8 @@ export function ApiFunctions(base) {
                 jsonParam[p.argumentName] = p.fixValue
               } else if (p.contextVariableName) {
                 jsonParam[p.argumentName] = this[p.contextVariableName]
+              } else if (p.parentElementProperty) {
+                jsonParam[p.argumentName] = parentElement[p.parentElementProperty]
               } else {
                 jsonParam[p.argumentName] = p.value
               }

@@ -1369,12 +1369,9 @@ export function DataViews(base) {
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
       const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
-      //const calcParentData = selectedIdx === undefined ? dataArr[0] : undefined;
-      alert(parentData)      
       if (parentData===undefined){
         parentData= selectedIdx !== undefined ? dataArr[0] : undefined;
       }
-//console.log('childDataArr', childDataArr)
       return html`
         ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme, parentData)}
         ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem, theme, parentData) : nothing}

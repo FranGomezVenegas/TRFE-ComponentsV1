@@ -939,15 +939,15 @@ export function ButtonsFunctions(base) {
     }
 
     actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement, parentData) {
-      console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
+      console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem, 'parentData', parentData)
       this.selectedAction = action
       if (targetValue === undefined) { targetValue = {} }
       if (this.itemId) {
-        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, parentData), action, null, null, isProcManagement)
+        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, selectedItem, parentData), action, isProcManagement, parentData)
       } else {
-        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, parentData), action, null, null, isProcManagement)
+        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, selectedItem, parentData), action, isProcManagement, parentData)
       }
-      // Comentado para habilitar confirmDialogs
+      // Comentado para habilitar confirmDialogsparentData
       // this.performActionRequestHavingDialogOrNot(action, selectedItem)
       return
     }
@@ -966,7 +966,8 @@ export function ButtonsFunctions(base) {
       return
     }
 
-    async performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}) {
+    async performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}, parentData) {
+      
       if (action.alternativeAPIActionMethod !== undefined) {
         this[action.alternativeAPIActionMethod]()
         return
@@ -976,7 +977,7 @@ export function ButtonsFunctions(base) {
           gridSelectedItem = this.genericDialogGridSelectedItems[0]
         }
       }
-      let extraParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem)
+      let extraParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem, parentData)
       let APIParams = this.getAPICommonParams(action)
       let endPointUrl = this.getActionAPIUrl(action)
       if (String(endPointUrl).toUpperCase().includes("ERROR")) {
