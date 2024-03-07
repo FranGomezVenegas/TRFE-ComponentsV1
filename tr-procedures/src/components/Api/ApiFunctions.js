@@ -88,7 +88,7 @@ export function ApiFunctions(base) {
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
         return extraParams
       }          
-      jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElement) {
+      jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElementData) {
         console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue, 'selGridObject', selGridObject)
         let curArgName=""
         if (action===undefined){return}
@@ -286,7 +286,7 @@ export function ApiFunctions(base) {
               } else if (p.contextVariableName) {
                 jsonParam[p.argumentName] = this[p.contextVariableName]
               } else if (p.parentElementProperty) {
-                jsonParam[p.argumentName] = parentElement[p.parentElementProperty]
+                jsonParam[p.argumentName] = parentElementData[p.parentElementProperty]
               } else {
                 jsonParam[p.argumentName] = p.value
               }

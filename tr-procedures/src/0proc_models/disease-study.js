@@ -55,8 +55,8 @@ export const DiseaseStudy = {
 		"actions": [],
 		"tabs": [
 		  {
-			"tabLabel_en": "Study Family",
-			"tabLabel_es": "Familias de estudio",
+			"tabLabel_en": "Families",
+			"tabLabel_es": "Familias",
 			"view": "studyfamily",
 			"view_definition": [
 			  {
@@ -133,6 +133,56 @@ export const DiseaseStudy = {
 						}
 					  ]
 					}
+				  },
+				  {
+					"actionName": "STUDY_FAMILY_ACTIVATE",
+					"clientMethod": "openReactivateObjectDialog",
+					"notGetViewData": true,
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "familyName",
+						"selObjectPropertyName": "name"
+					  }
+					],					
+					"button": {
+					  "icon": "toggle_on",
+					  "title": {
+						"label_en": "Reactivate",
+						"label_es": "Reactivar"
+					  },
+					  "requiresGridItemSelected": false
+					},
+					"dialogInfo": {												
+						"name": "reactivateObjectDialog",
+						"fieldsObject": {
+							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
+							"objectName": {"label_en": "Family to reactivate", "label_es": "Familia a Reactivar"}
+					  	},
+					  	"listDefinition": {
+						  "keyFldName": "name",
+						  "eachEntryTextGenerator": [
+						  {"value": "Name: ","type": "fix"},
+						  {"value": "name","type": "field"}
+						]
+					  },
+					  "viewQuery": {
+						  "actionName": "DEACTIVATED_STUDY_FAMILIES_LAST_N_DAYS",
+						  "clientMethod": "getDeactivatedObjects",
+						  "endPointParams": [
+							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
+							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"}
+						  ]
+						}
+					}
 				  }
 				],
 				"row_buttons": [
@@ -162,93 +212,24 @@ export const DiseaseStudy = {
 						}
 					  },
 					  {
-						"actionName": "STUDY_FAMILY_ACTIVATE",
-						"notGetViewData": true,
-						"requiresDialog": true,
-						"certificationException": true,
-						"endPointParams": [
-						  {
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
-							"argumentName": "familyName",
-							"selObjectPropertyName": "name"
-						  }
-						],
-						"selObjectVariableName": "selectedFamily",
-						"button": {
-						  "icon": "toggle_on",
-						  "title": {
-							"label_en": "Activate",
-							"label_es": "Activar"
-						  },
-						  "requiresGridItemSelected": false
-						},
-						"dialogInfo": {
-						  "name": "genericDialog",
-						  "fields": {
-							"numDays": {
-							  "label_en": "Number of Days",
-							  "label_es": "Número de Días"
-							},
-							"objectName": {
-							  "label_en": "Family to reactivate",
-							  "label_es": "Familia a Reactivar"
-							}
-						  },
-						  "listDefinition": {
-							"keyFldName": "name",
-							"eachEntryTextGenerator": [
-							  {
-								"value": "Name: ",
-								"type": "fix"
-							  },
-							  {
-								"value": "name",
-								"type": "field"
-							  }
-							]
-						  },
-						  "action": [
-							{
-							  "actionName": "DEACTIVATED_STUDY_FAMILIES_LAST_N_DAYS",
-							  "apiParams": [
-								{
-								  "query": "numDays",
-								  "element": "lotNumDays",
-								  "defaultValue": 7
-								},
-								{
-								  "argumentName": "studyName",
-								  "selObjectPropertyName": "study"
-								}
-							  ]
-							}
-						  ]
-						}
-					  },
-					  {
 						"actionName": "STUDY_FAMILY_ADD_INDIVIDUAL",
 						"notGetViewData": true,
 						"requiresDialog": true,
 						"certificationException": true,
 						"endPointParams": [
-						  {
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
-							"argumentName": "familyName",
-							"internalVariableSimpleObjName": "selectedFamily",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
+							{
+								"argumentName": "studyName",
+								"internalVariableSimpleObjName": "selectedItem",
+								"internalVariableSimpleObjProperty": "name"
+							},
+							{
+								"argumentName": "familyName",
+								"selObjectPropertyName": "name"
+							},
+							{
 							"argumentName": "individualsList",
-							"element": "listSelectedStudyIndividuals"
-						  }
+							"element": "list1"
+							}
 						],
 						"button": {
 						  "icon": "add",
@@ -263,21 +244,22 @@ export const DiseaseStudy = {
 						  "name": "genericDialog",
 						  "fields": [
 							{
-							  "listSelectedStudyIndividuals": {
-								"label_en": "Indvidual Id to Add",
-								"label_es": "Individuo a añadir",
-								"keyFldName": "individual_id",
-								"eachEntryTextGenerator": [
-								  {
-									"value": "Name: ",
-									"type": "fix"
-								  },
-								  {
-									"value": "individual_name",
-									"type": "field"
-								  }
-								]
-							  }
+								"list1": {
+									"label_en": "Indvidual Id to Add",
+									"label_es": "Individuo a añadir",									"addBlankValueOnTop": true,
+									"addBlankValueAtBottom": false,
+									"valuesFromSelectedItem": {
+									"internalVariableSingleObjName": "selectedItem",
+									"internalVariableSingleObjProperty": "study_individual",
+									"propertyKeyName": "individual_id",
+									"propertyKeyValueEn": [
+										"individual_name"
+									],
+									"propertyKeyValueEs": [
+										"individual_name"
+									]
+									}
+								}
 							}
 						  ]
 						}
@@ -339,7 +321,7 @@ export const DiseaseStudy = {
 						  },
 						  "requiresGridItemSelected": true
 						}
-					  }					
+						}					
 					]
 				}
 			  }
@@ -414,6 +396,58 @@ export const DiseaseStudy = {
 					}
 				  },
 				  {
+					"actionName": "STUDY_INDIVIDUAL_ACTIVATE",
+					"clientMethod": "openReactivateObjectDialog",
+					"notGetViewData": true,
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "individualId",
+						"selObjectPropertyName": "individual_id"
+					  }
+					],					
+					"button": {
+					  "icon": "toggle_on",
+					  "title": {
+						"label_en": "Reactivate",
+						"label_es": "Reactivar"
+					  },
+					  "requiresGridItemSelected": false
+					},
+					"dialogInfo": {												
+						"name": "reactivateObjectDialog",
+						"fieldsObject": {
+							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
+							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
+					  	},
+					  	"listDefinition": {
+						  "keyFldName": "individual_id",
+						  "eachEntryTextGenerator": [
+						  {"value": "Name: ","type": "fix"},
+						  {"value": "individual_name","type": "field"}
+						]
+					  },
+					  "viewQuery": {
+						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
+						  "clientMethod": "getDeactivatedObjects",
+						  "endPointParams": [
+							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
+							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"}
+						  ]
+						}
+					}
+				  }
+			  ],
+			  "row_buttons":[
+				  {
 					"actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
 					"notGetViewData": true,
 					"requiresDialog": false,
@@ -460,72 +494,6 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": true
 					}
-				  },
-				  {
-					"actionName": "STUDY_INDIVIDUAL_ACTIVATE",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "individualId",
-						"selObjectPropertyName": "individual_id"
-					  }
-					],
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Activate",
-						"label_es": "Activar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {
-					  "name": "genericDialog",
-					  "fields": {
-						"numDays": {
-						  "label_en": "Number of Days",
-						  "label_es": "Número de Días"
-						},
-						"objectName": {
-						  "label_en": "Individual to reactivate",
-						  "label_es": "Individuo a Reactivar"
-						}
-					  },
-					  "listDefinition": {
-						"keyFldName": "individual_id",
-						"eachEntryTextGenerator": [
-						  {
-							"value": "Name: ",
-							"type": "fix"
-						  },
-						  {
-							"value": "individual_name",
-							"type": "field"
-						  }
-						]
-					  },
-					  "action": [
-						{
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
-						  "apiParams": [
-							{
-							  "query": "numDays",
-							  "element": "lotNumDays",
-							  "defaultValue": 7
-							},
-							{
-							  "argumentName": "studyName",
-							  "selObjectPropertyName": "study"
-							}
-						  ]
-						}
-					  ]
-					}
 				  }
 				],
 				"children": "study_individual_sample",
@@ -556,9 +524,10 @@ export const DiseaseStudy = {
 					  "label_es": "Creado en"
 					}
 				  ],
-				  "actions": [
+				  "row_buttons": [
 					{
 					  "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+					  "certificationException": true,
 					  "endPointParams": [
 						{
 						  "argumentName": "studyName",
@@ -600,6 +569,7 @@ export const DiseaseStudy = {
 					},
 					{
 					  "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					  "certificationException": true,
 					  "endPointParams": [
 						{
 						  "argumentName": "studyName",
@@ -641,6 +611,7 @@ export const DiseaseStudy = {
 					},
 					{
 					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
+					  "certificationException": true,
 					  "endPointParams": [
 						{
 						  "argumentName": "studyName",
@@ -666,6 +637,7 @@ export const DiseaseStudy = {
 					},
 					{
 					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
+					  "certificationException": true,
 					  "endPointParams": [
 						{
 						  "argumentName": "studyName",
@@ -749,7 +721,61 @@ export const DiseaseStudy = {
 						"label_es": "Muestra"
 					  }
 					],
-					"actions": []
+					"row_buttons": [
+						{
+							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+							"notGetViewData": true,
+							"requiresDialog": true,
+							"certificationException": true,
+							"endPointParams": [
+								{
+								"argumentName": "studyName",
+								"selObjectPropertyName": "study"
+								},
+								{
+								"argumentName": "ownerId",
+								"selObjectPropertyName": "owner_id"
+								},
+								{
+								"argumentName": "ownerTable",
+								"selObjectPropertyName": "owner_table"
+								},
+								{
+								"argumentName": "variableSetName",
+								"selObjectPropertyName": "variable_set"
+								},
+								{
+								"argumentName": "variableName",
+								"selObjectPropertyName": "name"
+								},
+								{
+								"argumentName": "newValue",
+								"variableName": "newResult"
+								}
+							],
+							"button": {
+								"icon": "manufacturing",
+								"title": {
+								"label_en": "Set Result",
+								"label_es": "Entrar Result"
+								},
+								"requiresGridItemSelected": true
+							},
+							"dialogInfo": {
+								"name": "genericDialog",
+								"fields": {
+								"variableName": {
+									"label_en": "Variable Name",
+									"label_es": "Nombre Variable"
+								},
+								"value": {
+									"label_en": "Value",
+									"label_es": "Valor"
+								}
+								}
+							}
+						}						
+					]
 				  }
 				}
 			  }
@@ -797,9 +823,13 @@ export const DiseaseStudy = {
 					"label_es": "Valor"
 				  }
 				],
-				"actions": [
+				"actions":[],
+				"row_buttons": [
 				  {
 					"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+					"alertMsg": {
+						"empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
+					},					
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
@@ -837,22 +867,33 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": true
 					},
-					"dialogInfo": {
-					  "name": "genericDialog",
-					  "fields": {
-						"variableName": {
-						  "label_en": "Variable Name",
-						  "label_es": "Nombre Variable"
-						},
-						"value": {
-						  "label_en": "Value",
-						  "label_es": "Valor"
-						}
-					  }
+					"dialogInfo": { 
+						"name": "resultDialog",
+						"subQueryName": "getResult",		  
+						"viewQuery": {
+							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",							
+							  "endPointParams": [				  
+								{ "argumentName": "eventId", "selObjectPropertyName": "id"}
+							  ]
+						},			  
+						"automatic": true,
+						"action": [
+						  { "actionName": "ENTER_EVENT_RESULT",
+							"notGetViewData": true,
+							"requiresDialog": false,
+							"endPointUrl": "Samples",
+							"clientMethod": "enterEventResult",
+							"endPointParams": [
+								{ "argumentName": "newValue", "targetValue": true },
+								{ "argumentName": "eventId", "targetValue": true },
+								{ "argumentName": "instrumentName", "targetValue": true },
+								{ "argumentName": "variableName", "targetValue": true }
+							]
+						  }
+						]
+					  },
 					}
-				  }
-				],
-				"row_buttons": []
+				]
 			  }
 			]
 		  }

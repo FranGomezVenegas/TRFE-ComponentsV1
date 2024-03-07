@@ -10,8 +10,20 @@ import "../ParentReadOnlyTable/ParentReadOnlyTable";
 
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import { TrazitTestScriptNewStepDialog } from '../GenericDialogs/TrazitTestScriptNewStepDialog';
+import { TrazitReactivateObjectsDialog } from "../GenericDialogs/TrazitReactivateObjectsDialog";
 
-export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog)))))) {
+
+import { ModuleEnvMonitClientMethods } from "../../module_env_monit/ModuleEnvMonitClientMethods";
+import { TrazitEnterResultWithSpec } from "../GenericDialogs/TrazitEnterResultWithSpec";
+import { ModuleEnvMonitDialogsMicroorganism } from "../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism";
+import { TrazitInvestigationsDialog } from "../GenericDialogs/TrazitInvestigationsDialog";
+import { ModuleInstrumentsDialogs } from "../../module_instruments/ModuleInstrumentsDialogs";
+
+import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
+
+
+
+export class ObjecttabsComposition extends (TrazitCredentialsDialogs(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog)))))))))))) {
   static get styles() {
     return [
       Layouts,
@@ -97,8 +109,21 @@ export class ObjecttabsComposition extends ((CoaView(TrazitGenericDialogs(Trazit
         `}
       </div>
       ${this.genericFormDialog()}
+      ${this.reactivateObjectsDialog()}
       ${this.testScriptNewStepFormDialog()}
+
+      ${this.credentialsDialog()} 
+      ${this.reactivateObjectsDialog()}
+      ${this.moduleEnvMonitMicroorganismsDialogAdd()}
+      ${this.moduleEnvMonitMicroorganismsDialogRemove()}
+      ${this.pointTemplate()} ${this.resultTemplate()}
+      ${this.investigationTemplate()}
+      ${this.filterName == "open"
+        ? html`${this.decisionTemplate()}`
+        : nothing}
+      ${this.decisionTemplate()}      
       ${super.render()}
+
     ` 
   }
 

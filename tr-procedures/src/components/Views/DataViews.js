@@ -12,6 +12,7 @@ import { TrazitInvestigationsDialog } from "../GenericDialogs/TrazitInvestigatio
 import { ModuleInstrumentsDialogs } from "../../module_instruments/ModuleInstrumentsDialogs";
 
 import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
+
 import "@vaadin/vaadin-grid/vaadin-grid";
 import "@vaadin/vaadin-grid/vaadin-grid-column";
 import "@vaadin/vaadin-grid/vaadin-grid-selection-column";
@@ -984,7 +985,10 @@ export function DataViews(base) {
       e.style.display = "none";
     }
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
+      
+      parentData=this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
       console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
+
       let tmp = elem.theme;
       if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
         tmp = sessionStorage.getItem('tableTheme');
@@ -2086,11 +2090,12 @@ export function DataViews(base) {
         : fld.name;
     }
     dialogs() {
-      return html` ${this.credentialsDialog()} ${this.genericFormDialog()} `;
+      console.log('DataViews dialogs')
+      return html` ${this.credentialsDialog()} ${this.genericFormDialog()}  ${this.reactivateObjectsDialog()}`;
     }
 
     loadDialogs() {
-      //console.log('DataViews loadDialogs')
+      console.log('DataViews loadDialogs')
       return html`
         ${this.credentialsDialog()} ${this.genericFormDialog()}
         ${this.reactivateObjectsDialog()}
