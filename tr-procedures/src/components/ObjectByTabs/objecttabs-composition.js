@@ -12,6 +12,8 @@ import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import { TrazitTestScriptNewStepDialog } from '../GenericDialogs/TrazitTestScriptNewStepDialog';
 import { TrazitReactivateObjectsDialog } from "../GenericDialogs/TrazitReactivateObjectsDialog";
 
+import { GenomaSetVariableValue } from "../GenericDialogs/GenomaSetVariableValue";
+
 
 import { ModuleEnvMonitClientMethods } from "../../module_env_monit/ModuleEnvMonitClientMethods";
 import { TrazitEnterResultWithSpec } from "../GenericDialogs/TrazitEnterResultWithSpec";
@@ -23,7 +25,7 @@ import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDia
 
 
 
-export class ObjecttabsComposition extends (TrazitCredentialsDialogs(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog)))))))))))) {
+export class ObjecttabsComposition extends (GenomaSetVariableValue(TrazitCredentialsDialogs(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
   static get styles() {
     return [
       Layouts,
@@ -116,6 +118,10 @@ export class ObjecttabsComposition extends (TrazitCredentialsDialogs(ModuleInstr
       ${this.reactivateObjectsDialog()}
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}
+
+      ${this.genomaDialogsSetResultValueTemplate()}
+
+      
       ${this.pointTemplate()} ${this.resultTemplate()}
       ${this.investigationTemplate()}
       ${this.filterName == "open"

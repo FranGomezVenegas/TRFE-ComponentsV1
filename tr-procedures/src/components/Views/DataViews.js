@@ -890,6 +890,7 @@ export function DataViews(base) {
       if(rowSelected[elem.children] == 0) {
         if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
           alert("There is no data");
+          this.selectedItemInView={}
         }
       }
       //alert(el);
@@ -898,6 +899,7 @@ export function DataViews(base) {
       //  this.selectedItemInView=undefined
       //}else{
       this.selectedItemInView = rowSelected;
+      console.log('selectedItemInView', this.selectedItemInView)
       //}
       // const event2 = new CustomEvent('action-performed', {
       //   bubbles: true, // Allow the event to bubble up the DOM tree

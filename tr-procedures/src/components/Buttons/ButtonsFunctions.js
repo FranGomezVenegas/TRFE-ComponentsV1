@@ -9,7 +9,7 @@ export function ButtonsFunctions(base) {
 
 
     getButtonForRows(actions, data, isProcManagement, parentData) {
-      console.log('getButtonForRows', 'actions', actions, 'data', data, 'parentData', parentData)
+      //console.log('getButtonForRows', 'actions', actions, 'data', data, 'parentData', parentData)
       if (actions === undefined) { actions = this.viewModelFromProcModel }
       return html`
         <style>

@@ -87,9 +87,17 @@ export function ApiFunctions(base) {
         }
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
         return extraParams
-      }          
+      }   
+             
       jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElementData) {
         console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue, 'selGridObject', selGridObject)
+        
+        const stack = new Error().stack;
+        const stackLines = stack.split('\n');
+        const callerName = stackLines[2].match(/at (\w+)/)[1]; // Adjust the index as needed
+    
+        console.log("Llamada por: " + callerName);
+        
         let curArgName=""
         if (action===undefined){return}
           let jsonParam = {}
