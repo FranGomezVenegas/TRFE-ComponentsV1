@@ -110,12 +110,12 @@ export const MbEm=
           },
           "requiresGridItemSelected": false
         },
-		"requiresDialog": true,
+		    "requiresDialog": true,
         "dialogInfo": {          
           "name": "reactivateObjectDialog",
           "fieldsObject": {
-			"queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
-			"objectName": { "label_en": "Production Lot to reactivate", "label_es": "Lote de Producción a Reactivar" }
+            "queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
+            "objectName": { "label_en": "Production Lot to reactivate", "label_es": "Lote de Producción a Reactivar" }
           },    
           "listDefinition":{
             "keyFldName":"lot_name",
@@ -123,16 +123,16 @@ export const MbEm=
               {"value": "Lot: ", "type":"fix"}, {"value": "lot_name", "type":"field"} 
             ]
           },
-		  "viewQuery": {
-			  "actionName": "DEACTIVATED_PRODUCTION_LOTS_LAST_N_DAYS",
-			  "clientMethod": "getDeactivatedObjects",
-			  "endPoint": "/moduleenvmon/EnvMonAPIqueries",
-			  "endPointParams": [
-				{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
-			  ]
-		  },
-          "action": [            
-          ]
+          "viewQuery": {
+            "actionName": "DEACTIVATED_PRODUCTION_LOTS_LAST_N_DAYS",
+            "clientMethod": "getDeactivatedObjects",
+            "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+            "endPointParams": [
+              { "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
+            ]
+          },
+            "action": [            
+            ]
         }
       },
       { "actionName": "EM_DEACTIVATE_PRODUCTION_LOT",
