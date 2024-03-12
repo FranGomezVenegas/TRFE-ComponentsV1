@@ -542,6 +542,19 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
                   border: 1px solid white;
                 }
               }
+              .isLocked_true{
+                color:red;
+              }
+              .isLocked_false{
+                color:black;
+              }
+              .isLocked_undefined{
+                color:black;
+              }
+              mwc-icon-button#locked-for-actions-icon {
+                color:red;
+                
+              }
             </style>
             
             <div style="flex-basis: auto; width: auto;">            
@@ -591,17 +604,17 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
                               : html`
                                   ${p.cardData.title === undefined
                                     ? nothing
-                                    : html`<p"><span style="font-weight: bold; font-size:18px;">${
-                                        p["label_"+this.lang] 
-                                      }</span>
-                  ${
-                    p.cardData.subtitle === undefined
-                      ? nothing
-                      : html` <span style="font-size:16px;"
-                          >(${p.cardData.subtitle})</span
-                        >`
-                  }
-                  </p>`}
+                                    : html`<p class='isLocked_${p.locked_for_actions}'><span  style="font-weight: bold; font-size:18px;">
+                                        ${p.locked_for_actions===undefined||p.locked_for_actions===false?nothing:html`<mwc-icon-button id="locked-for-actions-icon" icon="lock" alt="locked for changes"></mwc-icon-button>`}
+                                        ${p["label_"+this.lang]}</span>
+                                        ${
+                                          p.cardData.subtitle === undefined
+                                            ? nothing
+                                            : html` <span style="font-size:16px;"
+                                                >(${p.cardData.subtitle})</span
+                                              >`
+                                        }
+                                        </p>`}
                                   ${p.cardData.fields === undefined
                                     ? nothing
                                     : html`
@@ -1614,7 +1627,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
   selectedProcessTitle() {
     return html`
       <style>
-        .title-banner {
+        .title-banner-isLocked-false {
           background-color: #007bff; /* Blue */
           color: #24c0eb; /* White */
           display: flex;
@@ -1631,6 +1644,30 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
           background : -ms-linear-gradient(-76deg, rgba(214, 233, 248, 1) 43.85%, rgba(255, 255, 255, 1) 58.66%);
           -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#D6E9F8', endColorstr='#FFFFFF' ,GradientType=0)";
           background : linear-gradient(166deg, rgba(214, 233, 248, 1) 43.85%, rgba(255, 255, 255, 1) 58.66%);
+          border-radius : 12px;
+          -moz-border-radius : 12px;
+          -webkit-border-radius : 12px;
+          box-shadow : 2.77px 2.77px 4.62px rgba(20, 78, 117, 0.5);
+          box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);     
+          filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2.77, Off=2.77, Color='#144E75') progid:DXImageTransform.Microsoft.gradient(startColorstr='#D6E9F8',endColorstr='#FFFFFF' , GradientType=1);                  
+        }
+        .title-banner-isLocked-true {
+          background-color: #007bff; /* Blue */
+          color: #24c0eb; /* White */
+          display: flex;
+          align-items: center;
+          height: 60px;
+          width: 100%;
+          position: relative;
+          z-index: 6;       
+          transition: width 0.5s ease-in-out;
+          background : -moz-linear-gradient(46.71% -341.1% -76deg,rgba(214, 233, 248, 1) 43.85%,#A3181E 58.66%);
+          background : -webkit-linear-gradient(-76deg, rgba(214, 233, 248, 1) 43.85%, #A3181E 58.66%);
+          background : -webkit-gradient(linear,46.71% -341.1% ,53.29% 441.1% ,color-stop(0.4385,rgba(214, 233, 248, 1) ),color-stop(0.5866,#A3181E ));
+          background : -o-linear-gradient(-76deg, rgba(214, 233, 248, 1) 43.85%, #A3181E 58.66%);
+          background : -ms-linear-gradient(-76deg, rgba(214, 233, 248, 1) 43.85%, #A3181E 58.66%);
+          -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#D6E9F8', endColorstr='#FFFFFF' ,GradientType=0)";
+          background : linear-gradient(166deg, rgba(214, 233, 248, 1) 43.85%, #A3181E 58.66%);
           border-radius : 12px;
           -moz-border-radius : 12px;
           -webkit-border-radius : 12px;
@@ -1675,8 +1712,10 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
 
       <div class="${classMap({
         "title-banner": true,
+        'title-banner-isLocked-true': this.selectedProcInstance?.locked_for_actions === true,
+        'title-banner-isLocked-false': !this.selectedProcInstance?.locked_for_actions,
         collapsed:
-          this.leftSplitDisplayed === undefined || !this.leftSplitDisplayed,
+        this.leftSplitDisplayed === undefined || !this.leftSplitDisplayed,
       })}">
           <span class="left-text">
             <mwc-icon-button size="s" style="left:22px;" id="expandleftpane" dense raised label=""  icon="${
