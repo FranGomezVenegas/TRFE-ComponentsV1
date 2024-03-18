@@ -157,8 +157,13 @@ return class extends LitElement {
           <vaadin-grid id="erGrid" theme="row-dividers" column-reordering-allowed multi-sort
             .items=${this.enterResults}
             @selected-items-changed=${e => {
-            if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
-                this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
+            // if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+            //     this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES"||
+            //     this.actionBeingPerformedModel.actionName == "STUDY_OBJECT_SET_VARIABLE_VALUE"
+            //     ) {
+              if (this.actionBeingPerformedModel.dialogInfo!==undefined&&
+                  this.actionBeingPerformedModel.dialogInfo.name!==undefined&&
+                  this.actionBeingPerformedModel.dialogInfo.name==="resultDialog"){      
               this.selectedResults = []
             } else {
               this.selectedResults = e.detail.value
@@ -170,10 +175,12 @@ return class extends LitElement {
             html`<vaadin-grid-selection-column header="" flex-grow="1"></vaadin-grid-selection-column>` :
             html`<vaadin-grid-selection-column header="" width="65px" resizable ></vaadin-grid-selection-column>`
           }
-            ${this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
-              this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES"  ?
-            html`${this.instrumentEventList()}` :
-            html`${this.enterResultList()}`
+
+          ${this.actionBeingPerformedModel.dialogInfo!==undefined&&
+                this.actionBeingPerformedModel.dialogInfo.name!==undefined&&
+                this.actionBeingPerformedModel.dialogInfo.name==="resultDialog" ?  
+            html`${this.instrumentEventList()}` 
+            :html`${this.enterResultList()}`
           }
           </vaadin-grid>
           <div id="rowTooltipenterresults">&nbsp;</div>
@@ -242,9 +249,12 @@ return class extends LitElement {
     }    
     setCellListenerEnterResults() {
       console.log('setCellListenerEnterResults EnterResults')
-      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
-          this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
-        // 
+      // if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+      //     this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES"||
+      //     this.actionBeingPerformedModel.actionName == "STUDY_OBJECT_SET_VARIABLE_VALUE") {
+      if (this.actionBeingPerformedModel.dialogInfo!==undefined&&
+          this.actionBeingPerformedModel.dialogInfo.name!==undefined&&
+          this.actionBeingPerformedModel.dialogInfo.name==="resultDialog"){
       } else {
         if (this.erGrid===undefined||this.erGrid===null){return}
         this.rowTooltipEnterResults.style.display = "block"
@@ -416,9 +426,12 @@ return class extends LitElement {
       })
     }
     removeEvents() {
-      if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
-          this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES") {
-        // 
+      // if (this.actionBeingPerformedModel.actionName == "INSTRUMENT_EVENT_VARIABLES"||
+      //     this.actionBeingPerformedModel.actionName == "QUALIFIFICATION_EVENT_VARIABLES"||
+      //     this.actionBeingPerformedModel.actionName == "STUDY_OBJECT_SET_VARIABLE_VALUE") {
+      if (this.actionBeingPerformedModel.dialogInfo!==undefined&&
+          this.actionBeingPerformedModel.dialogInfo.name!==undefined&&
+          this.actionBeingPerformedModel.dialogInfo.name==="resultDialog"){
       } else {
         if (this.rowTooltipEnterResults===undefined||this.rowTooltipEnterResults===null){return}
         this.rowTooltipEnterResults.textContent = ""
@@ -685,6 +698,9 @@ return class extends LitElement {
       this.actionMethod(this.selectedDialogAction, false)
     }
     specRenderer(result) {
+      if (result===undefined||result.spec_eval===undefined){
+        return html``
+      }
       if (result.spec_eval) {
         if (result.spec_eval == 'IN') {
           return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`

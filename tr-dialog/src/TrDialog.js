@@ -150,6 +150,7 @@ export class TrDialog extends Dialog {
       expandLabel: { type: String },
       hideMin: { type: Boolean, reflect: true },
       hideZoom: { type: Boolean, reflect: true },
+      hideXtoClose: { type: Boolean, reflect: true },
       zIndex: { type: Number }
     };
   }
@@ -161,6 +162,7 @@ export class TrDialog extends Dialog {
     this.expandLabel = "expand_more"
     this.hideMin = false;
     this.hideZoom = false;
+    this.hideXtoClose = false;
     this.top = "0px";
     this.left = "0px";
     this.width = "0px";
@@ -180,6 +182,7 @@ export class TrDialog extends Dialog {
   }
 
   cornerButton() {
+    //alert('hideXtoClose '+this.hideXtoClose)
     return html`
       <div class="popup-header" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 30px;">
         <div style="position: absolute; top: 10px; left: 10px;">
@@ -189,7 +192,7 @@ export class TrDialog extends Dialog {
           <slot name="icon1" style="margin-right: 5px;"></slot>
           <mwc-icon ?hidden=${this.hideMin} class="corner" @click=${this.minimize}>${this.expandLabel}</mwc-icon>
           <mwc-icon ?hidden=${this.hideZoom} class="corner" @click=${this.zoomOut}>${this.zoomLabel}</mwc-icon>
-          <mwc-icon class="corner" dialogAction="decline">close</mwc-icon>
+          <mwc-icon ?hidden=${this.hideXtoClose} class="corner" dialogAction="decline">close</mwc-icon>
         </div>
       </div>
     `

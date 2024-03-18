@@ -169,6 +169,7 @@ export class CredDialog extends CommonCore {
         @closed=${this.closed}
         .heading="${this.headerLabel()}"
         hideActions=""
+        hideXtoClose
         scrimClickAction=""
         .escapeKeyAction="${this.escapeKey?'close':''}">
         ${this.changing||this.nonProc ?

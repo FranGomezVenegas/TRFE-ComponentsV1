@@ -40,6 +40,7 @@ This area want to track the requirements that made this web component to become 
 
 - #192. Corporative dark-blue color for corner icons [https://github.com/FranGomezVenegas/FETR/issues/192](url)
 - #278. Resize and movable dialogs [https://github.com/FranGomezVenegas/FETR/issues/278](url)
+- #344. x Corner icon can be displayed/hidden programatically [https://github.com/FranGomezVenegas/FrontE-Issues/issues/344](url)
 
 
 ## Fixed Bugs Tracking

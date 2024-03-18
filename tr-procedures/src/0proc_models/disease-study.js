@@ -9,7 +9,7 @@ export const DiseaseStudy = {
 		{ "name": "Projects" , "url" : "/moduleclinicalstudy/ClinicalStudyAPIactions"}		
 	  ],
 	  "queriesEndpoints":[
-		{ "name": "Studies" , "url" : "/modulegenoma/GenomaStudyAPIqueries"}				
+		{ "name": "Studies" , "url" : "/moduleclinicalstudy/ClinicalStudyAPIqueries"}				
 	  ],
 	  "zzzactionsEndpoints":[
 		{ "name": "Studies" , "url" : "/modulegenoma/GenomaStudyAPIactions"}
@@ -54,14 +54,15 @@ export const DiseaseStudy = {
 		},
 		"actions": [],
 		"tabs": [
-		  {"tabLabel_en": "Families",
+		  {
+			"tabLabel_en": "Families",
 			"tabLabel_es": "Familias",
 			"view": "studyfamily",
 			"view_definition": [
 			  {
 				"type": "parentReadOnlyTable",
 				"endPointPropertyArray": [
-				  "study_family"				  
+				  "study_family"
 				],
 				"columns": [
 				  {
@@ -139,7 +140,7 @@ export const DiseaseStudy = {
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
+					"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 					"endPointParams": [
 					  {
 						"argumentName": "studyName",
@@ -150,7 +151,7 @@ export const DiseaseStudy = {
 						"argumentName": "familyName",
 						"selObjectPropertyName": "name"
 					  }
-					],					
+					],
 					"button": {
 					  "icon": "toggle_on",
 					  "title": {
@@ -159,35 +160,562 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": false
 					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Family to reactivate", "label_es": "Familia a Reactivar"}
-					  	},
-						
-					  	"listDefinition": {
-						  "keyFldName": "name",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "name","type": "field"}
+					"dialogInfo": {
+					  "name": "reactivateObjectDialog",
+					  "fieldsObject": {
+						"queryNumDays": {
+						  "label_en": "Number of Days",
+						  "label_es": "Número de Días"
+						},
+						"objectName": {
+						  "label_en": "Family to reactivate",
+						  "label_es": "Familia a Reactivar"
+						}
+					  },
+					  "listDefinition": {
+						"keyFldName": "name",
+						"eachEntryTextGenerator": [
+						  {
+							"value": "Name: ",
+							"type": "fix"
+						  },
+						  {
+							"value": "name",
+							"type": "field"
+						  }
 						]
 					  },
 					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_FAMILIES_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
+						"actionName": "DEACTIVATED_STUDY_FAMILIES_LAST_N_DAYS",
+						"clientMethod": "getDeactivatedObjects",
+						"endPointParams": [
+						  {
+							"query": "numDays",
+							"element": "queryNumDays",
+							"defaultValue": 7
+						  },
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  }
+						]
+					  }
 					}
 				  }
 				],
 				"row_buttons": [
+				  {
+					"actionName": "STUDY_FAMILY_DEACTIVATE",
+					"notGetViewData": true,
+					"requiresDialog": false,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "familyName",
+						"selObjectPropertyName": "name"
+					  }
+					],
+					"button": {
+					  "icon": "toggle_off",
+					  "title": {
+						"label_en": "Deactivate",
+						"label_es": "Desactivar"
+					  },
+					  "requiresGridItemSelected": true
+					}
+				  },
+				  {
+					"actionName": "STUDY_FAMILY_ADD_INDIVIDUAL",
+					"notGetViewData": true,
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "familyName",
+						"selObjectPropertyName": "name"
+					  },
+					  {
+						"argumentName": "individualsList",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "add",
+					  "title": {
+						"label_en": "Add Individual",
+						"label_es": "Añadir Individuo"
+					  },
+					  "requiresGridItemSelected": true
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"label_en": "Indvidual Id to Add",
+							"label_es": "Individuo a añadir",
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromSelectedItem": {
+							  "internalVariableSingleObjName": "selectedItem",
+							  "internalVariableSingleObjProperty": "study_individual",
+							  "propertyKeyName": "individual_id",
+							  "propertyKeyValueEn": [
+								"individual_name"
+							  ],
+							  "propertyKeyValueEs": [
+								"individual_name"
+							  ]
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_family"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "name"
+					  },
+					  {
+						"argumentName": "variableSetName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable Set",
+						"label_es": "Añadir Conjunto de Variables"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variable Set",
+							"label_es": "Grupo de variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables_set",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_family"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "name"
+					  },
+					  {
+						"argumentName": "variableName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable",
+						"label_es": "Añadir Variable"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variables",
+							"label_es": "Variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  }
+				],
+				"children": "study_individual",
+				"children_definition": {
+				  "title": {
+					"label_en": "Individuals",
+					"label_es": "Individuos"
+				  },
+				  "columns": [
 					{
-						"actionName": "STUDY_FAMILY_DEACTIVATE",
+					  "name": "individual_id",
+					  "label_en": "Individual ID",
+					  "label_es": "ID persona"
+					},
+					{
+					  "name": "individual_name",
+					  "label_en": "Individual name",
+					  "label_es": "Nombre persona"
+					},
+					{
+					  "name": "created_by",
+					  "label_en": "Created by",
+					  "label_es": "Creado por"
+					},
+					{
+					  "name": "created_on",
+					  "label_en": "Created On",
+					  "label_es": "Creado en"
+					}
+				  ],
+				  "row_buttons": [
+					{
+					  "actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
+					  "notGetViewData": true,
+					  "requiresDialog": false,
+					  "certificationException": true,
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
+						},
+						{
+						  "argumentName": "familyName",
+						  "parentElementProperty": "name"
+						},
+						{
+						  "argumentName": "individualId",
+						  "selObjectPropertyName": "individual_id"
+						}
+					  ],
+					  "button": {
+						"icon": "remove",
+						"title": {
+						  "label_en": "Unlink from family",
+						  "label_es": "Quitar de la familia"
+						},
+						"requiresGridItemSelected": true
+					  }
+					},
+								{
+					"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_individual"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "individual_id"
+					  },
+					  {
+						"argumentName": "variableSetName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable Set",
+						"label_es": "Añadir Conjunto de Variables"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variable Set",
+							"label_es": "Grupo de variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables_set",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_individual"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "individual_id"
+					  },
+					  {
+						"argumentName": "variableName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable",
+						"label_es": "Añadir Variable"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variable",
+							"label_es": "Variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+	  
+					{
+					  "actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
+					  "requiresDialog": false,
+					  "certificationException": true,
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "selObjectPropertyName": "study"
+						},
+						{
+						  "argumentName": "individualId",
+						  "selObjectPropertyName": "individual_id"
+						}
+					  ],
+					  "button": {
+						"icon": "refresh",
+						"title": {
+						  "label_en": "Deactivate",
+						  "label_es": "Desactivar"
+						},
+						"requiresObjectSelected": true
+					  }
+					},
+					{
+					  "actionName": "STUDY_INDIVIDUAL_ACTIVATE",
+					  "clientMethod": "openReactivateObjectDialog",
+					  "notGetViewData": true,
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
+						},
+						{
+						  "argumentName": "individualId",
+						  "selObjectPropertyName": "individual_id"
+						}
+					  ],
+					  "button": {
+						"icon": "toggle_on",
+						"title": {
+						  "label_en": "Reactivate",
+						  "label_es": "Reactivar"
+						},
+						"requiresGridItemSelected": false
+					  },
+					  "dialogInfo": {
+						"name": "reactivateObjectDialog",
+						"fieldsObject": {
+						  "queryNumDays": {
+							"label_en": "Number of Days",
+							"label_es": "Número de Días"
+						  },
+						  "objectName": {
+							"label_en": "Individual to reactivate",
+							"label_es": "Individuo a Reactivar"
+						  }
+						},
+						"listDefinition": {
+						  "keyFldName": "individual_id",
+						  "eachEntryTextGenerator": [
+							{
+							  "value": "Name: ",
+							  "type": "fix"
+							},
+							{
+							  "value": "individual_name",
+							  "type": "field"
+							}
+						  ]
+						},
+						"viewQuery": {
+						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
+						  "clientMethod": "getDeactivatedObjects",
+						  "endPointParams": [
+							{
+							  "query": "numDays",
+							  "element": "queryNumDays",
+							  "defaultValue": 7
+							},
+							{
+							  "argumentName": "studyName",
+							  "internalVariableSimpleObjName": "selectedItem",
+							  "internalVariableSimpleObjProperty": "name"
+							}
+						  ]
+						}
+					  }
+					}
+				  ],
+				  "children": "study_individual_sample",
+				  "children_definition": {
+					"title": {
+					  "label_en": "Individuals",
+					  "label_es": "Individuos"
+					},
+					"columns": [
+					  {
+						"name": "sample_id",
+						"label_en": "Sample ID",
+						"label_es": "ID Muestra"
+					  },
+					  {
+						"name": "individual_name",
+						"label_en": "Individual name",
+						"label_es": "Nombre persona"
+					  },
+					  {
+						"name": "created_by",
+						"label_en": "Created by",
+						"label_es": "Creado por"
+					  },
+					  {
+						"name": "created_on",
+						"label_en": "Created On",
+						"label_es": "Creado en"
+					  }
+					],
+					"row_buttons": [
+					  {
+						"actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
 						"notGetViewData": true,
 						"requiresDialog": false,
 						"certificationException": true,
@@ -199,559 +727,26 @@ export const DiseaseStudy = {
 						  },
 						  {
 							"argumentName": "familyName",
-							"selObjectPropertyName": "name"
+							"parentElementProperty": "name"
+						  },
+						  {
+							"argumentName": "individualId",
+							"selObjectPropertyName": "individual_id"
 						  }
 						],
 						"button": {
-						  "icon": "toggle_off",
+						  "icon": "remove",
 						  "title": {
-							"label_en": "Deactivate",
-							"label_es": "Desactivar"
+							"label_en": "Unlink from family",
+							"label_es": "Quitar de la familia"
 						  },
 						  "requiresGridItemSelected": true
 						}
-					},
-					{
-						"actionName": "STUDY_FAMILY_ADD_INDIVIDUAL",
-						"notGetViewData": true,
-						"requiresDialog": true,
-						"certificationException": true,
-						"endPointParams": [
-							{
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							},
-							{
-								"argumentName": "familyName",
-								"selObjectPropertyName": "name"
-							},
-							{
-							"argumentName": "individualsList",
-							"element": "list1"
-							}
-						],
-						"button": {
-						  "icon": "add",
-						  "title": {
-							"label_en": "Add Individual",
-							"label_es": "Añadir Individuo"
-						  },
-						  "requiresGridItemSelected": true
-						},
-						"dialogInfo": {
-						  "requiresDialog": true,
-						  "name": "genericDialog",
-						  "fields": [
-							{
-								"list1": {
-									"label_en": "Indvidual Id to Add",
-									"label_es": "Individuo a añadir",									
-									"addBlankValueOnTop": true,
-									"addBlankValueAtBottom": false,
-									"valuesFromSelectedItem": {
-									"internalVariableSingleObjName": "selectedItem",
-									"internalVariableSingleObjProperty": "study_individual",
-									"propertyKeyName": "individual_id",
-									"propertyKeyValueEn": [
-										"individual_name"
-									],
-									"propertyKeyValueEs": [
-										"individual_name"
-									]
-									}
-								}
-							}
-						  ]
-						}
-					},
-					{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-						"requiresDialog": true,
-					  	"certificationException": true,
-					  	"endPointParams": [
-						{
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_family"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "name"
-						},
-						{
-						  "argumentName": "variableSetName",
-						  "element": "list1"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable Set",
-						  "label_es": "Añadir Conjunto de Variables"
-						},
-						"requiresObjectSelected": false
 					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fields": [
-							{"list1": {
-								"items": [
-								{ "keyName": "name", "keyValue_en": "name", "keyValue_es": "name" }
-								],
-								"label_en": "Variable Set", "label_es": "Grupo de variables", "optional": true,
-								"addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-								"valuesFromMasterData": {
-								  "elementName":"list4",
-								  "propertyNameContainer": "variables_set",
-								  "propertyNameContainerLevelPropertyKeyName": "name",
-								  "propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
-								}			
-							  }
-							}
-						]
-					  }
-					},
-				  	{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-					  "requiresDialog": true,
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_family"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "name"
-						},
-						{
-						  "argumentName": "variableName",
-						  "element": "list1"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable",
-						  "label_es": "Añadir Variable"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fields": [
-							{"list1": {
-								"items": [
-								{ "keyName": "name", "keyValue_en": "name", "keyValue_es": "name" }
-								],
-								"label_en": "Variable Set", "label_es": "Grupo de variables", "optional": true,
-								"addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-								"valuesFromMasterData": {
-								  "elementName":"list4",
-								  "propertyNameContainer": "variables",
-								  "propertyNameContainerLevelPropertyKeyName": "name",
-								  "propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
-								}			
-							  }
-							}
-						]
-
-					  }
-					}
-				],
-				"children": "study_individual",
-				"children_definition": {
-					"title": {
-					"label_en": "Individuals",
-					"label_es": "Individuos"
-					},
-					"columns": [
-						{
-						  "name": "individual_id",
-						  "label_en": "Individual ID",
-						  "label_es": "ID persona"
-						},
-						{
-						  "name": "individual_name",
-						  "label_en": "Individual name",
-						  "label_es": "Nombre persona"
-						},
-						{
-						  "name": "created_by",
-						  "label_en": "Created by",
-						  "label_es": "Creado por"
-						},
-						{
-						  "name": "created_on",
-						  "label_en": "Created On",
-						  "label_es": "Creado en"
-						}
-					],	
-					"row_buttons": [
-						{ "actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
-  						"notGetViewData": true,
-  						"requiresDialog": false,
-  						"certificationException": true,
-  						"endPointParams": [
-  						  {
-  							"argumentName": "studyName",
-  							"internalVariableSimpleObjName": "selectedItem",
-  							"internalVariableSimpleObjProperty": "name"
-  						  },
-  						  {
-  							"argumentName": "familyName",
-  							"parentElementProperty": "name"							
-  						  },
-  						  {
-  							"argumentName": "individualId",
-  							"selObjectPropertyName": "individual_id"
-  						  }
-  						],
-  						"button": {
-  						  "icon": "remove",
-  						  "title": {
-  							"label_en": "Unlink from family",
-  							"label_es": "Quitar de la familia"
-  						  },
-  						  "requiresGridItemSelected": true
-  						}
-						},	
-						{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableSetName",
-								"element": "listMDvariablesSet"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable Set",
-								"label_es": "Añadir Conjunto de Variables"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariablesSet": {
-									"label_en": "Variables Set",
-									"label_es": "Conjunto Variables"
-								  }
-								}
-							  ]
-							}
-						},
-						{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableName",
-								"element": "listMDvariables"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable",
-								"label_es": "Añadir Variable"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariables": {
-									"label_en": "Variable",
-									"label_es": "Variable"
-								  }
-								}
-							  ]
-							}
-						},
-						{"actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
-							"requiresDialog": false,
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Deactivate",
-								"label_es": "Desactivar"
-							  },
-							  "requiresObjectSelected": true
-							}
-						},
-						{"actionName": "STUDY_INDIVIDUAL_ACTIVATE",
-    					"clientMethod": "openReactivateObjectDialog",
-    					"notGetViewData": true,
-    					"requiresDialog": true,
-    					"certificationException": true,
-    					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-    					"endPointParams": [
-    					  {
-    						"argumentName": "studyName",
-    						"internalVariableSimpleObjName": "selectedItem",
-    						"internalVariableSimpleObjProperty": "name"
-    					  },
-    					  {
-    						"argumentName": "individualId",
-    						"selObjectPropertyName": "individual_id"
-    					  }
-    					],					
-		    			"button": {
-  					  "icon": "toggle_on",
-  					  "title": {
-  						"label_en": "Reactivate",
-  						"label_es": "Reactivar"
-  					  },
-  					  "requiresGridItemSelected": false
-					  },
-					  "dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "individual_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "individual_name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
-					}
-				    }
-					],
-					"children": "study_individual_sample",
-					"children_definition": {
-						"title": {
-						"label_en": "Individuals",
-						"label_es": "Individuos"
-						},
-						"columns": [
-							{
-							  "name": "sample_id",
-							  "label_en": "Sample ID",
-							  "label_es": "ID Muestra"
-							},
-							{
-							  "name": "individual_name",
-							  "label_en": "Individual name",
-							  "label_es": "Nombre persona"
-							},
-							{
-							  "name": "created_by",
-							  "label_en": "Created by",
-							  "label_es": "Creado por"
-							},
-							{
-							  "name": "created_on",
-							  "label_en": "Created On",
-							  "label_es": "Creado en"
-							}
-						],	
-						"row_buttons": [
-							{ "actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
-							"notGetViewData": true,
-							"requiresDialog": false,
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							  },
-							  {
-								"argumentName": "familyName",
-								"parentElementProperty": "name"							
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "remove",
-							  "title": {
-								"label_en": "Unlink from family",
-								"label_es": "Quitar de la familia"
-							  },
-							  "requiresGridItemSelected": true
-							}
-							},	
-							{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
 								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableSetName",
-									"element": "listMDvariablesSet"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable Set",
-									"label_es": "Añadir Conjunto de Variables"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariablesSet": {
-										"label_en": "Variables Set",
-										"label_es": "Conjunto Variables"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableName",
-									"element": "listMDvariables"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable",
-									"label_es": "Añadir Variable"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariables": {
-										"label_en": "Variable",
-										"label_es": "Variable"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
-								"certificationException": true,
-								"requiresDialog": false,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "sampleId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "individualId",
-									"selObjectPropertyName": "individual_id"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Deactivate",
-									"label_es": "Desactivar"
-								  },
-								  "requiresObjectSelected": true
-								}
-							},
-				  {
-					"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
+					"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
 					"requiresDialog": true,
 					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
 					"endPointParams": [
 					  {
 						"argumentName": "studyName",
@@ -759,130 +754,375 @@ export const DiseaseStudy = {
 						"internalVariableSimpleObjProperty": "name"
 					  },
 					  {
-						"argumentName": "sampleId",
+						"argumentName": "ownerTable",
+						"value": "study_individual_sample"
+					  },
+					  {
+						"argumentName": "ownerId",
 						"selObjectPropertyName": "sample_id"
+					  },
+					  {
+						"argumentName": "variableSetName",
+						"element": "list1"
 					  }
-					],					
+					],
 					"button": {
-					  "icon": "toggle_on",
+					  "icon": "refresh",
 					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
+						"label_en": "Add Variable Set",
+						"label_es": "Añadir Conjunto de Variables"
 					  },
-					  "requiresGridItemSelected": false
+					  "requiresObjectSelected": false
 					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Sample to reactivate", "label_es": "Muestra a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "sample_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Sample: ","type": "fix"},
-						  {"value": "sample_id","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variable Set",
+							"label_es": "Grupo de variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables_set",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
 						}
+					  ]
 					}
-				  }
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_individual_sample"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "sample_id"
+					  },
+					  {
+						"argumentName": "variableName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable",
+						"label_es": "Añadir Variable"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variables",
+							"label_es": "Variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+	  
+					  {
+						"actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
+						"certificationException": true,
+						"requiresDialog": false,
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"selObjectPropertyName": "study"
+						  },
+						  {
+							"argumentName": "sampleId",
+							"selObjectPropertyName": "sample_id"
+						  },
+						  {
+							"argumentName": "individualId",
+							"selObjectPropertyName": "individual_id"
+						  }
 						],
-						"children": "study_variable_values",
-						"children_definition": {
+						"button": {
+						  "icon": "refresh",
 						  "title": {
-							  "label_en": "Sample results",
-							  "label_es": "Resultados de muestra"
+							"label_en": "Deactivate",
+							"label_es": "Desactivar"
+						  },
+						  "requiresObjectSelected": true
+						}
+					  },
+					  {
+						"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
+						"clientMethod": "openReactivateObjectDialog",
+						"notGetViewData": true,
+						"requiresDialog": true,
+						"certificationException": true,
+						"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  },
+						  {
+							"argumentName": "sampleId",
+							"selObjectPropertyName": "sample_id"
+						  }
+						],
+						"button": {
+						  "icon": "toggle_on",
+						  "title": {
+							"label_en": "Reactivate",
+							"label_es": "Reactivar"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"dialogInfo": {
+						  "name": "reactivateObjectDialog",
+						  "fieldsObject": {
+							"queryNumDays": {
+							  "label_en": "Number of Days",
+							  "label_es": "Número de Días"
 							},
-						  "columns": [
+							"objectName": {
+							  "label_en": "Sample to reactivate",
+							  "label_es": "Muestra a Reactivar"
+							}
+						  },
+						  "listDefinition": {
+							"keyFldName": "sample_id",
+							"eachEntryTextGenerator": [
+							  {
+								"value": "Sample: ",
+								"type": "fix"
+							  },
+							  {
+								"value": "sample_id",
+								"type": "field"
+							  }
+							]
+						  },
+						  "viewQuery": {
+							"actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
+							"clientMethod": "getDeactivatedObjects",
+							"endPointParams": [
+							  {
+								"query": "numDays",
+								"element": "queryNumDays",
+								"defaultValue": 7
+							  },
+							  {
+								"argumentName": "studyName",
+								"internalVariableSimpleObjName": "selectedItem",
+								"internalVariableSimpleObjProperty": "name"
+							  }
+							]
+						  }
+						}
+					  }
+					],
+					"children": "study_variable_values",
+					"children_definition": {
+					  "title": {
+						"label_en": "Sample results",
+						"label_es": "Resultados de muestra"
+					  },
+					  "columns": [
+						{
+						  "name": "id",
+						  "label_en": "Id",
+						  "label_es": "Id"
+						},
+						{
+						  "name": "sample",
+						  "label_en": "Sample",
+						  "label_es": "Muestra"
+						}
+					  ],
+					  "row_buttons": [
+						{ "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+							"requiresDialog": true,
+							"alertMsg": {
+							"empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
+							},
+							"button": {
+							"icon": "document_scanner",
+							"title": {
+								"label_en": "Enter Result", "label_es": "Ingrese el Resultado"
+							},
+							"requiresGridItemSelected": true,
+							"hideWhenSelectedItem": {
+								"column": "total_params",
+								"value": 0
+							}
+							},
+							"resultHeader": {
+								"id": {
+								"label_en": "Id", "label_es": "Id", "width": "10%"
+								},
+								"param_name": {
+								"label_en": "Parameter", "label_es": "Parámetro"
+								},
+								"value": {
+								"label_en": "Value", "label_es": "Valor"
+								}
+							},
+							"resultHeaderObjectLabelTopLeft": {
+								"label_en": "Instrument Event:", "label_es": "Evento de Instrumento :"
+							},    
+							"dialogInfo": { 
+								"name": "resultDialog",
+								"subQueryName": "getResult",		  
+								"viewQuery": {
+									"actionName": "STUDY_VARIABLES_LIST",
+									"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
+										"endPointParams": [				  
+											{
+												"argumentName": "studyName",
+												"internalVariableSimpleObjName": "selectedItem",
+												"internalVariableSimpleObjProperty": "name"
+											},
+											{
+												"argumentName": "variableId",
+												"selObjectPropertyName": "id"
+											}										
+										]
+								},			  
+								"automatic": true,
+								"action": [
+									{ "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+									"notGetViewData": true,
+									"requiresDialog": false,
+									"clientMethod": "enterEventResult",
+									"endPointParams": [
+										{ "argumentName": "newValue", "targetValue": true },
+										{ "argumentName": "eventId", "targetValue": true },
+										{ "argumentName": "instrumentName", "targetValue": true },
+										{ "argumentName": "variableName", "targetValue": true }
+									]
+									}
+								]
+							},
+							"endPointParams": [
+								{ "argumentName": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
+								{ "argumentName": "sortFieldsName", "value": "test_id|result_id" },
+								{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+							]
+				  		},
+			
+						{
+						  "actionName": "ZZZZZZZZSTUDY_OBJECT_SET_VARIABLE_VALUE",
+						  "notGetViewData": true,
+						  "requiresDialog": true,
+						  "certificationException": true,
+						  "endPointParams": [
 							{
-							  "name": "id",
-							  "label_en": "Id",
-							  "label_es": "Id"
+							  "argumentName": "studyName",
+							  "selObjectPropertyName": "study"
 							},
 							{
-							  "name": "sample",
-							  "label_en": "Sample",
-							  "label_es": "Muestra"
+							  "argumentName": "ownerId",
+							  "selObjectPropertyName": "owner_id"
+							},
+							{
+							  "argumentName": "ownerTable",
+							  "selObjectPropertyName": "owner_table"
+							},
+							{
+							  "argumentName": "variableSetName",
+							  "selObjectPropertyName": "variable_set"
+							},
+							{
+							  "argumentName": "variableName",
+							  "selObjectPropertyName": "name"
+							},
+							{
+							  "argumentName": "newValue",
+							  "variableName": "newResult"
 							}
 						  ],
-						  "row_buttons": [
-							  {
-								  "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-								  "notGetViewData": true,
-								  "requiresDialog": true,
-								  "certificationException": true,
-								  "endPointParams": [
-									  {
-									  "argumentName": "studyName",
-									  "selObjectPropertyName": "study"
-									  },
-									  {
-									  "argumentName": "ownerId",
-									  "selObjectPropertyName": "owner_id"
-									  },
-									  {
-									  "argumentName": "ownerTable",
-									  "selObjectPropertyName": "owner_table"
-									  },
-									  {
-									  "argumentName": "variableSetName",
-									  "selObjectPropertyName": "variable_set"
-									  },
-									  {
-									  "argumentName": "variableName",
-									  "selObjectPropertyName": "name"
-									  },
-									  {
-									  "argumentName": "newValue",
-									  "variableName": "newResult"
-									  }
-								  ],
-								  "button": {
-									  "icon": "manufacturing",
-									  "title": {
-									  "label_en": "Set Result",
-									  "label_es": "Entrar Result"
-									  },
-									  "requiresGridItemSelected": true
-								  },
-								  "dialogInfo": {
-									  "name": "genericDialog",
-									  "fields": {
-									  "variableName": {
-										  "label_en": "Variable Name",
-										  "label_es": "Nombre Variable"
-									  },
-									  "value": {
-										  "label_en": "Value",
-										  "label_es": "Valor"
-									  }
-									  }
-								  }
-							  }						
-						  ]
+						  "button": {
+							"icon": "manufacturing",
+							"title": {
+							  "label_en": "Set Result",
+							  "label_es": "Entrar Result"
+							},
+							"requiresGridItemSelected": true
+						  },
+						  "dialogInfo": {
+							"name": "genericDialog",
+							"fields": {
+							  "variableName": {
+								"label_en": "Variable Name",
+								"label_es": "Nombre Variable"
+							  },
+							  "value": {
+								"label_en": "Value",
+								"label_es": "Valor"
+							  }
+							}
+						  }
 						}
-					}					
+					  ]
+					}
+				  }
 				}
 			  }
 			]
 		  },
-		  {"tabLabel_en": "Cohorts",
+		  {
+			"tabLabel_en": "Cohorts",
 			"tabLabel_es": "Cohortes",
 			"view": "studycohort",
 			"view_definition": [
 			  {
 				"type": "parentReadOnlyTable",
 				"endPointPropertyArray": [
-				  "study_cohort"				  
+				  "study_cohort"
 				],
 				"columns": [
 				  {
@@ -960,7 +1200,7 @@ export const DiseaseStudy = {
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
+					"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 					"endPointParams": [
 					  {
 						"argumentName": "studyName",
@@ -971,7 +1211,7 @@ export const DiseaseStudy = {
 						"argumentName": "cohortName",
 						"selObjectPropertyName": "name"
 					  }
-					],					
+					],
 					"button": {
 					  "icon": "toggle_on",
 					  "title": {
@@ -980,143 +1220,561 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": false
 					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Cohort to reactivate", "label_es": "Cohorte a Reactivar"}
-					  	},
-						
-					  	"listDefinition": {
-						  "keyFldName": "name",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "name","type": "field"}
+					"dialogInfo": {
+					  "name": "reactivateObjectDialog",
+					  "fieldsObject": {
+						"queryNumDays": {
+						  "label_en": "Number of Days",
+						  "label_es": "Número de Días"
+						},
+						"objectName": {
+						  "label_en": "Cohort to reactivate",
+						  "label_es": "Cohorte a Reactivar"
+						}
+					  },
+					  "listDefinition": {
+						"keyFldName": "name",
+						"eachEntryTextGenerator": [
+						  {
+							"value": "Name: ",
+							"type": "fix"
+						  },
+						  {
+							"value": "name",
+							"type": "field"
+						  }
 						]
 					  },
 					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_COHORTS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
+						"actionName": "DEACTIVATED_STUDY_COHORTS_LAST_N_DAYS",
+						"clientMethod": "getDeactivatedObjects",
+						"endPointParams": [
+						  {
+							"query": "numDays",
+							"element": "queryNumDays",
+							"defaultValue": 7
+						  },
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  }
+						]
+					  }
 					}
 				  }
 				],
 				"row_buttons": [
-					{
-						"actionName": "STUDY_COHORT_DEACTIVATE",
-						"notGetViewData": true,
-						"requiresDialog": false,
-						"certificationException": true,
-						"endPointParams": [
-						  {
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
-							"argumentName": "cohortName",
-							"selObjectPropertyName": "name"
-						  }
-						],
-						"button": {
-						  "icon": "toggle_off",
-						  "title": {
-							"label_en": "Deactivate",
-							"label_es": "Desactivar"
-						  },
-						  "requiresGridItemSelected": true
-						}
+				  {
+					"actionName": "STUDY_COHORT_DEACTIVATE",
+					"notGetViewData": true,
+					"requiresDialog": false,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
 					  },
 					  {
-						"actionName": "STUDY_COHORT_ADD_INDIVIDUAL",
-						"notGetViewData": true,
-						"requiresDialog": true,
-						"certificationException": true,
-						"endPointParams": [
-							{
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							},
-							{
-								"argumentName": "cohortName",
-								"selObjectPropertyName": "name"
-							},
-							{
-							"argumentName": "individualsList",
-							"element": "list1"
+						"argumentName": "cohortName",
+						"selObjectPropertyName": "name"
+					  }
+					],
+					"button": {
+					  "icon": "toggle_off",
+					  "title": {
+						"label_en": "Deactivate",
+						"label_es": "Desactivar"
+					  },
+					  "requiresGridItemSelected": true
+					}
+				  },
+				  {
+					"actionName": "STUDY_COHORT_ADD_INDIVIDUAL",
+					"notGetViewData": true,
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "cohortName",
+						"selObjectPropertyName": "name"
+					  },
+					  {
+						"argumentName": "individualsList",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "add",
+					  "title": {
+						"label_en": "Add Individual",
+						"label_es": "Añadir Individuo"
+					  },
+					  "requiresGridItemSelected": true
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"label_en": "Indvidual Id to Add",
+							"label_es": "Individuo a añadir",
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromSelectedItem": {
+							  "internalVariableSingleObjName": "selectedItem",
+							  "internalVariableSingleObjProperty": "study_individual",
+							  "propertyKeyName": "individual_id",
+							  "propertyKeyValueEn": [
+								"individual_name"
+							  ],
+							  "propertyKeyValueEs": [
+								"individual_name"
+							  ]
 							}
-						],
-						"button": {
-						  "icon": "add",
-						  "title": {
-							"label_en": "Add Individual",
-							"label_es": "Añadir Individuo"
-						  },
-						  "requiresGridItemSelected": true
+						  }
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_cohort"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "name"
+					  },
+					  {
+						"argumentName": "variableSetName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable Set",
+						"label_es": "Añadir Conjunto de Variables"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variable Set",
+							"label_es": "Grupo de variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables_set",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_cohort"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "name"
+					  },
+					  {
+						"argumentName": "variableName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable",
+						"label_es": "Añadir Variable"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variables",
+							"label_es": "Variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  }
+				],
+				"children": "study_individual",
+				"children_definition": {
+				  "title": {
+					"label_en": "Individuals",
+					"label_es": "Individuos"
+				  },
+				  "columns": [
+					{
+					  "name": "individual_id",
+					  "label_en": "Individual ID",
+					  "label_es": "ID persona"
+					},
+					{
+					  "name": "individual_name",
+					  "label_en": "Individual name",
+					  "label_es": "Nombre persona"
+					},
+					{
+					  "name": "created_by",
+					  "label_en": "Created by",
+					  "label_es": "Creado por"
+					},
+					{
+					  "name": "created_on",
+					  "label_en": "Created On",
+					  "label_es": "Creado en"
+					}
+				  ],
+				  "row_buttons": [
+					{
+					  "actionName": "STUDY_COHORT_REMOVE_INDIVIDUAL",
+					  "notGetViewData": true,
+					  "requiresDialog": false,
+					  "certificationException": true,
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
 						},
-						"dialogInfo": {
-						  "requiresDialog": true,
-						  "name": "genericDialog",
-						  "fields": [
-							{
-								"list1": {
-									"label_en": "Indvidual Id to Add",
-									"label_es": "Individuo a añadir",									
-									"addBlankValueOnTop": true,
-									"addBlankValueAtBottom": false,
-									"valuesFromSelectedItem": {
-									"internalVariableSingleObjName": "selectedItem",
-									"internalVariableSingleObjProperty": "study_individual",
-									"propertyKeyName": "individual_id",
-									"propertyKeyValueEn": [
-										"individual_name"
-									],
-									"propertyKeyValueEs": [
-										"individual_name"
-									]
-									}
+						{
+						  "argumentName": "cohortName",
+						  "parentElementProperty": "name"
+						},
+						{
+						  "argumentName": "individualId",
+						  "selObjectPropertyName": "individual_id"
+						}
+					  ],
+					  "button": {
+						"icon": "remove",
+						"title": {
+						  "label_en": "Unlink from cohort",
+						  "label_es": "Quitar del cohorte"
+						},
+						"requiresGridItemSelected": true
+					  }
+					},
+					{
+					  "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
+						},
+						{
+						  "argumentName": "ownerTable",
+						  "value": "study_individual"
+						},
+						{
+						  "argumentName": "ownerId",
+						  "selObjectPropertyName": "individual_id"
+						},
+						{
+						  "argumentName": "variableSetName",
+						  "element": "list1"
+						}
+					  ],
+					  "button": {
+						"icon": "refresh",
+						"title": {
+						  "label_en": "Add Variable Set",
+						  "label_es": "Añadir Conjunto de Variables"
+						},
+						"requiresObjectSelected": false
+					  },
+					  "dialogInfo": {
+						"requiresDialog": true,
+						"name": "genericDialog",
+						"fields": [
+						  {
+							"list1": {
+							  "items": [
+								{
+								  "keyName": "name",
+								  "keyValue_en": "name",
+								  "keyValue_es": "name"
 								}
+							  ],
+							  "label_en": "Variable Set",
+							  "label_es": "Grupo de variables",
+							  "optional": true,
+							  "addBlankValueOnTop": true,
+							  "addBlankValueAtBottom": false,
+							  "valuesFromMasterData": {
+								"elementName": "list4",
+								"propertyNameContainer": "variables_set",
+								"propertyNameContainerLevelPropertyKeyName": "name",
+								"propertyKeyName": "name",
+								"propertyKeyValueEn": "name",
+								"propertyKeyValueEs": "name"
+							  }
+							}
+						  }
+						]
+					  }
+					},
+					{
+					  "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
+						},
+						{
+						  "argumentName": "ownerTable",
+						  "value": "study_individual"
+						},
+						{
+						  "argumentName": "ownerId",
+						  "selObjectPropertyName": "individual_id"
+						},
+						{
+						  "argumentName": "variableName",
+						  "element": "list1"
+						}
+					  ],
+					  "button": {
+						"icon": "refresh",
+						"title": {
+						  "label_en": "Add Variable",
+						  "label_es": "Añadir Variable"
+						},
+						"requiresObjectSelected": false
+					  },
+					  "dialogInfo": {
+						"requiresDialog": true,
+						"name": "genericDialog",
+						"fields": [
+						  {
+							"list1": {
+							  "items": [
+								{
+								  "keyName": "name",
+								  "keyValue_en": "name",
+								  "keyValue_es": "name"
+								}
+							  ],
+							  "label_en": "Variables",
+							  "label_es": "Variables",
+							  "optional": true,
+							  "addBlankValueOnTop": true,
+							  "addBlankValueAtBottom": false,
+							  "valuesFromMasterData": {
+								"elementName": "list4",
+								"propertyNameContainer": "variables",
+								"propertyNameContainerLevelPropertyKeyName": "name",
+								"propertyKeyName": "name",
+								"propertyKeyValueEn": "name",
+								"propertyKeyValueEs": "name"
+							  }
+							}
+						  }
+						]
+					  }
+					},
+					{
+					  "actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
+					  "certificationException": true,
+					  "requiresDialog": false,
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "selObjectPropertyName": "study"
+						},
+						{
+						  "argumentName": "individualId",
+						  "selObjectPropertyName": "individual_id"
+						}
+					  ],
+					  "button": {
+						"icon": "refresh",
+						"title": {
+						  "label_en": "Deactivate",
+						  "label_es": "Desactivar"
+						},
+						"requiresObjectSelected": true
+					  }
+					},
+					{
+					  "actionName": "STUDY_INDIVIDUAL_ACTIVATE",
+					  "clientMethod": "openReactivateObjectDialog",
+					  "notGetViewData": true,
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
+						},
+						{
+						  "argumentName": "individualId",
+						  "selObjectPropertyName": "individual_id"
+						}
+					  ],
+					  "button": {
+						"icon": "toggle_on",
+						"title": {
+						  "label_en": "Reactivate",
+						  "label_es": "Reactivar"
+						},
+						"requiresGridItemSelected": false
+					  },
+					  "dialogInfo": {
+						"name": "reactivateObjectDialog",
+						"fieldsObject": {
+						  "queryNumDays": {
+							"label_en": "Number of Days",
+							"label_es": "Número de Días"
+						  },
+						  "objectName": {
+							"label_en": "Individual to reactivate",
+							"label_es": "Individuo a Reactivar"
+						  }
+						},
+						"listDefinition": {
+						  "keyFldName": "individual_id",
+						  "eachEntryTextGenerator": [
+							{
+							  "value": "Name: ",
+							  "type": "fix"
+							},
+							{
+							  "value": "individual_name",
+							  "type": "field"
+							}
+						  ]
+						},
+						"viewQuery": {
+						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
+						  "clientMethod": "getDeactivatedObjects",
+						  "endPointParams": [
+							{
+							  "query": "numDays",
+							  "element": "queryNumDays",
+							  "defaultValue": 7
+							},
+							{
+							  "argumentName": "studyName",
+							  "internalVariableSimpleObjName": "selectedItem",
+							  "internalVariableSimpleObjProperty": "name"
 							}
 						  ]
 						}
 					  }
-				],
-				"children": "study_individual",
-				"children_definition": {
+					}
+				  ],
+				  "children": "study_individual_sample",
+				  "children_definition": {
 					"title": {
-					"label_en": "Individuals",
-					"label_es": "Individuos"
+					  "label_en": "Individual Samples",
+					  "label_es": "Muestras del Individuo"
 					},
 					"columns": [
-						{
-						  "name": "individual_id",
-						  "label_en": "Individual ID",
-						  "label_es": "ID persona"
-						},
-						{
-						  "name": "individual_name",
-						  "label_en": "Individual name",
-						  "label_es": "Nombre persona"
-						},
-						{
-						  "name": "created_by",
-						  "label_en": "Created by",
-						  "label_es": "Creado por"
-						},
-						{
-						  "name": "created_on",
-						  "label_en": "Created On",
-						  "label_es": "Creado en"
-						}
-					],	
+					  {
+						"name": "sample_id",
+						"label_en": "Sample ID",
+						"label_es": "ID Muestra"
+					  },
+					  {
+						"name": "individual_name",
+						"label_en": "Individual name",
+						"label_es": "Nombre persona"
+					  },
+					  {
+						"name": "created_by",
+						"label_en": "Created by",
+						"label_es": "Creado por"
+					  },
+					  {
+						"name": "created_on",
+						"label_en": "Created On",
+						"label_es": "Creado en"
+					  }
+					],
 					"row_buttons": [
-						{ "actionName": "STUDY_COHORT_REMOVE_INDIVIDUAL",
+					  {
+						"actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
 						"notGetViewData": true,
 						"requiresDialog": false,
 						"certificationException": true,
@@ -1127,8 +1785,8 @@ export const DiseaseStudy = {
 							"internalVariableSimpleObjProperty": "name"
 						  },
 						  {
-							"argumentName": "cohortName",
-							"parentElementProperty": "name"							
+							"argumentName": "familyName",
+							"parentElementProperty": "name"
 						  },
 						  {
 							"argumentName": "individualId",
@@ -1138,479 +1796,312 @@ export const DiseaseStudy = {
 						"button": {
 						  "icon": "remove",
 						  "title": {
-							"label_en": "Unlink from cohort",
-							"label_es": "Quitar del cohorte"
+							"label_en": "Unlink from family",
+							"label_es": "Quitar de la familia"
 						  },
 						  "requiresGridItemSelected": true
 						}
-						},	
-						{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableSetName",
-								"element": "listMDvariablesSet"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable Set",
-								"label_es": "Añadir Conjunto de Variables"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariablesSet": {
-									"label_en": "Variables Set",
-									"label_es": "Conjunto Variables"
+					  },
+					  {
+						"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+						"requiresDialog": true,
+						"certificationException": true,
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  },
+						  {
+							"argumentName": "ownerTable",
+							"value": "study_individual_sample"
+						  },
+						  {
+							"argumentName": "ownerId",
+							"selObjectPropertyName": "sample_id"
+						  },
+						  {
+							"argumentName": "variableSetName",
+							"element": "list1"
+						  }
+						],
+						"button": {
+						  "icon": "refresh",
+						  "title": {
+							"label_en": "Add Variable Set",
+							"label_es": "Añadir Conjunto de Variables"
+						  },
+						  "requiresObjectSelected": false
+						},
+						"dialogInfo": {
+						  "requiresDialog": true,
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "list1": {
+								"items": [
+								  {
+									"keyName": "name",
+									"keyValue_en": "name",
+									"keyValue_es": "name"
 								  }
+								],
+								"label_en": "Variable Set",
+								"label_es": "Grupo de variables",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "elementName": "list4",
+								  "propertyNameContainer": "variables_set",
+								  "propertyNameContainerLevelPropertyKeyName": "name",
+								  "propertyKeyName": "name",
+								  "propertyKeyValueEn": "name",
+								  "propertyKeyValueEs": "name"
+								}
+							  }
+							}
+						  ]
+						}
+					  },
+					  {
+						"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+						"requiresDialog": true,
+						"certificationException": true,
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  },
+						  {
+							"argumentName": "ownerTable",
+							"value": "study_individual_sample"
+						  },
+						  {
+							"argumentName": "ownerId",
+							"selObjectPropertyName": "sample_id"
+						  },
+						  {
+							"argumentName": "variableName",
+							"element": "list1"
+						  }
+						],
+						"button": {
+						  "icon": "refresh",
+						  "title": {
+							"label_en": "Add Variable",
+							"label_es": "Añadir Variable"
+						  },
+						  "requiresObjectSelected": false
+						},
+						"dialogInfo": {
+						  "requiresDialog": true,
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "list1": {
+								"items": [
+								  {
+									"keyName": "name",
+									"keyValue_en": "name",
+									"keyValue_es": "name"
+								  }
+								],
+								"label_en": "Variables",
+								"label_es": "Variables",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "elementName": "list4",
+								  "propertyNameContainer": "variables",
+								  "propertyNameContainerLevelPropertyKeyName": "name",
+								  "propertyKeyName": "name",
+								  "propertyKeyValueEn": "name",
+								  "propertyKeyValueEs": "name"
+								}
+							  }
+							}
+						  ]
+						}
+					  },
+					  {
+						"actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
+						"certificationException": true,
+						"requiresDialog": false,
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"selObjectPropertyName": "study"
+						  },
+						  {
+							"argumentName": "sampleId",
+							"selObjectPropertyName": "sample_id"
+						  },
+						  {
+							"argumentName": "individualId",
+							"selObjectPropertyName": "individual_id"
+						  }
+						],
+						"button": {
+						  "icon": "refresh",
+						  "title": {
+							"label_en": "Deactivate",
+							"label_es": "Desactivar"
+						  },
+						  "requiresObjectSelected": true
+						}
+					  },
+					  {
+						"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
+						"certificationException": true,
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"selObjectPropertyName": "study"
+						  },
+						  {
+							"argumentName": "sampleId",
+							"selObjectPropertyName": "sample_id"
+						  }
+						],
+						"button": {
+						  "icon": "alarm_add",
+						  "title": {
+							"label_en": "Activate",
+							"label_es": "Activar"
+						  },
+						  "requiresObjectSelected": false
+						},
+						"dialogInfo": {
+						  "requiresDialog": true,
+						  "name": "reactivateObjectDialog",
+						  "selObjectVariableName": "selectedIndiv",
+						  "fieldText": {
+							"numDays": {
+							  "label_en": "Number of Days",
+							  "label_es": "Número de Días"
+							},
+							"objectName": {
+							  "label_en": "Sample to reactivate",
+							  "label_es": "Muestra a Reactivar"
+							}
+						  },
+						  "listDefinition": {
+							"keyFldName": "sample_id",
+							"eachEntryTextGenerator": [
+							  {
+								"value": "Sample: ",
+								"type": "fix"
+							  },
+							  {
+								"value": "sample_id",
+								"type": "field"
+							  }
+							]
+						  },
+						  "action": [
+							{
+							  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
+							  "clientMethod": "getDeactivatedObjects",
+							  "apiParams": [
+								{
+								  "query": "numDays",
+								  "element": "lotNumDays",
+								  "defaultValue": 7
+								},
+								{
+								  "argumentName": "studyName",
+								  "selObjectPropertyName": "study"
 								}
 							  ]
 							}
-						},
-						{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableName",
-								"element": "listMDvariables"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable",
-								"label_es": "Añadir Variable"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariables": {
-									"label_en": "Variable",
-									"label_es": "Variable"
-								  }
-								}
-							  ]
-							}
-						},
-						{"actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
-							"certificationException": true,
-							"requiresDialog": false,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Deactivate",
-								"label_es": "Desactivar"
-							  },
-							  "requiresObjectSelected": true
-							}
+						  ]
+						}
+					  }
+					],
+					"children": "study_variable_values",
+					"children_definition": {
+					  "title": {
+						"label_en": "Sample results",
+						"label_es": "Resultados de muestra"
+					  },
+					  "columns": [
+						{
+						  "name": "id",
+						  "label_en": "Id",
+						  "label_es": "Id"
 						},
 						{
-					"actionName": "STUDY_INDIVIDUAL_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "individualId",
-						"selObjectPropertyName": "individual_id"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "individual_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "individual_name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
+						  "name": "sample",
+						  "label_en": "Sample",
+						  "label_es": "Muestra"
 						}
-					}
-				  }
-					],
-					"children": "study_individual_sample",
-					"children_definition": {
-						"title": {
-						"label_en": "Individual Samples",
-						"label_es": "Muestras del Individuo"
-						},
-						"columns": [
+					  ],
+					  "row_buttons": [
+						{
+						  "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+						  "notGetViewData": true,
+						  "requiresDialog": true,
+						  "certificationException": true,
+						  "endPointParams": [
 							{
-							  "name": "sample_id",
-							  "label_en": "Sample ID",
-							  "label_es": "ID Muestra"
+							  "argumentName": "studyName",
+							  "selObjectPropertyName": "study"
 							},
 							{
-							  "name": "individual_name",
-							  "label_en": "Individual name",
-							  "label_es": "Nombre persona"
+							  "argumentName": "ownerId",
+							  "selObjectPropertyName": "owner_id"
 							},
 							{
-							  "name": "created_by",
-							  "label_en": "Created by",
-							  "label_es": "Creado por"
+							  "argumentName": "ownerTable",
+							  "selObjectPropertyName": "owner_table"
 							},
 							{
-							  "name": "created_on",
-							  "label_en": "Created On",
-							  "label_es": "Creado en"
-							}
-						],	
-						"row_buttons": [
-							{ "actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
-							"notGetViewData": true,
-							"requiresDialog": false,
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							  },
-							  {
-								"argumentName": "familyName",
-								"parentElementProperty": "name"							
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "remove",
-							  "title": {
-								"label_en": "Unlink from family",
-								"label_es": "Quitar de la familia"
-							  },
-							  "requiresGridItemSelected": true
-							}
-							},	
-							{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableSetName",
-									"element": "listMDvariablesSet"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable Set",
-									"label_es": "Añadir Conjunto de Variables"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariablesSet": {
-										"label_en": "Variables Set",
-										"label_es": "Conjunto Variables"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableName",
-									"element": "listMDvariables"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable",
-									"label_es": "Añadir Variable"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariables": {
-										"label_en": "Variable",
-										"label_es": "Variable"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
-								"certificationException": true,
-								"requiresDialog": false,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "sampleId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "individualId",
-									"selObjectPropertyName": "individual_id"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Deactivate",
-									"label_es": "Desactivar"
-								  },
-								  "requiresObjectSelected": true
-								}
-							},
-							{"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "sampleId",
-									"selObjectPropertyName": "sample_id"
-								  }
-								],
-								"button": {
-								  "icon": "alarm_add",
-								  "title": {
-									"label_en": "Activate",
-									"label_es": "Activar"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "reactivateObjectDialog",
-								  "selObjectVariableName": "selectedIndiv",
-								  "fieldText": {
-									"numDays": {
-									  "label_en": "Number of Days",
-									  "label_es": "Número de Días"
-									},
-									"objectName": {
-									  "label_en": "Sample to reactivate",
-									  "label_es": "Muestra a Reactivar"
-									}
-								  },
-								  "listDefinition": {
-									"keyFldName": "sample_id",
-									"eachEntryTextGenerator": [
-									  {
-										"value": "Sample: ",
-										"type": "fix"
-									  },
-									  {
-										"value": "sample_id",
-										"type": "field"
-									  }
-									]
-								  },
-								  "action": [
-									{
-									  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-									  "clientMethod": "getDeactivatedObjects",
-									  "apiParams": [
-										{
-										  "query": "numDays",
-										  "element": "lotNumDays",
-										  "defaultValue": 7
-										},
-										{
-										  "argumentName": "studyName",
-										  "selObjectPropertyName": "study"
-										}
-									  ]
-									}
-								  ]
-								}
-							}										
-						],
-						"children": "study_variable_values",
-						"children_definition": {
-						  "title": {
-							  "label_en": "Sample results",
-							  "label_es": "Resultados de muestra"
-							},
-						  "columns": [
-							{
-							  "name": "id",
-							  "label_en": "Id",
-							  "label_es": "Id"
+							  "argumentName": "variableSetName",
+							  "selObjectPropertyName": "variable_set"
 							},
 							{
-							  "name": "sample",
-							  "label_en": "Sample",
-							  "label_es": "Muestra"
+							  "argumentName": "variableName",
+							  "selObjectPropertyName": "name"
+							},
+							{
+							  "argumentName": "newValue",
+							  "variableName": "newResult"
 							}
 						  ],
-						  "row_buttons": [
-							  {
-								  "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-								  "notGetViewData": true,
-								  "requiresDialog": true,
-								  "certificationException": true,
-								  "endPointParams": [
-									  {
-									  "argumentName": "studyName",
-									  "selObjectPropertyName": "study"
-									  },
-									  {
-									  "argumentName": "ownerId",
-									  "selObjectPropertyName": "owner_id"
-									  },
-									  {
-									  "argumentName": "ownerTable",
-									  "selObjectPropertyName": "owner_table"
-									  },
-									  {
-									  "argumentName": "variableSetName",
-									  "selObjectPropertyName": "variable_set"
-									  },
-									  {
-									  "argumentName": "variableName",
-									  "selObjectPropertyName": "name"
-									  },
-									  {
-									  "argumentName": "newValue",
-									  "variableName": "newResult"
-									  }
-								  ],
-								  "button": {
-									  "icon": "manufacturing",
-									  "title": {
-									  "label_en": "Set Result",
-									  "label_es": "Entrar Result"
-									  },
-									  "requiresGridItemSelected": true
-								  },
-								  "dialogInfo": {
-									  "name": "genericDialog",
-									  "fields": {
-									  "variableName": {
-										  "label_en": "Variable Name",
-										  "label_es": "Nombre Variable"
-									  },
-									  "value": {
-										  "label_en": "Value",
-										  "label_es": "Valor"
-									  }
-									  }
-								  }
-							  }						
-						  ]
+						  "button": {
+							"icon": "manufacturing",
+							"title": {
+							  "label_en": "Set Result",
+							  "label_es": "Entrar Result"
+							},
+							"requiresGridItemSelected": true
+						  },
+						  "dialogInfo": {
+							"name": "genericDialog",
+							"fields": {
+							  "variableName": {
+								"label_en": "Variable Name",
+								"label_es": "Nombre Variable"
+							  },
+							  "value": {
+								"label_en": "Value",
+								"label_es": "Valor"
+							  }
+							}
+						  }
 						}
-					}					
+					  ]
+					}
+				  }
 				}
 			  }
 			]
 		  },
-		  {"tabLabel_en": "Individuals",
+		  {
+			"tabLabel_en": "Individuals",
 			"tabLabel_es": "Individuos",
 			"view": "studyindividuals",
 			"view_definition": [
@@ -1683,7 +2174,7 @@ export const DiseaseStudy = {
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
+					"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 					"endPointParams": [
 					  {
 						"argumentName": "studyName",
@@ -1694,7 +2185,7 @@ export const DiseaseStudy = {
 						"argumentName": "individualId",
 						"selObjectPropertyName": "individual_id"
 					  }
-					],					
+					],
 					"button": {
 					  "icon": "toggle_on",
 					  "title": {
@@ -1703,32 +2194,51 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": false
 					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "individual_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "individual_name","type": "field"}
+					"dialogInfo": {
+					  "name": "reactivateObjectDialog",
+					  "fieldsObject": {
+						"queryNumDays": {
+						  "label_en": "Number of Days",
+						  "label_es": "Número de Días"
+						},
+						"objectName": {
+						  "label_en": "Individual to reactivate",
+						  "label_es": "Individuo a Reactivar"
+						}
+					  },
+					  "listDefinition": {
+						"keyFldName": "individual_id",
+						"eachEntryTextGenerator": [
+						  {
+							"value": "Name: ",
+							"type": "fix"
+						  },
+						  {
+							"value": "individual_name",
+							"type": "field"
+						  }
 						]
 					  },
 					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
+						"actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
+						"clientMethod": "getDeactivatedObjects",
+						"endPointParams": [
+						  {
+							"query": "numDays",
+							"element": "queryNumDays",
+							"defaultValue": 7
+						  },
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  }
+						]
+					  }
 					}
 				  }
-			  ],
-			  "row_buttons":[
+				],
+				"row_buttons": [
 				  {
 					"actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
 					"notGetViewData": true,
@@ -1776,14 +2286,242 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": true
 					}
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_individual_sample"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "sample_id"
+					  },
+					  {
+						"argumentName": "variableSetName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable Set",
+						"label_es": "Añadir Conjunto de Variables"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variable Set",
+							"label_es": "Grupo de variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables_set",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "ownerTable",
+						"value": "study_individual"
+					  },
+					  {
+						"argumentName": "ownerId",
+						"selObjectPropertyName": "individual_id"
+					  },
+					  {
+						"argumentName": "variableName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Add Variable",
+						"label_es": "Añadir Variable"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"items": [
+							  {
+								"keyName": "name",
+								"keyValue_en": "name",
+								"keyValue_es": "name"
+							  }
+							],
+							"label_en": "Variables",
+							"label_es": "Variables",
+							"optional": true,
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "elementName": "list4",
+							  "propertyNameContainer": "variables",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "name",
+							  "propertyKeyValueEn": "name",
+							  "propertyKeyValueEs": "name"
+							}
+						  }
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "individualId",
+						"selObjectPropertyName": "individual_id"
+					  },
+					  {
+						"argumentName": "familyName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Remove from family",
+						"label_es": "Borrar de familia"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+							"list1": {
+							  "label_en": "Family",
+							  "label_es": "Familia",
+							  "addBlankValueOnTop": true,
+							  "addBlankValueAtBottom": false,
+							  "valuesFromSelectedItem": {
+								"selObjectPropertyName": "study_family_individual",								
+								"propertyKeyName": "family_name",
+								"propertyKeyValueEn": [
+								  "family_name"
+								],
+								"propertyKeyValueEs": [
+								  "family_name"
+								]
+							  }
+							}
+						}
+					  ]
+					}
+				  },
+				  {
+					"actionName": "STUDY_COHORT_REMOVE_INDIVIDUAL",
+					"requiresDialog": true,
+					"certificationException": true,
+					"endPointParams": [
+					  {
+						"argumentName": "studyName",
+						"internalVariableSimpleObjName": "selectedItem",
+						"internalVariableSimpleObjProperty": "name"
+					  },
+					  {
+						"argumentName": "individualId",
+						"selObjectPropertyName": "individual_id"
+					  },
+					  {
+						"argumentName": "cohortName",
+						"element": "list1"
+					  }
+					],
+					"button": {
+					  "icon": "refresh",
+					  "title": {
+						"label_en": "Remove from cohort",
+						"label_es": "Borrar de cohorte"
+					  },
+					  "requiresObjectSelected": false
+					},
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+							"list1": {
+							  "label_en": "Cohort",
+							  "label_es": "Cohorte",
+							  "addBlankValueOnTop": true,
+							  "addBlankValueAtBottom": false,
+							  "valuesFromSelectedItem": {
+								"selObjectPropertyName": "study_cohort_individual",								
+								"propertyKeyName": "cohort_name",
+								"propertyKeyValueEn": [
+								  "cohort_name"
+								],
+								"propertyKeyValueEs": [
+								  "cohort_name"
+								]
+							  }
+							}
+						}
+					  ]
+					}
 				  }
 				],
 				"children": "study_individual_sample",
 				"children_definition": {
-					"title": {
+				  "title": {
 					"label_en": "Individual Samples",
 					"label_es": "Muestras del individuo"
-					},
+				  },
 				  "columns": [
 					{
 					  "name": "sample_id",
@@ -1807,90 +2545,6 @@ export const DiseaseStudy = {
 					}
 				  ],
 				  "row_buttons": [
-					{
-					  "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_individual_sample"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "variableSetName",
-						  "element": "listMDvariablesSet"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable Set",
-						  "label_es": "Añadir Conjunto de Variables"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fieldText": [
-						  {
-							"listMDvariablesSet": {
-							  "label_en": "Variables Set",
-							  "label_es": "Conjunto Variables"
-							}
-						  }
-						]
-					  }
-					},
-					{
-					  "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_individual_sample"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "variableName",
-						  "element": "listMDvariables"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable",
-						  "label_es": "Añadir Variable"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fieldText": [
-						  {
-							"listMDvariables": {
-							  "label_en": "Variable",
-							  "label_es": "Variable"
-							}
-						  }
-						]
-					  }
-					},
 					{
 					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
 					  "certificationException": true,
@@ -1918,66 +2572,134 @@ export const DiseaseStudy = {
 						"requiresObjectSelected": true
 					  }
 					},
-				  {
-					"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
+					{
+					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
+					  "clientMethod": "openReactivateObjectDialog",
+					  "notGetViewData": true,
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
+						},
+						{
+						  "argumentName": "sampleId",
+						  "selObjectPropertyName": "sample_id"
+						}
+					  ],
+					  "button": {
+						"icon": "toggle_on",
+						"title": {
+						  "label_en": "Reactivate",
+						  "label_es": "Reactivar"
+						},
+						"requiresGridItemSelected": false
 					  },
-					  {
-						"argumentName": "sampleId",
-						"selObjectPropertyName": "sample_id"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
+					  "dialogInfo": {
 						"name": "reactivateObjectDialog",
 						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Sample to reactivate", "label_es": "Muestra a Reactivar"}
-					  	},
-					  	"listDefinition": {
+						  "queryNumDays": {
+							"label_en": "Number of Days",
+							"label_es": "Número de Días"
+						  },
+						  "objectName": {
+							"label_en": "Sample to reactivate",
+							"label_es": "Muestra a Reactivar"
+						  }
+						},
+						"listDefinition": {
 						  "keyFldName": "sample_id",
 						  "eachEntryTextGenerator": [
-						  {"value": "Sample: ","type": "fix"},
-						  {"value": "sample_id","type": "field"}
-						]
-					  },
-					  "viewQuery": {
+							{
+							  "value": "Sample: ",
+							  "type": "fix"
+							},
+							{
+							  "value": "sample_id",
+							  "type": "field"
+							}
+						  ]
+						},
+						"viewQuery": {
 						  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
 						  "clientMethod": "getDeactivatedObjects",
 						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
+							{
+							  "query": "numDays",
+							  "element": "queryNumDays",
+							  "defaultValue": 7
+							},
+							{
+							  "argumentName": "studyName",
+							  "internalVariableSimpleObjName": "selectedItem",
+							  "internalVariableSimpleObjProperty": "name"
+							}
 						  ]
 						}
-					}
-				  }
-
-
-
+					  }
+					},
+					{
+						"actionName": "STUDY_SAMPLES_SET_REMOVE_SAMPLE",
+						"requiresDialog": true,
+						"certificationException": true,
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  },
+						  {
+							"argumentName": "sampleId",
+							"selObjectPropertyName": "sample_id"
+						  },
+						  {
+							"argumentName": "samplesSetName",
+							"element": "list1"
+						  }
+						],
+						"button": {
+						  "icon": "refresh",
+						  "title": {
+							"label_en": "Remove from Sample Set",
+							"label_es": "Borrar de Grupo de muestras"
+						  },
+						  "requiresObjectSelected": false
+						},
+						"dialogInfo": {
+						  "requiresDialog": true,
+						  "name": "genericDialog",
+						  "fields": [
+							{
+								"list1": {
+								  "label_en": "Sample Set",
+								  "label_es": "Grupo de muestras",
+								  "addBlankValueOnTop": true,
+								  "addBlankValueAtBottom": false,
+								  "valuesFromSelectedItem": {
+									"selObjectPropertyName": "study_samples_set",								
+									"propertyKeyName": "name",
+									"propertyKeyValueEn": [
+									  "name"
+									],
+									"propertyKeyValueEs": [
+									  "name"
+									]
+								  }
+								}
+							}
+						  ]
+						}
+					  }					
 				  ],
 				  "children": "study_variable_values",
 				  "children_definition": {
 					"title": {
-						"label_en": "Sample results",
-						"label_es": "Resultados de muestra"
-					  },
+					  "label_en": "Sample results",
+					  "label_es": "Resultados de muestra"
+					},
 					"columns": [
 					  {
 						"name": "id",
@@ -1991,66 +2713,67 @@ export const DiseaseStudy = {
 					  }
 					],
 					"row_buttons": [
-						{
-							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-							"notGetViewData": true,
-							"requiresDialog": true,
-							"certificationException": true,
-							"endPointParams": [
-								{
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-								},
-								{
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "owner_id"
-								},
-								{
-								"argumentName": "ownerTable",
-								"selObjectPropertyName": "owner_table"
-								},
-								{
-								"argumentName": "variableSetName",
-								"selObjectPropertyName": "variable_set"
-								},
-								{
-								"argumentName": "variableName",
-								"selObjectPropertyName": "name"
-								},
-								{
-								"argumentName": "newValue",
-								"variableName": "newResult"
-								}
-							],
-							"button": {
-								"icon": "manufacturing",
-								"title": {
-								"label_en": "Set Result",
-								"label_es": "Entrar Result"
-								},
-								"requiresGridItemSelected": true
+					  {
+						"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+						"notGetViewData": true,
+						"requiresDialog": true,
+						"certificationException": true,
+						"endPointParams": [
+						  {
+							"argumentName": "studyName",
+							"selObjectPropertyName": "study"
+						  },
+						  {
+							"argumentName": "ownerId",
+							"selObjectPropertyName": "owner_id"
+						  },
+						  {
+							"argumentName": "ownerTable",
+							"selObjectPropertyName": "owner_table"
+						  },
+						  {
+							"argumentName": "variableSetName",
+							"selObjectPropertyName": "variable_set"
+						  },
+						  {
+							"argumentName": "variableName",
+							"selObjectPropertyName": "name"
+						  },
+						  {
+							"argumentName": "newValue",
+							"variableName": "newResult"
+						  }
+						],
+						"button": {
+						  "icon": "manufacturing",
+						  "title": {
+							"label_en": "Set Result",
+							"label_es": "Entrar Result"
+						  },
+						  "requiresGridItemSelected": true
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": {
+							"variableName": {
+							  "label_en": "Variable Name",
+							  "label_es": "Nombre Variable"
 							},
-							"dialogInfo": {
-								"name": "genericDialog",
-								"fields": {
-								"variableName": {
-									"label_en": "Variable Name",
-									"label_es": "Nombre Variable"
-								},
-								"value": {
-									"label_en": "Value",
-									"label_es": "Valor"
-								}
-								}
+							"value": {
+							  "label_en": "Value",
+							  "label_es": "Valor"
 							}
-						}						
+						  }
+						}
+					  }
 					]
 				  }
 				}
 			  }
 			]
 		  },
-		  {"tabLabel_en": "Consents",
+		  {
+			"tabLabel_en": "Consents",
 			"tabLabel_es": "Consentimientos",
 			"view": "studyindividualConsent",
 			"view_definition": [
@@ -2123,7 +2846,7 @@ export const DiseaseStudy = {
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
+					"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 					"endPointParams": [
 					  {
 						"argumentName": "studyName",
@@ -2134,7 +2857,7 @@ export const DiseaseStudy = {
 						"argumentName": "individualId",
 						"selObjectPropertyName": "individual_id"
 					  }
-					],					
+					],
 					"button": {
 					  "icon": "toggle_on",
 					  "title": {
@@ -2143,32 +2866,51 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": false
 					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "individual_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "individual_name","type": "field"}
+					"dialogInfo": {
+					  "name": "reactivateObjectDialog",
+					  "fieldsObject": {
+						"queryNumDays": {
+						  "label_en": "Number of Days",
+						  "label_es": "Número de Días"
+						},
+						"objectName": {
+						  "label_en": "Individual to reactivate",
+						  "label_es": "Individuo a Reactivar"
+						}
+					  },
+					  "listDefinition": {
+						"keyFldName": "individual_id",
+						"eachEntryTextGenerator": [
+						  {
+							"value": "Name: ",
+							"type": "fix"
+						  },
+						  {
+							"value": "individual_name",
+							"type": "field"
+						  }
 						]
 					  },
 					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
+						"actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
+						"clientMethod": "getDeactivatedObjects",
+						"endPointParams": [
+						  {
+							"query": "numDays",
+							"element": "queryNumDays",
+							"defaultValue": 7
+						  },
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  }
+						]
+					  }
 					}
 				  }
-			  ],
-			  "row_buttons":[
+				],
+				"row_buttons": [
 				  {
 					"actionName": "REMOVE_INDIVIDUAL_CONSENT",
 					"notGetViewData": true,
@@ -2197,7 +2939,8 @@ export const DiseaseStudy = {
 			  }
 			]
 		  },
-		  {"tabLabel_en": "Study Variable Values",
+		  {
+			"tabLabel_en": "Study Variable Values",
 			"tabLabel_es": "Valores de variables para el estudio",
 			"view": "studyvariablevalues",
 			"view_definition": [
@@ -2238,14 +2981,97 @@ export const DiseaseStudy = {
 					"label_es": "Valor"
 				  }
 				],
-				"actions":[],
+				"actions": [],
 				"row_buttons": [
-				  {
-					"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-					"alertMsg": {
+					{ "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+						"requiresDialog": true,
+						"certificationException": true,
+						"alertMsg": {
 						"empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
+						},
+						"button": {
+							"icon": "document_scanner",
+							"title": {
+								"label_en": "Enter Result", "label_es": "Ingrese el Resultado"
+							},
+							"requiresGridItemSelected": true,
+							"hideWhenSelectedItem": {
+								"column": "total_params",
+								"value": 0
+							}
+						},
+						"resultHeader": {
+							"id": {
+							"label_en": "Id", "label_es": "Id", "width": "10%"
+							},
+							"name": {
+							"label_en": "Parameter", "label_es": "Parámetro"
+							},
+							"value": {
+							"label_en": "Value", "label_es": "Valor"
+							}
+						},
+						"resultHeaderObjectLabelTopLeft": {
+							"label_en": "Instrument Event:", "label_es": "Evento de Instrumento :"
+						},    
+						"dialogInfo": { 
+							"name": "resultDialog",
+							"subQueryName": "getResult",		  
+							"viewQuery": {
+								"actionName": "STUDY_VARIABLES_LIST",
+								"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIqueries",
+								"endPointParams": [				  
+									{
+										"argumentName": "studyName",
+										"internalVariableSimpleObjName": "selectedItem",
+										"internalVariableSimpleObjProperty": "name"
+									},
+									{
+										"argumentName": "variableId",
+										"selObjectPropertyName": "id"
+									}										
+								]
+							},			  
+							"automatic": true,
+							"action": [
+								{ "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+								"notGetViewData": true,
+								"requiresDialog": false,
+								"clientMethod": "enterEventResult",
+								"endPointParams": [
+									{	"argumentName": "studyName",
+										"internalVariableSimpleObjName": "selectedItem",
+										"internalVariableSimpleObjProperty": "name"
+									},
+									{	"argumentName": "variableName",
+										"selObjectPropertyName": "name"
+									},										
+									{	"argumentName": "ownerTable",
+										"selObjectPropertyName": "owner_table"
+									},										
+									{	"argumentName": "ownerId",
+										"selObjectPropertyName": "owner_id"
+									},										
+									{ "argumentName": "newValue", "targetValue": true }
+								]
+								}
+							]
+						},
+						"endPointParams": [
+							{ "argumentName": "sampleAnalysisResultFieldToRetrieve", "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict" },
+							{ "argumentName": "sortFieldsName", "value": "test_id|result_id" },
+							{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+						]
+				  	},					
+				  {
+					"actionName": "ssssSTUDY_OBJECT_SET_VARIABLE_VALUE",
+					"alertMsg": {
+					  "empty": {
+						"label_en": "No pending results to enter result",
+						"label_es": "No hay resultados pendientes de resultados"
+					  }
 					},
-					"clientMethod": "studyObjectSetVariableValue",					
+					"clientMethod": "studyObjectSetVariableValue",
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
@@ -2278,42 +3104,59 @@ export const DiseaseStudy = {
 					"button": {
 					  "icon": "manufacturing",
 					  "title": {
-						"label_en": "Set Result",
-						"label_es": "Entrar Result"
+						"label_en": "sssss Set Result",
+						"label_es": "sssss Entrar Result"
 					  },
 					  "requiresGridItemSelected": true
 					},
-					"dialogInfo": { 
-						"name": "resultDialog",
-						"subQueryName": "getResult",		  
-						"viewQuery": {
-							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",							
-							  "endPointParams": [				  
-								{ "argumentName": "eventId", "selObjectPropertyName": "id"}
-							  ]
-						},			  
-						"automatic": true,
-						"action": [
-						  { "actionName": "ENTER_EVENT_RESULT",
-							"notGetViewData": true,
-							"requiresDialog": false,
-							"endPointUrl": "Samples",
-							"clientMethod": "enterEventResult",
-							"endPointParams": [
-								{ "argumentName": "newValue", "targetValue": true },
-								{ "argumentName": "eventId", "targetValue": true },
-								{ "argumentName": "instrumentName", "targetValue": true },
-								{ "argumentName": "variableName", "targetValue": true }
-							]
+					"dialogInfo": {
+					  "name": "resultDialog",
+					  "subQueryName": "getResult",
+					  "viewQuery": {
+						"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
+						"endPointParams": [
+						  {
+							"argumentName": "eventId",
+							"selObjectPropertyName": "id"
 						  }
 						]
-					  }
+					  },
+					  "automatic": true,
+					  "action": [
+						{
+						  "actionName": "ENTER_EVENT_RESULT",
+						  "notGetViewData": true,
+						  "requiresDialog": false,
+						  "endPointUrl": "Samples",
+						  "clientMethod": "enterEventResult",
+						  "endPointParams": [
+							{
+							  "argumentName": "newValue",
+							  "targetValue": true
+							},
+							{
+							  "argumentName": "eventId",
+							  "targetValue": true
+							},
+							{
+							  "argumentName": "instrumentName",
+							  "targetValue": true
+							},
+							{
+							  "argumentName": "variableName",
+							  "targetValue": true
+							}
+						  ]
+						}
+					  ]
 					}
+				  }
 				]
 			  }
 			]
 		  },
-		  {"tabLabel_en": "Samples Set",
+		  {
+			"tabLabel_en": "Samples Set",
 			"tabLabel_es": "Muestras Agrupadas",
 			"view": "studySamplesSet",
 			"view_definition": [
@@ -2340,7 +3183,8 @@ export const DiseaseStudy = {
 				  }
 				],
 				"actions": [
-				  {"actionName": "STUDY_CREATE_SAMPLES_SET",
+				  {
+					"actionName": "STUDY_CREATE_SAMPLES_SET",
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
@@ -2380,7 +3224,7 @@ export const DiseaseStudy = {
 					"notGetViewData": true,
 					"requiresDialog": true,
 					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
+					"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 					"endPointParams": [
 					  {
 						"argumentName": "studyName",
@@ -2391,7 +3235,7 @@ export const DiseaseStudy = {
 						"argumentName": "samplesSetName",
 						"selObjectPropertyName": "name"
 					  }
-					],					
+					],
 					"button": {
 					  "icon": "toggle_on",
 					  "title": {
@@ -2400,34 +3244,53 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": false
 					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Set to reactivate", "label_es": "Grupo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "name",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "name","type": "field"}
+					"dialogInfo": {
+					  "name": "reactivateObjectDialog",
+					  "fieldsObject": {
+						"queryNumDays": {
+						  "label_en": "Number of Days",
+						  "label_es": "Número de Días"
+						},
+						"objectName": {
+						  "label_en": "Set to reactivate",
+						  "label_es": "Grupo a Reactivar"
+						}
+					  },
+					  "listDefinition": {
+						"keyFldName": "name",
+						"eachEntryTextGenerator": [
+						  {
+							"value": "Name: ",
+							"type": "fix"
+						  },
+						  {
+							"value": "name",
+							"type": "field"
+						  }
 						]
 					  },
 					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_SAMPLES_SETS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
+						"actionName": "DEACTIVATED_STUDY_SAMPLES_SETS_LAST_N_DAYS",
+						"clientMethod": "getDeactivatedObjects",
+						"endPointParams": [
+						  {
+							"query": "numDays",
+							"element": "queryNumDays",
+							"defaultValue": 7
+						  },
+						  {
+							"argumentName": "studyName",
+							"internalVariableSimpleObjName": "selectedItem",
+							"internalVariableSimpleObjProperty": "name"
+						  }
+						]
+					  }
 					}
 				  }
-
-			  ],
-			  "row_buttons":[
-				  {"actionName": "STUDY_SAMPLES_SET_DEACTIVATE",
+				],
+				"row_buttons": [
+				  {
+					"actionName": "STUDY_SAMPLES_SET_DEACTIVATE",
 					"notGetViewData": true,
 					"requiresDialog": false,
 					"certificationException": true,
@@ -2453,7 +3316,7 @@ export const DiseaseStudy = {
 				  {
 					"actionName": "STUDY_SAMPLES_SET_ADD_SAMPLE",
 					"notGetViewData": true,
-					"requiresDialog": false,
+					"requiresDialog": true,
 					"certificationException": true,
 					"endPointParams": [
 					  {
@@ -2466,7 +3329,7 @@ export const DiseaseStudy = {
 					  },
 					  {
 						"argumentName": "sampleId",
-						"selObjectPropertyName": "list1"
+						"element": "list1"
 					  }
 					],
 					"button": {
@@ -2478,38 +3341,143 @@ export const DiseaseStudy = {
 					  "requiresGridItemSelected": true
 					},
 					"dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fields": [
-						  {
-							  "list1": {
-								  "label_en": "sample Id to Add",
-								  "label_es": "Muestra a añadir",									
-								  "addBlankValueOnTop": true,
-								  "addBlankValueAtBottom": false,
-								  "valuesFromSelectedItem": {
-								  "internalVariableSingleObjName": "selectedItem",
-								  "internalVariableSingleObjProperty": "study_individual_sample",
-								  "propertyKeyName": "sample_id",
-								  "propertyKeyValueEn": [
-									  "sample_id"
-								  ],
-								  "propertyKeyValueEs": [
-									  "sample_id"
-								  ]
+					  "requiresDialog": true,
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"label_en": "sample Id to Add",
+							"label_es": "Muestra a añadir",
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromSelectedItem": {
+							  "internalVariableSingleObjName": "selectedItem",
+							  "internalVariableSingleObjProperty": "study_individual_sample",
+							  "propertyKeyName": "sample_id",
+							  "propertyKeyValueEn": [
+								"sample_id"
+							  ],
+							  "propertyKeyValueEs": [
+								"sample_id"
+							  ]
+										  }
+									  }
 								  }
+								]
 							  }
+						  },
+						  {"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+							  "requiresDialog": true,
+								"certificationException": true,
+								"endPointParams": [
+							  {
+								  "argumentName": "studyName",
+								  "internalVariableSimpleObjName": "selectedItem",
+								  "internalVariableSimpleObjProperty": "name"
+							  },
+							  {
+								"argumentName": "ownerTable",
+								"value": "study_samples_set"
+							  },
+							  {
+								"argumentName": "ownerId",
+								"selObjectPropertyName": "name"
+							  },
+							  {
+								"argumentName": "variableSetName",
+								"element": "list1"
+							  }
+							],
+							"button": {
+							  "icon": "refresh",
+							  "title": {
+								"label_en": "Add Variable Set",
+								"label_es": "Añadir Conjunto de Variables"
+							  },
+							  "requiresObjectSelected": false
+							},
+							"dialogInfo": {
+							  "requiresDialog": true,
+							  "name": "genericDialog",
+							  "fields": [
+								  {"list1": {
+									  "items": [
+									  { "keyName": "name", "keyValue_en": "name", "keyValue_es": "name" }
+									  ],
+									  "label_en": "Variable Set", "label_es": "Grupo de variables", "optional": true,
+									  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+									  "valuesFromMasterData": {
+										"elementName":"list4",
+										"propertyNameContainer": "variables_set",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
+									  }			
+									}
+								  }
+							  ]
+							}
+						  },
+						  {"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+							"requiresDialog": true,
+							"certificationException": true,
+							"endPointParams": [
+							  {
+								  "argumentName": "studyName",
+								  "internalVariableSimpleObjName": "selectedItem",
+								  "internalVariableSimpleObjProperty": "name"
+							  },
+							  {
+								"argumentName": "ownerTable",
+								"value": "study_samples_set"
+							  },
+							  {
+								"argumentName": "ownerId",
+								"selObjectPropertyName": "name"
+							  },
+							  {
+								"argumentName": "variableName",
+								"element": "list1"
+							  }
+							],
+							"button": {
+							  "icon": "refresh",
+							  "title": {
+								"label_en": "Add Variable",
+								"label_es": "Añadir Variable"
+							  },
+							  "requiresObjectSelected": false
+							},
+							"dialogInfo": {
+							  "requiresDialog": true,
+							  "name": "genericDialog",
+							  "fields": [
+								  {"list1": {
+									  "items": [
+									  { "keyName": "name", "keyValue_en": "name", "keyValue_es": "name" }
+									  ],
+									  "label_en": "Variable Set", "label_es": "Grupo de variables", "optional": true,
+									  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+									  "valuesFromMasterData": {
+										"elementName":"list4",
+										"propertyNameContainer": "variables",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
+									  }			
+									}
+								  }
+							  ]
+	  
+							}
 						  }
-						]
-					  }					
-				  }
-				],
+					  ],
+	  
+				
 				"children": "samples",
 				"children_definition": {
-					"title": {
+				  "title": {
 					"label_en": "Individual Samples",
 					"label_es": "Muestras del individuo"
-					},
+				  },
 				  "columns": [
 					{
 					  "name": "sample_id",
@@ -2533,13 +3501,42 @@ export const DiseaseStudy = {
 					}
 				  ],
 				  "row_buttons": [
+					{ "actionName": "STUDY_SAMPLES_SET_REMOVE_SAMPLE",
+					"clientMethod": "dialogRequired",
+					"selObjectVariableName": "selectedSampleSet",
+					"endPointUrl": "Projects",
+					"endPointParams": [
+					  { "argumentName": "studyName", 
+					    "internalVariableSimpleObjName":"selectedItem", 
+					    "internalVariableSimpleObjProperty":"study", 
+					    "ZZZselObjectPropertyName": "study"},
+					  { "argumentName": "samplesSetName", "selObjectPropertyName":"name"},
+					  { "argumentName": "sampleId", "element": "text1" }
+					],
+					"button": {
+					  "z-icon": "remove",
+					  "title": {
+						"label_en": "Unlink Sample", "label_es": "Quitar Muestra"
+					  },
+					  "requiresObjectSelected" : true
+					}, 
+					"dialogInfo": {
+					  "requiresDialog": true,
+					  "name": "genericFormDialog",
+					  "fieldText": [
+						{"text1": { "label_en": "Sample to unlink", "label_es": "Muestra a deasignar" }}
+					  ]
+					}
+				 	},  					
 					{
 					  "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
+					  "requiresDialog": true,
 					  "certificationException": true,
 					  "endPointParams": [
 						{
 						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
 						},
 						{
 						  "argumentName": "ownerTable",
@@ -2551,7 +3548,7 @@ export const DiseaseStudy = {
 						},
 						{
 						  "argumentName": "variableSetName",
-						  "element": "listMDvariablesSet"
+						  "element": "list1"
 						}
 					  ],
 					  "button": {
@@ -2565,11 +3562,29 @@ export const DiseaseStudy = {
 					  "dialogInfo": {
 						"requiresDialog": true,
 						"name": "genericDialog",
-						"fieldText": [
+						"fields": [
 						  {
-							"listMDvariablesSet": {
-							  "label_en": "Variables Set",
-							  "label_es": "Conjunto Variables"
+							"list1": {
+							  "items": [
+								{
+								  "keyName": "name",
+								  "keyValue_en": "name",
+								  "keyValue_es": "name"
+								}
+							  ],
+							  "label_en": "Variable Set",
+							  "label_es": "Grupo de variables",
+							  "optional": true,
+							  "addBlankValueOnTop": true,
+							  "addBlankValueAtBottom": false,
+							  "valuesFromMasterData": {
+								"elementName": "list4",
+								"propertyNameContainer": "variables_set",
+								"propertyNameContainerLevelPropertyKeyName": "name",
+								"propertyKeyName": "name",
+								"propertyKeyValueEn": "name",
+								"propertyKeyValueEs": "name"
+							  }
 							}
 						  }
 						]
@@ -2577,11 +3592,13 @@ export const DiseaseStudy = {
 					},
 					{
 					  "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
+					  "requiresDialog": true,
 					  "certificationException": true,
 					  "endPointParams": [
 						{
 						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
 						},
 						{
 						  "argumentName": "ownerTable",
@@ -2593,7 +3610,7 @@ export const DiseaseStudy = {
 						},
 						{
 						  "argumentName": "variableName",
-						  "element": "listMDvariables"
+						  "element": "list1"
 						}
 					  ],
 					  "button": {
@@ -2607,11 +3624,29 @@ export const DiseaseStudy = {
 					  "dialogInfo": {
 						"requiresDialog": true,
 						"name": "genericDialog",
-						"fieldText": [
+						"fields": [
 						  {
-							"listMDvariables": {
-							  "label_en": "Variable",
-							  "label_es": "Variable"
+							"list1": {
+							  "items": [
+								{
+								  "keyName": "name",
+								  "keyValue_en": "name",
+								  "keyValue_es": "name"
+								}
+							  ],
+							  "label_en": "Variables",
+							  "label_es": "Variables",
+							  "optional": true,
+							  "addBlankValueOnTop": true,
+							  "addBlankValueAtBottom": false,
+							  "valuesFromMasterData": {
+								"elementName": "list4",
+								"propertyNameContainer": "variables",
+								"propertyNameContainerLevelPropertyKeyName": "name",
+								"propertyKeyName": "name",
+								"propertyKeyValueEn": "name",
+								"propertyKeyValueEs": "name"
+							  }
 							}
 						  }
 						]
@@ -2644,63 +3679,82 @@ export const DiseaseStudy = {
 						"requiresObjectSelected": true
 					  }
 					},
-				  {
-					"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
+					{
+					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
+					  "clientMethod": "openReactivateObjectDialog",
+					  "notGetViewData": true,
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
+					  "endPointParams": [
+						{
+						  "argumentName": "studyName",
+						  "internalVariableSimpleObjName": "selectedItem",
+						  "internalVariableSimpleObjProperty": "name"
+						},
+						{
+						  "argumentName": "sampleId",
+						  "selObjectPropertyName": "sample_id"
+						}
+					  ],
+					  "button": {
+						"icon": "toggle_on",
+						"title": {
+						  "label_en": "Reactivate",
+						  "label_es": "Reactivar"
+						},
+						"requiresGridItemSelected": false
 					  },
-					  {
-						"argumentName": "sampleId",
-						"selObjectPropertyName": "sample_id"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
+					  "dialogInfo": {
 						"name": "reactivateObjectDialog",
 						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
-					  	},
-					  	"listDefinition": {
+						  "queryNumDays": {
+							"label_en": "Number of Days",
+							"label_es": "Número de Días"
+						  },
+						  "objectName": {
+							"label_en": "Individual to reactivate",
+							"label_es": "Individuo a Reactivar"
+						  }
+						},
+						"listDefinition": {
 						  "keyFldName": "sample_id",
 						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "individual_name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
+							{
+							  "value": "Name: ",
+							  "type": "fix"
+							},
+							{
+							  "value": "individual_name",
+							  "type": "field"
+							}
+						  ]
+						},
+						"viewQuery": {
 						  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
 						  "clientMethod": "getDeactivatedObjects",
 						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
+							{
+							  "query": "numDays",
+							  "element": "queryNumDays",
+							  "defaultValue": 7
+							},
+							{
+							  "argumentName": "studyName",
+							  "internalVariableSimpleObjName": "selectedItem",
+							  "internalVariableSimpleObjProperty": "name"
+							}
 						  ]
 						}
+					  }
 					}
-				  }
 				  ],
 				  "children": "study_variable_values",
 				  "children_definition": {
 					"title": {
-						"label_en": "Sample results",
-						"label_es": "Resultados de muestra"
-					  },
+					  "label_en": "Sample results",
+					  "label_es": "Resultados de muestra"
+					},
 					"columns": [
 					  {
 						"name": "id",
@@ -2714,2935 +3768,67 @@ export const DiseaseStudy = {
 					  }
 					],
 					"row_buttons": [
-						{
-							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-							"notGetViewData": true,
-							"requiresDialog": true,
-							"certificationException": true,
-							"endPointParams": [
-								{
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-								},
-								{
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "owner_id"
-								},
-								{
-								"argumentName": "ownerTable",
-								"selObjectPropertyName": "owner_table"
-								},
-								{
-								"argumentName": "variableSetName",
-								"selObjectPropertyName": "variable_set"
-								},
-								{
-								"argumentName": "variableName",
-								"selObjectPropertyName": "name"
-								},
-								{
-								"argumentName": "newValue",
-								"variableName": "newResult"
-								}
-							],
-							"button": {
-								"icon": "manufacturing",
-								"title": {
-								"label_en": "Set Result",
-								"label_es": "Entrar Result"
-								},
-								"requiresGridItemSelected": true
-							},
-							"dialogInfo": {
-								"name": "genericDialog",
-								"fields": {
-								"variableName": {
-									"label_en": "Variable Name",
-									"label_es": "Nombre Variable"
-								},
-								"value": {
-									"label_en": "Value",
-									"label_es": "Valor"
-								}
-								}
-							}
-						}						
-					]
-				  }
-				}
-			  }
-			]
-		  }	  
-		]
-	},
-	"MyStudiesLocal":{
-		"component": "ObjectByTabs",
-		"hasOwnComponent": true,
-		"showTitleOnTop": true,
-		"title": {
-		  "fix_text_en": "My Studies",
-		  "fix_text_es": "Mis Estudios",
-		  "name": "study"
-		},
-		"viewQuery": {
-		  "actionName": "ALL_MY_ACTIVE_STUDIES",
-		  "notUseGrid": true,
-		  "button": {
-			"icon": "refresh",
-			"title": {
-			  "label_en": "Reload",
-			  "label_es": "Recargar"
-			},
-			"requiresGridItemSelected": false
-		  },
-		  "endPointParams": [
-			{}
-		  ]
-		},
-		"filter_button": {
-		  "label_en": "Search",
-		  "label_es": "Buscar"
-		},
-		"filter": [],
-		"filterResultDetail": {
-		  "type": "list",
-		  "detail": [
-			{
-			  "field": "name"
-			}
-		  ]
-		},
-		"actions": [],
-		"tabs": [
-		  {"tabLabel_en": "Families",
-			"tabLabel_es": "Familias",
-			"view": "studyfamily",
-			"view_definition": [
-			  {
-				"type": "parentReadOnlyTable",
-				"endPointPropertyArray": [
-				  "study_family"				  
-				],
-				"columns": [
-				  {
-					"name": "name",
-					"label_en": "Family",
-					"label_es": "Familia"
-				  },
-				  {
-					"name": "active",
-					"label_en": "Active",
-					"label_es": "Activo",
-					"is_icon": true
-				  },
-				  {
-					"name": "description",
-					"label_en": "Description",
-					"label_es": "Descripción"
-				  },
-				  {
-					"name": "created_by",
-					"label_en": "Created By",
-					"label_es": "Creado por"
-				  },
-				  {
-					"name": "individual_name",
-					"label_en": "Individual name",
-					"label_es": "Nombre individual"
-				  },
-				  {
-					"name": "individual_id",
-					"label_en": "Individual ID",
-					"label_es": "Valor individual"
-				  }
-				],
-				"actions": [
-				  {
-					"actionName": "STUDY_CREATE_FAMILY",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPointParams": [
 					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "familyName",
-						"element": "text1"
-					  }
-					],
-					"button": {
-					  "icon": "person_add",
-					  "title": {
-						"label_en": "New study family",
-						"label_es": "Nueva familia de estudio"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {
-					  "name": "genericDialog",
-					  "fields": [
-						{
-						  "text1": {
-							"label_en": "New family Name",
-							"label_es": "Nombre Nueva familia"
-						  }
-						}
-					  ]
-					}
-				  },
-				  {
-					"actionName": "STUDY_FAMILY_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "familyName",
-						"selObjectPropertyName": "name"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Family to reactivate", "label_es": "Familia a Reactivar"}
-					  	},
-						
-					  	"listDefinition": {
-						  "keyFldName": "name",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_FAMILIES_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
-					}
-				  }
-				],
-				"row_buttons": [
-					{
-						"actionName": "STUDY_FAMILY_DEACTIVATE",
-						"notGetViewData": true,
-						"requiresDialog": false,
-						"certificationException": true,
-						"endPointParams": [
-						  {
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
-							"argumentName": "familyName",
-							"selObjectPropertyName": "name"
-						  }
-						],
-						"button": {
-						  "icon": "toggle_off",
-						  "title": {
-							"label_en": "Deactivate",
-							"label_es": "Desactivar"
-						  },
-						  "requiresGridItemSelected": true
-						}
-					  },
-					  {
-						"actionName": "STUDY_FAMILY_ADD_INDIVIDUAL",
+						"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
 						"notGetViewData": true,
 						"requiresDialog": true,
 						"certificationException": true,
 						"endPointParams": [
-							{
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							},
-							{
-								"argumentName": "familyName",
-								"selObjectPropertyName": "name"
-							},
-							{
-							"argumentName": "individualsList",
-							"element": "list1"
-							}
+						  {
+							"argumentName": "studyName",
+							"selObjectPropertyName": "study"
+						  },
+						  {
+							"argumentName": "ownerId",
+							"selObjectPropertyName": "owner_id"
+						  },
+						  {
+							"argumentName": "ownerTable",
+							"selObjectPropertyName": "owner_table"
+						  },
+						  {
+							"argumentName": "variableSetName",
+							"selObjectPropertyName": "variable_set"
+						  },
+						  {
+							"argumentName": "variableName",
+							"selObjectPropertyName": "name"
+						  },
+						  {
+							"argumentName": "newValue",
+							"variableName": "newResult"
+						  }
 						],
 						"button": {
-						  "icon": "add",
+						  "icon": "manufacturing",
 						  "title": {
-							"label_en": "Add Individual",
-							"label_es": "Añadir Individuo"
+							"label_en": "Set Result",
+							"label_es": "Entrar Result"
 						  },
 						  "requiresGridItemSelected": true
 						},
 						"dialogInfo": {
-						  "requiresDialog": true,
 						  "name": "genericDialog",
-						  "fields": [
-							{
-								"list1": {
-									"label_en": "Indvidual Id to Add",
-									"label_es": "Individuo a añadir",									
-									"addBlankValueOnTop": true,
-									"addBlankValueAtBottom": false,
-									"valuesFromSelectedItem": {
-									"internalVariableSingleObjName": "selectedItem",
-									"internalVariableSingleObjProperty": "study_individual",
-									"propertyKeyName": "individual_id",
-									"propertyKeyValueEn": [
-										"individual_name"
-									],
-									"propertyKeyValueEs": [
-										"individual_name"
-									]
-									}
-								}
-							}
-						  ]
-						}
-					  }
-				],
-				"children": "study_individual",
-				"children_definition": {
-					"title": {
-					"label_en": "Individuals",
-					"label_es": "Individuos"
-					},
-					"columns": [
-						{
-						  "name": "individual_id",
-						  "label_en": "Individual ID",
-						  "label_es": "ID persona"
-						},
-						{
-						  "name": "individual_name",
-						  "label_en": "Individual name",
-						  "label_es": "Nombre persona"
-						},
-						{
-						  "name": "created_by",
-						  "label_en": "Created by",
-						  "label_es": "Creado por"
-						},
-						{
-						  "name": "created_on",
-						  "label_en": "Created On",
-						  "label_es": "Creado en"
-						}
-					],	
-					"row_buttons": [
-						{ "actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
-						"notGetViewData": true,
-						"requiresDialog": false,
-						"certificationException": true,
-						"endPointParams": [
-						  {
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
-							"argumentName": "familyName",
-							"parentElementProperty": "name"							
-						  },
-						  {
-							"argumentName": "individualId",
-							"selObjectPropertyName": "individual_id"
-						  }
-						],
-						"button": {
-						  "icon": "remove",
-						  "title": {
-							"label_en": "Unlink from family",
-							"label_es": "Quitar de la familia"
-						  },
-						  "requiresGridItemSelected": true
-						}
-						},	
-						{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableSetName",
-								"element": "listMDvariablesSet"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable Set",
-								"label_es": "Añadir Conjunto de Variables"
-							  },
-							  "requiresObjectSelected": false
+						  "fields": {
+							"variableName": {
+							  "label_en": "Variable Name",
+							  "label_es": "Nombre Variable"
 							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariablesSet": {
-									"label_en": "Variables Set",
-									"label_es": "Conjunto Variables"
-								  }
-								}
-							  ]
-							}
-						},
-						{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableName",
-								"element": "listMDvariables"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable",
-								"label_es": "Añadir Variable"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariables": {
-									"label_en": "Variable",
-									"label_es": "Variable"
-								  }
-								}
-							  ]
-							}
-						},
-						{"actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Deactivate",
-								"label_es": "Desactivar"
-							  },
-							  "requiresObjectSelected": true
-							}
-						},
-						{"actionName": "STUDY_INDIVIDUAL_ACTIVATE",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "alarm_add",
-							  "title": {
-								"label_en": "Activate",
-								"label_es": "Activar"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "reactivateObjectDialog",
-							  "selObjectVariableName": "selectedIndiv",
-							  "fieldText": {
-								"numDays": {
-								  "label_en": "Number of Days",
-								  "label_es": "Número de Días"
-								},
-								"objectName": {
-								  "label_en": "Sample to reactivate",
-								  "label_es": "Muestra a Reactivar"
-								}
-							  },
-							  "listDefinition": {
-								"keyFldName": "sample_id",
-								"eachEntryTextGenerator": [
-								  {
-									"value": "Sample: ",
-									"type": "fix"
-								  },
-								  {
-									"value": "sample_id",
-									"type": "field"
-								  }
-								]
-							  },
-							  "action": [
-								{
-								  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-								  "clientMethod": "getDeactivatedObjects",
-								  "apiParams": [
-									{
-									  "query": "numDays",
-									  "element": "lotNumDays",
-									  "defaultValue": 7
-									},
-									{
-									  "argumentName": "studyName",
-									  "selObjectPropertyName": "study"
-									}
-								  ]
-								}
-							  ]
-							}
-						}										
-					],
-					"children": "study_individual_sample",
-					"children_definition": {
-						"title": {
-						"label_en": "Individual samples",
-						"label_es": "Muestras del Individuo"
-						},
-						"columns": [
-							{
-							  "name": "sample_id",
-							  "label_en": "Sample ID",
-							  "label_es": "ID Muestra"
-							},
-							{
-							  "name": "individual_name",
-							  "label_en": "Individual name",
-							  "label_es": "Nombre persona"
-							},
-							{
-							  "name": "created_by",
-							  "label_en": "Created by",
-							  "label_es": "Creado por"
-							},
-							{
-							  "name": "created_on",
-							  "label_en": "Created On",
-							  "label_es": "Creado en"
-							}
-						],	
-						"row_buttons": [
-							{ "actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
-							"notGetViewData": true,
-							"requiresDialog": false,
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							  },
-							  {
-								"argumentName": "familyName",
-								"parentElementProperty": "name"							
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "remove",
-							  "title": {
-								"label_en": "Unlink from family",
-								"label_es": "Quitar de la familia"
-							  },
-							  "requiresGridItemSelected": true
-							}
-							},	
-							{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableSetName",
-									"element": "listMDvariablesSet"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable Set",
-									"label_es": "Añadir Conjunto de Variables"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariablesSet": {
-										"label_en": "Variables Set",
-										"label_es": "Conjunto Variables"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableName",
-									"element": "listMDvariables"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable",
-									"label_es": "Añadir Variable"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariables": {
-										"label_en": "Variable",
-										"label_es": "Variable"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
-								"certificationException": true,
-								"requiresDialog": false,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "sampleId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "individualId",
-									"selObjectPropertyName": "individual_id"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Deactivate",
-									"label_es": "Desactivar"
-								  },
-								  "requiresObjectSelected": true
-								}
-							},
-							{"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "sampleId",
-									"selObjectPropertyName": "sample_id"
-								  }
-								],
-								"button": {
-								  "icon": "alarm_add",
-								  "title": {
-									"label_en": "Activate",
-									"label_es": "Activar"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "reactivateObjectDialog",
-								  "selObjectVariableName": "selectedIndiv",
-								  "fieldText": {
-									"numDays": {
-									  "label_en": "Number of Days",
-									  "label_es": "Número de Días"
-									},
-									"objectName": {
-									  "label_en": "Sample to reactivate",
-									  "label_es": "Muestra a Reactivar"
-									}
-								  },
-								  "listDefinition": {
-									"keyFldName": "sample_id",
-									"eachEntryTextGenerator": [
-									  {
-										"value": "Sample: ",
-										"type": "fix"
-									  },
-									  {
-										"value": "sample_id",
-										"type": "field"
-									  }
-									]
-								  },
-								  "action": [
-									{
-									  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-									  "clientMethod": "getDeactivatedObjects",
-									  "apiParams": [
-										{
-										  "query": "numDays",
-										  "element": "lotNumDays",
-										  "defaultValue": 7
-										},
-										{
-										  "argumentName": "studyName",
-										  "selObjectPropertyName": "study"
-										}
-									  ]
-									}
-								  ]
-								}
-							}										
-						],
-						"children": "study_variable_values",
-						"children_definition": {
-						  "title": {
-							  "label_en": "Sample results",
-							  "label_es": "Resultados de muestra"
-							},
-						  "columns": [
-							{
-							  "name": "id",
-							  "label_en": "Id",
-							  "label_es": "Id"
-							},
-							{
-							  "name": "sample",
-							  "label_en": "Sample",
-							  "label_es": "Muestra"
-							}
-						  ],
-						  "row_buttons": [
-							  {
-								  "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-								  "notGetViewData": true,
-								  "requiresDialog": true,
-								  "certificationException": true,
-								  "endPointParams": [
-									  {
-									  "argumentName": "studyName",
-									  "selObjectPropertyName": "study"
-									  },
-									  {
-									  "argumentName": "ownerId",
-									  "selObjectPropertyName": "owner_id"
-									  },
-									  {
-									  "argumentName": "ownerTable",
-									  "selObjectPropertyName": "owner_table"
-									  },
-									  {
-									  "argumentName": "variableSetName",
-									  "selObjectPropertyName": "variable_set"
-									  },
-									  {
-									  "argumentName": "variableName",
-									  "selObjectPropertyName": "name"
-									  },
-									  {
-									  "argumentName": "newValue",
-									  "variableName": "newResult"
-									  }
-								  ],
-								  "button": {
-									  "icon": "manufacturing",
-									  "title": {
-									  "label_en": "Set Result",
-									  "label_es": "Entrar Result"
-									  },
-									  "requiresGridItemSelected": true
-								  },
-								  "dialogInfo": {
-									  "name": "genericDialog",
-									  "fields": {
-									  "variableName": {
-										  "label_en": "Variable Name",
-										  "label_es": "Nombre Variable"
-									  },
-									  "value": {
-										  "label_en": "Value",
-										  "label_es": "Valor"
-									  }
-									  }
-								  }
-							  }						
-						  ]
-						}
-					}					
-				}
-			  }
-			]
-		  },
-		  {"tabLabel_en": "Cohorts",
-			"tabLabel_es": "Cohortes",
-			"view": "studycohort",
-			"view_definition": [
-			  {
-				"type": "parentReadOnlyTable",
-				"endPointPropertyArray": [
-				  "study_cohort"				  
-				],
-				"columns": [
-				  {
-					"name": "name",
-					"label_en": "Cohort",
-					"label_es": "Cohorte"
-				  },
-				  {
-					"name": "active",
-					"label_en": "Active",
-					"label_es": "Activo",
-					"is_icon": true
-				  },
-				  {
-					"name": "description",
-					"label_en": "Description",
-					"label_es": "Descripción"
-				  },
-				  {
-					"name": "created_by",
-					"label_en": "Created By",
-					"label_es": "Creado por"
-				  },
-				  {
-					"name": "individual_name",
-					"label_en": "Individual name",
-					"label_es": "Nombre individual"
-				  },
-				  {
-					"name": "individual_id",
-					"label_en": "Individual ID",
-					"label_es": "Valor individual"
-				  }
-				],
-				"actions": [
-				  {
-					"actionName": "STUDY_CREATE_COHORT",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "cohortName",
-						"element": "text1"
-					  }
-					],
-					"button": {
-					  "icon": "person_add",
-					  "title": {
-						"label_en": "New study cohort",
-						"label_es": "Nuevo cohorte de estudio"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {
-					  "name": "genericDialog",
-					  "fields": [
-						{
-						  "text1": {
-							"label_en": "New cohort Name",
-							"label_es": "Nombre Nuevo cohort"
-						  }
-						}
-					  ]
-					}
-				  },
-				  {
-					"actionName": "STUDY_COHORT_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "cohortName",
-						"selObjectPropertyName": "name"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Cohort to reactivate", "label_es": "Cohorte a Reactivar"}
-					  	},
-						
-					  	"listDefinition": {
-						  "keyFldName": "name",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_COHORTS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
-					}
-				  }
-				],
-				"row_buttons": [
-					{
-						"actionName": "STUDY_COHORT_DEACTIVATE",
-						"notGetViewData": true,
-						"requiresDialog": false,
-						"certificationException": true,
-						"endPointParams": [
-						  {
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
-							"argumentName": "cohortName",
-							"selObjectPropertyName": "name"
-						  }
-						],
-						"button": {
-						  "icon": "toggle_off",
-						  "title": {
-							"label_en": "Deactivate",
-							"label_es": "Desactivar"
-						  },
-						  "requiresGridItemSelected": true
-						}
-					  },
-					  {
-						"actionName": "STUDY_COHORT_ADD_INDIVIDUAL",
-						"notGetViewData": true,
-						"requiresDialog": true,
-						"certificationException": true,
-						"endPointParams": [
-							{
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							},
-							{
-								"argumentName": "cohortName",
-								"selObjectPropertyName": "name"
-							},
-							{
-							"argumentName": "individualsList",
-							"element": "list1"
-							}
-						],
-						"button": {
-						  "icon": "add",
-						  "title": {
-							"label_en": "Add Individual",
-							"label_es": "Añadir Individuo"
-						  },
-						  "requiresGridItemSelected": true
-						},
-						"dialogInfo": {
-						  "requiresDialog": true,
-						  "name": "genericDialog",
-						  "fields": [
-							{
-								"list1": {
-									"label_en": "Indvidual Id to Add",
-									"label_es": "Individuo a añadir",									
-									"addBlankValueOnTop": true,
-									"addBlankValueAtBottom": false,
-									"valuesFromSelectedItem": {
-									"internalVariableSingleObjName": "selectedItem",
-									"internalVariableSingleObjProperty": "study_individual",
-									"propertyKeyName": "individual_id",
-									"propertyKeyValueEn": [
-										"individual_name"
-									],
-									"propertyKeyValueEs": [
-										"individual_name"
-									]
-									}
-								}
-							}
-						  ]
-						}
-					  }
-				],
-				"children": "study_individual",
-				"children_definition": {
-					"title": {
-					"label_en": "Individuals",
-					"label_es": "Individuos"
-					},
-					"columns": [
-						{
-						  "name": "individual_id",
-						  "label_en": "Individual ID",
-						  "label_es": "ID persona"
-						},
-						{
-						  "name": "individual_name",
-						  "label_en": "Individual name",
-						  "label_es": "Nombre persona"
-						},
-						{
-						  "name": "created_by",
-						  "label_en": "Created by",
-						  "label_es": "Creado por"
-						},
-						{
-						  "name": "created_on",
-						  "label_en": "Created On",
-						  "label_es": "Creado en"
-						}
-					],	
-					"row_buttons": [
-						{ "actionName": "STUDY_COHORT_REMOVE_INDIVIDUAL",
-						"notGetViewData": true,
-						"requiresDialog": false,
-						"certificationException": true,
-						"endPointParams": [
-						  {
-							"argumentName": "studyName",
-							"internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"
-						  },
-						  {
-							"argumentName": "cohortName",
-							"parentElementProperty": "name"							
-						  },
-						  {
-							"argumentName": "individualId",
-							"selObjectPropertyName": "individual_id"
-						  }
-						],
-						"button": {
-						  "icon": "remove",
-						  "title": {
-							"label_en": "Unlink from cohort",
-							"label_es": "Quitar del cohorte"
-						  },
-						  "requiresGridItemSelected": true
-						}
-						},	
-						{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableSetName",
-								"element": "listMDvariablesSet"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable Set",
-								"label_es": "Añadir Conjunto de Variables"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariablesSet": {
-									"label_en": "Variables Set",
-									"label_es": "Conjunto Variables"
-								  }
-								}
-							  ]
-							}
-						},
-						{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "ownerTable",
-								"value": "study_individual_sample"
-							  },
-							  {
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "sample_id"
-							  },
-							  {
-								"argumentName": "variableName",
-								"element": "listMDvariables"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Add Variable",
-								"label_es": "Añadir Variable"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "genericDialog",
-							  "fieldText": [
-								{
-								  "listMDvariables": {
-									"label_en": "Variable",
-									"label_es": "Variable"
-								  }
-								}
-							  ]
-							}
-						},
-						{"actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "refresh",
-							  "title": {
-								"label_en": "Deactivate",
-								"label_es": "Desactivar"
-							  },
-							  "requiresObjectSelected": true
-							}
-						},
-						{"actionName": "STUDY_INDIVIDUAL_ACTIVATE",
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "alarm_add",
-							  "title": {
-								"label_en": "Activate",
-								"label_es": "Activar"
-							  },
-							  "requiresObjectSelected": false
-							},
-							"dialogInfo": {
-							  "requiresDialog": true,
-							  "name": "reactivateObjectDialog",
-							  "selObjectVariableName": "selectedIndiv",
-							  "fieldText": {
-								"numDays": {
-								  "label_en": "Number of Days",
-								  "label_es": "Número de Días"
-								},
-								"objectName": {
-								  "label_en": "Sample to reactivate",
-								  "label_es": "Muestra a Reactivar"
-								}
-							  },
-							  "listDefinition": {
-								"keyFldName": "sample_id",
-								"eachEntryTextGenerator": [
-								  {
-									"value": "Sample: ",
-									"type": "fix"
-								  },
-								  {
-									"value": "sample_id",
-									"type": "field"
-								  }
-								]
-							  },
-							  "action": [
-								{
-								  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-								  "clientMethod": "getDeactivatedObjects",
-								  "apiParams": [
-									{
-									  "query": "numDays",
-									  "element": "lotNumDays",
-									  "defaultValue": 7
-									},
-									{
-									  "argumentName": "studyName",
-									  "selObjectPropertyName": "study"
-									}
-								  ]
-								}
-							  ]
-							}
-						}										
-					],
-					"children": "study_individual_sample",
-					"children_definition": {
-						"title": {
-						"label_en": "Individual samples",
-						"label_es": "Muestras del Individuo"
-						},
-						"columns": [
-							{
-							  "name": "sample_id",
-							  "label_en": "Sample ID",
-							  "label_es": "ID Muestra"
-							},
-							{
-							  "name": "individual_name",
-							  "label_en": "Individual name",
-							  "label_es": "Nombre persona"
-							},
-							{
-							  "name": "created_by",
-							  "label_en": "Created by",
-							  "label_es": "Creado por"
-							},
-							{
-							  "name": "created_on",
-							  "label_en": "Created On",
-							  "label_es": "Creado en"
-							}
-						],	
-						"row_buttons": [
-							{ "actionName": "STUDY_FAMILY_REMOVE_INDIVIDUAL",
-							"notGetViewData": true,
-							"requiresDialog": false,
-							"certificationException": true,
-							"endPointParams": [
-							  {
-								"argumentName": "studyName",
-								"internalVariableSimpleObjName": "selectedItem",
-								"internalVariableSimpleObjProperty": "name"
-							  },
-							  {
-								"argumentName": "familyName",
-								"parentElementProperty": "name"							
-							  },
-							  {
-								"argumentName": "individualId",
-								"selObjectPropertyName": "individual_id"
-							  }
-							],
-							"button": {
-							  "icon": "remove",
-							  "title": {
-								"label_en": "Unlink from family",
-								"label_es": "Quitar de la familia"
-							  },
-							  "requiresGridItemSelected": true
-							}
-							},	
-							{	"actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableSetName",
-									"element": "listMDvariablesSet"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable Set",
-									"label_es": "Añadir Conjunto de Variables"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariablesSet": {
-										"label_en": "Variables Set",
-										"label_es": "Conjunto Variables"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "ownerTable",
-									"value": "study_individual_sample"
-								  },
-								  {
-									"argumentName": "ownerId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "variableName",
-									"element": "listMDvariables"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Add Variable",
-									"label_es": "Añadir Variable"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "genericDialog",
-								  "fieldText": [
-									{
-									  "listMDvariables": {
-										"label_en": "Variable",
-										"label_es": "Variable"
-									  }
-									}
-								  ]
-								}
-							},
-							{"actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "sampleId",
-									"selObjectPropertyName": "sample_id"
-								  },
-								  {
-									"argumentName": "individualId",
-									"selObjectPropertyName": "individual_id"
-								  }
-								],
-								"button": {
-								  "icon": "refresh",
-								  "title": {
-									"label_en": "Deactivate",
-									"label_es": "Desactivar"
-								  },
-								  "requiresObjectSelected": true
-								}
-							},
-							{"actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-								"certificationException": true,
-								"endPointParams": [
-								  {
-									"argumentName": "studyName",
-									"selObjectPropertyName": "study"
-								  },
-								  {
-									"argumentName": "sampleId",
-									"selObjectPropertyName": "sample_id"
-								  }
-								],
-								"button": {
-								  "icon": "alarm_add",
-								  "title": {
-									"label_en": "Activate",
-									"label_es": "Activar"
-								  },
-								  "requiresObjectSelected": false
-								},
-								"dialogInfo": {
-								  "requiresDialog": true,
-								  "name": "reactivateObjectDialog",
-								  "selObjectVariableName": "selectedIndiv",
-								  "fieldText": {
-									"numDays": {
-									  "label_en": "Number of Days",
-									  "label_es": "Número de Días"
-									},
-									"objectName": {
-									  "label_en": "Sample to reactivate",
-									  "label_es": "Muestra a Reactivar"
-									}
-								  },
-								  "listDefinition": {
-									"keyFldName": "sample_id",
-									"eachEntryTextGenerator": [
-									  {
-										"value": "Sample: ",
-										"type": "fix"
-									  },
-									  {
-										"value": "sample_id",
-										"type": "field"
-									  }
-									]
-								  },
-								  "action": [
-									{
-									  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-									  "clientMethod": "getDeactivatedObjects",
-									  "apiParams": [
-										{
-										  "query": "numDays",
-										  "element": "lotNumDays",
-										  "defaultValue": 7
-										},
-										{
-										  "argumentName": "studyName",
-										  "selObjectPropertyName": "study"
-										}
-									  ]
-									}
-								  ]
-								}
-							}										
-						],
-						"children": "study_variable_values",
-						"children_definition": {
-						  "title": {
-							  "label_en": "Sample results",
-							  "label_es": "Resultados de muestra"
-							},
-						  "columns": [
-							{
-							  "name": "id",
-							  "label_en": "Id",
-							  "label_es": "Id"
-							},
-							{
-							  "name": "sample",
-							  "label_en": "Sample",
-							  "label_es": "Muestra"
-							}
-						  ],
-						  "row_buttons": [
-							  {
-								  "actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-								  "notGetViewData": true,
-								  "requiresDialog": true,
-								  "certificationException": true,
-								  "endPointParams": [
-									  {
-									  "argumentName": "studyName",
-									  "selObjectPropertyName": "study"
-									  },
-									  {
-									  "argumentName": "ownerId",
-									  "selObjectPropertyName": "owner_id"
-									  },
-									  {
-									  "argumentName": "ownerTable",
-									  "selObjectPropertyName": "owner_table"
-									  },
-									  {
-									  "argumentName": "variableSetName",
-									  "selObjectPropertyName": "variable_set"
-									  },
-									  {
-									  "argumentName": "variableName",
-									  "selObjectPropertyName": "name"
-									  },
-									  {
-									  "argumentName": "newValue",
-									  "variableName": "newResult"
-									  }
-								  ],
-								  "button": {
-									  "icon": "manufacturing",
-									  "title": {
-									  "label_en": "Set Result",
-									  "label_es": "Entrar Result"
-									  },
-									  "requiresGridItemSelected": true
-								  },
-								  "dialogInfo": {
-									  "name": "genericDialog",
-									  "fields": {
-									  "variableName": {
-										  "label_en": "Variable Name",
-										  "label_es": "Nombre Variable"
-									  },
-									  "value": {
-										  "label_en": "Value",
-										  "label_es": "Valor"
-									  }
-									  }
-								  }
-							  }						
-						  ]
-						}
-					}					
-				}
-			  }
-			]
-		  },
-		  {"tabLabel_en": "Individuals",
-			"tabLabel_es": "Individuos",
-			"view": "studyindividuals",
-			"view_definition": [
-			  {
-				"type": "parentReadOnlyTable",
-				"endPointPropertyArray": [
-				  "study_individual"
-				],
-				"columns": [
-				  {
-					"name": "individual_id",
-					"label_en": "Individual ID",
-					"label_es": "ID persona"
-				  },
-				  {
-					"name": "individual_name",
-					"label_en": "Individual name",
-					"label_es": "Nombre persona"
-				  },
-				  {
-					"name": "created_by",
-					"label_en": "Created by",
-					"label_es": "Creado por"
-				  },
-				  {
-					"name": "created_on",
-					"label_en": "Created On",
-					"label_es": "Creado en"
-				  }
-				],
-				"actions": [
-				  {
-					"actionName": "STUDY_CREATE_INDIVIDUAL",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "individualName",
-						"element": "text1"
-					  }
-					],
-					"button": {
-					  "icon": "person_add",
-					  "title": {
-						"label_en": "New",
-						"label_es": "Nuevo"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {
-					  "name": "genericDialog",
-					  "fields": [
-						{
-						  "text1": {
-							"label_en": "new Individual Name",
-							"label_es": "Nombre Nuevo Individuo"
-						  }
-						}
-					  ]
-					}
-				  },
-				  {
-					"actionName": "STUDY_INDIVIDUAL_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "individualId",
-						"selObjectPropertyName": "individual_id"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "individual_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "individual_name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
-					}
-				  }
-			  ],
-			  "row_buttons":[
-				  {
-					"actionName": "STUDY_INDIVIDUAL_DEACTIVATE",
-					"notGetViewData": true,
-					"requiresDialog": false,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "individualId",
-						"selObjectPropertyName": "individual_id"
-					  }
-					],
-					"button": {
-					  "icon": "toggle_off",
-					  "title": {
-						"label_en": "Deactivate",
-						"label_es": "Desactivar"
-					  },
-					  "requiresGridItemSelected": true
-					}
-				  },
-				  {
-					"actionName": "STUDY_CREATE_INDIVIDUAL_SAMPLE",
-					"notGetViewData": true,
-					"requiresDialog": false,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "individualId",
-						"selObjectPropertyName": "individual_id"
-					  }
-					],
-					"button": {
-					  "icon": "playlist_add",
-					  "title": {
-						"label_en": "Add Extra Sample",
-						"label_es": "Añadir Muestra Extra"
-					  },
-					  "requiresGridItemSelected": true
-					}
-				  }
-				],
-				"children": "study_individual_sample",
-				"children_definition": {
-					"title": {
-					"label_en": "Individual Samples",
-					"label_es": "Muestras del individuo"
-					},
-				  "columns": [
-					{
-					  "name": "sample_id",
-					  "label_en": "Sample Id",
-					  "label_es": "Id de muestra"
-					},
-					{
-					  "name": "individual_name",
-					  "label_en": "Name",
-					  "label_es": "Nombre"
-					},
-					{
-					  "name": "created_by",
-					  "label_en": "Created by",
-					  "label_es": "Creado por"
-					},
-					{
-					  "name": "created_on",
-					  "label_en": "Created on",
-					  "label_es": "Creado en"
-					}
-				  ],
-				  "row_buttons": [
-					{
-					  "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_individual_sample"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "variableSetName",
-						  "element": "listMDvariablesSet"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable Set",
-						  "label_es": "Añadir Conjunto de Variables"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fieldText": [
-						  {
-							"listMDvariablesSet": {
-							  "label_en": "Variables Set",
-							  "label_es": "Conjunto Variables"
+							"value": {
+							  "label_en": "Value",
+							  "label_es": "Valor"
 							}
 						  }
-						]
-					  }
-					},
-					{
-					  "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_individual_sample"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "variableName",
-						  "element": "listMDvariables"
 						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable",
-						  "label_es": "Añadir Variable"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fieldText": [
-						  {
-							"listMDvariables": {
-							  "label_en": "Variable",
-							  "label_es": "Variable"
-							}
-						  }
-						]
 					  }
-					},
-					{
-					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
-					  "certificationException": true,
-					  "requiresDialog": false,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "sampleId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "individualId",
-						  "selObjectPropertyName": "individual_id"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Deactivate",
-						  "label_es": "Desactivar"
-						},
-						"requiresObjectSelected": true
-					  }
-					},
-					{
-					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "sampleId",
-						  "selObjectPropertyName": "sample_id"
-						}
-					  ],
-					  "button": {
-						"icon": "alarm_add",
-						"title": {
-						  "label_en": "Activate",
-						  "label_es": "Activar"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "reactivateObjectDialog",
-						"selObjectVariableName": "selectedIndiv",
-						"fieldText": {
-						  "numDays": {
-							"label_en": "Number of Days",
-							"label_es": "Número de Días"
-						  },
-						  "objectName": {
-							"label_en": "Sample to reactivate",
-							"label_es": "Muestra a Reactivar"
-						  }
-						},
-						"listDefinition": {
-						  "keyFldName": "sample_id",
-						  "eachEntryTextGenerator": [
-							{
-							  "value": "Sample: ",
-							  "type": "fix"
-							},
-							{
-							  "value": "sample_id",
-							  "type": "field"
-							}
-						  ]
-						},
-						"action": [
-						  {
-							"actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-							"clientMethod": "getDeactivatedObjects",
-							"apiParams": [
-							  {
-								"query": "numDays",
-								"element": "lotNumDays",
-								"defaultValue": 7
-							  },
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  }
-							]
-						  }
-						]
-					  }
-					}
-				  ],
-				  "children": "study_variable_values",
-				  "children_definition": {
-					"title": {
-						"label_en": "Sample results",
-						"label_es": "Resultados de muestra"
-					  },
-					"columns": [
-					  {
-						"name": "id",
-						"label_en": "Id",
-						"label_es": "Id"
-					  },
-					  {
-						"name": "sample",
-						"label_en": "Sample",
-						"label_es": "Muestra"
-					  }
-					],
-					"row_buttons": [
-						{
-							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-							"notGetViewData": true,
-							"requiresDialog": true,
-							"certificationException": true,
-							"endPointParams": [
-								{
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-								},
-								{
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "owner_id"
-								},
-								{
-								"argumentName": "ownerTable",
-								"selObjectPropertyName": "owner_table"
-								},
-								{
-								"argumentName": "variableSetName",
-								"selObjectPropertyName": "variable_set"
-								},
-								{
-								"argumentName": "variableName",
-								"selObjectPropertyName": "name"
-								},
-								{
-								"argumentName": "newValue",
-								"variableName": "newResult"
-								}
-							],
-							"button": {
-								"icon": "manufacturing",
-								"title": {
-								"label_en": "Set Result",
-								"label_es": "Entrar Result"
-								},
-								"requiresGridItemSelected": true
-							},
-							"dialogInfo": {
-								"name": "genericDialog",
-								"fields": {
-								"variableName": {
-									"label_en": "Variable Name",
-									"label_es": "Nombre Variable"
-								},
-								"value": {
-									"label_en": "Value",
-									"label_es": "Valor"
-								}
-								}
-							}
-						}						
 					]
 				  }
 				}
 			  }
 			]
-		  },
-		  {"tabLabel_en": "Consents",
-			"tabLabel_es": "Consentimientos",
-			"view": "studyindividualConsent",
-			"view_definition": [
-			  {
-				"type": "parentReadOnlyTable",
-				"endPointPropertyArray": [
-				  "study_individual_consent"
-				],
-				"columns": [
-				  {
-					"name": "individual_id",
-					"label_en": "Individual ID",
-					"label_es": "ID persona"
-				  },
-				  {
-					"name": "individual_name",
-					"label_en": "Individual name",
-					"label_es": "Nombre persona"
-				  },
-				  {
-					"name": "created_by",
-					"label_en": "Created by",
-					"label_es": "Creado por"
-				  },
-				  {
-					"name": "created_on",
-					"label_en": "Created On",
-					"label_es": "Creado en"
-				  }
-				],
-				"actions": [
-				  {
-					"actionName": "ADD_INDIVIDUAL_CONSENT",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "individualName",
-						"element": "text1"
-					  }
-					],
-					"button": {
-					  "icon": "person_add",
-					  "title": {
-						"label_en": "New",
-						"label_es": "Nuevo"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {
-					  "name": "genericDialog",
-					  "fields": [
-						{
-						  "text1": {
-							"label_en": "new Individual Name",
-							"label_es": "Nombre Nuevo Individuo"
-						  }
-						}
-					  ]
-					}
-				  },
-				  {
-					"actionName": "REACTIVATE_INDIVIDUAL_CONSENT",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "individualId",
-						"selObjectPropertyName": "individual_id"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Individual to reactivate", "label_es": "Individuo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "individual_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "individual_name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
-					}
-				  }
-			  ],
-			  "row_buttons":[
-				  {
-					"actionName": "REMOVE_INDIVIDUAL_CONSENT",
-					"notGetViewData": true,
-					"requiresDialog": false,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "individualId",
-						"selObjectPropertyName": "individual_id"
-					  }
-					],
-					"button": {
-					  "icon": "toggle_off",
-					  "title": {
-						"label_en": "Deactivate",
-						"label_es": "Desactivar"
-					  },
-					  "requiresGridItemSelected": true
-					}
-				  }
-				]
-			  }
-			]
-		  },
-		  {"tabLabel_en": "Study Variable Values",
-			"tabLabel_es": "Valores de variables para el estudio",
-			"view": "studyvariablevalues",
-			"view_definition": [
-			  {
-				"type": "parentReadOnlyTable",
-				"endPointPropertyArray": [
-				  "study_variable_values"
-				],
-				"columns": [
-				  {
-					"name": "id",
-					"label_en": "Id",
-					"label_es": "Id"
-				  },
-				  {
-					"name": "owner_table",
-					"label_en": "Type",
-					"label_es": "Tipo"
-				  },
-				  {
-					"name": "owner_id",
-					"label_en": "Owner",
-					"label_es": "Dueño"
-				  },
-				  {
-					"name": "variable_set",
-					"label_en": "Variable set",
-					"label_es": "Set de variables"
-				  },
-				  {
-					"name": "name",
-					"label_en": "Name",
-					"label_es": "Nombre"
-				  },
-				  {
-					"name": "value",
-					"label_en": "Value",
-					"label_es": "Valor"
-				  }
-				],
-				"actions":[],
-				"row_buttons": [
-				  {
-					"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-					"alertMsg": {
-						"empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }
-					},
-					"clientMethod": "studyObjectSetVariableValue",					
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "ownerId",
-						"selObjectPropertyName": "owner_id"
-					  },
-					  {
-						"argumentName": "ownerTable",
-						"selObjectPropertyName": "owner_table"
-					  },
-					  {
-						"argumentName": "variableSetName",
-						"selObjectPropertyName": "variable_set"
-					  },
-					  {
-						"argumentName": "variableName",
-						"selObjectPropertyName": "name"
-					  },
-					  {
-						"argumentName": "newValue",
-						"variableName": "newResult"
-					  }
-					],
-					"button": {
-					  "icon": "manufacturing",
-					  "title": {
-						"label_en": "Set Result",
-						"label_es": "Entrar Result"
-					  },
-					  "requiresGridItemSelected": true
-					},
-					"dialogInfo": { 
-						"name": "resultDialog",
-						"subQueryName": "getResult",		  
-						"viewQuery": {
-							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",							
-							  "endPointParams": [				  
-								{ "argumentName": "eventId", "selObjectPropertyName": "id"}
-							  ]
-						},			  
-						"automatic": true,
-						"action": [
-						  { "actionName": "ENTER_EVENT_RESULT",
-							"notGetViewData": true,
-							"requiresDialog": false,
-							"endPointUrl": "Samples",
-							"clientMethod": "enterEventResult",
-							"endPointParams": [
-								{ "argumentName": "newValue", "targetValue": true },
-								{ "argumentName": "eventId", "targetValue": true },
-								{ "argumentName": "instrumentName", "targetValue": true },
-								{ "argumentName": "variableName", "targetValue": true }
-							]
-						  }
-						]
-					  }
-					}
-				]
-			  }
-			]
-		  },
-		  {"tabLabel_en": "Samples Set",
-			"tabLabel_es": "Muestras Agrupadas",
-			"view": "studySamplesSet",
-			"view_definition": [
-			  {
-				"type": "parentReadOnlyTable",
-				"endPointPropertyArray": [
-				  "study_samples_set"
-				],
-				"columns": [
-				  {
-					"name": "name",
-					"label_en": "Sample Set",
-					"label_es": "Grupo"
-				  },
-				  {
-					"name": "created_by",
-					"label_en": "Created by",
-					"label_es": "Creado por"
-				  },
-				  {
-					"name": "created_on",
-					"label_en": "Created On",
-					"label_es": "Creado en"
-				  }
-				],
-				"actions": [
-				  {"actionName": "STUDY_CREATE_SAMPLES_SET",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "samplesSetName",
-						"element": "text1"
-					  }
-					],
-					"button": {
-					  "icon": "person_add",
-					  "title": {
-						"label_en": "New",
-						"label_es": "Nuevo"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {
-					  "name": "genericDialog",
-					  "fields": [
-						{
-						  "text1": {
-							"label_en": "new Sample set Name",
-							"label_es": "Nombre Nuevo Grupo Muestras"
-						  }
-						}
-					  ]
-					}
-				  },
-				  {"actionName": "STUDY_SAMPLES_SET_ACTIVATE",
-					"clientMethod": "openReactivateObjectDialog",
-					"notGetViewData": true,
-					"requiresDialog": true,
-					"certificationException": true,
-					"endPoint":"/moduleclinicalstudy/ClinicalStudyAPIactions",
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"internalVariableSimpleObjName": "selectedItem",
-						"internalVariableSimpleObjProperty": "name"
-					  },
-					  {
-						"argumentName": "samplesSetName",
-						"selObjectPropertyName": "name"
-					  }
-					],					
-					"button": {
-					  "icon": "toggle_on",
-					  "title": {
-						"label_en": "Reactivate",
-						"label_es": "Reactivar"
-					  },
-					  "requiresGridItemSelected": false
-					},
-					"dialogInfo": {												
-						"name": "reactivateObjectDialog",
-						"fieldsObject": {
-							"queryNumDays": {"label_en": "Number of Days", "label_es": "Número de Días"},
-							"objectName": {"label_en": "Set to reactivate", "label_es": "Grupo a Reactivar"}
-					  	},
-					  	"listDefinition": {
-						  "keyFldName": "individual_id",
-						  "eachEntryTextGenerator": [
-						  {"value": "Name: ","type": "fix"},
-						  {"value": "name","type": "field"}
-						]
-					  },
-					  "viewQuery": {
-						  "actionName": "DEACTIVATED_STUDY_SAMPLES_SET_LAST_N_DAYS",
-						  "clientMethod": "getDeactivatedObjects",
-						  "endPointParams": [
-							{"query": "numDays", "element": "queryNumDays", "defaultValue": 7},
-							{"argumentName": "studyName", "internalVariableSimpleObjName": "selectedItem",
-							"internalVariableSimpleObjProperty": "name"}
-						  ]
-						}
-					}
-				  }
-			  ],
-			  "row_buttons":[
-				  {"actionName": "STUDY_SAMPLES_SET_DEACTIVATE",
-					"notGetViewData": true,
-					"requiresDialog": false,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "samplesSetName",
-						"selObjectPropertyName": "name"
-					  }
-					],
-					"button": {
-					  "icon": "toggle_off",
-					  "title": {
-						"label_en": "Deactivate",
-						"label_es": "Desactivar"
-					  },
-					  "requiresGridItemSelected": true
-					}
-				  },
-				  {
-					"actionName": "STUDY_SAMPLES_SET_ADD_SAMPLE",
-					"notGetViewData": true,
-					"requiresDialog": false,
-					"certificationException": true,
-					"endPointParams": [
-					  {
-						"argumentName": "studyName",
-						"selObjectPropertyName": "study"
-					  },
-					  {
-						"argumentName": "samplesSetName",
-						"selObjectPropertyName": "name"
-					  },
-					  {
-						"argumentName": "sampleId",
-						"selObjectPropertyName": "list1"
-					  }
-					],
-					"button": {
-					  "icon": "playlist_add",
-					  "title": {
-						"label_en": "Add Extra Sample",
-						"label_es": "Añadir Muestra Extra"
-					  },
-					  "requiresGridItemSelected": true
-					},
-					"dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fields": [
-						  {
-							  "list1": {
-								  "label_en": "sample Id to Add",
-								  "label_es": "Muestra a añadir",									
-								  "addBlankValueOnTop": true,
-								  "addBlankValueAtBottom": false,
-								  "valuesFromSelectedItem": {
-								  "internalVariableSingleObjName": "selectedItem",
-								  "internalVariableSingleObjProperty": "study_individual_sample",
-								  "propertyKeyName": "sample_id",
-								  "propertyKeyValueEn": [
-									  "sample_id"
-								  ],
-								  "propertyKeyValueEs": [
-									  "sample_id"
-								  ]
-								  }
-							  }
-						  }
-						]
-					  }					
-				  }
-				],
-				"children": "samples",
-				"children_definition": {
-					"title": {
-					"label_en": "Individual Samples",
-					"label_es": "Muestras del individuo"
-					},
-				  "columns": [
-					{
-					  "name": "sample_id",
-					  "label_en": "Sample Id",
-					  "label_es": "Id de muestra"
-					},
-					{
-					  "name": "individual_name",
-					  "label_en": "Name",
-					  "label_es": "Nombre"
-					},
-					{
-					  "name": "created_by",
-					  "label_en": "Created by",
-					  "label_es": "Creado por"
-					},
-					{
-					  "name": "created_on",
-					  "label_en": "Created on",
-					  "label_es": "Creado en"
-					}
-				  ],
-				  "row_buttons": [
-					{
-					  "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_individual_sample"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "variableSetName",
-						  "element": "listMDvariablesSet"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable Set",
-						  "label_es": "Añadir Conjunto de Variables"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fieldText": [
-						  {
-							"listMDvariablesSet": {
-							  "label_en": "Variables Set",
-							  "label_es": "Conjunto Variables"
-							}
-						  }
-						]
-					  }
-					},
-					{
-					  "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "ownerTable",
-						  "value": "study_individual_sample"
-						},
-						{
-						  "argumentName": "ownerId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "variableName",
-						  "element": "listMDvariables"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Add Variable",
-						  "label_es": "Añadir Variable"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "genericDialog",
-						"fieldText": [
-						  {
-							"listMDvariables": {
-							  "label_en": "Variable",
-							  "label_es": "Variable"
-							}
-						  }
-						]
-					  }
-					},
-					{
-					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "sampleId",
-						  "selObjectPropertyName": "sample_id"
-						},
-						{
-						  "argumentName": "individualId",
-						  "selObjectPropertyName": "individual_id"
-						}
-					  ],
-					  "button": {
-						"icon": "refresh",
-						"title": {
-						  "label_en": "Deactivate",
-						  "label_es": "Desactivar"
-						},
-						"requiresObjectSelected": true
-					  }
-					},
-					{
-					  "actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-					  "certificationException": true,
-					  "endPointParams": [
-						{
-						  "argumentName": "studyName",
-						  "selObjectPropertyName": "study"
-						},
-						{
-						  "argumentName": "sampleId",
-						  "selObjectPropertyName": "sample_id"
-						}
-					  ],
-					  "button": {
-						"icon": "alarm_add",
-						"title": {
-						  "label_en": "Activate",
-						  "label_es": "Activar"
-						},
-						"requiresObjectSelected": false
-					  },
-					  "dialogInfo": {
-						"requiresDialog": true,
-						"name": "reactivateObjectDialog",
-						"selObjectVariableName": "selectedIndiv",
-						"fieldText": {
-						  "numDays": {
-							"label_en": "Number of Days",
-							"label_es": "Número de Días"
-						  },
-						  "objectName": {
-							"label_en": "Sample to reactivate",
-							"label_es": "Muestra a Reactivar"
-						  }
-						},
-						"listDefinition": {
-						  "keyFldName": "sample_id",
-						  "eachEntryTextGenerator": [
-							{
-							  "value": "Sample: ",
-							  "type": "fix"
-							},
-							{
-							  "value": "sample_id",
-							  "type": "field"
-							}
-						  ]
-						},
-						"action": [
-						  {
-							"actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
-							"clientMethod": "getDeactivatedObjects",
-							"apiParams": [
-							  {
-								"query": "numDays",
-								"element": "lotNumDays",
-								"defaultValue": 7
-							  },
-							  {
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-							  }
-							]
-						  }
-						]
-					  }
-					}
-				  ],
-				  "children": "study_variable_values",
-				  "children_definition": {
-					"title": {
-						"label_en": "Sample results",
-						"label_es": "Resultados de muestra"
-					  },
-					"columns": [
-					  {
-						"name": "id",
-						"label_en": "Id",
-						"label_es": "Id"
-					  },
-					  {
-						"name": "sample",
-						"label_en": "Sample",
-						"label_es": "Muestra"
-					  }
-					],
-					"row_buttons": [
-						{
-							"actionName": "STUDY_OBJECT_SET_VARIABLE_VALUE",
-							"notGetViewData": true,
-							"requiresDialog": true,
-							"certificationException": true,
-							"endPointParams": [
-								{
-								"argumentName": "studyName",
-								"selObjectPropertyName": "study"
-								},
-								{
-								"argumentName": "ownerId",
-								"selObjectPropertyName": "owner_id"
-								},
-								{
-								"argumentName": "ownerTable",
-								"selObjectPropertyName": "owner_table"
-								},
-								{
-								"argumentName": "variableSetName",
-								"selObjectPropertyName": "variable_set"
-								},
-								{
-								"argumentName": "variableName",
-								"selObjectPropertyName": "name"
-								},
-								{
-								"argumentName": "newValue",
-								"variableName": "newResult"
-								}
-							],
-							"button": {
-								"icon": "manufacturing",
-								"title": {
-								"label_en": "Set Result",
-								"label_es": "Entrar Result"
-								},
-								"requiresGridItemSelected": true
-							},
-							"dialogInfo": {
-								"name": "genericDialog",
-								"fields": {
-								"variableName": {
-									"label_en": "Variable Name",
-									"label_es": "Nombre Variable"
-								},
-								"value": {
-									"label_en": "Value",
-									"label_es": "Valor"
-								}
-								}
-							}
-						}						
-					]
-				  }
-				}
-			  }
-			]
-		  }	  
+		  }
 		]
 	},
-	"MyStudiesOld":{
-		"component": "ObjectByTabs",
-		"hasOwnComponent": true,
-		"showTitleOnTop": true,
-		"title": {
-		  "fix_text_en": "My Studies",
-		  "fix_text_es": "Mis Estudios",
-		  "name": "study"
-		},
-		"viewQuery": {
-		  "actionName": "ALL_MY_ACTIVE_STUDIES",
-		  "notUseGrid": true,
-		  "button": {
-			"icon": "refresh",
-			"title": {
-			  "label_en": "Reload",
-			  "label_es": "Recargar"
-			},
-			"requiresGridItemSelected": false
-		  },
-		  "endPointParams": [
-		  ]
-		},
-		"filter_button": {
-		  "label_en": "Search",
-		  "label_es": "Buscar"
-		},
-		"filter": [
-		],
-		"filterResultDetail":{
-			"type":"list",
-			"detail":[
-				{"field": "name"}
-		  ]  		
-		},
-		"actions": [],
-		"tabs": [
-			{"tabLabel_en": "Variable Values", "tabLabel_es": "Valores de Variables", "view": "studyvariablevalues",
-			"view_definition":[
-				{   "type": "parentReadOnlyTable", 
-					"endPointPropertyArray": ["project", "study", "study_variable_values"],
-					"columns": [
-						{
-							"name": "owner_table",
-							"label_en": "Entity",
-							"label_es": "Entidad"
-						},
-						{
-							"name": "owner_id",
-							"label_en": "Object",
-							"label_es": "Objeto"
-						},
-						{
-							"name": "individual",
-							"label_en": "Individual",
-							"label_es": "Individuo"
-						},
-						{
-							"name": "variable_set",
-							"label_en": "Variable Set",
-							"label_es": "Grupo de variables"
-						},
-						{
-							"name": "name",
-							"label_en": "Name",
-							"label_es": "Nombre"
-						},
-						{
-							"name": "value",
-							"label_en": "Value",
-							"label_es": "Valor"
-						}
-					]
-				}
-			]
-			},  
-			{"tabLabel_en": "Individuals", "tabLabel_es": "Individuos", "view": "studyindividuals",
-			"view_definition":[
-				{   "type": "parentReadOnlyTable", 
-				"endPointPropertyArray": ["study_individual"],
-				"endPointResponseObject":"study_individual",
-				"columns": [
-					{
-						"name": "name",
-						"label_en": "Study",
-						"label_es": "Estudio"
-					}
-				],
-				"children":"study_individual_sample",
-				"children_definition":{
-					"columns": [
-					{
-						"name": "sample_id",
-						"label_en": "Id",
-						"label_es": "Id"
-					},
-					{
-						"name": "individual_name",
-						"label_en": "Name",
-						"label_es": "Nombre"
-					}			  
-					],
-					"children":"study_variable_values",
-					"children_definition":{
-						"columns": [
-						{
-							"name": "study_variable_values",
-							"label_en": "Name",
-							"label_es": "Nombre"
-						},
-						{
-							"name": "value",
-							"label_en": "Value",
-							"label_es": "Valor"
-						}			  
-						]
-					}	
-				}
-				}
-			]
-		},
-			{"tabLabel_en": "Families", "tabLabel_es": "Familias", "view": "studyfamilies",
-			"view_definition":[
-				{
-					
-				}
-			]
-		},
-			{"tabLabel_en": "Samples Set", "tabLabel_es": "Agrupador Muestras", "view": "studysamplesset",
-			"view_definition":[
-				{
-					
-				}
-			]
-		}
-		],
-	  },
 	"MyProjects":{
 	"component": "ObjectByTabs",
 	"hasOwnComponent": true,
@@ -5817,7 +4003,7 @@ export const DiseaseStudy = {
 							}
 						},
 						{ "actionName": "PROJECT_USER_ACTIVATE",
-							"endPoint": "/modulegenoma/GenomaProjectAPIactions",
+						"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 							"endPointParams": [
 							{ "argumentName": "projectName", "internalVariableSimpleObjName":"selectedProject", "internalVariableSimpleObjProperty":"name", "ZZZselObjectPropertyName": "study"},
 							{ "argumentName": "userName", "selObjectPropertyName": "person" }
@@ -5846,7 +4032,7 @@ export const DiseaseStudy = {
 							"viewQuery": {
 								"actionName": "DEACTIVATED_PROJECT_USERS_LAST_N_DAYS",
 								"clientMethod": "getDeactivatedObjects",
-								"endPoint": "/modulegenoma/GenomaStudyAPIqueries",
+								"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 								"endPointParams": [
 									{ "argumentName": "projectName", "internalVariableSimpleObjName": "selectedProject", "internalVariableSimpleObjProperty": "name"},
 									{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }							
@@ -6305,7 +4491,7 @@ export const DiseaseStudy = {
 				},    
 			  }, 
 				{ "actionName": "PROJECT_USER_ACTIVATE",
-					"endPoint": "/modulegenoma/GenomaProjectAPIactions",
+				"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 					"endPointParams": [
 					  { "argumentName": "projectName", "internalVariableSimpleObjName":"selectedProject", "internalVariableSimpleObjProperty":"name", "ZZZselObjectPropertyName": "study"},
 					  { "argumentName": "userName", "selObjectPropertyName": "person" }
@@ -6334,7 +4520,7 @@ export const DiseaseStudy = {
 					  "viewQuery": {
 						  "actionName": "DEACTIVATED_PROJECT_USERS_LAST_N_DAYS",
 						  "clientMethod": "getDeactivatedObjects",
-						  "endPoint": "/modulegenoma/GenomaStudyAPIqueries",
+						  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 						  "endPointParams": [
 						    { "argumentName": "projectName", "internalVariableSimpleObjName": "selectedProject", "internalVariableSimpleObjProperty": "name"},
 							{ "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }							
@@ -6447,7 +4633,7 @@ export const DiseaseStudy = {
 					{
 					  "actionName": "DEACTIVATED_STUDY_USERS_LAST_N_DAYS",
 					  "clientMethod": "getDeactivatedObjects",
-					  "endPoint": "/modulegenoma/GenomaStudyAPIFrontend",  
+					  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 					  "apiParams": [
 						{ "query": "numDays", "element": "lotNumDays", "defaultValue": 7 },
 						{ "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -6627,7 +4813,7 @@ export const DiseaseStudy = {
 						{
 						  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
 						  "clientMethod": "getDeactivatedObjects",
-						  "endPoint": "/modulegenoma/GenomaStudyAPIFrontend",  
+						  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 						  "apiParams": [
 							{ "query": "numDays", "element": "lotNumDays", "defaultValue": 7 },
 							{ "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -6657,7 +4843,7 @@ export const DiseaseStudy = {
 					  { "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
 						"clientMethod": "newStudyIndividual",
 						"selObjectVariableName": "selectedIndivSample", 
-						"endPoint": "/modulegenoma/GenomaStudyAPI",
+						"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 						"endPointParams": [ 
 						  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 						  { "argumentName": "ownerTable", "value": "study_individual_sample" },
@@ -6685,7 +4871,7 @@ export const DiseaseStudy = {
 					  { "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
 						"clientMethod": "newStudyIndividual",
 						"selObjectVariableName": "selectedIndivSample", 
-						"endPoint": "/modulegenoma/GenomaStudyAPI",
+						"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 						"endPointParams": [ 
 						  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 						  { "argumentName": "ownerTable", "value": "study_individual_sample" },
@@ -6713,7 +4899,7 @@ export const DiseaseStudy = {
 					  { "actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
 						"clientMethod": "buttonActionWithoutDialog",
 						"selObjectVariableName": "selectedIndivSample",
-						"endPoint": "/modulegenoma/GenomaStudyAPI",
+						"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 						"endPointParams": [
 						  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 						  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
@@ -6728,7 +4914,7 @@ export const DiseaseStudy = {
 						},    
 					  }, 
 					  { "actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-						"endPoint": "/modulegenoma/GenomaStudyAPI",  
+					  	"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions", 
 						"endPointParams": [
 						  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 						  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -6761,7 +4947,7 @@ export const DiseaseStudy = {
 							{
 							  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
 							  "clientMethod": "getDeactivatedObjects",
-							  "endPoint": "/modulegenoma/GenomaStudyAPIFrontend",  
+							  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions", 
 							  "apiParams": [
 								{ "query": "numDays", "element": "lotNumDays", "defaultValue": 7 },
 								{ "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -6927,7 +5113,7 @@ export const DiseaseStudy = {
 						{
 						  "actionName": "DEACTIVATED_STUDY_FAMILIES_LAST_N_DAYS",
 						  "clientMethod": "getDeactivatedObjects",
-						  "endPoint": "/modulegenoma/GenomaStudyAPIFrontend",  
+						  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 						  "apiParams": [
 							{ "query": "numDays", "element": "lotNumDays", "defaultValue": 7 },
 							{ "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -7098,7 +5284,7 @@ export const DiseaseStudy = {
 								{
 								  "actionName": "DEACTIVATED_STUDY_INDIVIDUALS_LAST_N_DAYS",
 								  "clientMethod": "getDeactivatedObjects",
-								  "endPoint": "/modulegenoma/GenomaStudyAPIFrontend",  
+								  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 								  "apiParams": [
 									{ "query": "numDays", "element": "lotNumDays", "defaultValue": 7 },
 									{ "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -7128,7 +5314,7 @@ export const DiseaseStudy = {
 							  { "actionName": "ADD_VARIABLE_SET_TO_STUDY_OBJECT",
 								"clientMethod": "newStudyIndividual",
 								"selObjectVariableName": "selectedIndivSample", 
-								"endPoint": "/modulegenoma/GenomaStudyAPI",
+								"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 								"endPointParams": [ 
 								  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 								  { "argumentName": "ownerTable", "value": "study_individual_sample" },
@@ -7156,7 +5342,7 @@ export const DiseaseStudy = {
 							  { "actionName": "ADD_VARIABLE_TO_STUDY_OBJECT",
 								"clientMethod": "newStudyIndividual",
 								"selObjectVariableName": "selectedIndivSample", 
-								"endPoint": "/modulegenoma/GenomaStudyAPI",
+								"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 								"endPointParams": [ 
 								  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 								  { "argumentName": "ownerTable", "value": "study_individual_sample" },
@@ -7184,7 +5370,7 @@ export const DiseaseStudy = {
 							  { "actionName": "STUDY_INDIVIDUAL_SAMPLE_DEACTIVATE",
 								"clientMethod": "buttonActionWithoutDialog",
 								"selObjectVariableName": "selectedIndivSample",
-								"endPoint": "/modulegenoma/GenomaStudyAPI",
+								"endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 								"endPointParams": [
 								  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 								  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
@@ -7199,7 +5385,7 @@ export const DiseaseStudy = {
 								},    
 							  }, 
 							  { "actionName": "STUDY_INDIVIDUAL_SAMPLE_ACTIVATE",
-								"endPoint": "/modulegenoma/GenomaStudyAPI",  
+							  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",  
 								"endPointParams": [
 								  { "argumentName": "studyName", "selObjectPropertyName": "study"},
 								  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
@@ -7232,7 +5418,7 @@ export const DiseaseStudy = {
 									{
 									  "actionName": "DEACTIVATED_STUDY_INDIVIDUAL_SAMPLES_LAST_N_DAYS",
 									  "clientMethod": "getDeactivatedObjects",
-									  "endPoint": "/modulegenoma/GenomaStudyAPIFrontend",  
+									  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions", 
 									  "apiParams": [
 										{ "query": "numDays", "element": "lotNumDays", "defaultValue": 7 },
 										{ "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -7397,7 +5583,7 @@ export const DiseaseStudy = {
 						{
 						  "actionName": "DEACTIVATED_STUDY_SAMPLES_SET_LAST_N_DAYS",
 						  "clientMethod": "getDeactivatedObjects",
-						  "endPoint": "/modulegenoma/GenomaStudyAPIFrontend",  
+						  "endPoint": "/moduleclinicalstudy/ClinicalStudyAPIactions",
 						  "apiParams": [
 							{ "query": "numDays", "element": "lotNumDays", "defaultValue": 7 },
 							{ "argumentName": "studyName", "selObjectPropertyName": "study"},
@@ -7431,31 +5617,7 @@ export const DiseaseStudy = {
 						{"text1": { "label_en": "Sample to Add", "label_es": "Muestra a añadir" }}
 					  ]
 					}
-				  },               
-				  { "actionName": "STUDY_SAMPLES_SET_REMOVE_SAMPLE",
-					"clientMethod": "dialogRequired",
-					"selObjectVariableName": "selectedSampleSet",
-					"endPointUrl": "Projects",
-					"endPointParams": [
-					  { "argumentName": "studyName", "internalVariableSimpleObjName":"selectedItem", "internalVariableSimpleObjProperty":"study", "ZZZselObjectPropertyName": "study"},
-					  { "argumentName": "samplesSetName", "selObjectPropertyName":"name"},
-					  { "argumentName": "sampleId", "element": "text1" }
-					],
-					"button": {
-					  "z-icon": "remove",
-					  "title": {
-						"label_en": "Unlink Sample", "label_es": "Quitar Muestra"
-					  },
-					  requiresObjectSelected : true
-					}, 
-					"dialogInfo": {
-					  "requiresDialog": true,
-					  "name": "genericFormDialog",
-					  "fieldText": [
-						{"text1": { "label_en": "Sample to unlink", "label_es": "Muestra a deasignar" }}
-					  ]
-					}
-				  },   
+				  }              
 			]
 		},		
 				"studysamplessetsample": {
