@@ -10,7 +10,6 @@ import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 // import {TrazitEnterResultWithSpec} from '../GenericDialogs/TrazitEnterResultWithSpec';
 // import {ModuleEnvMonitDialogsMicroorganism} from '../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism';
 // import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
-// import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
 
 // import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 // import '@vaadin/vaadin-grid/vaadin-grid';
@@ -22,7 +21,7 @@ import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 // import '@google-web-components/google-chart';
 
 export function LeftPaneFilterViews(base) {
-  //return class extends TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(AuditFunctions(ButtonsFunctions(base))))))))))) {
+  //return class extends TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(AuditFunctions(ButtonsFunctions(base))))))))))) {
   return class extends  base {
     
     filterElement(data){

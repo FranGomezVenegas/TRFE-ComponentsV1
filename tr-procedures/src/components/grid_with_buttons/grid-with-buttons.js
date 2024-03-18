@@ -28,7 +28,7 @@ import {TrazitReactivateObjectsDialog} from '../GenericDialogs/TrazitReactivateO
 import {TrazitEnterResultWithSpec} from '../GenericDialogs/TrazitEnterResultWithSpec';
 import {ModuleEnvMonitDialogsMicroorganism} from '../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism';
 import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
-import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
+//import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
 
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
@@ -36,7 +36,7 @@ import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDial
 
 import '../Audit/audit-dialog';
 //import '../../tabs-composition';
-export class GridWithButtons extends TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
+export class GridWithButtons extends TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,

@@ -19,13 +19,12 @@ import { ModuleEnvMonitClientMethods } from "../../module_env_monit/ModuleEnvMon
 import { TrazitEnterResultWithSpec } from "../GenericDialogs/TrazitEnterResultWithSpec";
 import { ModuleEnvMonitDialogsMicroorganism } from "../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism";
 import { TrazitInvestigationsDialog } from "../GenericDialogs/TrazitInvestigationsDialog";
-import { ModuleInstrumentsDialogs } from "../../module_instruments/ModuleInstrumentsDialogs";
 
 import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
 
 
 
-export class ObjecttabsComposition extends ((TrazitCredentialsDialogs(ModuleInstrumentsDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
+export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
   static get styles() {
     return [
       Layouts,

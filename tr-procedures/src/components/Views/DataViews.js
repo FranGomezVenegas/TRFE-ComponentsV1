@@ -9,7 +9,6 @@ import { TrazitReactivateObjectsDialog } from "../GenericDialogs/TrazitReactivat
 import { TrazitEnterResultWithSpec } from "../GenericDialogs/TrazitEnterResultWithSpec";
 import { ModuleEnvMonitDialogsMicroorganism } from "../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism";
 import { TrazitInvestigationsDialog } from "../GenericDialogs/TrazitInvestigationsDialog";
-import { ModuleInstrumentsDialogs } from "../../module_instruments/ModuleInstrumentsDialogs";
 
 import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
 
@@ -28,7 +27,7 @@ export function DataViews(base) {
   return class extends TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(
-        ModuleInstrumentsDialogs(
+          (
           TrazitInvestigationsDialog(
             ModuleEnvMonitDialogsMicroorganism(
               TrazitEnterResultWithSpec(
