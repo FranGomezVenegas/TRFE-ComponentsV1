@@ -118,9 +118,7 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}
 
-      ${this.genomaDialogsSetResultValueTemplate()}
-
-      
+     
       ${this.pointTemplate()} ${this.resultTemplate()}
       ${this.investigationTemplate()}
       ${this.filterName == "open"
