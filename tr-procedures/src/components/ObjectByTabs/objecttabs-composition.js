@@ -12,9 +12,6 @@ import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import { TrazitTestScriptNewStepDialog } from '../GenericDialogs/TrazitTestScriptNewStepDialog';
 import { TrazitReactivateObjectsDialog } from "../GenericDialogs/TrazitReactivateObjectsDialog";
 
-//import { GenomaSetVariableValue } from "../GenericDialogs/GenomaSetVariableValue";
-
-
 import { ModuleEnvMonitClientMethods } from "../../module_env_monit/ModuleEnvMonitClientMethods";
 import { TrazitEnterResultWithSpec } from "../GenericDialogs/TrazitEnterResultWithSpec";
 import { ModuleEnvMonitDialogsMicroorganism } from "../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism";
