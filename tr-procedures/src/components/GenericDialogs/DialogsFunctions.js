@@ -163,7 +163,7 @@ export function DialogsFunctions(base) {
     if (bypass) return true
   }  
 
-  nextRequest(action, parentData) {
+  nextRequest(action, gridSelectedItem, parentData) {
     // This is required to get the action due to it is not being passed.
     if (action===undefined||action.actionName===undefined){
       action=this.actionBeingPerformedModel
@@ -202,7 +202,8 @@ export function DialogsFunctions(base) {
       this.targetValue={}
     }
     if (action!==undefined){//&&action.alternativeItemPropertyName!==undefined){
-      this.performActionRequestHavingDialogOrNot(action, this.selectedItems[0], this.targetValue, credArguments, this.selectedItems[0], parentData)
+                                                //action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}, parentData
+      this.performActionRequestHavingDialogOrNot(action, this.selectedItems[0], this.targetValue, credArguments, gridSelectedItem, parentData)
     }
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {

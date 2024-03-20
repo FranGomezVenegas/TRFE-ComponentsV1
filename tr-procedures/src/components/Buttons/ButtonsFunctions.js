@@ -594,12 +594,12 @@ export function ButtonsFunctions(base) {
         } else {
           if (this[selectedItemPropertyName] === undefined) {
             if (data === undefined) {
-              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement, parentData)
+              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement, undefined, parentData)
             } else {
-              this.actionWhenRequiresNoDialog(action, data, null, isProcManagement, parentData)
+              this.actionWhenRequiresNoDialog(action, data, null, isProcManagement, undefined, parentData)
             }
           } else {
-            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement, parentData)
+            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement, undefined, parentData)
           }
           return
         }
@@ -938,14 +938,14 @@ export function ButtonsFunctions(base) {
       return data
     }
 
-    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement, parentData) {
-      console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem, 'parentData', parentData)
+    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement, gridSelectedRow, parentData) {
+      console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem, 'gridSelectedRow', gridSelectedRow, 'parentData', parentData)
       this.selectedAction = action
       if (targetValue === undefined) { targetValue = {} }
       if (this.itemId) {
-        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, selectedItem, parentData), action, isProcManagement, parentData)
+        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData), action, false, '', isProcManagement, gridSelectedRow, parentData)
       } else {
-        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, selectedItem, parentData), action, isProcManagement, parentData)
+        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData), action, false, '', isProcManagement, gridSelectedRow, parentData)
       }
       // Comentado para habilitar confirmDialogsparentData
       // this.performActionRequestHavingDialogOrNot(action, selectedItem)
@@ -1003,46 +1003,70 @@ export function ButtonsFunctions(base) {
         this.selectedItems[0] = selectedItem;
         action = this.actionBeingPerformedModel
         let actionRefreshQuery = []
-        if (action.actionName.includes("ENTER_EVENT_RESULT")) {
-          if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-            actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES" || s.actionName == "QUALIFIFICATION_EVENT_VARIABLES")
-            this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].event_id)
-          } else {
-            this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
-          }
-          //alert(action.actionName)
-          return
-        }
-        if (action.actionName.includes("ENTERRESULT")) {
-          if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-            actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTERRESULT")
-            this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-          } else {
-            this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
-          }
-          return
-        }
-        if (action.actionName.includes("ENTER_PLATE_READING")) {
-          if (action.actionName.includes("SECONDENTRY")) {
-            if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-              actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING_SECONDENTRY")
-              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-            } else {
+        if (action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined&&action.dialogInfo.name==='resultDialog'){
+          if (action.dialogInfo.keyFldName!==undefined){
+            this.actionMethodResults(action, this.selectedItems, this.selectedItems[0][action.dialogInfo.keyFldName])  
+          }else{
+            if (action.dialogInfo.viewQuery.endPointParams[0].selObjectPropertyName!==undefined){
+              this.actionMethodResults(action, this.selectedItems, this.selectedItems[0][action.dialogInfo.viewQuery.endPointParams[0].selObjectPropertyName])
+            }else{
+              this.actionMethodResults(action, this.selectedItems, '')
             }
-            this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
+          }
+        }
+        if (1==2){ // old way to get the result action, not required!
+          if (action.actionName.includes("ENTER_STUDY_OBJECT_VARIABLE_VALUE")) {
+            this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
+            // if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
+            //   actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_STUDY_OBJECT_VARIABLE_VALUE")
+            //   this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].id)
+            // } else {
+            //   this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
+            // }
+            //alert(action.actionName)
             return
-          } else {
+          }        
+          if (action.actionName.includes("ENTER_EVENT_RESULT")) {
             if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-              actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING")
+              actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES" || s.actionName == "QUALIFIFICATION_EVENT_VARIABLES")
+              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].event_id)
+            } else {
+              this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
+            }
+            //alert(action.actionName)
+            return
+          }
+          if (action.actionName.includes("ENTERRESULT")) {
+            if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
+              actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTERRESULT")
               this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
             } else {
               this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
             }
             return
           }
+          if (action.actionName.includes("ENTER_PLATE_READING")) {
+            if (action.actionName.includes("SECONDENTRY")) {
+              if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
+                actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING_SECONDENTRY")
+                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+              } else {
+              }
+              this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
+              return
+            } else {
+              if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
+                actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING")
+                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
+              } else {
+                this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
+              }
+              return
+            }
 
-          //this.actionMethodResults(this.viewModelFromProcModel.actions[3], this.selectedItems, this.selectedItems[0].sample_id)
-          //alert(action.actionName)
+            //this.actionMethodResults(this.viewModelFromProcModel.actions[3], this.selectedItems, this.selectedItems[0].sample_id)
+            //alert(action.actionName)
+          }
         }
         if (action !== undefined && action.dialogInfo !== undefined && action.dialogInfo.name !== undefined
           && action !== null && action.dialogInfo !== null && action.dialogInfo.name !== null) {

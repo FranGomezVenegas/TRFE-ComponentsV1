@@ -404,7 +404,7 @@ export function TrazitCredentialsDialogs(base) {
     this.credDialog.close()
   }
 
-  credsChecker(actionName, objId, params={}, action, isPlatform=false, dialogName='', isProcManagement) {
+  credsChecker(actionName, objId, params={}, action, isPlatform=false, dialogName='', isProcManagement, gridSelectedRow, parentData) {
     console.log("credsChecker");
     console.log('credsChecker', isProcManagement)
     this.actionObj = action || {}
@@ -428,7 +428,7 @@ export function TrazitCredentialsDialogs(base) {
           }
         }
         if (noNeedCreds) {
-          this.nextRequest(action, isProcManagement)
+          this.nextRequest(action, gridSelectedRow, parentData)
         } else {
           if (this.type == "confirm") {
             //this.actionBeingPerformedModel=action
