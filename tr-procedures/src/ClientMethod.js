@@ -201,17 +201,8 @@ console.log('getSamples', 'actionObj', this.actionObj)
         this.reload()
       })
     }
-    getDeactivatedInstruments() {
-      this.deactivatedLots = []
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          this.deactivatedLots = j
-        }
-      })
-    }
-    getInstEventResult() {
+    zzzgetInstEventResult() {
+      // marked to be removed 20230318
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(j => {
