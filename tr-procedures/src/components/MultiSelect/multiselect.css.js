@@ -33,6 +33,8 @@ export const styles = css`
     text-align: center;
     line-height: 24px;
     display: inline-block;
+    color: rgb(19, 11, 111);
+    background-color: #8DDDF4;    
 }
 
 .sellect-destination-list .sellect-item .sellect-close-icon {
