@@ -261,6 +261,12 @@
     "viewName": "MyStudies", 
     "filterName" :  "MyStudies" 
   },
+  "localDefaultView": {
+    "procName":  "mb_em", 
+    "viewName": "Home", 
+    "filterName" :  "Home" 
+  },
+  
   "localDefaultViewsssssssss": {
     "procName":  "instruments", 
     "viewName": "Deviation", 

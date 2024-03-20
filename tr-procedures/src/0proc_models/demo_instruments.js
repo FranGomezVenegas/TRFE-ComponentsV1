@@ -1925,7 +1925,7 @@ export const DemoInstruments ={
     "langConfig": {
       "title": {
         "EventsER": {
-          "label_en": "Events in progress",
+          "label_en": "20280319Events in progress",
           "label_es": "Eventos en curso"
         }
       },
@@ -2150,7 +2150,8 @@ export const DemoInstruments ={
       },    
         "dialogInfo": { 
 		  "name": "resultDialog",
-		  "subQueryName": "getResult",		  
+      "keyFldName": "id",
+		  "subQueryName": "getParams",		  
 		  "viewQuery": {
 			  "actionName": "INSTRUMENT_EVENT_VARIABLES",
 			  "endPoint": "/app/procs/InstrumentsAPIqueries",
