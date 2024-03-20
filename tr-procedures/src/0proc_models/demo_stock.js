@@ -231,7 +231,8 @@ export const Stock =
 			},    
 			"dialogInfo": { 
 				"name": "resultDialog",
-				"subQueryName": "getResult",		  
+				"keyFldName": "qualif_id",
+				"subQueryName": "getParams",		  
 				"viewQuery": {
 					"actionName": "QUALIFIFICATION_EVENT_VARIABLES",
 					"endPoint": "/app/procs/InvTrackingAPIqueries",
@@ -2917,7 +2918,8 @@ export const Stock =
         }
       },
       "gridHeader": {
-        "lot_name": {"label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"},
+        "lot_name": {"label_en": "Lot", "label_es": "Lote", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"},
+        "created_on": {"label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
         "created_on": {"label_en": "Creation", "label_es": "Creación", "sort": false, "filter": true, "is_icon": false, "width": "10%"},
         "created_by": {"label_en": "Creator", "label_es": "Creador", "sort": false, "filter": false, "is_icon": false, "width": "10%"}
       },
@@ -2969,7 +2971,8 @@ export const Stock =
 			},    
 			"dialogInfo": { 
 				"name": "resultDialog",
-				"subQueryName": "getResult",		  
+				"keyFldName": "qualif_id",
+				"subQueryName": "getParams",		  
 				"viewQuery": {
 					"actionName": "QUALIFIFICATION_EVENT_VARIABLES",
 					"endPoint": "/app/procs/InvTrackingAPIqueries",
