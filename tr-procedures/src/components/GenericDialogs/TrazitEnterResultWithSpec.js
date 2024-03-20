@@ -102,7 +102,7 @@ return class extends LitElement {
     get uomDialog() {return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")}
 
     resultTemplate() {
-      // console.log('resultTemplate')
+       console.log('resultTemplate', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel)
       // if(this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name===undefined){return nothing}
       // if (this.actionBeingPerformedModel.dialogInfo.name !== "resultDialog"&&
       // this.actionBeingPerformedModel.dialogInfo.name !== "uomConvertionDialog") {return nothing}
@@ -178,7 +178,9 @@ return class extends LitElement {
 
           ${this.actionBeingPerformedModel.dialogInfo!==undefined&&
                 this.actionBeingPerformedModel.dialogInfo.name!==undefined&&
-                this.actionBeingPerformedModel.dialogInfo.name==="resultDialog" ?  
+                this.actionBeingPerformedModel.dialogInfo.name==="resultDialog"&&
+                this.actionBeingPerformedModel.dialogInfo.subQueryName !==undefined&&
+                this.actionBeingPerformedModel.dialogInfo.subQueryName==='getParams' ?  
             html`${this.instrumentEventList()}` 
             :html`${this.enterResultList()}`
           }
@@ -810,6 +812,72 @@ return class extends LitElement {
       })
     }
 
+    getParams() {
+      console.log('getResult', 'SampleAPIqueriesUrl', 'this.selectedItems[0]', this.selectedItems[0], 'action', this.actionBeingPerformedModel)
+
+      let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
+      this.deactivatedObjects = []
+      let APIParams=this.getAPICommonParams(queryDefinition)
+      let viewParams=this.jsonParam(queryDefinition, this.selectedItems[0])
+      let endPointUrl=this.getQueryAPIUrl(queryDefinition)
+      if (String(endPointUrl).toUpperCase().includes("ERROR")){
+          alert(endPointUrl)
+          return
+      }
+      let params = this.config.backendUrl + endPointUrl
+      + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
+
+
+//      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
+//        + '?' + new URLSearchParams(this.reqParams)
+      this.fetchApi(params).then(j => {
+        if (j && !j.is_error) {
+          if (j.length==0){            
+            //alert('Found no results')
+
+            this.dispatchEvent(new CustomEvent("error", {
+              detail: {
+                is_error: true,
+                message_en: 'Found no results',
+                message_es: 'No se encontraron resultados'
+              },
+              bubbles: true,
+              composed: true
+            }))            
+          }
+          if (this.curResultRef) {
+            if (j.message!==undefined&&j.message.includes('unexpected')){
+              return
+            }
+            let r = j.filter(d => d.result_id == this.curResultRef.resId)
+            
+            if (r.length) {
+              if (this.curResultRef.elm.type == "number") {
+                this.adjustValUndetermined(r[0], this.curResultRef.elm)
+              } else {
+                this.curResultRef.elm.value = r[0].raw_value
+              }
+            }
+          }
+          this.curResultRef = undefined
+          this.selectedResults = []
+          this.enterResults = j
+          this.requestUpdate()
+        } else {
+          this.dispatchEvent(new CustomEvent("error", {
+            detail: {
+              is_error: true,
+              message_en: this.actionBeingPerformedModel.alertMsg.empty["label_en"],
+              message_es: this.actionBeingPerformedModel.alertMsg.empty["label_es"]
+            },
+            bubbles: true,
+            composed: true
+          }))
+          console.log(this.actionBeingPerformedModel.alertMsg.empty["label_en"])
+        }
+      })
+    }
+
     getInstEventResult() {
       let params = this.config.backendUrl + this.config.ApiInstrumentsAPIqueriesUrl
         + '?' + new URLSearchParams(this.reqParams)
@@ -892,20 +960,21 @@ return class extends LitElement {
       console.log('setResult After', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction, 'this.selectedItems', this.selectedItems)
     }
 
-    actionMethodResults(action, selObject, sampleId) {
+    actionMethodResults(action, selObject, sampleId, resultRow) {
       //this.loadDialogs()  
-      console.log('actionMethodResults', 'action', action, 'sampleId', sampleId)
+      //console.log('actionMethodResults', 'action', action, 'sampleId', sampleId, 'resultRow', resultRow)
           if(action===undefined){
               alert('action not passed as argument')
               return
-          }
-          this.actionBeingPerformedModel=action        
+          }          
+//console.log('I assigned action to ationBeingPErformedModel', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel, 'action', action)
+          //this.actionBeingPerformedModel=action        
           if(action.requiresDialog===undefined){
               alert('The action '+action.actionName+' has no requiresDialog property which is mandatory')
               return
           }
           if(action.requiresDialog===false){
-              this.actionWhenRequiresNoDialog(action, selObject[0])
+              this.actionWhenRequiresNoDialog(action, selObject[0], undefined, undefined, resultRow, undefined)
               return
           }  
           if ( action.requiresGridItemSelected!==undefined&&action.requiresGridItemSelected===true&&
@@ -927,70 +996,30 @@ return class extends LitElement {
               }
           }else{
               alert('the dialog '+action.dialogInfo.name+' does not exist')
-          }
+          }          
         return
       }      
 
-    setResultInstrument(result, e) {
+    setResultInstrument(resultRow, e) {      
       //alert('setResultInstrument , line 890')
       let newValue = e.target.value
       this.targetValue = {
         newValue: newValue,
-        eventId: result.event_id,
-        instrumentName: result.instrument,
-        variableName: result.param_name
+        eventId: resultRow.event_id,
+        instrumentName: resultRow.instrument,
+        variableName: resultRow.param_name
       }
       // vaadin grid field rebinding doesn't work, so let's do manually
       // ClientMethod::getResult
-      this.curResultRef = { elm: e.target, resId: result.result_id, evtId: result.event_id }
+      this.curResultRef = { elm: e.target, resId: resultRow.result_id, evtId: resultRow.event_id }
       let act = JSON.stringify(this.actionBeingPerformedModel.dialogInfo.action[0])
       this.selectedDialogAction = JSON.parse(act)
-      if (result.raw_value || result.value) {
+      if (resultRow.raw_value || resultRow.value) {
         this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.event_id)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow)
       } else {
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.event_id)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow)
       }
     }
-    xgetResult2() {
-      console.log('getResult2', 'SampleAPIqueriesUrl')
-      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          if (this.curResultRef) {
-            let r = j.filter(d => d.result_id == this.curResultRef.resId)
-            if (r.length) {
-              if (this.curResultRef.elm.type == "number") {
-                this.adjustValUndetermined(r[0], this.curResultRef.elm)
-              } else {
-                this.curResultRef.elm.value = r[0].raw_value
-              }
-            }
-          }
-          this.curResultRef = undefined
-          this.selectedResults = []
-          this.enterResults = j
-          this.requestUpdate()
-        } else {
-          this.dispatchEvent(new CustomEvent("error", {
-            detail: {
-              is_error: true,
-              message_en: this.actionBeingPerformedModel.alertMsg.empty["label_en"],
-              message_es: this.actionBeingPerformedModel.alertMsg.empty["label_es"]
-            },
-            bubbles: true,
-            composed: true
-          }))
-          // console.log(this.actionBeingPerformedModel.alertMsg.empty["label_en"])
-        }
-      })
-    }
 
-  //   update(changedProperties) {
-  //    super.update(changedProperties);
-  // }
-
-    //get reactivateObjectDialog() {return this.shadowRoot.querySelector("tr-dialog#resultDialog")}
-  
 }}
