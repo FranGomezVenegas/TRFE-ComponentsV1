@@ -6,11 +6,14 @@ export const template = (props, label) => {
     if (props.activeOptions===undefined){ props.activeOptions=[]}
     if (props.allowAdhocEntries===undefined){ props.allowAdhocEntries=false}
     if (props.searchOptions===undefined){ props.searchOptions=[]}
+    const filteredOptions = props.searchOptions.filter(option => !props.activeOptions.includes(option));
+    const uniqueFilteredOptions = [...new Set(filteredOptions)];
     return html`
     <div>
         <div class="sellect-container" @click=${(e) => props.clickContainer(e)} style=${props.clickedContainer ? "background-color:white;" : ""} @focusout=${() => props.inputFocusOut()}>
             <div class="sellect-destination-list">
                 ${props.activeOptions.map((option, i) => html `
+
                     <span class="sellect-trigger sellect-item" style="display: inherit;"> ${option} <mwc-icon class="sellect-close-icon" style="font-size:8px" @click=${() => props.removeActiveOption(i)}> close </mwc-icon> </span>
                 `)}
             </div>
@@ -21,7 +24,7 @@ export const template = (props, label) => {
             <input class="sellect-element" @click=${() => props.setOpenTrue()} id="my-element" type="text" label=${"* New Production Lot Name"}> </input>
             `}
             <div class="sellect-origin-list ${!props.open ? "" : "open"}">
-                ${props.searchOptions.map((option, i) => html `
+                ${uniqueFilteredOptions.map((option, i) => html`
                     <span class="sellect-trigger sellect-item" style="display: inherit;" @click=${() => props.removeOption(i)}> ${option} <i class="fa fa-times sellect-close-icon"> </i> </span>
                 `)}
             </div>

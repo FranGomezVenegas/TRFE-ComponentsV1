@@ -64,7 +64,10 @@ export class MultiSelect extends navigator(LitElement) {
   }
 
   _pressEnter = (e) => {
-    this.activeOptions.push(e.target.value);
+    const inputValue = e.target.value.toLowerCase(); // Convert input value to lower case
+    if (!this.activeOptions.some(option => option.toLowerCase() === inputValue)) {
+        this.activeOptions.push(e.target.value); // Push the original value
+    }
     this.activeOptions.map((value, i) => {
       if(i == 0) {
         this.value = value;
