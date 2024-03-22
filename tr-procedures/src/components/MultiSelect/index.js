@@ -11,6 +11,7 @@ export class MultiSelect extends navigator(LitElement) {
     return {
       activeOptions: { type: Array },
       options: { type: Array },
+      props: { type: Object},
       open: { type: Boolean },
       searchOptions: { type: Array }
     };
@@ -19,25 +20,51 @@ export class MultiSelect extends navigator(LitElement) {
   constructor() {
     super();
     this.options = [];
+    this.props = {};
     this.activeOptions = [];
     this.open = false;
     this.searchOptions = [];
     this.allowAdhocEntries = true;
     this.value = undefined;
     this.clickedContainer = false;
+   
   }
 
   render() {
-    if (this.activeOptions===undefined){this.activeOptions=[]}
-    if (this.searchOptions===undefined){this.searchOptions=[]}
-    if (this.allowAdhocEntries===undefined){this.allowAdhocEntries=false}
-
+    //if (this.activeOptions===undefined){this.activeOptions=[]}
+    //if (this.searchOptions===undefined){this.searchOptions=[]}    
+    if (this.activeOptions===undefined){ 
+      this.activeOptions=[]
+    } else if (typeof this.activeOptions === 'string') {
+        // Split the string into an array using the pipe '|' as a delimiter
+        this.activeOptions = this.activeOptions.split('|');
+    }
+    if (!Array.isArray(this.activeOptions)) {
+        this.activeOptions = [];
+    }
+    if (this.searchOptions===undefined){ 
+        this.searchOptions=[]
+    } else if (typeof this.searchOptions === 'string') {
+        // Split the string into an array using the pipe '|' as a delimiter
+        this.searchOptions = this.searchOptions.split('|');
+    }   
+    if (!Array.isArray(this.searchOptions)) {
+      this.searchOptions = [];
+    }       
+    if (this.props===undefined){this.props={}}
+    if (this.props.allowAdhocEntries===undefined){this.props.allowAdhocEntries=false}
+    if (this.props===undefined||this.props.displayLabel===undefined){this.props.displayLabel=true}
+    if (this.props===undefined||this.props.readOnly===undefined){this.props.readOnly=false}
+    //alert(this.props.readOnly)
+    console.log(this.props)
     return template({
       activeOptions: this.activeOptions,
       options: this.options,
+      displayLabel: this.props.displayLabel,
+      readOnly: this.props.readOnly,
       open: this.open,
       searchOptions: this.searchOptions,
-      allowAdhocEntries: this.allowAdhocEntries,
+      allowAdhocEntries: this.props.allowAdhocEntries,
       clickedContainer: this.clickedContainer,
       setOpen: this._setOpen,
       removeActiveOption: this._removeActiveOption,

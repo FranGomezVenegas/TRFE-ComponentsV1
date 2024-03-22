@@ -560,7 +560,7 @@ export function TrazitGenericDialogs(base) {
                 </div>  
                 ${!fld.list8 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list8" llabel="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)}>
+                    <mwc-select style="width:100%;" id="list8" label="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)}>
                         ${this.listEntries(fld.list8)}</mwc-select>`}
                 </div>  
                 ${!fld.list9 ?html``: html`        
@@ -573,13 +573,77 @@ export function TrazitGenericDialogs(base) {
                     <mwc-select style="width:100%;" id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)}>
                         ${this.listEntries(fld.list10)}</mwc-select>`}
                 </div>  
-                ${!fld.multiselectlist1 ?
+                ${!fld.multilist1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multiselectlist1" .options=${fld.multiselectlist1.multiselectOptions} .activeOptions=${fld.multiselectlist1.multiselectActiveOptions}
-                      .label="${fld.multiselectlist1["label_" + this.lang]}"> </multi-select> 
+                      <multi-select style="width: 100%;" id="multilist1" .props=${fld.multilist1.properties!==undefined?fld.multilist1.properties:{}} .activeOptions=${fld.multilist1.default_value ? fld.multilist1.default_value : {}} .options=${this.listEntries(fld.multilist1, true)}
+                      .label="${fld.multilist1["label_" + this.lang]}"> </multi-select> 
                     </div>
-                  `}                   
+                `}                   
+                ${!fld.multilist2 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist2" .props=${fld.multilist2.properties!==undefined?fld.multilist2.properties:{}} .activeOptions=${fld.multilist2.default_value ? fld.multilist2.default_value : {}} .options=${this.listEntries(fld.multilist2, true)}
+                      .label="${fld.multilist2["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist3 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist3" .props=${fld.multilist3.properties!==undefined?fld.multilist3.properties:{}} .activeOptions=${fld.multilist3.default_value ? fld.multilist3.default_value : {}} .options=${this.listEntries(fld.multilist3, true)}
+                      .label="${fld.multilist3["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist4 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist4" .props=${fld.multilist4.properties!==undefined?fld.multilist4.properties:{}} .activeOptions=${fld.multilist4.default_value ? fld.multilist4.default_value : {}} .options=${this.listEntries(fld.multilist4, true)}
+                      .label="${fld.multilist4["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist5 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist5" .props=${fld.multilist5.properties!==undefined?fld.multilist5.properties:{}} .activeOptions=${fld.multilist5.default_value ? fld.multilist5.default_value : {}} .options=${this.listEntries(fld.multilist5, true)}
+                      .label="${fld.multilist5["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist6 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist6" .props=${fld.multilist6.properties!==undefined?fld.multilist6.properties:{}} .activeOptions=${fld.multilist6.default_value ? fld.multilist6.default_value : {}} .options=${this.listEntries(fld.multilist6, true)}
+                      .label="${fld.multilist6["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist7 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist7" .props=${fld.multilist7.properties!==undefined?fld.multilist7.properties:{}} .activeOptions=${fld.multilist7.default_value ? fld.multilist7.default_value : {}} .options=${this.listEntries(fld.multilist7, true)}
+                      .label="${fld.multilist7["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist8 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist8" .props=${fld.multilist8.properties!==undefined?fld.multilist8.properties:{}} .activeOptions=${fld.multilist8.default_value ? fld.multilist8.default_value : {}} .options=${this.listEntries(fld.multilist8, true)}
+                      .label="${fld.multilist8["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist9 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist9" .props=${fld.multilist9.properties!==undefined?fld.multilist9.properties:{}} .activeOptions=${fld.multilist9.default_value ? fld.multilist9.default_value : {}} .options=${this.listEntries(fld.multilist9, true)}
+                      .label="${fld.multilist9["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist10 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist10" .props=${fld.multilist10.properties!==undefined?fld.multilist10.properties:{}} .activeOptions=${fld.multilist10.default_value ? fld.multilist10.default_value : {}} .options=${this.listEntries(fld.multilist10, true)}
+                      .label="${fld.multilist10["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+
                 ${!fld.list1SelectedRow ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
                     <mwc-select style="width:100%;" id="list1SelectedRow" label="${this.fieldLabel(fld.list1SelectedRow)}">
@@ -827,8 +891,9 @@ export function TrazitGenericDialogs(base) {
         //alert(this.actionBeingPerformedModel.dialogInfo.fields[e.target.id].valuesFromMasterData.recalculateObjectOnEntrySelected)
         //console.log(e.targetValue)
     }
-    listEntries(fld){
-        //console.log('listEntries')
+    listEntries(fld, multilist=false){
+
+        console.log('listEntries', fld, multilist)
         let blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
         let newList=[]
         if (fld===undefined){
@@ -853,7 +918,10 @@ export function TrazitGenericDialogs(base) {
         if (fld.addBlankValueAtBottom!==undefined&&fld.addBlankValueAtBottom===true){
             newList.push(blankEmpty)
         }
-    
+        if (multilist){
+            return newList.filter(entry => entry.keyName.length > 0).map(entry => entry.keyName).join('|');
+            //return newList.map(entry => entry.keyName).join('|');            
+        }
         return html`
         ${newList.map((c, i) =>
             html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
@@ -1195,7 +1263,16 @@ export function TrazitGenericDialogs(base) {
     get listSelectedStudyIndividuals() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividuals")}
     get listSelectedStudyIndividualSamples() {return this.shadowRoot.querySelector("mwc-select#listSelectedStudyIndividualSamples")}
 
-    get multiselectlist1() {    return this.shadowRoot.querySelector("multi-select#multiselectlist1")    }
+    get multilist1() {    return this.shadowRoot.querySelector("multi-select#multilist1")    }
+    get multilist2() {    return this.shadowRoot.querySelector("multi-select#multilist2")    }
+    get multilist3() {    return this.shadowRoot.querySelector("multi-select#multilist3")    }
+    get multilist4() {    return this.shadowRoot.querySelector("multi-select#multilist4")    }
+    get multilist5() {    return this.shadowRoot.querySelector("multi-select#multilist5")    }
+    get multilist6() {    return this.shadowRoot.querySelector("multi-select#multilist6")    }
+    get multilist7() {    return this.shadowRoot.querySelector("multi-select#multilist7")    }
+    get multilist8() {    return this.shadowRoot.querySelector("multi-select#multilist8")    }
+    get multilist9() {    return this.shadowRoot.querySelector("multi-select#multilist9")    }
+    get multilist10() {    return this.shadowRoot.querySelector("multi-select#multilist10")    }
 
     get dynamicElement1() {    return this.shadowRoot.querySelector("#dynamicElement1")    } 
 

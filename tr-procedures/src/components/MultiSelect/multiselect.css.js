@@ -13,6 +13,16 @@ export const styles = css`
     background: #efefef;
 }
 
+.sellect-container-readonly {
+    border: none;
+    padding: 16px 5px 0 5px;
+    border-radius: 3px;
+    margin-top: -5px;
+    position: relative;
+    background: #efefef;
+}
+
+
 .sellect-destination-list {
     display: inline-block;
 }

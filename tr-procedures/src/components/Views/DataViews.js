@@ -19,6 +19,8 @@ import "@vaadin/vaadin-grid/vaadin-grid-sort-column";
 import "@vaadin/vaadin-grid/vaadin-grid-filter-column";
 import "@doubletrade/lit-datatable";
 import "@google-web-components/google-chart";
+import '../MultiSelect';
+
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 
 export function DataViews(base) {
@@ -1177,8 +1179,7 @@ export function DataViews(base) {
                   <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
                     <thead>
                       <tr>
-                        ${elem.columns.map(
-                          (fld, idx) => {
+                        ${elem.columns.map((fld, idx) => {
                             if(idx === 0 && parentElement !== null && parentElement !== undefined) {
                               return html` 
                                 <th>
@@ -1230,15 +1231,17 @@ export function DataViews(base) {
                               >
                                 ${elem.columns.map((fld, index) => 
                                   html`
-                                    ${fld.name === "pretty_spec"
-                                      ? html`
+                                    ${fld.name === "pretty_spec"? html`
                                           <td>
                                             <span style="color:green">${p["spec_text_green_area_" + this.lang]}</span>
                                             <span style="color:orange">${p["spec_text_yellow_area_" + this.lang]}</span>
                                             <span style="color:red">${p["spec_text_red_area_" + this.lang]}</span>
                                           </td>
                                         `
-                                      : html`
+                                    : html`
+                                    ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`                                  
+                                      <multi-select .label=${this.purpose} .props=${fld.properties!==undefined?fld.properties:{"readOnly":true, "displayLabel":false}} .activeOptions=${p[fld.name]} .options=${{}}> </multi-select>
+                                    `:html`                                      
                                           ${fld.as_progress !== undefined && fld.as_progress === true ? 
                                             html`
                                               <td>
@@ -1304,6 +1307,7 @@ export function DataViews(base) {
                                               </td>
                                             `}
                                         `}
+                                      `} 
                                   `)}
                                 ${elem.row_buttons === undefined
                                   ? nothing : 
@@ -1972,6 +1976,12 @@ export function DataViews(base) {
                             `}
                                   `
                                 : html`
+                                ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`   
+                                <span class="cardLabel">${this.fieldLabel(fld)}:</span>
+                                <span class="cardValue">                               
+                                  <multi-select .label=${this.purpose} .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${data[fld.name]} .options=${{}}> </multi-select>
+                                </span>
+                                `:html`                                      
                                     ${fld.as_progress !== undefined &&
                                     fld.as_progress === true
                                       ? html`
@@ -2076,6 +2086,7 @@ export function DataViews(base) {
                                           </li>
                                         `}
                                   `}
+                                `}  
                             `}
                       `
                   )}
