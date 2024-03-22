@@ -74,8 +74,8 @@ export const MbEm=
     },
 	"actions": [
       { "actionName": "EM_NEW_PRODUCTION_LOT",
-		"endPointUrl": "ProdLot",
-		"requiresDialog": true,
+		  "endPointUrl": "ProdLot",
+		  "requiresDialog": true,
         "button": {
           "icon": "create_new_folder",
           "title": {

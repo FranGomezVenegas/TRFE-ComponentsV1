@@ -169,7 +169,8 @@ export class HomeAir extends navigator(LitElement) {
             procInstanceName:{type: String},
             params: { type: Object },
             multiselectOptions: {type: Array},
-            multiselectActiveOptions:{type: Array}
+            multiselectActiveOptions:{type: Array},
+            multiselectProps:{type: Object}
         }
     }
     constructor() {
@@ -197,7 +198,10 @@ export class HomeAir extends navigator(LitElement) {
         this.config={}
         this.multiselectOptions=['hello', 'goodbye']
         this.purpose = "* New Production Lot Name";
-        this.multiselectActiveOptions=[]
+        this.multiselectActiveOptions=['hello', 'hello22']
+        this.multiselectProps={}
+        this.multiselectProps.readOnly=true
+        this.multiselectProps.displayLabel=false
         this.params = {
           title1_en: "Locations",
           title1_es: "Ubicaciones",
@@ -287,7 +291,7 @@ export class HomeAir extends navigator(LitElement) {
       // <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
       return html`
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
-        <multi-select .label=${this.purpose} .options=${this.multiselectOptions} .activeOptions=${this.multiselectActiveOptions}> </multi-select>
+        <multi-select .label=${this.purpose} .options=${this.multiselectOptions} .activeOptions=${this.multiselectActiveOptions} .props=${this.multiselectProps}> </multi-select>
         <dragdrop-box .action=${this.actionModel}> </dragdrop-box>
         <dragdrop-table .action=${this.actionModel}> </dragdrop-table>
         <stages-view> </stages-view>
