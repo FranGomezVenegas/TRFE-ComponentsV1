@@ -40,7 +40,7 @@ export function DialogsFunctions(base) {
    * @param {*} params ref of this.reqParams
    * @param {*} action ref of action object
    */
-  credsChecker(actionName, objId, params={}, action, isProcManagement, parentData) {
+  credsChecker(actionName, objId, params={}, action, isProcManagement, gridSelectionData, parentData, dragEntry, dropEntry) {
     console.log('credsChecker', 'isProcManagement', isProcManagement, 'action', action, 'parentData', parentData)
     this.actionObj = action || {}
     this.reqParams = params
@@ -52,7 +52,7 @@ export function DialogsFunctions(base) {
         this.objectId = objId
         let noNeedCreds = this.checkProcList(isProcManagement)
         if (noNeedCreds) {
-          this.nextRequest(action, parentData)
+          this.nextRequest(action, gridSelectionData, parentData, dragEntry, dropEntry)
         } else {
           if (this.type == "confirm") {
             this.confirmDialog.show()
@@ -163,7 +163,7 @@ export function DialogsFunctions(base) {
     if (bypass) return true
   }  
 
-  nextRequest(action, gridSelectedItem, parentData) {
+  nextRequest(action, gridSelectedItem, parentData, dragEntry, dropEntry) {
     // This is required to get the action due to it is not being passed.
     if (action===undefined||action.actionName===undefined){
       action=this.actionBeingPerformedModel
@@ -203,7 +203,7 @@ export function DialogsFunctions(base) {
     }
     if (action!==undefined){//&&action.alternativeItemPropertyName!==undefined){
                                                 //action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}, parentData
-      this.performActionRequestHavingDialogOrNot(action, this.selectedItems[0], this.targetValue, credArguments, gridSelectedItem, parentData)
+      this.performActionRequestHavingDialogOrNot(action, this.selectedItems[0], this.targetValue, credArguments, gridSelectedItem, parentData, dragEntry, dropEntry)
     }
     let cleanParams = {}
     Object.entries(this.reqParams).map(([key, value]) => {

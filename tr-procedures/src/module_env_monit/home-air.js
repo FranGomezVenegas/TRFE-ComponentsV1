@@ -159,7 +159,8 @@ export class HomeAir extends navigator(LitElement) {
         return {
             tabsMainViewModelFromProcModel: {type: Object},
             viewModelFromProcModel: {type: Object},      
-            actionModel: {type: Object},  
+            actionModelForBox: {type: Object},  
+            actionModelForTable: {type: Object},  
             config: { type: Object },
             procName: { type: String },
             ready:{type: Boolean},
@@ -177,8 +178,23 @@ export class HomeAir extends navigator(LitElement) {
         super()        
         this.viewModelFromProcModel={} 
         this.tabsMainViewModelFromProcModel={}
-        this.actionModel={ 
-          "actionName": "EM_DEACTIVATE_PRODUCTION_LOT",
+        this.actionModelForBox={ 
+          "actionName": "boxEM_DEACTIVATE_PRODUCTION_LOT",
+          "endPoint": "/moduleenvmon/EnvMonProdLotAPIactions",     
+          "endPointParams": [
+            { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
+          ],
+          "requiresDialog": false,
+          "button": {
+            "icon": "alarm_off",
+            "title": {
+              "label_en": "Deactivate", "label_es": "Desactivar"
+            },
+            "requiresGridItemSelected": true
+          }
+        }
+        this.actionModelForTable={ 
+          "actionName": "tableEM_DEACTIVATE_PRODUCTION_LOT",
           "endPoint": "/moduleenvmon/EnvMonProdLotAPIactions",     
           "endPointParams": [
             { "argumentName": "lotName", "selObjectPropertyName": "lot_name" }
@@ -292,10 +308,17 @@ export class HomeAir extends navigator(LitElement) {
       return html`
         <dynamic-dashboard .params=${this.params}> </dynamic-dashboard>
         <multi-select .label=${this.purpose} .options=${this.multiselectOptions} .activeOptions=${this.multiselectActiveOptions} .props=${this.multiselectProps}> </multi-select>
-        <dragdrop-box .action=${this.actionModel}> </dragdrop-box>
-        <dragdrop-table .action=${this.actionModel}> </dragdrop-table>
+        <dragdrop-box .action=${this.actionModelForBox} .config=${this.config}
+          .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop}> </dragdrop-box>
+        <dragdrop-table .action=${this.actionModelForTable} .config=${this.config}
+          .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-table>
         <stages-view> </stages-view>
       `;
+
+      
+      
+  
+
     }
     renderFran() {          
         return html`  

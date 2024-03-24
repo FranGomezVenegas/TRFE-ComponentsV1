@@ -227,8 +227,9 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
   }
 
   print2LevelsObject(elem, data){    
+    console.log(elem.elements)
     return html`    
-    ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject], false) : nothing}
+    ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
       ${elem.elements.map((elem2, i) => {
         return html`
@@ -243,26 +244,8 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
             ${elem2.type==="chart" ? this.kpiChartFran(elem2, true) : nothing}   
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
-            ${elem2.type==="readOnlyTable" ? 
-              this.readOnlyTable(
-                elem2, 
-                data, 
-                true, 
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                elem2.theme,
-              ): nothing}
-            ${elem2.type==="parentReadOnlyTable" ? 
-              this.parentReadOnlyTable(
-                elem2, 
-                data, 
-                true, 
-                undefined, 
-                undefined,
-              ): nothing}
+            ${elem2.type==="readOnlyTable" ? this.readOnlyTable(): nothing}
+            ${elem2.type==="parentReadOnlyTable" ? this.parentReadOnlyTable(elem2, data, true, undefined, undefined,): nothing}
             ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 
@@ -303,17 +286,8 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
       ${elem.type==="readOnlyTable" ? this.readOnlyTable(elem, data, true): nothing}
       ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
       ${elem.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem, data, true): nothing}
-
       ${elem.type==="parentReadOnlyTable" ? 
-      this.parentReadOnlyTable(
-        elem, 
-        data, 
-        true, 
-        undefined, 
-        undefined,
-        undefined,
-        elem.theme,
-      ): nothing}
+      this.parentReadOnlyTable(elem, data, true, undefined, undefined,undefined,elem.theme,): nothing}
 
       ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
         this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true, this.lang) : nothing}

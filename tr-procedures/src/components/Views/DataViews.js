@@ -178,13 +178,15 @@ export function DataViews(base) {
         </div>
       `;
     }
-    kpiReportTitle(elem) {
-      //console.log('kpiReportTitle', elem)
+    kpiReportTitle(elem, data) {    
       return html`    
-             <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${
-               elem.title["label_" + this.lang]
-             }</p>
-            `;
+        <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]}</p>
+        ${elem.elements.map((curElem) =>           
+              html`
+              ${this.print1LevelObject(curElem, data)}
+              `
+        )}
+      `;
     }
     kpiReportTitleLvl2(elem) {
       if (elem.title===undefined||elem.title.label_en===undefined){
@@ -988,11 +990,17 @@ export function DataViews(base) {
       e.style.display = "none";
     }
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
-      
+      if (elem===undefined){
+        return
+      }
       parentData=this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
       console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
-
-      let tmp = elem.theme;
+      let tmp=""
+      if (elem.theme===undefined){
+        tmp = "TRAZiT-UsersArea";
+      }else{
+        tmp = elem.theme;
+      }
       if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
         tmp = sessionStorage.getItem('tableTheme');
       }

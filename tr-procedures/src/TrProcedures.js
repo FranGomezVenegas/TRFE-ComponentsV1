@@ -115,7 +115,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
   }
 
   resetView() {
-
     let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procName)
     if (!this.config.local) {
       if (findProc.length) {
@@ -135,8 +134,11 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     }
     this.viewModelFromProcModel=ProceduresModel[this.procName][this.viewName];
     if (this.viewModelFromProcModel===undefined){
-      alert('Not found any window called '+this.viewName+' in the Backend Proc Model for procedure '+this.procName)
-      return
+      this.viewModelFromProcModel=ProceduresModel["fake-developers"][this.viewName];
+      if (this.viewModelFromProcModel===undefined){
+        alert('Not found any window called '+this.viewName+' in the Backend Proc Model for procedure '+this.procName)
+        return
+      }
     }
     if (this.viewModelFromProcModel.component===undefined){
       alert('The window called '+this.viewName+' has no component specified in the Backend Proc Model for procedure '+this.procName)
@@ -154,6 +156,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           this.GridWithButtons.ready=false
         }        
         //alert('grid')
+        return
+      case 'dragDropObjects':
+        import('./components/DragDropTable/drag-drop')  
         return
       case 'Dashboard':        
         import('./components/Dashboard/dashboard.template')  
@@ -372,6 +377,12 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
           .model=${this.viewModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
+      `:nothing}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'dragDropObjects' ? html`
+        <drag-drop .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .model=${this.viewModelFromProcModel} ?ready="false"
+          .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></drag-drop>      
       `:nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'Dashboard' ? html`
         <dynamic-dashboard .params=${this.viewModelFromProcModel.data}  .lang=${this.lang} .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed}

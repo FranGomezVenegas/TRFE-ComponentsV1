@@ -148,7 +148,11 @@ class DemoExample extends LitElement {
     //console.log('openTestDefaultView', this.pLogin)
     if (this.pLogin&&this.pLogin.config&&this.pLogin.config.local&&this.pLogin.config.localDefaultView){
       //this.showAllButtonsStatus=true
-      this.selectMenu(this.pLogin.config.localDefaultView.procName, this.pLogin.config.localDefaultView.viewName, this.pLogin.config.localDefaultView.filterName)      
+      let procName=this.pLogin.config.localDefaultView.procName
+      if (this.pLogin.config.localDefaultView.procNameData!==undefined){
+        procName=this.pLogin.config.localDefaultView.procNameData
+      }
+      this.selectMenu(procName, this.pLogin.config.localDefaultView.viewName, this.pLogin.config.localDefaultView.filterName)      
     }
   }
   selectMenu(proc, viewName, filter) {

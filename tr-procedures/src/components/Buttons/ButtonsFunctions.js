@@ -517,50 +517,7 @@ export function ButtonsFunctions(base) {
       return d
     }
     
-    actionMethodForDragAndDrop(e, action, data, dataFromDestination, dataFromOrigin={}, isProcManagement) {
-      e.stopPropagation();
-      sessionStorage.setItem('actionName', action.actionName);
-
-      //this.loadDialogs()  
-      if (data !== undefined) {
-        if (Object.keys(data).length > 0) {
-          this.selectedItems = []
-          this.selectedItems.push(data)
-        }
-      }
-      console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems)
-      if (action === undefined) {
-        alert('action not passed as argument')
-        return
-      }
-  
-      if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
-        action.actionName = "SCRIPT_UPDATE_STEP";
-        action.dialogInfo.name = "testScriptNewStepDialog";
-      }
-      this.actionBeingPerformedModel = action;
-      if (action.requiresDialog === undefined) {
-        alert('The action ' + action.actionName + ' has no requiresDialog property which is mandatory')
-        return
-      }
-      if (action.requiresDialog === false) {
-        if (action.clientMethod !== undefined) {
-          this[action.clientMethod](action, this[selectedItemPropertyName][0])
-          return
-        } else {
-          this.actionWhenRequiresNoDialogForDragAndDrop(action, data, dataFromDestination, dataFromOrigin, null, isProcManagement)
-        }
-      }
-      if (action.requiresGridItemSelected !== undefined && action.requiresGridItemSelected === true &&
-        (this[selectedItemPropertyName] === undefined || this[selectedItemPropertyName][0] === undefined)) {
-        alert('Please select one item in the table prior')
-        return
-      }
-      this.GetQueriesForDialog(action)
-      //this.loadDialogs()
-    }
-
-    actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData) {
+    actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData, dragEntry, dropEntry) {
       e.stopPropagation();
       sessionStorage.setItem('actionName', action.actionName);
       selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
@@ -594,12 +551,12 @@ export function ButtonsFunctions(base) {
         } else {
           if (this[selectedItemPropertyName] === undefined) {
             if (data === undefined) {
-              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement, undefined, parentData)
+              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
             } else {
-              this.actionWhenRequiresNoDialog(action, data, null, isProcManagement, undefined, parentData)
+              this.actionWhenRequiresNoDialog(action, data, null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
             }
           } else {
-            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement, undefined, parentData)
+            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
           }
           return
         }
@@ -704,7 +661,12 @@ export function ButtonsFunctions(base) {
 
 
     async GetViewData(setGrid = true, viewQuery) {
-
+      const stack = new Error().stack;
+      const stackLines = stack.split('\n');
+      if (stackLines!==null&&stackLines[1]!==null){
+        const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
+        console.log("Called from: " + callerName);
+      }  
       if (viewQuery === undefined) {
         viewQuery = this.viewModelFromProcModel.viewQuery
       }
@@ -938,35 +900,35 @@ export function ButtonsFunctions(base) {
       return data
     }
 
-    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement, gridSelectedRow, parentData) {
+    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry) {
       console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem, 'gridSelectedRow', gridSelectedRow, 'parentData', parentData)
       this.selectedAction = action
       if (targetValue === undefined) { targetValue = {} }
       if (this.itemId) {
-        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData), action, false, '', isProcManagement, gridSelectedRow, parentData)
+        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
       } else {
-        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData), action, false, '', isProcManagement, gridSelectedRow, parentData)
+        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
       }
       // Comentado para habilitar confirmDialogsparentData
       // this.performActionRequestHavingDialogOrNot(action, selectedItem)
       return
     }
-    actionWhenRequiresNoDialogForDragAndDrop(action, selectedItem, dataFromDestination, dataFromOrigin, targetValue, isProcManagement) {
+    zzzactionWhenRequiresNoDialogForDragAndDrop(action, selectedItem, dataFromDestination, dataFromOrigin, targetValue, isProcManagement) {
       console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
       this.selectedAction = action
       if (targetValue === undefined) { targetValue = {} }
       if (this.itemId) {
-        conso
+        //conso
         this.credsChecker(action.actionName, this.itemId, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
       } else {
-        // this.credsChecker(action.actionName, selectedItem, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
+         this.credsChecker(action.actionName, selectedItem, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
       }
       // Comentado para habilitar confirmDialogs
       // this.performActionRequestHavingDialogOrNot(action, selectedItem)
       return
     }
 
-    async performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}, parentData) {
+    async performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}, parentData, dragEntry, dropEntry) {
       
       if (action.alternativeAPIActionMethod !== undefined) {
         this[action.alternativeAPIActionMethod]()
@@ -977,7 +939,7 @@ export function ButtonsFunctions(base) {
           gridSelectedItem = this.genericDialogGridSelectedItems[0]
         }
       }
-      let extraParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem, parentData)
+      let extraParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem, parentData, dragEntry, dropEntry)
       let APIParams = this.getAPICommonParams(action)
       let endPointUrl = this.getActionAPIUrl(action)
       if (String(endPointUrl).toUpperCase().includes("ERROR")) {
@@ -1012,60 +974,6 @@ export function ButtonsFunctions(base) {
             }else{
               this.actionMethodResults(action, this.selectedItems, '')
             }
-          }
-        }
-        if (1==2){ // old way to get the result action, not required!
-          if (action.actionName.includes("ENTER_STUDY_OBJECT_VARIABLE_VALUE")) {
-            this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
-            // if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-            //   actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_STUDY_OBJECT_VARIABLE_VALUE")
-            //   this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].id)
-            // } else {
-            //   this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
-            // }
-            //alert(action.actionName)
-            return
-          }        
-          if (action.actionName.includes("ENTER_EVENT_RESULT")) {
-            if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-              actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "INSTRUMENT_EVENT_VARIABLES" || s.actionName == "QUALIFIFICATION_EVENT_VARIABLES")
-              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].event_id)
-            } else {
-              this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].event_id)
-            }
-            //alert(action.actionName)
-            return
-          }
-          if (action.actionName.includes("ENTERRESULT")) {
-            if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-              actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTERRESULT")
-              this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-            } else {
-              this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
-            }
-            return
-          }
-          if (action.actionName.includes("ENTER_PLATE_READING")) {
-            if (action.actionName.includes("SECONDENTRY")) {
-              if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-                actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING_SECONDENTRY")
-                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-              } else {
-              }
-              this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
-              return
-            } else {
-              if (this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.actions !== undefined) {
-                actionRefreshQuery = this.viewModelFromProcModel.actions.filter(s => s.actionName == "ENTER_PLATE_READING")
-                this.actionMethodResults(actionRefreshQuery[0], this.selectedItems, this.selectedItems[0].sample_id)
-              } else {
-                this.actionMethodResults(action, this.selectedItems, this.selectedItems[0].sample_id)
-              }
-              return
-            }
-
-            //this.actionMethodResults(this.viewModelFromProcModel.actions[3], this.selectedItems, this.selectedItems[0].sample_id)
-            //alert(action.actionName)
           }
         }
         if (action !== undefined && action.dialogInfo !== undefined && action.dialogInfo.name !== undefined

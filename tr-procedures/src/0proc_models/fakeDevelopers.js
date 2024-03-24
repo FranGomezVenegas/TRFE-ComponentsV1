@@ -10,6 +10,108 @@ export const FakeDevelopers = {
 		{ "name": "PlatformAdmin" , "url" : "/app/PlatformAdminAPIactions"}
 	  ]
   },	
+  "drag-drop":{
+    "component": "dragDropObjects",
+    
+    "viewQuery":{ "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
+                  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+                  //"notUseGrid": true,
+                  "endPointParams": [
+                    { "argumentName": "incub1_whereFieldsName", "value": "current_stage|incubation_passed" },
+                    { "argumentName": "incub1_whereFieldsValue", "value": "Incubation|false" },
+                    { "argumentName": "incub1_sortFieldsName", "value": "sample_id desc" },
+                    { "argumentName": "incub2_whereFieldsName", "value": "current_stage|incubation_passed" },
+                    { "argumentName": "incub2_whereFieldsValue", "value": "Incubation|true" },
+                    { "argumentName": "incub2_sortFieldsName", "value": "sample_id desc" },
+                    { "argumentName": "includeAllWithAnyPendingIncubation", "value": true },
+                    { "argumentName": "samplesWithAnyPendingIncubation", "value": true}
+                  ]
+    },    
+    "tables":[
+      { "dragEnable": true,
+        "dropEnable": false,
+        "theme":"TRAZiT-DefinitionArea",
+        "endPointPropertyArray":["samplesWithAnyPendingIncubation"],
+        "columns": [
+          {
+            "name": "sample_id",
+            "label_en": "id",
+            "label_es": "id"
+          },
+          {
+            "name": "location_name",
+            "label_en": "location_name",
+            "label_es": "location_name"
+          },
+          {
+            "name": "pending_incub",
+            "label_en": "pending_incub",
+            "label_es": "pending_incub"
+          }
+        ]
+      },  
+      { "dragEnable": true,
+        "dropEnable": true,
+        "theme":"TRAZiT-DefinitionArea",
+        "endPointPropertyArray":["active_batches"],
+        "dataIntegrityCheck":{
+          "dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
+        },
+        "columns": [
+          {
+            "name": "name",
+            "label_en": "name",
+            "label_es": "name"
+          },
+          {
+            "name": "incub_stage",
+            "label_en": "incub_stage",
+            "label_es": "incub_stage"
+          },
+          {
+            "name": "incubation_start",
+            "label_en": "incubation_start",
+            "label_es": "incubation_start"
+          }
+        ],
+        "rowbuttons": { 
+          "actionName": "EM_BATCH_INCUB_ADD_SMP",
+          "endPointUrl": "Samples",
+          "requiresDialog": false,          
+          "alternativeItemPropertyName": "selectedSamples",
+          "button": {
+            "title": {
+              "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+            },
+            "requiresGridItemSelected": true,          
+          },
+          "endPointParams": [
+            { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+            { "argumentName": "batchTemplateId", "defaultValue": 1 },
+            { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+            { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" }			  
+          ]
+        },        
+        "dropAction": { 
+          "actionName": "EM_BATCH_INCUB_ADD_SMP",
+          "endPointUrl": "Samples",
+          "requiresDialog": false,
+          "button": {
+            "title": {
+              "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+            },
+            "requiresGridItemSelected": true,
+          },
+          "endPointParams": [
+            { "argumentName": "sampleId", "dragElement": "sample_id" },
+            { "argumentName": "batchTemplateId", "dropElement": "name" },
+            { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+            { "argumentName": "batchName", "dropElement": "name" }			  
+          ]
+        }  
+      }  
+    ],
+  },
   "tree-view":{
 	"component": "TreeView",  
   },

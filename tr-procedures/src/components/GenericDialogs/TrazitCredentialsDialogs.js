@@ -404,7 +404,7 @@ export function TrazitCredentialsDialogs(base) {
     this.credDialog.close()
   }
 
-  credsChecker(actionName, objId, params={}, action, isPlatform=false, dialogName='', isProcManagement, gridSelectedRow, parentData) {
+  credsCheckerOoooold(actionName, objId, params={}, action, isPlatform=false, dialogName='', isProcManagement, gridSelectedRow, parentData) {
     console.log("credsChecker");
     console.log('credsChecker', isProcManagement)
     this.actionObj = action || {}

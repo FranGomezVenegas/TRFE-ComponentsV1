@@ -266,7 +266,12 @@
     "viewName": "Home", 
     "filterName" :  "Home" 
   },
-  
+  "localDefaultView": {
+    "procName":  "fake-developers", 
+    "procNameData":  "mb_em",
+    "viewName": "drag-drop", 
+    "filterName" :  "drag-drop" 
+  },  
   "localDefaultViewsssssssss": {
     "procName":  "instruments", 
     "viewName": "Deviation", 

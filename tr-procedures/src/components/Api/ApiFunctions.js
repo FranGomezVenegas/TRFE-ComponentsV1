@@ -89,21 +89,25 @@ export function ApiFunctions(base) {
         return extraParams
       }   
              
-      jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElementData) {
+      jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElementData, dragEntry, dropEntry) {
         console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue, 'selGridObject', selGridObject)
         
-        /*const stack = new Error().stack;
+        const stack = new Error().stack;
         const stackLines = stack.split('\n');
-        if (stackLines!==null&&stackLines[2]!==null){
-          const callerName = stackLines[2].match(/at (\w+)/)[0]; // Adjust the index as needed    
+        if (stackLines!==null&&stackLines[1]!==null){
+          const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
           console.log("Called from: " + callerName);
-        } */       
+        }       
         let curArgName=""
         if (action===undefined){return}
           let jsonParam = {}
           if (action.endPointParams) {
             action.endPointParams.forEach(p => {
-              if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {     
+              if (p.dragElement){
+                jsonParam[p.argumentName]=dragEntry[p.dragElement]
+              } else if (p.dropElement){
+                jsonParam[p.argumentName]=dropEntry[p.dropElement]
+              } else if (p.internalVariableSimpleObjName&&p.internalVariableSimpleObjProperty) {     
                      
                 if (this[p.internalVariableSimpleObjName]===undefined||this[p.internalVariableSimpleObjName][p.internalVariableSimpleObjProperty]===undefined){
                   let msg=""
@@ -416,7 +420,7 @@ export function ApiFunctions(base) {
           }
           return jsonParam
       }
-      jsonParamForDragAndDrop(action, selObject = {}, dataFromDestination, dataFromOrigin, targetValue = {}, selGridObject = {}) {
+      zzzjsonParamForDragAndDrop(action, selObject = {}, dataFromDestination, dataFromOrigin, targetValue = {}, selGridObject = {}) {
         console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', 
            'dataFromDestination', dataFromDestination, 'dataFromOrigin', dataFromOrigin, targetValue, 'selGridObject', selGridObject)
         let curArgName="";

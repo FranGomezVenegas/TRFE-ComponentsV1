@@ -3,8 +3,8 @@ import {template} from './dragdropbox.template';
 import {styles} from './dragdropbox.css';
 import { navigator } from "lit-element-router";
 import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
-
-export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
+import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
+export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(LitElement))) {
 
   static get styles() {
     return styles;
@@ -12,6 +12,7 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
 
   static get properties() {
     return {
+      config: { type: Object },
       data: { type: Object },
       viewMode: { type: Number},
       selectedIndex1: { type: String },
@@ -21,6 +22,7 @@ export class DragDropBox extends ButtonsFunctions(navigator(LitElement)) {
 
   constructor() {
     super();
+    this.config={};
     this.selectedIndex1 = "";
     this.selectedIndex2 = 0;
     this.viewMode = 1;
