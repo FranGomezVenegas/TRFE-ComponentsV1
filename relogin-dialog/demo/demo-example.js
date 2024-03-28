@@ -30,7 +30,7 @@ class DemoExample extends LitElement {
       <platform-login @authorized=${e=>{this.auth=e.target.auth;this.rLogin.config=this.pLogin.config}}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <relogin-dialog @logout=${()=>this.pLogin.logout()}></relogin-dialog><br>
+        <relogin-dialog @logout=${()=>this.pLogin.logout()} ?hideXtoClose=${true}></relogin-dialog><br>
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button><br><br>
         <button @click=${()=>this.rLogin.show()}>Relogin</button>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
