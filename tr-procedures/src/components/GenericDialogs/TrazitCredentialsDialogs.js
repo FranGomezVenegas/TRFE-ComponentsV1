@@ -254,6 +254,7 @@ export function TrazitCredentialsDialogs(base) {
             </div>
           </tr-dialog>
           <tr-dialog id="confirmDialog" 
+            ?hideXtoClose=${true}
             heading=""
             hideActions=""
             scrimClickAction=""
