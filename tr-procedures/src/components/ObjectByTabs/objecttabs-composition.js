@@ -244,7 +244,7 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
             ${elem2.type==="chart" ? this.kpiChartFran(elem2, true) : nothing}   
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
-            ${elem2.type==="readOnlyTable" ? this.readOnlyTable(): nothing}
+            ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
             ${elem2.type==="parentReadOnlyTable" ? this.parentReadOnlyTable(elem2, data, true, undefined, undefined,): nothing}
             ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
