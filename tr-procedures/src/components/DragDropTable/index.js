@@ -5,8 +5,9 @@ import { navigator } from "lit-element-router";
 import { ButtonsFunctions} from '../../components/Buttons/ButtonsFunctions';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
+//import {DataViews} from '../../components/Views/DataViews';
 
-export class DragDropTable extends GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement)))) {
+export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement))))) {
   static get styles() {
     return styles;
   }
@@ -18,7 +19,7 @@ export class DragDropTable extends GridFunctions(DialogsFunctions(ButtonsFunctio
       viewMode: { type: Number},
       selectedIndex1: { type: String },
       selectedIndex2: { type: Number},
-      dragTableDefinition: {type: Object}
+      dragTable: {type: Object}
     };
   }
 
@@ -26,7 +27,7 @@ export class DragDropTable extends GridFunctions(DialogsFunctions(ButtonsFunctio
     super();
     this.selectedTr = undefined;
     this.dragData = undefined;
-    this.dragTableDefinition={}
+    this.dragTable={}
     this.viewModelFromProcModel={}
     this.data={}
     this.data2 = {
@@ -338,7 +339,7 @@ export class DragDropTable extends GridFunctions(DialogsFunctions(ButtonsFunctio
 
   render() {
     return template({
-      definition: this.viewModelFromProcModel.tables,
+      definition: this.viewModelFromProcModel.objects,
       dropTableTr: this._dropTableTr,
       allowDropTr: this._allowDropTr,
       dragTableTr: this._dragTableTr,
@@ -354,7 +355,7 @@ export class DragDropTable extends GridFunctions(DialogsFunctions(ButtonsFunctio
     console.log('this.dragData', this.dragData, e)
     //this.data.tableData[ii].splice(index, 1);
     this.dragData = rowData; //this.data.tableData[ii][index];
-    this.dragTableDefinition=dragTable
+    this.dragTable=dragTable
     this.requestUpdate();
   }
 
@@ -364,11 +365,38 @@ export class DragDropTable extends GridFunctions(DialogsFunctions(ButtonsFunctio
 
   _dropTableTr = (e, dropTable, dropData) => {
     e.preventDefault();
+    if (this.dragTable.name===dropTable.name){
+      if (this.lang==='en'){
+        alert('You cannot drap and drop over the same table, action aborted')
+      }else{
+        alert('No se puede transferir desde y hasta la misma tabla, acción cancelada')
+      }
+      return
+    }
+    if (dropTable.acceptEntriesOnlyFromObjects!==undefined){
+      if (!Array.isArray(dropTable.acceptEntriesOnlyFromObjects)) {        
+        if (this.lang==='en'){
+          alert('The property called acceptEntriesOnlyFromObjects must be an array of strings, for the table '+dropTable.name);
+        }else{
+          alert('La propiedad llamada acceptEntriesOnlyFromObjects debe ser un array, para la tabla '+dropTable.name)
+        }
+        return
+      }    
+      if (!dropTable.acceptEntriesOnlyFromObjects.includes(this.dragTable.name)){
+        
+        if (this.lang==='en'){
+          alert('The table '+dropTable.name+' accept only data from some tables and the table  '+this.dragTable.name+' is not one of those.')
+        }else{
+          alert('La tabla '+dropTable.name+' sólo accepta datos de ciertas tablas y la tabla '+this.dragTable.name+' no es una de ellas.')
+        }
+        return
+      }      
+    }
     if (dropTable.dropEnable===undefined||dropTable.dropEnable===false){
       if (this.lang==='en'){
-        alert('Not allowed')
+        alert('Not allowed, the destination table accept no data transfers into')
       }else{
-        alert('No permitido')
+        alert('No permitido, la tabla destino no acepte que se le transfiera contenido')
       }
       return
     }
@@ -391,10 +419,10 @@ export class DragDropTable extends GridFunctions(DialogsFunctions(ButtonsFunctio
   }
 
   dataIntegrityChecks(dropTable, dropData){ 
-    if (dropTable===undefined||dropTable.dataIntegrityCheck===undefined||dropTable.dataIntegrityCheck.dropObjectPropertiesRequired===undefined){
+    if (dropTable===undefined||dropTable.dataIntegrityCheck===undefined){
       return true
     }
-    if (!this.dataIntegrityDragElementMandatoryProps(this.dragTableDefinition, dropTable, dropData)){
+    if (!this.dataIntegrityDragElementMandatoryProps(this.dragTable, dropTable, dropData)){
       return false
     }
     //alert('abort by Fran, remove this!')

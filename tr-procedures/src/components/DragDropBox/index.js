@@ -14,9 +14,10 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
     return {
       config: { type: Object },
       data: { type: Object },
-      viewMode: { type: Number},
+      //viewMode: { type: Number},
       selectedIndex1: { type: String },
-      selectedIndex2: { type: Number}
+      selectedIndex2: { type: Number},
+      selectedBox: { type: Object}
     };
   }
 
@@ -25,305 +26,13 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
     this.config={};
     this.selectedIndex1 = "";
     this.selectedIndex2 = 0;
-    this.viewMode = 1;
+    //this.viewMode = 1;
     this.selectedBox = undefined;
     this.selectedTr = undefined;
-    this.dragBoxData = {id: undefined, x:"", y: "", name:"", temperature:"", study:""};
+    //this.dragBoxData = {id: undefined, x:"", y: "", name:"", temperature:"", study:""};
     this.dropBoxData = {id: undefined, x:"", y: "", name:"", temperature:"", study:""};  
     this.dragTrData = {id: undefined, temperature:"", study:""};
-    this.data = {
-      boxDefinition:{
-        cols: 5,
-        rows: 3,
-        views:[
-          ["id", "study"],
-          ["id", "temperature"],
-        ],
-        readOnly: true,
-        allow_move_objects: true,
-        max_num_objects_per_position: 1,
-        datas: [
-          {
-            id: 1, 
-            name: "Sample1",
-            description: "Hello",
-            study: undefined,
-            temperature: "aaa",
-            result1: 1,
-            result2: 2,
-            posX: 2,
-            posY: 1,
-            stored_on: "2024-01-19"
-          },
-          {
-            id: 2, 
-            name: "Sample2",
-            description: "Hello2",
-            study: "here2",
-            temperature: "bbb",
-            result1: 1,
-            result2: 2,
-            posX: 3,
-            posY: 2,
-            stored_on: "2024-01-17"
-          },
-          {
-            id: 3, 
-            name: "Sample3",
-            description: "Hello3",
-            study: "here13",
-            temperature: "ccc",
-            result1: 1,
-            result2: 2,
-            posX: 5,
-            posY: 3,
-            stored_on: "2024-01-16"
-          }        
-        ]
-      },
-      tableData:[
-        {id: "1", study:"Study 1", temperature: "10º", "extraField":"demo"},
-        {id: "2", study:"Study 2", temperature: "20º", "extraField":"demo"},
-        {id: "3", study:"Study 3", temperature: "30º", "extraField":"demo"},
-        {id: "4", study:"Study 10", temperature: "40º", "extraField":"demo"}
-      ],
-      tableDefinition: {
-        "type": "readOnlyTable",
-        "dragEnable": true,
-        "dropEnable": true,
-        "dropObjectPropertiesRequired":["id", "study", "temperature"],
-        "title": {
-          "label_en": "1.1) Roles",
-          "label_es": "1.1) Perfiles"
-        },
-        "theme":"TRAZiT-DefinitionArea",
-        "endPointResponseObject": "procedure_roles",
-        "columns": [
-          {
-            "name": "id",
-            "label_en": "id",
-            "label_es": "id"
-          },
-          {
-            "name": "temperature",
-            "label_en": "temperature",
-            "label_es": "temperature"
-          },
-          {
-            "name": "study",
-            "label_en": "study",
-            "label_es": "study"
-          }
-        ],
-        "row_buttons": [
-          {
-            "actionName": "REMOVE_ROLE",
-            "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-            "selectedItemPropertyName": "selectedItems",
-            "requiresDialog": false,
-            "certificationException": true,
-            "secondaryActionToPerform": {
-              "name": "refreshSelProcData"
-            },
-            "button": {
-              "icon": "person_remove",
-              "title": {
-                "label_en": "Remove role",
-                "label_es": "Borrar perfil"
-              },
-              "requiresGridItemSelected": false
-            },
-            "endPointParams": [
-              {
-                "argumentName": "procedureName",
-                "contextVariableName": "procedureName"
-              },
-              {
-                "argumentName": "procedureVersion",
-                "contextVariableName": "procedureVersion"
-              },
-              {
-                "argumentName": "procInstanceName",
-                "contextVariableName": "procInstanceName"
-              },
-              {
-                "argumentName": "roleName",
-                "selObjectPropertyName": "role_name"
-              }
-            ]
-          },
-          {
-            "actionName": "RENAME_ROLE",
-            "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-            "selectedItemPropertyName": "selectedItems",
-            "requiresDialog": true,
-            "certificationException": true,
-            "secondaryActionToPerform": {
-              "name": "refreshSelProcData"
-            },
-            "button": {
-              "icon": "manage_accounts",
-              "title": {
-                "label_en": "Rename role",
-                "label_es": "Renombrar perfil"
-              },
-              "requiresGridItemSelected": false
-            },
-            "dialogInfo": {
-              "name": "genericDialog",
-              "fields": [
-                {
-                  "text1": {
-                    "label_en": "New Role Name",
-                    "label_es": "Nuevo Nombre Perfil",
-                    "selObjectPropertyName": "role_name"
-                  }
-                }
-              ]
-            },
-            "endPointParams": [
-              {
-                "argumentName": "procedureName",
-                "contextVariableName": "procedureName"
-              },
-              {
-                "argumentName": "procedureVersion",
-                "contextVariableName": "procedureVersion"
-              },
-              {
-                "argumentName": "procInstanceName",
-                "contextVariableName": "procInstanceName"
-              },
-              {
-                "argumentName": "roleName",
-                "selObjectPropertyName": "role_name"
-              },
-              {
-                "argumentName": "newroleName",
-                "element": "text1",
-                "defaultValue": ""
-              }
-            ]
-          },
-          {
-            "actionName": "CLONE_ROLE",
-            "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-            "selectedItemPropertyName": "selectedItems",
-            "requiresDialog": true,
-            "certificationException": true,
-            "secondaryActionToPerform": {
-              "name": "refreshSelProcData"
-            },
-            "button": {
-              "icon": "file_copy",
-              "title": {
-                "label_en": "Clone Role",
-                "label_es": "Clonar Perfil"
-              },
-              "requiresGridItemSelected": false
-            },
-            "dialogInfo": {
-              "name": "genericDialog",
-              "fields": [
-                {
-                  "text1": {
-                    "label_en": "New Role Name",
-                    "label_es": "Nuevo Nombre de Perfil",
-                    "selObjectPropertyName": "role_name"
-                  }
-                }
-              ]
-            },
-            "endPointParams": [
-              {
-                "argumentName": "procedureName",
-                "contextVariableName": "procedureName"
-              },
-              {
-                "argumentName": "procedureVersion",
-                "contextVariableName": "procedureVersion"
-              },
-              {
-                "argumentName": "procInstanceName",
-                "contextVariableName": "procInstanceName"
-              },
-              {
-                "argumentName": "roleName",
-                "selObjectPropertyName": "role_name"
-              },
-              {
-                "argumentName": "newroleName",
-                "element": "text1"
-              }
-            ]
-          }
-        ],
-        "actions": [
-          {
-            "actionName": "ADD_ROLE",
-            "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
-            "selectedItemPropertyName": "selectedItems",
-            "requiresDialog": true,
-            "certificationException": true,
-            "secondaryActionToPerform": {
-              "name": "refreshSelProcData"
-            },
-            "button": {
-              "icon": "person_add",
-              "title": {
-                "label_en": "Assign Role",
-                "label_es": "Asignar Perfil"
-              },
-              "requiresGridItemSelected": false
-            },
-            "dialogInfo": {
-              "name": "genericDialog",
-              "dialogWidth": "500px",
-              "fields": [
-                {
-                  "text1": {
-                    "label_en": "New Role name",
-                    "label_es": "Nuevo Nombre de Perfil"
-                  }
-                }
-              ]
-            },
-            "endPointParams": [
-              {
-                "argumentName": "procedureName",
-                "contextVariableName": "procedureName"
-              },
-              {
-                "argumentName": "procedureVersion",
-                "contextVariableName": "procedureVersion"
-              },
-              {
-                "argumentName": "procInstanceName",
-                "contextVariableName": "procInstanceName"
-              },
-              {
-                "argumentName": "roleName",
-                "element": "text1",
-                "defaultValue": ""
-              }
-            ]
-          }
-        ]
-      },
-      boxContents: [
-        {cols: 5, rows: 5},
-        {cols: 9, rows: 4},
-        {cols: 11, rows: 6}
-      ]
-    };
+    this.data = {};
     this.dragElement = undefined;
     this.viewBoxMode = 0;
     this.listBoxViewMode = false;
@@ -336,11 +45,12 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
   }
 
   render() {
+    if (this.viewModelFromProcModel.viewMode===undefined){this.viewModelFromProcModel.viewMode=1}
     return template({
-      data: this.data,
+      data: this.data,      
       selectedIndex1: this.selectedIndex1,
       selectedIndex2: this.selectedIndex2,
-      viewMode: this.viewMode,
+      //viewMode: this.viewMode,
       listBoxViewMode: this.listBoxViewMode,
       viewBoxMode: this.viewBoxMode,
       viewTable: this.viewTable,
@@ -354,23 +64,28 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
       dragBox: this._dragBox,
       dragTableTr: this._dragTableTr,
       setShowBoxViewModeList: this._setShowBoxViewModeList,
-      setViewBoxMode:this._setViewBoxMode,
+      setBoxPosicsViewFilter:this._setBoxPosicsViewFilter,
       setViewTable: this._setViewTable,
-      setViewTableBox: this._setViewTableBox,
+      setViewTableButtonLabel: this._setViewTableButtonLabel,
+      setBoxView: this._setBoxView,
       showBoxContent: this._showBoxContent,
-    }, this.action);
+    }, this.selectedBox, this.viewModelFromProcModel, this.lang);
   }
 
    _showBoxContent = (data, i) => {
-    this.data.boxDefinition.cols = data.cols;
-    this.data.boxDefinition.rows = data.rows;
+    this.selectedBox=data
+    this.selectedBox.cols = data.cols;
+    this.selectedBox.rows = data.rows;
+//    this.data.boxDefinition.cols = data.cols;
+//    this.data.boxDefinition.rows = data.rows;
     this.viewTableBox = false;
     
     this.requestUpdate();
   }
 
-  _setViewTableBox = () => {
+  _setBoxView = () => {
     this.viewTableBox = !this.viewTableBox;
+    this.selectedBox=undefined
     this.requestUpdate();
   }
 
@@ -379,8 +94,18 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
     this.requestUpdate();
   }
 
-  _dragTableTr = (e, id, study, temperature) => {
+  _setViewTableButtonLabel = () =>{
+    let labels={
+      "hide":{"label_en":"Hide Table", "label_es":"Ocultar Tabla"},
+      "show":{"label_en":"Show Table", "label_es":"Mostrar Tabla"}
+    }
+    if (this.viewTable){return labels.hide["label_"+this.lang]}else{return labels.show["label_"+this.lang]}
+  }
+
+  _dragTableTr = (e, elem, dragElement) => {
     this.dragTr = true;
+    this.dragElement=dragElement
+    return
     let currentElement = e.target;
     
     while (currentElement && !currentElement.classList.contains('dragdropabletr')) {
@@ -399,12 +124,12 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
       str =`<div>id: ${this.data.tableData[currentID].id}</div><div> temperature: ${this.data.tableData[currentID].temperature}</div>`
     }
     this.selectedBox = str;
-    this.dragTrData.id = id;
-    this.dragTrData.study = study;
-    this.dragTrData.temperature =temperature;
+    //this.dragTrData.id = id;
+    //this.dragTrData.study = study;
+    //this.dragTrData.temperature =temperature;
   }
 
-  _setViewBoxMode = (mode) => {
+  _setBoxPosicsViewFilter = (mode) => {
     console.log("viewmode", mode);
     this.viewBoxMode = mode;
     this.requestUpdate();
@@ -419,39 +144,37 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
     e.preventDefault();
   }
 
-  _dropBox = (e, x, y) => {
-    this.dropBoxData.x = x;
-    this.dropBoxData.y = y;
-    this.data.boxDefinition.datas.map((item, index) => {
-      if(item.posX == x && item.posY == y) {
-        this.dropBoxData.id = item.id;
-        this.dropBoxData.name = item.name;
-        this.dropBoxData.temperature = item.temperature;
-        this.dropBoxData.study = item.study
-      }
-    })
+  _dropBox = (e, y, x) => {
     e.preventDefault();
-    let currentElement = e.target;
-    while (currentElement && !currentElement.classList.contains('box')) {
-        currentElement = currentElement.parentElement;
-    };
-    this.dropBackgroundColor = currentElement.style.backgroundColor;
-    console.log("dropbox", this.dropBackgroundColor);
-    if(!this.dragTr) {
-      this.dragElement.innerHTML =  currentElement.childNodes[1].childNodes[1].innerHTML;
-      this.dragParentElement.style.backgroundColor = "";
-      if(this.dropBackgroundColor) {
-        this.dragParentElement.style.backgroundColor = this.dropBackgroundColor;
+    this.selectedBox.posicx = x;
+    this.selectedBox.posicy = y;
+
+    if (this.selectedBox.datas.some(item => item.posX === y && item.posY === x)){
+      
+      if (this.lang==='en'){
+        alert('Position occupied already')
+      }else{
+        alert('Posición ocupada actualmente')
+      }      
+      return
+    }
+
+    if (this.viewModelFromProcModel.dropAction===undefined){
+      if (this.lang==='en'){
+        console.log('viewModelFromProcModel', this.viewModelFromProcModel)
+        alert('No drop action defined')
+      }else{
+        alert('No hay definida acción al soltar')
       }
-      this.actionMethodForDragAndDrop(e, this.action, this.dragBoxData, this.dropBoxData, null, null);
+      return
     }
-    currentElement.style.backgroundColor = this.dragBackgroundColor;
-    if(this.dragTr) {
-      currentElement.style.backgroundColor = "rgb(80, 220, 247)";
-      this.actionMethodForDragAndDrop(e, this.action, this.dragTrData, this.dropBoxData, null, null);
+    if (this.dataIntegrityChecks(this.viewModelFromProcModel, this.selectedBox, this.dragElement)===false){
+      return
     }
-    currentElement.childNodes[1].childNodes[1].innerHTML = this.selectedBox;
-    console.log("dropbox", this.dragBoxData, this.dropBoxData); 
+    //this.data.tableData[ii].push(this.dragData);
+    alert("Success to Drop");    
+    this.actionMethod(e, this.viewModelFromProcModel.dropAction, true, undefined, undefined, this.selectedBox, false, undefined, this.selectedBox, this.dragElement)
+    return
   }
 
   _allowDropTr = (e) => {
@@ -467,7 +190,7 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
   _dragBox = (e, x, y) => {
     this.dragBoxData.x = x;
     this.dragBoxData.y = y;
-    this.data.boxDefinition.datas.map((item, index) => {
+    this.selectedBox.datas.map((item, index) => {
       if(item.posX == x && item.posY == y) {
         this.dragBoxData.id = item.id;
         this.dragBoxData.name = item.name;
@@ -494,9 +217,146 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
   }
 
   _setViewMode = (mode) => {
-    this.viewMode = mode;
+    this.viewModelFromProcModel.viewMode = mode;
     this.requestUpdate();
   }
+
+  dataIntegrityChecks(viewModel, selectedBox, dropData){ 
+    if (viewModel===undefined||viewModel.dataIntegrityCheck===undefined){
+      return true
+    }
+    if (!this.dataIntegrityDragElementMandatoryProps(viewModel, selectedBox, dropData)){
+      return false
+    }
+    if (!this.dataIntegrityDragElementMandatoryPropsAndMatchValues(viewModel, selectedBox, dropData)){
+      return false
+    }
+    
+    //alert('abort by Fran, remove this!')
+    //return false;
+    return true; 
+  }
+
+  dataIntegrityDragElementMandatoryProps(viewModel, selectedBox, dropData){
+    if (viewModel.dataIntegrityCheck.dropingEntryRequiredProperties===undefined){
+      return true
+    }
+    for (const property of viewModel.dataIntegrityCheck.dropingEntryRequiredProperties) {
+      if (!(property in dropData)) {
+          alert('The property ' + property + ' is required and not found');
+          return false; // Property is missing, return false
+      }
+    }
+    return true; 
+  }
+
+  dataIntegrityDragElementMandatoryPropsAndMatchValues(viewModel, selectedBox, dropData) {
+    if (viewModel.dataIntegrityCheck.dropingEntryRequiredPropertiesAndMatchValues === undefined) {
+      return true;
+    }
+  
+    for (const entry of viewModel.dataIntegrityCheck.dropingEntryRequiredPropertiesAndMatchValues) {
+      // Check for both name and criteria in each entry
+      if (!('name' in entry) || !('criteria' in entry)) {
+        alert('Each entry must contain a name and criteria');
+        return false;
+      }
+  
+      const propertyName = entry.name;
+      const criteria = entry.criteria;
+  
+      // Check if the property exists in dropData
+      if (!(propertyName in dropData)) {
+        alert('The property ' + propertyName + ' is required and not found');
+        return false;
+      }
+  
+      // Check criteria based on type
+      switch (criteria.type) {
+        case 'value': // Exact match
+          if (String(dropData[propertyName]) !== String(criteria.value)) {
+            alert(`The value for ${propertyName} must exactly match ${criteria.value} but is ${dropData[propertyName]}`);
+            return false;
+          }
+          break;
+        case 'values': // One of the listed values
+          if (!criteria.values.map(String).includes(String(dropData[propertyName]))) {
+            let validValuesList = criteria.values.join(", ");
+            alert(`The value for ${propertyName} must be one of the specified values: [${validValuesList}]`);
+            return false;
+          }
+          break;
+        case 'greater': // Greater than
+          if (typeof dropData[propertyName] !== 'number' || dropData[propertyName] < criteria.value) {
+            alert(`The value for ${propertyName} must be a number greater than ${criteria.value}`);
+            return false;
+          }
+          break;
+          case 'greater_or_equal': // Greater than
+          if (typeof dropData[propertyName] !== 'number' || dropData[propertyName] <= criteria.value) {
+            alert(`The value for ${propertyName} must be a number greater than ${criteria.value}`);
+            return false;
+          }
+          break;
+        case 'less': // Less than
+          if (typeof dropData[propertyName] !== 'number' || dropData[propertyName] > criteria.value) {
+            alert(`The value for ${propertyName} must be a number less than ${criteria.value}`);
+            return false;
+          }
+          break;
+        case 'less_or_equal': // Less than
+          if (typeof dropData[propertyName] !== 'number' || dropData[propertyName] >= criteria.value) {
+            alert(`The value for ${propertyName} must be a number less than ${criteria.value}`);
+            return false;
+          }
+          break;
+        case 'range': // Range
+          if (typeof dropData[propertyName] !== 'number' ||
+              dropData[propertyName] < criteria.min ||
+              dropData[propertyName] > criteria.max) {
+            alert(`The value for ${propertyName} must be a number between ${criteria.min} and ${criteria.max}`);
+            return false;
+          }
+          break;
+        case 'selectedBox_value': // Match with selectedBox property
+          let selectedBoxPropertyName = criteria.selectedBoxPropName || propertyName;
+          if (String(dropData[propertyName]) !== String(selectedBox[selectedBoxPropertyName])) {
+            alert(`The value for ${propertyName} in dropData must match the value of ${selectedBoxPropertyName} in selectedBox that is ${selectedBox[selectedBoxPropertyName]}`);
+            return false;
+          }
+          break;        
+        case 'selectedBox_range': // Value within a range in selectedBox
+          selectedBoxPropertyName = criteria.selectedBoxPropName || propertyName;
+          let range = selectedBox[selectedBoxPropertyName].split('-').map(Number);
+          if (range.length !== 2 || isNaN(range[0]) || isNaN(range[1]) || 
+              dropData[propertyName] < range[0] || dropData[propertyName] > range[1]) {
+            alert(`The value for ${propertyName} in dropData must be within the range specified in selectedBox for ${selectedBoxPropertyName} (${selectedBox[selectedBoxPropertyName]})`);
+            return false;
+          }
+          break;        
+        default:
+          alert(`Invalid criteria type for ${propertyName}`);
+          return false;
+      }
+    }
+  
+    return true;
+  }
+  
+  // dataIntegrityDragElementMandatoryPropsAndMatchValues(viewModel, selectedBox, dropData){
+  //   if (viewModel.dataIntegrityCheck.dropingEntryRequiredPropertiesAndMatchValues===undefined){
+  //     return true
+  //   }
+  //   for (const property of viewModel.dataIntegrityCheck.dropingEntryRequiredPropertiesAndMatchValues) {
+  //     if (!(property in dropData)) {
+  //         alert('The property ' + property + ' is required and not found');
+  //         return false; // Property is missing, return false
+  //     }
+  //   }
+  //   return true; 
+  // }
+
+
 }
 
 window.customElements.define('dragdrop-box', DragDropBox);

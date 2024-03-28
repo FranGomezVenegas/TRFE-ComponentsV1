@@ -119,9 +119,11 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
     }
     render(){
       return html`
-        ${this.ready===false ? html`${this.GetViewData()}`: nothing}            
+        <div style='display:none;'>
+          ${this.ready===false ? html`${this.GetViewData()}`: nothing}  
+        </div>
         <dragdrop-box .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
-          .data=${this.gridItems}
+          .data=${this.viewModelFromProcModel.fakedata}
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-box>
       `
     }

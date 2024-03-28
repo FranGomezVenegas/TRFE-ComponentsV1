@@ -103,4 +103,153 @@ export const styles = css`
   .undropable {
     cursor: no-drop !important;
   }
+
+  ul.column-list {
+    -webkit-columns: var(
+      --num-columns,
+      3
+    ); /* Number of columns */
+    -moz-columns: var(--num-columns, 3);
+    columns: var(--num-columns, 3);
+    -webkit-column-gap: 10px; /* Spacing between columns */
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.column-list1 {
+    -webkit-columns: 1; /* Number of columns */
+    -moz-columns: 1;
+    columns: 1;
+    -webkit-column-gap: 10px; /* Spacing between columns */
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.column-list2 {
+    -webkit-columns: 2; /* Number of columns */
+    -moz-columns: 2;
+    columns: 2;
+    -webkit-column-gap: 10px; /* Spacing between columns */
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.column-list3 {
+    -webkit-columns: var(
+      --num-columns,
+      3
+    ); /* Number of columns */
+    -moz-columns: var(--num-columns, 3);
+    columns: var(--num-columns, 3);
+    -webkit-column-gap: 10px; /* Spacing between columns */
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.column-list4 {
+    -webkit-columns: 4; /* Number of columns */
+    -moz-columns: 4;
+    columns: 4;
+    -webkit-column-gap: 10px; /* Spacing between columns */
+    -moz-column-gap: 10px;
+    column-gap: 10px;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  ul.column-list li {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-left: 30px;
+    hyphens: auto;
+    word-break: break-all;
+  }
+  span.relevantlabel {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  span.label {
+    font-weight: bold;
+  }
+  div#mainaddborder {
+    border: 0.72px solid rgba(36, 192, 235, 1);
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 2px;
+    overflow: hidden;
+    flex-basis: calc(33.33% - 10px);
+  }
+  iframe {
+    width: 100%;
+    height: 250px;
+    flex: 1;
+  }
+  /* Dialog styles */
+  .dialog {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 1000px;
+    height: 600px;
+    background-color: white; /* rgba(0, 0, 0, 0.5); */
+  }
+
+  /* Iframe styles */
+  #my-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    flex: 1;
+  }
+  @keyframes slidein {
+    from {
+      margin-left: 30%;
+    }
+    to {
+      margin-left: 0%;
+    }
+  }
+  @media (max-width: 460px) {
+  }
+  iframe::shadow
+    .pdf-viewer::content
+    #controls
+    ::slotted(.SwitchToReadingMode-Small14) {
+    display: none;
+  }
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    flex: 0 0 calc(33.33% - 20px);
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  @media (max-width: 768px) {
+    .card {
+      flex: 0 0 calc(50% - 20px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .card {
+      flex: 0 0 calc(100% - 20px);
+    }
+  }  
 `

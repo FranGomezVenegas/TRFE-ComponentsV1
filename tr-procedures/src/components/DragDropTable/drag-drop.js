@@ -38,7 +38,7 @@ import '../DragDropTable';
 
 import '../Audit/audit-dialog';
 //import '../../tabs-composition';
-export class DrapDrop extends TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
+export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement))))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,
@@ -119,7 +119,9 @@ export class DrapDrop extends TrazitTakePictureDialog(TrazitCredentialsDialogs(A
     }
     render(){
       return html`
-        ${this.ready===false ? html`${this.GetViewData()}`: nothing}            
+        <div style='display:none;'>
+          ${this.ready===false ? html`${this.GetViewData()}`: nothing}            
+        </div>
         <dragdrop-table .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .data=${this.gridItems}
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-table>

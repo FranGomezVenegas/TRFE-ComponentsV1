@@ -18,6 +18,27 @@ export const styles = css`
     border: 2px solid #03A9F4;
   }
 
+  .box-content_allowmove_false {
+    width: fit-content;
+    border-radius: 4px;
+    background-color: #aca2a2;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 2px solid #03A9F4;
+  }
+  .box-content_allowmove_true {
+    width: fit-content;
+    border-radius: 4px;
+    background-color: #20B2AA;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 2px solid #03A9F4;
+  }  
+
   .box {
     width: 80px;
     height: 80px;
