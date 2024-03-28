@@ -56,7 +56,7 @@ export class MultiSelect extends navigator(LitElement) {
     if (this.props===undefined||this.props.displayLabel===undefined){this.props.displayLabel=true}
     if (this.props===undefined||this.props.readOnly===undefined){this.props.readOnly=false}
     //alert(this.props.readOnly)
-    console.log(this.props)
+    //console.log(this.props)
     return template({
       activeOptions: this.activeOptions,
       options: this.options,
