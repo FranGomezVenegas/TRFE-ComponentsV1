@@ -122,6 +122,7 @@ export const DemoViews = [
     {"proc_instance_name": "fake-developers", "view_name": "culture-medium", "filter_name": "culture-medium", "title": "ModuleEnvMonitCultureMedium"},
     {"proc_instance_name": "fake-developers", "view_name": "tree-view", "filter_name": "tree-view", "title": "TreeView"},
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-drop", "filter_name": "drag-drop", "title": "DragDropTables"},
+    {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-box", "filter_name": "drag-box", "title": "DragDropBoxes"},
 	  {"proc_instance_name": "fake-developers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"}
 	
   ]},      

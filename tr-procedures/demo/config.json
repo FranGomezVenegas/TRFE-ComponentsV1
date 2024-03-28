@@ -272,6 +272,12 @@
     "viewName": "drag-drop", 
     "filterName" :  "drag-drop" 
   },  
+  "localDefaultView": {
+    "procName":  "fake-developers", 
+    "procNameData":  "mb_em",
+    "viewName": "drag-box", 
+    "filterName" :  "drag-box" 
+  },  
   "localDefaultViewsssssssss": {
     "procName":  "instruments", 
     "viewName": "Deviation", 

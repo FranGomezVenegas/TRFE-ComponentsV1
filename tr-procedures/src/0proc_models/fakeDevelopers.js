@@ -10,6 +10,494 @@ export const FakeDevelopers = {
 		{ "name": "PlatformAdmin" , "url" : "/app/PlatformAdminAPIactions"}
 	  ]
   },	
+  "drag-box":{
+    "component": "dragDropBoxes",
+    "boxesTableColumns":{
+      "endPointPropertyArray": ["boxContents"],
+      "columns": [
+        {
+          "name": "allow_move_objects",
+          "label_en": "",
+          "label_es": "",
+          "is_icon":true,
+          "icon_name": "allow_move_objects"
+        },
+        {
+          "name": "name",
+          "label_en": "name",
+          "label_es": "name"
+        },        
+        {
+          "name": "cols",
+          "label_en": "incub_stage",
+          "label_es": "incub_stage"
+        },
+        {
+          "name": "rows",
+          "label_en": "incubation_start",
+          "label_es": "incubation_start"
+        }
+      ]
+    },
+    "boxesContentColumns":{
+      "endPointPropertyArray": ["boxContents"],
+      "columns": [
+        {
+          "name": "name",
+          "label_en": "name",
+          "label_es": "name"
+        },
+        {
+          "name": "posX",
+          "label_en": "posX",
+          "label_es": "posX"
+        },
+        {
+          "name": "posY",
+          "label_en": "incubation_start",
+          "label_es": "incubation_start"
+        }
+      ]
+    },    
+    "objectsToDragColumns":{
+      "endPointPropertyArray": ["tableData"],
+      "columns": [
+        {
+          "name": "id",
+          "label_en": "id2",
+          "label_es": "id2"
+        },
+        {
+          "name": "study",
+          "label_en": "study",
+          "label_es": "study"
+        },
+        {
+          "name": "temperature",
+          "label_en": "temperature",
+          "label_es": "temperature"
+        }
+      ]
+    },
+    "dataIntegrityCheck":{
+      "xdropingEntryRequiredProperties":["sample_id", "study", "temperaturezzz"],
+      "xdropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "values", "values": [1, 3]}},
+        {"name": "id", "criteria":{"type": "range", "min": 1, "max": 4}},
+      ],
+      "dropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "selectedBox_value", "selectedBoxPropName": "anyProperty"}}
+      ]
+    },      
+    "boxPosicsViews":[
+      ["id", "study"],
+      ["id", "temperature"],
+    ],
+    "dropAction": { 
+      "actionName": "EM_BATCH_INCUB_ADD_SMP",
+      "endPointUrl": "Samples",
+      "requiresDialog": false,
+      "button": {
+        "title": {
+          "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+        },
+        "requiresGridItemSelected": true,
+      },
+      "endPointParams": [
+        { "argumentName": "sampleId", "dropElement": "id" },
+        { "argumentName": "batchTemplateId", "dragElement": "posicy" },
+        { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+        { "argumentName": "batchName", "dragElement": "posicx" }			  
+      ]
+    },
+    "fakedata": {
+      boxDefinition:{
+        xcols: 5,
+        xrows: 3,
+        xviews:[
+          ["id", "study"],
+          ["id", "temperature"],
+        ],
+        readOnly: true,
+        xallow_move_objects: true,
+        max_num_objects_per_position: 1,
+        xdatas: [
+          {
+            id: 1, 
+            name: "Sample1",
+            description: "Hello",
+            study: undefined,
+            temperature: "aaa",
+            result1: 1,
+            result2: 2,
+            posX: 3,
+            posY: 1,
+            stored_on: "2024-01-19"
+          },
+          {
+            id: 2, 
+            name: "Sample2",
+            description: "Hello2",
+            study: "here2",
+            temperature: "bbb",
+            result1: 1,
+            result2: 2,
+            posX: 3,
+            posY: 2,
+            stored_on: "2024-01-17"
+          },
+          {
+            id: 3, 
+            name: "Sample3",
+            description: "Hello3",
+            study: "here13",
+            temperature: "ccc",
+            result1: 1,
+            result2: 2,
+            posX: 5,
+            posY: 3,
+            stored_on: "2024-01-16"
+          }        
+        ]
+      },
+      tableData:[
+        {id: "1", name: "Box 1", study:"Study 1", temperature: "10º", "extraField":"demo"},
+        {id: "2", study:"Study 2", temperature: "20º", "extraField":"demo"},
+        {id: "3", study:"Study 3", temperature: "30º", "extraField":"demo"},
+        {id: "4", study:"Study 10", temperature: "40º", "extraField":"demo"}
+      ],
+      tableDefinition: {
+        "type": "readOnlyTable",
+        "dragEnable": true,
+        "dropEnable": true,
+        "dropObjectPropertiesRequired":["id", "study", "temperature"],
+        "title": {
+          "label_en": "1.1) Roles",
+          "label_es": "1.1) Perfiles"
+        },
+        "theme":"TRAZiT-DefinitionArea",
+        "endPointResponseObject": "procedure_roles",
+        "columns": [
+          {
+            "name": "id",
+            "label_en": "id",
+            "label_es": "id"
+          },
+          {
+            "name": "temperature",
+            "label_en": "temperature",
+            "label_es": "temperature"
+          },
+          {
+            "name": "study",
+            "label_en": "study",
+            "label_es": "study"
+          }
+        ],
+        "row_buttons": [
+          {
+            "actionName": "REMOVE_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": false,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "person_remove",
+              "title": {
+                "label_en": "Remove role",
+                "label_es": "Borrar perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "selObjectPropertyName": "role_name"
+              }
+            ]
+          },
+          {
+            "actionName": "RENAME_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": true,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "manage_accounts",
+              "title": {
+                "label_en": "Rename role",
+                "label_es": "Renombrar perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "dialogInfo": {
+              "name": "genericDialog",
+              "fields": [
+                {
+                  "text1": {
+                    "label_en": "New Role Name",
+                    "label_es": "Nuevo Nombre Perfil",
+                    "selObjectPropertyName": "role_name"
+                  }
+                }
+              ]
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "selObjectPropertyName": "role_name"
+              },
+              {
+                "argumentName": "newroleName",
+                "element": "text1",
+                "defaultValue": ""
+              }
+            ]
+          },
+          {
+            "actionName": "CLONE_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": true,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "file_copy",
+              "title": {
+                "label_en": "Clone Role",
+                "label_es": "Clonar Perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "dialogInfo": {
+              "name": "genericDialog",
+              "fields": [
+                {
+                  "text1": {
+                    "label_en": "New Role Name",
+                    "label_es": "Nuevo Nombre de Perfil",
+                    "selObjectPropertyName": "role_name"
+                  }
+                }
+              ]
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "selObjectPropertyName": "role_name"
+              },
+              {
+                "argumentName": "newroleName",
+                "element": "text1"
+              }
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "actionName": "ADD_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": true,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "person_add",
+              "title": {
+                "label_en": "Assign Role",
+                "label_es": "Asignar Perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "dialogInfo": {
+              "name": "genericDialog",
+              "dialogWidth": "500px",
+              "fields": [
+                {
+                  "text1": {
+                    "label_en": "New Role name",
+                    "label_es": "Nuevo Nombre de Perfil"
+                  }
+                }
+              ]
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "element": "text1",
+                "defaultValue": ""
+              }
+            ]
+          }
+        ]
+      },
+      boxContents: [
+        {"name":"Box 1", cols: 5, rows: 5,  "allow_move_objects": true,   
+          "anyProperty": 1, 
+          datas: [
+            {
+              id: 1, 
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 1,
+              stored_on: "2024-01-19"
+            },
+            {
+              id: 11, 
+              name: "Sample11",
+              description: "Hello11",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 5,
+              posY: 1,
+              stored_on: "2024-01-19"
+            },            
+            {
+              id: 2, 
+              name: "Sample2",
+              description: "Hello2",
+              study: "here2",
+              temperature: "bbb",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 2,
+              stored_on: "2024-01-17"
+            },
+            {
+              id: 3, 
+              name: "Sample3",
+              description: "Hello3",
+              study: "here13",
+              temperature: "ccc",
+              result1: 1,
+              result2: 2,
+              posX: 5,
+              posY: 3,
+              stored_on: "2024-01-16"
+            }        
+          ]
+        },
+        {"name":"Box 11",cols: 9, rows: 4,
+          datas: [
+            {
+              id: 1, 
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 1,
+              stored_on: "2024-01-19"
+            },
+            {
+              id: 2, 
+              name: "Sample2",
+              description: "Hello2",
+              study: "here2",
+              temperature: "bbb",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 2,
+              stored_on: "2024-01-17"
+            }  
+          ]
+        },
+        {"name":"Caja A", cols: 11, rows: 6, "allow_move_objects": true, 
+          datas: [
+            {
+              id: 1, 
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 1,
+              stored_on: "2024-01-19"
+            } 
+          ]
+        }
+      ]
+    }    
+  },
   "drag-drop":{
     "component": "dragDropObjects",
     
@@ -27,9 +515,11 @@ export const FakeDevelopers = {
                     { "argumentName": "samplesWithAnyPendingIncubation", "value": true}
                   ]
     },    
-    "tables":[
+    "objects":[
       { "dragEnable": true,
         "dropEnable": false,
+        "name": "1",
+        "type": "table",
         "theme":"TRAZiT-DefinitionArea",
         "endPointPropertyArray":["samplesWithAnyPendingIncubation"],
         "columns": [
@@ -52,12 +542,18 @@ export const FakeDevelopers = {
       },  
       { "dragEnable": true,
         "dropEnable": true,
+        "name": "2",
+        "acceptEntriesOnlyFromObjects":["11", "3"],
+        "type": "cards",
+        "title": "Testing Script Coverage",
+        "add_border":true,
+        "num_columns": 1,        
         "theme":"TRAZiT-DefinitionArea",
         "endPointPropertyArray":["active_batches"],
         "dataIntegrityCheck":{
           "dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
-        },
-        "columns": [
+        },        
+        "fieldsToDisplay": [
           {
             "name": "name",
             "label_en": "name",
@@ -74,24 +570,6 @@ export const FakeDevelopers = {
             "label_es": "incubation_start"
           }
         ],
-        "rowbuttons": { 
-          "actionName": "EM_BATCH_INCUB_ADD_SMP",
-          "endPointUrl": "Samples",
-          "requiresDialog": false,          
-          "alternativeItemPropertyName": "selectedSamples",
-          "button": {
-            "title": {
-              "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
-            },
-            "requiresGridItemSelected": true,          
-          },
-          "endPointParams": [
-            { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-            { "argumentName": "batchTemplateId", "defaultValue": 1 },
-            { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
-            { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" }			  
-          ]
-        },        
         "dropAction": { 
           "actionName": "EM_BATCH_INCUB_ADD_SMP",
           "endPointUrl": "Samples",
@@ -109,7 +587,69 @@ export const FakeDevelopers = {
             { "argumentName": "batchName", "dropElement": "name" }			  
           ]
         }  
+      },
+      { "dragEnable": false,
+      "dropEnable": false,
+      "name": "3",
+      "type": "table",
+      "theme":"TRAZiT-DefinitionArea",
+      "endPointPropertyArray":["active_batches"],
+      "dataIntegrityCheck":{
+        "dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
+      },
+      "columns": [
+        {
+          "name": "name",
+          "label_en": "name",
+          "label_es": "name"
+        },
+        {
+          "name": "incub_stage",
+          "label_en": "incub_stage",
+          "label_es": "incub_stage"
+        },
+        {
+          "name": "incubation_start",
+          "label_en": "incubation_start",
+          "label_es": "incubation_start"
+        }
+      ],
+      "rowbuttons": { 
+        "actionName": "EM_BATCH_INCUB_ADD_SMP",
+        "endPointUrl": "Samples",
+        "requiresDialog": false,          
+        "alternativeItemPropertyName": "selectedSamples",
+        "button": {
+          "title": {
+            "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+          },
+          "requiresGridItemSelected": true,          
+        },
+        "endPointParams": [
+          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+          { "argumentName": "batchTemplateId", "defaultValue": 1 },
+          { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+          { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" }			  
+        ]
+      },        
+      "dropAction": { 
+        "actionName": "EM_BATCH_INCUB_ADD_SMP",
+        "endPointUrl": "Samples",
+        "requiresDialog": false,
+        "button": {
+          "title": {
+            "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+          },
+          "requiresGridItemSelected": true,
+        },
+        "endPointParams": [
+          { "argumentName": "sampleId", "dragElement": "sample_id" },
+          { "argumentName": "batchTemplateId", "dropElement": "name" },
+          { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+          { "argumentName": "batchName", "dropElement": "name" }			  
+        ]
       }  
+    }        
     ],
   },
   "tree-view":{
