@@ -682,12 +682,20 @@ export function ButtonsFunctions(base) {
         return
       }
       if (this.config === undefined || this.config.backendUrl === undefined) {
-        fetch("../../../demo/config.json").then(r => r.json()).then(j => {
-          this.config = {}
-          this.config = j
-          //this.config.backendUrl=j.backendUrl
-        })
-      }
+        fetch('../../../demo/config.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(json => {
+            this.config = json;
+          })
+          .catch(error => {
+            console.error('Error fetching config:', error);
+          });
+      }      
       if (this.config.backendUrl === undefined) {
         this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
         //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
