@@ -92,12 +92,12 @@ export function ApiFunctions(base) {
       jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElementData, dragEntry, dropEntry) {
         console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue, 'selGridObject', selGridObject)
         
-        const stack = new Error().stack;
-        const stackLines = stack.split('\n');
-        if (stackLines!==null&&stackLines[1]!==null){
-          const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
-          console.log("Called from: " + callerName);
-        }       
+        // const stack = new Error().stack;
+        // const stackLines = stack.split('\n');
+        // if (stackLines!==null&&stackLines[1]!==null){
+        //   const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
+        //   console.log("Called from: " + callerName);
+        // }       
         let curArgName=""
         if (action===undefined){return}
           let jsonParam = {}
