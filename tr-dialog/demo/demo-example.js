@@ -31,7 +31,7 @@ class DemoExample extends LitElement {
       heading="Trazit Dialog"
       scrimClickAction=""
       hideActions=""
-      zIndex=${7}
+      zIndex=${7}      
       @opening=${() => console.log("opening")}
       @opened=${() => console.log("opened")}
       @closing=${() => console.log("closing")}
