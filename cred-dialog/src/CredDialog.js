@@ -163,13 +163,14 @@ export class CredDialog extends CommonCore {
 
 
   creadDialogs() {
+    //alert('credDialog-popup')
     //console.log('credDialog>>render')
     return html`
       <tr-dialog id="credDialog" 
         @closed=${this.closed}
         .heading="${this.headerLabel()}"
         hideActions=""
-        hideXtoClose
+        hideXtoClose=""
         scrimClickAction=""
         .escapeKeyAction="${this.escapeKey?'close':''}">
         ${this.changing||this.nonProc ?
@@ -199,6 +200,7 @@ export class CredDialog extends CommonCore {
       <tr-dialog id="confirmDialog" 
         heading=""
         hideActions=""
+        hideXtoClose=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
           <div>${commonLangConfig.confirmActionPhrase["label_" + this.lang]} ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName}?</div>
@@ -220,6 +222,7 @@ export class CredDialog extends CommonCore {
         @closed=${this.closed}
         .heading="${this.headerLabel()}"
         hideActions=""
+        hideXtoClose=""
         scrimClickAction=""
         .escapeKeyAction="${this.escapeKey?'close':''}">
         ${this.changing||this.nonProc ?
@@ -249,6 +252,7 @@ export class CredDialog extends CommonCore {
       <tr-dialog id="confirmDialog" 
         heading=""
         hideActions=""
+        hideXtoClose=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
           <div>${commonLangConfig.confirmActionPhrase["label_" + this.lang]} ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName}?</div>
