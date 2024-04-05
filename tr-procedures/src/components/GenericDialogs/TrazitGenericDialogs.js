@@ -795,6 +795,21 @@ export function TrazitGenericDialogs(base) {
         return true
     }
 
+    listEntries(fld, multilist=false){
+        let newList=this.entriesForTheList(fld, multilist=false)
+        if (newList===undefined){
+            return html``
+        }
+        if (multilist){
+            return newList.filter(entry => entry.keyName.length > 0).map(entry => entry.keyName).join('|');
+            //return newList.map(entry => entry.keyName).join('|');            
+        }
+        return html`
+        ${newList.map((c, i) =>
+            html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+        )}`                    
+    }
+
 
     gridActiveItemChanged(){
         alert('Changed')

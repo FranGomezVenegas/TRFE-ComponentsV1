@@ -1,7 +1,7 @@
 
 export function ListsFunctions(base) {
     return class extends (base) {
-        listEntries(fld, multilist=false){
+        entriesForTheList(fld, multilist=false){
 
             console.log('listEntries', fld, multilist)
             let blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
@@ -24,14 +24,16 @@ export function ListsFunctions(base) {
                 }
             }else{
                 fld.items.forEach(item =>newList.push(item))
-            }
+            }            
             if (fld.addBlankValueAtBottom!==undefined&&fld.addBlankValueAtBottom===true){
                 newList.push(blankEmpty)
             }
+            return newList;            
             if (multilist){
                 return newList.filter(entry => entry.keyName.length > 0).map(entry => entry.keyName).join('|');
                 //return newList.map(entry => entry.keyName).join('|');            
             }
+            
             return html`
             ${newList.map((c, i) =>
                 html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
