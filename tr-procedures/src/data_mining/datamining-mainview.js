@@ -11,7 +11,10 @@ import './datamining-data';
 import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
 import {FakeCOA} from '../0proc_models/RawMaterialCoaFake';
 import '../components/ObjectByTabs/objecttabs-composition';
-export class DataMiningMainView extends ButtonsFunctions(LitElement) {
+
+import { ListsFunctions } from '../form_fields/lists-functions';
+
+export class DataMiningMainView extends ListsFunctions(ButtonsFunctions(LitElement)) {
   static get styles() {
     return [
       Layouts,
@@ -1083,14 +1086,127 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
                                              
                     
 
-                    ${!fld.list1 ?
+                      ${!fld.list1 ?html``: html`       
+                      <div class="layout horizontal flex center-center"> 
+                          <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected} ?disabled=${this.isFieldDisabled(fld.list1)}                     
+                              style="width:100%;">
+                              ${this.listEntries(fld.list1)}</mwc-select>`}  
+                      </div>
+                      ${!fld.list2 ?html``: html`        
+                        <div class="layout horizontal flex center-center"> 
+                        <mwc-select style="width:100%;" id="list2" label="${this.fieldLabel(fld.list2)}" ?disabled=${this.isFieldDisabled(fld.list2)}>
+                            ${this.listEntries(fld.list2)}</mwc-select>`}
+                      </div>  
+                ${!fld.list3 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list3" label="${this.fieldLabel(fld.list3)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list3)}>
+                        ${this.listEntries(fld.list3)}</mwc-select>`}
+                </div>  
+                ${!fld.list4 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list4" label="${this.fieldLabel(fld.list4)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list4)}>
+                        ${this.listEntries(fld.list4)}</mwc-select>`}
+                </div>  
+                ${!fld.list5 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list5" label="${this.fieldLabel(fld.list5)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list5)}>
+                        ${this.listEntries(fld.list5)}</mwc-select>`}
+                </div>  
+                ${!fld.list6 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list6" label="${this.fieldLabel(fld.list6)}" ?disabled=${this.isFieldDisabled(fld.list6)}>
+                        ${this.listEntries(fld.list6)}</mwc-select>`}
+                </div>  
+                ${!fld.list7 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list7" label="${this.fieldLabel(fld.list7)}" ?disabled=${this.isFieldDisabled(fld.list7)}>
+                        ${this.listEntries(fld.list7)}</mwc-select>`}
+                </div>  
+                ${!fld.list8 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list8" label="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)}>
+                        ${this.listEntries(fld.list8)}</mwc-select>`}
+                </div>  
+                ${!fld.list9 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list9" label="${this.fieldLabel(fld.list9)}" ?disabled=${this.isFieldDisabled(fld.list9)}>
+                        ${this.listEntries(fld.list9)}</mwc-select>`}
+                </div>  
+                ${!fld.list10 ?html``: html`        
+                    <div class="layout horizontal flex center-center"> 
+                    <mwc-select style="width:100%;" id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)}>
+                        ${this.listEntries(fld.list10)}</mwc-select>`}
+                </div>  
+                ${!fld.multilist1 ?
                     html``: html`        
-                        <mwc-select id="list1" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.list1&&fld.list1["label_" + this.lang]}">
-                        ${fld.list1.items.map((c, i) =>
-                            html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-                        )}
-                        </mwc-select>
-                    `}  
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist1" .props=${fld.multilist1.properties!==undefined?fld.multilist1.properties:{}} .activeOptions=${fld.multilist1.default_value ? fld.multilist1.default_value : {}} .options=${this.listEntries(fld.multilist1, true)}
+                      .label="${fld.multilist1["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist2 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist2" .props=${fld.multilist2.properties!==undefined?fld.multilist2.properties:{}} .activeOptions=${fld.multilist2.default_value ? fld.multilist2.default_value : {}} .options=${this.listEntries(fld.multilist2, true)}
+                      .label="${fld.multilist2["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist3 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist3" .props=${fld.multilist3.properties!==undefined?fld.multilist3.properties:{}} .activeOptions=${fld.multilist3.default_value ? fld.multilist3.default_value : {}} .options=${this.listEntries(fld.multilist3, true)}
+                      .label="${fld.multilist3["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist4 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist4" .props=${fld.multilist4.properties!==undefined?fld.multilist4.properties:{}} .activeOptions=${fld.multilist4.default_value ? fld.multilist4.default_value : {}} .options=${this.listEntries(fld.multilist4, true)}
+                      .label="${fld.multilist4["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist5 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist5" .props=${fld.multilist5.properties!==undefined?fld.multilist5.properties:{}} .activeOptions=${fld.multilist5.default_value ? fld.multilist5.default_value : {}} .options=${this.listEntries(fld.multilist5, true)}
+                      .label="${fld.multilist5["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist6 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist6" .props=${fld.multilist6.properties!==undefined?fld.multilist6.properties:{}} .activeOptions=${fld.multilist6.default_value ? fld.multilist6.default_value : {}} .options=${this.listEntries(fld.multilist6, true)}
+                      .label="${fld.multilist6["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist7 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist7" .props=${fld.multilist7.properties!==undefined?fld.multilist7.properties:{}} .activeOptions=${fld.multilist7.default_value ? fld.multilist7.default_value : {}} .options=${this.listEntries(fld.multilist7, true)}
+                      .label="${fld.multilist7["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist8 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist8" .props=${fld.multilist8.properties!==undefined?fld.multilist8.properties:{}} .activeOptions=${fld.multilist8.default_value ? fld.multilist8.default_value : {}} .options=${this.listEntries(fld.multilist8, true)}
+                      .label="${fld.multilist8["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist9 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist9" .props=${fld.multilist9.properties!==undefined?fld.multilist9.properties:{}} .activeOptions=${fld.multilist9.default_value ? fld.multilist9.default_value : {}} .options=${this.listEntries(fld.multilist9, true)}
+                      .label="${fld.multilist9["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                   
+                ${!fld.multilist10 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center" style="margin-top: 4px;">
+                      <multi-select style="width: 100%;" id="multilist10" .props=${fld.multilist10.properties!==undefined?fld.multilist10.properties:{}} .activeOptions=${fld.multilist10.default_value ? fld.multilist10.default_value : {}} .options=${this.listEntries(fld.multilist10, true)}
+                      .label="${fld.multilist10["label_" + this.lang]}"> </multi-select> 
+                    </div>
+                `}                        
                     ${!fld.listMDSamplerPersonalAreas ?
                       html``: html`        
                           <mwc-select id="listMDSamplerPersonalAreas" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDSamplerPersonalAreas&&fld.listMDSamplerPersonalAreas["label_" + this.lang]}">
@@ -1216,6 +1332,27 @@ export class DataMiningMainView extends ButtonsFunctions(LitElement) {
   get number10() {    return this.shadowRoot.querySelector("mwc-textfield#number10")    }    
 
   get list1() {    return this.shadowRoot.querySelector("mwc-select#list1")    }
+  get list2() {    return this.shadowRoot.querySelector("mwc-select#list2")    }
+  get list3() {    return this.shadowRoot.querySelector("mwc-select#list3")    }
+  get list4() {    return this.shadowRoot.querySelector("mwc-select#list4")    }
+  get list5() {    return this.shadowRoot.querySelector("mwc-select#list5")    }    
+  get list6() {    return this.shadowRoot.querySelector("mwc-select#list6")    }    
+  get list7() {    return this.shadowRoot.querySelector("mwc-select#list7")    }    
+  get list8() {    return this.shadowRoot.querySelector("mwc-select#list8")    }    
+  get list9() {    return this.shadowRoot.querySelector("mwc-select#list9")    }    
+  get list10() {    return this.shadowRoot.querySelector("mwc-select#list10")    }  
+
+  get multilist1() {    return this.shadowRoot.querySelector("multi-select#multilist1")    }
+  get multilist2() {    return this.shadowRoot.querySelector("multi-select#multilist2")    }
+  get multilist3() {    return this.shadowRoot.querySelector("multi-select#multilist3")    }
+  get multilist4() {    return this.shadowRoot.querySelector("multi-select#multilist4")    }
+  get multilist5() {    return this.shadowRoot.querySelector("multi-select#multilist5")    }
+  get multilist6() {    return this.shadowRoot.querySelector("multi-select#multilist6")    }
+  get multilist7() {    return this.shadowRoot.querySelector("multi-select#multilist7")    }
+  get multilist8() {    return this.shadowRoot.querySelector("multi-select#multilist8")    }
+  get multilist9() {    return this.shadowRoot.querySelector("multi-select#multilist9")    }
+  get multilist10() {    return this.shadowRoot.querySelector("multi-select#multilist10")    }
+
   get listMDSamplerPersonalAreas() {    return this.shadowRoot.querySelector("mwc-select#listMDSamplerPersonalAreas")    }
   
   get sampleId() {

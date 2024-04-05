@@ -181,11 +181,16 @@ export function DataViews(base) {
     kpiReportTitle(elem, data) {    
       return html`    
         <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]}</p>
-        ${elem.elements.map((curElem) =>           
-              html`
-              ${this.print1LevelObject(curElem, data)}
-              `
-        )}
+        ${elem.elements===undefined?
+          html`
+          `
+        :html`
+          ${elem.elements.map((curElem) =>           
+                html`
+                ${this.print1LevelObject(curElem, data)}
+                `
+          )}
+        `}
       `;
     }
     kpiReportTitleLvl2(elem) {
@@ -235,7 +240,8 @@ export function DataViews(base) {
     readOnlyTableByGroupOrig(elem, dataArr, isSecondLevel = false) {
       console.log("readOnlyTableByGroup", elem, dataArr);
       dataArr = this.getDataFromRoot(elem, dataArr);
-      console.log("Mejori",dataArr);      return html`
+      console.log("Mejori",dataArr);      
+      return html`
         <style>
           .table-group-container {
             display: grid;
