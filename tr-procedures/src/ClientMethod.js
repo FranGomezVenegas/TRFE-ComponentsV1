@@ -247,6 +247,24 @@ console.log('getSamples', 'actionObj', this.actionObj)
         this.reload()
       })
     }
+
+    openPDF(action , data){
+      if (data===undefined){
+        alert('no data received')
+      }      
+      let linkUrl=undefined
+      if (data.report_url!==undefined){
+        linkUrl=data.report_url
+      }
+      if (data.file_link!==undefined){
+        linkUrl=data.file_link
+      }
+      if (linkUrl===undefined){
+        alert('this record has no property called report_url or file_link instead')
+        return
+      }
+      window.open(linkUrl, '_blank').focus()
+    }
  
     inventoryLotPrintLabel(action, selectedItem ) {
       console.log('inventoryLotPrintLabel this.reqParams', this.reqParams);
