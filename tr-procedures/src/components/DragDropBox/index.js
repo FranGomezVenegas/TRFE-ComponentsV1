@@ -4,7 +4,8 @@ import {styles} from './dragdropbox.css';
 import { navigator } from "lit-element-router";
 import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
-export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(LitElement))) {
+import { GridFunctions } from '../grid_with_buttons/GridFunctions';
+export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement)))) {
 
   static get styles() {
     return styles;
@@ -69,6 +70,7 @@ export class DragDropBox extends DialogsFunctions(ButtonsFunctions(navigator(Lit
       setViewTableButtonLabel: this._setViewTableButtonLabel,
       setBoxView: this._setBoxView,
       showBoxContent: this._showBoxContent,
+      iconRendererSrc: this.iconRendererSrc,
     }, this.selectedBox, this.viewModelFromProcModel, this.lang);
   }
 

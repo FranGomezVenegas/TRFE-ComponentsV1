@@ -179,7 +179,7 @@ export function GridFunctions(base) {
             </div>
             <br>            
             `
-        }
+        } 
         if (colDef.image_name!==undefined&&String(colDef.image_name).toUpperCase()==="ACTIVATE_DEACTIVATE"){
             return html`<img src="/images/${sample[keyName]?'activate.svg':'deactivate.svg'}" style="width:20px">`
         }
@@ -204,6 +204,71 @@ export function GridFunctions(base) {
         } else {
             return html`<img src="/images/icons/${this.getIconPath(sample[keyName])}" style="width:20px">`
         }
+        }
+
+        iconRendererSrc(sample, keyName, i ,colDef) {
+            console.log('field:', keyName, 'record value:', sample[keyName])
+            if (colDef.as_progress!==undefined&&colDef.as_progress){
+                return html`
+                <style>
+                .w3-responsive{display:block;overflow-x:auto}
+                .w3-container,.w3-panel{padding:0.01em 4px}.w3-panel{margin-top:16px;margin-bottom:16px}
+                .w3-container:after,.w3-container:before,.w3-panel:after,.w3-panel:before,.w3-row:after,.w3-row:before,.w3-row-padding:after,.w3-row-padding:before,
+                .w3-blue,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#2196F3!important}
+                .w3-background,.w3-hover-blue:hover{color:rgba(7, 13, 22, 0.94)!important;background-color:#ffdedd!important}
+                .title {
+                    font-size: 8px; font-weight: 500; letter-spacing: 0;
+                    line-height: 1.5em; padding-bottom: 15px; position: relative;
+                    font-family: Montserrat; font-color:rgb(94, 145, 186);
+                  }
+                </style>
+                <div class="w3-container" >
+                    <div class="w3-background w3-round-xlarge" title="${this.titleLang(colDef)}">
+                    <div class="w3-container w3-blue w3-round-xlarge" style="width:${sample[keyName]}%" >${sample[keyName]}%</div>
+                    </div>
+                </div>
+                <br>            
+                `
+            } 
+            if (colDef.image_name!==undefined&&String(colDef.image_name).toUpperCase()==="ACTIVATE_DEACTIVATE"){
+                if (sample[keyName]){
+                    return '/images/activate.svg'
+                }else {
+                    return '/images/deactivate.svg'
+                }//" style="width:20px">`
+            }
+            //[{"value": "A", "image_name": "imagenA"}, {"value": "B", "image_name": "imagenB"}, {"value": "else", "image_name": "imagenParaElResto"}]
+    
+            if (this.filterName == "SampleLogin") {
+                return "/images/labplanet.png";// style="width:20px">`
+            //} else if (String(this.viewName).toUpperCase().includes("INSTRUM")&&sample.on_line!==undefined) {
+            //    return "/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
+            } else if (this.viewName == "EventsInProgress") {                
+                return "/images/inst_ev_type_"+sample.event_type!==undefined?sample.event_type.toLowerCase():''+".svg" // style="width:20px">`
+            } else if (this.viewName == "WhiteIpList") {
+                return "/images/"+sample.active?'activate.svg':'deactivate.svg'// style="width:20px">`
+            } else if (this.viewName == "BlackIpList") {
+                if (sample.active){
+                    return '/images/activate.svg'
+                }else {
+                    return '/images/deactivate.svg'
+                }//" style="width:20px">`
+
+//                return "/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
+            } else if (this.viewName == "PlatformBusRules") {
+                if (sample.disabled){
+                    return '/images/activate.svg'
+                }else {
+                    return '/images/deactivate.svg'
+                }//" style="width:20px">`
+                //return "/images/${sample.disabled?'activate.svg':'deactivate.svg'}" style="width:20px">`
+            } else if (sample[keyName]!==undefined&&sample[keyName]===true) {
+                return "/images/activate.svg" // style="width:20px">`
+            } else if (sample[keyName]!==undefined&&sample[keyName]===false) {
+                return "/images/deactivate.svg" //style="width:20px">`
+            } else {
+                return "/images/icons/${this.getIconPath(sample[keyName])}" //style="width:20px">`
+            }
         }
     
         getIconPath(iconName) {

@@ -2,6 +2,7 @@ import { html } from 'lit-element';
 import '@material/mwc-icon';
 import '../MultiSelect';
 
+
 export const template = (tmpLogic, selectedBox, viewModel, lang) => {
     //console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
     if (viewModel.boxPosicsViews===undefined){
@@ -154,13 +155,15 @@ function dragObjectsTable(tmpLogic, elem, data){
                         ${elem.columns.map((fld, index) =>         
                             fld.is_icon !== undefined && fld.is_icon == true ? 
                             fld.icon_class ?
-                                html`
+                                html`                                
                                 <div class="left-area">
+                                    ${this.iconRenderer(p, fld.name, idx, fld)}
                                     <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
                                 </div>
                                 ` :
-                                html `
-                                <img src="/images/activate.svg" style="width:20px">
+                                html `                                
+                                ${this.iconRenderer(p, fld.name, idx, fld)}
+                                <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
                                 ` 
                             :     
                             html`<td>${p[fld.name]}</td>`                    
@@ -199,7 +202,7 @@ function boxContentTable(elem, selectedBox){
                             </div>
                             ` :
                             html `
-                            <img src="/images/activate.svg" style="width:20px">
+                            <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
                             ` 
                     :     
                         html`<td>${p[fld.name]}</td>`                    
@@ -235,8 +238,8 @@ function boxesTable(tmpLogic, elem, data){
                                 <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
                             </div>
                             ` :
-                            html `
-                                <img src="/images/activate.svg" style="width:20px">
+                            html `                                
+                                <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
                             ` 
                     :     
                         html`<td>${p[fld.name]}</td>`                    

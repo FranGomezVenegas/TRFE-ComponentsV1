@@ -22,11 +22,12 @@ import "@google-web-components/google-chart";
 import '../MultiSelect';
 
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
+import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 
 export function DataViews(base) {
 
   let contextMenu = undefined;
-  return class extends TrazitFormsElements(
+  return class extends GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(
           (
@@ -46,7 +47,7 @@ export function DataViews(base) {
         )
       )
     )
-  ) {
+  )) {
     kpiChartFran(elem) {
       //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
       return html`
@@ -1280,7 +1281,7 @@ export function DataViews(base) {
                                                         </div>
                                                       ` :
                                                       html `
-                                                        <img src="/images/activate.svg" style="width:20px">
+                                                        <img src="${this.iconRendererSrc(p, fld.name, index, fld)}" alt="${this.iconRendererSrc(p, fld.name, index, fld)}" style="width:20px">
                                                       ` 
                                                     :  null
                                                   }
