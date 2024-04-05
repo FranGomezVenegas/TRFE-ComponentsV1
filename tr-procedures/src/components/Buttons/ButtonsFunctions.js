@@ -661,12 +661,12 @@ export function ButtonsFunctions(base) {
 
 
     async GetViewData(setGrid = true, viewQuery) {
-      const stack = new Error().stack;
-      const stackLines = stack.split('\n');
-      if (stackLines!==null&&stackLines[1]!==null){
-        const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
-        console.log("Called from: " + callerName);
-      }  
+      // const stack = new Error().stack;
+      // const stackLines = stack.split('\n');
+      // if (stackLines!==null&&stackLines[1]!==null){
+      //   const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
+      //   console.log("Called from: " + callerName);
+      // }  
       if (viewQuery === undefined) {
         viewQuery = this.viewModelFromProcModel.viewQuery
       }
@@ -744,7 +744,9 @@ export function ButtonsFunctions(base) {
             }
           } else {
             this.selectedItems = j
-            this.selectedItem = this.selectedItems[0]
+            if (this.selectedItems[0]!==undefined&&this.selectedItems[0]!==null){
+              this.selectedItem = this.selectedItems[0]
+            }
             console.log('this.selectedItems', this.selectedItems)
             if (j && !j.is_error) {
               this.requestData = j
