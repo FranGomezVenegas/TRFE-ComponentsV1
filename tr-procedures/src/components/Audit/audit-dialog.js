@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from 'lit';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import { CredDialog } from '@trazit/cred-dialog';
+//import { CredDialog } from '@trazit/cred-dialog';
 import '@material/mwc-icon';
 import '@spectrum-web-components/tooltip/sp-tooltip.js';
 import '@trazit/tr-dialog/tr-dialog';
@@ -17,7 +17,8 @@ const langConfig = {
   "by": {    "label_en": "By",    "label_es": "Por"  },
   "sign": {    "label_en": "Sign",    "label_es": "Firmar"  }
 }
-export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(CredDialog)) {
+import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
+export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(DialogsFunctions(LitElement))) {
   static get styles() {
     return [
       Layouts,
