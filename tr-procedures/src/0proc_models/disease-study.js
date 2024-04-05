@@ -1056,7 +1056,8 @@ export const DiseaseStudy = {
 				  },
 				  {
 					"actionName": "OPEN_INDIVIDUAL_CONSENT",
-					"requiresDialog": true,
+					"requiresDialog": false,
+					"clientMethod": "openPDF",
 					"button": {
 					  "icon": "attach_file",
 					  "title": {
@@ -1065,7 +1066,7 @@ export const DiseaseStudy = {
 					  },
 					  "requiresGridItemSelected": false
 					},
-					"dialogInfo": {
+					"zzzdialogInfo": {
 					  "name": "genericDialog",
 					  "filesListContent": true,
 					  "dialogQuery": {

@@ -62,6 +62,10 @@ class DemoExample extends LitElement {
     if (isSpecial!==undefined&&isSpecial===true) return false
     let sessionProcs=JSON.parse(sessionStorage.getItem("userSession"))
     if (sessionProcs===null) return false
+    if (sessionProcs.procedures_list===undefined){
+      //alert('procedures list is empty, please reload')
+      return
+    }
     let findProc = sessionProcs.procedures_list.procedures.filter(m => m.procInstanceName == proc)
     //console.log('hideActionButtonProc', 'proc', proc, 'findProc', findProc)
     return (findProc===undefined||findProc.length==0)
@@ -74,6 +78,10 @@ class DemoExample extends LitElement {
     //alert(proc)
     let sessionProcs=JSON.parse(sessionStorage.getItem("userSession"))
     if (sessionProcs===null) return false
+    if (sessionProcs.procedures_list===undefined){
+      //alert('procedures list is empty, please reload')
+      return
+    }
     let findProc = sessionProcs.procedures_list.procedures.filter(m => m.procInstanceName == proc)
 //    console.log('hideAllButtons', 'proc', proc, 'findProc', findProc)
     return (findProc===undefined||findProc.length==0)

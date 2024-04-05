@@ -2178,7 +2178,8 @@ export const DemoLotsRaw =
           "requiresGridItemSelected": true
         },
         "endPointParams": [
-			{"argumentName": "testId", "selObjectPropertyName": "test_id", "getFromGrid": true},
+			{"argumentName": "sampleId", "selObjectPropertyName": "sample_id", "getFromGrid": true},
+      {"argumentName": "testId", "selObjectPropertyName": "test_id", "getFromGrid": true},
 			{"argumentName": "analysis", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
 			{"argumentName": "method_name", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
 			{"argumentName": "method_version", "addToFieldNameAndValue": true, "fieldType": "INTEGER", "notAddWhenValueIsBlank":true, "getFromGrid": true}
