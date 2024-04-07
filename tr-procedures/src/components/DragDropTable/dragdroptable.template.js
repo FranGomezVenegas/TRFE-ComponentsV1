@@ -42,6 +42,7 @@ function myTable(elem, dataArr, lang, props) {
                         <td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
                         `}
                     </tr>
+              
                     `})}
                 `}
             </tr>            

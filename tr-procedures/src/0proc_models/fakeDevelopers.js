@@ -20,7 +20,14 @@ export const FakeDevelopers = {
           "label_en": "",
           "label_es": "",
           "is_icon":true,
-          "icon_name": "allow_move_objects"
+          "image_name":"ACTIVATE_DEACTIVATE",
+          "icon_name": "allow_move_objects",
+          "tooltip":{
+            "text": "111 the box {fld:name} is {fld?allow_move_objects ? open : closed}",
+            "text_en": "the box {fld:name} is {fld?allow_move_objects ? open : close} {fld?name:Box 1? 'result1' :Caja A? 'result2' : 'default'}",
+            "text_es": "La caja {fld:name} está {fld?allow_move_objects ? abierta : cerrada}",
+            "text1": "the box {fld:name} is {fld:allow_move_objects}"
+          }
         },
         {
           "name": "name",

@@ -20,6 +20,10 @@ import "@vaadin/vaadin-grid/vaadin-grid-filter-column";
 import "@doubletrade/lit-datatable";
 import "@google-web-components/google-chart";
 import '../MultiSelect';
+import '../grid_with_buttons/gridCellTooltip'
+import '../grid_with_buttons/tableRowDetail';
+
+
 
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
@@ -1246,6 +1250,7 @@ export function DataViews(base) {
                               >
                                 ${elem.columns.map((fld, index) => 
                                   html`
+                                    ${fld.tooltip!==undefined?html`<grid-cell-tooltip .element="${elem}" .data="${p}">`:nothing}
                                     ${fld.name === "pretty_spec"? html`
                                           <td>
                                             <span style="color:green">${p["spec_text_green_area_" + this.lang]}</span>
@@ -1323,6 +1328,7 @@ export function DataViews(base) {
                                             `}
                                         `}
                                       `} 
+                                  ${fld.tooltip!==undefined?html`</grid-cell-tooltip>`:nothing}
                                   `)}
                                 ${elem.row_buttons === undefined
                                   ? nothing : 

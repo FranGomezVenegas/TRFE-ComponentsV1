@@ -1,9 +1,10 @@
 import { html } from 'lit-element';
 import '@material/mwc-icon';
 import '../MultiSelect';
+import '../grid_with_buttons/gridCellTooltip'
+import '../grid_with_buttons/tableRowDetail';
 
-
-export const template = (tmpLogic, selectedBox, viewModel, lang) => {
+export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
     //console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
     if (viewModel.boxPosicsViews===undefined){
         alert("Not found the property boxPosicsViews, it should be of at least one entry")
@@ -112,7 +113,7 @@ export const template = (tmpLogic, selectedBox, viewModel, lang) => {
                     ` :
                     tmpLogic.data.boxContents && tmpLogic.data.boxContents.length > 0 ?
                     html `
-                    ${viewModel.boxesTableColumns===undefined? html``:html`${boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data)}`}                                    
+                    ${viewModel.boxesTableColumns===undefined? html``:html`${boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data, lang)}`}                                    
                     `: null}
                 </div>
                 ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
@@ -130,13 +131,13 @@ export const template = (tmpLogic, selectedBox, viewModel, lang) => {
                     html ``}
                 </div>
                 `}
-                ${viewModel.objectsToDragColumns===undefined? html``:html`${dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data)}`}
+                ${viewModel.objectsToDragColumns===undefined? html``:html`${dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data, componentRef)}`}
             </div>
         </div>
     `;
 };
 
-function dragObjectsTable(tmpLogic, elem, data){
+function dragObjectsTable20240405(tmpLogic, elem, data){
     let dataArr=getDataFromRoot(elem, data)
     return html`
     ${tmpLogic.viewTable ? html `
@@ -166,12 +167,18 @@ function dragObjectsTable(tmpLogic, elem, data){
                                 <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
                                 ` 
                             :     
-                            html`<td>${p[fld.name]}</td>`                    
+                            html`<td @click="${() => this.shadowRoot.querySelector('#detail1').toggle()}">${p[fld.name]}</td>`                    
                             )} 
                         ${elem.row_buttons === undefined? html`` : html`
                             <td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
                         `}
                     </tr>
+                    <table-row-detail id="detail1">
+                    <div slot="details">
+                    sssss
+                      <!-- Contenido detallado específico para la fila 1 -->
+                    </div>
+                    </table-row-detail>                         
                     `})}
                 `}
             </tbody>
@@ -180,6 +187,48 @@ function dragObjectsTable(tmpLogic, elem, data){
     `: null}
     `
 }
+
+function dragObjectsTable(tmpLogic, elem, data, componentRef){
+    let dataArr = getDataFromRoot(elem, data)
+    return html`
+    ${tmpLogic.viewTable ? html`
+    <div style="margin-top:42px">
+        <table class="dragdropable TRAZiT-DefinitionArea"> 
+            <thead>
+                ${elem.columns.map((column) => html`<th>${column.label_en}</th>`)}
+            </thead>
+            <tbody>
+                ${dataArr === undefined || !Array.isArray(dataArr) ? html`No Data` : 
+                html`  
+                    ${dataArr.map((p, idx) => html`
+                    <tr class="dragdropabletr" draggable="true" @dragstart=${(e) => tmpLogic.dragTableTr(e, elem, p)}>
+                        ${elem.columns.map((fld, index) => fld.is_icon !== undefined && fld.is_icon == true ? 
+                            fld.icon_class ?
+                                html`<div class="left-area">
+                                    ${this.iconRenderer(p, fld.name, idx, fld)}
+                                    <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
+                                </div>` :
+                                html`${this.iconRenderer(p, fld.name, idx, fld)}
+                                    <img src="${tmpLogic.iconRendererSrc(p, fld.name, idx, fld)}" style="width:20px">` 
+                            :     
+                            html`<td @click="${() => componentRef.shadowRoot.querySelector('#detail' + idx).toggle()}">${p[fld.name]}</td>`                    
+                        )}
+                        ${elem.row_buttons === undefined ? html`` : html`<td><div class="layout horizontal center flex wrap">${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>`}
+                    </tr>
+                    <table-row-detail id="detail${idx}">
+                      <div slot="details">
+                      dd
+                        <!-- Aquí puedes poner el contenido detallado para esta fila -->
+                      </div>
+                    </table-row-detail>`)}
+                `}
+            </tbody>
+        </table>
+    </div> 
+    ` : null}
+    `
+  }
+  
 function boxContentTable(elem, selectedBox){
     return html`
     <table class="TRAZiT-DefinitionArea dragdropable">
@@ -192,7 +241,9 @@ function boxContentTable(elem, selectedBox){
         html`  
             ${selectedBox.datas.map((p, i) => { return html `
             <tr @click=${() => tmpLogic.showBoxContent(p, i)}> 
+            
                 <td>${ String.fromCharCode(p.posY + 64) + p.posX}</td>
+            
                 ${elem.columns.map((fld, index) =>         
                     fld.is_icon !== undefined && fld.is_icon == true ? 
                         fld.icon_class ?
@@ -218,7 +269,7 @@ function boxContentTable(elem, selectedBox){
     `
 }
 
-function boxesTable(tmpLogic, elem, data){
+function boxesTable(tmpLogic, elem, data, lang){
     let dataArr=getDataFromRoot(elem, data)
     return html`
     <table class="dragdropable TRAZiT-DefinitionArea">
@@ -230,19 +281,47 @@ function boxesTable(tmpLogic, elem, data){
         html`  
             ${dataArr.map((p, i) => { return html `
             <tr @click=${() => tmpLogic.showBoxContent(p, i)}> 
-                ${elem.columns.map((fld, index) =>    
+            
+                ${elem.columns.map((fld, index) =>      
+                
                     fld.is_icon !== undefined && fld.is_icon == true ? 
                         fld.icon_class ?
                             html`
-                            <div class="left-area">
-                                <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                            </div>
+                                ${fld.tooltip !== undefined ? html`
+                                    <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${p}">
+                                    <div class="left-area">
+                                        <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
+                                    </div>
+                                    </grid-cell-tooltip>
+                                `:html`
+                                    <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
+                                `}
                             ` :
-                            html `                                
+                            html `     
+                            <td>                           
+                                ${fld.tooltip !== undefined ? html`
+                                    <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${p}">
+                                        <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
+                                    </grid-cell-tooltip>
+                                `:html`
                                 <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
+                                `}
+
+                            </td>
                             ` 
                     :     
-                        html`<td>${p[fld.name]}</td>`                    
+                        html`                        
+                            <td>
+                                ${fld.tooltip !== undefined ? html`
+                                    <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${p}">
+                                        ${p[fld.name]}
+                                    </grid-cell-tooltip>
+                                `:html`
+                                ${p[fld.name]}
+                                `}
+
+                            </td>
+                        `
                 )} 
                 ${elem.row_buttons === undefined? html`` : html`
                     <td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>

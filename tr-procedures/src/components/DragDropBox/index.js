@@ -71,7 +71,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
       setBoxView: this._setBoxView,
       showBoxContent: this._showBoxContent,
       iconRendererSrc: this.iconRendererSrc,
-    }, this.selectedBox, this.viewModelFromProcModel, this.lang);
+    }, this.selectedBox, this.viewModelFromProcModel, this.lang, this);
   }
 
    _showBoxContent = (data, i) => {

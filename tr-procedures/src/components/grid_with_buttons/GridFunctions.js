@@ -207,7 +207,7 @@ export function GridFunctions(base) {
         }
 
         iconRendererSrc(sample, keyName, i ,colDef) {
-            console.log('field:', keyName, 'record value:', sample[keyName])
+            //console.log('field:', keyName, 'record value:', sample[keyName])
             if (colDef.as_progress!==undefined&&colDef.as_progress){
                 return html`
                 <style>
