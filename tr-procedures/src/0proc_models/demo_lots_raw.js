@@ -6341,45 +6341,51 @@ export const DemoLotsRaw =
           {
             "type": "parentReadOnlyTable",
             "endPointResponseObject": "analysis",
-            "expandSection": true,
-            "expandSectionDetail":{
-              "type": "cardSomeElementsSingleObject",
-              "endPointResponseObject": "ROOT",			  
-              "num_columns": 2,
-              "fieldsToDisplay": [
+            "expandInfoSection": true,
+            "expandInfoSectionDetail":{
+              "elements":[
               {
-                "name": "code",
-                "label_en": "code Expanded",
-                "label_es": "code Expanded"
-              },
-              {
-                "name": "code",
-                "label_en": "code Expanded rep2",
-                "label_es": "code Expanded rep2"
-              }
+                "type": "cardSomeElementsSingleObject",
+                "endPointResponseObject": "ROOT",			  
+                "num_columns": 2,
+                "fieldsToDisplay": [
+                    {
+                      "name": "code",
+                      "label_en": "code Expanded",
+                      "label_es": "code Expanded"
+                    },
+                    {
+                      "name": "code",
+                      "label_en": "code Expanded rep2",
+                      "label_es": "code Expanded rep2"
+                    }
+                  ]
+                }
               ]
             },
             "columns": [
               {
                 "name": "code",
+                "tooltip": {"text": "ggg"},
                 "label_en": "Code",
                 "label_es": "Código"
               },
               {
                 "name": "active",
                 "label_en": "Active",
-                "label_es": "Activo"
-              },
-              {
-                "name": "active",
-                "label_en": "Active",
                 "label_es": "Activo",
+                "tooltip": {"text": "gggssss <span style='color:red;'>{fld:code}</span>"},
                 "is_icon": true
               },
               {
                 "name": "testing_group",
                 "label_en": "Testing Group",
-                "label_es": "Grupo Analítico"
+                "label_es": "Grupo Analítico",
+                "as_paragraph": true,
+                "paragraph": {
+                  "text_en": "{fld?active?<span>:<span style='color:red;'>}The analysis {fld:code} is {fld?active?active:not active}</span>",
+                  "text_es": "{fld?active?<span>:<span style='color:red;'>}El análisis {fld:code} está actualmente {fld?active?activo:desactivado</span>}"
+                }
               }
             ],
             "actions": [

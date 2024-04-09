@@ -251,28 +251,28 @@
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
   },
-  "localDefaultView2": {
+  "localDefaultView": {
     "procName":  "inspection_lot", 
     "viewName": "analysisDesign", 
     "filterName" :  "analysisDesign" 
   },
-  "localDefaultView": {
+  "localDefaultViewzz": {
     "procName":  "DiseaseStudies", 
     "viewName": "MyStudies", 
     "filterName" :  "MyStudies" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzz": {
     "procName":  "mb_em", 
     "viewName": "Home", 
     "filterName" :  "Home" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzz": {
     "procName":  "fake-developers", 
     "procNameData":  "mb_em",
     "viewName": "drag-drop", 
     "filterName" :  "drag-drop" 
   },  
-  "localDefaultView": {
+  "localDefaultViewzzzzz": {
     "procName":  "fake-developers", 
     "procNameData":  "mb_em",
     "viewName": "drag-box", 

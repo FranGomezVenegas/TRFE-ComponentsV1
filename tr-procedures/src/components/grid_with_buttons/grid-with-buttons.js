@@ -36,7 +36,8 @@ import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDial
 
 import '../Audit/audit-dialog';
 //import '../../tabs-composition';
-export class GridWithButtons extends TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
+export class GridWithButtons extends 
+TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,

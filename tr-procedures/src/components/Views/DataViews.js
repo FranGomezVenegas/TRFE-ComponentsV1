@@ -23,7 +23,7 @@ import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 import '../grid_with_buttons/tableRowDetail';
 
-
+import { ReadOnlyTableParts } from "./ReadOnlyTableParts";
 
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
@@ -31,7 +31,7 @@ import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 export function DataViews(base) {
 
   let contextMenu = undefined;
-  return class extends GridFunctions(TrazitFormsElements(
+  return class extends ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(
           (
@@ -51,7 +51,7 @@ export function DataViews(base) {
         )
       )
     )
-  )) {
+  ))) {
     kpiChartFran(elem) {
       //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
       return html`
@@ -900,7 +900,7 @@ export function DataViews(base) {
       `;
     }
 
-    handleTableRowClick(event, rowSelected, elem) {
+    handleTableRowClick(event, rowSelected, elem) {      
       if(rowSelected[elem.children] == 0) {
         if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
           alert("There is no data");
@@ -999,356 +999,6 @@ export function DataViews(base) {
 
     contextMenuItemAction(e) {
       e.style.display = "none";
-    }
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
-      if (elem===undefined){
-        return
-      }
-      parentData=this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
-      console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
-      let tmp=""
-      if (elem.theme===undefined){
-        tmp = "TRAZiT-UsersArea";
-      }else{
-        tmp = elem.theme;
-      }
-      if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
-        tmp = sessionStorage.getItem('tableTheme');
-      }
-      if(typeof(tmp) != "undefined") {
-        sessionStorage.setItem('tableTheme', tmp);
-      }
-      if(typeof(tmp) == "undefined") {
-        tmp = "TRAZiT-UsersArea";
-        sessionStorage.setItem('tableTheme', tmp);
-      }
-      const endPointResponseObject = elem.endPointResponseObject;
-      const selectedIdx = this.selectedTableIndex[endPointResponseObject];
-
-      if (isSecondLevel === undefined) {
-        isSecondLevel = false;
-      }
-      if (directData !== undefined) {
-        dataArr = directData;
-      } else {
-        dataArr = this.getDataFromRoot(elem, dataArr);
-      }
-      if (!this.dataContainsRequiredProperties(elem, dataArr)) {
-        return nothing;
-      }
-
-      if (dataArr === undefined || !Array.isArray(dataArr)) {
-        return html``;
-      } else {
-        if(dataArr.length > 0 && dataArr[0].action_name) {
-          sessionStorage.setItem('steps', JSON.stringify(dataArr))
-        }
-      }
-      
-      return html`
-        <style>
-          * {
-            box-sizing: border-box;
-          }
-
-          .title {
-            color: #2989d8;
-            font-size: 18px;
-            font-weight: bold;
-          }
-
-          table.TRAZiT-DefinitionArea thead tr th {
-            background-color: #2989d8;
-            color: white;
-          }
-
-          table.TRAZiT-UsersArea thead tr th {
-            background-color: white;
-            color: gray;
-          }
-
-          table {
-            border-collapse: collapse;
-            width: 100%;
-            font-family: Montserrat;
-            font-size: 16px;
-          }
-
-          table.TRAZiT-UsersArea tr {
-            border: none; 
-            border-bottom: 1px solid #dddddd;
-          }
-
-          tr {
-            border: 1px solid #dddddd;
-            text-align: center;
-            color: #808080;
-          }
-
-          table.TRAZiT-UsersArea tr:nth-child(even) {
-            background-color: white;
-          }
-
-          table.TRAZiT-UsersArea tr:last-child {
-            border: none;
-          }
-       
-          table.TRAZiT-UsersArea thead {
-            border-bottom: 1px solid #dddddd;
-          }
-
-          tr:nth-child(even) {
-            background-color: rgba(214, 233, 248, 0.37);
-          }
-
-          table.TRAZiT-DefinitionArea th {
-            padding: 16px 20px;
-            border: 1px solid #dddddd !important;
-          }
-
-          td, th {
-            padding: 16px 20px;
-            border: 1px solid #dddddd !important;
-          }
-
-          table.TRAZiT-UsersArea td, th {
-            border: none !important;
-          }
-
-          tr {
-            cursor: pointer;
-          }
-
-          table#${elem.endPointResponseObject} tr:hover td {
-            background-color: #2989d830 !important;
-          }
-
-          mwc-icon-button {
-            --mdc-icon-button-size: 24px;
-            --mdc-icon-size: 16px;
-          }
-
-          .hidden {
-            display: none;
-          }
-
-          .js-context-popup {
-            background-color: #24C0EB;
-            color: white;
-            width: 130px;
-            position: fixed;
-            z-index: 10;
-            display:none;
-          }
-          .js-context-popup div {
-            padding: 8px 12px;
-            border: 2px solid #03A9F4;
-            cursor: pointer;
-          }
-          .js-context-popup div:first-child {
-            border-botton: none !important;
-          }
-
-          .circle {
-            width: 20px;
-            height: 20px;
-            line-height: 20px;
-            text-align: center;
-            background-color: #24C0EB;
-            border-radius: 50%;
-            color: white;
-            float: left;
-          }
-          .green {
-            color: green;
-          }
-          .red { 
-            color: red;
-          }
-          .yellow {
-            color: orange;
-          }
-          </style>
-        <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
-          <div style="display: flex; flex-direction: column; text-align: center;">
-            ${alternativeTitle !== undefined
-              ? html` <p>
-                  <span class="title ${isSecondLevel}"
-                    >${alternativeTitle}</span
-                  >
-                </p>`
-              : html`
-                  ${elem === undefined || elem.title === undefined
-                    ? nothing
-                    : html` <p>
-                        <span class="title ${isSecondLevel}"
-                          >${elem.title["label_" + this.lang]}</span
-                        >
-                      </p>`}
-                `}
-            <div class="layout horizontal center flex wrap">
-              ${this.getButton(elem, dataArr, true)}
-            </div>
-            ${elem.columns === undefined
-              ? html`${elem.hideNoDataMessage !== undefined &&
-                elem.hideNoDataMessage
-                  ? ""
-                  : "No columns defined"}`
-              : html`
-                  <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
-                    <thead>
-                      <tr>
-                        ${elem.columns.map((fld, idx) => {
-                            if(idx === 0 && parentElement !== null && parentElement !== undefined) {
-                              return html` 
-                                <th>
-                                  <mwc-icon-button 
-                                    class="icon resetBtn" 
-                                    icon="refresh" 
-                                    @click=${() => handleResetParentFilter(parentElement)}
-                                  ></mwc-icon-button>
-
-                                  ${fld["label_" + this.lang]} <span class="resize-handle"></span>
-                                </th>
-                              `;
-                            }
-                            return html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th>`;
-                          }
-                        )}
-                        ${elem.row_buttons === undefined
-                          ? nothing 
-                          : html`
-                            <th>
-                              ${this.lang === "en" ? "Actions" : "Acciones"} 
-                              <span class="resize-handle"></span>
-                            </th>
-                          `}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <div class="js-context-popup">
-                      </div>
-                      ${dataArr === undefined || !Array.isArray(dataArr) ? 
-                        html `No Data` : 
-                        html`
-                         
-                          ${dataArr.map((p, idx) => {
-                            return html`
-                              <tr
-                                @click=${(event) => {
-                                  if(handler) {
-                                    if(p[elem.children] && p[elem.children].length > 0) {
-                                      if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
-                                        handler(event, p, elem, idx);
-                                      }
-                                    }
-                                  }
-                                  this.handleTableRowClick(event, p, elem)
-                                }}
-                                @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
-                                class="${selectedIdx === idx ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"
-                              >
-                                ${elem.columns.map((fld, index) => 
-                                  html`
-                                    ${fld.tooltip!==undefined?html`<grid-cell-tooltip .element="${elem}" .data="${p}">`:nothing}
-                                    ${fld.name === "pretty_spec"? html`
-                                          <td>
-                                            <span style="color:green">${p["spec_text_green_area_" + this.lang]}</span>
-                                            <span style="color:orange">${p["spec_text_yellow_area_" + this.lang]}</span>
-                                            <span style="color:red">${p["spec_text_red_area_" + this.lang]}</span>
-                                          </td>
-                                        `
-                                    : html`
-                                    ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`                                  
-                                      <multi-select .label=${this.purpose} .props=${fld.properties!==undefined?fld.properties:{"readOnly":true, "displayLabel":false}} .activeOptions=${p[fld.name]} .options=${{}}> </multi-select>
-                                    `:html`                                      
-                                          ${fld.as_progress !== undefined && fld.as_progress === true ? 
-                                            html`
-                                              <td>
-                                                <div class="w3-container">
-                                                  <div class="w3-background w3-round-xlarge" title="${this.titleLang(fld)}">
-                                                    <div class="w3-container w3-blue w3-round-xlarge" style="width:${p[fld.name]}%">
-                                                      ${p[fld.name]}%
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <br />
-                                              </td>
-                                            `
-                                            : html`
-                                              <td>
-                                                <div class="icon-text-container">
-                                                  ${fld.is_icon !== undefined && fld.is_icon == true ? 
-                                                    fld.icon_class ?
-                                                      html`
-                                                        <div class="left-area">
-                                                          <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                                                        </div>
-                                                      ` :
-                                                      html `
-                                                        <img src="${this.iconRendererSrc(p, fld.name, index, fld)}" alt="${this.iconRendererSrc(p, fld.name, index, fld)}" style="width:20px">
-                                                      ` 
-                                                    :  null
-                                                  }
-                                                  <div class="right-area">
-                                                    ${index == 0 && p[elem.children] && p[elem.children].length > 0 ? html `
-                                                    <div class="circle"> 
-                                                      ${p[elem.children].length} 
-                                                    </div>
-                                                    ` : html``}
-                                                    <span class="text">
-                                                      ${fld.fix_value_prefix !== undefined ? fld.fix_value_prefix: ""}
-                                                    </span>
-                                                    ${fld.is_icon !== undefined && fld.is_icon == true ? 
-                                                      fld.icon_class ?
-                                                        html`
-                                                        <span>${ p[fld.name] }</span>    
-                                                        ` :
-                                                        html `
-                                                        ` 
-                                                      :  html`
-                                                      <span>${ p[fld.name] }</span>    
-                                                      `
-                                                    }
-                                                    ${fld.fix_value_suffix !== undefined ? fld.fix_value_suffix : ""}
-                                                    ${fld.fix_value2_prefix !== undefined ? fld.fix_value2_prefix : ""}
-                                                    <span>
-                                                      ${fld.name2 !== undefined ? p[fld.name2] : ""}
-                                                    </span>
-                                                    ${fld.fix_value2_suffix !== undefined ? fld.fix_value2_suffix : ""}
-                                                    ${fld.fix_value3_prefix !== undefined ? fld.fix_value3_prefix : ""}
-                                                    <span>
-                                                      ${fld.name3 !== undefined ? p[fld.name3] : ""}
-                                                      ${fld.fix_value3_suffix !== undefined ? fld.fix_value3_suffix : ""}
-                                                    </span>
-                                                  </div>
-                                                      
-                                                </div>
-                                              </td>
-                                            `}
-                                        `}
-                                      `} 
-                                  ${fld.tooltip!==undefined?html`</grid-cell-tooltip>`:nothing}
-                                  `)}
-                                ${elem.row_buttons === undefined
-                                  ? nothing : 
-                                  html`
-                                    <td>
-                                      <div class="layout horizontal center flex wrap">
-                                        ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}
-                                      </div>
-                                    </td>
-                                  `}
-                              </tr>
-                            `}
-                          )}
-                        `}
-                    </tbody>
-                  </table>
-                `}
-          </div>
-        </div>
-      `;
     }
 
     resetFilterIndex(elem) {
@@ -2976,6 +2626,138 @@ export function DataViews(base) {
     }
     get audit() {
       return this.shadowRoot.querySelector("audit-dialog");
+    }
+ 
+    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
+      if (elem===undefined){
+        return
+      }
+      parentData=this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
+      console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
+      let tmp=""
+      if (elem.theme===undefined){
+        tmp = "TRAZiT-UsersArea";
+      }else{
+        tmp = elem.theme;
+      }
+      if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
+        tmp = sessionStorage.getItem('tableTheme');
+      }
+      if(typeof(tmp) != "undefined") {
+        sessionStorage.setItem('tableTheme', tmp);
+      }
+      if(typeof(tmp) == "undefined") {
+        tmp = "TRAZiT-UsersArea";
+        sessionStorage.setItem('tableTheme', tmp);
+      }
+      const endPointResponseObject = elem.endPointResponseObject;
+      const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+
+      if (isSecondLevel === undefined) {
+        isSecondLevel = false;
+      }
+      if (directData !== undefined) {
+        dataArr = directData;
+      } else {
+        dataArr = this.getDataFromRoot(elem, dataArr);
+      }
+      if (!this.dataContainsRequiredProperties(elem, dataArr)) {
+        return nothing;
+      }
+
+      if (dataArr === undefined || !Array.isArray(dataArr)) {
+        return html``;
+      } else {
+        if(dataArr.length > 0 && dataArr[0].action_name) {
+          sessionStorage.setItem('steps', JSON.stringify(dataArr))
+        }
+      }
+      const styles = this.getTableStyles(elem);
+      const title = this.addViewTitle(elem, alternativeTitle, isSecondLevel)
+      const actionButtons = this.getActionsButtons(elem, dataArr)
+      return html`     
+        ${styles}   
+        <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
+          <div style="display: flex; flex-direction: column; text-align: center;">
+            ${title}
+            ${actionButtons}
+            ${elem.columns === undefined
+              ? html`${elem.hideNoDataMessage !== undefined &&
+                elem.hideNoDataMessage
+                  ? ""
+                  : "No columns defined"}`
+              : html`
+                  <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
+                    <thead>
+                      <tr>
+                        ${elem.columns.map((fld, idx) => {
+                            if(idx === 0 && parentElement !== null && parentElement !== undefined) {
+                              return html` 
+                                <th>
+                                  <mwc-icon-button 
+                                    class="icon resetBtn" 
+                                    icon="refresh" 
+                                    @click=${() => handleResetParentFilter(parentElement)}
+                                  ></mwc-icon-button>
+
+                                  ${fld["label_" + this.lang]} <span class="resize-handle"></span>
+                                </th>
+                              `;
+                            }
+                            return html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th>`;
+                          }
+                        )}
+                        ${elem.row_buttons === undefined
+                          ? nothing 
+                          : html`
+                            <th>
+                              ${this.lang === "en" ? "Actions" : "Acciones"} 
+                              <span class="resize-handle"></span>
+                            </th>
+                          `}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <div class="js-context-popup">
+                      </div>
+                      ${dataArr === undefined || !Array.isArray(dataArr) ? 
+                        html `No Data` : 
+                        html`
+                         
+                          ${dataArr.map((p, idx) => {
+                            return html`
+                              <tr
+                              @click=${(event) => {
+                                if(handler) {
+                                  if(p[elem.children] && p[elem.children].length > 0) {
+                                    if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
+                                      handler(event, p, elem, idx);
+                                    }
+                                  }
+                                }
+                                this.handleTableRowClick(event, p, elem)
+                              }}
+                              @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
+                              class="${selectedIdx === idx ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"  
+                              >
+                                ${this.getRowsInfo(elem, p, idx, this.lang, parentData, handler)}
+                              </tr>
+                              ${elem.expandInfoSection!==undefined?html`
+                                <table-row-detail id="detail${idx}" .data="${p}" .elem="${elem}">
+                                <div slot="details">                                
+                                  <!-- Contenido detallado específico para la fila 1 -->
+                                </div>
+                                </table-row-detail>
+                              `:html``}
+                            `}
+                          )}
+                        `}
+                    </tbody>
+                  </table>
+                `}
+          </div>
+        </div>
+      `;
     }
   };
 }
