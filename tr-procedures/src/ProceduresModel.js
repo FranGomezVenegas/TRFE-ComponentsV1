@@ -123,8 +123,8 @@ export const DemoViews = [
     {"proc_instance_name": "fake-developers", "view_name": "tree-view", "filter_name": "tree-view", "title": "TreeView"},
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-drop", "filter_name": "drag-drop", "title": "DragDropTables"},
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-box", "filter_name": "drag-box", "title": "DragDropBoxes"},
-	  {"proc_instance_name": "fake-developers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"}
-	
+	  {"proc_instance_name": "fake-developers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"},
+	  {"proc_instance_name": "fake-developers", "view_name": "ck-editor", "filter_name": "ck-editor", "title": "ck-editor"}
   ]},      
   {"label":"genoma (genoma-1)", "proc_instance_name": "genoma-1", "views":[
     {"proc_instance_name": "genoma-1", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
@@ -259,6 +259,7 @@ export const DemoViews = [
   {"label":"Fake developers", "proc_instance_name": "fakeDevelopers", "isSpecial":true, "views":[
     {"proc_instance_name": "fakeDevelopers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "prototype-elements-view-main", "isSpecial": true},
     {"proc_instance_name": "fakeDevelopers", "view_name": "culture-medium", "filter_name": "culture-medium", "title": "culture-medium", "isSpecial": true},
+    
 	]}
      
 ]

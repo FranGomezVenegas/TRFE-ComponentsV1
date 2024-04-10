@@ -287,11 +287,12 @@
     "procName":  "instruments", 
     "viewName": "PlatformInstruments", 
     "filterName" :  "InstrumentsList" 
-  }    
-  
-  
-  
-  
+  },
+  "localDefaultView": {
+    "procName":  "fake-developers", 
+    "viewName": "ck-editor", 
+    "filterName" :  "ck-editor" 
+  }
  
   
 }

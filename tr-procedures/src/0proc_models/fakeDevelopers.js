@@ -10,6 +10,9 @@ export const FakeDevelopers = {
 		{ "name": "PlatformAdmin" , "url" : "/app/PlatformAdminAPIactions"}
 	  ]
   },	
+  "ck-editor":{
+    "component": "ckEditor",
+  },
   "drag-box":{
     "component": "dragDropBoxes",
     "boxesTableColumns":{

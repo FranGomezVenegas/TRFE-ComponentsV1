@@ -156,7 +156,10 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           this.GridWithButtons.ready=false
         }        
         //alert('grid')
-        return
+        return        
+      case 'ckEditor':
+          import('./components/ckeditor/ckeditor')  
+          return
       case 'dragDropBoxes':
         import('./components/DragDropBox/drag-box')  
         return
@@ -386,6 +389,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
           .model=${this.viewModelFromProcModel} ?ready="false"
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></drag-box>      
+      `:nothing}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ckEditor' ? html`
+        <lit-ckeditor ></lit-ckeditor>      
       `:nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'dragDropObjects' ? html`
         <drag-drop .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
