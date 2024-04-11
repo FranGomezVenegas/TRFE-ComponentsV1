@@ -22,10 +22,25 @@ export const MonWater= {
         "url": "/moduleenvmon/EnvMonSampleAPIactions"
       },
       {
+        "name": "Batches",
+        "url": "/moduleenvmon/EnvMonAPIactions"
+      },
+      {
         "name": "ProdLot",
         "url": "/moduleenvmon/EnvMonProdLotAPIactions"
+      },
+      {
+        "name": "Incubators",
+        "url": "/moduleenvmon/EnvMonIncubatorAPIactions"
       }
-    ]
+    ],
+    "queriesEndpoints": [
+      {
+        "name": "Lots",
+        "url": "/moduleMonitoring/MonitoringAPIqueries"
+      }
+    ]            
+    
   },
   "Home":{
 	  "component": "ModuleEnvMonitHomeWater"
@@ -374,212 +389,227 @@ export const MonWater= {
       }
     ]
   },
-  "SamplePending": {
-    "component": "TableWithButtons",
-    "langConfig": {
-      "title": {
-        "sampling": {
-          "label_en": "Pending Sampling",
-          "label_es": "Muestras pendiente muestreo"
-        }
-      },
-      "gridHeader": {"sample_id": {"label_en": "Sample ID","label_es": "ID Muestra","sort": false,"filter": true},
-        "program_name": {"label_en": "Project", "label_es": "Programa", "sort": false, "filter": true},
-        "location_name": {"label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true},
-        "sampling_comment": {"label_en": "sampling Comment", "label_es": "Comentario Muestreo", "sort": false, "filter": true},
-        "spec_code": {"label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true},
-        "spec_variation_name": {"label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true}
-      }
-    },
-    "viewQuery": {
-      "actionName": "SAMPLES_INPROGRESS_LIST",
-      "xxxclientMethod": "getSamples",
-      "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
+  "SamplePending": {    
+      "component": "TableWithButtons",
+      "langConfig": {
+        "gridHeader": {
+          "sample_id": {
+            "label_en": "Sample ID",
+            "label_es": "ID Muestra",
+            "sort": true,
+            "filter": false
+          },
+          "received_on": {
+            "label_en": "Reception Date",
+            "label_es": "Fecha de Recepción",
+            "sort": true,
+            "filter": false
+          },
+          "spec_code": {
+            "label_en": "Spec",
+            "label_es": "Especificación",
+            "sort": true,
+            "filter": false
+          }
+        },
         "title": {
-          "label_en": "Reload",
-          "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": true
-      },
-      "endPointParams": [
-        {"argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name"},
-        {"argumentName": "whereFieldsValue","value": "-"},
-		{"argumentName": "addSampleAnalysis", "value": false},
-        {"argumentName": "addSampleAnalysisFieldToRetrieve", "value": "method_name|testing_group"},
-        {"argumentName": "sampleAnalysisWhereFieldsName", "value": "FQ*String"},
-        {"argumentName": "addSampleAnalysisResult", "value": false}
-		
-      ],
-      "paramFilter": {
-        "sampling": {
-          "argumentName": "whereFieldsName",
-          "value": "sampling_date is null"
+          "label_en": "",
+          "label_es": ""
         }
-      }
-    },
-    "actions": [
-      {
-        "actionName": "GET_SAMPLE_AUDIT",
-        "requiresDialog": true,
-        "endPoint": "/modulesample/SampleAPIqueries",
+      },
+      "viewQuery": {
+        "actionName": "SAMPLES_INPROGRESS_LIST",
+        "addRefreshButton": true,
         "button": {
-          "icon": "rule",
+          "icon": "refresh",
           "title": {
-            "label_en": "Sample Audit",
-            "label_es": "Auditoría de Muestra"
+            "label_en": "Reload",
+            "label_es": "Recargar"
           },
           "requiresGridItemSelected": true
         },
-        "clientMethod": "getObjectAuditInfo",
         "endPointParams": [
           {
-            "argumentName": "sampleId",
-            "selObjectPropertyName": "sample_id"
+            "argumentName": "sampleFieldToRetrieve",
+            "value": "sample_id|current_stage|status|status_previous|received_on|sampling_comment|sample_config_code|spec_code|spec_variation_name"
+          },
+          {
+            "argumentName": "whereFieldsValue",
+            "value": "LOGGED-RECEIVED-INCOMPLETE-COMPLETE*String"
+          },
+          {
+            "argumentName": "whereFieldsName",
+            "value": "status in-"
+          },
+          {
+            "argumentName": "addSampleAnalysisFieldToRetrieve",
+            "value": "method_name|testing_group"
+          },
+          {
+            "argumentName": "sampleAnalysisWhereFieldsName",
+            "value": "testing_group|status not in"
+          },
+          {
+            "argumentName": "addSampleAnalysis",
+            "value": false
+          },
+          {
+            "argumentName": "addSampleAnalysisResult",
+            "value": false
           }
-        ],
-        "dialogInfo": {
-          "name": "auditDialog",
-          "automatic": true,
-          "action": [
+        ]
+      },
+      "row_buttons": [],
+      "enableContextMenu": true,
+      "addActionsInContextMenu": false,
+      "actions": [
+        {
+          "actionName": "SETSAMPLINGDATE",
+          "endPointUrl": "Samples",
+          "requiresDialog": false,
+          "button": {
+            "icon": "date_range",
+            "title": {
+              "label_en": "Set Sample Date",
+              "label_es": "Establecer Fecha Muestra"
+            },
+            "requiresGridItemSelected": true
+          },
+          "endPointParams": [
             {
-              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
-              "requiresDialog": false,
-              "notGetViewData": true,
-              "xxxxsecondaryActionToPerform": {
-                "name": "getObjectAuditInfo",
-                "endPointParams": [
-                  {
-                    "argumentName": "sampleId",
-                    "selObjectPropertyName": "sample_id"
-                  }
-                ]
-              },
-              "endPointUrl": "Samples",
-              "clientMethod": "signAudit",
-              "endPointParams": [
-                {
-                  "argumentName": "auditId",
-                  "targetValue": true
+              "argumentName": "sampleId",
+              "selObjectPropertyName": "sample_id"
+            }
+          ]
+        },
+        {
+          "actionName": "SAMPLINGCOMMENTADD",
+          "requiresDialog": true,
+          "endPointUrl": "Samples",
+          "button": {
+            "icon": "add_comment",
+            "title": {
+              "label_en": "Add Sampling Comment",
+              "label_es": "Agregar Comentario de Muestra"
+            },
+            "requiresGridItemSelected": true
+          },
+          "dialogInfo": {
+            "name": "genericDialog",
+            "fields": [
+              {
+                "text1": {
+                  "label_en": "new Comment",
+                  "label_es": "Comentario",
+                  "selObjectPropertyName": "sampling_comment"
                 }
-              ]
+              }
+            ]
+          },
+          "endPointParams": [
+            {
+              "argumentName": "sampleId",
+              "selObjectPropertyName": "sample_id"
+            },
+            {
+              "argumentName": "sampleComment",
+              "element": "text1",
+              "defaultValue": ""
+            }
+          ]
+        },
+        {
+          "actionName": "SAMPLINGCOMMENTREMOVE",
+          "requiresDialog": false,
+          "endPointUrl": "Samples",
+          "button": {
+            "icon": "speaker_notes_off",
+            "title": {
+              "label_en": "Remove Sampling Comment",
+              "label_es": "Eliminar Comentario de Muestra"
+            },
+            "requiresGridItemSelected": true
+          },
+          "endPointParams": [
+            {
+              "argumentName": "sampleId",
+              "selObjectPropertyName": "sample_id"
+            }
+          ]
+        },
+        {
+          "actionName": "CHANGESAMPLINGDATE",
+          "requiresDialog": true,
+          "endPointUrl": "Samples",
+          "button": {
+            "icon": "event",
+            "title": {
+              "label_en": "Change Sample Date",
+              "label_es": "Cambiar Fecha Muestra"
+            },
+            "requiresGridItemSelected": true
+          },
+          "dialogInfo": {
+            "name": "genericDialog",
+            "fields": [
+              {
+                "datetime1": {
+                  "label_en": "new Date",
+                  "label_es": "Nueva Fecha"
+                }
+              }
+            ]
+          },
+          "endPointParams": [
+            {
+              "argumentName": "sampleId",
+              "selObjectPropertyName": "sample_id"
+            },
+            {
+              "argumentName": "newDateTime",
+              "element": "datetime1"
+            }
+          ]
+        },
+        {
+          "actionName": "EM_NEW_PRODUCTION_LOT",
+          "endPointUrl": "ProdLot",
+          "requiresDialog": true,
+          "button": {
+            "icon": "create_new_folder",
+            "title": {
+              "label_en": "New",
+              "label_es": "Nuevo"
+            },
+            "requiresGridItemSelected": false
+          },
+          "dialogInfo": {
+            "name": "genericDialog",
+            "fields": [
+              {
+                "text1": {
+                  "label_en": "New Production Lot Name",
+                  "label_es": "Nombre para nuevo lote de producción"
+                }
+              }
+            ]
+          },
+          "endPointParams": [
+            {
+              "argumentName": "lotName",
+              "element": "text1"
+            },
+            {
+              "argumentName": "fieldName",
+              "value": "active"
+            },
+            {
+              "argumentName": "fieldValue",
+              "value": "true*Boolean"
             }
           ]
         }
-      },
-      {
-        "actionName": "SETSAMPLINGDATE",
-        "endPointUrl": "Samples",
-        "requiresDialog": false,
-        "button": {
-          "icon": "date_range",
-          "title": {
-            "label_en": "Set Sample Date",
-            "label_es": "Establecer Fecha Muestra"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          {
-            "argumentName": "sampleId",
-            "selObjectPropertyName": "sample_id"
-          }
-        ]
-      },
-      {
-        "actionName": "CHANGESAMPLINGDATE",
-        "requiresDialog": true,
-        "endPointUrl": "Samples",
-        "button": {
-          "icon": "event",
-          "title": {
-            "label_en": "Change Sample Date",
-            "label_es": "Cambiar Fecha Muestra"
-          },
-          "requiresGridItemSelected": true
-        },
-        "dialogInfo": {
-          "namesssss": "dateDialog",
-          "name": "genericDialog",
-          "fields": [
-            {
-              "datetime1": {
-                "label_en": "new Comment",
-                "label_es": "Comentario"
-              }
-            }
-          ]
-        },
-        "endPointParams": [
-          {
-            "argumentName": "sampleId",
-            "selObjectPropertyName": "sample_id"
-          },
-          {
-            "argumentName": "newDateTime",
-            "element": "datetime1"
-          }
-        ]
-      },
-      {
-        "actionName": "SAMPLINGCOMMENTADD",
-        "requiresDialog": true,
-        "endPointUrl": "Samples",
-        "button": {
-          "icon": "add_comment",
-          "title": {
-            "label_en": "Add Sampling Comment",
-            "label_es": "Agregar Comentario de Muestra"
-          },
-          "requiresGridItemSelected": true
-        },
-        "dialogInfo": {
-          "namezzzz": "commentDialog",
-          "name": "genericDialog",
-          "fields": [
-            {
-              "text1": {
-                "label_en": "new Comment",
-                "label_es": "Comentario",
-                "selObjectPropertyName": "sampling_comment"
-              }
-            }
-          ]
-        },
-        "endPointParams": [
-          {
-            "argumentName": "sampleId",
-            "selObjectPropertyName": "sample_id"
-          },
-          {
-            "argumentName": "sampleComment",
-            "element": "text1",
-            "defaultValue": ""
-          }
-        ]
-      },
-      {
-        "actionName": "SAMPLINGCOMMENTREMOVE",
-        "requiresDialog": false,
-        "endPointUrl": "Samples",
-        "button": {
-          "icon": "speaker_notes_off",
-          "title": {
-            "label_en": "Remove Sampling Comment",
-            "label_es": "Eliminar Comentario de Muestra"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          {
-            "argumentName": "sampleId",
-            "selObjectPropertyName": "sample_id"
-          }
-        ]
-      }
-    ]
+      ]      
   },
   "SampleEnterResult": {
     "component": "TableWithButtons",

@@ -2,10 +2,10 @@ import { html, css, nothing } from 'lit';
 import { ApiFunctions } from '../Api/ApiFunctions';
 import { ClientMethod } from '../../../src/ClientMethod';
 import { ProcManagementMethods } from '../../components/ProcManagement/ProcManagementMethods';
-
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
 
 export function ButtonsFunctions(base) {
-  return class extends ProcManagementMethods(ClientMethod(ApiFunctions(base))) {
+  return class extends ProcManagementMethods(ClientMethod(ActionsFunctions(ApiFunctions(base)))) {
 
 
     getButtonForRows(actions, data, isProcManagement, parentData) {
@@ -105,14 +105,14 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-icon-button>` :
+                  @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-icon-button>` :
                 html`${action.button.img ?
                   html`<mwc-icon-button 
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   title="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement, parentData)}>
+                  @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised 
@@ -120,7 +120,7 @@ export function ButtonsFunctions(base) {
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.actionMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-button>`
+                  @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-button>`
                   }`
                 }` :
               nothing
@@ -240,7 +240,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
                   html`${action.button.img ?
                     html`<mwc-icon-button  id="${action.actionName}"
                   class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
@@ -248,7 +248,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
+                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                   </mwc-icon-button>` :
                     html`<mwc-button dense raised id="${action.actionName}"
@@ -256,7 +256,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${(e) => this.actionMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
                     }`
                   }` :
                 nothing
@@ -517,82 +517,6 @@ export function ButtonsFunctions(base) {
       return d
     }
     
-    actionMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData, dragEntry, dropEntry) {
-      e.stopPropagation();
-      sessionStorage.setItem('actionName', action.actionName);
-      selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
-      console.log('actionMethod', this.selectedProcInstance, isProcManagement)
-      //this.loadDialogs()  
-      if (data !== undefined) {
-        if (Object.keys(data).length > 0) {
-          this.selectedItems = []
-          this.selectedItems.push(data)
-        }
-      }
-      console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems, 'parentData', parentData)
-      if (action === undefined) {
-        alert('action not passed as argument')
-        return
-      }
-  
-      if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
-        action.actionName = "SCRIPT_UPDATE_STEP";
-        action.dialogInfo.name = "testScriptNewStepDialog";
-      }
-      this.actionBeingPerformedModel = action;
-      if (action.requiresDialog === undefined) {
-        alert('The action ' + action.actionName + ' has no requiresDialog property which is mandatory')
-        return
-      }
-      if (action.requiresDialog === false) {
-        if (action.clientMethod !== undefined) {
-          this[action.clientMethod](action, this[selectedItemPropertyName][0])
-          return
-        } else {
-          if (this[selectedItemPropertyName] === undefined) {
-            if (data === undefined) {
-              this.actionWhenRequiresNoDialog(action, null, null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
-            } else {
-              this.actionWhenRequiresNoDialog(action, data, null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
-            }
-          } else {
-            this.actionWhenRequiresNoDialog(action, this[selectedItemPropertyName][0], null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
-          }
-          return
-        }
-      }
-      if (action.requiresGridItemSelected !== undefined && action.requiresGridItemSelected === true &&
-        (this[selectedItemPropertyName] === undefined || this[selectedItemPropertyName][0] === undefined)) {
-        alert('Please select one item in the table prior')
-        return
-      }
-      this.GetQueriesForDialog(action)
-      this.getGenericDialogGridItems(action.dialogInfo)
-
-      //this.loadDialogs()
-      console.log("action.dialogInfo.name", action.dialogInfo.name);
-      if (action.dialogInfo!==undefined&&action.dialogInfo.name === "auditDialog") {
-        this[action.clientMethod]()
-        return
-      }
-      if (action.dialogInfo!==undefined&&this[action.dialogInfo.name]) {
-        if (action.dialogInfo.subQueryName) {
-          this[action.dialogInfo.subQueryName]()
-        } else {
-          this[action.dialogInfo.name].show();
-        }
-      }
-      else if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
-        this["testScriptNewStepDialog"].show();
-      }
-      else {
-        if (action.dialogInfo!==undefined){
-          alert('the action ' + action.actionName + ' has no dialog defined')
-        }else{  
-          alert('the dialog ' + action.dialogInfo.name + ' does not exist')
-        }
-      }
-    }
 
     getFromMasterData() {
       if (this.procInstanceName === undefined) {
@@ -910,101 +834,6 @@ export function ButtonsFunctions(base) {
       return data
     }
 
-    actionWhenRequiresNoDialog(action, selectedItem, targetValue, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry) {
-      console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem, 'gridSelectedRow', gridSelectedRow, 'parentData', parentData)
-      this.selectedAction = action
-      if (targetValue === undefined) { targetValue = {} }
-      if (this.itemId) {
-        this.credsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
-      } else {
-        this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
-      }
-      // Comentado para habilitar confirmDialogsparentData
-      // this.performActionRequestHavingDialogOrNot(action, selectedItem)
-      return
-    }
-    zzzactionWhenRequiresNoDialogForDragAndDrop(action, selectedItem, dataFromDestination, dataFromOrigin, targetValue, isProcManagement) {
-      console.log('actionWhenRequiresNoDialog', 'action', action, 'selectedItem', selectedItem)
-      this.selectedAction = action
-      if (targetValue === undefined) { targetValue = {} }
-      if (this.itemId) {
-        //conso
-        this.credsChecker(action.actionName, this.itemId, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
-      } else {
-         this.credsChecker(action.actionName, selectedItem, this.jsonParamForDragAndDrop(this.selectedAction, selectedItem, dataFromDestination, dataFromOrigin, targetValue), action, null, null, isProcManagement)
-      }
-      // Comentado para habilitar confirmDialogs
-      // this.performActionRequestHavingDialogOrNot(action, selectedItem)
-      return
-    }
-
-    async performActionRequestHavingDialogOrNot(action, selectedItem, targetValue = {}, credDialogArgs = {}, gridSelectedItem = {}, parentData, dragEntry, dropEntry) {
-      
-      if (action.alternativeAPIActionMethod !== undefined) {
-        this[action.alternativeAPIActionMethod]()
-        return
-      }
-      if (gridSelectedItem === undefined || gridSelectedItem === null) {
-        if (this.genericDialogGridSelectedItems !== undefined && this.genericDialogGridSelectedItems.length > 0) {
-          gridSelectedItem = this.genericDialogGridSelectedItems[0]
-        }
-      }
-      let extraParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem, parentData, dragEntry, dropEntry)
-      let APIParams = this.getAPICommonParams(action)
-      let endPointUrl = this.getActionAPIUrl(action)
-      if (String(endPointUrl).toUpperCase().includes("ERROR")) {
-        alert(endPointUrl)
-        return
-      }
-      let params = ""
-      if (this.config !== undefined && this.config.backendUrl !== undefined) {
-        params = this.config.backendUrl + endPointUrl
-      } else {
-        let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-        params = userSession.backendUrl + endPointUrl
-      }
-      params = params + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(extraParams)
-        + '&' + new URLSearchParams(credDialogArgs)
-      //console.log('performActionRequestHavingDialogOrNot', 'action', action, 'selectedItem', selectedItem, 'extraParams', extraParams)
-
-      await this.fetchApi(params).then(j => {
-        //console.log('performActionRequestHavingDialogOrNot: into the fetchApi', 'action', action)
-        if (action.notGetViewData === undefined || action.notGetViewData === false) {
-          this.GetViewData()
-        }
-        this.selectedItems[0] = selectedItem;
-        action = this.actionBeingPerformedModel
-        let actionRefreshQuery = []
-        if (action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined&&action.dialogInfo.name==='resultDialog'){
-          if (action.dialogInfo.keyFldName!==undefined){
-            this.actionMethodResults(action, this.selectedItems, this.selectedItems[0][action.dialogInfo.keyFldName])  
-          }else{
-            if (action.dialogInfo.viewQuery.endPointParams[0].selObjectPropertyName!==undefined){
-              this.actionMethodResults(action, this.selectedItems, this.selectedItems[0][action.dialogInfo.viewQuery.endPointParams[0].selObjectPropertyName])
-            }else{
-              this.actionMethodResults(action, this.selectedItems, '')
-            }
-          }
-        }
-        if (action !== undefined && action.dialogInfo !== undefined && action.dialogInfo.name !== undefined
-          && action !== null && action.dialogInfo !== null && action.dialogInfo.name !== null) {
-          //alert('closing dialog')
-          //console.log('closing dialog')
-          if (this[action.dialogInfo.name] !== undefined) {
-            this[action.dialogInfo.name].close()
-          }
-        }
-        if (action.secondaryActionToPerform !== undefined) {
-          this[action.secondaryActionToPerform.name]()
-        }
-        if (action.variableToSetResponse !== undefined) {
-          if (this[action.variableToSetResponse] !== undefined) {
-            this[action.variableToSetResponse] = j
-          }
-        }
-
-      })
-    }
 
     disabledByCertification(action) {
       return false;

@@ -149,7 +149,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     loadDialogs(){
       //console.log('loadDialogs')
       return html`
-      ${this.credentialsDialog()}
+      ${this.credentialsDialog()} 
       ${this.genericFormDialog()}
       ${this.reactivateObjectsDialog()}
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}

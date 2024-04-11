@@ -164,13 +164,14 @@ export function TrazitCredentialsDialogs(base) {
       nonProc: { type: Boolean },
       escapeKey: { type: Boolean },
       reqParams: { type: Object }
+      
     };
   }
 
   constructor() {
     super();
     this.escapeKey = true;
-    this.reqParams = {};
+    this.reqParams = {};    
     this.reset();
   }
 
@@ -219,7 +220,19 @@ export function TrazitCredentialsDialogs(base) {
     }
         
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    credentialsDialog(actionModel = this.actionBeingPerformedModel) {
+    credentialsDialogToOpen(action, params, gridSelectionData, parentData) {
+      console.log('credentialsDialog, line223', action, params, gridSelectionData, parentData)
+      this.credDialog.show()
+      // this.showDialog = true;
+      // // You can also directly manipulate the dialog element here
+      // const dialog = this.shadowRoot.querySelector('#credDialog');
+      // if (dialog) {
+      //   dialog.open(); // or dialog.style.display = 'block'; or similar
+      // }
+    }
+      credentialsDialog(){
+        console.log('actionInfoToAPIcall', this.actionInfoToAPIcall)
+      //alert('credentialsDialog, line223')
         //console.log('credDialog>>render')
         return html`
           <tr-dialog id="credDialog" 
@@ -227,7 +240,7 @@ export function TrazitCredentialsDialogs(base) {
             @closed=${this.closed}
             .heading="${this.headerLabel()}"
             hideActions=""
-            scrimClickAction=""
+            scrimClickAction=""            
             .escapeKeyAction="${this.escapeKey?'close':''}">
             ${this.changing||this.nonProc ?
               nothing :
@@ -265,7 +278,7 @@ export function TrazitCredentialsDialogs(base) {
               <div style="margin-top:30px;text-align:center">
                 <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
                   ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.nextRequest}>
+                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.trazitNextRequest}>
                   ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
               </div>
             </div>
@@ -280,6 +293,7 @@ export function TrazitCredentialsDialogs(base) {
     if (this.pwd) this.pwd.value = ""
     if (this.esg) this.esg.value = ""
     if (this.jst) this.jst.value = ""
+    
     }
   /**
    * Composition template for the input fields
@@ -302,7 +316,7 @@ export function TrazitCredentialsDialogs(base) {
         <mwc-textfield id="esg" label="${this.adjustLbl(`${langConfig.esgToCheck["label_"+this.lang]}`)}" type="password" iconTrailing="visibility" 
           dialogInitialFocus
           @click=${this.showPwd}
-          @keypress=${e=>this.keyPress(e, 'checkingPhrase')}></mwc-textfield>
+          @keypress=${e=>this.keyPress(e, 'checkingEsignPhrase')}></mwc-textfield>
       `
     }
   }
@@ -313,8 +327,9 @@ export function TrazitCredentialsDialogs(base) {
    * TEXTLIST: combination of TEXT & LIST
    */
   auditField() {
+    console.log(this.justificationType)
     // adjust the placeholder label for changing purpose
-    if (this.justificationType == "TEXT" || this.justificationType == "LABPLANET_FALSE") {
+    if (this.justificationType===null || this.justificationType===undefined || this.justificationType == "TEXT" || this.justificationType == "LABPLANET_FALSE") {
       return html`
         <mwc-textfield id="jst" label="${this.adjustLbl(`${langConfig.jstToCheck["label_"+this.lang]}`)}" type="text" 
           ?dialogInitialFocus=${this.justificationType?true:false} 
@@ -322,7 +337,7 @@ export function TrazitCredentialsDialogs(base) {
       `
     } else {
       return html`
-        <vaadin-combo-box id="jst"
+      <vaadin-combo-box id="jst"
           item-label-path="name"
           item-value-path="id"
           .placeholder="${langConfig.jstToCheck["label_"+this.lang]}"
@@ -360,7 +375,8 @@ export function TrazitCredentialsDialogs(base) {
   get esg() {return this.shadowRoot.querySelector("mwc-textfield#esg")}
 
   get jst() {return this.shadowRoot.querySelector("#jst")}
-
+  
+   
   get dialogSurface() {
     if (this.credDialog===null){return null}
     return this.credDialog.shadowRoot.querySelector(".mdc-dialog__surface")}
@@ -387,9 +403,9 @@ export function TrazitCredentialsDialogs(base) {
     if (this.type == "user") {
       this.checkingUser()
     } else if (this.type == "esign") {
-      this.checkingPhrase()
+      this.checkingEsignPhrase()
     } else if (this.type == "justification") {
-      this.nextRequest()
+      this.trazitNextRequest()
     }
   }
 
@@ -405,44 +421,16 @@ export function TrazitCredentialsDialogs(base) {
     this.credDialog.close()
   }
 
-  credsCheckerOoooold(actionName, objId, params={}, action, isPlatform=false, dialogName='', isProcManagement, gridSelectedRow, parentData) {
-    console.log("credsChecker");
-    console.log('credsChecker', isProcManagement)
-    this.actionObj = action || {}
-    this.reqParams = params
-    if (actionName) {
-      this.actionName = actionName
-      if (objId == -1) {
-        //this.actionBeingPerformedModel=action
-        this.credDialog.show(action)
-      } else {
-        this.objectId = objId
-        let noNeedCreds = false
-        if (!isPlatform){
-          noNeedCreds=this.checkProcList(isProcManagement)
-        }else{
-          if (dialogName.length==0){
-            noNeedCreds=true
-          }else{
-            noNeedCreds=false
-            this.type=dialogName
-          }
-        }
-        if (noNeedCreds) {
-          this.nextRequest(action, gridSelectedRow, parentData)
-        } else {
-          if (this.type == "confirm") {
-            //this.actionBeingPerformedModel=action
-            this.confirmDialog.show(action)
-          } else {
-            //this.actionBeingPerformedModel=action
-            this.credDialog.show(action)
-          }
-        }
-      }
-    }
+ 
+  buildCreadArgumentsObj(){
+    let credArguments = {}
+    if (this.userName) {credArguments.userToCheck=this.userName}
+    if (this.userTxtFld&&this.userTxtFld.value!==null&&String(this.userTxtFld.value).length>0) {credArguments.userToCheck=this.userTxtFld.value}
+    if (this.pwd&&this.pwd.value!==null&&String(this.pwd.value).length>0) {credArguments.passwordToCheck=this.pwd.value}
+    if (this.esg&&this.esg.value!==null&&String(this.esg.value).length>0) {credArguments.esignPhraseToCheck=this.esg.value}
+    if (this.jst&&this.jst.value!==null&&String(this.jst.value).length>0) {credArguments.auditReasonPhrase=this.jst.value}
+    return credArguments
   }
-  
   checkingUser() {
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "TOKEN_VALIDATE_USER_CREDENTIALS",
@@ -454,12 +442,18 @@ export function TrazitCredentialsDialogs(base) {
       if (j.is_error) {
         this.checkAttempt()
       } else {
-        this.nextRequest()
+        let actionInfoToAPIcall=JSON.parse(sessionStorage.getItem('actionInfoToAPIcall'));
+        this.trazitNextRequest(actionInfoToAPIcall.action, actionInfoToAPIcall.actionParams, 
+            this.buildCreadArgumentsObj(), actionInfoToAPIcall.gridSelectedItem, actionInfoToAPIcall.parentData)
       }
     })
   }
 
-  checkingPhrase() {
+
+
+
+
+  checkingEsignPhrase() {
     let params = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
       actionName: "TOKEN_VALIDATE_ESIGN_PHRASE",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
@@ -469,34 +463,11 @@ export function TrazitCredentialsDialogs(base) {
       if (j.is_error) {
         this.checkAttempt()
       } else {
-        this.nextRequest()
+        let actionInfoToAPIcall=JSON.parse(sessionStorage.getItem('actionInfoToAPIcall'));
+        this.trazitNextRequest(actionInfoToAPIcall.action, actionInfoToAPIcall.actionParams, 
+            this.buildCreadArgumentsObj(), actionInfoToAPIcall.gridSelectedItem, actionInfoToAPIcall.parentData)
       }
     })
-  }
-
-  nextRequestMovedToDialogsFunctions() {
-    alert('nextRequest')
-    this.reqParams = {
-      ...this.reqParams,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      dbName: this.config.dbName,
-      actionName: this.actionName,
-      //sampleId: this.objectId,
-      userToCheck: this.userName,
-      passwordToCheck: this.pwd ? this.pwd.value : "",
-      esignPhraseToCheck: this.esg ? this.esg.value : "",
-      auditReasonPhrase: this.jst ? this.jst.value: ""
-    }
-    let cleanParams = {}
-    Object.entries(this.reqParams).map(([key, value]) => {
-      if (value != null || value != undefined) {
-        cleanParams[key] = value
-      }
-    })
-    this.reqParams = cleanParams
-    if (this.credDialog) {
-      this.credDialog.close()
-    }
   }
 
   setAttempts() {
