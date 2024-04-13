@@ -21,7 +21,7 @@ export function ProcManagementMethods(base) {
     }
 
     procMngRequirementsMethod(e) {
-      this.credsChecker(
+      this.trazitCredsChecker(
         this.actionBeingPerformedModel.actionName,
         null,
         this.jsonParam(this.actionBeingPerformedModel, this.selectedItems[0]),

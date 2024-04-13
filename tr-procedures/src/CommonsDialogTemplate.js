@@ -194,48 +194,7 @@ export function CommonsDialogTemplate(base) {
         }
     }
     
-    actionMethodTrProcedure(action, replace = true, actionNumIdx) {
-      console.log('actionMethodTrProcedure', 'action', action)
-        if (replace) {
-          this.selectedAction = action
-        }
-        if (actionNumIdx!==undefined) {
-          let viewDef=ProceduresModel[this.procName][this.viewName]
-          action = viewDef.actions[actionNumIdx]
-          this.selectedAction = ProceduresModel[this.procName][this.viewName].actions[actionNumIdx]
-        }else{
-          //action = ProceduresModel[this.procName][this.viewName].viewQuery
-          //this.selectedAction = ProceduresModel[this.procName][this.viewName].viewQuery
-        }
-        if (action===undefined){
-          alert('viewQuery property not found in the procedure model for procInstanceName'+this.procName+' and view '+this.viewName)
-          return
-        }
-        if (action&&action.dialogInfo) {
-          if (action.dialogInfo.automatic) { 
-            if (this.itemId) {
-              this.credsChecker(action.actionName, this.itemId, this.jsonParam(action, this.selectedSamples[0]), action)
-            } else if (this.selectedSamples.length) {
-              this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(action, this.selectedSamples[0]), action)
-            } else {
-              this.credsChecker(action.actionName, null, this.jsonParam(action, this.selectedSamples), action)
-            }
-          } else {
-            if (this[action.dialogInfo.name]){
-              this[action.dialogInfo.name].show()          
-            }else{
-              alert('the dialog '+action.dialogInfo.name+' does not exist')
-            }
-          }
-        } else {
-          if (this.selectedSamples.length) {
-            this.credsChecker(action.actionName, this.selectedSamples[0].sample_id, this.jsonParam(action, this.selectedSamples[0]), action)
-          } else {
-            this.credsChecker(action.actionName, null, this.jsonParam(action, this.selectedSamples[0]), action)
-          }
-        }
-      }    
-      async getGridData() {
+  async getGridData() {
         this.samplesReload = true
         this.selectedSamples = []
         let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl)

@@ -301,47 +301,6 @@ export class SamplingPoints extends ModuleEnvMonitClientMethods(DialogsFunctions
     `
   }
 
-  xactionMethod(action, replace = true, actionNumIdx) {
-    if (replace) {
-      this.selectedAction = action
-    }
-    if (actionNumIdx) {
-      action = actions[actionNumIdx]
-      this.selectedAction = actions[actionNumIdx]
-    }
-    if (this.selectedItems.length) {
-      this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(), action)
-    } else {
-      this.credsChecker(action.actionName, null, this.jsonParam(), action)
-    }
-  }
-
-  xjsonParam() {
-    let jsonParam = {}
-    if (this.selectedAction.apiParams) {
-      this.selectedAction.apiParams.forEach(p => {
-        if (p.element) {
-          jsonParam[p.query] = this[p.element].value // get value from field input
-        } else if (p.defaultValue) {
-          jsonParam[p.query] = p.defaultValue // get value from default value (i.e incubator)
-        } else if (p.targetValue) {
-          jsonParam[p.query] = this.targetValue[p.query] // get value from target element passed
-        } else {
-          jsonParam[p.query] = p.value
-        }
-      })
-    }
-    return jsonParam
-  }
-
-  xnextRequest() {
-    super.nextRequest()
-    this.reqParams = {
-      procInstanceName: this.procInstanceName,
-      ...this.reqParams
-    }
-    this[this.selectedAction.clientMethod]()
-  }
 
   gridList() {
     return Object.entries(thisTabViewDefinition.gridHeader).map(

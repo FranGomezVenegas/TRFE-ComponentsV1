@@ -9,6 +9,14 @@ import '../grid_with_buttons/gridCellTooltip'
 export function ReadOnlyTableParts(base) {
     let contextMenu = undefined;
     return class extends FeaturesDynamicFieldValue(GridFunctions(ButtonsFunctions(base))) {
+        popupFilterElement(elem, dataArr){
+          elem.filterElements=[{"name": "lot_name", "type": "text"}, 
+          {"name": "references", "type": "multilist", "list properties":"blablabla"}]
+
+        }
+        applyFilter(elem, dataArr){
+
+        }
         setupReadOnlyTable(elem, dataArr, isSecondLevel, directData, theme, parentData) {
             if (elem===undefined){
                 return

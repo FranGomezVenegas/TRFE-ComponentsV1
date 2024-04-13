@@ -1,7 +1,6 @@
-import { html, css, nothing, LitElement } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
 
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
@@ -15,7 +14,6 @@ import '../components/Audit/audit-dialog';
 import '../components/grid_with_buttons/grid-with-buttons';
 import { commonLangConfig } from '@trazit/common-core';
 
-import '../components/Audit/audit-dialog';
 import { AuditFunctions} from '../components/Audit/AuditFunctions';
 
 export class SampleIncubationView extends AuditFunctions(TrazitGenericDialogs(ButtonsFunctions(GridFunctions((CredDialog))))) {
@@ -150,39 +148,7 @@ export class SampleIncubationView extends AuditFunctions(TrazitGenericDialogs(Bu
 // </grid-with-buttons>  
 
 
-xbottomCompositionBlock(){
-  return html`  
-  ${this.viewModelFromProcModel.bottomCompositions ?
-      html`${this.viewModelFromProcModel.bottomCompositions.map(c =>                             
-      html`
-          ${c.elementName=='envmonit-batch-sampleincubation' ? html`                               
-          <div class="layout flex">
-          ${c.filter}
-          <gridmodel-bottomcomp-sampleincubation id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
-              .lang=${this.lang}
-              .windowOpenable=${this.windowOpenable}
-              .sopsPassed=${this.sopsPassed}
-              .model=${c} .config=${this.config} .batchName=${this.batchName}
-              @reload-samples=${e=>this[e.detail.method]()}
-              @selected-incub=${this.filteringBatch}
-              @selected-batch=${this.filteringIncub}
-              @set-grid=${e=>this.setGrid(e.detail)}></gridmodel-bottomcomp-sampleincubation>
-          </div>
-          ` : nothing} 
-          ${c.elementName=='chart' ? html`      
-          <div class="layout flex">
-          <gridmodel-bottomcomp-chart id=${c.filter} .procName=${this.procName} .viewName=${this.viewName}
-          .selectedItems=${this.selectedItems} .lang=${this.lang}
-          .model=${c} .config=${this.config}></gridmodel-bottomcomp-chart>
-          </div>
-      ` : nothing} 
-      `
-      )}` :
-      html``
-  }
-  `
-  }
- 
+
 
 render(){
  // console.log('SampleIncubationView >> render', 'viewModelFromProcModel', this.viewModelFromProcModel)
@@ -341,73 +307,7 @@ samplesPendingIncubLayout(){
     this.selectedStucks = []
     this.selectedDialogAction = null
   }
-  xreloadDialog() {
-    this.resetDialogThings()
-    this.actionMethod(this.selectedAction)
-  }
-  xnextRequest() {
-    super.nextRequest()
-    this.reqParams = {
-      procInstanceName: this.procInstanceName,
-      ...this.reqParams
-    }
-    let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
-    this[action.clientMethod]()
-  }
-  xdialogAccept(selected=true) {
-    if (selected) {
-      this.credsChecker(this.selectedAction.actionName, this.selectedItems[0].sample_id, this.jsonParam(this.selectedAction), this.selectedAction)
-    } else {
-      this.credsChecker(this.selectedAction.actionName, null, this.jsonParam(this.selectedAction), this.selectedAction)
-    }
-  }
-  xjsonParam() {
 
-    let jsonParam = {}
-    return jsonParam
-    let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
-    if (action.apiParams) {
-      action.apiParams.forEach(p => {
-        if (p.element) {
-          jsonParam[p.query] = this[p.element].value // get value from field input
-        } else if (p.defaultValue) {
-          jsonParam[p.query] = p.defaultValue // get value from default value (i.e incubator)
-        } else if (p.beItem) {
-          jsonParam[p.query] = this.selectedItems[0][p.beItem] // get value from selected item
-        } else if (p.targetValue) {
-          jsonParam[p.query] = this.targetValue[p.query] // get value from target element passed
-        } else {
-          jsonParam[p.query] = p.value
-        }
-      })
-    }
-    if (action.paramFilter) {
-      jsonParam[action.paramFilter[this.filterName].query] = action.paramFilter[this.filterName].value
-    }
-    return jsonParam
-  }
-  xiconColumn(key, value, i, sectionModel=this.viewModelFromProcModel) {
-    return html`
-      ${this.desktop ?
-        html`
-          <vaadin-grid-column class="${key}"
-            header="${value['label_'+this.lang]}"
-            ${columnBodyRenderer(this.iconRenderer)}
-            text-align="center"
-            width="${sectionModel.langConfig.gridHeader[key].width}" resizable 
-          ></vaadin-grid-column>
-        ` :
-        html`
-          <vaadin-grid-column class="${key}"
-            header="${value['label_'+this.lang]}"
-            ${columnBodyRenderer(this.iconRenderer)}
-            text-align="center"
-            width="65px" resizable 
-          ></vaadin-grid-column>
-        `
-      }
-    `
-  }
   iconRenderer(sample, viewModelFromProcModel, col) {
     if (this.filterName) {
       if (col.getAttribute("class") == "sampleType") {
@@ -461,111 +361,7 @@ samplesPendingIncubLayout(){
       }
     }
   }
-  xnonIconColumn(key, value, i, sectionModel=this.viewModelFromProcModel) {
-    return html`${sectionModel.langConfig.gridHeader[key].sort ?
-      this.xsortColumn(key, value, i, sectionModel) :
-      html`${sectionModel.langConfig.gridHeader[key].filter ? 
-        html`${this.xfilterColumn(key, value, i, sectionModel)}` : 
-        html`${this.xcommonColumn(key, value, i, sectionModel)}`
-      }`
-    }`
-  }
-  xsortColumn(key, value, i, sectionModel=this.viewModelFromProcModel) {
-    return html`
-      ${this.desktop ?
-        html`
-          ${i==0 ?
-            html`${sectionModel.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-sort-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                width="${sectionModel.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`:
-              html`<vaadin-grid-sort-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-            }` :
-            html`${sectionModel.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-sort-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                width="${sectionModel.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>` :
-              html`<vaadin-grid-sort-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-            }`
-          }
-        ` :
-        html`<vaadin-grid-sort-column width="65px" resizable 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-          text-align="${sectionModel.langConfig.gridHeader[key].align ? sectionModel.langConfig.gridHeader[key].align : 'end' }"
-          path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-sort-column>`
-      }
-    `
-  }
-  xfilterColumn(key, value, i, sectionModel=this.viewModelFromProcModel) {
-    return html`
-      ${this.desktop ?
-        html`
-          ${i==0 ?
-            html`${sectionModel.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-filter-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                width="${sectionModel.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-              html`<vaadin-grid-filter-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-            }` :
-            html`${sectionModel.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-filter-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                width="${sectionModel.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`:
-              html`<vaadin-grid-filter-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-            }`
-          }
-        ` :
-        html`<vaadin-grid-filter-column width="65px" resizable 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-          text-align="${sectionModel.langConfig.gridHeader[key].align ? sectionModel.langConfig.gridHeader[key].align : 'end' }"
-          path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-filter-column>`
-      }
-    `
-  }
-  xcommonColumn(key, value, i, sectionModel=this.viewModelFromProcModel) {
-    return html`
-      ${this.desktop ?
-        html`
-          ${i==0 ?
-            html`${sectionModel.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                width="${sectionModel.langConfig.gridHeader[key].width}" resizable text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-              html`<vaadin-grid-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                flex-grow="0" text-align="end" path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-            }` :
-            html`${sectionModel.langConfig.gridHeader[key].width ?
-              html`<vaadin-grid-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                width="${sectionModel.langConfig.gridHeader[key].width}" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`:
-              html`<vaadin-grid-column 
-                ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-                resizable auto-width path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-            }`
-          }
-        ` :
-        html`<vaadin-grid-column 
-          ${columnBodyRenderer((sample)=>this.isConfidential(sample, key, sectionModel))}
-          width="65px" resizable path="${key}" header="${value['label_'+this.lang]}"></vaadin-grid-column>`
-      }
-    `
-  }
-  xisConfidential(sample, key, sectionModel=this.viewModelFromProcModel) {
-    if (sectionModel.langConfig.gridHeader[key].confidential_value&&sample[key]) {
-      return html`*****`
-    } else {
-      return html`${sample[key]}`
-    }
-  }
+
 
   actionMethod(action, viewModel) {
    // console.log('actionMethod')
@@ -611,88 +407,9 @@ samplesPendingIncubLayout(){
     }
     //this.actionBeingPerformedModel=undefined
     console.log("End of actionMethiod", this.actionBeingPerformedModel)
-
     return
-    if (action.dialogInfo) {
-      if (action.dialogInfo.automatic) {
-        if (this.itemId) {
-          this.credsChecker(action.actionName, this.itemId, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
-        } else {
-          this.credsChecker(action.actionName, this[selectedItemPropertyName][0].sample_id, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
-        }
-      } else {
-        this[action.dialogInfo.name].show()
-      }
-    } else {
-      if (this[selectedItemPropertyName].length) {
-        this.credsChecker(action.actionName, this[selectedItemPropertyName][0].sample_id, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
-      } else {
-        this.credsChecker(action.actionName, null, this.xjsonParamCommons(action, this[selectedItemPropertyName][0]), action)
-      }
-    }
   }
-  xloadDialogs(){
-    console.log('loadDialogs', this.actionBeingPerformedModel)
-    return html`
-      ${this.genericFormDialog(this.actionBeingPerformedModel)}
-      ${this.assignTemplate()}
-    `
-  }
-//  ${this.newBatchTemplate()}
 
-  xxxxxxactionMethodxxxx(action, replace = true, actionNumIdx) {
-    //this.loadDialogs()  
-    console.log('actionMethod', 'action', action)
-        if(action===undefined){
-            alert('action not passed as argument')
-            return
-        }
-
-        this.samplesReload = true
-        this.selectedItems = []  
-
-        this.actionBeingPerformedModel=action        
-        if(action.requiresDialog===undefined){
-            alert('The action '+action.actionName+' has no requiresDialog property which is mandatory')
-            return
-        }
-        if(action.requiresDialog===false){
-            this.actionWhenRequiresNoDialog(action, this.selectedItems[0])
-            return
-        }  
-        //this.loadDialogs()
-        if (action.dialogInfo.name==="auditDialog"){
-          this[action.clientMethod]()
-          return}
-        if (this[action.dialogInfo.name]){
-            if (action.dialogInfo.subQueryName){
-                this[action.dialogInfo.subQueryName]()
-            }else{        
-                this[action.dialogInfo.name].show()          
-            }
-        }else{
-            alert('the dialog '+action.dialogInfo.name+' does not exist')
-        }
-
-    return
-    }   
-
-
-  gridList2(sectionModel) {
-//    console.log('gridList2', 'sectionModel', sectionModel)
-    if (sectionModel.langConfig.gridHeader===undefined){return}
-    if (sectionModel.langConfig && JSON.stringify(sectionModel.langConfig) == JSON.stringify(sectionModel.langConfig)) {
-      return Object.entries(sectionModel.langConfig.gridHeader).map(
-        ([key, value], i) => html`
-        alert(sectionModel.langConfig.gridHeader[key].label_en)
-          ${sectionModel.langConfig.gridHeader[key].is_icon ?
-            this.xiconColumn(key, value, i, sectionModel) :
-            this.xnonIconColumn(key, value, i, sectionModel)
-          }
-        `
-      )
-    }
-  }
 
 
   filteringIncub(e) {
@@ -752,55 +469,7 @@ samplesPendingIncubLayout(){
   }
 
 
-    /** Incubation Template Dialog part */
-    xnewBatchTemplate() {      
-      return html`
-      <tr-dialog id="newBatchDialog" 
-        @closed=${() => this.batchInput.value = ""}
-        heading=""
-        hideActions=""
-        scrimClickAction="">
-        <div class="layout vertical flex center-justified">
-          <mwc-textfield id="batchInput" label="${this.viewModelFromProcModel.active_batches && this.viewModelFromProcModel.active_batches.langConfig.fieldText.newBatch["label_" + this.lang]}" 
-            dialogInitialFocus @keypress=${e => e.keyCode == 13 && this.newBatch()}></mwc-textfield>
-          <div style="margin-top:30px;text-align:center">
-            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" @click=${this.newBatch}>
-              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-          </div>
-        </div>
-      </tr-dialog>
-      `
-    }
 
-    get xnewBatchDialog() {
-      return this.shadowRoot.querySelector("tr-dialog#newBatchDialog")
-    }
-
-    get xbatchInput() {
-      return this.shadowRoot.querySelector("mwc-textfield#batchInput")
-    }
-
-    xnewBatch() {
-      if (this.batchInput.value) {
-        this.dialogAccept(false)
-      }
-    }
-    xxxgetAssign() {
-      console.log('getAssign')
-      let params = this.config.backendUrl + this.config.frontEndEnvMonitIncubationUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          this.selectedIncubators = []
-          this.incubatorsList = j
-          this.asGrid.items = j
-          this.requestUpdate()
-        }
-      })
-    }
-    // 
     assignTemplate() {
       // console.log('assignTemplate')
       return html`
@@ -1032,8 +701,6 @@ samplesPendingIncubLayout(){
 
     get stuckSamplesGrid() {return this.shadowRoot.querySelector("vaadin-grid#stuckSamplesGrid")}
 
-//    get batchElement() {return this.shadowRoot.querySelector("gridmodel-bottomcomp-sampleincubation#active_batches")}
-//    get incubElement() {return this.shadowRoot.querySelector("gridmodel-bottomcomp-sampleincubation#samplesWithAnyPendingIncubation")}
 
 }
 window.customElements.define('sample-incubation-view', SampleIncubationView);

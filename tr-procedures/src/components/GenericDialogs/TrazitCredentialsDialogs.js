@@ -219,21 +219,7 @@ export function TrazitCredentialsDialogs(base) {
        return true 
     }
         
-    /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    credentialsDialogToOpen(action, params, gridSelectionData, parentData) {
-      console.log('credentialsDialog, line223', action, params, gridSelectionData, parentData)
-      this.credDialog.show()
-      // this.showDialog = true;
-      // // You can also directly manipulate the dialog element here
-      // const dialog = this.shadowRoot.querySelector('#credDialog');
-      // if (dialog) {
-      //   dialog.open(); // or dialog.style.display = 'block'; or similar
-      // }
-    }
       credentialsDialog(){
-        console.log('actionInfoToAPIcall', this.actionInfoToAPIcall)
-      //alert('credentialsDialog, line223')
-        //console.log('credDialog>>render')
         return html`
           <tr-dialog id="credDialog" 
           style="position: relative; z-index:999;"
@@ -278,7 +264,7 @@ export function TrazitCredentialsDialogs(base) {
               <div style="margin-top:30px;text-align:center">
                 <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
                   ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.trazitNextRequest}>
+                <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.addJustificationPhrase}>
                   ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
               </div>
             </div>
@@ -405,7 +391,7 @@ export function TrazitCredentialsDialogs(base) {
     } else if (this.type == "esign") {
       this.checkingEsignPhrase()
     } else if (this.type == "justification") {
-      this.trazitNextRequest()
+      this.addJustificationPhrase()
     }
   }
 
@@ -450,7 +436,11 @@ export function TrazitCredentialsDialogs(base) {
   }
 
 
-
+  addJustificationPhrase(){
+    let actionInfoToAPIcall=JSON.parse(sessionStorage.getItem('actionInfoToAPIcall'));
+    this.trazitNextRequest(actionInfoToAPIcall.action, actionInfoToAPIcall.actionParams, 
+        this.buildCreadArgumentsObj(), actionInfoToAPIcall.gridSelectedItem, actionInfoToAPIcall.parentData)
+  }
 
 
   checkingEsignPhrase() {

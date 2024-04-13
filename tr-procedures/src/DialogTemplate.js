@@ -1072,7 +1072,7 @@ export function DialogTemplate(base) {
           }
         }
       }
-      this.credsChecker(this.selectedAction.actionName, this.selectedStucks[0].sample_id, this.jsonParam(), adjustAction)
+      this.trazitCredsChecker(this.selectedAction.actionName, this.selectedStucks[0].sample_id, this.jsonParam(), adjustAction)
     }
 
     /** Point Template Dialog part */

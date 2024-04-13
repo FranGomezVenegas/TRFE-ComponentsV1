@@ -169,22 +169,8 @@ export class CorrectiveActions extends DialogsFunctions(CoreView) {
     return d
   }
 
-  xactionMethod(action, replace = true, actionNumIdx) {
-    if (replace) {
-      this.selectedAction = action
-    }
-    if (actionNumIdx) {
-      action = actions[actionNumIdx]
-      this.selectedAction = actions[actionNumIdx]
-    }
-    if (this.selectedItems.length) {
-      this.credsChecker(action.actionName, this.selectedItems[0].sample_id, this.jsonParam(), action)
-    } else {
-      this.credsChecker(action.actionName, null, this.jsonParam(), action)
-    }
-  }
 
-  jsonParam() {
+  xxxjsonParam() {
     let jsonParam = {}
     if (this.selectedAction.apiParams) {
       this.selectedAction.apiParams.forEach(p => {
@@ -202,14 +188,7 @@ export class CorrectiveActions extends DialogsFunctions(CoreView) {
     return jsonParam
   }
 
-  xnextRequest() {
-    super.nextRequest()
-    this.reqParams = {
-      procInstanceName: this.procInstanceName,
-      ...this.reqParams
-    }
-    this[this.selectedAction.clientMethod]()
-  }
+
 
   gridList() {
     return Object.entries(thisTabViewDefinition.gridHeader).map(

@@ -57,6 +57,7 @@ export function TrazitGenericDialogs(base) {
     }
     openGenericDialog(actionModel = this.actionBeingPerformedModel){
         //alert('openGenericDialog')
+        this.defaultValue()
         if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
             return false
        }    
@@ -770,7 +771,7 @@ export function TrazitGenericDialogs(base) {
         this.fieldsShouldBeReset=true
     }
     acceptedGenericDialog(e){
-        // this.fieldsShouldBeReset=true
+        this.fieldsShouldBeReset=true
         if (this.checkMandatoryFieldsNotEmpty()){
             this.dialogAccept(false)
         }else{
@@ -822,7 +823,10 @@ export function TrazitGenericDialogs(base) {
             this.resetFields()
             this.fieldsShouldBeReset=false
         }
-        let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
+        let dlgFlds=undefined
+        if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
+            this.actionBeingPerformedModel.dialogInfo.fields
+        }
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
@@ -849,7 +853,10 @@ export function TrazitGenericDialogs(base) {
     }    
     resetFields(e){           
         //alert('reset Fields now')   
-        let dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
+        let dlgFlds=undefined
+        if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
+            this.actionBeingPerformedModel.dialogInfo.fields
+        }
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
@@ -859,7 +866,7 @@ export function TrazitGenericDialogs(base) {
             let keyName=Object.keys(fldObj)
             if (this[keyName]!==null){
                // console.log(keyName[0])
-                if (keyName[0].includes('list')){
+                if (keyName[0].includes('list')&&!keyName[0].includes('multi')){
                     if (!keyName[0].includes('SelectedRow')){
                         this[keyName[0]].value=[]
                     }
