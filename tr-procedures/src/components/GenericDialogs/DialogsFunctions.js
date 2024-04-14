@@ -1,6 +1,3 @@
-import { html, css } from 'lit';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
-import { CredDialog } from '@trazit/cred-dialog';
 import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
 import { ActionsFunctions } from '../Actions/ActionsFunctions';
 
@@ -8,7 +5,6 @@ export function DialogsFunctions(base) {
     return class extends ActionsFunctions(ButtonsFunctions(base)) {
 
         dialogAccept(selected=true) {
-          //console.log('dialogAccept before run trazitCredsChecker')
           if (this.actionBeingPerformedModel.clientMethod!==undefined){
             this[this.actionBeingPerformedModel.clientMethod]()
             return

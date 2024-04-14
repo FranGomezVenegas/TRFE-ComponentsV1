@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
@@ -25,8 +25,6 @@ import {DialogsFunctions} from '../components/GenericDialogs/DialogsFunctions';
 import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
 import {GridFunctions} from '../components/grid_with_buttons/GridFunctions';
 import { ApiFunctions } from '../components/Api/ApiFunctions';
-
-// { tabLabel_en: "Corrective Actions", tabLabel_es: "Acciones Correctivas", view: "corrective-actions"}
 
 let tabBtns = {
   "tabs": [

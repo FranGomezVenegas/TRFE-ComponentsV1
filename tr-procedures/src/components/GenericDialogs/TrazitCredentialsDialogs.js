@@ -1,6 +1,5 @@
 import { html, css, nothing } from 'lit';
-import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
-import { CommonCore, commonLangConfig } from '@trazit/common-core';
+import {  commonLangConfig } from '@trazit/common-core';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
 
 import '@material/mwc-list/mwc-list-item';

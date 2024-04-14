@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, nothing } from 'lit';
 import { ApiFunctions } from '../Api/ApiFunctions';
 import { ClientMethod } from '../../../src/ClientMethod';
 import { ProcManagementMethods } from '../../components/ProcManagement/ProcManagementMethods';

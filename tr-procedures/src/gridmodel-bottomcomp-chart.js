@@ -1,9 +1,6 @@
 import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
-import { ClientMethod } from './ClientMethod';
-//import { DialogTemplate } from './DialogTemplate';
 import '@google-web-components/google-chart';
 let chartWithNoData = {
    label_en: 'No data for charting', label_es: 'No hay datos para una gráfica' }

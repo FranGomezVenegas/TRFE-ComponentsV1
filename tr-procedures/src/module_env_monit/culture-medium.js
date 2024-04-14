@@ -1,9 +1,4 @@
-import { html, css, nothing, LitElement } from 'lit';
-// import('../grid_with_buttons/grid-with-buttons');
-// import './tabs-composition';
-// import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
-
-//import { navigator } from 'lit-element-router';
+import { html, css, LitElement } from 'lit';
 export class CultureMedium extends (LitElement) {
   static get styles() {
     return css`
@@ -116,11 +111,7 @@ export class CultureMedium extends (LitElement) {
         for (let j = 0; j < this.cols; j++) {
           row.push(html`<div class="box-container"></div>`);
         }
-        // if (this.boxes[contId]===undefined){
-        //   this.boxes[contId]=html`<div id=${contId} class="box" @dragover="${this.handleDragOver}" @drop="${this.handleDrop}" @click="${this.handleBoxClick}"></div> `;
-        // }else{
           this.boxes[contId]=html`<div id=${contId} class="box" @dragover="${this.handleDragOver}" @drop="${this.handleDrop}" @click="${this.handleBoxClick}">${this.boxes[contId].join(', ')}</div> `;
-//        }
         contId=contId+1
       }
       return this.boxes //containers;
@@ -145,7 +136,6 @@ export class CultureMedium extends (LitElement) {
       this.selectedSize = value;
       this.boxes = Array.from({ length: this.rows*this.cols }, () => [])
 
-      //this.renderContainers()
       this.render()
 
     }

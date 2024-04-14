@@ -1,7 +1,6 @@
 import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
 
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';

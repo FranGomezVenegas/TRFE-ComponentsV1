@@ -47,7 +47,16 @@ export const Stock =
         "quantity_uom": {
           "label_en": "uom", "label_es": "uom", "sort": false, "filter": true, "width": "10%"
         }
-      }
+      },
+      "gridHeaderOptionalFlds": {
+        "category": {
+          "label_en": "extra", "label_es": "Categoría", "sort": false, "filter": true, "is_icon": false, "width": "20%", "align": "left"
+		}  
+	  },
+	  "exportToCSV":{
+		"requiredFlds":"lot_name",
+		"optionalFlds": "quantity"
+	  }
     },
     "viewQuery":{ "actionName": "ALL_INVENTORY_LOTS",
       "endPoint": "/app/procs/InvTrackingAPIqueries",

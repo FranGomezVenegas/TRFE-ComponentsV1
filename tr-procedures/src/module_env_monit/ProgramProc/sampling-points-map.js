@@ -1,4 +1,4 @@
-import { html, css, nothing } from 'lit';
+import { html, css } from 'lit';
 import { CoreView } from './../../components/core-view';
 import { Alignment, Layouts } from '@collaborne/lit-flexbox-literals';
 import { commonLangConfig } from '@trazit/common-core';

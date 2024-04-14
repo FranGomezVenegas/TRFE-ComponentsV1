@@ -1,4 +1,4 @@
-import { html, css, nothing} from 'lit';
+import { html, nothing} from 'lit';
 
 export function ViewReport(base) {
 return class extends  (base) {

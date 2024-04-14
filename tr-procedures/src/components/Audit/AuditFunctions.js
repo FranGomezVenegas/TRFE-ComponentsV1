@@ -1,4 +1,3 @@
-import { html, css, nothing} from 'lit';
 import { ApiFunctions } from '../Api/ApiFunctions';
 
 export function AuditFunctions(base) {

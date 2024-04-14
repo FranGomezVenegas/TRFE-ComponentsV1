@@ -1,5 +1,3 @@
-import { html, css, nothing} from 'lit';
-
 export function ViewDownloadable(base) {
 return class extends  (base) {
     getDataFromRoot(elem, data) {

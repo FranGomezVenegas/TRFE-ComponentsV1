@@ -1,5 +1,4 @@
 import { html } from 'lit-element';
-import { nothing } from 'lit';
 import '@material/mwc-icon';
 import "@material/mwc-textfield";
 

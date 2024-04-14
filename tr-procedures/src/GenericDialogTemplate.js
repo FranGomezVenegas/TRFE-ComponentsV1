@@ -1,5 +1,4 @@
 import { html, nothing } from 'lit';
-import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
@@ -10,20 +9,11 @@ export function GenericDialogTemplate(base) {
   return class extends base {
     static get properties() {
       return {
-        // targetValue: { type: Object },
-        // selectedDialogAction: { type: Object },
-        // numDays: { type: Number },
-        // deactivatedObjects: { type: Array },
-        // dataForDialog: { type: Object },
-        // fromGrid: { type: Boolean }
       }
     }
 
     constructor() {
       super()
-    //   this.numDays = 7
-    //   this.deactivatedObjects = []
-    //   this.fromGrid = false
     }
 
 
@@ -106,31 +96,7 @@ export function GenericDialogTemplate(base) {
           ${this[this.selectedAction.selObjectVariableName][0].value}      
           `    
       }
-        
 
-    xlistItemValueToGet(entry){
-      if (this.selectedAction.dialogInfo===undefined||this.selectedAction.dialogInfo.listDefinition===undefined||this.selectedAction.dialogInfo.listDefinition.keyFldName===undefined){
-        alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.keyFldName property, check the console')
-        console.log('this.selectedAction', this.selectedAction)
-        return entry["name"]
-      }
-      return entry[this.selectedAction.dialogInfo.listDefinition.keyFldName]
-    }
-    xlistItemValueToDisplay(entry){
-      if (this.selectedAction.dialogInfo===undefined||this.selectedAction.dialogInfo.listDefinition===undefined||this.selectedAction.dialogInfo.listDefinition.eachEntryTextGenerator===undefined){
-        alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.eachEntryTextGenerator property, check the console')
-        console.log('this.selectedAction', this.selectedAction)
-        return entry["name"]
-      }
-      let lFlds=this.selectedAction.dialogInfo.listDefinition.eachEntryTextGenerator
-      let textToDisplay=''
-      for (let i = 0; i < lFlds.length; i++) {
-        if (lFlds[i].type=='fix'){textToDisplay=textToDisplay+lFlds[i].value}
-        if (lFlds[i].type=='field'){textToDisplay=textToDisplay+entry[lFlds[i].value]}
-      }
-      return textToDisplay
-      //return entry["description"]+' ('+entry["name"]+')'
-    }
     listItemValueToGet(fieldDef, entry){
       console.log('fieldDef', fieldDef, 'entry', entry)      
       if (fieldDef===undefined||fieldDef.keyFldName===undefined){

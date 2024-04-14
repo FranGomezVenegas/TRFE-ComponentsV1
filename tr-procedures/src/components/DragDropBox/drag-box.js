@@ -1,6 +1,5 @@
 import { html, css, LitElement, nothing } from 'lit';
-import { CredDialog } from '@trazit/cred-dialog';
-import { columnBodyRenderer, gridRowDetailsRenderer, contextMenuRenderer } from 'lit-vaadin-helpers';
+import { gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
@@ -13,7 +12,6 @@ import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '@vaadin/vaadin-context-menu/vaadin-context-menu';
 
 import '@trazit/cred-dialog'
-//import '../../module_env_monit/gridmodel-bottomcomp-sampleincubation';
 import '../../gridmodel-bottomcomp-chart';
 
 import '../templates-';
@@ -28,7 +26,6 @@ import {TrazitReactivateObjectsDialog} from '../GenericDialogs/TrazitReactivateO
 import {TrazitEnterResultWithSpec} from '../GenericDialogs/TrazitEnterResultWithSpec';
 import {ModuleEnvMonitDialogsMicroorganism} from '../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism';
 import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
-//import { ModuleInstrumentsDialogs} from '../../module_instruments/ModuleInstrumentsDialogs'
 
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
@@ -37,7 +34,6 @@ import '../DragDropBox';
 
 
 import '../Audit/audit-dialog';
-//import '../../tabs-composition';
 export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
     static get styles() {
       return [

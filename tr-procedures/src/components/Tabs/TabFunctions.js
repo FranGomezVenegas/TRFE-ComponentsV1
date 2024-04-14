@@ -1,5 +1,4 @@
-import { html, css , nothing} from 'lit';
-import { columnBodyRenderer } from 'lit-vaadin-helpers';
+import { html, nothing} from 'lit';
 
 export function TabFunctions(base) {
     return class extends base {

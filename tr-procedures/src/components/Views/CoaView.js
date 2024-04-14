@@ -1,4 +1,4 @@
-import { html, css, nothing} from 'lit';
+import { html, nothing} from 'lit';
 import '@material/mwc-icon-button';
 export function CoaView(base) {
     return class extends (((((((((((base))))))))))) {

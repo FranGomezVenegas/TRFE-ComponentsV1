@@ -1,4 +1,3 @@
-import { html, css } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import {TrazitCredentialsDialogs} from '../../tr-procedures/src/components/GenericDialogs/TrazitCredentialsDialogs';
 

@@ -1,6 +1,4 @@
-import { html, nothing } from 'lit';
-import { commonLangConfig } from '@trazit/common-core';
-import { columnBodyRenderer, gridRowDetailsRenderer, contextMenuRenderer } from 'lit-vaadin-helpers';
+import { html } from 'lit';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
 import {DialogsFunctions} from './DialogsFunctions';
 import '../cameraview/index';

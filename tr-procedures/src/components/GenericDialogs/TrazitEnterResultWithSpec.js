@@ -1,8 +1,7 @@
-import { html, css, nothing, LitElement } from 'lit';
+import { html, css, nothing } from 'lit';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import { commonLangConfig } from '@trazit/common-core';
-import { ReactiveElement } from 'lit';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';

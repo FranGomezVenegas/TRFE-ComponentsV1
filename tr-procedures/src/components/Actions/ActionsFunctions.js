@@ -1,6 +1,3 @@
-import { html } from "lit";
-import { LitElement } from 'lit';
-import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
 export function ActionsFunctions(base) {
 return class extends (base) {
     trazitButtonsMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData, dragEntry, dropEntry) {

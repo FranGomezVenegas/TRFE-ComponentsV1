@@ -1,16 +1,14 @@
-import { html, css } from 'lit';
+import { html } from 'lit';
 import { columnBodyRenderer } from 'lit-vaadin-helpers';
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 export function GridFunctions(base) {
     return class extends ButtonsFunctions(base) {
 
         getTitle(sectionModel = this.viewModelFromProcModel) {
-            //alert(this.filterName)
             let textToDisplay=this.filterName
             if (sectionModel.langConfig&&sectionModel.langConfig.title[this.filterName]) {
                 textToDisplay=sectionModel.langConfig.title[this.filterName]["label_"+this.lang]
             }
-            //if (sectionModel.langConfig&&sectionModel.langConfig.title[this.filterName]) {
                 let viewDisabled=this.disabledByCertification({})
                 if (viewDisabled){
                     let title={}
@@ -27,7 +25,6 @@ export function GridFunctions(base) {
                 }else{
                     return html`<h1>${textToDisplay}</h1>`
                 }
-            //}
           }
         cleanGrid(){
             this.selectedItems = []
@@ -83,9 +80,6 @@ export function GridFunctions(base) {
             }
         }
         gridList(viewModelFromProcModel ={}) {
-            // this.selectedItems=[]
-            // this.gridItems=[]
-            //console.log('gridList')    
             if (viewModelFromProcModel===undefined){return} 
             if (this.gridItems===undefined||this.gridItems.length==0){return       }
             return Object.entries(viewModelFromProcModel.langConfig.gridHeader).map(
@@ -235,26 +229,21 @@ export function GridFunctions(base) {
                     return '/images/activate.svg'
                 }else {
                     return '/images/deactivate.svg'
-                }//" style="width:20px">`
+                }
             }
-            //[{"value": "A", "image_name": "imagenA"}, {"value": "B", "image_name": "imagenB"}, {"value": "else", "image_name": "imagenParaElResto"}]
-    
             if (this.filterName == "SampleLogin") {
                 return "/images/labplanet.png";// style="width:20px">`
-            //} else if (String(this.viewName).toUpperCase().includes("INSTRUM")&&sample.on_line!==undefined) {
-            //    return "/images/${sample.on_line?'activate.svg':'deactivate.svg'}" style="width:20px">`
             } else if (this.viewName == "EventsInProgress") {                
                 return "/images/inst_ev_type_"+sample.event_type!==undefined?sample.event_type.toLowerCase():''+".svg" // style="width:20px">`
             } else if (this.viewName == "WhiteIpList") {
-                return "/images/"+sample.active?'activate.svg':'deactivate.svg'// style="width:20px">`
+                return "/images/"+sample.active?'activate.svg':'deactivate.svg'
             } else if (this.viewName == "BlackIpList") {
                 if (sample.active){
                     return '/images/activate.svg'
                 }else {
                     return '/images/deactivate.svg'
-                }//" style="width:20px">`
+                }
 
-//                return "/images/${sample.active?'activate.svg':'deactivate.svg'}" style="width:20px">`
             } else if (this.viewName == "PlatformBusRules") {
                 if (sample.disabled){
                     return '/images/activate.svg'
@@ -366,7 +355,6 @@ export function GridFunctions(base) {
         }
     
         isConfidential(sample, key, viewModelFromProcModel) {
-        //if (sample[key]===undefined) return ''
         if (viewModelFromProcModel.langConfig.gridHeader[key]===undefined){ 
             alert('key='+key)
             //console.log('gridheader', viewModelFromProcModel.langConfig.gridHeader, 'key', key, 'sample', sample)

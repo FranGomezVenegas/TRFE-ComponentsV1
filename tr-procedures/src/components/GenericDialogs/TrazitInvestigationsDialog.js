@@ -1,5 +1,4 @@
-import { html, nothing } from 'lit';
-import { columnBodyRenderer, gridRowDetailsRenderer } from 'lit-vaadin-helpers';
+import { html } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';

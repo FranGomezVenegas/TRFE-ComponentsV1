@@ -218,10 +218,6 @@ export class ProcManagementHome extends ((((CommonCore)))) {
       customElements.define('mwc-notched-outline', NotchedOutline);
     }
     return
-    this.selectedProcInstance=undefined
-    this.viewModelFromProcModel=ProcManagement.ProcedureDefinition
-    console.log('constructor', 'this.config', this.config, this.viewModelFromProcModel)
-    this.GetViewData()
   }
   updated(changedProperties) {
     if (changedProperties.has('show')) {
@@ -238,14 +234,6 @@ export class ProcManagementHome extends ((((CommonCore)))) {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const isActive = item.hasAttribute('data-active');
-      //const content = item.querySelector('.accordion-content');
-      // const content = this.shadowRoot.querySelector('div#section'+i+'_detail');
-      
-      // if (isActive) {
-      //   content.style.maxHeight = content.scrollHeight + 'px';
-      // } else {
-      //   content.style.maxHeight = null;
-      // }
     }  
   }
   async authorized() {

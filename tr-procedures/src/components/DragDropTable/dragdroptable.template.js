@@ -1,7 +1,4 @@
-import { css, nothing } from "lit";
-
 import { html } from 'lit-element';
-import { ButtonsFunctions } from "../Buttons/ButtonsFunctions";
 
 import '@material/mwc-icon';
 

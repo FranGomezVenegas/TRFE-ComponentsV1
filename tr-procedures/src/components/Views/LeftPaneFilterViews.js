@@ -1,27 +1,7 @@
-import { html, css, nothing} from 'lit';
-import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
+import { html, nothing} from 'lit';
 
-// import { AuditFunctions} from '../Audit/AuditFunctions';
-// import '../Audit/audit-dialog';
-
-// import {ModuleEnvMonitClientMethods} from '../../module_env_monit/ModuleEnvMonitClientMethods';
-// import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
-// import {TrazitReactivateObjectsDialog} from '../GenericDialogs/TrazitReactivateObjectsDialog';
-// import {TrazitEnterResultWithSpec} from '../GenericDialogs/TrazitEnterResultWithSpec';
-// import {ModuleEnvMonitDialogsMicroorganism} from '../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism';
-// import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigationsDialog';
-
-// import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
-// import '@vaadin/vaadin-grid/vaadin-grid';
-// import '@vaadin/vaadin-grid/vaadin-grid-column';
-// import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
-// import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
-// import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
-// import '@doubletrade/lit-datatable';
-// import '@google-web-components/google-chart';
 
 export function LeftPaneFilterViews(base) {
-  //return class extends TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(AuditFunctions(ButtonsFunctions(base))))))))))) {
   return class extends  base {
     
     filterElement(data){
@@ -113,7 +93,6 @@ export function LeftPaneFilterViews(base) {
           : nothing}
       `;
     }
-    //clickedUserSessionFromList
 
 
     filterElementClicked = (i) => {

@@ -1,6 +1,6 @@
 import { html, css, nothing  } from 'lit';
 import { CoreView } from './../../components/core-view';
-import { Alignment, Layouts } from '@collaborne/lit-flexbox-literals';
+import { Layouts } from '@collaborne/lit-flexbox-literals';
 
 let langConfig = {
   limitView: {

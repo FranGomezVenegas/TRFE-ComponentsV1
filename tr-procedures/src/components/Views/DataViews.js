@@ -1,4 +1,4 @@
-import { html, css, nothing } from "lit";
+import { html, nothing } from "lit";
 import { ButtonsFunctions } from "../Buttons/ButtonsFunctions";
 import { AuditFunctions } from "../Audit/AuditFunctions";
 import "../Audit/audit-dialog";
