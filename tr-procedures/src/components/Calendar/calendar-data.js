@@ -1,4 +1,4 @@
-import { html, css, nothing, LitElement } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { TrazitFormsElements } from '../GenericDialogs/TrazitFormsElements'
