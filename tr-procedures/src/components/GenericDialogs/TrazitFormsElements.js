@@ -93,6 +93,7 @@ export function TrazitFormsElements(base) {
 
     fldDefaultValue(fldDef){
         //console.log('fldDefaultValue', 'fldDef', fldDef)
+        let curArgName=""
         if (fldDef.default_value){
             return fldDef.default_value
         } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          

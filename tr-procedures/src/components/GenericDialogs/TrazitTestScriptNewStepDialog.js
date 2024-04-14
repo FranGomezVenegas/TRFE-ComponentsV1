@@ -1335,6 +1335,7 @@ export function TrazitTestScriptNewStepDialog(base) {
     }
 
     fldDefaultValue(fldDef) {
+      let curArgName=""
       //console.log('fldDefaultValue', fldDef)
       if (fldDef.default_value) {
         return fldDef.default_value;
