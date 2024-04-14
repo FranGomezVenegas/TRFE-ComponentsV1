@@ -411,7 +411,7 @@ export function DataViews(base) {
                     value === undefined || !Array.isArray(value)
                       ? html`No Data`
                       : html`
-                          ${value.toSorted().map(
+                          ${value.sort().map(
                             (p) =>
                               html`
                                 <tr>
@@ -714,7 +714,7 @@ export function DataViews(base) {
                               ${value === undefined || !Array.isArray(value)
                                 ? html`No Data`
                                 : html`
-                                    ${value.toSorted().map(
+                                    ${value.sort().map(
                                       (p) =>
                                         html`
                                           <tr>

@@ -105,6 +105,7 @@ export class MultiSelect extends navigator(LitElement) {
     })
     this.inputValue = "";
     this.requestUpdate();
+    return
   }
 
   firstUpdated = () => {
@@ -118,6 +119,7 @@ export class MultiSelect extends navigator(LitElement) {
       }
     })
     this.requestUpdate();
+    return
   }
 
   _setOpen = (e) => {
@@ -149,6 +151,7 @@ export class MultiSelect extends navigator(LitElement) {
       this.open = false;
     }
     this.requestUpdate();
+    return
   }
 
   _removeOption = (index) => {
@@ -163,6 +166,7 @@ export class MultiSelect extends navigator(LitElement) {
     })
     this.searchOptions.splice(index, 1);
     this.requestUpdate();
+    return
   }
 
   _setOpenTrue = () => {
