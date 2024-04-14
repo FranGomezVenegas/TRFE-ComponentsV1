@@ -1,4 +1,4 @@
-import { html, nothing } from "lit";
+import { html } from "lit";
 import { commonLangConfig } from "@trazit/common-core";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 
@@ -19,7 +19,6 @@ export function TrazitTestScriptNewStepDialog(base) {
       super();
     }
     openTestScriptNewStepDialog(actionModel = this.actionBeingPerformedModel) {
-      //alert('openGenericDialog')
       if (
         actionModel.dialogInfo === undefined ||
         actionModel.dialogInfo.name === undefined ||

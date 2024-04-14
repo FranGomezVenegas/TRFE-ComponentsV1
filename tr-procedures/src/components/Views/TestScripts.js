@@ -1,4 +1,4 @@
-import { html, css, nothing} from 'lit';
+import { html, nothing} from 'lit';
 export function TestScripts(base) {
     return class extends (((((((((((base))))))))))) {
 
