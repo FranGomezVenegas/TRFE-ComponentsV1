@@ -45,4 +45,6 @@ This area want to track the bugs identified for this Web Component that were alr
 
 [- #927. 2023-Sep-07 Issue for removing attachments within genericDialog, the grid parameter not added to the API request, fixed.](https://github.com/FranGomezVenegas/FETR/issues/927)
 
+[- #324. 2024-Apr-16 Arrows in the procedure management are not working properly after clicking its title](https://github.com/FranGomezVenegas/FrontE-Issues/issues/324)
+
 

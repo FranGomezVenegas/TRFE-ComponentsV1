@@ -1108,7 +1108,6 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
 
   sectionElement(item, index) {
     if(index === this.selectedViewIndex) {
-      item.expanded = true;
       if(this.selectedTestIndex === -1)
         this.selectSectionView(this.selectedViewIndex);
     }  
