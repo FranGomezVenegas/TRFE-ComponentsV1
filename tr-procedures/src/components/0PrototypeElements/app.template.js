@@ -4,7 +4,7 @@ import '../dropzone/index';
 import '../cameraview/index';
 import "../codeview/index";
 import "../qrcode-scanner/index";
-
+import '../Calendar/index';
 
 export const template = (props) => {
   const { selectedItems, handleSelectItem, getSelectedItems } = props;
@@ -21,6 +21,7 @@ export const template = (props) => {
   }
 
   return html`
+  <calendar-component></calendar-component>
     <div class="section">
         <div 
           class="dropzone"
