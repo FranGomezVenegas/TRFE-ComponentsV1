@@ -97,11 +97,19 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
     this.filterCurrentData={}
     this.lang = "";
     this.selectedTableIndex = {};
+    this.connectedCallback();
+  }
+
+  handleTabSelected(event) {
+    //const { selectedTab } = event.detail;
+    alert('tab selected, objectabs-composition')
+    // Reset table or perform other actions based on the selected tab
+    this.dispatchEvent(new CustomEvent('tab-selected', {bubbles: true,composed: true}));  
   }
   render(){
     //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
     return html`
-      <div>
+      <div id="mainDiv">
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
           ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
         `}
@@ -348,6 +356,32 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
           `}
         </div>
     `
-  }  
+  } 
+  
+  handleTabSelected(event) {
+    //const { selectedTab } = event.detail;
+    alert('tab selected, objectabs-composition')
+    // Reset table or perform other actions based on the selected tab
+    this.resetTable();  // Assuming resetTable is a method that resets the table
+}
+
+// Ensure to clean up in disconnectedCallback
+disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('tab-selected', this.handleTabSelected);
+}
+connectedCallback() {
+  super.connectedCallback();
+  this.addEventListener('tab-selected', this.handleTabSelected);
+}
+resetTable() {
+  alert('resetTable, objectabs-composition')
+  // Logic to reset the table, potentially checking if the correct table is active
+  if (this.shadowRoot.querySelector('parentReadOnlyTable')) {
+      this.shadowRoot.querySelector('parentReadOnlyTable').reset();
+  }
+} 
+
+
 }
 window.customElements.define('objecttabs-composition', ObjecttabsComposition);

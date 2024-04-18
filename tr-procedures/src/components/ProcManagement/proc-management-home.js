@@ -9,8 +9,8 @@ import { CommonCore } from "@trazit/common-core";
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { ProcManagementMethods } from "./ProcManagementMethods";
 import {TrazitTestScriptNewStepDialog} from "../GenericDialogs/TrazitTestScriptNewStepDialog";
-
-export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))) {
+import { PrintViews } from "./procManagementPrint";
+export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog(ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore))))) {
   static get properties() {
     return {
       config: { type: Object },
@@ -1063,6 +1063,7 @@ export class ProcManagementHome extends TrazitTestScriptNewStepDialog(ProcManage
             ? html`    
               ${this.selectedViewDefinition.tabs !== undefined ? 
                 html`
+                <mwc-icon-button icon="print" @click=${this.print}></mwc-icon-button> 
                   <object-by-tabs 
                     .windowOpenable=true 
                     .sopsPassed=true 
