@@ -331,8 +331,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         //this.filterElement(this.filterResponseData)
         //console.log('filterResponseData', this.filterResponseData)
         if (!Array.isArray(this.requestData)){
-          this.selectedItem=this.requestData;
-          console.log("6272tw6es6es");
+          this.selectedItem=this.requestData;          
         }else{
           if (this.requestData.length===1){
             if (Array.isArray(this.requestData)){
@@ -450,7 +449,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
                       .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
                       .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
                       .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-                      .filterCurrentData=${this.filterCurrentData}>
+                      .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}"> 
                       </objecttabs-composition>              
       
                     `: nothing}
@@ -468,7 +467,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
               .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName} .filterName=${this.filterName} 
               .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
               .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
-              .filterCurrentData=${this.filterCurrentData}>
+              .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}">
             </objecttabs-composition>              
           `: nothing}
         </div>
@@ -525,7 +524,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
           .moduleVersion=${this.moduleVersion} 
           ?isProcManagement=${this.isProcManagement} 
           .filterCurrentData=${this.filterCurrentData}
-        ></objecttabs-composition>     
+          @tab-selected="${(e) => { alert("test") }}"></objecttabs-composition>     
       `
     }
     tabOnOpenView() {
@@ -542,6 +541,10 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
     }
     selectTab(tab) {
       this.selectedTabModelFromProcModel=tab
+      this.dispatchEvent(new CustomEvent('tab-selected', {        
+        bubbles: true,  // Allow event to bubble up through the DOM
+        composed: true  // Allow event to cross the shadow DOM boundary
+      }));      
       this.objecttabsComposition.render()
     }
 

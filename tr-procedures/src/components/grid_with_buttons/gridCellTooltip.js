@@ -57,6 +57,8 @@ class GridCellTooltip extends FeaturesObjectsAndArrays(FeaturesDynamicFieldValue
             ${tooltipArr.map((curTip, index) => 
                 html`
                     ${curTip.text ? html`${unsafeHTML(this.getDynamicData(curTip, this.data, this.lang))}`:''}
+                    ${curTip.text_en&&this.lang==="en" ? html`${unsafeHTML(this.getDynamicData(curTip, this.data, this.lang))}`:''}
+                    ${curTip.text_es&&this.lang==="es" ? html`${unsafeHTML(this.getDynamicData(curTip, this.data, this.lang))}`:''}
                     ${curTip.field? html`${this.data[curTip.field]}`:''}
                     ${curTip.imageSrc ? html`<img src="${this.imageSrc}" alt="Tooltip Image">` : ''}
             `

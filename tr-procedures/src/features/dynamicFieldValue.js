@@ -6,7 +6,8 @@ export function FeaturesDynamicFieldValue(base) {
             if (curTip["text_" + lang] !== undefined) {
               templateString = curTip["text_" + lang];
             }  
-            return this.replaceTagsInDynamicValue(templateString, data, lang)
+            console.log('lang', lang, templateString)
+            return this.replaceTagsInDynamicValue(templateString, data)
         }        
         replaceTagsInDynamicValue(templateString, data) {
             if (templateString===undefined){return''}
