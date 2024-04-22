@@ -32,7 +32,12 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
     }else if (viewModel.boxPosicsViews){
         boxPosicsViews=viewModel.boxPosicsViews
     }
-        
+    let totalStr=""
+    if (selectedBox!==undefined){
+        let total=selectedBox.cols*selectedBox.rows
+        let occupied=selectedBox.datas.length
+        totalStr=String(occupied)+(lang==="en"?' of ':' de ')+ String(total)
+    }
     return html`    
         <div style="display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; flex-direction:row; gap:12px;">
@@ -44,6 +49,7 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
                             <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
                             <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
                             <div class="view-btn ${viewModel.viewMode == 2 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(2)}> List View </div>
+                            <span style="color:#24C0EB; font-weight: bold; font-size: 16px;">${totalStr}</span>
                         `}
                         </div>
                         <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;">
