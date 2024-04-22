@@ -1,4 +1,4 @@
-import { html, css, unsafeCSS } from 'lit';
+import { html, css, unsafeCSS, nothing } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { Alignment, displayFlex, Layouts, vertical } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-icon-button';
@@ -22,8 +22,17 @@ const langConfig = {
     title: {
       "label_en": "Title", "label_es": "Titulo"
     },
-    detail: {
-      "label_en": "Detail", "label_es": "Detalle"
+    procInstanceName:{
+      "label_en": "Procedure", "label_es": "Proceso"
+    },
+    category:{
+      "label_en": "Category", "label_es": "Categoría"
+    },
+    priority:{
+      "label_en": "Priority", "label_es": "Prioridad"
+    },
+    note: {
+      "label_en": "Note", "label_es": "Nota"
     },
     days: {
       "label_en": "Number of Days", "label_es": "Número de Días"
@@ -32,23 +41,13 @@ const langConfig = {
       "label_en": "Incident Id - Date Creation - Title", "label_es": "Id de Incidencia - Creación de fecha - Título"
     }
   },
-  dialog_button: {
-    new: {
-      "label_en": "Create", "label_es": "Crear"
-    },
-    confirm: {
-      "label_en": "Confirm", "label_es": "Confirmar"
-    },
-    close: {
-      "label_en": "Close", "label_es": "Cerrar"
-    },
-    cancel: {
-      "label_en": "Cancel", "label_es": "Cancelar"
-    },
-    accept: {
-      "label_en": "Accept", "label_es": "Aceptar"
-    }
-  },
+  categories:{
+    "label_en": "Number of Days", "label_es": "Número de Días",
+    "listEntries": [
+        {"name": "users", label_en: "users management", "label_es":"Gestión usuarios"}
+    ]
+  },  
+  priority:['', '1', '2', '3'],
   grid: {
     id: {
       "label_en": "Id", "label_es": "Id"
@@ -62,9 +61,10 @@ const langConfig = {
     title: {
       "label_en": "Title", "label_es": "Titulo"
     },
-    detail: {
-      "label_en": "Detail", "label_es": "Detalle"
-    }
+    detail: {"label_en": "Detail", "label_es": "Detalle"},
+    priority: {"label_en": "Priority", "label_es": "Prioridad"},
+    category: {"label_en": "Category", "label_es": "Categoría"},
+    procInstanceName:{"label_en": "Procedure", "label_es": "Proceso"}
   },
   button: {
     new: {
@@ -116,6 +116,11 @@ export class MyIncidents extends CommonCore {
           ${unsafeCSS(displayFlex)}
           ${unsafeCSS(vertical)}
         }
+        .dialogButton {
+          width: 100%;
+          left: 21px;
+          top: -29px;
+        }
         `
     ];
   }
@@ -126,13 +131,15 @@ export class MyIncidents extends CommonCore {
       histories: { type: Array },
       dialogType: { type: String },
       numDays: { type: Number },
-      closedIds: { type: Array }
+      closedIds: { type: Array },
+      category: { type: Object }
     };
   }
 
   constructor() {
     super();
     this.histories = [];
+    this.category = {}
     this.dialogType = "";
     this.numDays = 7;
     this.closedIds = [];
@@ -140,12 +147,14 @@ export class MyIncidents extends CommonCore {
       en: {
         title: "Title is required",
         id: "Id is required",
-        detail: "Detail is required"
+        note: "Note is required",
+        procInstanceName:"Procedure is required"
       },
       es: {
         title: "El título es obligatorio",
         id: "Se requiere identificación",
-        detail: "Se requiere detalle"
+        note: "Se requiere una nota",
+        procInstanceName: "Se requiere asociar proceso"
       }
     };
   }
@@ -159,7 +168,7 @@ export class MyIncidents extends CommonCore {
     return html`
     <div class="layout horizontal center flex wrap">
       <mwc-icon-button icon="refresh" @click=${this.getOpenIncidents}></mwc-icon-button>
-      <mwc-icon-button style="color:#c9252d" .title="${langConfig.button.new["label_"+this.lang]}" icon="add" @click=${()=>{this.action=`${langConfig.button.new["label_"+this.lang]} Incident`;this.openDialog("create")}}></mwc-icon-button>
+      <mwc-icon-button style="color:#c9252d" .title="${langConfig.button.new["label_"+this.lang]}" icon="add" @click=${()=>{this.action=`${langConfig.button.new["label_"+this.lang]} Incident`;this.openDialog("createStep1")}}></mwc-icon-button>
       <mwc-icon-button style="color:#12805c" .title="${langConfig.button.confirm["label_"+this.lang]}" icon="check" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.confirm["label_"+this.lang]} Incident`;this.openDialog("confirm")}}></mwc-icon-button>
       <mwc-icon-button style="color:#0d66d0" .title="${langConfig.button.note["label_"+this.lang]}" icon="note_add" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.note["label_"+this.lang]}`;this.openDialog("note")}}></mwc-icon-button>
       <mwc-icon-button style="color:#747474" .title="${langConfig.button.close["label_"+this.lang]}" icon="close" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.close["label_"+this.lang]} Incident`;this.openDialog("close")}}></mwc-icon-button>
@@ -171,7 +180,11 @@ export class MyIncidents extends CommonCore {
       <vaadin-grid-filter-column path="date_last_update" .header="${langConfig.grid.last_update["label_"+this.lang]}"></vaadin-grid-filter-column>
       <vaadin-grid-filter-column path="date_creation" .header="${langConfig.grid.creation["label_"+this.lang]}"></vaadin-grid-filter-column>
       <vaadin-grid-filter-column path="item_title" .header="${langConfig.grid.title["label_"+this.lang]}"></vaadin-grid-filter-column>
+      <vaadin-grid-filter-column path="category" .header="${langConfig.grid.category["label_"+this.lang]}"></vaadin-grid-filter-column>
+      <vaadin-grid-filter-column path="priority" .header="${langConfig.grid.priority["label_"+this.lang]}"></vaadin-grid-filter-column>
+      <vaadin-grid-filter-column path="incident_procedure" .header="${langConfig.grid.procInstanceName["label_"+this.lang]}"></vaadin-grid-filter-column>
       <vaadin-grid-filter-column path="item_detail" .header="${langConfig.grid.detail["label_"+this.lang]}"></vaadin-grid-filter-column>
+      
     </vaadin-grid>
     <div ?hidden=${this.hideList}>
       ${this.histories.map(h=>
@@ -179,15 +192,85 @@ export class MyIncidents extends CommonCore {
       )}
     </div>
     <tr-dialog id="icdDialog" 
-      @opened=${e=>{if(e.target===this.icdDialog)this.dialogOpened()}} 
-      @closed=${e=>{if(e.target===this.icdDialog){this.icdTitle.value="";this.icdDetail.value="";this.action=null;}}}
+      @opened=${e=>{if(e.target===this.icdDialog)this.dialogOpened()}}       
       heading=""
       hideActions=""
       scrimClickAction="">
-      <label slot="topLeft" style="font-size:12px">${this.action}</label>
+      <label slot="topLeft" style="font-size:12px">
+        ${this.addDialogTitle()}
+      </label>
       <div class="content layout vertical flex center-justified">
-        <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="create"} .validationMessage=${this.fieldErrMsg[this.lang].title} required></mwc-textfield>
-        <div class="reopenPart" ?hidden=${this.dialogType!="reopen"}>
+        ${this.fieldsByTypeAndAction()}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+          ${this.buttonsByTypeAndAction()}
+        </div>
+      </div>
+    </tr-dialog>
+    `;
+  }
+  resetDialogFields(){
+    this.action=undefined;
+    this.category.name=undefined;
+    let textElements=['icdTitle', 'icdNote', 'priority']
+    textElements.forEach(elementId => {
+      if(this[elementId]){this[elementId].value="";}
+    })
+  }
+
+  addDialogTitle(){
+    if (this.category.name===undefined){return html``}//${this.action}`}
+    return html`
+      ${this.dialogType=="ZZZcreate"?html`<button disabled><img .src="/images/incidentType/${this.category.name}_${this.flag}.webp" style="width:80px; background-color: transparent;"></button>`:html``}
+    <!--${this.action}        -->
+    `
+  }
+
+  computeGridStyle(count) {    
+    let columns, rows;
+    switch (count) {
+      case 4:
+        columns = 2; rows = 2;
+        break;
+      case 6:
+        columns = 3; rows = 2;
+        break;
+      case 8:
+        columns = 2; rows = 4;
+        break;
+      case 9:
+        columns = 3; rows = 3;
+        break;
+      default:
+        columns = 1; rows = count;  // Default to a single column layout
+    }
+    return `grid-template-columns: repeat(${columns}, 1fr); grid-template-rows: repeat(${rows}, auto);`;
+  }
+
+  fieldsByTypeAndAction(){        
+    if (this.dialogType=="createStep1"){
+      let incidentsType=[{"name":"issue"}, {"name":"request"} , {"name":"request"}, {"name":"issue"}, {"name":"request"}, {"name":"request"}]
+      const gridStyle = this.computeGridStyle(incidentsType.length);
+      return html`
+        <div style="display: grid; ${gridStyle}" class="reopenPart">
+          ${incidentsType.map((curType, idx) => html`
+            <button style="width:100px; border: none; background-color: transparent;" @click=${() =>{this.newTicketForm(curType)}}><img .src="/images/incidentType/${curType.name}_${this.flag}.webp" style="width:100%"></button><br><br></br>
+          `)}
+        </div>
+      `
+    } else if (this.dialogType=="createStep2"){
+      return html`
+        <mwc-select id="procInstanceName" label="${langConfig.field.procInstanceName["label_"+this.lang]}" @selected=${this.valueSelected}                    
+          style="width:100%;">${this.getUserProcsList()}</mwc-select>  
+        <mwc-textfield id="title" label="${langConfig.field.title["label_"+this.lang]}" ?hidden=${this.dialogType!="createStep2"} .validationMessage=${this.fieldErrMsg[this.lang].title} required></mwc-textfield>
+        <mwc-select id="priority" label="${langConfig.field.priority["label_"+this.lang]}" @selected=${this.valueSelected}                    
+          style="width:100%;">${langConfig.priority.map((curValue, i)=>
+            html`<mwc-list-item value="${curValue}" ?selected=${i == 0}>${curValue}</mwc-list-item>`
+          )}</mwc-select>  
+        <mwc-textarea id="note" label="${langConfig.field.note["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg[this.lang].detail} required></mwc-textarea>
+      `
+    } else if (this.dialogType=="reopen"){
+      return html`
+        <div class="reopenPart">
           <div class="layout horizontal flex center-center">
             <mwc-textfield class="layout flex" id="numDays" type="number" 
               .value=${this.numDays} @change=${e=>this.numDays=e.target.value}
@@ -201,40 +284,43 @@ export class MyIncidents extends CommonCore {
             )}
           </mwc-select>
         </div>
-        <mwc-textarea id="detail" label="${langConfig.field.detail["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg[this.lang].detail} required></mwc-textarea>
-        <sp-button size="m" @click=${this.createIncident} ?hidden=${this.dialogType!="create"}>${langConfig.dialog_button.new["label_"+this.lang]}</sp-button>
-        <sp-button size="m" @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"}>${langConfig.dialog_button.confirm["label_"+this.lang]}</sp-button>
-        <sp-button size="m" @click=${this.addNote} ?hidden=${this.dialogType!="note"}>${langConfig.dialog_button.accept["label_"+this.lang]}</sp-button>
-        <sp-button size="m" @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>${langConfig.dialog_button.accept["label_"+this.lang]}</sp-button>
-        <sp-button size="m" @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} ?disabled=${!this.closedIds.length}>${langConfig.dialog_button.accept["label_"+this.lang]}</sp-button>
-      </div>
-    </tr-dialog>
-    `;
-  }
+      `
+    }else{
+      return html`
+      <mwc-textarea id="note" label="${langConfig.field.note["label_"+this.lang]}" rows=10 cols=100 .validationMessage=${this.fieldErrMsg[this.lang].detail} required></mwc-textarea>
+      `
+    }
 
-  get grid() {
-    return this.shadowRoot.querySelector("vaadin-grid")
   }
-
-  get icdDialog() {
-    return this.shadowRoot.querySelector("tr-dialog#icdDialog")
+  buttonsByTypeAndAction(){
+    switch (this.dialogType){
+      case "createStep2":
+        return html`<img .src="/images/incidentType/${this.category.name}_${this.flag}.webp" style="width:80px; background-color: transparent; position: absolute; top:-10px; left:-15px;">
+        <sp-button class="dialogButton" size="m" @click=${this.createIncident}>${langConfig.button.new["label_"+this.lang]}</sp-button>`
+      case "confirm":
+        return html`<sp-button class="dialogButton" size="m" @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"}>${langConfig.button.confirm["label_"+this.lang]}</sp-button>`
+      case "note":
+        return html`<sp-button class="dialogButton" size="m" @click=${this.addNote} ?hidden=${this.dialogType!="note"}>${langConfig.button.note["label_"+this.lang]}</sp-button>`
+      case "close":
+        return html`<sp-button class="dialogButton" size="m" @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>${langConfig.button.reopen["label_"+this.lang]}</sp-button>`
+      case "reopen":
+        return html`<sp-button class="dialogButton" size="m" @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} ?disabled=${!this.closedIds.length}>${langConfig.button.reopen["label_"+this.lang]}</sp-button>`
+      default: return html``
+    }
   }
-
-  get icdDialogSurface() {
-    return this.icdDialog.shadowRoot.querySelector(".mdc-dialog__surface")
+  newTicketForm(curType){
+    this.category=curType
+    this.openDialog("createStep2")
   }
-
-  get icdTitle() {
-    return this.shadowRoot.querySelector("#title")
-  }
-
-  get icdId() {
-    return this.shadowRoot.querySelector("#icdId")
-  }
-
-  get icdDetail() {
-    return this.shadowRoot.querySelector("#detail")
-  }
+  get grid() {return this.shadowRoot.querySelector("vaadin-grid")}
+  get icdDialog() {return this.shadowRoot.querySelector("tr-dialog#icdDialog")}
+  get icdDialogSurface() {return this.icdDialog.shadowRoot.querySelector(".mdc-dialog__surface")}
+  get icdTitle() {return this.shadowRoot.querySelector("#title")}
+  get icdId() {return this.shadowRoot.querySelector("#icdId")}
+  get icdNote() {return this.shadowRoot.querySelector("#note")}
+  get icdProcInstanceName() {return this.shadowRoot.querySelector("#procInstanceName")}
+  get icdPriority() {return this.shadowRoot.querySelector("#priority")}
+  
 
   getOpenIncidents() {
     this.histories = []
@@ -252,7 +338,17 @@ export class MyIncidents extends CommonCore {
       }
     })
   }
-
+  getUserProcsList(){
+    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    let blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
+    let newList=[]
+    newList.push(blankEmpty)
+    newList = newList.concat(procList);
+    return html`
+    ${newList.map((c, i) =>
+        html`<mwc-list-item value="${c.procInstanceName}" ?selected=${i == 0}>${c["label_" + this.lang]}</mwc-list-item>`
+    )}`         
+  }
   getClosedIds() {
     this.closedIds = []
     this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
@@ -311,72 +407,80 @@ export class MyIncidents extends CommonCore {
     if (!this.icdTitle.validity.valid) {
       return this.icdTitle.focus()
     }
-    if (!this.icdDetail.validity.valid) {
-      return this.icdDetail.focus()
+    if (!this.icdNote.validity.valid) {
+      return this.icdNote.focus()
     }
     this.incidentAPI({
       actionName: 'NEW_INCIDENT',
+      category: this.category.name,
       incidentTitle: this.icdTitle.value,
-      incidentDetail: this.icdDetail.value
+      incidentDetail: this.icdNote.value,
+      incidentProcedure: this.icdProcInstanceName.value,
+      priority: this.icdPriority.value
     })
+    this.resetDialogFields()
   }
 
   confirmIncident() {
-    if (!this.icdDetail.validity.valid) {
-      return this.icdDetail.focus()
+    if (!this.icdNote.validity.valid) {
+      return this.icdNote.focus()
     }
     this.incidentAPI({
       actionName: 'CONFIRM_INCIDENT',
       incidentId: this.selectedItem.id,
-      note: this.icdDetail.value
+      note: this.icdNote.value
     })
   }
 
   addNote() {
-    if (!this.icdDetail.validity.valid) {
-      return this.icdDetail.focus()
+    if (!this.icdNote.validity.valid) {
+      return this.icdNote.focus()
     }
     this.incidentAPI({
       actionName: 'ADD_NOTE_INCIDENT',
       incidentId: this.selectedItem.id,
-      note: this.icdDetail.value
+      note: this.icdNote.value
     })
   }
 
   closeIncident() {
-    if (!this.icdDetail.validity.valid) {
-      return this.icdDetail.focus()
+    if (!this.icdNote.validity.valid) {
+      return this.icdNote.focus()
     }
     this.incidentAPI({
       actionName: 'CLOSE_INCIDENT',
       incidentId: this.selectedItem.id,
-      note: this.icdDetail.value
+      note: this.icdNote.value
     })
   }
 
   reopenIncident() {
-    if (!this.icdDetail.validity.valid) {
-      return this.icdDetail.focus()
+    if (!this.icdNote.validity.valid) {
+      return this.icdNote.focus()
     }
     this.incidentAPI({
       actionName: 'REOPEN_INCIDENT',
       incidentId: this.icdId.value,
-      note: this.icdDetail.value
+      note: this.icdNote.value
     })
   }
 
   openDialog(type) {
     this.dialogType = type
-    this.icdDialog.show()
+    if (this.icdDialog!==undefined&&this.icdDialog!==null){
+      this.icdDialog.show()
+    }
   }
 
   dialogOpened() {
-    if (this.dialogType == "create") {
+    if (this.dialogType == "createStep2") {
       this.icdTitle.focus()
     } else if (this.dialogType == "reopen") {
       this.icdId.focus()
     } else {
-      this.icdDetail.focus()
+      if (this.icdNote!==null){
+        this.icdNote.focus()  
+      }
     }
   }
 }
