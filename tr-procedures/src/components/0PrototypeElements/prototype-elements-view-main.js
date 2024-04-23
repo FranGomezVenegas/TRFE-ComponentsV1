@@ -11,7 +11,9 @@ export class PrototypeElementsViewMain extends LitElement {
   static get properties() {
     return {
       entity: { type: String },
-      selectedItems: { type: Object }
+      selectedItems: { type: Object },
+      treeElementData: { type: Array},
+      treeElementSpecification:{ type: Array}
     };
   }
 
@@ -19,13 +21,66 @@ export class PrototypeElementsViewMain extends LitElement {
     super();
     this.entity = "";
     this.selectedItems = {};
-  }
+    this.treeElementData=[
+      {
+        "name": "hola lvl1",
+        "level2":[
+          { 
+            "otro":"hola lvl2"
+          },
+          { 
+            "otro":"adios lvl2"
+          }
+        ]
+      },
+      {
+        "name": "adios lvl1"
+      }
+    ];
+    this.treeElementSpecification=[
+      {
+        "key": "name",
+        "label": "name",
+        "label2": [
+          "'('",
+          "name",
+          "') '",
+          "name"
+        ],
+        "children": "level2"
+      },
+      {
+        "key": "otro",
+        "label": "otro",
+        "label2": [
+          "'('",
+          "otro",
+          "') '",
+          "otro"
+        ],
+        "children": "children"
+      }
+    ]
 
+    
+  }
+  _treeSelection = () => {
+    const myTree = this.shadowRoot.querySelector("tree-view#mytree");
+    if (myTree) {
+      setTimeout(() => {  // Use setTimeout to allow the event loop to update the value
+        alert(myTree.value);
+        
+      }, 0);
+    }
+  }
   render() {
     return template({
       selectedItems: this.selectedItems,
       handleSelectItem: this._handleSelectItem,
-      getSelectedItems: this._getSelectedItems
+      getSelectedItems: this._getSelectedItems,
+      treeElementData: this.treeElementData,
+      treeElementSpecification: this.treeElementSpecification,
+      treeSelection: this._treeSelection
     });
   }
 

@@ -11,18 +11,28 @@ export const template = (props) => {
     showChildren,
     handleShowChildren,
     level,
+    handleClickItem    
   } = props;
-  const {entity, children} = data;
+  const entity = data;
+  const children = data[specification[level].children]
   const key = data[specification[level].key];
   const label = data[specification[level].label];
   const selected = selectedItems[key] ? true : false;
 
-  const handleClickItem = () => {
-    handleShowChildren();
-    if (!children) handleSelectItem(entity, data);
-  };
+  
+  const handleShowChildrenItem = () =>{
+    handleShowChildren();    
+    this.dispatchEvent(new CustomEvent('item-selected', { detail: '', bubbles: true, composed: true }));
+  }
+  // handleClickItem = () => {    
+  //   const selectedValue=data[specification[level].key] 
+  //   alert(selectedValue)
+  //   this.dispatchEvent(new CustomEvent('item-selected', { detail: selectedValue, bubbles: true, composed: true }));
+  //   //handleShowChildren();
+  //   //if (!children) handleSelectItem(entity, data);
+  //};
 
-  const handleDragStart = (event) => {
+  const handleDragStart = (event) => {    
     event.dataTransfer.setData('item', JSON.stringify(data));
   };
 
@@ -35,10 +45,10 @@ export const template = (props) => {
         selected ? 'selected' : '',
         children && children.length > 0 ? 'hasChildren' : '',
         showChildren ? 'opened' : 'closed'
-      )}"
-      @click=${handleClickItem}
+      )}" 
+      @click=${handleShowChildrenItem}
     >
-      <span>${label}</span>
+      <span @click=${handleClickItem}>${label}</span>
     </div>
     <ul>
       ${showChildren && children

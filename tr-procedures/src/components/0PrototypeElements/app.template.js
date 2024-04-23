@@ -5,6 +5,7 @@ import '../cameraview/index';
 import "../codeview/index";
 import "../qrcode-scanner/index";
 import '../Calendar/index';
+import '../Tree/treeview/index'
 
 export const template = (props) => {
   const { selectedItems, handleSelectItem, getSelectedItems } = props;
@@ -21,6 +22,8 @@ export const template = (props) => {
   }
 
   return html`
+  
+  <tree-view id="mytree" .data=${props.treeElementData} .specification=${props.treeElementSpecification} @item-selected=${props.treeSelection}></tree-view>
   <calendar-component></calendar-component>
     <div class="section">
         <div 

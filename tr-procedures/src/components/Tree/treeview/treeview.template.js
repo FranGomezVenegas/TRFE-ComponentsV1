@@ -2,10 +2,12 @@ import {html} from 'lit-element';
 import '../treenode';
 
 export const template = (props) => {
-  const {data, specification, level, selectedItems, handleSelectItem} = props;
+  const {data, specification, level, selectedItems, handleSelectItem, value, handleItemSelected} = props;
 
+
+  
   return html`
-    <ul>
+    <ul @item-selected=${handleItemSelected}>
       ${data.map((node) => {
         return html`
           <tree-node
@@ -14,6 +16,7 @@ export const template = (props) => {
             .selectedItems=${selectedItems}
             .handleSelectItem=${handleSelectItem}
             .level=${level}
+            value=${value}
           ></tree-node>
         `;
       })}
