@@ -115,7 +115,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     }
   render() {
       return html`
-        <div>      
+        <div id="gridwithbuttons">      
           ${this.topCompositionBlock()} 
           ${this.abstractBlock()}
           ${this.bottomCompositionBlock()}  

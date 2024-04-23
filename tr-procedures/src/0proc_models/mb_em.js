@@ -63,7 +63,21 @@ export const MbEm=
         "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
         "clientMethodssss": "getSamples",
         "endPoint": "/moduleenvmon/EnvMonAPIqueries",
-        "addRefreshButton": true,
+        "addRefreshButton": true,        
+        "printable": {
+          "enable": true,
+          "icon": "print",
+          "title": {
+            "label_en": "Print", "label_es": "Imprimir"
+          }
+        },
+        "downloadable": {
+          "enable": true,
+          "icon": "download_2",
+          "title": {
+            "label_en": "Download", "label_es": "Descargar"
+          }
+        },
         "button": {
           "icon": "refresh",
           "title": {
