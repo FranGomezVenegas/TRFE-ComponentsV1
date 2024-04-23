@@ -136,11 +136,7 @@
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingPERS" 
   },
-  "localDefaultView1234122": {
-    "procName":  "em-demo-a", 
-    "viewName": "ProductionLots", 
-    "filterName" :  "SampleLot" 
-  },  
+  
   "localDefaultView3": {
     "procName":  "sample-coa-rel1", 
     "viewName": "LogSamplesModuleSamples", 
@@ -292,7 +288,11 @@
     "procName":  "fake-developers", 
     "viewName": "ck-editor", 
     "filterName" :  "ck-editor" 
-  }
- 
+  },
+  "localDefaultView": {
+    "procName":  "mb_em", 
+    "viewName": "ProductionLots", 
+    "filterName" :  "SampleLot" 
+  }  
   
 }
