@@ -1,173 +1,302 @@
-export function PrintViews(base) {
-    return class extends (base) {
-        print(){
-            alert('prrrrint')
-            this.printCoa({})
-        }
+import { html } from "lit"
 
-        printCoa(data) {
-            let coaData = data//FakeCOA
-            this.setPrintContentCoa(data)
-            let printWindow = window.open('aaa', '', 'fullscreen=yes');
-            printWindow.document.write(this.printObj.contentWithFooter);
-            console.log('contentWithFooter', this.printObj.contentWithFooter)
-            printWindow.document.title = coaData.report_info["provisional_copy_" + this.lang];
-            printWindow.document.close();
-            setTimeout(function () {
-              printWindow.print();
-              printWindow.close();
-            }, 500); 
-          }
-      
-          setPrintContentCoa(data) {
-            let headerData = ''
-            // let headerDataDiv = this.shadowRoot.querySelectorAll("div#document")
-            // if (headerDataDiv !== undefined) {
-            //   headerData = headerDataDiv[0].outerHTML
-            // }
-            let mainDivContent = ''
-            let mainDivContentDiv = this.shadowRoot.querySelectorAll("div#mainDiv")
-            if (mainDivContentDiv !== undefined) {
-                mainDivContent = mainDivContentDiv[0].outerHTML
+export function PrintViews(base) {
+  return class extends (base) {
+    print() {
+      this.printCoa({})
+    }
+
+    printCoa(data) {
+      let coaData = data
+      this.setPrintContentCoa(data)
+      let printWindow = window.open('', '_blank');
+      printWindow.document.write(this.printObj.contentWithFooter);
+      printWindow.document.title = 'Title Hear';
+      setTimeout(function () {
+        printWindow.print();
+        printWindow.close();
+      }, 500);
+    }
+    documentFooter(data) {
+      let coaData = data
+      let session = JSON.parse(sessionStorage.getItem("userSession"))
+      let sessionDate = session.appSessionStartDate
+      let sessionUser = session.header_info.first_name + " " + session.header_info.last_name + " (" + session.userRole + ")"
+      let footerText = `${sessionUser} on ${sessionDate} `
+      if (coaData == undefined && coaData.report_info !== undefined && coaData.report_info.report_information !== undefined) {
+        footerText += `${coaData.report_info["report_information_" + this.lang]}`
+      }
+      return footerText
+    }
+
+    setPrintContentCoa(data) {
+      let headerData = ''
+      let headerDataDiv = this.shadowRoot.querySelectorAll(".title-banner .title")
+      if (headerDataDiv !== undefined) {
+        headerData = headerDataDiv[0].outerHTML
+      }
+      let mainDivContent = ''
+      let mainDivContentDiv = this.shadowRoot.querySelectorAll('#rightSplit')
+      console.log(mainDivContent)
+      if (mainDivContentDiv !== undefined) {
+        mainDivContent = mainDivContentDiv[0].outerHTML
+      }
+      let pagerFooter = ''
+      let pagerFooterDiv = this.shadowRoot.querySelectorAll("div#pagefooter")
+      if (pagerFooterDiv !== undefined) {
+        pagerFooter = headerDataDiv[0].outerHTML
+      }
+
+      const element = this.shadowRoot.querySelector('#rightSplit object-by-tabs');
+      let dataTable = '';
+      if (element) {
+        const compositionObj = element.shadowRoot.querySelector('objecttabs-composition');
+        if (compositionObj) {
+          const allDivs = compositionObj.shadowRoot.querySelectorAll('#mainDiv > div > div > div');
+          allDivs.forEach(div => {
+            const table = div.querySelector('.styled-table');
+            if (table) {
+              const clonedTable = table;
+              const headers = clonedTable.querySelectorAll('th');
+              let actionsColumnIndex = -1;
+
+              headers.forEach((header, index) => {
+                if (header.textContent.trim() === "Actions") {
+                  actionsColumnIndex = index;
+                }
+              });
+
+              if (actionsColumnIndex !== -1) {
+                headers[actionsColumnIndex].remove();
+                const rows = clonedTable.querySelectorAll('tr');
+                rows.forEach(row => {
+                  if (row.cells.length > actionsColumnIndex) {
+                    row.deleteCell(actionsColumnIndex);
+                  }
+                });
+              }
+
+              dataTable += div.outerHTML;
+            } else {
+              dataTable += div.outerHTML;
             }
-            let pagerFooter = ''
-            // let pagerFooterDiv = this.shadowRoot.querySelectorAll("div#pagefooter")
-            // if (pagerFooterDiv !== undefined) {
-            //   pagerFooter = pagerFooterDiv[0].outerHTML
-            // }
-      
-            const tbody = this.shadowRoot.querySelector(".table-container-results tbody");
-            const tableItems = tbody.querySelectorAll('tr');
-            const totalPages = Math.ceil(tableItems.length / 14);
-            const lastItemsCount = tableItems.length % 14;
-            const lastItemsLeft = 14 - lastItemsCount;
-            const pageStr = this.lang === "en" ? "Page" : "Página";
-            const ofStr = this.lang === "en" ? "of" : "de";
-    
-            this.printObj = {
-              header: '.', //this.documentFooter(), //this.coaForInspectionLotHeader(),
-              content: headerData, //this.coaForInspectionLotContent(),   
-              contentWithFooter: `
+          });
+
+        } else {
+          console.error("objecttabs-composition not found.");
+        }
+      } else {
+        console.error("#rightSplit object-by-tabs not found.");
+      }
+
+
+      this.printObj = {
+        header: '.',
+        content: headerData,
+        contentWithFooter: `
                 <html>
                   <head>        
                   <style>
-                    #firstline-header .title {
+                  * {
+                    box-sizing: border-box;
+                    -webkit-print-color-adjust: exact !important;
+                  print-color-adjust: exact !important;
+                  }            
+        
+                  .title {
+                    color: #2989d8;
+                    font-size: 18px;
+                    font-weight: bold;
+                  }
+        
+                  table.TRAZiT-DefinitionArea thead tr th {
+                    background-color: #2989d8;
+                    color: white;
+                  }
+        
+                  table.TRAZiT-UsersArea thead tr th {
+                    background-color: white;
+                    color: gray;
+                  }
+        
+                  table {
+                    border-collapse: collapse;
+                    width: 100%;
+                    font-family: Montserrat;
+                    font-size: 16px;
+                  }
+        
+                  table.TRAZiT-UsersArea tr {
+                    border: none; 
+                    border-bottom: 1px solid #dddddd;
+                  }
+        
+                  tr {
+                    border: 1px solid #dddddd;
+                    text-align: center;
+                    color: #808080;
+                  }
+        
+                  table.TRAZiT-UsersArea tr:nth-child(even) {
+                    background-color: white;
+                  }
+        
+                  table.TRAZiT-UsersArea tr:last-child {
+                    border: none;
+                  }
+               
+                  table.TRAZiT-UsersArea thead {
+                    border-bottom: 1px solid #dddddd;
+                  }
+        
+                  tr:nth-child(even) {
+                    background-color: rgba(214, 233, 248, 0.37);
+                  }
+        
+                  table.TRAZiT-DefinitionArea th {
+                    padding: 16px 20px;
+                    border: 1px solid #dddddd !important;
+                  }
+        
+                  td, th {
+                    padding: 16px 20px;
+                    border: 1px solid #dddddd !important;
+                  }
+        
+                  table.TRAZiT-UsersArea td, th {
+                    border: none !important;
+                  }
+        
+                  tr {
+                    cursor: pointer;
+                  }
+        
+                  table#<!---->procedure_roles tr:hover td {
+                    background-color: #2989d830 !important;
+                  }
+        
+                  mwc-icon-button {
+                    --mdc-icon-button-size: 24px;
+                    --mdc-icon-size: 16px;
+                  }
+        
+                  .hidden {
+                    display: none;
+                  }
+        
+                  .js-context-popup {
+                    background-color: #24C0EB;
+                    color: white;
+                    width: 130px;
+                    position: fixed;
+                    z-index: 10;
+                    display:none;
+                  }
+                  .js-context-popup div {
+                    padding: 8px 12px;
+                    border: 2px solid #03A9F4;
+                    cursor: pointer;
+                  }
+                  .js-context-popup div:first-child {
+                    border-botton: none !important;
+                  }
+        
+                  .circle {
+                    width: 20px;
+                    height: 20px;
+                    line-height: 20px;
+                    text-align: center;
+                    background-color: #24C0EB;
+                    border-radius: 50%;
+                    color: white;
+                    float: left;
+                  }
+                  .green {
+                    color: green;
+                  }
+                  .red { 
+                    color: red;
+                  }
+                  .yellow {
+                    color: orange;
+                  }
+                  span.title {
+                      color: rgb(35, 163, 198);
+                      margin-top: 10px;
+                      font-weight: bold;
+                  }
+                  span.title.true {
+                      font-size: 18px;
+                  }
+                  span.title.false {
+                      font-size: 18px;
+                  }  
+                  .w3-responsive {
                       display: block;
-                      color: red;
-                      text-align: right;
+                      overflow-x: auto;
                     }
-      
-                    #header-header {
-                      padding: 0 20px;
+                    .w3-container,
+                    .w3-panel {
+                      padding: 0.01em 4px;
                     }
-      
-                    .table-container-results {
-                      padding: 0 20px;
+                    .w3-panel {
+                      margin-top: 16px;
+                      margin-bottom: 16px;
                     }
-      
-                    .logo-header {
-                      margin-left: 20px !important;
+                    .w3-container:after,
+                    .w3-container:before,
+                    .w3-panel:after,
+                    .w3-panel:before,
+                    .w3-row:after,
+                    .w3-row:before,
+                    .w3-row-padding:after,
+                    .w3-row-padding:before,
+                    .w3-blue,
+                    .w3-hover-blue:hover {
+                      color: rgba(
+                        7,
+                        13,
+                        22,
+                        0.94
+                      ) !important;
+                      background-color: #2196f3 !important;
                     }
-      
-                    * {
-                      box-sizing: border-box;
+                    .w3-background,
+                    .w3-hover-blue:hover {
+                      color: rgba(
+                        7,
+                        13,
+                        22,
+                        0.94
+                      ) !important;
+                      background-color: #ffdedd !important;
                     }
-      
-                    body {
-                      padding: 0;
-                      margin: 0;
-                      counter-increment: page_index;
-                    }
-      
-                    table {
-                      padding: 0;
-                      margin: 0;
-                      width: 100%;
-                    }
-      
-                    tr {
-                      height: 50px;
-                    }
-      
-                    @media print {
-                      :root {
-                        counter-reset: page_index;
-                      }
-      
-                      @page {
-                        margin: 0;
-                      }
-      
-                      .page-break-row {
-                        border-bottom: 1px solid black;
-                        page-break-after: always; /* This ensures the page breaks after this row */
-                      }
-    
-                      tr:nth-child(14n + 14) {
-                        position: relative;
-                        border-bottom: ${ data.report_info.display_result_box_border ? `1px solid black;` : `none;`}
-                        page-break-after: always;
-                      }
-      
-                      tr:nth-child(14n + 14)::after {
-                        display: block;
-                        position: absolute;
-                        font-style: italic;
-                        top: 90px;
-                        left: 0px;
-                        counter-increment: page_index;
-                        content: "${this.documentFooter(data)}";
-                      }
-      
-                      tr:nth-child(14n + 14) td:last-child::after {
-                        display: block;
-                        position: absolute;
-                        top: 90px;
-                        right: 0px;
-                        content: "${pageStr} " counter(page_index) " ${ofStr} ${totalPages}";
-                      }
-      
-                      tr:nth-child(14)::after {
-                        top: 84px;
-                      }
-      
-                      tr:nth-child(14) td:last-child::after {
-                        top: 84px;
-                      }
-      
-                      #print-document-footer {
-                        position: relative;
-                        margin-top: ${50 * lastItemsLeft - 150}px;
-                      }
-      
-                      #print-document-footer::before {
-                        display: block;
-                        position: absolute;
-                        font-style: italic;
-                        top: 150px;
-                        left: 20px;
-                        content: "${this.documentFooter(data)}";
-                      }
-      
-                      #print-document-footer::after {
-                        display: block;
-                        position: absolute;
-                        top: 150px;
-                        right: 20px;
-                        content: "${pageStr} " counter(page_index) " ${ofStr} ${totalPages}";
-                      }
-                    }
-                    </style>
+                    .title {
+                      font-size: 8px;
+                      font-weight: 500;
+                      letter-spacing: 0;
+                      line-height: 1.5em;
+                      padding-bottom: 15px;
+                      position: relative; 
+                      font-family: Montserrat;
+                      font-color: rgb(
+                        94,
+                        145,
+                        186
+                      );
+                    }                      
+                  <!----></style>
                   </head>
                   <body>  
-                    <div id="print-content">
-                      ${headerData}
-                    </div>
-                    <div id="print-document-footer" class="print-document-footer">${pagerFooter}</div>                    
+                  <div id="print-document-header" class="print-document-footer">This Is Page Heaser Content</div>  
+                    <div id="print-content" style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">
+                      ${dataTable}
+                    </div>                    
+                    <div id="print-document-footer" class="print-document-footer">This Is Page Footer Content</div>                    
                   </body>
                 </html>
               `
-            }
-          }        
+      }
     }
+  }
 }
