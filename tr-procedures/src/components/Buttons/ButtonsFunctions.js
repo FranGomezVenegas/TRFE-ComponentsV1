@@ -3,9 +3,10 @@ import { ApiFunctions } from '../Api/ApiFunctions';
 import { ClientMethod } from '../../../src/ClientMethod';
 import { ProcManagementMethods } from '../../components/ProcManagement/ProcManagementMethods';
 import { ActionsFunctions } from '../Actions/ActionsFunctions';
-
+import { ExportTableToCsv } from '../../features/exportTableToCsv';
+import { PrintableTable } from '../../features/printableTable';
 export function ButtonsFunctions(base) {
-  return class extends ProcManagementMethods(ClientMethod(ActionsFunctions(ApiFunctions(base)))) {
+  return class extends PrintableTable(ExportTableToCsv(ProcManagementMethods(ClientMethod(ActionsFunctions(ApiFunctions(base)))))) {
 
 
     getButtonForRows(actions, data, isProcManagement, parentData) {
@@ -228,6 +229,26 @@ export function ButtonsFunctions(base) {
               style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
           </mwc-icon-button>` : nothing
         }
+        ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.printable && sectionModel.viewQuery.printable.enable && sectionModel.viewQuery.printable.enable === true ?
+          html`
+          <mwc-icon-button 
+              class="${sectionModel.viewQuery.button.class}"
+              icon="${sectionModel.viewQuery.printable.icon}" id="printable" 
+              title="${sectionModel.viewQuery.printable.title['label_' + this.lang]}"             
+              @click=${() => this.printTable()}
+              style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+          </mwc-icon-button>` : nothing
+        }
+        ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.downloadable && sectionModel.viewQuery.downloadable.enable && sectionModel.viewQuery.downloadable.enable === true ?
+          html`
+          <mwc-icon-button 
+              class="${sectionModel.viewQuery.button.class}"
+              icon="${sectionModel.viewQuery.downloadable.icon}" id="downloadable" 
+              title="${sectionModel.viewQuery.downloadable.title['label_' + this.lang]}"             
+              @click=${() => this.downloadDataTableToCSV(sectionModel.langConfig.gridHeader, this.gridItems)}
+              style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+          </mwc-icon-button>` : nothing
+        }                
           ${sectionModel !== undefined && sectionModel.actions && sectionModel.actions.map(action =>
           html`
           ${this.btnHidden(action) ? nothing :
