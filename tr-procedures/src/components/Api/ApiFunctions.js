@@ -103,13 +103,13 @@ export function ApiFunctions(base) {
         if (action===undefined){return}          
           if (action.endPointParams) {
             action.endPointParams.forEach(p => {
-              this.buildJsonParam(jsonParam, p)
+              this.buildJsonParam(jsonParam, p, selObject, targetValue)
             })
             return jsonParam
           }
           if (action.extraParams) {
             action.extraParams.forEach(p => {
-              this.buildJsonParam(jsonParam, p)
+              this.buildJsonParam(jsonParam, p, selObject, targetValue)
             })
             return jsonParam
           }
@@ -121,7 +121,7 @@ export function ApiFunctions(base) {
               return jsonParam[p.argumentName]
             }
             action.subViewFilter[this.filterName].forEach(p => {
-              this.buildJsonParam(jsonParam, p)
+              this.buildJsonParam(jsonParam, p, selObject, targetValue)
             })
             return jsonParam
           }
@@ -505,7 +505,7 @@ export function ApiFunctions(base) {
         }
       }
 
-      buildJsonParam( jsonParam, p){
+      buildJsonParam( jsonParam, p, selObject, targetValue){
         if (p.dragElement){
           jsonParam[p.argumentName]=dragEntry[p.dragElement]
         } else if (p.dropElement){
