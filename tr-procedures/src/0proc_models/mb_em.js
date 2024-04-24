@@ -82,9 +82,8 @@ export const MbEm=
           "icon": "refresh",
           "title": {
             "label_en": "Refresh", "label_es": "Recargar"
-          },
-          "xxxwhenDisabled": "samplesReload"
-      }
+          }          
+        }
     },
 	"actions": [
       { "actionName": "EM_NEW_PRODUCTION_LOT",

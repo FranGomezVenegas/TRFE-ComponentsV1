@@ -1,8 +1,8 @@
 import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
-
+import { ActionsFunctions } from '../components/Actions/ActionsFunctions';
 export function ModuleEnvMonitClientMethods(base) {
-    return class extends base {  
+    return class extends ActionsFunctions(base) {  
         static get properties() {
             return {
                 headerInfo: { type: Object },
@@ -18,7 +18,7 @@ export function ModuleEnvMonitClientMethods(base) {
             this.prodLotList=[]
         }
         async getProgramList() {
-           //alert('getProgramList')
+          // alert('getProgramList')
             let queryDefinition=this.viewModelFromProcModel.viewQuery
             this.samplesReload = true
         //    this.templates.programsList = []
@@ -97,14 +97,15 @@ export function ModuleEnvMonitClientMethods(base) {
             return this.shadowRoot.querySelector("mwc-select#lot")
           }
       
-          setLogSample() {
+          setLogSample(e) {
             this.targetValue = {
               sampleTemplate: this.templates.selectedProgram.sample_config_code,
               sampleTemplateVersion: this.templates.selectedProgram.sample_config_code_version,
               fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
             }
             
-            this.performActionRequestHavingDialogOrNot(this.viewModelFromProcModel.langConfig.gridActionOnClick.dialogInfo.action, this.selectedItems[0], this.targetValue)
+            this.trazitNoDialogRequired(this.viewModelFromProcModel.langConfig.gridActionOnClick.dialogInfo.action, this.selectedItems[0], this.targetValue, false, this.selectedItems[0])
+            e.stopPropagation();
           }
       
     }

@@ -169,9 +169,11 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     this.ready=true
   }
   programChangedAction(e){
+    console.log('programChangedAction', e.detail)
+    
     if (e===undefined){return}
     this.ready=true
-    this.gridItems=e.detail
+    this.setGrid(e.detail)
 
   }
   bottomCompositionBlock(){
