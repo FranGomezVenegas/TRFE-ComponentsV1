@@ -192,7 +192,7 @@ export const styles = css`
 
 .tab-item {
     display: flex;
-    flex: 1;
+    // flex: 1;
     text-align: center;
 }
 
@@ -220,7 +220,7 @@ export const styles = css`
 /* SGR */
 
 .holidayEvent {
-    background-color: orange;
+    background-color: gray;
     color: white;
 }
 
@@ -230,7 +230,8 @@ export const styles = css`
 }
 
 .activeEvent {
-    background-color: #3999aa;
+    // background-color: #3999aa;
+    background-color: blue;
     color: #fff;
 }
 
@@ -344,7 +345,54 @@ export const styles = css`
   button:hover {
     background-color: #45a049;
   }
+
+
+
+  .event-list-container {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    list-style:none;
+}
+
+.event-date {
+    font-weight: bold;
+    color: #333333;
+    margin: 0 0 5px;
+}
+
+.event-description {
+    margin: 0;
+    color: #555555;
+    margin-bottom: 10px;
+}
+
+.event-label {
+    background-color: #666666;
+    color: #ffffff;
+    padding: 5px 12px;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.conflict-detail {
+    color: #ff0000;
+    font-style: italic;
+    margin-top: 10px;
+}
+
   
+
+
   
 
   `;
