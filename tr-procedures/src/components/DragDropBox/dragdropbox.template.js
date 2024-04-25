@@ -42,16 +42,17 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
         <div style="display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; flex-direction:row; gap:12px;">
                 <div style="width: fit-content; gap: 4px; display: flex; flex-direction: column;">
-                    <div style="display:flex; justify-content: space-between;"> 
+                    <div style="display:flex; justify-content: space-between; align-items: center;"> 
                     
                         <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
                         ${selectedBox===undefined ? html``: html `
                             <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
                             <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
                             <div class="view-btn ${viewModel.viewMode == 2 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(2)}> List View </div>
-                            <span style="color:#24C0EB; font-weight: bold; font-size: 16px;">${totalStr}</span>
+                            
                         `}
                         </div>
+                        <div style="color:#24C0EB; font-weight: bold; font-size: 16px;">${totalStr}</div>
                         <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;">
                             ${viewModel.objectsToDragColumns===undefined?html``:html`<div class="accept-btn" @click=${() => tmpLogic.setViewTable()}> ${tmpLogic.setViewTableButtonLabel()} </div>`}
                         </div>
@@ -127,10 +128,11 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
                     <mwc-icon style="color:#54CCEF; cursor:pointer; margin-top:42px;" @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
                     ${tmpLogic.listBoxViewMode ? html `
                         ${boxPosicsViews.map((view, i) => html `
-                        <div class="display:flex; flex-direction:row;">
-                            <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}>
-                            <multi-select for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)} .label="" .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${view} .options=${{}}> </multi-select>
-                            <label for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}> id, ${view[1]} </label><br>
+                        <div style="display:flex;">
+                            <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}>                            
+                            <label for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}> 
+                                <multi-select id="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)} .label="" .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${view} .options=${{}}> </multi-select>                            
+                            </label><br>                            
                         </div>                        
                         `)}
                     `: 
@@ -426,5 +428,4 @@ function getDataFromRoot(elem, data) {
       }
     }
   }
-
 
