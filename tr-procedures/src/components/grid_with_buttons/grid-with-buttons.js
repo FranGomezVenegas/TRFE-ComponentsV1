@@ -172,7 +172,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     console.log('programChangedAction', e.detail)
     
     if (e===undefined){return}
-    this.ready=true
+    //this.ready=true
     this.setGrid(e.detail)
 
   }
