@@ -544,7 +544,9 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       this.dispatchEvent(new CustomEvent('tab-selected', {        
         bubbles: true,  // Allow event to bubble up through the DOM
         composed: true  // Allow event to cross the shadow DOM boundary
-      }));      
+      }));   
+      const objectComposition = this.shadowRoot.querySelector('#rightSplit objecttabs-composition')
+      objectComposition.resetFilterIndex(this.selectedTabModelFromProcModel.view_definition[0])          
       this.objecttabsComposition.render()
     }
 
