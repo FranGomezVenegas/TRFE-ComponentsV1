@@ -276,31 +276,7 @@ export class SamplingPoints extends ModuleEnvMonitClientMethods(DialogsFunctions
     this.reqParams=this.jsonParam(actions[0], {}, this.targetValue)
     this.nextRequestCommons(actions[0])
     return    
-
-    this.targetValue = {
-      sampleTemplate: this.selectedProgram.sample_config_code,
-      sampleTemplateVersion: this.selectedProgram.sample_config_code_version,
-      fieldValue: `${this.shiftField.value}*String|${this.lotField.value}*String`
-    }
-    this.actionMethod(null, false, 1)
   }
-
-  xgetButton() {
-    return html`
-      ${actions.map(action =>
-        html`${action.button ?
-          html`<mwc-icon-button 
-            class="${action.button.class}"
-            icon="${action.button.icon}" 
-            title="${action.button.title['label_'+this.lang]}" 
-            ?disabled=${action.button.whenDisabled == "samplesReload" ? this.samplesReload : !this.selectedItems.length}
-            @click=${()=>this.actionMethod(action)}></mwc-icon-button>` :
-          nothing
-        }`
-      )}
-    `
-  }
-
 
   gridList() {
     return Object.entries(thisTabViewDefinition.gridHeader).map(
