@@ -436,6 +436,12 @@ export function TrazitCredentialsDialogs(base) {
 
 
   addJustificationPhrase(){
+        // const stack = new Error().stack;
+        // const stackLines = stack.split('\n');
+        // if (stackLines!==null&&stackLines[1]!==null){
+        //   const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
+        //   console.log("Called from: " + callerName);
+        // }       
     let actionInfoToAPIcall=JSON.parse(sessionStorage.getItem('actionInfoToAPIcall'));
     this.trazitNextRequest(actionInfoToAPIcall.action, actionInfoToAPIcall.actionParams, 
         this.buildCreadArgumentsObj(), actionInfoToAPIcall.gridSelectedItem, actionInfoToAPIcall.parentData)
