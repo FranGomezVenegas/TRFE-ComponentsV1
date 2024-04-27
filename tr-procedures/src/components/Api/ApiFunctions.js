@@ -592,7 +592,7 @@ export function ApiFunctions(base) {
               alert('Not found the html element called '+p.element+' Please talk with your System Admin')
             }else{
               //console.log('element object in context content is:', this[p.element])
-              if (this[p.element].value.length>0){
+              if (this[p.element]!==undefined&&this[p.element].value!==undefined&&this[p.element].value.length>0){
                 jsonParam[p.argumentName] = this[p.element].value // get value from field input
               }else{
                 if (p.notAddWhenValueIsBlank===undefined||p.notAddWhenValueIsBlank===false){
