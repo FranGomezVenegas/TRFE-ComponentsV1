@@ -3,13 +3,13 @@ import "@material/mwc-select";
 import "@material/mwc-textfield";
 import "@material/mwc-switch";
 import "@material/mwc-list/mwc-list-item";
-
+import '../../MultiSelect/index';
 import { elementTypes } from "../config";
 
 export const template = (props) => {
   let items = [];
   items = sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.endpoints.find((item) => item.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name)?.arguments_array : props.params;
-
+  console.log(props.objectTypesStr)
   return html`
     <div class="container">
       <form id="#endpoint-form" action="/" method="get">
@@ -65,14 +65,9 @@ export const template = (props) => {
                           style="width: 100%"
                           @change=${props.handleChangeStep(param.name)}
                         ></mwc-textfield>
-                         <mwc-textfield
-                            type="text"
-                            ?required=${required}
-                            label=${"Object Type"}
-                            name=${param.name + "_object_posic"}
-                            style="width: 100%"
-                            value=${props.objectTypes}
-                          ></mwc-textfield>                       
+                        <multi-select style="width: 100%;" name=${param.name + "_object_posic"} 
+                        ?required=${required} .activeOptions=${{}} .options=${props.objectTypes}
+                        .props=${{"readOnly":false, "displayLabel":true}} .label="${"Object Type"}"> </multi-select> 
                         <mwc-textfield
                           type="text"
                           ?required=${required}
@@ -110,14 +105,9 @@ export const template = (props) => {
                           style="width: 100%"
                           @change=${props.handleChangeStep(param.name)}
                         ></mwc-textfield>
-                         <mwc-textfield
-                            type="text"
-                            ?required=${required}
-                            label=${"Object Type"}
-                            name=${param.name + "_object_posic"}
-                            style="width: 100%"
-                            value=${props.objectTypes}
-                          ></mwc-textfield>                       
+                        <multi-select style="width: 100%;" name=${param.name + "_object_posic"} 
+                        ?required=${required} .activeOptions=${{}} .options=${props.objectTypes}
+                        .props=${{"readOnly":false, "displayLabel":true}} .label="${"Object Type"}"> </multi-select> 
                         <mwc-textfield
                           type="text"
                           ?required=${required}
@@ -172,14 +162,11 @@ export const template = (props) => {
                             `;
                           })}
                           </mwc-select>
-                          ` : html ` <mwc-textfield
-                                type="text"
-                                ?required=${required}
-                                label=${"Object Type"}
-                                name=${param.name + "_object_posic"}
-                                style="width: 100%"
-                                value=${props.objectTypes}
-                              ></mwc-textfield>`
+                          ` : html `
+                            <multi-select style="width: 100%;" name=${param.name + "_object_posic"} 
+                            ?required=${required} .activeOptions=${{}} .options=${props.objectTypes}
+                            .props=${{"readOnly":false, "displayLabel":true}} .label="${"Object Type"}"> </multi-select> 
+                          `
                         }
                        
                         <mwc-textfield

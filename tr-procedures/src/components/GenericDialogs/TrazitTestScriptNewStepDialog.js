@@ -8,6 +8,7 @@ import "@material/mwc-checkbox";
 import "@material/mwc-formfield";
 import { DialogsFunctions } from "./DialogsFunctions";
 import "../../components/DependencyForm/app/index";
+import '../MultiSelect';
 
 export function TrazitTestScriptNewStepDialog(base) {
   return class extends GridFunctions(DialogsFunctions(base)) {
@@ -267,9 +268,9 @@ export function TrazitTestScriptNewStepDialog(base) {
         return `${data[info.name]}*${info.type}`;
       });
 
-      console.log({ meta, data });
-      console.log(fieldNames.join("|"), fieldValues.join("|"));
-      console.log("uuuuuuuuuuuuuuuuu",{ fieldNames, fieldValues });
+      //console.log({ meta, data });
+      //console.log(fieldNames.join("|"), fieldValues.join("|"));
+      //console.log("uuuuuuuuuuuuuuuuu",{ fieldNames, fieldValues });
 
       let actionName = actionModel.actionName; //sessionStorage.getItem('actionName');
       let extraParams = "&action=" + this.getDependencyForm().endpoint;
@@ -307,8 +308,7 @@ export function TrazitTestScriptNewStepDialog(base) {
       console.log("add data extraParams", JSON.stringify(extraParams));
           await this.fetchApi(params)
             .then((j) => {
-              if (j && !j.is_error) {
-      //console.log('j', j.json())
+              if (j && !j.is_error) {      
                 this.actionOutput = j.json();
                 this.selectedItem = j.json();
               } else {
@@ -948,8 +948,8 @@ export function TrazitTestScriptNewStepDialog(base) {
             arguments_array: [],
           };
           blankEmpty.keyName = item[fldMDDef.propertyKeyName];
-          blankEmpty.keyValue_en = item[fldMDDef.propertyKeyValueEn];
-          blankEmpty.keyValue_es = item[fldMDDef.propertyKeyValueEs];
+          blankEmpty.keyValue_en = item[fldMDDef.propertyKeyValueEn]!==undefined? item[fldMDDef.propertyKeyValueEn]: item[fldMDDef.propertyKeyName];
+          blankEmpty.keyValue_es = item[fldMDDef.propertyKeyValueEs]!==undefined? item[fldMDDef.propertyKeyValueEs]: item[fldMDDef.propertyKeyName];
           blankEmpty.arguments_array = item.arguments_array;
           //console.log('blankEmpty', blankEmpty)
           entries.push(blankEmpty);
@@ -1006,8 +1006,8 @@ export function TrazitTestScriptNewStepDialog(base) {
             arguments_array: [],
           };
           blankEmpty.keyName = item[fldMDDef.propertyKeyName];
-          blankEmpty.keyValue_en = item[fldMDDef.propertyKeyValueEn];
-          blankEmpty.keyValue_es = item[fldMDDef.propertyKeyValueEs];
+          blankEmpty.keyValue_en = item[fldMDDef.propertyKeyValueEn]!==undefined? item[fldMDDef.propertyKeyValueEn]: item[fldMDDef.propertyKeyName];
+          blankEmpty.keyValue_es = item[fldMDDef.propertyKeyValueEs]!==undefined? item[fldMDDef.propertyKeyValueEs]: item[fldMDDef.propertyKeyName];
           blankEmpty.arguments_array = item.arguments_array;
           entries.push(blankEmpty);
         });

@@ -18,7 +18,8 @@ export class DependencyForm extends LitElement {
       isFormValid: { type: Boolean },
       toggles: { type: Object },
       objectTypes: {type : Array},
-      rowSelectedData: { type: Object }
+      rowSelectedData: { type: Object },
+      objectTypesStr: {type: String}
     };
   }
 
@@ -32,6 +33,7 @@ export class DependencyForm extends LitElement {
     this.lang = "";
     this.toggles = {};
     this.objectTypes = [];
+    this.objectTypesStr=""
     this.rowSelectedData = {};
     this.notificationChecked = false;
     this.tmpNotification = [];
@@ -47,6 +49,7 @@ export class DependencyForm extends LitElement {
       checkValidity: this._checkValidity,
       toggles: this.toggles,
       objectTypes: this.objectTypes,
+      objectTypesStr: this.objectTypesStr,
       rowSelectedData: this.rowSelectedData,
       notificationChecked: this.notificationChecked,
       handleChangeEndpoint: this._handleChangeEndpoint,
@@ -67,10 +70,17 @@ export class DependencyForm extends LitElement {
 
   _handleChangeStep = (name) => (e) => {
     this.objectTypes = [];
+    this.objectTypesStr="";
     const stepValue = e.target.value;
     let steps = JSON.parse(sessionStorage.getItem("steps"));
     const tmp = JSON.parse(steps[stepValue - 1].dynamic_data);
+    console.log(tmp)
+    //this.objectTypesStr=tmp.object_type
     tmp.map((step, i) => {
+      if (this.objectTypesStr.length>0){
+        this.objectTypesStr=this.objectTypesStr+"|"
+      }
+      this.objectTypesStr=this.objectTypesStr+step.object_type;
       this.objectTypes.push(step.object_type);
     });
     this.requestUpdate();
@@ -92,10 +102,12 @@ export class DependencyForm extends LitElement {
     if (idx === -1) return [];
     this.endpoint = this.endpoints[idx].keyName;
     this.params = this.endpoints[idx]?.arguments_array ?? [];
+    console.log(this.endpoint, this.params)
     this.requestUpdate();
   };
 
   getFormFields = () => {
+    console.log('getFormFields')
     this.checkValidity();
     if (!this.isFormValid) return null;
 
