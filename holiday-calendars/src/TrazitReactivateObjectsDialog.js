@@ -24,15 +24,12 @@ return class extends CalendarActions(base) {
     }
   
     noNegativeValues(e) {
-      //alert('reactive')
       if (e.target.value <=0){
         this.numDays=0
         e.target.value=0
       }
-      // console.log('setValidVal', e)
     }    
 
-    //${this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject.objectName===undefined ?          
     reactivateObjectsDialog() {
        //console.log('reactivateObjectsDialog', 'actionBeingPerformedModel', this.actionBeingPerformedModel)
       //if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject===undefined){return nothing}
@@ -101,18 +98,14 @@ return class extends CalendarActions(base) {
     cleanReactivateObjectList(){
       this.deactivatedObjects= []
       this.selectedObjectToReactive={}
-      //this.getDeactivatedObjects()
     }    
     setDays() {
-        //console.log('setDays clicked')
-        //alert(this.numDays)
         this.selectedDialogAction = this.actionBeingPerformedModel.dialogInfo.viewQuery
         this.GetAlternativeViewData(this.selectedDialogAction, false)
     }  
     listItemValueToGet(entry){
         if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName===undefined){
           alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.keyFldName property, check the console')
-          //console.log('this.actionBeingPerformedModel', this.actionBeingPerformedModel)
           return entry["name"]
         }
         this.selectedObjectToReactive=entry
@@ -121,7 +114,6 @@ return class extends CalendarActions(base) {
     listItemValueToDisplay(entry){
         if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition.eachEntryTextGenerator===undefined){
             alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.eachEntryTextGenerator property, check the console')
-            //console.log('this.actionBeingPerformedModel', this.actionBeingPerformedModel)
             return entry["name"]
         }
         let lFlds=this.actionBeingPerformedModel.dialogInfo.listDefinition.eachEntryTextGenerator
@@ -133,7 +125,6 @@ return class extends CalendarActions(base) {
         return textToDisplay
     }
     reactivateObjectDialogAction() {
-       //console.log('reactivateObjectDialogAction', 'this.objectToReactivateName', this.objectToReactivateName)
         if (this.objectToReactivateName.value===undefined||this.objectToReactivateName.value.length==0) {
           alert('Please check the model, the keyFldName property is set to one value ('+ this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName +') that is not part of those entities data info')
           return
@@ -155,19 +146,6 @@ return class extends CalendarActions(base) {
         selObjectArr.push(selObject)
         this.buttonActionWithoutDialogNoCredChecker(action, selObjectArr)
         return
-        console.log('myActionMethod','action', action, 'selectedObjectToReactive', this.selectedObjectToReactive)
-        if (selObject.length) {
-          this.credsChecker(action.actionName, selObject[propName], this.jsonParam(action, this.selectedObjectToReactive), action)
-        } else {
-          this.credsChecker(action.actionName, null, this.jsonParam(action, this.selectedObjectToReactive), action)
-        }
-
-         return
-          if (selObject.length) {
-            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, this.selectedObjectToReactive), action)
-          } else {
-            this.credsCheckerCommons(action.actionName, null, this.jsonParam(action, this.selectedObjectToReactive), action)
-          }
     }    
     getDeactivatedObjects() {        
         let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery

@@ -10,7 +10,6 @@ export function CalendarActions(base) {
             extraParams.dbName= this.config.dbName
             extraParams.procName = "app"
             extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
-        //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
             if (extraParams!==undefined){
@@ -19,9 +18,7 @@ export function CalendarActions(base) {
             params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(() => {
                 this.getHolidayCalendars()
-              //this.reload()
             })
-            //this.getHolidayCalendars()
           }
           buttonActionWithoutDialog(action, selectedItem) {
             this.selectedAction=action
@@ -32,22 +29,7 @@ export function CalendarActions(base) {
               this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
-                //console.log('buttonActionWithoutDialog')
-                this.reqParams.actionName=action.actionName
-                let extraParams=this.jsonParam(action, selectedItem)   
-            //    if (extraParams.includes("ERROR")){return}   
-                let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
-                params=params+'?' + new URLSearchParams(this.reqParams) 
-                if (extraParams!==undefined){
-                  params=params + '&' + new URLSearchParams(extraParams)
-                }
-                this.fetchApi(params).then(() => {
-                    this.getHolidayCalendars()
-                  //this.reload()
-                })
-                //this.getHolidayCalendars()
           }
-          //actionBeingPerformedModel
           checkMandatoryFieldsNotEmpty(){                
             let dlgFlds=Object.values(this.selectedAction.dialogInfo.fields)
             for (let i=0;i<dlgFlds.length;i++){            
@@ -65,14 +47,10 @@ export function CalendarActions(base) {
             return true
           }          
           genomaSuperDialogClickedActionNoCredChecker(){
-            //console.log('genomaSuperDialogClickedAction')
-            
             if (this.checkMandatoryFieldsNotEmpty()){
             }else{
-                console.log('Accepted Generic Dialog but mandatories pending then action not performed')
-              // alert('mandatories pending')
+              console.log('Accepted Generic Dialog but mandatories pending then action not performed')
             return
-              //e.stopPropagation();
             }
 
             let action=this.selectedAction
@@ -85,24 +63,18 @@ export function CalendarActions(base) {
             extraParams.dbName= this.config.dbName
             extraParams.procName = "app"
             extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
-        //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
             if (extraParams!==undefined){
               params=params + '&' + new URLSearchParams(extraParams)
             }
-            //console.log(extraParams)
-            //return
             params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(() => {
-              //alert('closing dialog')
               this[action.dialogInfo.name].close()
               this.getHolidayCalendars()
-              //this.reload()
             })            
           }
           genomaSuperDialogClickedAction(){
-            //console.log('genomaSuperDialogClickedAction')
             let action=this.selectedAction
             let selectedItem={}
             if (action.selObjectVariableName!==undefined&&this[action.selObjectVariableName][0]!==undefined){
@@ -114,19 +86,6 @@ export function CalendarActions(base) {
               this.credsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem), action)
             }
             return
-            this.reqParams.actionName=action.actionName
-            let extraParams=this.jsonParam(action, selectedItem)      
-        //    if (extraParams.includes("ERROR")){return}   
-            let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
-            params=params+'?' + new URLSearchParams(this.reqParams) 
-            if (extraParams!==undefined){
-              params=params + '&' + new URLSearchParams(extraParams)
-            }
-            this.fetchApi(params).then(() => {
-              this[action.dialogInfo.name].close()
-              this.getHolidayCalendars()
-              //this.reload()
-            })            
           }
           nextRequest() {
             super.nextRequest()
@@ -136,7 +95,6 @@ export function CalendarActions(base) {
             }
             let action = this.selectedDialogAction ? this.selectedDialogAction : this.selectedAction
             this.performRequest()
-            //this[action.clientMethod]()
           }    
                 
           performRequest(){
@@ -147,7 +105,6 @@ export function CalendarActions(base) {
                 selectedItem=this[action.selObjectVariableName][0]
             }
             let extraParams=this.jsonParam(action, selectedItem)      
-        //    if (extraParams.includes("ERROR")){return}   
             let params = this.config.backendUrl + (action.endPoint ? action.endPoint : this.config.frontEndEnvMonitSampleUrl)
             params=params+'?' + new URLSearchParams(this.reqParams) 
             if (extraParams!==undefined){
@@ -160,15 +117,9 @@ export function CalendarActions(base) {
                 this[action.dialogInfo.name].close()
               }
               this.getHolidayCalendars()
-              //this.reload()
             })            
 
           }
-    
-          
-//          { "isAdhocField": true, "argumentName": "fieldName", "value": "description" },
-//          { "isAdhocField": true, "argumentName": "fieldValue", "element": "text2", "fieldType":"STRING" }
-  
           actionMethod(action, replace = true) {
             console.log('actionMethod')
             if (replace) {
@@ -191,13 +142,10 @@ export function CalendarActions(base) {
                   alert('the action '+action.actionName+' has no dialog assigned')
                   return
                 }
-                //console.log('action', action)
                 if (this[dialogName]===undefined){
                   alert('Check the code due to the dialog '+dialogName+' is not load as to be open')
                   return
                 }				
-                //this.genomaDialogsTemplate()
-                //this.requestUpdate()
                 this[dialogName].show()
               }
             } else {
@@ -208,35 +156,5 @@ export function CalendarActions(base) {
               }
             }
           }  
-/*          
-          async getHolidayCalendars() {
-            this.samplesReload = true
-            let curProject = this.selectedProject 
-            let curStudy = this.selectedStudy 
-            this.selectedProject={}
-            this.selectedStudy={}
-            this.reqParams.actionName="ALL_ACTIVE_PROJECTS"
-            let params = this.config.backendUrl + this.config.GenomaStudyAPIqueriesUrl
-              + '?' + new URLSearchParams(this.reqParams)
-            await this.fetchApi(params).then(j => {
-              if (j && !j.is_error) {        
-                this.programsList = j.project
-                if (j.master_data&&j.master_data.users){
-                }
-              }
-            })
-            
-            if (this.selectedProject===undefined){
-               // console.log("FIRST TIME!!!!")
-            }else{
-                let givenProject = this.programsList.filter(i => i.name == curProject.name)
-                this.selectedProject=givenProject[0]
-                if (curStudy!==undefined&&this.selectedProject!==undefined){
-                    this.selectedStudy=this.selectedProject.study.filter(i => i.name == curStudy.name)[0]
-                }
-                console.log('selectedStudy', this.selectedStudy)
-            }
-          }
-*/          
     }
 }
