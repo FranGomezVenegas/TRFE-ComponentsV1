@@ -4,9 +4,9 @@ import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
-
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
 export function TrazitReactivateObjectsDialog(base) {
-return class extends base {
+return class extends ActionsFunctions(base) {
     static get properties() {
         return {
             numDays: { type: Number },
@@ -22,19 +22,14 @@ return class extends base {
     }
   
     noNegativeValues(e) {
-      //alert('reactive')
       if (e.target.value <=0){
         this.numDays=0
         e.target.value=0
       }
-      // console.log('setValidVal', e)
       return
     }    
 
-    //${this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject.objectName===undefined ?          
     reactivateObjectsDialog() {
-      //  console.log('reactivateObjectsDialog', 'actionBeingPerformedModel', this.actionBeingPerformedModel)
-      //if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.fieldsObject===undefined){return nothing}
         return html` 
         <tr-dialog id="reactivateObjectDialog" ?open=${this.actionBeingPerformedModel&&this.actionBeingPerformedModel.dialogInfo&&this.actionBeingPerformedModel.dialogInfo.name==='reactivateObjectDialog'} heading="" hideActions="" @open="${this.cleanReactivateObjectList}" scrimClickAction="">
         ${this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name!=="reactivateObjectDialog" ? nothing :
@@ -102,15 +97,12 @@ return class extends base {
         this.selectedObjectToReactive={}
     }    
     setDays() {
-        //console.log('setDays clicked')
-        //alert(this.numDays)
         this.selectedDialogAction = this.actionBeingPerformedModel.dialogInfo.viewQuery
         this.GetAlternativeViewData(this.selectedDialogAction, false)
     }  
     listItemValueToGet(entry){
         if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName===undefined){
           alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.keyFldName property, check the console')
-          //console.log('this.actionBeingPerformedModel', this.actionBeingPerformedModel)
           return entry["name"]
         }
         this.selectedObjectToReactive=entry
@@ -119,7 +111,6 @@ return class extends base {
     listItemValueToDisplay(entry){
         if (this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition===undefined||this.actionBeingPerformedModel.dialogInfo.listDefinition.eachEntryTextGenerator===undefined){
             alert('This selected action has no the requirements, requieres dialogInfo.listDefinition.eachEntryTextGenerator property, check the console')
-            //console.log('this.actionBeingPerformedModel', this.actionBeingPerformedModel)
             return entry["name"]
         }
         let lFlds=this.actionBeingPerformedModel.dialogInfo.listDefinition.eachEntryTextGenerator
@@ -131,31 +122,10 @@ return class extends base {
         return textToDisplay
     }
     reactivateObjectDialogAction() {
-       console.log('reactivateObjectDialogAction', 'this.objectToReactivateName', this.objectToReactivateName)
-        if (this.objectToReactivateName.value===undefined||this.objectToReactivateName.value.length==0) {
-          alert('Please check the model, the keyFldName property is set to one value ('+ this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName +') that is not part of those entities data info')
-          return
-        }
-        if (this.objectToReactivateName.value) {
-          this.selectedItems[this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName]=this.objectToReactivateName.value
-          this.selectedDialogAction = this.actionBeingPerformedModel
-          this.myActionMethod(this.selectedDialogAction, this.selectedItems, this.actionBeingPerformedModel.dialogInfo.listDefinition.keyFldName)
-          //this.dialogAccept(false)
-          this.cleanReactivateObjectList()
-        }
+      this.trazitNoDialogRequired(this.actionBeingPerformedModel, this.selectedObjectToReactive, null, false, this.selectedObjectToReactive, null, null, null)
+      this.cleanReactivateObjectList()
+      return
     } 
-    myActionMethod(action, selObject, propName) {
-        if (action===undefined){
-          alert('viewQuery property not found in the procedure model for procInstanceName'+this.procName+' and view '+this.viewName)
-          return
-        }
-         console.log('myActionMethod','action', action, 'selectedObjectToReactive', this.selectedObjectToReactive)
-          if (selObject.length) {
-            this.credsCheckerCommons(action.actionName, selObject[propName], this.jsonParam(action, this.selectedObjectToReactive), action)
-          } else {
-            this.credsCheckerCommons(action.actionName, null, this.jsonParam(action, this.selectedObjectToReactive), action)
-          }
-    }    
     async getDeactivatedObjects() {
         // console.log('getDeactivatedObjects')
         let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
