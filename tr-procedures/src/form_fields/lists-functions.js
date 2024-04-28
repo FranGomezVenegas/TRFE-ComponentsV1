@@ -2,7 +2,8 @@ import { html } from "lit";
 export function ListsFunctions(base) {
     return class extends (base) {
         listEntries(fld, multilist=false){
-            let newList=this.entriesForTheList(fld, multilist=false)
+            if (multilist===undefined){multilist=false}
+            let newList=this.entriesForTheList(fld, multilist)
             if (newList===undefined){
                 return html``
             }
