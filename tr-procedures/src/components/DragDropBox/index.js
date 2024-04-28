@@ -35,7 +35,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
     this.dragTrData = {id: undefined, temperature:"", study:""};
     this.data = {};
     this.dragElement = undefined;
-    this.viewBoxMode = 0;
+    this.viewContentIndex = 0;
     this.listBoxViewMode = false;
     this.dragTr = false;
     this.dragBackgroundColor = undefined;
@@ -53,7 +53,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
       selectedIndex2: this.selectedIndex2,
       //viewMode: this.viewMode,
       listBoxViewMode: this.listBoxViewMode,
-      viewBoxMode: this.viewBoxMode,
+      viewContentIndex: this.viewContentIndex,
       viewTable: this.viewTable,
       viewTableBox: this.viewTableBox,
       setSelectBoxIndex: this._setSelectBoxIndex,
@@ -119,7 +119,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
     let currentID = currentElement.childNodes[1].childNodes[1].textContent;
     currentID -= 1;
     let str = "";
-    if(this.viewBoxMode == 0) {
+    if(this.viewContentIndex == 0) {
       str =`<div>id: ${this.data.tableData[currentID].id}</div><div> study: ${this.data.tableData[currentID].study}</div>`
     } 
     else {
@@ -133,7 +133,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
 
   _setBoxPosicsViewFilter = (mode) => {
     console.log("viewmode", mode);
-    this.viewBoxMode = mode;
+    this.viewContentIndex = mode;
     this.requestUpdate();
   }
 
