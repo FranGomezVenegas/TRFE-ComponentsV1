@@ -5,9 +5,10 @@ import { navigator } from "lit-element-router";
 import { ButtonsFunctions} from '../../components/Buttons/ButtonsFunctions';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
 //import {DataViews} from '../../components/Views/DataViews';
 
-export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement))))) {
+export class DragDropTable extends ActionsFunctions(GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement))))) {
   static get styles() {
     return styles;
   }
@@ -414,7 +415,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
     }
     //this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");
-    this.actionMethod(e, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)         
+    this.trazitButtonsMethod(e, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)         
     this.requestUpdate();
   }
 

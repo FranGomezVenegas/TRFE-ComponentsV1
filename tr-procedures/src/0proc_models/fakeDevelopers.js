@@ -95,7 +95,7 @@ export const FakeDevelopers = {
         {"name": "id", "criteria":{"type": "values", "values": [1, 3]}},
         {"name": "id", "criteria":{"type": "range", "min": 1, "max": 4}},
       ],
-      "dropingEntryRequiredPropertiesAndMatchValues":[
+      "xxdropingEntryRequiredPropertiesAndMatchValues":[
         {"name": "id", "criteria":{"type": "selectedBox_value", "selectedBoxPropName": "anyProperty"}}
       ]
     },      
@@ -118,7 +118,7 @@ export const FakeDevelopers = {
         { "argumentName": "sampleId", "dropElement": "id" },
         { "argumentName": "batchTemplateId", "dragElement": "posicy" },
         { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
-        { "argumentName": "batchName", "dragElement": "posicx" }			  
+        { "argumentName": "batchName", "dragElement": "name" }			  
       ]
     },
     "fakedata": {
@@ -462,7 +462,7 @@ export const FakeDevelopers = {
             }        
           ]
         },
-        {"name":"Box 11", content_structured: false,
+        {"name":"Box 11", content_structured: true,
           datas: [
             {
               id: 1,               
@@ -490,7 +490,23 @@ export const FakeDevelopers = {
             }  
           ]
         },
-        {"name":"Caja A", cols: 11, rows: 6, content_structured: true, "allow_move_objects": true, 
+        {"name":"Caja A", cols: 11, rows: 6, content_structured: false, "allow_move_objects": true, 
+          datas: [
+            {
+              id: 1, 
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 1,
+              stored_on: "2024-01-19"
+            } 
+          ]
+        },
+        {"name":"Caja B", cols: 11, rows: 6, content_structured: false, "allow_move_objects": true, 
           datas: [
             {
               id: 1, 

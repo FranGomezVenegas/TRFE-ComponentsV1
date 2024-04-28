@@ -5,7 +5,8 @@ import { navigator } from "lit-element-router";
 import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { GridFunctions } from '../grid_with_buttons/GridFunctions';
-export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement)))) {
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
+export class DragDropBox extends ActionsFunctions(GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement))))) {
 
   static get styles() {
     return styles;
@@ -175,7 +176,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
     }
     //this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");    
-    this.actionMethod(e, this.viewModelFromProcModel.dropAction, true, undefined, undefined, this.selectedBox, false, undefined, this.selectedBox, this.dragElement)
+    this.trazitButtonsMethod(e, this.viewModelFromProcModel.dropAction, true, undefined, undefined, this.selectedBox, false, undefined, this.selectedBox, this.dragElement)
     return
   }
 
