@@ -268,7 +268,7 @@
     "viewName": "drag-drop", 
     "filterName" :  "drag-drop" 
   },  
-  "localDefaultViewzzzzz": {
+  "localDefaultView": {
     "procName":  "fake-developers", 
     "procNameData":  "mb_em",
     "viewName": "drag-box", 
@@ -284,12 +284,12 @@
     "viewName": "PlatformInstruments", 
     "filterName" :  "InstrumentsList" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzz": {
     "procName":  "fake-developers", 
     "viewName": "ck-editor", 
     "filterName" :  "ck-editor" 
   },
-  "localDefaultView": {
+  "localDefaultView111": {
     "procName":  "mb_em", 
     "viewName": "ProductionLots", 
     "filterName" :  "SampleLot" 

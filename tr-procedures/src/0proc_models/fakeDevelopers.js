@@ -102,6 +102,7 @@ export const FakeDevelopers = {
     "boxPosicsViews":[
       ["id", "study"],
       ["id", "temperature"],
+      ["temperature"]
     ],
     "dropAction": { 
       "actionName": "EM_BATCH_INCUB_ADD_SMP",
@@ -408,7 +409,7 @@ export const FakeDevelopers = {
         ]
       },
       boxContents: [
-        {"name":"Box 1", cols: 5, rows: 5,  "allow_move_objects": true,   
+        {"name":"Box 1", cols: 5, rows: 5, content_structured: true, "allow_move_objects": true,   
           "anyProperty": 1, 
           datas: [
             {
@@ -461,10 +462,10 @@ export const FakeDevelopers = {
             }        
           ]
         },
-        {"name":"Box 11",cols: 9, rows: 4,
+        {"name":"Box 11", content_structured: false,
           datas: [
             {
-              id: 1, 
+              id: 1,               
               name: "Sample1",
               description: "Hello",
               study: undefined,
@@ -489,7 +490,7 @@ export const FakeDevelopers = {
             }  
           ]
         },
-        {"name":"Caja A", cols: 11, rows: 6, "allow_move_objects": true, 
+        {"name":"Caja A", cols: 11, rows: 6, content_structured: true, "allow_move_objects": true, 
           datas: [
             {
               id: 1, 
