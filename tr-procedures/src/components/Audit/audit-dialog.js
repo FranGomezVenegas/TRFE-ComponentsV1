@@ -7,6 +7,7 @@ import '@trazit/tr-dialog/tr-dialog';
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import { ProceduresModel } from '../../ProceduresModel';
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
 import '../../components/Audit/audit-dialog';
 const langConfig = {
   "actionName": {    "label_en": "Action Name",    "label_es": "Acción"  },
@@ -18,7 +19,7 @@ const langConfig = {
   "sign": {    "label_en": "Sign",    "label_es": "Firmar"  }
 }
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
-export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(DialogsFunctions(LitElement))) {
+export class AuditDialog extends ActionsFunctions(TrazitCredentialsDialogs(ButtonsFunctions(DialogsFunctions(LitElement)))) {
   static get styles() {
     return [
       Layouts,
@@ -544,6 +545,9 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(Dialo
     this.targetValue = {
       auditId: id
     }    
+    this.trazitNoDialogRequired(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], this.targetValue, false, this.selectedItems[0], undefined, undefined, undefined)
+    return
+
     console.log('signAudit', 'actionBeingPerformedModel', this.actionBeingPerformedModel)
     this.auditAction=this.actionBeingPerformedModel.dialogInfo.action[0]
     //this.selectedDialogAction = this.selectedAction.dialogInfo.viewQuery
@@ -551,12 +555,6 @@ export class AuditDialog extends TrazitCredentialsDialogs(ButtonsFunctions(Dialo
     this.actionWhenRequiresNoDialog(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], this.targetValue)
     //this.actionMethod(this.actionBeingPerformedModel.dialogInfo.action[0], false)
     //this.actionMethod(this.actionBeingPerformedModel, false)
-  }
-
-  xsignAuditMahdi(id) {
-    this.dispatchEvent(new CustomEvent('sign-audit', {
-      detail: { audit_id: id }
-    }))
   }
 
   get dialog() {
