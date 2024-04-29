@@ -83,7 +83,7 @@ function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, 
         boxPosicsViews=viewModel.boxPosicsViews
     }
     return  html`
-            <div class="box-content_allowmove_${boxAllowMoveObject}">
+            <div class="box-content_allowmove_${boxAllowMoveObject}" style="min-width: 200px; min-height: 200px">
                 ${viewModel.viewMode == 1 ? html `
                 <div draggable="true" class="draggable-box" @dragover=${(e) => tmpLogic.allowDrop(e)} @drop=${(e) => tmpLogic.dropBox(e, 0, 0)}>
                 ${selectedBox.datas.length > 0 ?
