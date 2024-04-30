@@ -248,12 +248,12 @@ export class MyIncidents extends CommonCore {
 
   fieldsByTypeAndAction(){        
     if (this.dialogType=="createStep1"){
-      let incidentsType=[{"name":"issue"}, {"name":"request"} , {"name":"request"}, {"name":"issue"}, {"name":"request"}, {"name":"request"}]
+      let incidentsType=[{"name":"issue"}, {"name":"request"} , {"name":"proposal"}, {"name":"users_management"}, {"name":"change_control"}, {"name":"doubt"}]
       const gridStyle = this.computeGridStyle(incidentsType.length);
       return html`
         <div style="display: grid; ${gridStyle}" class="reopenPart">
           ${incidentsType.map((curType, idx) => html`
-            <button style="width:100px; border: none; background-color: transparent;" @click=${() =>{this.newTicketForm(curType)}}><img .src="/images/incidentType/${curType.name}_${this.flag}.webp" style="width:100%"></button><br><br></br>
+            <button style="width:100px; border: none; background-color: transparent;" @click=${() =>{this.newTicketForm(curType)}}><img .src="/images/incidentType/${curType.name}_${this.lang}.webp" style="width:100%"></button><br><br></br>
           `)}
         </div>
       `
