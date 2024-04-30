@@ -126,8 +126,8 @@
     "viewName": "Deviation", 
     "filterName" :  "pending" 
   },
-  "localDefaultView123111s": {
-    "procName":  "em-demo-a", 
+  "localDefaultView": {
+    "procName":  "mb_em", 
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingSMP" 
   },
@@ -247,7 +247,7 @@
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
   },
-  "localDefaultView": {
+  "localDefaultViewffff": {
     "procName":  "inspection_lot", 
     "viewName": "analysisDesign", 
     "filterName" :  "analysisDesign" 
@@ -268,7 +268,7 @@
     "viewName": "drag-drop", 
     "filterName" :  "drag-drop" 
   },  
-  "localDefaultView": {
+  "localDefaultViefffw": {
     "procName":  "fake-developers", 
     "procNameData":  "mb_em",
     "viewName": "drag-box", 
