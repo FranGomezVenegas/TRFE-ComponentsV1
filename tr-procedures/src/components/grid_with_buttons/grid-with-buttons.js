@@ -30,7 +30,7 @@ import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigations
 
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
-
+import '../StagesView/index';
 
 import '../Audit/audit-dialog';
 export class GridWithButtons extends 
@@ -222,6 +222,15 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     }
 
   }
+  getTitleElement(){    
+    if (this.viewModelFromProcModel.isStaged){
+      return html`<stages-view style="margin:17.6779px;"
+      .stages="${this.viewModelFromProcModel.isStaged.stages}"
+      .currentstage="${this.viewModelFromProcModel.isStaged.currentstage}" .lang="${this.lang}"></stages-view>`  
+    }else{
+      return html`${this.getTitle()}`
+    }
+  }
   abstractBlock(){
     //console.log('abstractBlock')
     let addContextMenu=this.addContextMenu()    
@@ -230,8 +239,9 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
   ${this.abstract ? 
       nothing :
       html`
-        ${this.viewModelFromProcModel.topCompositions!==undefined ? nothing: html`${this.getTitle()}`}
-      
+        
+        <!-- ${this.viewModelFromProcModel.topCompositions!==undefined ? nothing: html`${this.getTitle()}`}-->
+        ${this.getTitleElement()}
         <div class="layout horizontal flex wrap">
             <div class="layout flex">          
             <div class="layout horizontal center flex wrap">
