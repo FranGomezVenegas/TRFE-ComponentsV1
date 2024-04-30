@@ -9,28 +9,38 @@ export class StagesView extends navigator(LitElement) {
 
   static get properties() {
     return {
-      state: { type: Number }
+      stages: { type: Array},
+      currentstage: { type: Number },
+      data:{type: Object},
+      lang: {type: String}
     };
   }
 
   constructor() {
     super();
-    this.state = 0;
-    this.data = {
-      datas: [
-        { name : "Assigned" },
-        { name : "Started" },
-        { name : "Completed" },
-        { name : "Approved" }
-      ],
-      currentState: 1
-    }
+    this.stages=[]
+    this.currentstage = 0;
+    this.data = {}
+    this.lang=''
   }
 
   render() {
+    console.log('stages', this.stages)
+    this.data = {
+      stages: this.stages,
+    //[
+    //   { name : "Assigned" },
+    //   { name : "Started" },
+    //   { name : "Completed" },
+    //   { name : "Approved" }
+    // ],
+    currentStageName: this.stages[this.currentstage-1],
+    currentState: this.currentstage-1   
+  }  
     return template({
       data: this.data
-    });
+    },
+    this.lang);
   }
 }
 
