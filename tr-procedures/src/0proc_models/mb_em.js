@@ -700,7 +700,356 @@ export const MbEm=
       }
     ]
   },
-  "SamplePlateReading": {
+  "SamplePlateReading":{
+    "component": "TableWithButtons",
+    "langConfig": {
+      "gridHeader": {
+        "sample_id": {
+          "label_en": "Sample ID",
+          "label_es": "ID Muestra",
+          "sort": false,
+          "filter": true
+        },
+        "program_name": {
+          "label_en": "Project",
+          "label_es": "Programa",
+          "sort": false,
+          "filter": true
+        },
+        "location_name": {
+          "label_en": "Location",
+          "label_es": "Ubicación",
+          "sort": false,
+          "filter": true
+        },
+        "sampling_date": {
+          "label_en": "sampling Date",
+          "label_es": "ID Fecha de Muestreo",
+          "sort": false,
+          "filter": true
+        },
+        "incubation_batch": {
+          "label_en": "Batch incub 1",
+          "label_es": "Tanda 1a Incubacion",
+          "sort": false,
+          "filter": true
+        },
+        "incubation_incubator": {
+          "label_en": "Incubator incub 1",
+          "label_es": "Incubadora 1a Incubacion",
+          "sort": false,
+          "filter": true
+        },
+        "incubation_start": {
+          "label_en": "incubation 1 start",
+          "label_es": "Inicio 1a Incubacion",
+          "sort": false,
+          "filter": true
+        },
+        "incubation_end": {
+          "label_en": "incubation 1 end",
+          "label_es": "Fin 1a Incubacion",
+          "sort": false,
+          "filter": true
+        },
+        "incubation2_batch": {
+          "label_en": "Batch incub 2",
+          "label_es": "Tanda 2a Incubacion",
+          "sort": false,
+          "filter": true
+        },
+        "incubation2_incubator": {
+          "label_en": "Incubator incub 2",
+          "label_es": "Incubadora 2a Incubacion",
+          "sort": false,
+          "filter": true
+        },
+        "incubation2_start": {
+          "label_en": "incubation 2 start",
+          "label_es": "Inicio 2a Incubacion",
+          "sort": false,
+          "filter": true
+        },
+        "incubation2_end": {
+          "label_en": "incubation 2 end",
+          "label_es": "Fin 2a Incubacion",
+          "sort": false,
+          "filter": true
+        }
+      },
+      "title": [
+        {
+          "LOCATION": {
+            "label_en": "Samples Pending Plate Reading",
+            "label_es": "Muestras pendientes de la lectura de placa"
+          }
+        },
+        {
+          "PERSONAL": {
+            "label_en": "Personnel Samples Pending Plate Reading",
+            "label_es": "Muestras de personal pendientes de la lectura de placa"
+          }
+        }
+      ],
+      "isStaged":[
+        {"LOCATION":{
+          "stages":[{ "name": "Sampling", "label_en":"Sampling", "label_es":"Muestreo" }, 
+                  { "name": "Incubation", "label_en":"Incubation", "label_es":"Incubación" }, 
+                  { "name": "PlateReading", "label_en":"Plate Reading Location", "label_es":"Lectura de placa Ubicación" }, 
+                  { "name": "PlateReadingSecondEntry", "label_en":"Plate Reading 2nd Entry", "label_es":"2ª Lectura de placa" }, 
+                  { "name": "MicroorganismIdentification", "label_en":"Microorganism Identification", "label_es":"Identificación de microorganismos" }, 
+                  { "name": "Revision", "label_en":"Revision", "label_es":"Revisión" }],
+          "currentstage": 3
+          }
+        },
+        {"PERSONAL":{
+          "stages":[{ "name": "Sampling", "label_en":"Sampling", "label_es":"Muestreo" }, 
+                  { "name": "Incubation", "label_en":"Incubation", "label_es":"Incubación" }, 
+                  { "name": "PlateReading", "label_en":"Plate Reading Personnel", "label_es":"Lectura de placa Personal" }, 
+                  { "name": "PlateReadingSecondEntry", "label_en":"Plate Reading 2nd Entry", "label_es":"2ª Lectura de placa" }, 
+                  { "name": "MicroorganismIdentification", "label_en":"Microorganism Identification", "label_es":"Identificación de microorganismos" }, 
+                  { "name": "Revision", "label_en":"Revision", "label_es":"Revisión" }],
+          "currentstage": 3
+          }
+        }
+      ],       
+    },
+    "viewQuery": {
+      "actionName": "SAMPLES_BY_STAGE",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      },
+      "endPointParams": [
+        {
+          "argumentName": "sampleFieldToRetrieve",
+          "value": "sample_id|program_name|location_name|current_stage|status|sampling_date|sampling_comment|incubation_batch|incubation_incubator|incubation_start|incubation_end|incubation2_batch|incubation2_incubator|incubation2_start|incubation2_end|sample_config_code"
+        },
+        {
+          "argumentName": "whereFieldsValue",
+          "value": "PlateReading|prog_pers_template"
+        }
+      ]
+    },   
+    "row_buttons": [],
+    "enableContextMenu": true,
+    "addActionsInContextMenu": false,
+    "actions": [
+      {
+        "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
+        "requiresDialog": false,
+        "endPointUrl": "Samples",
+        "button": {
+          "icon": "skip_previous",
+          "title": {
+            "label_en": "Previous",
+            "label_es": "Previo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ]
+      },
+      {
+        "actionName": "SAMPLESTAGE_MOVETONEXT",
+        "clientMethod": "moveToNext",
+        "requiresDialog": false,
+        "endPointUrl": "Samples",
+        "button": {
+          "icon": "skip_next",
+          "title": {
+            "label_en": "Next",
+            "label_es": "Siguiente"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ]
+      },
+      {
+        "actionName": "ENTER_PLATE_READING",
+        "notGetViewData": true,
+        "requiresDialog": true,
+        "endPointUrl": "Samples",
+        "alertMsg": {
+          "empty": {
+            "label_en": "No pending results to enter result",
+            "label_es": "No hay resultados pendientes de resultados"
+          }
+        },
+        "button": {
+          "icon": "document_scanner",
+          "title": {
+            "label_en": "Enter Result",
+            "label_es": "Ingrese el Resultado"
+          },
+          "requiresGridItemSelected": true
+        },
+        "dialogInfo": {
+          "name": "resultDialog",
+          "subQueryName": "getResult",
+          "viewQuery": {
+            "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+            "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "selObjectPropertyName": "sample_id"
+              }
+            ]
+          },
+          "automatic": true,
+          "resultHeader": {
+            "spec_eval": {
+              "label_en": "Spec Eval",
+              "label_es": "Eval Espec"
+            },
+            "result_id": {
+              "label_en": "Result Id",
+              "label_es": "Id Resultado"
+            },
+            "analysis": {
+              "label_en": "Analysis",
+              "label_es": "Análísis"
+            },
+            "param_name": {
+              "label_en": "Parameter",
+              "label_es": "Parámetro"
+            },
+            "raw_value": {
+              "label_en": "Value",
+              "label_es": "Valor"
+            },
+            "uom": {
+              "label_en": "UOM",
+              "label_es": "UOM"
+            }
+          },
+          "resultHeaderObjectLabelTopLeft": {
+            "label_en": "Sample: ",
+            "label_es": "Muestra: "
+          },
+          "action": [
+            {
+              "actionName": "ENTER_PLATE_READING",
+              "requiresDialog": false,
+              "endPointUrl": "Samples",
+              "clientMethod": "enterResult",
+              "endPointParams": [
+                {
+                  "argumentName": "rawValueResult",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "resultId",
+                  "targetValue": true
+                }
+              ]
+            },
+            {
+              "actionName": "RESULT_CHANGE_UOM",
+              "clientMethod": "changeUOM",
+              "endPointParams": [
+                {
+                  "argumentName": "newResultUom",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "resultId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleAnalysisResultFieldToRetrieve",
+            "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
+          },
+          {
+            "argumentName": "sortFieldsName",
+            "value": "test_id|result_id"
+          },
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ]
+      },
+      {
+        "actionName": "GET_SAMPLE_AUDIT",
+        "requiresDialog": true,
+        "endPoint": "/modulesample/SampleAPIqueries",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Sample Audit",
+            "label_es": "Auditoría de Muestra"
+          },
+          "requiresGridItemSelected": true
+        },
+        "clientMethod": "getObjectAuditInfo",
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ],
+        "dialogInfo": {
+          "name": "auditDialog",
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "requiresDialog": false,
+              "notGetViewData": true,
+              "endPointUrl": "Samples",
+              "clientMethod": "signAudit",
+              "endPointParams": [
+                {
+                  "argumentName": "auditId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "subViewFilter": [
+      {
+        "LOCATION": [
+          {
+            "argumentName": "whereFieldsName",
+            "value": "current_stage|sample_config_code not in*"
+          }
+        ]
+      },
+      {
+        "PERSONAL": [
+          {
+            "argumentName": "whereFieldsName",
+            "value": "current_stage|sample_config_code in*"
+          }
+        ]
+      }
+    ]
+  },
+  "SamplePlateReadingOld": {
 	"component": "TableWithButtons",	
     "langConfig": {
       "title": {
