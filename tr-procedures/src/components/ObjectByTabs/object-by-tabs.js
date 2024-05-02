@@ -546,7 +546,9 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         composed: true  // Allow event to cross the shadow DOM boundary
       }));   
       const objectComposition = this.shadowRoot.querySelector('#rightSplit objecttabs-composition')
-      objectComposition.resetFilterIndex(this.selectedTabModelFromProcModel.view_definition[0])          
+      if (objectComposition!==null){
+        objectComposition.resetFilterIndex(this.selectedTabModelFromProcModel.view_definition[0])          
+      }
       this.objecttabsComposition.render()
     }
 
