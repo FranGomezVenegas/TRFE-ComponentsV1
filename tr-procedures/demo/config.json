@@ -129,7 +129,7 @@
   "localDefaultView": {
     "procName":  "mb_em", 
     "viewName": "SamplePlateReading", 
-    "filterName" :  "PlateReadingSMP" 
+    "filterName" :  "LOCATION" 
   },
   "localDefaultView1231231231": {
     "procName":  "em-demo-a", 
