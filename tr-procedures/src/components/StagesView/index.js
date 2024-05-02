@@ -26,6 +26,13 @@ export class StagesView extends navigator(LitElement) {
 
   render() {
     console.log('stages', this.stages)
+    let currentStageName=''
+    if (this.currentstage===undefined){
+      this.currentstage=0
+    }
+    if (this.stages!==undefined){
+      currentStageName=this.stages[this.currentstage-1]    
+    }
     this.data = {
       stages: this.stages,
     //[
@@ -34,7 +41,7 @@ export class StagesView extends navigator(LitElement) {
     //   { name : "Completed" },
     //   { name : "Approved" }
     // ],
-    currentStageName: this.stages[this.currentstage-1],
+    currentStageName: currentStageName,
     currentState: this.currentstage-1   
   }  
     return template({

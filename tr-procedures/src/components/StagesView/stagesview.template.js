@@ -1,6 +1,7 @@
 import { html } from 'lit-element';
 import '@material/mwc-icon';
 export const template = (props, lang) => {    
+    if (props.data.stages===undefined){return html``}
     return html`
     <style>
         *, *:before, *:after{ 
