@@ -222,15 +222,29 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     }
 
   }
-  getTitleElement(){    
-    if (this.viewModelFromProcModel.isStaged){
+  getTitleElement(sectionModel = this.viewModelFromProcModel){      
+    let stageData={}
+    if (sectionModel.langConfig && sectionModel.langConfig.isStaged) {
+      // Find the object in the array that matches filterName
+      const filteredStageData = sectionModel.langConfig.isStaged.find(obj => obj.hasOwnProperty(this.filterName));
+      
+      // If found, assign it to stageData
+      if (filteredStageData) {
+        stageData = filteredStageData[this.filterName];
+      } else {
+        // If not found, assign the first object in the array to stageData
+        stageData = sectionModel.langConfig.isStaged[0];
+      }
+    }
+    if (Object.keys(stageData).length !== 0){
       return html`<stages-view style="margin:17.6779px;"
-      .stages="${this.viewModelFromProcModel.isStaged.stages}"
-      .currentstage="${this.viewModelFromProcModel.isStaged.currentstage}" .lang="${this.lang}"></stages-view>`  
-    }else{
+      .stages="${stageData.stages}"
+      .currentstage="${stageData.currentstage}" .lang="${this.lang}"></stages-view>`  
+    } else {
       return html`${this.getTitle()}`
     }
   }
+
   abstractBlock(){
     //console.log('abstractBlock')
     let addContextMenu=this.addContextMenu()    
