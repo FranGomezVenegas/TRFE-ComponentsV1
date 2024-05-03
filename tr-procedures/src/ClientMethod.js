@@ -42,13 +42,6 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    reloadSampleState() {
-      this.selectedSamples = this.gridItems.filter(g => g.sample_id == this.sampleState.sample)
-      this.selectedAction = JSON.parse(this.sampleState.action)
-      this.reloadDialog()
-      this.sampleState = null
-    }
-
     getMicroorganismItem() {
       this.reqParams.whereFieldsValue = this.selectedSamples[0].sample_id + "*Integer"
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
@@ -70,17 +63,6 @@ console.log('getSamples', 'actionObj', this.actionObj)
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.microGrid.selectedItems = []
-        this.reload()
-      })
-    }
-
-    setIncubator() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      params = params.replace(/\|/g, "%7C");
-      this.fetchApi(params).then(j => {
-        this.newBatchDialog.close()
-        this.assignDialog.close()
         this.reload()
       })
     }
@@ -125,8 +107,6 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-
-
     getLots() {
       console.log('getLots')
       let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
@@ -149,60 +129,11 @@ console.log('getSamples', 'actionObj', this.actionObj)
       })
     }
 
-    reviewTest() {
-      let params = this.config.backendUrl + (this.actionObj.endPoint ? this.actionObj.endPoint : this.config.SampleAPIactionsUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      params = params.replace(/\|/g, "%7C");
-      this.fetchApi(params).then(() => {
-        this.reload()
-      })
-    }
-
-    getDeactivatedLots() {
-      this.deactivatedLots = []
-      let params = this.config.backendUrl + this.selectedDialogAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          this.deactivatedLots = j
-        }
-      })
-    }
-
-    setLot() {
-      console.log('setLot')
-      let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.lotDialog.close()
-        this.reload()
-      })
-    }
-
-    setInstruments() {
-      console.log('this.reqParams', this.reqParams);
-      let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        //        this.newInstrumentDialog.close()
-        this.reload()
-      })
-    }
-
-    instEventEnterResult() {
-      let params = this.config.backendUrl + this.config.ApiEnvMonitSampleUrl
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.reloadDialog()
-      })
-    }
-
-    reviewSample() {
-      let params = this.config.backendUrl + (this.selectedAction.endPoint ? this.selectedAction.endPoint : this.config.frontEndEnvMonitSampleUrl)
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.reload()
-      })
+    xxxreloadSampleState() {
+      this.selectedSamples = this.gridItems.filter(g => g.sample_id == this.sampleState.sample)
+      this.selectedAction = JSON.parse(this.sampleState.action)
+      this.reloadDialog()
+      this.sampleState = null
     }
 
     openPDF(action , data){
@@ -284,5 +215,36 @@ console.log('getSamples', 'actionObj', this.actionObj)
         //this.reload()
       )})
     }    
+  
+  xxxgetDeactivatedLots() {
+    this.deactivatedLots = []
+    let params = this.config.backendUrl + this.selectedDialogAction.endPoint
+      + '?' + new URLSearchParams(this.reqParams)
+    this.fetchApi(params).then(j => {
+      if (j && !j.is_error) {
+        this.deactivatedLots = j
+      }
+    })
   }
+
+  xxxsetLot() {
+    console.log('setLot')
+    let params = this.config.backendUrl + this.config.ApiEnvMonitProdLotUrl
+      + '?' + new URLSearchParams(this.reqParams)
+    this.fetchApi(params).then(() => {
+      this.lotDialog.close()
+      this.reload()
+    })
+  }
+
+  xxxsetInstruments() {
+    console.log('this.reqParams', this.reqParams);
+    let params = this.config.backendUrl + this.config.ApiInstrumentsAPIactionsUrl
+      + '?' + new URLSearchParams(this.reqParams)
+    this.fetchApi(params).then(() => {
+      //        this.newInstrumentDialog.close()
+      this.reload()
+    })
+  }
+}
 }
