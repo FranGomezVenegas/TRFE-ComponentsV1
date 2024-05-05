@@ -126,7 +126,7 @@
     "viewName": "Deviation", 
     "filterName" :  "pending" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzz": {
     "procName":  "mb_em", 
     "viewName": "SamplePlateReading", 
     "filterName" :  "LOCATION" 
@@ -162,8 +162,8 @@
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
   },  
-   "localDefaultViewzxccccz": {
-    "procName":  "inv-draft", 
+   "localDefaultView": {
+    "procName":  "stock", 
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  

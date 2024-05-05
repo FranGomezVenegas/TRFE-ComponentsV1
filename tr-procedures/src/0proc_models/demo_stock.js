@@ -105,7 +105,21 @@ export const Stock =
 				"propertyNameContainer": "category_and_references",
 				"propertyNameContainerLevelPropertyKeyName": "name",
 				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
-			  }			
+			  },
+			  "dependencyActionFields":[
+				{"field": "text2", "staticValue": "hola" },
+				{"field": "text3", "fieldValue": "name" },
+				{"field": "list2", "allRecordEntryWithList": "inv_reference", "propertyNameInDestination": "category_and_references"}
+			  ],
+			  "dependencyFieldBehaviorForAll":
+				{"rule": "whenEmpty", "resetValue": true, "action": "hide"}
+			  ,
+			  "xdependencyFieldBehavior":[
+				{"field": "text4", "rule": "whenEmpty", "resetValue": true}, 
+				{"field": "text2", "rule": "whenEmpty"}, 
+				{"field": "list2", "rule": "whenEmpty", "resetValue": true},
+				{"field": "number2", "rule": "whenEmpty", "resetValue": true, "action": "hide"}
+			  ]
 			}},
 			{"list2": { "label_en": "Reference", "label_es": "Referencia",
 			  "valuesFromMasterData": {
@@ -3530,8 +3544,7 @@ export const Stock =
 		},
 		{ "actionName": "REOPEN_QUALIFICATION",
 			"alternativeAPIActionMethod": "completeInstrumentEventAction",
-			"requiresDialog": true,		
-			"clientMethod": "openReactivateObjectDialog",
+			"requiresDialog": true,					
 			"endPoint": "/app/procs/InvTrackingAPIactions",
 			"endPointParams": [
 			  { "argumentName": "lotName", "selObjectPropertyName": "lot_name" },

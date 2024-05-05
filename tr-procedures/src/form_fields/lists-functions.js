@@ -1,59 +1,182 @@
 import { html } from "lit";
 export function ListsFunctions(base) {
     return class extends (base) {
-        listEntries(fld, multilist=false){
-            if (multilist===undefined){multilist=false}
-            let newList=this.entriesForTheList(fld, multilist)
-            if (newList===undefined){
-                return html``
+        actionWhenListValueSelected(event, fld, dialogInfo){
+            if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
+                fld.dependencyFieldBehaviorForAll===undefined){return}
+            const selectedItem = event.target.selected;
+            const index = selectedItem.getAttribute('data-index');
+            const itemData = JSON.parse(selectedItem.getAttribute('data-item')); 
+            if (fld.dependencyActionFields!==undefined){
+                this.dependencyActionFields(fld, itemData);
             }
-            if (multilist){
-                return newList.filter(entry => entry.keyName.length > 0).map(entry => entry.keyName).join('|');
-                //return newList.map(entry => entry.keyName).join('|');            
+            if (fld.dependencyFieldBehavior!==undefined){
+                this.dependencyFieldBehavior(fld.dependencyFieldBehavior, itemData);
             }
-            return html`
-            ${newList.map((c, i) =>
-                html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-            )}`                    
+            if (fld.dependencyFieldBehaviorForAll!==undefined){
+                this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, itemData, dialogInfo);
+            }
+            return 
         }
-        entriesForTheList(fld, multilist=false){
-
-            console.log('listEntries', fld, multilist)
-            let blankEmpty={keyName:"", keyValue_en:"", keyValue_es:""}
-            let newList=[]
-            if (fld===undefined){
-                return html`<mwc-list-item></mwc-list-item>`
-            }
-            if (fld.addBlankValueOnTop!==undefined&&fld.addBlankValueOnTop===true){
-                newList.push(blankEmpty)
-            }
-            if (fld.valuesFromMasterData!==undefined){
-                let MDentriesArr=this.listEntriesFromMasterData(fld.valuesFromMasterData)
-                if (MDentriesArr.length>0){
-                    MDentriesArr.forEach(item =>newList.push(item))
+        dependencyFieldBehaviorForAll(dependencyFieldBehaviorForAll, fldName, itemData, dialogInfo){
+            const fields = dialogInfo.fields;
+            const filteredFields = fields
+                .map(field => {
+                    const fieldName = Object.keys(field)[0];
+                    if (fieldName !== fldName) {
+                        return { field: fieldName, rule: dependencyFieldBehaviorForAll.rule, resetValue:dependencyFieldBehaviorForAll.resetValue, action:dependencyFieldBehaviorForAll.action,
+                            ...field[fieldName] };
+                    }
+                    return null;
+                })
+                .filter(item => item !== null); // Remove any null entries resulting from the exclusion
+        
+            this.dependencyFieldBehavior(filteredFields, itemData)
+        }
+        dependencyActionFields(fld, itemData){
+            fld.dependencyActionFields.map((curFld, index)=>{
+                if (curFld.field!==undefined){
+                    if(curFld.staticValue!==undefined){
+                        this[curFld.field].value=curFld.staticValue
+                    }
+                    if(curFld.fieldValue!==undefined){
+                        this[curFld.field].value=itemData.allRecord[curFld.fieldValue]
+                    }
+                    if (curFld.allRecordEntryWithList) { // Check if the action should update a list
+                        let data={}
+                        data[curFld.propertyNameInDestination]=itemData.allRecord[curFld.allRecordEntryWithList]
+                        this.updateListEntries(curFld.field, curFld, data);
+                    }                    
                 }
-            } else if (fld.valuesFromSelectedItem!==undefined){
-                let MDentriesArr=this.listEntriesFromSelectedItem(fld.valuesFromSelectedItem)
-                if (MDentriesArr.length>0){
-                    MDentriesArr.forEach(item =>newList.push(item))
+            })
+            return
+        }
+        dependencyFieldBehavior(fieldsList, itemData){
+            fieldsList.map((curFld, index)=>{
+                if (curFld.field!==undefined&&curFld.rule!==undefined){
+                    const fieldElement = this[curFld.field];
+                    switch(curFld.rule){
+                        case "whenEmpty":
+                            if (itemData.keyName.length==0){
+                                
+                                if (curFld.resetValue!==undefined&&curFld.resetValue===true){
+                                    this[curFld.field].value=""                                    
+                                }
+                                switch(curFld.action){
+                                    case "disable":
+                                        this[curFld.field].disabled=true
+                                        break;
+                                    case "hide":
+                                        fieldElement.style.display = 'none';  // Hide or show based on the rule
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled=true
+                                        break;
+                                }
+                            }else{
+                                switch(curFld.action){
+                                    case "disable":
+                                        this[curFld.field].disabled=false;
+                                        break;
+                                    case "hide":
+                                        fieldElement.style.display = '';  // Hide or show based on the rule
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled=false
+                                        break;
+                                }
+                                // this[curFld.field].disabled=false
+                                // if (curFld.hide !== undefined) {
+                                //     fieldElement.style.display = '';  // Hide or show based on the rule
+                                // }
+                            }           
+                            break;
+                        default:
+                    }
                 }
-            }else{
-                fld.items.forEach(item =>newList.push(item))
+            })
+        }
+        updateListEntries(listFieldName, fldMDDef, newData) {
+            return
+            let itemsToInject=this.buildFrontListFromData(this[listFieldName].definition.valuesFromMasterData, newData, true)
+            this[listFieldName] = { ...this[listFieldName], items: itemsToInject };
+            return
+            //this[listFieldName].items = itemsToInject;
+            //this.requestUpdate(); // This method call is necessary to re-render the component
+            if (this[listFieldName] && this[listFieldName].items) {
+                this[listFieldName].items = itemsToInject;
+                this.requestUpdate();
             }            
-            if (fld.addBlankValueAtBottom!==undefined&&fld.addBlankValueAtBottom===true){
-                newList.push(blankEmpty)
+        }
+        listEntries(fld, multilist = false) {
+            if (multilist === undefined) {
+                multilist = false;
             }
-            return newList;            
-            if (multilist){
+            let newList = this.entriesForTheList(fld, multilist);
+            if (!newList || newList.length === 0) {
+                return html``; // Gracefully handle undefined or empty lists
+            }
+            if (multilist) {
+                // For multi-list configurations, return a joined string of key names
                 return newList.filter(entry => entry.keyName.length > 0).map(entry => entry.keyName).join('|');
-                //return newList.map(entry => entry.keyName).join('|');            
             }
-            
+            return newList
+            // For standard configurations, map newList to HTML elements
             return html`
             ${newList.map((c, i) =>
-                html`<mwc-list-item value="${c.keyName}" ?selected=${i == 0}>${c["keyValue_" + this.lang]}</mwc-list-item>`
-            )}
-            `
+                html`<mwc-list-item 
+                        value="${c.keyName}" 
+                        ?selected="${fld.selectedValue === c.keyName}" 
+                        data-index="${i}"
+                        data-item="${JSON.stringify(c)}">${c["keyValue_" + this.lang]}</mwc-list-item>`
+            )}`;
+        }
+        entriesForTheList(fld, multilist=false) {
+            console.log('entriesForTheList', fld, multilist);
+            let blankEmpty = {keyName: "", keyValue_en: "", keyValue_es: "", allRecord: {}};
+            let newList = [];
+        
+            if (fld === undefined) {
+                return html`<mwc-list-item></mwc-list-item>`;
+            }
+        
+            // Add an empty entry at the top if specified
+            if (fld.addBlankValueOnTop) {
+                newList.push(blankEmpty);
+            }
+        
+            // Check if there is dynamic data provided (through actions based on another field's selection)
+            if (fld.items && fld.items.length > 0) {
+                newList = [...newList, ...fld.items]; // merge static or dynamically set items
+            } else if (fld.valuesFromMasterData) {
+                // Handle values from a master data source
+                let MDentriesArr = this.listEntriesFromMasterData(fld.valuesFromMasterData);
+                if (MDentriesArr.length > 0) {
+                    newList = [...newList, ...MDentriesArr];
+                }
+            } else if (fld.valuesFromSelectedItem) {
+                // Handle values based on another selected item's data
+                let MDentriesArr = this.listEntriesFromSelectedItem(fld.valuesFromSelectedItem);
+                if (MDentriesArr.length > 0) {
+                    newList = [...newList, ...MDentriesArr];
+                }
+            }
+        
+            // Add an empty entry at the bottom if specified
+            if (fld.addBlankValueAtBottom) {
+                newList.push(blankEmpty);
+            }
+        
+            // Return a filtered list for multi-list configuration, else map to HTML elements
+            if (multilist) {
+                return newList.filter(entry => entry.keyName.length > 0).map(entry => entry.keyName).join('|');
+            } else {
+                return html`
+                ${newList.map((c, i) =>
+                    html`<mwc-list-item value="${c.keyName}" ?selected="${fld.selectedValue === c.keyName}" data-index="${i}"
+                    data-item="${JSON.stringify(c)}">${c["keyValue_" + this.lang]}</mwc-list-item>`
+                )}`;
+            }
         }
         listEntriesForUom(fld, fldName){
             console.log('listEntriesForUom')
@@ -132,7 +255,6 @@ export function ListsFunctions(base) {
             )}
             `
         }   
-    
         getProcMasterData(){
             if (this.isProcManagement===undefined||this.isProcManagement!==true){
                 let userSession = JSON.parse(sessionStorage.getItem("userSession"))
@@ -211,15 +333,24 @@ export function ListsFunctions(base) {
             return entries        
             //return this.buildFrontListFromData(fldMDDef, this.selectedProcedureInstance)
         }
-        buildFrontListFromData(fldMDDef, data){
-            if (data===undefined){return []}
-            console.log('masterData', data)
-            console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)
+        buildFrontListFromData(fldMDDef, data, isInjected){            
+            if (data===undefined||fldMDDef===undefined){return []}
+            if (fldMDDef.version!==undefined&&fldMDDef.version===2){
+                return this.buildFrontListFromDatav2(fldMDDef, data, isInjected)
+            }
+            return this.buildFrontListFromDatav1(fldMDDef, data, isInjected)
+        }
+        buildFrontListFromDatav1(fldMDDef, data, isInjected){            
+            if (data===undefined||fldMDDef===undefined){return []}
             let entries=[]
-            
-            if (data[fldMDDef.propertyNameContainer]===undefined){
-                alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
-                return entries
+            if (isInjected===undefined||isInjected===false){
+                console.log('masterData', data)
+                console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)                
+                
+                if (data[fldMDDef.propertyNameContainer]===undefined){
+                    alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
+                    return entries
+                }
             }
             if (fldMDDef.filterInFirstLevel===undefined||fldMDDef.filterInFirstLevel!==true){
                 data[fldMDDef.propertyNameContainer].forEach(item =>{
@@ -228,6 +359,7 @@ export function ListsFunctions(base) {
                     blankEmpty.keyName=item[fldMDDef.propertyKeyName]
                     blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
                     blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                    blankEmpty.allRecord=item
                     //console.log('blankEmpty', blankEmpty)
                     entries.push(blankEmpty)
                 })
@@ -268,6 +400,7 @@ export function ListsFunctions(base) {
                     blankEmpty.keyName=item[fldMDDef.propertyKeyName]
                     blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
                     blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                    blankEmpty.allRecord=item
                     console.log('blankEmpty', blankEmpty)
                     entries.push(blankEmpty)
                 })
@@ -279,6 +412,47 @@ export function ListsFunctions(base) {
             //entries.push(blankEmpty)
             return entries
         }
+        buildFrontListFromDatav2(config, data) {
+            // Check if data is undefined or if the current configuration is invalid
+            if (!data || !config) {
+                console.log('Invalid data or configuration');
+                return [];
+            }
+        
+            console.log('Processing Level:', config.label);
+            let entries = [];
+        
+            // Apply the filter defined in the current node configuration
+            const filteredData = data
+            if (config.filterStaticValue!==undefined){
+                filteredData=data.filter(item => item[config.filterKey] === config.filterStaticValue);
+            }
+            if (config.filterDataValue!==undefined){
+                filteredData=data.filter(item => item[config.filterKey] === data[config.filterDataValue]);
+            }
+            // Iterate over each filtered item to process further or to generate the final entry
+            filteredData.forEach(item => {
+                if (config.children && item[config.children]) {
+                    // If children are defined, recurse into the children with the new subset of data
+                    let childEntries = buildFrontListFromDatav2(config.children_definition, item[config.children]);
+                    entries = entries.concat(childEntries);
+                } else {
+                    // If no children are defined, it's a terminal node
+                    console.log('Terminal Node Found:', config.label);
+                    let blankEmpty = {
+                        keyName: item[config.propertyKeys.name],
+                        keyValue_en: item[config.propertyKeys.values.en],
+                        keyValue_es: item[config.propertyKeys.values.es],
+                        allRecord: item
+                    };
+                    entries.push(blankEmpty);
+                }
+            });
+        
+            return entries;
+        }
+        
+
         getListInLevel3(fldMDDef, level2Arr){
             let level3Arr = level2Arr.filter(p => p[propertyNameContainerLevel2PropertyKeyName] == fldMDDef.propertyNameContainerLevel2fixValue)
             level3Arr[fldMDDef.propertyNameContainerLevel3].forEach(item =>{
