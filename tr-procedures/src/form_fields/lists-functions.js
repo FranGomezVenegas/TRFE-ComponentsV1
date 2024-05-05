@@ -2,23 +2,62 @@ import { html } from "lit";
 export function ListsFunctions(base) {
     return class extends (base) {
         actionWhenListValueSelected(event, fld, dialogInfo){
+            if (fld===undefined){return}
             if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
                 fld.dependencyFieldBehaviorForAll===undefined){return}
             const selectedItem = event.target.selected;
             const index = selectedItem.getAttribute('data-index');
             const itemData = JSON.parse(selectedItem.getAttribute('data-item')); 
             if (fld.dependencyActionFields!==undefined){
-                this.dependencyActionFields(fld, itemData);
+                this.dependencyActionFields(fld, itemData.allRecord);
             }
             if (fld.dependencyFieldBehavior!==undefined){
-                this.dependencyFieldBehavior(fld.dependencyFieldBehavior, itemData);
+                this.dependencyFieldBehavior(fld.dependencyFieldBehavior, itemData.allRecord, true, itemData.keyName);
             }
             if (fld.dependencyFieldBehaviorForAll!==undefined){
-                this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, itemData, dialogInfo);
+                this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, itemData.allRecord, dialogInfo, true, itemData.keyName);
             }
             return 
         }
-        dependencyFieldBehaviorForAll(dependencyFieldBehaviorForAll, fldName, itemData, dialogInfo){
+        actionWhenOtherThanListValueChanged(event, fld, dialogInfo, itemData){
+            if (fld===undefined){return}
+            if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
+                fld.dependencyFieldBehaviorForAll===undefined){return}
+            if (fld.dependencyActionFields!==undefined){
+                this.dependencyActionFields(fld, itemData);
+            }
+            if (fld.dependencyFieldBehavior!==undefined){
+                this.dependencyFieldBehavior(fld.dependencyFieldBehavior, itemData, false, this[event.currentTarget.id].value);
+            }
+            if (fld.dependencyFieldBehaviorForAll!==undefined){
+                this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, itemData, dialogInfo, false, this[event.currentTarget.id].value);
+            }
+            return 
+        }
+        dependencyFieldBehaviorForAll(dependencyFieldBehaviorForAll, fldName, itemData, dialogInfo, isList, itemKeyName){
+            const fields = dialogInfo.fields;
+            const exceptionFields = dependencyFieldBehaviorForAll.exceptionFields || []; // Default to an empty array if not present
+        
+            const filteredFields = fields
+                .map(field => {
+                    const fieldName = Object.keys(field)[0];
+                    if (fieldName !== fldName && !exceptionFields.includes(fieldName)) {
+                        // Only include fields not in exceptionFields and not equal to fldName
+                        return { 
+                            field: fieldName, 
+                            rule: dependencyFieldBehaviorForAll.rule, 
+                            resetValue: dependencyFieldBehaviorForAll.resetValue, 
+                            action: dependencyFieldBehaviorForAll.action,
+                            ...field[fieldName] 
+                        };
+                    }
+                    return null;
+                })
+                .filter(item => item !== null); // Remove any null entries resulting from the exclusion
+            
+            this.dependencyFieldBehavior(filteredFields, itemData, isList, itemKeyName)
+        }        
+        dependencyFieldBehaviorForAllFran(dependencyFieldBehaviorForAll, fldName, itemData, dialogInfo, isList, itemKeyName){
             const fields = dialogInfo.fields;
             const filteredFields = fields
                 .map(field => {
@@ -31,7 +70,7 @@ export function ListsFunctions(base) {
                 })
                 .filter(item => item !== null); // Remove any null entries resulting from the exclusion
         
-            this.dependencyFieldBehavior(filteredFields, itemData)
+            this.dependencyFieldBehavior(filteredFields, itemData, isList, itemKeyName)
         }
         dependencyActionFields(fld, itemData){
             fld.dependencyActionFields.map((curFld, index)=>{
@@ -40,24 +79,30 @@ export function ListsFunctions(base) {
                         this[curFld.field].value=curFld.staticValue
                     }
                     if(curFld.fieldValue!==undefined){
-                        this[curFld.field].value=itemData.allRecord[curFld.fieldValue]
+                        this[curFld.field].value=itemData[curFld.fieldValue]
                     }
                     if (curFld.allRecordEntryWithList) { // Check if the action should update a list
                         let data={}
-                        data[curFld.propertyNameInDestination]=itemData.allRecord[curFld.allRecordEntryWithList]
+                        data[curFld.propertyNameInDestination]=itemData[curFld.allRecordEntryWithList]
                         this.updateListEntries(curFld.field, curFld, data);
                     }                    
                 }
             })
             return
         }
-        dependencyFieldBehavior(fieldsList, itemData){
+        dependencyFieldBehavior(fieldsList, itemData, isList, itemKeyName){
             fieldsList.map((curFld, index)=>{
                 if (curFld.field!==undefined&&curFld.rule!==undefined){
                     const fieldElement = this[curFld.field];
                     switch(curFld.rule){
                         case "whenEmpty":
-                            if (itemData.keyName.length==0){
+                            // let currentFldValue=""
+                            // if (isList===true){
+                            //     currentFldValue=itemKeyName
+                            // }else{
+                            //     currentFldValue=fieldElement.value
+                            // }
+                            if (itemKeyName.length==0){
                                 
                                 if (curFld.resetValue!==undefined&&curFld.resetValue===true){
                                     this[curFld.field].value=""                                    

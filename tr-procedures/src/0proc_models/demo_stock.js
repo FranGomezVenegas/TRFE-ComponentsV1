@@ -99,27 +99,31 @@ export const Stock =
           "name": "genericDialog",
           "fields": [
 			{"list1": {
-			  "label_en": "Category", "label_es": "Categoría", "optional": true,
-			  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-			  "valuesFromMasterData": {
-				"propertyNameContainer": "category_and_references",
-				"propertyNameContainerLevelPropertyKeyName": "name",
-				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
-			  },
-			  "dependencyActionFields":[
-				{"field": "text2", "staticValue": "hola" },
-				{"field": "text3", "fieldValue": "name" },
-				{"field": "list2", "allRecordEntryWithList": "inv_reference", "propertyNameInDestination": "category_and_references"}
-			  ],
-			  "dependencyFieldBehaviorForAll":
-				{"rule": "whenEmpty", "resetValue": true, "action": "hide"}
-			  ,
-			  "xdependencyFieldBehavior":[
-				{"field": "text4", "rule": "whenEmpty", "resetValue": true}, 
-				{"field": "text2", "rule": "whenEmpty"}, 
-				{"field": "list2", "rule": "whenEmpty", "resetValue": true},
-				{"field": "number2", "rule": "whenEmpty", "resetValue": true, "action": "hide"}
-			  ]
+				"label_en": "Category", "label_es": "Categoría", "optional": true,
+				"addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+				"valuesFromMasterData": {
+					"propertyNameContainer": "category_and_references",
+					"propertyNameContainerLevelPropertyKeyName": "name",
+					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
+				},
+				"dependencyActionFields":[
+					{"field": "text4", "staticValue": "hola" },
+					{"field": "text3", "fieldValue": "name" },
+					{"field": "list2", "allRecordEntryWithList": "inv_reference", 
+						"propertyNameInDestination": "category_and_references"}
+				],
+				"dependencyFieldBehaviorForAll":
+					{"rule": "whenEmpty", "resetValue": true, "action": "disable", 
+						"exceptionFields":[ "list2"]}
+				,
+				"dependencyFieldBehavior":[
+					{"field": "text4", "rule": "whenEmpty", "resetValue": true}, 
+					{"field": "text5", "rule": "whenEmpty"}, 
+					{"field": "list2", "rule": "whenEmpty", "resetValue": true},
+					{"field": "number2", "rule": "whenEmpty", "resetValue": true, 
+						"action": "hide"}
+				]
+
 			}},
 			{"list2": { "label_en": "Reference", "label_es": "Referencia",
 			  "valuesFromMasterData": {
@@ -132,7 +136,9 @@ export const Stock =
 
 			}
 			},
-            {"text2": { "label_en": "lot id", "label_es": "id Lote" }},
+            {"text2": { "label_en": "lot id", "label_es": "id Lote" ,
+				}
+			},
 			{"number1": {"label_en": "Quantity", "label_es": "Cantidad", "optional": true , "min_allowed":0, "max_dp":2}},			
             {"date1": {"label_en": "Expiry Date", "label_es": "Fecha Caducidad", "optional": true }},
             {"date2": {"label_en": "Expiry Date In Use", "label_es": "Fecha Caducidad En Uso", "optional": true }},
