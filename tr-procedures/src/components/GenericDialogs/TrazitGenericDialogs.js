@@ -827,6 +827,7 @@ export function TrazitGenericDialogs(base) {
         let dlgFlds=undefined
         if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
             this.actionBeingPerformedModel.dialogInfo.fields
+            dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         }
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
@@ -845,7 +846,10 @@ export function TrazitGenericDialogs(base) {
             }
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
                 this[keyName].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
-            }
+            }            
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj.selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+                this[keyName].value=this.selectedItems[0][fldObj.selObjectPropertyName]
+            }            
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
                 this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
