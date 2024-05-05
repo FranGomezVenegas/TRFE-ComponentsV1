@@ -213,8 +213,9 @@ export function TrazitGenericDialogs(base) {
                 ${!fld.text2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${fld.text2.default_value ? fld.text2.default_value : ''} label="${this.fieldLabel(fld.text2)}"  ?disabled=${this.isFieldDisabled(fld.text2)} 
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${fld.text2.default_value ? fld.text2.default_value : ''} label="${this.fieldLabel(fld.text2)}"  ?disabled=${this.isFieldDisabled(fld.text2)}                    
+                    @keypress=${(e)=>e.keyCode == 13 &&this.actionWhenOtherThanListValueChanged(e, fld.text2, actionModel.dialogInfo, this.genericDialogGridSelectedItems)}  
+                    </mwc-textfield>                  
                     </div>
                 `}          
                 ${!fld.text3 ?
@@ -726,8 +727,8 @@ export function TrazitGenericDialogs(base) {
     `
     }
     addTheDynamicElement(fld){
-        if (fld.rule===undefined||this.selectedItemInView===undefined){return}
-        let selObj=this.selectedItemInView
+        if (fld.rule===undefined||this.selectedItems[0]===undefined){return}
+        let selObj=this.selectedItems[0]
         let curValue=selObj[fld.rule.field]
         if (curValue===undefined){return}
         if (curValue.length===0){curValue="*NULL*"}
@@ -848,7 +849,7 @@ export function TrazitGenericDialogs(base) {
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
                 this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
-            }
+            }            
         }
     }    
     resetFields(e){           
@@ -876,6 +877,7 @@ export function TrazitGenericDialogs(base) {
                     }
                 }
             }
+            //this.actionWhenOtherThanListValueChanged(e, element, this.actionBeingPerformedModel.dialogInfo, this.selectedItems[0]);
         }
     }
 
