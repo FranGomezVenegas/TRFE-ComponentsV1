@@ -141,8 +141,7 @@ export function ListsFunctions(base) {
                 }
             })
         }
-        updateListEntries(listFieldName, fldMDDef, newData) {
-            return
+        updateListEntries(listFieldName, fldMDDef, newData) {            
             let itemsToInject=this.buildFrontListFromData(this[listFieldName].definition.valuesFromMasterData, newData, true)
             this[listFieldName] = { ...this[listFieldName], items: itemsToInject };
             return
@@ -161,7 +160,7 @@ export function ListsFunctions(base) {
             if (!newList || newList.length === 0) {
                 return html``; // Gracefully handle undefined or empty lists
             }
-            if (multilist) {
+            if (multilist&&Array.isArray(newList)) {
                 // For multi-list configurations, return a joined string of key names
                 return newList.filter(entry => entry.keyName.length > 0).map(entry => entry.keyName).join('|');
             }
