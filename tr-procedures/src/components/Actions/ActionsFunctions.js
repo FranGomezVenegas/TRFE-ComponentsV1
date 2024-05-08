@@ -58,7 +58,8 @@ return class extends (base) {
             this[action.clientMethod]()
             return
         }
-        if (action.dialogInfo!==undefined&&this[action.dialogInfo.name]) {
+        if (true){
+        //if (action.dialogInfo!==undefined&&this[action.dialogInfo.name]) {
             if (action.dialogInfo.subQueryName) {
             this[action.dialogInfo.subQueryName]()
             } else {

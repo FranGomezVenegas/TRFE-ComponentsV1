@@ -57,6 +57,18 @@ export function TrazitGenericDialogs(base) {
     }
     openGenericDialog(actionModel = this.actionBeingPerformedModel){
         //alert('openGenericDialog')
+        if (actionModel===undefined||actionModel.dialogInfo===undefined){
+            return false
+        }    
+        if (actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true){
+            this.getGenericDialogGridItems(actionModel.dialogInfo)
+            return true
+        }
+        if (actionModel.dialogInfo.filesListContent!==undefined&&actionModel.dialogInfo.filesListContent===true){
+            this.getGenericDialogGridItems(actionModel.dialogInfo)
+            return true
+        }
+
         this.defaultValue()
         if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
             return false
@@ -69,14 +81,6 @@ export function TrazitGenericDialogs(base) {
        // alert(true)
        //this.defaultValue()
        //this.resetFields()
-    //    if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
-    //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-    //     return 
-    // }
-    // if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
-    //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-    //     return 
-    // }
        return true 
     }
 
@@ -178,7 +182,7 @@ export function TrazitGenericDialogs(base) {
             ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?
                 html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
             :html`
-                <vaadin-grid .items=${this.genericDialogGridItems} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                <vaadin-grid .items=${this.genericDialogGridItems} id="genericDialogGrid" theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${e => this.genericDialogGridSelectedItems = e.detail.value ? [e.detail.value] : []}
                 .selectedItems="${this.genericDialogGridSelectedItems}" all-rows-visible>
                 ${actionModel.dialogInfo.langConfig.gridHeader.map(fld =>
