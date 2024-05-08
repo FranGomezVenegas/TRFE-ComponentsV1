@@ -5,8 +5,10 @@ import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import {DialogsFunctions} from './DialogsFunctions';
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
+
 export function TrazitInvestigationsDialog(base) {
-return class extends DialogsFunctions(base) {
+return class extends ActionsFunctions(DialogsFunctions(base)) {
     static get properties() {
         return {
           selectedInvestigations:{ type: Array},
@@ -37,7 +39,8 @@ return class extends DialogsFunctions(base) {
      return true 
   }
     investigationTemplate() {
-      //console.log('viewModelFromProcModel', this.viewModelFromProcModel)
+      console.log('viewModelFromProcModel', this.viewModelFromProcModel, 'this.openInvests', this.openInvests)
+      //?open=${this.openInvests.length}        
       if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined
         ||this.viewModelFromProcModel.langConfig.gridHeader===undefined||this.viewModelFromProcModel.langConfig.gridHeader.created_on===undefined
         ||this.viewModelFromProcModel.filter!=="pending"){
@@ -45,7 +48,7 @@ return class extends DialogsFunctions(base) {
           return html``
         }
       return html`
-      <tr-dialog id="investigationDialog" ?open=${this.openInvests.length}        
+      <tr-dialog id="investigationDialog" 
         @closed=${e => { if (e.target === this.investigationDialog) { this.openInvests = []; this.grid.activeItem = null } }}
         heading=""
         hideActions=""
@@ -157,7 +160,10 @@ return class extends DialogsFunctions(base) {
         "capaFieldValue": "Trackwise" + this.systemName.value + "*String|" + this.systemId.value + "*String|" + this.capaName.value + "*String|" + this.capaId.value + "*String",
         "capaRequired": this.capaRequired
       }
-      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, this.selectedItems[0], targetValue)
+      this.trazitNoDialogRequired(this.actionBeingPerformedModel, 
+        this.selectedItems[0], targetValue, false, this.selectedItems[0], null, null, null)
+      //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, 
+      //  this.selectedItems[0], targetValue)
     }
     addInvestigationAction() {
       let targetValue = {
@@ -166,7 +172,9 @@ return class extends DialogsFunctions(base) {
       if (this.selectedItems[0].result_id!==undefined){
         targetValue.objectsToAdd= "sample_analysis_result*" + this.selectedItems[0].result_id
       }
-      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], targetValue, undefined, this.selectedInvestigations[0])
+      this.trazitNoDialogRequired(this.actionBeingPerformedModel, 
+        this.selectedItems[0], targetValue, false, this.selectedItems[0], null, null, null)
+//      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], targetValue, undefined, this.selectedInvestigations[0])
     }
     newInvestigationAction() {
 //      console.log('newInvestigationAction')
@@ -188,6 +196,7 @@ return class extends DialogsFunctions(base) {
     }
 
     getOpenInvestigations() {
+      alert('getOpenInvestigations')
       //this.actionBeingPerformedModel.dialogInfo.viewQuery  
       let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)    
       let endPointUrl=this.getQueryAPIUrl(this.actionBeingPerformedModel)
