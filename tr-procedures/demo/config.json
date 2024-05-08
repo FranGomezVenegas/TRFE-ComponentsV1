@@ -162,7 +162,7 @@
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
   },  
-   "localDefaultView": {
+   "localDefaultViewzzz": {
     "procName":  "stock", 
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
@@ -274,8 +274,13 @@
     "viewName": "drag-box", 
     "filterName" :  "drag-box" 
   },  
-  "localDefaultViewsssssssss": {
+  "localDefaultView": {
     "procName":  "instruments", 
+    "viewName": "Deviation", 
+    "filterName" :  "Deviation" 
+  },
+  "localDefaultView": {
+    "procName":  "stock", 
     "viewName": "Deviation", 
     "filterName" :  "Deviation" 
   },
