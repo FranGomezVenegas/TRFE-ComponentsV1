@@ -62,6 +62,7 @@ print2LevelsObject(elem, data){
             ${elem2.type==="card" ? this.kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
             ${elem2.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}
             ${elem2.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
+            ${elem2.type==="cardExpandSectionForScriptStep" ? this.cardExpandSectionForScriptStep(elem2, data, this.moduleName) : nothing}                    
             ${elem2.type==="recovery_rate" ? this.kpiRecoveryRate(elem2, true) : nothing}
             ${elem2.type==="grid" ? this.kpiGrid(elem2, data[elem2.endPointResponseObject], true) : nothing}
             ${elem2.type==="chart" ? this.kpiChartFran(elem2, true) : nothing}   

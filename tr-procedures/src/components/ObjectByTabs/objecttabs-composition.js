@@ -57,11 +57,18 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
         span.cardLabel {
           font-weight: bold;
           color: #032bbc;
-        }   
-        span.cardValue{
+          font-size: 10px;
+          word-break: auto-phrase;
+          color: rgb(41, 137, 216); /* #032bbc; */
+  
+        }
+        span.cardValue {
           color: #009879;
-        }     
-
+          font-size:8px; 
+          display:inherit;            
+          word-break: auto-phrase;
+        }
+  
       `
     ];
   }
@@ -98,6 +105,7 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
     this.lang = "";
     this.selectedTableIndex = {};
     this.connectedCallback();
+    this.moduleName='';
   }
 
   handleTabSelected(event) {
@@ -282,11 +290,12 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
   `
   }
   print1LevelObject(elem, data){   
+    
     return html`    
       ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="card" ? this.kpiCard(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem, data) : nothing}
-      ${elem.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem, data) : nothing}              
+      ${elem.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem, data) : nothing}    
       ${elem.type==="recovery_rate" ? this.kpiRecoveryRate(elem) : nothing}
       ${elem.type==="grid" ? this.kpiGrid(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="chart" ? this.kpiChartFran(elem) : nothing}   
@@ -335,6 +344,7 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
     // if (this.selectedItem!==undefined){
     //   console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
     // }    
+    console.log('elemDef', elemDef)
     return  html`
         <div style="display:block">
           ${elemDef!==undefined&&Array.isArray(elemDef)?
