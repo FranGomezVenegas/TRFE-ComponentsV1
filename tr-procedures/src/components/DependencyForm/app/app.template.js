@@ -8,8 +8,27 @@ import { elementTypes } from "../config";
 
 export const template = (props) => {
   let items = [];
-  items = sessionStorage.getItem('actionName') == "SCRIPT_UPDATE_STEP" ? props.endpoints.find((item) => item.keyName == JSON.parse(sessionStorage.getItem('rowSelectedData')).action_name)?.arguments_array : props.params;
-  console.log(props.objectTypesStr)
+  //let rowSelectedData=sessionStorage.getItem('rowSelectedData')
+  //rowSelectedData=sessionStorage.getItem('steps')
+  //props.rowSelectedData.action_name=rowSelectedData.action_name
+  //if (props.rowSelectedData!==null){
+    if (props.rowSelectedData===undefined){
+      items=props.params
+    } else if (Object.keys(props.rowSelectedData).length === 0){
+      items=props.params
+    } else if (!props.rowSelectedData) {    
+      items=[]//props.params
+    }else{
+      let actionName = sessionStorage.getItem('actionName')
+      if (actionName ==props.endpoint){
+        items =  actionName == "SCRIPT_UPDATE_STEP" ? 
+          props.endpoints.find((item) => item.keyName == props.rowSelectedData.action_name)?.arguments_array : props.params;
+        }else{
+          items=props.params
+        }
+    }
+  //}
+  //console.log(props.objectTypesStr, 'items', items)
   return html`
     <div class="container">
       <form id="#endpoint-form" action="/" method="get">

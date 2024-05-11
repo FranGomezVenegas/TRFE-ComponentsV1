@@ -1018,6 +1018,8 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
   selectedProcInstanceMainView() {
     let selectedItemArr=[]
     selectedItemArr.push(this.selectedItem)
+    sessionStorage.setItem('selectedProcedureModuleName', this.moduleName)
+    
     return html`
       <sp-split-view show-divider=${this.showDivider}>
         <div

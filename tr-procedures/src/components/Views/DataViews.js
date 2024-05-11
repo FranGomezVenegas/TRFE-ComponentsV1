@@ -9,7 +9,7 @@ import { TrazitReactivateObjectsDialog } from "../GenericDialogs/TrazitReactivat
 import { TrazitEnterResultWithSpec } from "../GenericDialogs/TrazitEnterResultWithSpec";
 import { ModuleEnvMonitDialogsMicroorganism } from "../../module_env_monit/Dialogs/ModuleEnvMonitDialogsMicroorganism";
 import { TrazitInvestigationsDialog } from "../GenericDialogs/TrazitInvestigationsDialog";
-
+import { TrazitTestScriptNewStepDialog } from "../GenericDialogs/TrazitTestScriptNewStepDialog";
 import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
 
 import "@vaadin/vaadin-grid/vaadin-grid";
@@ -31,7 +31,7 @@ import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 export function DataViews(base) {
 
   let contextMenu = undefined;
-  return class extends ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
+  return class extends TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(
           (
@@ -51,7 +51,7 @@ export function DataViews(base) {
         )
       )
     )
-  ))) {
+  )))) {
     kpiChartFran(elem) {
       //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
       return html`
@@ -174,8 +174,7 @@ export function DataViews(base) {
               >`}
           ${elem === undefined || data === undefined
             ? nothing
-            : html` <json-viewer
-                style="padding:0px; padding-left:20px; top:-15px;"
+            : html` <json-viewer style=${elem.style!==undefined?elem.style: "padding:0px; padding-left:20px; top:-15px;"}
                 >${JSON.stringify(
                   this.getDataFromRoot(elem, data)
                 )}</json-viewer
@@ -186,16 +185,6 @@ export function DataViews(base) {
     kpiReportTitle(elem, data) {    
       return html`    
         <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]}</p>
-        ${elem.elements===undefined?
-          html`
-          `
-        :html`
-          ${elem.elements.map((curElem) =>           
-                html`
-                ${this.print1LevelObject(curElem, data)}
-                `
-          )}
-        `}
       `;
     }
     kpiReportTitleLvl2(elem) {
@@ -347,10 +336,16 @@ export function DataViews(base) {
           }
           span.cardLabel {
             font-weight: bold;
+            font-size:10px;
+            word-break: auto-phrase;
             color: rgb(41, 137, 216); /* #032bbc; */
           }
           span.cardValue {            
-            color: rgba(214, 233, 248, 0.37); /* #009879; */
+            color: rgba(214, 233, 248, 0.37); 
+            font-size:8px; 
+            display:inherit;            
+            word-break: auto-phrase;
+             /* #009879; */
           }
           span.title {
             color: rgb(35, 163, 198);
@@ -645,10 +640,17 @@ export function DataViews(base) {
           }
           span.cardLabel {
             font-weight: bold;
-            color: rgb(41, 137, 216); /* #032bbc; */
+            color: rgb(41, 137, 216); 
+            word-break: auto-phrase;
+            font-size:10px; 
+            /* #032bbc; */
           }
           span.cardValue {
-            color: rgba(214, 233, 248, 0.37); /* #009879; */
+            color: rgba(214, 233, 248, 0.37); 
+            word-break: auto-phrase;
+            font-size:8px; 
+            display:inherit;
+            /* #009879; */
           }
           span.title {
             color: rgb(35, 163, 198);
@@ -1285,8 +1287,19 @@ export function DataViews(base) {
 
     kpiCardSomeElementsSingleObject(elem, data) {
       return html`
-        ${this.kpiCardSomeElementsMain(elem, this.getDataFromRoot(elem, data))}
+        ${this.kpiCardSomeElementsMain(elem, this.getDataFromRoot(elem, data))}          
+      `;      
+    }
+    cardExpandSectionForScriptStep(elem, data){
+      let jsonElem={}
+      jsonElem.endPointPropertyArray=["ROOT"]
+      jsonElem.style="background-color:white;" 
+      return html`
+        ${this.scriptStepArguments(elem, data)}        
+        ${this.jsonViewer(jsonElem, JSON.parse(data.dynamic_data))}
+        'tester notes:'${data.tester_notes}
       `;
+      //${this.kpiCardSomeElementsMain(elem, data)}
     }
     cardSomeElementsRepititiveObjects(elem, data) {
       //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
@@ -1407,7 +1420,7 @@ export function DataViews(base) {
             `;
     }
     kpiCardSomeElementsMain(elem, data) {
-      //console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
+      console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
       return html`
         ${elem === undefined || elem.title === undefined
           ? nothing
@@ -1491,6 +1504,8 @@ export function DataViews(base) {
                   margin-left: 30px;
                   hyphens: auto;
                   word-break: break-all;
+                  left: -17px;
+                  position: RELATIVE;
                 }
                 span.relevantlabel {
                   font-weight: bold;
@@ -1506,6 +1521,8 @@ export function DataViews(base) {
                   margin-right: 2px;
                   overflow: hidden;
                   flex-basis: calc(33.33% - 10px);
+                  position: relative;                  
+                  left: -12px;                  
                 }
                 iframe {
                   width: 100%;
@@ -1595,7 +1612,7 @@ export function DataViews(base) {
                       html`
                         ${this.fieldsToDiscard(fld) === true
                           ? nothing
-                          : html`
+                          : html`                              
                               ${fld.as_ppt !== undefined &&
                               (fld.as_ppt === true || fld.as_video === true)
                                 ? html`

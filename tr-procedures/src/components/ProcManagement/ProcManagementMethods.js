@@ -50,7 +50,7 @@ export function ProcManagementMethods(base) {
       window.dispatchEvent(event);
     }
 
-    async refreshSelProcData() {
+    async refreshSelProcData() {      
       let viewQuery = {
         actionName: "ONE_PROCEDURE_DEFINITION",
         label_en: "One Procedure Definition",
