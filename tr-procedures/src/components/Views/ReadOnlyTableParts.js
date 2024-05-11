@@ -83,7 +83,7 @@ export function ReadOnlyTableParts(base) {
               font-weight: bold;
             }
   
-            table.TRAZiT-DefinitionArea thead tr th {
+            table.TRAZiT-DefinitionArea-table1 thead tr th {
               background-color: #2989d8;
               color: white;
             }
