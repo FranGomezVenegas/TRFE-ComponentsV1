@@ -141,17 +141,36 @@ export function ListsFunctions(base) {
                 }
             })
         }
+
+
         updateListEntries(listFieldName, fldMDDef, newData) {            
             let itemsToInject=this.buildFrontListFromData(this[listFieldName].definition.valuesFromMasterData, newData, true)
-            this[listFieldName] = { ...this[listFieldName], items: itemsToInject };
-            return
+           
+            //return
+            //this[listFieldName] = { ...this[listFieldName], items: itemsToInject };
+            //return
             //this[listFieldName].items = itemsToInject;
             //this.requestUpdate(); // This method call is necessary to re-render the component
+            let htmlListEntries=this.convertListToHtmlListEntries(fldMDDef, itemsToInject);
             if (this[listFieldName] && this[listFieldName].items) {
-                this[listFieldName].items = itemsToInject;
+                this[listFieldName] = { ...this[listFieldName], items: htmlListEntries };
+                //this[listFieldName].items = htmlListEntries //this.convertListToHtmlListEntries(fldMDDef, itemsToInject);
                 this.requestUpdate();
             }            
         }
+
+        convertListToHtmlListEntries(fld, newList){
+            return html`
+            ${newList.map((c, i) =>
+                html`<mwc-list-item 
+                        value="${c.keyName}" 
+                        ?selected="${fld.selectedValue === c.keyName}" 
+                        data-index="${i}"
+                        data-item="${JSON.stringify(c)}">${c["keyValue_" + this.lang]}</mwc-list-item>`
+            )}`;
+            ``
+        }
+
         listEntries(fld, multilist = false) {
             if (multilist === undefined) {
                 multilist = false;
