@@ -110,11 +110,19 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
     if (selectedBox!==undefined){
     
         for(let i = 0; i < selectedBox.cols; i++) {
-            axisCols.push(i);
+            if (selectedBox.axisLabels===undefined||selectedBox.axisLabels.posicX===undefined||selectedBox.axisLabels.posicX.length<=i){
+                axisCols.push(i);
+            }else{
+                axisCols.push(selectedBox.axisLabels.posicX[i])
+            }
         }
         let letter = "A";
         for(let i = 0; i < selectedBox.rows; i++) {
-            axisRows.push(String.fromCharCode(letter.charCodeAt(0) + (i)));
+            if (selectedBox.axisLabels===undefined||selectedBox.axisLabels.posicY===undefined||selectedBox.axisLabels.posicY.length<=i){
+                axisRows.push(String.fromCharCode(letter.charCodeAt(0) + (i)));
+            }else{
+                axisRows.push(selectedBox.axisLabels.posicY[i])
+            }
         }
     }
     let boxPosicsViews=[]

@@ -11,6 +11,8 @@ import { ProceduresManagement } from './0proc_models/ProceduresManagement';
 import { FakeDevelopers } from './0proc_models/fakeDevelopers';
 
 import { MbEm } from './0proc_models/mb_em';
+import { ProjectRandD } from './0proc_models/projectRandD';
+
 import { MonWater } from './0proc_models/mon_water';
 import { Stock } from './0proc_models/demo_stock';
 import { DemoInstruments } from './0proc_models/demo_instruments'; 
@@ -30,13 +32,14 @@ export const ProceduresModel = {
   ['procedures-management']: ProceduresManagement,
   
   ['mb_em']: MbEm,
+
   ['instruments']: DemoInstruments,
   ['mon_water']: MonWater,
   ['stock']: Stock,
   ['inspection_lot']: DemoLotsRaw,
   ['DiseaseStudies']: DiseaseStudy,
   
-  
+  ['RandD']: ProjectRandD,
   
   ['fake-developers']: FakeDevelopers
 }
@@ -123,7 +126,10 @@ export const DemoViews = [
     {"proc_instance_name": "fake-developers", "view_name": "tree-view", "filter_name": "tree-view", "title": "TreeView"},
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-drop", "filter_name": "drag-drop", "title": "DragDropTables"},
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-box", "filter_name": "drag-box", "title": "DragDropBoxes"},
-	  {"proc_instance_name": "fake-developers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"},
+
+    {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "stability", "filter_name": "stability", "title": "stability"},
+    
+    {"proc_instance_name": "fake-developers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"},
 	  {"proc_instance_name": "fake-developers", "view_name": "ck-editor", "filter_name": "ck-editor", "title": "ck-editor"}
   ]},      
   {"label":"genoma (genoma-1)", "proc_instance_name": "genoma-1", "views":[

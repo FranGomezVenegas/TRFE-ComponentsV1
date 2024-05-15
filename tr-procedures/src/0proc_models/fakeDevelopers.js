@@ -12,6 +12,463 @@ export const FakeDevelopers = {
   },	
   "ck-editor":{
     "component": "ckEditor",
+  },  
+  "stability":{
+    "component": "dragDropBoxes",    
+    "boxesTableColumns":{
+      "endPointPropertyArray": ["boxContents"],
+      "columns": [
+        {
+          "name": "allow_move_objects",
+          "label_en": "",
+          "label_es": "",
+          "is_icon":true,
+          "image_name":"ACTIVATE_DEACTIVATE",
+          "icon_name": "allow_move_objects",
+          "tooltip":{
+            "text": "111 the box {fld:name} is {fld?allow_move_objects ? open : closed}",
+            "text_en": "the box {fld:name} is {fld?allow_move_objects ? open : close} {fld?name:Box 1? 'result1' :Caja A' ? 'result2' : 'default'}",
+            "text_es": "La caja {fld:name} está {fld?allow_move_objects ? abierta : cerrada}",
+            "text1": "the box {fld:name} is {fld:allow_move_objects}"
+          }
+        },
+        {
+          "name": "name",
+          "label_en": "name",
+          "label_es": "name"
+        },        
+        {
+          "name": "cols",
+          "label_en": "Conditions",
+          "label_es": "Condiciones"
+        },
+        {
+          "name": "rows",
+          "label_en": "Timepoints",
+          "label_es": "Tiempos"
+        }
+      ]
+    },
+    "boxesContentColumns":{
+      "endPointPropertyArray": ["boxContents"],
+      "columns": [
+        {
+          "name": "name",
+          "label_en": "name",
+          "label_es": "name"
+        },
+        {
+          "name": "posX",
+          "label_en": "Condition",
+          "label_es": "Condición"
+        },
+        {
+          "name": "posY",
+          "label_en": "Timepoint",
+          "label_es": "Tiempos"
+        },
+        {
+          "name": "location",
+          "label_en": "Location",
+          "label_es": "Ubicación"
+        }        
+      ]
+    },    
+    "dataIntegrityCheck":{
+      "xdropingEntryRequiredProperties":["sample_id", "study", "temperaturezzz"],
+      "xdropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "values", "values": [1, 3]}},
+        {"name": "id", "criteria":{"type": "range", "min": 1, "max": 4}},
+      ],
+      "xxdropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "selectedBox_value", "selectedBoxPropName": "anyProperty"}}
+      ]
+    },      
+    "boxPosicsViews":[
+      ["sample_id", "condition"],
+      ["sample_id", "condition", "timepoint"],
+      ["location"]
+    ],
+    "dropAction": { 
+      "actionName": "EM_BATCH_INCUB_ADD_SMP",
+      "endPointUrl": "Samples",
+      "requiresDialog": false,
+      "button": {
+        "title": {
+          "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+        },
+        "requiresGridItemSelected": true,
+      },
+      "endPointParams": [
+        { "argumentName": "sampleId", "dropElement": "id" },
+        { "argumentName": "batchTemplateId", "dragElement": "posicy" },
+        { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+        { "argumentName": "batchName", "dragElement": "name" }			  
+      ]
+    },
+    "fakedata": {
+      boxDefinition:{
+        readOnly: true,
+        max_num_objects_per_position: 1
+      },
+      tableDefinition: {
+        "type": "readOnlyTable",
+        "dragEnable": true,
+        "dropEnable": true,
+        "dropObjectPropertiesRequired":["id", "study", "temperature"],
+        "title": {
+          "label_en": "1.1) Roles",
+          "label_es": "1.1) Perfiles"
+        },
+        "theme":"TRAZiT-DefinitionArea",
+        "endPointResponseObject": "procedure_roles",
+        "columns": [
+          {
+            "name": "id",
+            "label_en": "id",
+            "label_es": "id"
+          },
+          {
+            "name": "temperature",
+            "label_en": "temperature",
+            "label_es": "temperature"
+          },
+          {
+            "name": "study",
+            "label_en": "study",
+            "label_es": "study"
+          }
+        ],
+        "row_buttons": [
+          {
+            "actionName": "REMOVE_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": false,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "person_remove",
+              "title": {
+                "label_en": "Remove role",
+                "label_es": "Borrar perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "selObjectPropertyName": "role_name"
+              }
+            ]
+          },
+          {
+            "actionName": "RENAME_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": true,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "manage_accounts",
+              "title": {
+                "label_en": "Rename role",
+                "label_es": "Renombrar perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "dialogInfo": {
+              "name": "genericDialog",
+              "fields": [
+                {
+                  "text1": {
+                    "label_en": "New Role Name",
+                    "label_es": "Nuevo Nombre Perfil",
+                    "selObjectPropertyName": "role_name"
+                  }
+                }
+              ]
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "selObjectPropertyName": "role_name"
+              },
+              {
+                "argumentName": "newroleName",
+                "element": "text1",
+                "defaultValue": ""
+              }
+            ]
+          },
+          {
+            "actionName": "CLONE_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": true,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "file_copy",
+              "title": {
+                "label_en": "Clone Role",
+                "label_es": "Clonar Perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "dialogInfo": {
+              "name": "genericDialog",
+              "fields": [
+                {
+                  "text1": {
+                    "label_en": "New Role Name",
+                    "label_es": "Nuevo Nombre de Perfil",
+                    "selObjectPropertyName": "role_name"
+                  }
+                }
+              ]
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "selObjectPropertyName": "role_name"
+              },
+              {
+                "argumentName": "newroleName",
+                "element": "text1"
+              }
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "actionName": "ADD_ROLE",
+            "notGetViewData": true,
+            "clientMethod": "procMngRequirementsMethod",
+            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+            "selectedItemPropertyName": "selectedItems",
+            "requiresDialog": true,
+            "certificationException": true,
+            "secondaryActionToPerform": {
+              "name": "refreshSelProcData"
+            },
+            "button": {
+              "icon": "person_add",
+              "title": {
+                "label_en": "Assign Role",
+                "label_es": "Asignar Perfil"
+              },
+              "requiresGridItemSelected": false
+            },
+            "dialogInfo": {
+              "name": "genericDialog",
+              "dialogWidth": "500px",
+              "fields": [
+                {
+                  "text1": {
+                    "label_en": "New Role name",
+                    "label_es": "Nuevo Nombre de Perfil"
+                  }
+                }
+              ]
+            },
+            "endPointParams": [
+              {
+                "argumentName": "procedureName",
+                "contextVariableName": "procedureName"
+              },
+              {
+                "argumentName": "procedureVersion",
+                "contextVariableName": "procedureVersion"
+              },
+              {
+                "argumentName": "procInstanceName",
+                "contextVariableName": "procInstanceName"
+              },
+              {
+                "argumentName": "roleName",
+                "element": "text1",
+                "defaultValue": ""
+              }
+            ]
+          }
+        ]
+      },
+      boxContents: [
+        {"name":"Protocol 1", cols: 5, rows: 5, content_structured: true, "allow_move_objects": false,   
+          "anyProperty": 1, 
+          axisLabels:{
+            posicX:["T25°C 60%RH", "30°C 35%RH", "30°C 65%RH", "30°C 75%RH", "40°C 25%RH", "40°C 75%RH", "5°C ± 3°C"],
+            posicY:["T0", "M1", "3 Months", "M6", "12 Meses"]
+          },
+          datas: [            
+            {
+              sample_id: 1, 
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              condition: "T25°C 60%RH",
+              timepoint: "T0",
+              result1: 1,
+              result2: 2,
+              posX: 1,
+              posY: 1,
+              stored_on: "2024-01-19"
+            },
+            {
+              sample_id: 11, 
+              condition: "40°C 25%RH",
+              timepoint: "M1",
+              name: "Sample11",
+              description: "Hello11",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 5,
+              posY: 2,
+              stored_on: "2024-01-19"
+            },            
+            {
+              sample_id: 2, 
+              condition: "30°C 65%RH",
+              timepoint: "M1",
+              name: "Sample2",
+              description: "Hello2",
+              study: "here2",
+              temperature: "bbb",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 2,
+              stored_on: "2024-01-17"
+            },
+            {
+              sample_id: 3, 
+              name: "Sample3",
+              description: "Hello3",
+              study: "here13",
+              temperature: "ccc",
+              condition: "40°C 25%RH",
+              timepoint: "3 Months",
+              result1: 1,
+              result2: 2,
+              posX: 5,
+              posY: 3,
+              stored_on: "2024-01-16"
+            }        
+          ]
+        },
+        {"name":"Box 11", content_structured: true,
+          datas: [
+            {
+              id: 1,               
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 1,
+              stored_on: "2024-01-19"
+            },
+            {
+              id: 2, 
+              name: "Sample2",
+              description: "Hello2",
+              study: "here2",
+              temperature: "bbb",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 2,
+              stored_on: "2024-01-17"
+            }  
+          ]
+        },
+        {"name":"Caja A", cols: 11, rows: 6, content_structured: false, "allow_move_objects": true, 
+          datas: [
+            {
+              id: 1, 
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 1,
+              stored_on: "2024-01-19"
+            } 
+          ]
+        },
+        {"name":"Caja B", cols: 11, rows: 6, content_structured: false, "allow_move_objects": true, 
+          datas: [
+            {
+              id: 1, 
+              name: "Sample1",
+              description: "Hello",
+              study: undefined,
+              temperature: "aaa",
+              result1: 1,
+              result2: 2,
+              posX: 3,
+              posY: 1,
+              stored_on: "2024-01-19"
+            } 
+          ]
+        }
+      ]
+    }    
   },
   "drag-box":{
     "component": "dragDropBoxes",
