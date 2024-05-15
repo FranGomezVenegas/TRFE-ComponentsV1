@@ -841,10 +841,10 @@ export function TrazitGenericDialogs(base) {
             let fldObj=element
             let keyName=Object.keys(fldObj)
             
-            //if (==null){        
-            if (this[keyName]!==null&&this[keyName].defval!==undefined&&this[keyName].defval!==null){
-                alert(this[keyName].defval)
-            }    
+            // //if (==null){        
+            // if (this[keyName]!==null&&this[keyName].defval!==undefined&&this[keyName].defval!==null){
+            //     alert(this[keyName].defval)
+            // }    
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
                 this[keyName].value=fldObj[keyName].default_value
             }
