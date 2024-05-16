@@ -4,7 +4,7 @@ export function CoaView(base) {
     return class extends (((((((((((base))))))))))) {
 
       coa(elem, data) {
-        //console.log('data', data)
+        console.log('data', data)
         return html`
               
                 <style type="text/css">
