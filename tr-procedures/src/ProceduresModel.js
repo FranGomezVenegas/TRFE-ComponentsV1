@@ -258,10 +258,16 @@ export const DemoViews = [
   {"proc_instance_name": "inspection_lot", "view_name": "analysisDesign", "filter_name": "analysisDesign", "title": "analysisDesign"},
 	{"proc_instance_name": "inspection_lot", "view_name": "SpecDesign", "filter_name": "SpecDesign", "title": "SpecDesign"}
 	]},
-  {"label":"Disease Study", "proc_instance_name": "DiseaseStudies", "views":[
+  {"label":"R and D", "proc_instance_name": "DiseaseStudies", "views":[
     {"proc_instance_name": "DiseaseStudies", "view_name": "MyStudies", "filter_name": "MyStudies", "title": "My Studies"},
     {"proc_instance_name": "DiseaseStudies", "view_name": "MyProjects", "filter_name": "MyProjects", "title": "My Projects"},
 	]},
+  {"label":"Disease Study", "proc_instance_name": "RandD", "views":[
+    {"proc_instance_name": "RandD", "view_name": "rdprojects", "filter_name": "rdprojects", "title": "rd projects"}
+    
+	]},
+
+  
   {"label":"Fake developers", "proc_instance_name": "fakeDevelopers", "isSpecial":true, "views":[
     {"proc_instance_name": "fakeDevelopers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "prototype-elements-view-main", "isSpecial": true},
     {"proc_instance_name": "fakeDevelopers", "view_name": "culture-medium", "filter_name": "culture-medium", "title": "culture-medium", "isSpecial": true},

@@ -10,21 +10,30 @@ export function FeaturesDynamicFieldValue(base) {
             return this.replaceTagsInDynamicValue(templateString, data)
         }        
         replaceTagsInDynamicValue(templateString, data) {
-            if (templateString===undefined){return''}
-            const regex = /\{(fld|variable)\?(\w+)(?:(?:\s*==\s*(['"]?.+['"]?))?\s*\?\s*(['"]?[^:'"]+['"]?)\s*:\s*(['"]?[^}]+['"]?)|([^}]+))\}|{(fld|variable):(\w+)\}/g;
-            return templateString.replace(regex, (match, type, key, comparisonValue, truePart, falsePart, switchCases, simpleType, simpleKey) => {
+          if (templateString === undefined) {
+              return '';
+          }
+          const regex = /\{(fld|variable)\?(\w+)(?:(?:\s*==\s*(['"]?.+['"]?))?\s*\?\s*(['"]?[^:}]+['"]?)\s*:\s*(['"]?[^}]+['"]?)|([^}]+))\}|{(fld|variable):(\w+)\}/g;
+          return templateString.replace(regex, (match, type, key, comparisonValue, truePart, falsePart, switchCases, simpleType, simpleKey) => {
               if (type && key) {
-                // Handle conditional expression
-                return this.evaluateExpression(data, type, key, truePart, falsePart, comparisonValue, switchCases);
+                  // Handle conditional expression
+                  return this.evaluateExpression(data, type, key, truePart, falsePart, comparisonValue, switchCases);
               } else if (simpleType) {
-                // Handle simple replacement
-                return simpleType === 'fld' ? data[simpleKey] ?? match : this.variable[simpleKey] ?? match;
+                  // Handle simple replacement
+                  return simpleType === 'fld' ? data[simpleKey] ?? match : this.variable[simpleKey] ?? match;
               }
               return match;
-            });
-          }   
+          });
+        }
+        
         evaluateExpression(data, type, key, truePart, falsePart, comparisonValue, switchCases) {
             try {
+              if (truePart && truePart.startsWith('{') && !truePart.endsWith('}')) {
+                truePart += '}';
+              }              
+              if (falsePart && falsePart.startsWith('{') && !falsePart.endsWith('}')) {
+                falsePart += '}';
+              }              
               const value = type === 'fld' ? data[key] : this.variable[key];
           
               // Handling switch-like expressions
@@ -46,11 +55,11 @@ export function FeaturesDynamicFieldValue(base) {
               // Handling comparison expressions
               if (comparisonValue !== undefined) {
                 const match = value === comparisonValue.replace(/['"]/g, '');
-                return match ? truePart : falsePart;
+                return match ? this.replaceTagsInDynamicValue(truePart, data) : this.replaceTagsInDynamicValue(falsePart, data);
               }
           
               // Handling boolean values
-              return value ? truePart : falsePart;
+              return value ? this.replaceTagsInDynamicValue(truePart, data) : this.replaceTagsInDynamicValue(falsePart, data);
             } catch (e) {
               console.error("Error evaluating expression: ", e);
               return ''; // Return a default value or handle the error as needed
