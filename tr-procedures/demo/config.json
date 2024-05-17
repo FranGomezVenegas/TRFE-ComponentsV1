@@ -274,13 +274,17 @@
     "viewName": "drag-box", 
     "filterName" :  "drag-box" 
   },  
-  "localDefaultView": {
+  "localDefaultViewxxx": {
     "procName":  "fake-developers", 
     "procNameData":  "RandD",
     "viewName": "stability", 
     "filterName" :  "stability" 
   },  
-
+  "localDefaultView": {
+    "procName":  "RandD", 
+    "viewName": "rdprojects", 
+    "filterName" :  "rdprojects" 
+  },
   
   "localDefaultViewqqqq": {
     "procName":  "instruments", 

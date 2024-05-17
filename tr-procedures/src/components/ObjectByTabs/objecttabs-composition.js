@@ -4,6 +4,9 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
+
+import { CardMultipleElementsView } from '../Views/CardMultipleElementsView';
+
 import {CoaView} from '../../components/Views/CoaView';
 import "../Tree/treeview/index";
 import "../ParentReadOnlyTable/ParentReadOnlyTable";
@@ -21,7 +24,7 @@ import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDia
 
 
 
-export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
+export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCredentialsDialogs((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
   static get styles() {
     return [
       Layouts,
@@ -271,8 +274,11 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
               this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true, this.lang) : nothing}   
 
             ${elem2.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}
+
+            ${elem2.type==="dragDropBoxes" ? this.dragDropBoxes(elem, data[elem2.endPointResponseObject]) : nothing}
               
-              
+            ${elem2.type==="cardMultipleElementsView" ? this.cardMultipleElementsView(elem2, data[elem2.endPointResponseObject]) : nothing}
+
             ${(elem2.includeChild===undefined||elem2.includeChild===false) ? nothing :
               html`
                   ${this.kpiCardSomeElementsChild(elem2, data, true)}
@@ -305,6 +311,11 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
       ${elem.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem, data, true): nothing}
       ${elem.type==="parentReadOnlyTable" ? 
       this.parentReadOnlyTable(elem, data, true, undefined, undefined,undefined,elem.theme,): nothing}
+
+      ${elem.type==="dragDropBoxes" ? this.dragDropBoxes(elem, data[elem.endPointResponseObject]) : nothing}
+
+      ${elem.type==="cardMultipleElementsView" ? this.cardMultipleElementsView(elem, data[elem.endPointResponseObject]) : nothing}
+      
 
       ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
         this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true, this.lang) : nothing}
@@ -344,7 +355,7 @@ export class ObjecttabsComposition extends ((TrazitCredentialsDialogs((TrazitInv
     // if (this.selectedItem!==undefined){
     //   console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
     // }    
-    console.log('elemDef', elemDef)
+    //console.log('elemDef', elemDef)
     return  html`
         <div style="display:block">
           ${elemDef!==undefined&&Array.isArray(elemDef)?

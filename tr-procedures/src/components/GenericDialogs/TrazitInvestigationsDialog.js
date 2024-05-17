@@ -39,7 +39,7 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
      return true 
   }
     investigationTemplate() {
-      console.log('viewModelFromProcModel', this.viewModelFromProcModel, 'this.openInvests', this.openInvests)
+      //console.log('viewModelFromProcModel', this.viewModelFromProcModel, 'this.openInvests', this.openInvests)
       //?open=${this.openInvests.length}        
       if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined
         ||this.viewModelFromProcModel.langConfig.gridHeader===undefined||this.viewModelFromProcModel.langConfig.gridHeader.created_on===undefined

@@ -101,7 +101,7 @@ return class extends LitElement {
     get uomDialog() {return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")}
 
     resultTemplate() {
-       console.log('resultTemplate', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel)
+      // console.log('resultTemplate', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel)
       // if(this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name===undefined){return nothing}
       // if (this.actionBeingPerformedModel.dialogInfo.name !== "resultDialog"&&
       // this.actionBeingPerformedModel.dialogInfo.name !== "uomConvertionDialog") {return nothing}

@@ -1,4 +1,6 @@
 import { html, nothing } from "lit";
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+
 import { ButtonsFunctions } from "../Buttons/ButtonsFunctions";
 import { AuditFunctions } from "../Audit/AuditFunctions";
 import "../Audit/audit-dialog";
@@ -28,6 +30,8 @@ import { ReadOnlyTableParts } from "./ReadOnlyTableParts";
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 
+import '../DragDropBox/index';  
+
 export function DataViews(base) {
 
   let contextMenu = undefined;
@@ -52,7 +56,10 @@ export function DataViews(base) {
       )
     )
   )))) {
-    kpiChartFran(elem) {
+    kpiChartFran1(elem, data) {
+      if (elem===undefined){return html``}
+      if (elem.hideNoDataMessage!==undefined&&elem.hideNoDataMessage===true&&data===undefined){return html``}
+      if (data===undefined&&this.data!==undefined){data=this.data}
       //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
       return html`
         ${elem.display_chart !== true
@@ -63,7 +70,7 @@ export function DataViews(base) {
                 id="${elem.chart_name}"
                 title="${elem.chart_title["label_" + this.lang]}"
                 type="${elem.chart_type}"
-                .data="${this.getChartData(elem)}"
+                .data="${this.getChartData(elem, data)}"
                 .options="${this.getChartOptions(elem)}"
                 style="${
                   elem.chart_style !== undefined
@@ -187,9 +194,16 @@ export function DataViews(base) {
         <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]}</p>
       `;
     }
-    kpiReportTitleLvl2(elem) {
-      if (elem.title===undefined||elem.title.label_en===undefined){
+    kpiReportTitleLvl2(elem, data, lang) {
+      if (elem.title===undefined&&(elem.title.text_en===undefined||elem.title.label_en===undefined)){
         return html``
+      }
+      if (elem.title.text_en!==undefined){
+        return html`
+        <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">            
+          ${unsafeHTML(this.getDynamicData(elem.title, data, lang))}
+        </p>
+        `
       }
       return html`    
           <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">${            
@@ -1970,8 +1984,12 @@ export function DataViews(base) {
       }
       return;
     }
-    kpiChartFran(elem) {
-      //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
+    kpiChartFran(elem, data) {
+      if (elem===undefined){return html``}
+      if (elem.hideNoDataMessage!==undefined&&elem.hideNoDataMessage===true&&data===undefined){return html``}
+      if (data===undefined&&this.data!==undefined){data=this.data}
+
+      console.log('kpiChartFran', 'elem', elem, 'data', data)
       return html`
         ${elem.display_chart !== true
           ? nothing
@@ -1981,7 +1999,7 @@ export function DataViews(base) {
                 id="${elem.chart_name}"
                 title="${elem.chart_title["label_" + this.lang]}"
                 type="${elem.chart_type}"
-                .data="${this.getChartData(elem)}"
+                .data="${this.getChartData(elem, data)}"
                 .options="${this.getChartOptions(elem)}"
               ></google-chart>
             `}
@@ -2029,8 +2047,8 @@ export function DataViews(base) {
       }
       return true;
     }
-    getChartData(elem) {
-      // console.log('getChartData', elem, 'chartData', this.data[elem.chart_name])
+    getChartData(elem, data) {
+      console.log('getChartData', elem, 'data', data, 'this.data', this.data, 'chartData')
       let chartData = [];
 
       if (elem.elementName === "cdatatable") {
@@ -2058,18 +2076,21 @@ export function DataViews(base) {
         ];
         return data;
       }
-      if (this.data === undefined || this.data[elem.chart_name] === undefined) {
+      if (data===undefined&&this.data!==undefined){data=this.data}
+      //data = this.getDataFromRoot(elem, data);
+      if (data === undefined && (elem.chart_name===undefined||data[elem.chart_name] === undefined)) {
         if (this.selectedItem !== undefined) {
-          this.data = this.selectedItem;
+          data = this.selectedItem;
         } else {
           if (this.selectedItemInView !== undefined) {
-            this.data = this.selectedItemInView;
+            data = this.selectedItemInView;
           }
         }
       }
       //chartData = [[elem.label_item, elem.label_value]];
-      if (this.data !== undefined && this.data[elem.chart_name] !== undefined) {
-        let dataForChart = this.data[elem.chart_name];
+
+      if (data !== undefined && data[elem.chart_name] !== undefined) {
+        let dataForChart = data[elem.chart_name];
 
         let seriesArr = [];
         if (Array.isArray(elem.counter_field_name)) {
@@ -2085,11 +2106,7 @@ export function DataViews(base) {
         }
         chartData.push(curchtHeader);
         for (let iData = 0; iData < dataForChart.length; iData++) {
-          if (
-            !elem.grouper_exclude_items.includes(
-              dataForChart[iData][elem.grouper_field_name]
-            )
-          ) {
+          if (!elem.grouper_exclude_items.includes(dataForChart[iData][elem.grouper_field_name])) {
             for (let iSerie = 0; iSerie < seriesArr.length; iSerie) {
               if (
                 this.addNumericValue(
@@ -2650,7 +2667,7 @@ export function DataViews(base) {
         return
       }
       parentData=this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
-      console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
+      //console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
       let tmp=""
       if (elem.theme===undefined){
         tmp = "TRAZiT-UsersArea";
@@ -2775,6 +2792,17 @@ export function DataViews(base) {
           </div>
         </div>
       `;
+    }
+    dragDropBoxes(elem, data){
+      import('../DragDropBox/drag-box')
+      //console.log('elem', elem)
+      return html`
+      <drag-box .windowOpenable=${true} .sopsPassed=${true} .lang=${this.lang}
+      .procInstanceName="RandD" .desktop=${true} .viewName="rdprojects" .filterName="rdprojects" 
+      .model=${elem} ?ready="false"
+      .viewModelFromProcModel=${elem} .config=${this.config}></drag-box>      
+  
+      `
     }
   };
 }

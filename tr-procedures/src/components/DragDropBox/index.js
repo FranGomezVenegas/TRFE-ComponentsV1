@@ -47,7 +47,9 @@ export class DragDropBox extends ActionsFunctions(GridFunctions(DialogsFunctions
   }
 
   render() {
+    console.log('render', 'data', this.data)
     if (this.viewModelFromProcModel.viewMode===undefined){this.viewModelFromProcModel.viewMode=1}
+    
     return template({
       data: this.data,      
       selectedIndex1: this.selectedIndex1,

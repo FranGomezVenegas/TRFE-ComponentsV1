@@ -312,7 +312,7 @@ export function TrazitCredentialsDialogs(base) {
    * TEXTLIST: combination of TEXT & LIST
    */
   auditField() {
-    console.log(this.justificationType)
+    //console.log(this.justificationType)
     // adjust the placeholder label for changing purpose
     if (this.justificationType===null || this.justificationType===undefined || this.justificationType == "TEXT" || this.justificationType == "LABPLANET_FALSE") {
       return html`
