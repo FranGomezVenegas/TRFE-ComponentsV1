@@ -431,7 +431,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
                 <div class="resizer" id="dragMe" style="width: 3px;"></div>
 
                 <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__right">
-                  <div id="document">
+                  <div id="document" style="width: 100%;">
                     ${this.tabsBlock()}  
                     <div class="layout horizontal">
                     ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?

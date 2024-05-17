@@ -30,7 +30,7 @@ cardController(elem, data){
         padding: 10px;
         margin-right: 2px;
         overflow: hidden;
-        
+        flex:1;        
         position: relative;                  
         top: 2px;
         left: 2px;                  
