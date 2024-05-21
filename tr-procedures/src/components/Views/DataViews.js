@@ -1300,7 +1300,25 @@ export function DataViews(base) {
     }
 
     kpiCardSomeElementsSingleObject(elem, data) {
+
       return html`
+        <style>
+        .cardItem {
+          display: flex;
+          flex-direction: row; /* Ensures items are laid out in a row */
+          align-items: center; /* Aligns items vertically in the center */
+        }
+        
+        .cardLabel {
+          color: blue; /* Set your desired color for the label */
+          margin-right: 8px; /* Space between the label and value */
+        }
+        
+        .cardValue {
+          color: green; /* Set your desired color for the value */
+        }
+        
+        </style>
         ${this.kpiCardSomeElementsMain(elem, this.getDataFromRoot(elem, data))}          
       `;      
     }
@@ -1679,8 +1697,8 @@ export function DataViews(base) {
                                   `
                                 : html`
                                 ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`   
-                                <span class="cardLabel">${this.fieldLabel(fld)}:</span>
-                                <span class="cardValue">                               
+                                <span class="cardLabel" style="${elem.styleForLabel !== undefined ? elem.styleForLabel : ""}">${this.fieldLabel(fld)}:</span>
+                                <span class="cardValue" style="${elem.styleForValue !== undefined ? elem.styleForValue : ""}">
                                   <multi-select .label=${this.purpose} .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${data[fld.name]} .options=${{}}> </multi-select>
                                 </span>
                                 `:html`                                      
@@ -1771,21 +1789,7 @@ export function DataViews(base) {
                                           <br />
                                         `
                                       : html`
-                                          <li>
-                                            <span class="cardLabel">
-                                              ${this.fieldLabel(fld)}:
-                                            </span>
-                                            <span class="cardValue">
-                                              ${data[fld.name]}
-                                              ${fld.fix_value_suffix !==undefined? fld.fix_value_suffix: ""}
-                                              ${fld.fix_value2_prefix !==undefined? fld.fix_value2_prefix: ""}
-                                              ${fld.name2 !== undefined? data[fld.name2]: ""}
-                                              ${fld.fix_value2_suffix !==undefined? fld.fix_value2_suffix: ""}
-                                              ${fld.fix_value3_prefix !==undefined? fld.fix_value3_prefix: ""}
-                                              ${fld.name3 !== undefined? data[fld.name3]: ""}
-                                              ${fld.fix_value3_suffix !==undefined? fld.fix_value3_suffix: ""}
-                                            </span>
-                                          </li>
+                                        ${this.cardField(fld, data)}
                                         `}
                                   `}
                                 `}  
@@ -1797,6 +1801,53 @@ export function DataViews(base) {
               </div>
             `}
       `;
+    }
+    cardField(fld, data){
+      if (fld.fix_value_suffix!==undefined||fld.name2!==undefined){
+        if (data[fld.name]===undefined&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){return html``}
+        return html`
+          <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
+            <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
+              ${this.fieldLabel(fld)}:
+            </span>
+            <span class="cardValue" style="${fld.styleForValue !== undefined ? fld.styleForValue : ""}">
+              ${data[fld.name]}
+              ${fld.fix_value_suffix !==undefined? fld.fix_value_suffix: ""}
+              ${fld.fix_value2_prefix !==undefined? fld.fix_value2_prefix: ""}
+              ${fld.name2 !== undefined? data[fld.name2]: ""}
+              ${fld.fix_value2_suffix !==undefined? fld.fix_value2_suffix: ""}
+              ${fld.fix_value3_prefix !==undefined? fld.fix_value3_prefix: ""}
+              ${fld.name3 !== undefined? data[fld.name3]: ""}
+              ${fld.fix_value3_suffix !==undefined? fld.fix_value3_suffix: ""}
+            </span>
+          </li>`
+        }
+      if (fld.paragraph!==undefined){
+        let fldValue=unsafeHTML(this.getDynamicData(fld.paragraph, data, this.lang))
+        if (fldValue===undefined&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){return html``}
+        
+        return html`
+        <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
+          <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
+            ${this.fieldLabel(fld)}:
+          </span>
+          <span class="cardValue" style="${fld.styleForValue !== undefined ? fld.styleForValue : ""}">
+            ${fldValue}
+          </span>
+        </li>        
+        `
+      }
+      if (data[fld.name]===undefined&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){return html``}
+      return html`
+        <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
+          <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
+            ${this.fieldLabel(fld)}:
+          </span>
+          <span class="cardValue" style="${fld.styleForValue !== undefined ? fld.styleForValue : ""}">
+            ${data[fld.name]}
+          </span>
+        </li>
+      `
     }
     fieldLabel(fld) {
       return fld["label_" + this.lang] !== undefined
@@ -1986,6 +2037,12 @@ export function DataViews(base) {
     }
     kpiChartFran(elem, data) {
       if (elem===undefined){return html``}
+
+      if ( !((elem.grouper_field_name!==undefined&&data[elem.grouper_field_name])||
+          (elem.counter_field_name!==undefined&&data[elem.counter_field_name])) ){
+            return html``
+          }
+
       if (elem.hideNoDataMessage!==undefined&&elem.hideNoDataMessage===true&&data===undefined){return html``}
       if (data===undefined&&this.data!==undefined){data=this.data}
 
@@ -2051,6 +2108,9 @@ export function DataViews(base) {
       console.log('getChartData', elem, 'data', data, 'this.data', this.data, 'chartData')
       let chartData = [];
 
+      if (elem.chartModel==="methodValidation"){
+        return this.getChartDataForMethodValidation(elem, data)
+      }
       if (elem.elementName === "cdatatable") {
         let data = [
           [
@@ -2144,6 +2204,49 @@ export function DataViews(base) {
       }
       return labelValue;
     }
+    getChartDataForMethodValidationFran(elem, data){
+      let chartData=[]
+      if (data===undefined||elem===undefined){return chartData}
+      
+      //curchtHeader.push(elem.label_item);
+      for (let iSerie = 0; iSerie < data[chartSourceData].length; iSerie++) {
+        let curchtHeader = [];
+        curchtHeader[0]=data[chartSourceData][xAxisSouceData]
+        curchtHeader[1]=data[chartSourceData][sourceData]
+        chartData.push(curchtHeader);
+      }
+      return chartData
+    }
+
+    getChartDataForMethodValidation(elem, data) {
+      let chartData = [];
+      if (data === undefined || elem === undefined) {
+        return chartData;
+      }
+    
+      const chartSourceData = data[elem.chartSourceData];
+      if (!chartSourceData || !Array.isArray(chartSourceData)) {
+        return chartData;
+      }
+      let curchtHeader = [];
+      curchtHeader[0] = "Trending";
+      curchtHeader[1] = "Final results";
+      chartData.push(curchtHeader);
+      for (let iSerie = 0; iSerie < chartSourceData.length; iSerie++) {
+        let curchtHeader = [];
+        let currentData = chartSourceData[iSerie];
+        
+        // Make sure xAxisSourceData and sourceData exist in the current data object
+        if (currentData[elem.xAxisSourceData] !== undefined && currentData[elem.sourceData] !== undefined) {
+          curchtHeader[0] = Number(currentData[elem.xAxisSourceData]);
+          curchtHeader[1] = Number(currentData[elem.sourceData]);
+          chartData.push(curchtHeader);
+        }
+      }
+    
+      return chartData;
+    }
+    
     getChartOptions(elem) {
       let defaultChartOptions = {
         width: "300px",
@@ -2209,7 +2312,7 @@ export function DataViews(base) {
             >
               <div slot="footer">
                 ${this.data.sampleFieldsToDisplay.map(
-                  (d) => html`<li>${d.field_name}: ${d.field_value}</li>`
+                  (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
                 )}
               </div>
             </sp-card-ext>
@@ -2231,7 +2334,7 @@ export function DataViews(base) {
                             ? html`
                                 ${d.data.map(
                                   (data) =>
-                                    html`<li>
+                                    html`<li class="cardItem">
                                       ${data.field_name}: ${data.field_value}
                                     </li>`
                                 )}
@@ -2249,7 +2352,7 @@ export function DataViews(base) {
                                               ${data.incubation_1.map(
                                                 (f) =>
                                                   html`${f.field_name
-                                                    ? html`<li>
+                                                    ? html`<li class="cardItem">
                                                         ${f.field_name}:
                                                         ${f.field_value}
                                                       </li>`
@@ -2265,7 +2368,7 @@ export function DataViews(base) {
                                               ${data.incubation_2.map(
                                                 (f) =>
                                                   html`${f.field_name
-                                                    ? html`<li>
+                                                    ? html`<li class="cardItem">
                                                         ${f.field_name}:
                                                         ${f.field_value}
                                                       </li>`
@@ -2282,7 +2385,7 @@ export function DataViews(base) {
                                           (data) =>
                                             html`${data.field_name ==
                                             "raw_value"
-                                              ? html`<li>
+                                              ? html`<li class="cardItem">
                                                   Number of Colonies:
                                                   ${data.field_value}
                                                 </li>`
@@ -2298,7 +2401,7 @@ export function DataViews(base) {
                                                   "microorganism_count" ||
                                                 data.field_name ===
                                                   "microorganism_list"
-                                                  ? html`<li>
+                                                  ? html`<li class="cardItem">
                                                       ${data.field_name}:
                                                       ${data.field_value}
                                                     </li>`
@@ -2340,7 +2443,7 @@ export function DataViews(base) {
     EnvMonAirSampleReportContent() {
       let strContent = `<h2>Summary</h2>`;
       this.data.sampleFieldsToDisplay.forEach((d) => {
-        strContent += `<li>${d.field_name}: ${d.field_value}</li>`;
+        strContent += `<li class="cardItem">${d.field_name}: ${d.field_value}</li>`;
       });
       strContent += `<h2>Stages</h2>`;
       this.data.stages.forEach((d) => {
@@ -2359,13 +2462,13 @@ export function DataViews(base) {
             strContent += `<td>`;
             data.incubation_1.forEach((f) => {
               if (f.field_name) {
-                strContent += `<li>${f.field_name}: ${f.field_value}</li>`;
+                strContent += `<li class="cardItem">${f.field_name}: ${f.field_value}</li>`;
               }
             });
             strContent += `</td><td>`;
             data.incubation_2.forEach((f) => {
               if (f.field_name) {
-                strContent += `<li>${f.field_name}: ${f.field_value}</li>`;
+                strContent += `<li class="cardItem">${f.field_name}: ${f.field_value}</li>`;
               }
             });
             strContent += `</td></tr></table>`;
@@ -2384,7 +2487,7 @@ export function DataViews(base) {
           });
         } else {
           d.data.forEach((data) => {
-            strContent += `<li>${data.name}: ${data.items}</li>`;
+            strContent += `<li class="cardItem">${data.name}: ${data.items}</li>`;
           });
         }
         strContent += `</td></tr></table>`;
@@ -2402,7 +2505,7 @@ export function DataViews(base) {
               >
                 <div slot="footer">
                   ${this.data.incubatorFieldsToDisplay.map(
-                    (d) => html`<li>${d.field_name}: ${d.field_value}</li>`
+                    (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
                   )}
                 </div>
               </sp-card-ext>
@@ -2433,7 +2536,7 @@ export function DataViews(base) {
               >
                 <div slot="footer">
                   ${this.data.batchFieldsToDisplay.map(
-                    (d) => html`<li>${d.field_name}: ${d.field_value}</li>`
+                    (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
                   )}
                 </div>
               </sp-card-ext>
@@ -2477,7 +2580,7 @@ export function DataViews(base) {
               >
                 <div slot="footer">
                   ${this.data.prodLotFieldsToDisplay.map(
-                    (d) => html`<li>${d.field_name}: ${d.field_value}</li>`
+                    (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
                   )}
                 </div>
               </sp-card-ext>
@@ -2526,7 +2629,7 @@ export function DataViews(base) {
     EnvMonAirIncubatorReportContent(strContent) {
       if (this.data.incubatorFieldsToDisplay) {
         this.data.incubatorFieldsToDisplay.forEach((d) => {
-          strContent += `<li>${d.field_name}: ${d.field_value}</li>`;
+          strContent += `<li class="cardItem">${d.field_name}: ${d.field_value}</li>`;
         });
         //strContent += this.incubatorChartContent()
       }
@@ -2548,7 +2651,7 @@ export function DataViews(base) {
     EnvMonAirBatchReportContent(strContent) {
       if (this.sampleData.batchFieldsToDisplay) {
         this.sampleData.batchFieldsToDisplay.forEach((d) => {
-          strContent += `<li>${d.field_name}: ${d.field_value}</li>`;
+          strContent += `<li class="cardItem">${d.field_name}: ${d.field_value}</li>`;
         });
         strContent += this.chartContent();
         let batches = this.sampleData.SAMPLES_ARRAY.map((d) => d.sample_id);
@@ -2562,7 +2665,7 @@ export function DataViews(base) {
     EnvMonProductionLotReportContent(strContent) {
       if (this.data.prodLotFieldsToDisplay) {
         this.data.prodLotFieldsToDisplay.forEach((d) => {
-          strContent += `<li>${d.field_name}: ${d.field_value}</li>`;
+          strContent += `<li class="cardItem">${d.field_name}: ${d.field_value}</li>`;
         });
         strContent += this.chartContent();
         strContent += `<br><table border="1" cellpadding="3" style="margin-top: 10px; border-collapse: collapse; width: 100%;">`;
@@ -2593,7 +2696,7 @@ export function DataViews(base) {
         this.activeTab.label_en == "Sample"
       ) {
         this.data.sampleFieldsToDisplay.forEach((d) => {
-          strContent += `<li>${d.field_name}: ${d.field_value}</li>`;
+          strContent += `<li class="cardItem">${d.field_name}: ${d.field_value}</li>`;
         });
         strContent += `<h2>Stages</h2>`;
         this.data.stages.forEach((d) => {
@@ -2612,13 +2715,13 @@ export function DataViews(base) {
               strContent += `<td>`;
               data.incubation_1.forEach((f) => {
                 if (f.field_name) {
-                  strContent += `<li>${f.field_name}: ${f.field_value}</li>`;
+                  strContent += `<li class="cardItem">${f.field_name}: ${f.field_value}</li>`;
                 }
               });
               strContent += `</td><td>`;
               data.incubation_2.forEach((f) => {
                 if (f.field_name) {
-                  strContent += `<li>${f.field_name}: ${f.field_value}</li>`;
+                  strContent += `<li class="cardItem">${f.field_name}: ${f.field_value}</li>`;
                 }
               });
               strContent += `</td></tr></table>`;
@@ -2631,7 +2734,7 @@ export function DataViews(base) {
             });
           } else {
             d.data.forEach((data) => {
-              strContent += `<li>${data.name}: ${data.items}</li>`;
+              strContent += `<li class="cardItem">${data.name}: ${data.items}</li>`;
             });
           }
           strContent += `</td></tr></table>`;

@@ -34,6 +34,11 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         --mdc-typography-button-font-size: 14px;
         --mdc-theme-primary: rgb(3, 169, 244);       
       }
+      .tabBtn.selected {
+        --mdc-theme-primary: #1062c5; /* Darker blue for the selected tab */
+        background-color: #1062c5; /* Ensure the background is also set */
+        color: white; /* Adjust text color for better contrast */
+      }
       sp-split-view {
         height: calc(100vh - 100px);
         width: 100%;
@@ -127,6 +132,47 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       mwc-textfield {
         width: 100%;
       }
+      mwc-button.tabBtn {
+        background-color: #24C0EB; /* Light blue background */
+        font-family: 'Myriad Pro', sans-serif; /* Font family */
+        border-radius: 11px; /* Rounded corners */
+        border: 2px solid rgb(48, 116, 135); /* Solid border with color */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        --mdc-typography-button-text-transform: none; /* No uppercase text */
+        --mdc-typography-button-font-size: 14px; /* Font size */
+        color: white; /* White text color for contrast */
+        transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+      }
+      
+      .tabBtn:hover {
+        background-color: #1aa7d9; /* Slightly darker blue on hover */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+      }
+      
+      .tabBtn.selected {
+        --mdc-theme-primary: #1062c5; /* Darker blue for the selected tab */
+        background-color: #1062c5; /* Ensure the background is also set */
+        color: white; /* Adjust text color for better contrast */
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Slightly deeper shadow */
+      }
+      
+      .tabBtn:active {
+        background-color: #0d5aa7; /* Darker blue on active/pressed */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow on active */
+      }
+      #leftSplit {
+        padding: 10px;
+        background-color: #148cfa24; /* Base color */
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                          radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 20px 20px; /* Adjust size to create a subtle pattern */
+        background-position: 0 0, 10px 10px;
+        overflow-y: scroll;
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
     `;
   }
     static get properties() {
@@ -153,12 +199,16 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             moduleVersion: { type: Number },
             moduleName: { type: String },      
             procedureVersion: { type: Number },
-            procedureName: { type: String }
-      
+            procedureName: { type: String },
+            showDivider: { type: Boolean },
+            selectedTab: { type: Object },
+            isLeftPaneExpanded: { type: Boolean }     
         }
     }
     constructor() {
         super()
+        this.isLeftPaneExpanded = true;
+        this.selectedTab = null;
         this.viewModelFromProcModel={} 
         this.tabsMainViewModelFromProcModel={}
         this.selectedTabModelFromProcModel={}
@@ -236,7 +286,20 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         resizer.addEventListener('mousedown', mouseDownHandler);
       }
     }
-
+    startDrag(e) {
+      document.addEventListener('mousemove', this.onDrag);
+      document.addEventListener('mouseup', this.stopDrag);
+    }
+  
+    onDrag(e) {
+      // Logic to resize the split view panels based on mouse movement
+      // This typically involves adjusting the width or height of the panels
+    }
+  
+    stopDrag(e) {
+      document.removeEventListener('mousemove', this.onDrag);
+      document.removeEventListener('mouseup', this.stopDrag);
+    }
     title() {      
       return html`
         <style>
@@ -400,7 +463,16 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       };
       resizer.addEventListener('mousedown', mouseDownHandler);
     }
-
+    toggleLeftPane() {
+      this.isLeftPaneExpanded = !this.isLeftPaneExpanded;
+      const leftPaneWidth = this.isLeftPaneExpanded ? '250px' : '3px';
+      this.shadowRoot.querySelector('#leftSplit').style.width = leftPaneWidth;
+      // if (this.isLeftPaneExpanded){
+      //   this.shadowRoot.querySelector('#leftSplit').style.display='block'
+      // }else{
+      //   this.shadowRoot.querySelector('#leftSplit').style.dipslay='none'
+      // }
+    }
     render() {      
       return html`
       ${this.genericFormDialog()}
@@ -409,18 +481,56 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
           ${this.viewModelFromProcModel.filter === undefined ? html`              
               ${this.tabsBlock()}  
 
-          ` : html`             
-            <sp-split-view show-divider=${this.showDivider}>
+          ` : html`    
+          <style>
+          .split-view {
+            display: flex;
+            /* Other styles for your split view */
+          }
+          
+          .divider {
+            background-color: #ccc; /* Light grey color */
+            width: 8px; /* Increase the width to make it more noticeable */
+            cursor: ew-resize; /* Change the cursor to indicate it can be dragged */
+            position: relative;
+            z-index: 1; /* Ensure it's above other content */
+          }
+          
+          .divider::before {
+            content: '';
+            position: absolute;
+            left: -4px; /* Adjust for a larger clickable area */
+            right: -4px; /* Adjust for a larger clickable area */
+            top: 0;
+            bottom: 0;
+            background-color: transparent; /* Transparent, but clickable */
+          }
+          
+          .divider:hover {
+            background-color: #aaa; /* Darker grey on hover */
+          }
+          
+          .divider:active {
+            background-color: #888; /* Even darker grey when actively being dragged */
+          }
+          
+          </style>         
+            <sp-split-view show-divider=${this.showDivider} class="split-view">              
               <div style="display:flex; width: 100%; background:transparent;">
                 <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__left">
+                ${this.viewModelFromProcModel.left_panel_actions === undefined ? nothing : html`
+                  <div style="flex-basis: auto; width: auto;">
+                    ${this.getButton(this.viewModelFromProcModel.left_panel_actions, {}, true)}
+                  </div>
+                `}
                   <div id="endpointName">      
                     ${this.viewModelFromProcModel.filter_button === undefined ? nothing : html`
-                      <div style="display:flex; justify-content:center;">
-                        <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
-                          ${this.viewModelFromProcModel.filter_button["label_" + this.lang]} 
-                        </sp-button>
-                      </div>
-                    `}
+                    <div class="search-container">
+                    <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
+                      ${this.viewModelFromProcModel.filter_button["label_" + this.lang]}
+                    </sp-button>
+                  </div>                  
+                                      `}
                     ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
                       ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} 
                     `}
@@ -476,33 +586,32 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
     `;
     }
   
-    tabsBlock(){
-        //this.resetView()
-        return html`
-        ${this.viewModelFromProcModel.tabs ?
-          html`
-            <div class="layout horizontal flex" style="position:relative; top:10px;">
-            ${this.viewModelFromProcModel.tabs!==undefined&&this.viewModelFromProcModel.tabs.length>1 ?
-            html`
-				      <div class="tabs-container">
-                ${this.viewModelFromProcModel.tabs.map(t => 
-                  html`
-                    <mwc-button class="tabBtn" dense unelevated 
-                      .label=${t["tabLabel_"+ this.lang]}
-                      @click=${()=>this.selectTab(t)}></mwc-button>
-                  `
-                )}
+    tabsBlock() {
+      return html`
+        ${this.viewModelFromProcModel.tabs ? html`
+          <div class="layout horizontal flex" style="position:relative; top:10px;">
+            ${this.viewModelFromProcModel.tabs !== undefined && this.viewModelFromProcModel.tabs.length > 1 ? html`
+              <div class="tabs-container">
+              <mwc-icon-button id="expandleftpane" icon="${this.isLeftPaneExpanded ? 'chevron_left' : 'chevron_right'}" @click=${this.toggleLeftPane}></mwc-icon-button>
+                ${this.viewModelFromProcModel.tabs.map(t => html`
+                  <mwc-button
+                    class="tabBtn ${this.selectedTab === t ? 'selected' : ''}"
+                    dense
+                    unelevated
+                    .label=${t["tabLabel_" + this.lang]}
+                    @click=${() => this.selectTab(t)}>
+                  </mwc-button>
+                `)}
               </div>
-            `: nothing}
-              ${this.selectedTabContent()}  
-            </div>
-            
-          ` : nothing
-        }
-        `
+            ` : nothing}
+            ${this.selectedTabContent()}
+          </div>
+        ` : nothing}
+      `;
     }
+    
 
-    selectedTabContent(){
+    selectedTabContent(){      
       if (Object.keys(this.selectedTabModelFromProcModel).length === 0){
         this.selectedTabModelFromProcModel=this.viewModelFromProcModel.tabs[0]
       }
@@ -540,6 +649,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       return
     }
     selectTab(tab) {
+      this.selectedTab = tab;
+      this.requestUpdate();
       this.selectedTabModelFromProcModel=tab
       this.dispatchEvent(new CustomEvent('tab-selected', {        
         bubbles: true,  // Allow event to bubble up through the DOM
@@ -549,7 +660,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       if (objectComposition!==null){
         objectComposition.resetFilterIndex(this.selectedTabModelFromProcModel.view_definition[0])          
       }
-      this.objecttabsComposition.render()
+      
+      this.objecttabsComposition.render()      
     }
 
     
