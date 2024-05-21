@@ -6,9 +6,10 @@ import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
 
 export function TrazitEnterResultWithSpec(LitElement) {
-return class extends LitElement {
+return class extends ActionsFunctions(LitElement) {
 
   static get styles() {
     return [
@@ -951,15 +952,15 @@ return class extends LitElement {
       //console.log('setResult Before', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction, 'this.selectedItems', this.selectedItems)
       if (rawValue) {
         this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number, this.selectedItems, this.targetValue)
       } else {
         this.selectedItems[0]=result;
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number, this.selectedItems, this.targetValue)
       }
       console.log('setResult After', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction, 'this.selectedItems', this.selectedItems)
     }
 
-    actionMethodResults(action, selObject, sampleId, resultRow) {
+    actionMethodResults(action, selObject, sampleId, resultRow, targetValue) {
       //this.loadDialogs()  
       //console.log('actionMethodResults', 'action', action, 'sampleId', sampleId, 'resultRow', resultRow)
           if(action===undefined){
@@ -973,7 +974,12 @@ return class extends LitElement {
               return
           }
           if(action.requiresDialog===false){
-              this.actionWhenRequiresNoDialog(action, selObject[0], undefined, undefined, resultRow, undefined)
+            //trazitNoDialogRequired(action, selectedItem, targetValue, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry) {
+            this.trazitNoDialogRequired(action, 
+              selObject[0], targetValue, false, selObject[0], null, null, null)
+            //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, 
+            //  this.selectedItems[0], targetValue)            
+            //  this.actionWhenRequiresNoDialog(action, selObject[0], undefined, undefined, resultRow, undefined)
               return
           }  
           if ( action.requiresGridItemSelected!==undefined&&action.requiresGridItemSelected===true&&
@@ -1015,9 +1021,9 @@ return class extends LitElement {
       this.selectedDialogAction = JSON.parse(act)
       if (resultRow.raw_value || resultRow.value) {
         this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow, this.targetValue)
       } else {
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow, this.targetValue)
       }
     }
 
