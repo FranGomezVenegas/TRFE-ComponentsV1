@@ -6,6 +6,7 @@ import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
+import '../uploadButton/index';
 import { ActionsFunctions } from '../Actions/ActionsFunctions';
 
 export function TrazitEnterResultWithSpec(LitElement) {
@@ -471,6 +472,14 @@ return class extends ActionsFunctions(LitElement) {
           return html`<input class="enterResultVal" type="text" .value=${rawValue} 
             disabled>
           `
+        } else if (result.param_type.toUpperCase() == "FILE") {
+          return html` 
+          <upload-button .action="${this.selectedDialogAction}" .selectedItem="${result}" 
+            name="upload"  label="File"></upload-button>
+<!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
+          <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
+          -->
+          `
         } else if (result.param_type.toUpperCase() == "TEXT" || result.param_type.toUpperCase() == "QUALITATIVE") {
           return html`<input class="enterResultVal" type="text" .value=${rawValue} 
             ?disabled=${this.actionBeingPerformedModel.dialogInfo.readOnly}
@@ -536,6 +545,7 @@ return class extends ActionsFunctions(LitElement) {
     }
 
     valRendererInstrument(result) {
+      alert(result.param_type)
       //console.log('valRendererInstrument', 'result', result)
       if (result.is_locked) {
         return html`
@@ -549,9 +559,12 @@ return class extends ActionsFunctions(LitElement) {
             disabled>
           `
         } else if (result.param_type.toUpperCase() == "FILE") {
-          return html`
-          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
+          return html` 
+          <upload-button .action="${this.selectedDialogAction}" .selectedItem="${result}" 
+            name="upload"  label="File"></upload-button>
+<!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
           <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
+          -->
           `
         }else if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
           return html`<input class="enterResultVal" type="text" .value=${result.value} 

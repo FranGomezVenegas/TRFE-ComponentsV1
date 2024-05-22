@@ -9,6 +9,8 @@ export class DependencyForm extends LitElement {
 
   static get properties() {
     return {
+      action: { type: Object },
+      selectedItem: { type: Object },
       endpoint: { type: String },
       endpoints: { type: Array },
       notification: { type: String },

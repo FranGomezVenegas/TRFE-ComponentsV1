@@ -51,6 +51,65 @@ export function ApiFunctions(base) {
           }
         })
       }
+
+      fetchApiForFiles(urlParams, feedback=true, actionModel, formData=null) {
+        // notification enabled by default, just turn log to false for those what requires no notification   
+        let log = true;
+        if (urlParams.toString().toUpperCase().includes("QUERI")) {
+            log = false;
+        }
+        log = true;
+        urlParams = urlParams.replace(/\|/g, "%7C");
+        //urlParams += "&isForTesting=" + this.config.isForTesting;
+        this.dispatchEvent(new CustomEvent('set-activity', { bubbles: true, composed: true }));
+    
+        let fetchOptions = {
+            method: formData ? 'POST' : 'GET',
+            credentials: 'same-origin'
+        };
+    
+        if (formData) {
+            fetchOptions.body = formData;
+        }
+    
+        return fetch(urlParams, fetchOptions).then(async r => {
+            if (r.status == 200) {
+                return r.json();
+            } else {
+                let err = await r.json();
+                throw err;
+            }
+        }).then(j => {
+            if (log) {
+                this.dispatchEvent(new CustomEvent('success', {
+                    detail: { ...j, log: log },
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+            if (actionModel !== undefined) {
+                this.refreshMasterData(j, actionModel);
+            }
+            return j;
+        }).catch(e => {
+            if (e.message == "Unexpected end of JSON input") {
+                this.dispatchEvent(new CustomEvent("error", {
+                    detail: { ...e },
+                    bubbles: true,
+                    composed: true
+                }));
+            } else {
+                this.dispatchEvent(new CustomEvent("error", {
+                    detail: { ...e, log: log },
+                    bubbles: true,
+                    composed: true
+                }));
+                return e;
+            }
+        });
+    }
+    
+
       refreshMasterData(endPointResponse, actionModel) {
         
         if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
