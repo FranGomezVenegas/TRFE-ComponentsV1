@@ -7,8 +7,8 @@ export const styles = css`
 
   .container {
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     width: 100%;
   }
 
@@ -23,24 +23,27 @@ export const styles = css`
 
   .button-wrap {
     position: relative;
+    width:100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
   }
 
   .button {
     display: inline-block;
-    background-color: #1d6355;
-    border-radius: 10px;
-    border: 4px double #cccccc;
-    color: #ffffff;
+    background-color: #007bff; 
+    border: none; 
+    color: #fff; 
+    padding:3px;
     text-align: center;
-    font-size: 20px;
-    padding: 8px;
-    width: 100px;
-    transition: all 0.5s;
+    font-size: 16px; 
+    border-radius: 4px;
+    transition: background-color 0.3s; 
     cursor: pointer;
-    margin: 5px;
-  }
-  
-  .button:hover {
-    background-color: #00ab97;
-  }
+}
+
+.button:hover {
+    background-color: #0056b3; 
+}
 `

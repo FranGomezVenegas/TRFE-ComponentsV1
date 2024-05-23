@@ -87,7 +87,8 @@ return class extends ActionsFunctions(LitElement) {
         return {
           enterResults: { type: Array },
           selectedItems: { type: Array },
-          actionBeingPerformedModel: {type: Object}
+          actionBeingPerformedModel: {type: Object},
+          procInstanceName: { type:String}
         }
     }
     constructor() {
@@ -102,7 +103,9 @@ return class extends ActionsFunctions(LitElement) {
     get rowTooltipEnterResults() {return this.shadowRoot.querySelector("#rowTooltipenterresults")}
     get uomDialog() {return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")}
 
-    resultTemplate() {
+    resultTemplate(procInstanceName) {
+      //alert(procInstanceName)
+      this.procInstanceName=procInstanceName
       // console.log('resultTemplate', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel)
       // if(this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name===undefined){return nothing}
       // if (this.actionBeingPerformedModel.dialogInfo.name !== "resultDialog"&&
@@ -474,7 +477,7 @@ return class extends ActionsFunctions(LitElement) {
           `
         } else if (result.param_type.toUpperCase() == "FILE") {
           return html` 
-          <upload-button .action="${this.selectedDialogAction}" .selectedItem="${result}" 
+          <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
             name="upload"  label="File"></upload-button>
 <!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
           <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
@@ -560,7 +563,7 @@ return class extends ActionsFunctions(LitElement) {
           `
         } else if (result.param_type.toUpperCase() == "FILE") {
           return html` 
-          <upload-button .action="${this.selectedDialogAction}" .selectedItem="${result}" 
+          <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
             name="upload"  label="File"></upload-button>
 <!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
           <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
