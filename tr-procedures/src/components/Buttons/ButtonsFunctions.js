@@ -136,6 +136,15 @@ export function ButtonsFunctions(base) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
       console.log("getButtondatasectionModel", sectionModel);
       console.log('getButtondata', data)
+      let gridDefinition=[]
+      let gridAllData=[]
+      if (sectionModel.langConfig!==undefined&&sectionModel.langConfig.gridHeader!==undefined){
+        gridDefinition=sectionModel.langConfig.gridHeader
+        gridAllData=this.gridItems
+      }else{
+        gridDefinition=sectionModel.columns
+        gridAllData=data
+      }
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -232,21 +241,21 @@ export function ButtonsFunctions(base) {
         ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.printable && sectionModel.viewQuery.printable.enable && sectionModel.viewQuery.printable.enable === true ?
           html`
           <mwc-icon-button 
-              class="${sectionModel.viewQuery.button.class}"
+              ${sectionModel.viewQuery.button===undefined||sectionModel.viewQuery.button.class===undefined?'':html`class="${sectionModel.viewQuery.button.class}"`}
               icon="${sectionModel.viewQuery.printable.icon}" id="printable" 
               title="${sectionModel.viewQuery.printable.title['label_' + this.lang]}"             
               @click=${() => this.printTable()}
-              style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+              style="${sectionModel.viewQuery.button!==undefined&&sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
           </mwc-icon-button>` : nothing
         }
         ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.downloadable && sectionModel.viewQuery.downloadable.enable && sectionModel.viewQuery.downloadable.enable === true ?
           html`
           <mwc-icon-button 
-              class="${sectionModel.viewQuery.button.class}"
+          ${sectionModel.viewQuery.button===undefined||sectionModel.viewQuery.button.class===undefined?'':html`class="${sectionModel.viewQuery.button.class}"`}
               icon="${sectionModel.viewQuery.downloadable.icon}" id="downloadable" 
               title="${sectionModel.viewQuery.downloadable.title['label_' + this.lang]}"             
-              @click=${() => this.downloadDataTableToCSV(sectionModel.langConfig.gridHeader, this.gridItems)}
-              style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+              @click=${() => this.downloadDataTableToCSV(gridDefinition, gridAllData, sectionModel.viewQuery.downloadable)}
+              style="${sectionModel.viewQuery.button!==undefined&&sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
           </mwc-icon-button>` : nothing
         }                
           ${sectionModel !== undefined && sectionModel.actions && sectionModel.actions.map(action =>
@@ -255,7 +264,8 @@ export function ButtonsFunctions(base) {
               html`${action.button ?
                 html`${action.button.icon ?
                   html`<mwc-icon-button id="${action.actionName}"
-                  class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
+                  ${action.button.class===undefined?'':html`class="${action.button.class}"`}
+                  disabled${this.btnDisabled(action, sectionModel)}"
                   icon="${action.button.icon}" 
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}

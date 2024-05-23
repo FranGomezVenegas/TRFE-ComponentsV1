@@ -1,6 +1,6 @@
 export function ExportTableToCsv(base) {
     return class extends (base) {
-        downloadDataTableToCSV(downloadElements, dataArr, lang = 'en') {
+        downloadDataTableToCSV(downloadElements, dataArr, downaloadbleButtonModel, lang = 'en') {
             if (downloadElements===undefined){
                 alert("The definition to download is wrong")
                 return

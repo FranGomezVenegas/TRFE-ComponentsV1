@@ -101,6 +101,24 @@ export const ProjectRandD=
             "actions": []
           },
           {
+            "viewQuery":{
+              "printable": {
+                "enable": true,
+                "icon": "print",
+                "title": {
+                  "label_en": "Print", "label_es": "Imprimir"
+                }
+              },
+              "downloadable": {
+                "enable": true,
+                "icon": "download_2",
+                "userCanDecideData": true,
+                "title": {
+                  "label_en": "Download", "label_es": "Descargar"
+                }
+              },            
+  
+            },
             "type": "parentReadOnlyTable",
             "endPointResponseObject": "formula",
             "columns": [

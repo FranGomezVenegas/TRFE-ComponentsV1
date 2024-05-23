@@ -129,13 +129,13 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
       ${this.reactivateObjectsDialog()}
       ${this.testScriptNewStepFormDialog()}
 
-      ${this.credentialsDialog()} 
+      ${this.credentialsDialog()}  
       ${this.reactivateObjectsDialog()}
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}
 
      
-      ${this.pointTemplate()} ${this.resultTemplate()}
+      ${this.pointTemplate()} ${this.resultTemplate(this.procInstanceName)}
       ${this.investigationTemplate()}
       ${this.filterName == "open"
         ? html`${this.decisionTemplate()}`
