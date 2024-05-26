@@ -1,9 +1,9 @@
 import { LitElement } from 'lit-element';
 import { template } from './dropzone.template';
 import { styles } from './dropzone.css';
+import { ApiFunctions } from '../Api/ApiFunctions';
 
-
-export class Dropzone extends LitElement {
+export class Dropzone extends ApiFunctions(LitElement) {
   static get styles() {
     return styles;
   }
@@ -14,7 +14,12 @@ export class Dropzone extends LitElement {
       fileSelector: { state: true },
       errorContent: { state: true },
       previewContent: { state: true },
-      files: { state : true }
+      files: { state : true },
+      lang: { type: String },
+      config: { type: Object },
+      action: { type: Object },
+      selectedItem: { type: Object },
+      procInstanceName: String      
     };
   }
 
@@ -38,7 +43,7 @@ export class Dropzone extends LitElement {
     });
   }
 
-  _handleFile = (file, name, type) => {
+  _handleFileYanko = (file, name, type) => {
     if (type.split("/")[0] !== "image") {
       this.errorContent.innerText = "Please upload an image file";
       return false;
@@ -56,6 +61,53 @@ export class Dropzone extends LitElement {
     };
   }
 
+  _handleFile = (file, name, type) => {
+    // Clear any previous error messages
+    this.errorContent.innerText = "";
+  
+    // Create a FileReader to read the file
+    let reader = new FileReader();
+  
+    // Set up the FileReader onloadend event
+    reader.onloadend = () => {
+      let fileContainer = document.createElement("figure");
+  
+      // Determine how to display the file based on its type
+      if (type.startsWith("image/")) {
+        // Display image files
+        let img = document.createElement("img");
+        img.src = reader.result;
+        fileContainer.appendChild(img);
+      } else if (type === "application/pdf") {
+        // Display PDF files
+        let iframe = document.createElement("iframe");
+        iframe.src = reader.result;
+        iframe.width = "100%";
+        iframe.height = "500px"; // Adjust height as needed
+        fileContainer.appendChild(iframe);
+      } else if (type.startsWith("text/") || type === "application/json") {
+        // Display text files and JSON
+        let textPreview = document.createElement("pre");
+        textPreview.textContent = reader.result;
+        fileContainer.appendChild(textPreview);
+      } else {
+        // Handle other file types (e.g., .doc, .xls) by creating a download link
+        let fileLink = document.createElement("a");
+        fileLink.href = reader.result;
+        fileLink.download = name;
+        fileLink.innerText = `Download ${name}`;
+        fileContainer.appendChild(fileLink);
+      }
+  
+      // Add file name as a caption
+      fileContainer.innerHTML += `<figcaption>${name}</figcaption>`;
+      this.previewContent.appendChild(fileContainer);
+    };
+  
+    // Read the file as a Data URL
+    reader.readAsDataURL(file);
+  };
+        
   _init = () => {
     console.log(this.fileSelector);
     this.fileSelector.addEventListener("change", () => {
@@ -101,17 +153,38 @@ export class Dropzone extends LitElement {
   }
 
   _upload = async () => {
-    const formData = new FormData()
+    //const formData = new FormData()
 
-    Array.prototype.forEach.call(this.files, f => formData.append('files', f))
 
-    return fetch('/api/upload', {
+    let form = new FormData();
+    Array.prototype.forEach.call(this.files, f => form.append('files', f))
+
+//    form.append('title', 'Sample');
+//    form.append('picture', this.imageBlob);
+//    let requestResult={}
+    let APIParams = this.getAPICommonParams(this.action)
+    let endPointUrl = this.getActionAPIUrl(this.action)
+    if (String(endPointUrl).toUpperCase().includes("ERROR")) {
+      alert(endPointUrl)
+      return
+    }
+
+    let actionParams = this.jsonParam(this.action, this.selectedItem, undefined, this.selectedItem, undefined, undefined, undefined)
+    
+    Object.keys(actionParams).forEach(key => {
+      form.append(key, actionParams[key]);
+    });
+    Object.keys(APIParams).forEach(key => {
+      form.append(key, APIParams[key]);
+    });
+    let params=this.config.backendUrl + endPointUrl
+    params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
+    return fetch(params, {
       method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
-      body: formData  // Coordinate the body type with 'Content-Type'
+      body: form  // Coordinate the body type with 'Content-Type'
     })
     .then(response => response.json())
     .catch(error => console.error(error))
   }
-}
 
-window.customElements.define('drop-zone', Dropzone);
+}window.customElements.define('drop-zone', Dropzone);

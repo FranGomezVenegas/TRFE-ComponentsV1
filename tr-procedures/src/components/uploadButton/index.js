@@ -122,7 +122,7 @@ export class UploadButton extends ApiFunctions(LitElement) {
           //+ '&' + new URLSearchParams(credDialogArgs)        
         console.log('_upload', 'action', this.action.actionName, params)
     
-        params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
+        //params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
 
         // Call fetchApi with the FormData
         let response = await fetch(params, {
