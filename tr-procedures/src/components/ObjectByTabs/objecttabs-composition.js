@@ -21,10 +21,10 @@ import { ModuleEnvMonitDialogsMicroorganism } from "../../module_env_monit/Dialo
 import { TrazitInvestigationsDialog } from "../GenericDialogs/TrazitInvestigationsDialog";
 
 import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
+import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
 
 
-
-export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCredentialsDialogs((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
+export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleElementsView(TrazitCredentialsDialogs((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
   static get styles() {
     return [
       Layouts,
@@ -134,6 +134,7 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}
 
+      ${this.takePictureFormDialog()}
      
       ${this.pointTemplate()} ${this.resultTemplate(this.procInstanceName)}
       ${this.investigationTemplate()}
