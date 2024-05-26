@@ -6,7 +6,9 @@ import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import { LeftPaneFilterViews } from '../Views/LeftPaneFilterViews';
 import { ViewDownloadable } from '../Views/ViewDownloadable';
 import { ViewReport } from '../Views/ViewReport';
-export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterViews(TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(LitElement)))))) {
+
+
+export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterViews(TrazitGenericDialogs(TrazitFormsElements(DialogsFunctions(LitElement))))))) {
   static get styles() {
     return css`
       :host([disabled]) {
@@ -57,10 +59,10 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         padding: 10px;
         background-color:transparent;
         overflow-y: scroll;
-        width: 20%;
+        width: 200px;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: end;
       }
       
       #leftSplit.collapsed {
@@ -114,9 +116,18 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         }
       }  
             
-      #endpointName {
+      #endpointName_expanded_true {
         box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
-        overflow-y : auto;
+        overflow-y : none;
+        display: flex;
+        flex-direction: column;      
+        width: 100%;  
+        gap: 12px;  
+        padding: 0px 20px;
+      }
+      #endpointName_expanded_false {
+        
+        overflow-y : none;
         display: flex;
         flex-direction: column;      
         width: 100%;  
@@ -168,10 +179,10 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         background-size: 20px 20px; /* Adjust size to create a subtle pattern */
         background-position: 0 0, 10px 10px;
         overflow-y: scroll;
-        width: 20%;
+        width: 25%;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: end;
       }
     `;
   }
@@ -369,6 +380,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
       this.leftSplitDisplayed = !this.leftSplitDisplayed
     }  
     async filterPerformAction(e, flag) {
+      //alert('filterPerformAction')
         this.filterCurrentData={}
         //this.filterCurrentData=this.jsonParam(this.viewModelFromProcModel)
         console.log("this.filterCurrentData", this.filterCurrentData)
@@ -381,7 +393,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         }
         if (this.filterdaterange1dateEnd!==null){
           this.filterCurrentData.filterdaterange1dateEnd=this.filterdaterange1dateEnd.value
-        }
+        }        
 
         this.selectedItemLot=""
         await this.GetViewData(false)
@@ -465,7 +477,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
     }
     toggleLeftPane() {
       this.isLeftPaneExpanded = !this.isLeftPaneExpanded;
-      const leftPaneWidth = this.isLeftPaneExpanded ? '250px' : '3px';
+      const leftPaneWidth = this.isLeftPaneExpanded ? '250px' : '30px';
       this.shadowRoot.querySelector('#leftSplit').style.width = leftPaneWidth;
       // if (this.isLeftPaneExpanded){
       //   this.shadowRoot.querySelector('#leftSplit').style.display='block'
@@ -476,6 +488,7 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
     render() {      
       return html`
       ${this.genericFormDialog()}
+      
         ${this.desktop ?
           html`     
           ${this.viewModelFromProcModel.filter === undefined ? html`              
@@ -518,27 +531,37 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
             <sp-split-view show-divider=${this.showDivider} class="split-view">              
               <div style="display:flex; width: 100%; background:transparent;">
                 <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__left">
-                ${this.viewModelFromProcModel.left_panel_actions === undefined ? nothing : html`
-                  <div style="flex-basis: auto; width: auto;">
-                    ${this.getButton(this.viewModelFromProcModel.left_panel_actions, {}, true)}
-                  </div>
-                `}
-                  <div id="endpointName">      
+                  <div id="endpointName_expanded_${this.isLeftPaneExpanded}">      
+  
+																																										
+						
+				  
+											   
                     ${this.viewModelFromProcModel.filter_button === undefined ? nothing : html`
-                    <div class="search-container">
-                    <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
-                      ${this.viewModelFromProcModel.filter_button["label_" + this.lang]}
-                    </sp-button>
-                  </div>                  
+                    <div style="display:flex;">
+                      <mwc-icon-button id="expandleftpane" icon="${this.isLeftPaneExpanded ? 'chevron_left' : 'chevron_right'}" @click=${this.toggleLeftPane}></mwc-icon-button>
+
+                      <div class="search-container" >
+                        <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
+                          ${this.viewModelFromProcModel.filter_button["label_" + this.lang]}
+                        </sp-button>                    
+                      </div>    
+                      ${this.viewModelFromProcModel.left_panel === undefined ? nothing : html`
+                        <div style="flex-basis: auto; width: auto;">                        
+                          ${this.getButton(this.viewModelFromProcModel.left_panel, {}, true)}
+                        </div>
+                      `}
+                    
+                  </div>
                                       `}
-                    ${this.viewModelFromProcModel.filter === undefined ? nothing : html`
+                    ${this.viewModelFromProcModel.filter === undefined || this.isLeftPaneExpanded===false ? nothing : html`
                       ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} 
                     `}
                   </div>
                   ${this.filterElement(this.filterResponseData)}
                 </div>
 
-                <div class="resizer" id="dragMe" style="width: 3px;"></div>
+                <div class="resizer" id="dragMe" style="width: 15px;"></div>
 
                 <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__right">
                   <div id="document" style="width: 100%;">
@@ -591,8 +614,8 @@ export class ObjectByTabs extends ViewReport(ViewDownloadable(LeftPaneFilterView
         ${this.viewModelFromProcModel.tabs ? html`
           <div class="layout horizontal flex" style="position:relative; top:10px;">
             ${this.viewModelFromProcModel.tabs !== undefined && this.viewModelFromProcModel.tabs.length > 1 ? html`
-              <div class="tabs-container">
-              <mwc-icon-button id="expandleftpane" icon="${this.isLeftPaneExpanded ? 'chevron_left' : 'chevron_right'}" @click=${this.toggleLeftPane}></mwc-icon-button>
+              <div class="tabs-container">              
+																																										
                 ${this.viewModelFromProcModel.tabs.map(t => html`
                   <mwc-button
                     class="tabBtn ${this.selectedTab === t ? 'selected' : ''}"

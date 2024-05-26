@@ -136,15 +136,15 @@ export function ButtonsFunctions(base) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
       console.log("getButtondatasectionModel", sectionModel);
       console.log('getButtondata', data)
-      let gridDefinition=[]
-      let gridAllData=[]
-      if (sectionModel.langConfig!==undefined&&sectionModel.langConfig.gridHeader!==undefined){
-        gridDefinition=sectionModel.langConfig.gridHeader
-        gridAllData=this.gridItems
-      }else{
-        gridDefinition=sectionModel.columns
-        gridAllData=data
-      }
+							  
+						   
+																																											 
+															
+									 
+			   
+											  
+						   
+		  
       return html`
         <style>
           mwc-icon-button#lang {        
@@ -264,13 +264,14 @@ export function ButtonsFunctions(base) {
               html`${action.button ?
                 html`${action.button.icon ?
                   html`<mwc-icon-button id="${action.actionName}"
-                  ${action.button.class===undefined?'':html`class="${action.button.class}"`}
-                  disabled${this.btnDisabled(action, sectionModel)}"
+																																								  
+                  class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
                   icon="${action.button.icon}" 
                   title="${action.button.title['label_' + this.lang]}" 
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
+                  .data=${data}
                   @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
                   html`${action.button.img ?
                     html`<mwc-icon-button  id="${action.actionName}"
@@ -279,6 +280,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
+                  .data=${data}
                   @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
                       <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                   </mwc-icon-button>` :
@@ -287,6 +289,7 @@ export function ButtonsFunctions(base) {
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
+                  .data=${data}
                   @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
                     }`
                   }` :
@@ -625,61 +628,82 @@ export function ButtonsFunctions(base) {
       if (viewQuery === undefined) {
         viewQuery = this.viewModelFromProcModel.viewQuery
       }
-      //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
-      if (viewQuery !== undefined && viewQuery.clientMethod !== undefined) {
-        //alert('Calling '+viewQuery.clientMethod+' from GetViewData')            
-        if (this[viewQuery.clientMethod] === undefined) {
-          alert('not found any clientMethod called ' + viewQuery.clientMethod)
-          return
-        }
-        let j = this[viewQuery.clientMethod]()
-        this.setTheValues(viewQuery, j)
-        return
-      }
-      if (this.config === undefined || this.config.backendUrl === undefined) {
-        fetch('../../../demo/config.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(json => {
-            this.config = json;
-          })
-          .catch(error => {
-            console.error('Error fetching config:', error);
-          });
-      }      
-      if (this.config.backendUrl === undefined) {
-        this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
-        //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
-        console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
-        let sessionDbName = JSON.parse(sessionStorage.getItem("userSession")).dbName
-        if (sessionDbName !== undefined) {
-          this.config.dbName = sessionDbName
-        }
-        if (this.config.dbName === undefined) {
-          this.config.dbName = "labplanet"
-          this.config.isForTesting = false
-        }
-      }
       let queryDefinition = viewQuery
       if (queryDefinition === undefined) { return }
-      //console.log('GetViewData', 'queryDefinition', queryDefinition)
-      this.samplesReload = true
-      this.selectedItems = []
-      let APIParams = this.getAPICommonParams(queryDefinition)
-      let viewParams = this.jsonParam(queryDefinition)
-      let endPointUrl = this.getQueryAPIUrl(queryDefinition)
-      if (String(endPointUrl).toUpperCase().includes("ERROR")) {
-        alert(endPointUrl)
-        return
-      }
-      let params = this.config.backendUrl + endPointUrl
-        + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
-
-      //console.log('params', params)        
+      let params = {}
+//      sessionStorage.setItem("viewFilterForQuery", undefined)
+//      let urlParams=sessionStorage.getItem("viewFilterForQuery")
+//      if (urlParams==="undefined"){
+        //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
+        if (viewQuery !== undefined && viewQuery.clientMethod !== undefined) {
+          //alert('Calling '+viewQuery.clientMethod+' from GetViewData')            
+          if (this[viewQuery.clientMethod] === undefined) {
+            alert('not found any clientMethod called ' + viewQuery.clientMethod)
+            return
+          }
+          let j = this[viewQuery.clientMethod]()
+          this.setTheValues(viewQuery, j)
+          return
+        }
+											  
+									   
+			  
+	   
+        if (this.config === undefined || this.config.backendUrl === undefined) {
+          fetch('../../../demo/config.json')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(json => {
+              this.config = json;
+            })
+            .catch(error => {
+              console.error('Error fetching config:', error);
+            });
+        }      
+        if (this.config.backendUrl === undefined) {
+          this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
+          //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
+          console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
+          let sessionDbName = JSON.parse(sessionStorage.getItem("userSession")).dbName
+          if (sessionDbName !== undefined) {
+            this.config.dbName = sessionDbName
+          }
+          if (this.config.dbName === undefined) {
+            this.config.dbName = "labplanet"
+            this.config.isForTesting = false
+          }
+        }
+        //console.log('GetViewData', 'queryDefinition', queryDefinition)
+        this.samplesReload = true
+        this.selectedItems = []
+        let APIParams = this.getAPICommonParams(queryDefinition)
+        let viewParams = this.jsonParam(queryDefinition)
+        let endPointUrl = this.getQueryAPIUrl(queryDefinition)
+        if (String(endPointUrl).toUpperCase().includes("ERROR")) {
+          alert(endPointUrl)
+          return
+        }
+	   
+									 
+												   
+																	  
+							   
+							 
+															  
+													  
+															
+																
+						  
+			  
+	   
+        params = this.config.backendUrl + endPointUrl
+          + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
+//      }
+      //console.log('params', params)          
       await this.fetchApi(params, false, queryDefinition).then(j => {
         if (queryDefinition.actionName === 'ONE_PROCEDURE_DEFINITION' || queryDefinition.actionName === 'ALL_PROCEDURES_DEFINITION') {
           if (j.master_data !== undefined) {
