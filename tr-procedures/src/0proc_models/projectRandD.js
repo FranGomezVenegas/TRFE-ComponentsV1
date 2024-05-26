@@ -69,6 +69,108 @@ export const ProjectRandD=
         }
       ]
     },
+    "left_panel":{
+      "actions": [
+        { "actionName": "NEW_PROJECT",
+          "notGetViewData": true,
+          "requiresDialog": true,
+          "certificationException": true,
+          "button": {
+            "icon": "add",
+            "title": {
+              "label_en": "New project",
+              "label_es": "Nuevo proyecto"
+            },
+            "requiresGridItemSelected": false
+          },
+          "dialogInfo": {
+            "name": "genericDialog",
+            "fields": [
+              {
+                "text1": {
+                  "label_en": "Proyect Name",
+                  "label_es": "Nombre de proyecto"
+                }
+              },
+              {
+                "text2": {
+                  "label_en": "Purpose",
+                  "label_es": "Propósito"
+                }
+              },
+              {
+                "list1": {
+                  "addBlankValueOnTop": true,
+                  "addBlankValueAtBottom": true,
+                  "label_en": "Type",
+                  "label_es": "Tipo",
+                  "items": [
+                    {
+                      "keyName": "Product Development",
+                      "keyValue_en": "Product Development",
+                      "keyValue_es": "Desarrollo de producto"
+                    },
+                    {
+                      "keyName": "Method validation",
+                      "keyValue_en": "Method validation",
+                      "keyValue_es": "Validación de método"
+                    }
+                  ]
+                }
+              },
+              {
+                "list2": {
+                  "label_en": "Responsible",
+                  "label_es": "Responsable",
+                  "optional": true,
+                  "addBlankValueOnTop": true,
+                  "addBlankValueAtBottom": false,
+                  "items": [
+                    {
+                      "keyName": "Admin",
+                      "keyValue_en": "Admin",
+                      "keyValue_es": "Admin"
+                    },
+                    {
+                      "keyName": "R&D",
+                      "keyValue_en": "R&D",
+                      "keyValue_es": "R&D"
+                    },
+                    {
+                      "keyName": "Paco",
+                      "keyValue_en": "Paco",
+                      "keyValue_es": "Paco"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "endPointParams": [
+            {
+              "argumentName": "projectName",
+              "element": "text1",
+              "defaultValue": ""
+            },
+            {
+              "argumentName": "type",
+              "element": "list1",
+              "defaultValue": ""
+            },
+            {
+              "argumentName": "purpose",
+              "element": "text2",
+              "defaultValue": ""
+            },
+            {
+              "argumentName": "responsible",
+              "element": "list2",
+              "defaultValue": " "
+            }
+          ]
+        }
+      ]
+    },
     "filter_button": {
       "label_en": "Search",
       "label_es": "Buscar"
@@ -92,6 +194,1152 @@ export const ProjectRandD=
     },
     "actions": [],
     "tabs": [
+      {
+        "tabLabel_en": "Daily entries",
+        "tabLabel_es": "Entradas diario",
+        "view": "summary",
+        "view_definition": [
+          {
+            "actions": []
+          },          
+          {
+            "type": "cardMultipleElementsView",            
+            "endPointResponseObject": "rd_daily_entry",
+            "add_border": true,
+            "num_columns":2,
+            "cardElements":[
+              {
+                "type": "reportTitle",
+                "endPointResponseObject": "ROOT",
+                "title":{
+                  "text_en": "{fld:name}",
+                  "text_es": "{fld:name}"
+                }    
+              },              
+              {
+                "type": "buttonsOnly",
+                "endPointResponseObject": "ROOT",
+                "num_columns":3,
+                "hideNoDataMessage": true,
+                "actions":[
+                  { "actionName": "DAILY_ENTRY_ADDPICTURE",
+                  "requiresDialog": true,	  
+                  "endPointUrl": "Samples",
+                      "button": {
+                        "icon": "add_a_photo",
+                        "title": {
+                          "label_en": "Take Plate Picture", "label_es": "Tomar foto de Placa"
+                        },
+                        "requiresGridItemSelected": false
+                      },
+                      "dialogInfo": { 
+                    "name": "takePictureDialog",
+                        "fields": [                                      
+                        ]  		  
+                      },
+                      "endPointParams": [
+                        { "argumentName": "projectName", "selObjectPropertyName": "project" },
+                        { "argumentName": "dailyEntryName", "selObjectPropertyName": "name"  }
+                      ]
+                  },
+                  {	"actionName": "DAILY_ENTRY_ADDAWSATTACHMENT",
+                  "requiresDialog": true,
+                  "button": {
+                    "icon": "add_link",
+                    "title": {
+                        "label_en": "Add Attachment", "label_es": "Añadir Adjunto"
+                      },
+                    "requiresGridItemSelected": false
+                  },
+                  "dialogInfo": {          
+                    "name": "uploadFileDialog",
+                    "fields": [
+                    ]
+                  },
+                  "endPointParams": [
+                    { "argumentName": "projectName", "selObjectPropertyName": "project" },
+                    { "argumentName": "dailyEntryName", "selObjectPropertyName": "name"  }                    
+                  ]
+                },
+                {	"actionName": "DAILY_ENTRY_ADDURLATTACHMENT",
+                "requiresDialog": true,
+                "button": {
+                  "icon": "link",
+                  "title": {
+                      "label_en": "Add Attachment", "label_es": "Añadir Adjunto"
+                    },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {          
+                  "name": "genericDialog",
+                  "fields": [
+                    {"text1": { "label_en": "Doc Url", "label_es": "Vínculo" }},
+                    {"text2": { "label_en": "Title", "label_es": "Título", "optional": true}}
+                  ]
+                },
+                "endPointParams": [
+                  { "argumentName": "instrumentName", "selObjectPropertyName": "name" },
+                  { "argumentName": "fileUrl", "element": "text1", "defaultValue": "" },
+                  { "argumentName": "briefSummary", "element": "text2", "defaultValue": "" }
+                  
+                ]
+                },
+                {	"actionName": "DAILY_ENTRY_ADDNOTE",
+                "requiresDialog": true,
+                "button": {
+                  "icon": "add_notes",
+                  "title": {
+                      "label_en": "Add note", "label_es": "Añadir nota"
+                    },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {          
+                  "name": "genericDialog",
+                  "fields": [
+                    {"text1": { "label_en": "Title", "label_es": "Título", "optional": true}},
+                    {"textarea1": { "label_en": "Doc Url", "label_es": "Vínculo" }}
+                    
+                  ]
+                },
+                "endPointParams": [
+                  { "argumentName": "projectName", "selObjectPropertyName": "project" },
+                  { "argumentName": "dailyEntryName", "selObjectPropertyName": "name" },
+                  { "argumentName": "note", "element": "textarea1", "defaultValue": "" },
+                  { "argumentName": "title", "element": "text1", "defaultValue": "" }
+                  
+                ]
+                }                                                                                                
+                ]
+                                  
+              },
+              {
+                "type": "chart",
+                "display_chart": true,
+                "chartModel": "methodValidation",
+                "chart_type": "line",
+                "chart_name": "results",
+                "zzzendPointResponseObject": "chart_results",
+                "elementName": "cdatatable",
+                "chartSourceData": "chart_results",
+                "xAxisSourceData": "theoretical_value",
+                "sourceData": "value",
+                "grouper_field_name": "chart_results",
+                "grouper_exclude_items":[],
+                "chart_title":{ "label_en": "", "label_es":""},
+                "label_item":{"label_en":"Statussss", "label_es":"Estado"},
+                "label_value":{"label_en":"#", "label_es":"#"} ,  
+    
+                "counter_field_name":"chart_results",
+                "xxcounter_field_name":["result", "final_result"],
+                "counterLimits":{
+                  "xmin_allowed": 3,
+                  "xmin_allowed_included":3,
+                  "xmax_allowed":100,
+                  "xmax_allowed_included":100,
+                  "xvalue":0
+                },
+    
+                "chart_style":"height:500px; width: 100%;",
+                "height": "300px",
+                "width": "50em",
+                "chartStyle": {
+                  "backgroundColor": "transparent",
+                  "is3D": true,
+                  "colors": ["#dfa942", "#d33737", "#bf120f"]              
+                }                
+              },
+              {
+                "type": "parentReadOnlyTable",
+                "endPointResponseObject": "results",
+                "columns": [
+                  { "name": "name", "label_en": "Sample", "label_es": "Muestra"},
+                  { "name": "injection", "label_en": "Injection", "label_es": "Inyectión"},
+                  { "name": "result", "label_en": "Result", "label_es": "Resultado"},
+                  { "name": "final_result", "label_en": "Average", "label_es": "Promedio"}
+                ],
+                "actions": [
+                  {
+                    "actionName": "ENTERRESULT",
+                    "requiresDialog": true,
+                    "endPointUrl": "Samples",
+                    "alertMsg": {
+                      "empty": {
+                        "label_en": "No pending results to enter result",
+                        "label_es": "No hay resultados pendientes de resultados"
+                      }
+                    },
+                    "button": {
+                      "icon": "document_scanner",
+                      "title": {
+                        "label_en": "Enter Result",
+                        "label_es": "Ingrese el Resultado"
+                      },
+                      "requiresGridItemSelected": true
+                    },
+                    "dialogInfo": {
+                      "name": "resultDialog",
+                      "subQueryName": "getResult",
+                      "viewQuery": {
+                        "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+                        "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+                        "endPointParams": [
+                          {
+                            "argumentName": "sampleId",
+                            "selObjectPropertyName": "sample_id"
+                          }
+                        ],
+                        "subViewFilter": {
+                          "ER-FQ": [
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsName",
+                              "value": "testing_group|status not in-"
+                            },
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsValue",
+                              "value": "FQ*String|REVIEWED-CANCELED*String"
+                            }
+                          ],
+                          "ER-MB": [
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsName",
+                              "value": "testing_group|status not in-"
+                            },
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsValue",
+                              "value": "MB*String|REVIEWED-CANCELED*String"
+                            }
+                          ]
+                        }
+                      },
+                      "automatic": true,
+                      "resultHeader": {
+                        "spec_eval": {
+                          "label_en": "Spec Eval",
+                          "label_es": "Eval Espec"
+                        },
+                        "result_id": {
+                          "label_en": "Result Id",
+                          "label_es": "Id Resultado"
+                        },
+                        "analysis": {
+                          "label_en": "Analysis",
+                          "label_es": "Análísis"
+                        },
+                        "param_name": {
+                          "label_en": "Parameter",
+                          "label_es": "Parámetro"
+                        },
+                        "raw_value": {
+                          "label_en": "Value",
+                          "label_es": "Valor"
+                        },
+                        "uom": {
+                          "label_en": "UOM",
+                          "label_es": "UOM"
+                        }
+                      },
+                      "resultHeaderObjectLabelTopLeft": {
+                        "label_en": "Sample: ",
+                        "label_es": "Muestra: "
+                      },
+                      "action": [
+                        {
+                          "actionName": "ENTERRESULT",
+                          "notGetViewData": true,
+                          "requiresDialog": false,
+                          "zzzendPointUrl": "Samples",
+                          "clientMethod": "enterResult",
+                          "endPointParams": [
+                            {
+                              "argumentName": "rawValueResult",
+                              "targetValue": true
+                            },
+                            {
+                              "argumentName": "resultId",
+                              "targetValue": true
+                            }
+                          ]
+                        },
+                        {
+                          "actionName": "RESULT_CHANGE_UOM",
+                          "clientMethod": "changeUOM",
+                          "endPointParams": [
+                            {
+                              "argumentName": "newResultUom",
+                              "targetValue": true
+                            },
+                            {
+                              "argumentName": "resultId",
+                              "targetValue": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "sampleAnalysisResultFieldToRetrieve",
+                        "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
+                      },
+                      {
+                        "argumentName": "sortFieldsName",
+                        "value": "test_id|result_id"
+                      },
+                      {
+                        "argumentName": "sampleAnalysisWhereFieldsName",
+                        "value": "testing_group|status not in"
+                      },
+                      {
+                        "argumentName": "sampleId",
+                        "selObjectPropertyName": "sample_id"
+                      }
+                    ],
+                    "subViewFilter": {
+                      "ER-FQ": [
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsValue",
+                          "value": "FQ|REVIEWED*String"
+                        }
+                      ],
+                      "ER-MB": [
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsValue",
+                          "value": "MB|REVIEWED*String"
+                        }
+                      ]
+                    }
+                  },                    
+                  {
+                    "actionName": "ANALYSIS_NEW",
+                    "notGetViewData": true,
+                    "requiresDialog": true,
+                    "certificationException": true,
+                    "button": {
+                      "icon": "person_add",
+                      "title": {
+                        "label_en": "Add Analysis",
+                        "label_es": "Añadir análisis"
+                      },
+                      "requiresGridItemSelected": false
+                    },
+                    "dialogInfo": {
+                      "name": "genericDialog",
+                      "fields": [
+                        {
+                          "text1": {
+                            "label_en": "Analysis Code",
+                            "label_es": "Código de análisis"
+                          }
+                        },
+                        {
+                          "text2": {
+                            "label_en": "Analysis version",
+                            "label_es": "Versión del análisis"
+                          }
+                        }
+                      ]
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "code",
+                        "element": "text1",
+                        "defaultValue": ""
+                      },
+                      {
+                        "argumentName": "config_version",
+                        "element": "text2",
+                        "defaultValue": ""
+                      },
+                      {
+                        "argumentName": "fieldName",
+                        "value": "active"
+                      },
+                      {
+                        "argumentName": "fieldValue",
+                        "value": "true*Boolean"
+                      }
+                    ]
+                  },
+                  {
+                    "actionName": "ANALYSIS_REACTIVATE",
+                    "notGetViewData": true,
+                    "requiresDialog": true,
+                    "certificationException": true,
+                    "button": {
+                      "icon": "toggle_on",
+                      "title": {
+                        "label_en": "Reactivate analysis",
+                        "label_es": "Reactivar análisis"
+                      },
+                      "requiresGridItemSelected": false
+                    },
+                    "dialogInfo": {
+                      "name": "genericDialog",
+                      "fields": [
+                        {
+                          "list1": {
+                            "label_en": "Analysis Code",
+                            "label_es": "Código de análisis",
+                            "addBlankValueOnTop": true,
+                            "addBlankValueAtBottom": false,
+                            "valuesFromSelectedItem": {
+                              "filterInFirstLevel": true,
+                              "elementName": "list1",
+                              "internalVariableSingleObjName": "selectedItem",
+                              "internalVariableSingleObjProperty": "analysis",
+                              "propertyNameContainerLevelPropertyKeyName": "active",
+                              "propertyNameContainerLevelfixValue": "false",
+                              "propertyKeyName": "code",
+                              "propertyKeyValueEn": [
+                                "code"
+                              ],
+                              "propertyKeyValueEs": [
+                                "code"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "text2": {
+                            "label_en": "Analysis version",
+                            "label_es": "Versión del análisis"
+                          }
+                        }
+                      ]
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "code",
+                        "element": "list1"
+                      },
+                      {
+                        "argumentName": "configVersion",
+                        "element": "text2"
+                      }
+                    ]
+                  },
+                  {
+                    "actionName": "ANALYSIS_DEACTIVATE",
+                    "notGetViewData": true,
+                    "requiresDialog": true,
+                    "certificationException": true,
+                    "button": {
+                      "icon": "toggle_off",
+                      "title": {
+                        "label_en": "Deactivate analysis",
+                        "label_es": "Desactivar análisis"
+                      },
+                      "requiresGridItemSelected": false
+                    },
+                    "dialogInfo": {
+                      "name": "genericDialog",
+                      "fields": [
+                        {
+                          "list1": {
+                            "label_en": "Analysis Code",
+                            "label_es": "Código de análisis",
+                            "addBlankValueOnTop": true,
+                            "addBlankValueAtBottom": false,
+                            "valuesFromSelectedItem": {
+                              "internalVariableSingleObjName": "selectedItem",
+                              "internalVariableSingleObjProperty": "analysis",
+                              "propertyKeyName": "code",
+                              "propertyKeyValueEn": [
+                                "code"
+                              ],
+                              "propertyKeyValueEs": [
+                                "code"
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "text2": {
+                            "label_en": "Analysis version",
+                            "label_es": "Versión del análisis"
+                          }
+                        }
+                      ]
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "code",
+                        "element": "list1"
+                      },
+                      {
+                        "argumentName": "configVersion",
+                        "element": "text2"
+                      }
+                    ]
+                  }
+                ],
+                "row_buttons": [
+                  {
+                    "actionName": "ENTERRESULT",
+                    "requiresDialog": true,
+                    "endPointUrl": "Samples",
+                    "alertMsg": {
+                      "empty": {
+                        "label_en": "No pending results to enter result",
+                        "label_es": "No hay resultados pendientes de resultados"
+                      }
+                    },
+                    "button": {
+                      "icon": "document_scanner",
+                      "title": {
+                        "label_en": "Enter Result",
+                        "label_es": "Ingrese el Resultado"
+                      },
+                      "requiresGridItemSelected": false
+                    },
+                    "dialogInfo": {
+                      "name": "resultDialog",
+                      "subQueryName": "getResult",
+                      "viewQuery": {
+                        "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+                        "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+                        "endPointParams": [
+                          {
+                            "argumentName": "sampleId",
+                            "selObjectPropertyName": "sample_id"
+                          }
+                        ],
+                        "subViewFilter": {
+                          "ER-FQ": [
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsName",
+                              "value": "testing_group|status not in-"
+                            },
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsValue",
+                              "value": "FQ*String|REVIEWED-CANCELED*String"
+                            }
+                          ],
+                          "ER-MB": [
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsName",
+                              "value": "testing_group|status not in-"
+                            },
+                            {
+                              "argumentName": "sampleAnalysisWhereFieldsValue",
+                              "value": "MB*String|REVIEWED-CANCELED*String"
+                            }
+                          ]
+                        }
+                      },
+                      "automatic": true,
+                      "resultHeader": {
+                        "spec_eval": {
+                          "label_en": "Spec Eval",
+                          "label_es": "Eval Espec"
+                        },
+                        "result_id": {
+                          "label_en": "Result Id",
+                          "label_es": "Id Resultado"
+                        },
+                        "analysis": {
+                          "label_en": "Analysis",
+                          "label_es": "Análísis"
+                        },
+                        "param_name": {
+                          "label_en": "Parameter",
+                          "label_es": "Parámetro"
+                        },
+                        "raw_value": {
+                          "label_en": "Value",
+                          "label_es": "Valor"
+                        },
+                        "uom": {
+                          "label_en": "UOM",
+                          "label_es": "UOM"
+                        }
+                      },
+                      "resultHeaderObjectLabelTopLeft": {
+                        "label_en": "Sample: ",
+                        "label_es": "Muestra: "
+                      },
+                      "action": [
+                        {
+                          "actionName": "ENTERRESULT",
+                          "notGetViewData": true,
+                          "requiresDialog": false,
+                          "zzzendPointUrl": "Samples",
+                          "clientMethod": "enterResult",
+                          "endPointParams": [
+                            {
+                              "argumentName": "rawValueResult",
+                              "targetValue": true
+                            },
+                            {
+                              "argumentName": "resultId",
+                              "targetValue": true
+                            }
+                          ]
+                        },
+                        {
+                          "actionName": "RESULT_CHANGE_UOM",
+                          "clientMethod": "changeUOM",
+                          "endPointParams": [
+                            {
+                              "argumentName": "newResultUom",
+                              "targetValue": true
+                            },
+                            {
+                              "argumentName": "resultId",
+                              "targetValue": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "sampleAnalysisResultFieldToRetrieve",
+                        "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
+                      },
+                      {
+                        "argumentName": "sortFieldsName",
+                        "value": "test_id|result_id"
+                      },
+                      {
+                        "argumentName": "sampleAnalysisWhereFieldsName",
+                        "value": "testing_group|status not in"
+                      },
+                      {
+                        "argumentName": "sampleId",
+                        "selObjectPropertyName": "sample_id"
+                      }
+                    ],
+                    "subViewFilter": {
+                      "ER-FQ": [
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsValue",
+                          "value": "FQ|REVIEWED*String"
+                        }
+                      ],
+                      "ER-MB": [
+                        {
+                          "argumentName": "sampleAnalysisWhereFieldsValue",
+                          "value": "MB|REVIEWED*String"
+                        }
+                      ]
+                    }
+                  },                        
+                  {
+                    "actionName": "ANALYSIS_ADD_METHOD",
+                    "notGetViewData": true,
+                    "requiresDialog": true,
+                    "certificationException": true,
+                    "button": {
+                      "icon": "playlist_add",
+                      "title": {
+                        "label_en": "Add Analysis Method",
+                        "label_es": "Añadir método analítico"
+                      },
+                      "requiresGridItemSelected": false
+                    },
+                    "dialogInfo": {
+                      "name": "genericDialog",
+                      "fields": [
+                        {
+                          "list1": {
+                            "label_en": "Method Code",
+                            "label_es": "Código de método",
+                            "addBlankValueOnTop": true,
+                            "addBlankValueAtBottom": false,
+                            "valuesFromMasterData": {
+                              "propertyNameContainer": "methods",
+                              "filterInFirstLevel": false,
+                              "propertyNameContainerLevelPropertyKeyName": "code",
+                              "propertyKeyName": "code",
+                              "propertyKeyValueEn": "code",
+                              "propertyKeyValueEs": "code"
+                            }
+                          }
+                        },
+                        {
+                          "text2": {
+                            "label_en": "Method version",
+                            "label_es": "Versión del método",
+                            "optional": false
+                          }
+                        },
+                        {
+                          "text3": {
+                            "label_en": "Expiry Interval Info",
+                            "label_es": "Información del intervalo de caducidad",
+                            "optional": true
+                          }
+                        }
+                      ]
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "methodName",
+                        "element": "list1"
+                      },
+                      {
+                        "argumentName": "methodVersion",
+                        "element": "text2",
+                        "defaultValue": ""
+                      },
+                      {
+                        "argumentName": "code",
+                        "selObjectPropertyName": "code"
+                      },
+                      {
+                        "argumentName": "configVersion",
+                        "selObjectPropertyName": "config_version"
+                      },
+                      {
+                        "argumentName": "expiryIntervalInfo",
+                        "element": "text3",
+                        "defaultValue": ""
+                      }
+                    ]
+                  },
+                  {
+                    "actionName": "ANALYSIS_APPROVAL_FOR_USE",
+                    "notGetViewData": true,
+                    "requiresDialog": false,
+                    "certificationException": true,
+                    "requiresGridItemSelected": false,
+                    "button": {
+                      "icon": "check_box",
+                      "title": {
+                        "label_en": "Approve analysis for use",
+                        "label_es": "Aprobar análisis para su uso"
+                      }
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "code",
+                        "selObjectPropertyName": "code"
+                      },
+                      {
+                        "argumentName": "configVersion",
+                        "selObjectPropertyName": "config_version"
+                      }
+                    ]
+                  }
+                ],
+                "children": "analysis_method",
+                "children_definition": {
+                  "title": {
+                    "label_en": "Analysis Method",
+                    "label_es": "Método analítico"
+                  },
+                  "columns": [
+                    {
+                      "name": "method_name",
+                      "label_en": "Method Code",
+                      "label_es": "Código método"
+                    },
+                    {
+                      "name": "testing_group",
+                      "label_en": "Testing Group",
+                      "label_es": "Grupo Analítico"
+                    }
+                  ],
+                  "row_buttons": [
+                    {
+                      "actionName": "ANALYSIS_ADD_PARAM",
+                      "notGetViewData": true,
+                      "requiresDialog": true,
+                      "certificationException": true,
+                      "button": {
+                        "icon": "person_add",
+                        "title": {
+                          "label_en": "Add Analysis Params",
+                          "label_es": "Añadir parámetros de análisis"
+                        },
+                        "requiresGridItemSelected": false
+                      },
+                      "dialogInfo": {
+                        "name": "genericDialog",
+                        "fields": [
+                          {
+                            "text1": {
+                              "label_en": "Param Name",
+                              "label_es": "Nombre del parámetro",
+                              "optional": false
+                            }
+                          },
+                          {
+                            "text2": {
+                              "label_en": "Number of replicas ",
+                              "label_es": "Número de réplicas",
+                              "optional": false
+                            }
+                          },
+                          {
+                            "text3": {
+                              "label_en": "UOM Conversion Mode",
+                              "label_es": "Modo de conversión de UOM",
+                              "optional": true
+                            }
+                          },
+                          {
+                            "text4": {
+                              "label_en": "Linked Calc",
+                              "label_es": "Cálculo enlanzado",
+                              "optional": true
+                            }
+                          },
+                          {
+                            "text5": {
+                              "label_en": "List Entry",
+                              "label_es": "Lista de entradas",
+                              "optional": true
+                            }
+                          },
+                          {
+                            "text6": {
+                              "label_en": "Param Type",
+                              "label_es": "Tipo parámetro",
+                              "optional": false
+                            }
+                          },
+                          {
+                            "text7": {
+                              "label_en": "UOM",
+                              "label_es": "UOM",
+                              "optional": false
+                            }
+                          },
+                          {
+                            "text8": {
+                              "label_en": "Analysis Version",
+                              "label_es": "Versión análisis",
+                              "optional": false
+                            }
+                          }
+                        ]
+                      },
+                      "endPointParams": [
+                        {
+                          "argumentName": "code",
+                          "selObjectPropertyName": "analysis"
+                        },
+                        {
+                          "argumentName": "configVersion",
+                          "element": "text8"
+                        },
+                        {
+                          "argumentName": "methodName",
+                          "selObjectPropertyName": "method_name"
+                        },
+                        {
+                          "argumentName": "paramName",
+                          "element": "text1",
+                          "defaultValue": " "
+                        },
+                        {
+                          "argumentName": "paramType",
+                          "element": "text6",
+                          "defaultValue": " "
+                        },
+                        {
+                          "argumentName": "numReplicas",
+                          "element": "text2",
+                          "defaultValue": "0"
+                        },
+                        {
+                          "argumentName": "uom",
+                          "element": "text7",
+                          "defaultValue": " "
+                        },
+                        {
+                          "argumentName": "uomConversionMode",
+                          "element": "text3",
+                          "defaultValue": " "
+                        },
+                        {
+                          "argumentName": "calcLinked",
+                          "element": "text4",
+                          "defaultValue": " "
+                        },
+                        {
+                          "argumentName": "listEntry",
+                          "element": "text5",
+                          "defaultValue": " "
+                        }
+                      ]
+                    },
+                    {
+                      "actionName": "ANALYSIS_REMOVE_METHOD",
+                      "notGetViewData": true,
+                      "requiresDialog": true,
+                      "certificationException": true,
+                      "button": {
+                        "icon": "playlist_remove",
+                        "title": {
+                          "label_en": "Remove Analysis Method",
+                          "label_es": "Borrar método analítico"
+                        },
+                        "requiresGridItemSelected": false
+                      },
+                      "dialogInfo": {
+                        "name": "genericDialog",
+                        "fields": [
+                          {
+                            "zzzlist1": {
+                              "label_en": "Analysis Code",
+                              "label_es": "Código de análisis",
+                              "addBlankValueOnTop": true,
+                              "addBlankValueAtBottom": false,
+                              "valuesFromSelectedItem": {
+                                "internalVariableSingleObjName": "selectedItem",
+                                "internalVariableSingleObjProperty": "analysis_method",
+                                "filterInFirstLevel": true,
+                                "propertyKeyName": "method_name",
+                                "propertyKeyValueEn": [
+                                  "method_name"
+                                ],
+                                "propertyKeyValueEs": [
+                                  "method_name"
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "text2": {
+                              "label_en": "Method version",
+                              "label_es": "Versión del método"
+                            }
+                          }
+                        ]
+                      },
+                      "endPointParams": [
+                        {
+                          "argumentName": "methodName",
+                          "selObjectPropertyName": "method_name"
+                        },
+                        {
+                          "argumentName": "code",
+                          "selObjectPropertyName": "analysis"
+                        },
+                        {
+                          "argumentName": "configVersion",
+                          "element": "text2"
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [],
+                  "children": "analysis_method_params",
+                  "children_definition": {
+                    "title": {
+                      "label_en": "Analysis Params",
+                      "label_es": "Parámetros analíticos"
+                    },
+                    "columns": [
+                      {
+                        "name": "param_name",
+                        "label_en": "Param Name",
+                        "label_es": "Nombre parámetro"
+                      },
+                      {
+                        "name": "param_type",
+                        "label_en": "Param type",
+                        "label_es": "Tipo parámetro"
+                      },
+                      {
+                        "name": "mandatory",
+                        "label_en": "Mandatory",
+                        "label_es": "Obligatorio"
+                      },
+                      {
+                        "name": "list_entry",
+                        "label_en": "List entry",
+                        "label_es": "Lista de entrada"
+                      },
+                      {
+                        "name": "calc_linked",
+                        "label_en": "Calc linked",
+                        "label_es": "Calculos enlazados"
+                      },
+                      {
+                        "name": "uom",
+                        "label_en": "UOM",
+                        "label_es": "UOM"
+                      },
+                      {
+                        "name": "uom_conversion_mode",
+                        "label_en": "UOM conversion mode",
+                        "label_es": "Modo conversión UOM"
+                      }
+                    ],
+                    "actions": []
+                  }
+                }
+              }
+            ]
+
+          }
+        ]
+      },      
+      {
+        "tabLabel_en": "Project info",
+        "tabLabel_es": "Información Proyecto",
+        "view": "summary",
+        "view_definition": [
+          {
+            "actions": []
+          },
+          {
+            "type": "reportTitle",
+            "title": {
+              "label_en": "Summary",
+              "label_es": "Resumen"
+            },
+            "elements": [
+              {
+                "type": "cardSomeElementsSingleObject",
+                "endPointPropertyArray": [
+                  "ROOT"
+                ],
+                "num_columns": 1,
+                "add_border":true,
+                "fieldsToDisplay": [
+                  {
+                    "name": "name",
+                    "label_en": "Name",
+                    "label_es": "Nombre"
+                  },
+                  {
+                    "name": "purpose",
+                    "label_en": "Purpose",
+                    "label_es": "Propósito"
+                  },
+                  {
+                    "name": "created_on",
+                    "label_en": "Created on",
+                    "label_es": "Fecha creación"
+                  },
+                  {
+                    "name": "type",
+                    "label_en": "Type",
+                    "label_es": "Tipo"
+                  },
+                  {
+                    "name": "responsible",
+                    "label_en": "Responsible",
+                    "label_es": "Responsable"
+                  },
+                  {
+                    "name": "is_locked",
+                    "label_en": "Locked?",
+                    "label_es": "¿Bloqueado?",
+                    "is_icon": true
+                  },
+                ],
+                "actions": [
+                  {
+                    "actionName": "NEW_PROJECT",
+                    "xnotGetViewData": true,
+                    "requiresDialog": true,
+                    "certificationException": true,
+                    "button": {
+                      "icon": "add",
+                      "title": {
+                        "label_en": "New project",
+                        "label_es": "Nuevo proyecto"
+                      },
+                      "requiresGridItemSelected": false
+                    },
+                    "dialogInfo": {
+                      "name": "genericDialog",
+                      "fields": [
+                        {
+                          "text1": {
+                            "label_en": "Proyect Name",
+                            "label_es": "Nombre de proyecto"
+                          }
+                        },
+                        {
+                          "text2": {
+                            "label_en": "Purpose",
+                            "label_es": "Propósito"
+                          }
+                        },
+                        {
+                          "list1": {
+                            "addBlankValueOnTop": true,
+                            "addBlankValueAtBottom": true,
+                            "label_en": "Type",
+                            "label_es": "Tipo",
+                            "items": [
+                              {
+                                "keyName": "Product Development",
+                                "keyValue_en": "Product Development",
+                                "keyValue_es": "Desarrollo de producto"
+                              },
+                              {
+                                "keyName": "Method validation",
+                                "keyValue_en": "Method validation",
+                                "keyValue_es": "Validación de método"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "list2": {
+                            "label_en": "Responsible",
+                            "label_es": "Responsable",
+                            "optional": true,
+                            "addBlankValueOnTop": true,
+                            "addBlankValueAtBottom": false,
+                            "items": [
+                              {
+                                "keyName": "Admin",
+                                "keyValue_en": "Admin",
+                                "keyValue_es": "Admin"
+                              },
+                              {
+                                "keyName": "R&D",
+                                "keyValue_en": "R&D",
+                                "keyValue_es": "R&D"
+                              },
+                              {
+                                "keyName": "Paco",
+                                "keyValue_en": "Paco",
+                                "keyValue_es": "Paco"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    "endPointParams": [
+                      {
+                        "argumentName": "projectName",
+                        "element": "text1",
+                        "defaultValue": ""
+                      },
+                      {
+                        "argumentName": "type",
+                        "element": "list1",
+                        "defaultValue": ""
+                      },
+                      {
+                        "argumentName": "purpose",
+                        "element": "text2",
+                        "defaultValue": ""
+                      },
+                      {
+                        "argumentName": "responsible",
+                        "element": "list2",
+                        "defaultValue": " "
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },      
       {
         "tabLabel_en": "Formulation",
         "tabLabel_es": "Formulación",
@@ -508,6 +1756,7 @@ export const ProjectRandD=
           }
         ]
       },
+
         {
           "tabLabel_en": "Method validation",
           "tabLabel_es": "Validación de métodos",
@@ -1412,7 +2661,7 @@ export const ProjectRandD=
   
             }
           ]
-        },
+        },        
         {
           "tabLabel_en": "Stability Studies",
           "tabLabel_es": "Estudios de Estabilidad",
