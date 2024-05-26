@@ -1446,7 +1446,7 @@ export function DataViews(base) {
               >`
         }
                 <div style="flex-basis: auto; width: auto;">
-                  ${this.getButton(elem, data, true)}
+                  ${this.getButton(elem, data, false)}
                 </div>
               </div>
             `;
