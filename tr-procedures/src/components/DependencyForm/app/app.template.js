@@ -1,4 +1,4 @@
-import { html } from "lit-element";
+import { html, nothing } from "lit";
 import "@material/mwc-select";
 import "@material/mwc-textfield";
 import "@material/mwc-switch";
@@ -43,6 +43,7 @@ export const template = (props) => {
             value=${props!==undefined&&props.rowSelectedData!==null&&props.rowSelectedData!==undefined&&props.rowSelectedData.action_name!==undefined?
               props.rowSelectedData.action_name:''}
           >
+          ${props===undefined||props.endpoints===undefined?nothing:html`
            ${ props.endpoints.map((endpoint, idx) => 
                 endpoint.keyName != props.rowSelectedData?.action_name ?
                 html `                
@@ -57,6 +58,7 @@ export const template = (props) => {
                 `
               )
             }
+          `}
           </mwc-select>
         </div>
 
@@ -223,6 +225,7 @@ export const template = (props) => {
             name="notification"
             label="notification"
           >
+          ${props===undefined||props.notifications===undefined?nothing:html`
             ${props.notifications.map((notif, idx) => {
               return html`
                 <mwc-list-item value=${notif.keyName}>
@@ -230,6 +233,7 @@ export const template = (props) => {
                 </mwc-list-item>
               `;
             })}
+          `}
           </mwc-select>
           `: null}
         </div>
