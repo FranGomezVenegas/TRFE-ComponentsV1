@@ -1,6 +1,7 @@
 import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
+import '@material/mwc-textarea';
 
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
@@ -277,7 +278,13 @@ export function TrazitGenericDialogs(base) {
                     <mwc-textfield class="layout flex" id="text10" type="text" .value=${fld.text10.default_value ? fld.text10.default_value : ''} label="${this.fieldLabel(fld.text10)}" ?disabled=${this.isFieldDisabled(fld.text10)} 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
-                `}             
+                `} 
+                ${!fld.textarea1 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center">
+                    <mwc-textarea id="textarea1" label="${this.fieldLabel(fld.textarea1)}" rows=10 cols=100></mwc-textarea>            
+                    </div>
+                `} 
                 ${!fld.number1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
@@ -911,7 +918,10 @@ export function TrazitGenericDialogs(base) {
     get text7() {    return this.shadowRoot.querySelector("mwc-textfield#text7")    }        
     get text8() {    return this.shadowRoot.querySelector("mwc-textfield#text8")    }        
     get text9() {    return this.shadowRoot.querySelector("mwc-textfield#text9")    }        
-    get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    }        
+    get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    } 
+
+    get textarea1() {    return this.shadowRoot.querySelector("mwc-textarea#textarea1")    } 
+    
     get checkbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox1")    }        
     get checkbox2() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox2")    }        
     get checkbox3() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox3")    }        
