@@ -76,7 +76,9 @@ cardController(elem, data){
                     ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}
                     ${elem2.type==="testScripts" ? this.scripts(elem2, true) : nothing}
                     ${elem2.type==="spectestScripts" ? this.specScripts(elem, true) : nothing}
-                    ${elem2.type==="buttonsOnly" ? this.buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
+                    ${elem2.type==="buttonsOnly" ? 
+                    
+                      this.buttonsOnly(elem2, elem2.endPointResponseObject=="ROOT"? data: data[elem2.endPointResponseObject]) : nothing}
                     ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
         
                   `:nothing}
