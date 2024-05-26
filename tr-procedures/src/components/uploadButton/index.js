@@ -132,14 +132,14 @@ export class UploadButton extends ApiFunctions(LitElement) {
         });
 
         if (response.status === 200) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'processed_report.txt'; // Adjust the filename as needed
-            document.body.appendChild(a); // Append to the document to make it clickable
-            a.click(); // Trigger the download
-            a.remove(); // Remove the element after the download
+            //const blob = await response.blob();
+            //const url = window.URL.createObjectURL(blob);
+            //const a = document.createElement('a');
+            //a.href = url;
+            //a.download = 'processed_report.txt'; // Adjust the filename as needed
+            //document.body.appendChild(a); // Append to the document to make it clickable
+            //a.click(); // Trigger the download
+            //a.remove(); // Remove the element after the download
         } else {
             const errorText = await response.text();
             throw new Error(errorText);

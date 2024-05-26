@@ -60,12 +60,41 @@ export class CameraView extends ApiFunctions(LitElement) {
     this.video.srcObject = stream;
   }
 
-  _capture = () => {
+  _captureYanko = () => {
     const width = this.viewport.width;
     const height = this.viewport.height;
     this.viewport.getContext('2d').drawImage(this.video, 0, 0, width, height);
     this.imageDataUrl = this.viewport.toDataURL('image/jpeg');
     // this.viewport.getContext('2d').clearRect(0, 0, width, height);
+  }
+  _capture = () => {
+    const width = this.viewport.width;
+    const height = this.viewport.height;
+    const context = this.viewport.getContext('2d');
+
+    // Draw the video frame to the canvas
+    context.drawImage(this.video, 0, 0, width, height);
+
+    // Get the image as a Data URL
+    let captureimageDataUrl = this.viewport.toDataURL('image/jpeg', 0.9); // Adjust the quality if needed
+
+    this.imageDataUrl = this.dataURLToBlob(captureimageDataUrl);
+    // Optional: Clear the canvas (uncomment if necessary)
+    // context.clearRect(0, 0, width, height);
+
+    // Log the Data URL length to check the size
+    console.log('Image Data URL length:', this.imageDataUrl.length);
+  }
+
+  dataURLToBlob = (dataURL) => {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
   }
 
   base64ToBlob(base64, mime) {
@@ -97,20 +126,20 @@ export class CameraView extends ApiFunctions(LitElement) {
       }
       return;
     }
-    const dataUrl = this.imageDataUrl;
-    const base64String = dataUrl.split(',')[1];
+    //const dataUrl = this.imageDataUrl;
+    //const base64String = dataUrl.split(',')[1];
 
-    const mimeType = 'image/jpeg';
-    const imageBlob = this.base64ToBlob(base64String, mimeType);
-    this.downloadBlob(imageBlob, "hola.jpeg")
+    //const mimeType = 'image/jpeg';
+    //const imageBlob = this.base64ToBlob(base64String, mimeType);
+    //this.downloadBlob(imageBlob, "hola.jpeg")
     
     let form = new FormData();
     form.append('title', 'Sample');
-    form.append('picture', this.imageBlob);
+    form.append('picture', this.imageDataUrl);
     let requestResult={}
     try{
         // URL parameters for the fetchApi call
-        let params = 'http://localhost:8081/TRAZiT-API/moduleProjectRnD/ProjectRnDAPIactions?actionName=FORMULA_ADD_INGREDIENT&dbName=demo_v0_9_2&procInstanceName=RandD&finalToken=eyJ1c2VyREIiOiJhZG1pbiIsImRhdGV0aW1lRm9ybWF0QXRQbGF0Zm9ybUxldmVsIjoiRElTQUJMRUQiLCJwcm9jc01vZHVsZU5hbWUiOiJpbnNwZWN0aW9uX2xvdCpJTlNQRUNUSU9OX0xPVFN8aW5zdHJ1bWVudHMqSU5TVFJVTUVOVFN8RGVtbypJTlNUUlVNRU5UU3xEaXNlYXNlU3R1ZGllcypDTElOSUNBTF9TVFVESUVTfG1iX2VtKk1PTklUT1JJTkd8c3RvY2sqU1RPQ0tTfG1vbl93YXRlcipNT05JVE9SSU5HfFJhbmREKlJhbmREIFBST0pFQ1RTIiwiZGJOYW1lIjoiZGVtb192MF85XzIiLCJ0eXAiOiJKV1QiLCJ1c2VyX3Byb2NlZHVyZV9oYXNoY29kZXMiOiJpbnNwZWN0aW9uX2xvdCoxKi03MDQyMTQ1NTZ8aW5zdHJ1bWVudHMqMSotOTQ0MTQ0NTQ3fERlbW8qMSoxNzcyNjIzMTI4fERpc2Vhc2VTdHVkaWVzKjEqMTk3NDc3MTczMXxtYl9lbSoxKjIzNDI0MjU0NXxzdG9jayoxKjEzNjEyMjU2OTF8bW9uX3dhdGVyKjEqMjA1MzgwNjg2NXxSYW5kRCoxKjEyMzg0NTgzNjUiLCJlU2lnbiI6ImZpcm1hZGVtbyIsInVzZXJEQlBhc3N3b3JkIjoidHJheml0IiwidXNlck1haWwiOiJORVd0cmF6aXQuaW5mb0BnbWFpbC5jb20iLCJ1c2VyX3Byb2NlZHVyZXMiOiJbaW5zcGVjdGlvbl9sb3QsIGluc3RydW1lbnRzLCBEZW1vLCBEaXNlYXNlU3R1ZGllcywgbWJfZW0sIHN0b2NrLCBtb25fd2F0ZXIsIFJhbmREXSIsImFwcFNlc3Npb25JZCI6IjYzODgiLCJhcHBTZXNzaW9uU3RhcnRlZERhdGUiOiJUdWUgTWF5IDIxIDE0OjM0OjE1IFVUQyAyMDI0IiwidXNlclJvbGUiOiJzdXBlcnVzZXIiLCJhbGciOiJIUzI1NiIsImludGVybmFsVXNlcklEIjoiNDU0ODkyMjMifQ.eyJpc3MiOiJMYWJQTEFORVRkZXN0cmFuZ2lzSW5UaGVOaWdodCJ9.PNpQDZobs2EcR4L1pRUXE0lLDBNIZH2CDxexKTfidjk&formulaName=formula+nueva+1&ingredient=Almid%C3%B3n+de+ma%C3%ADz&quantity=100&quantityUom=mg&&isForTesting=false';
+        //let params = 'http://localhost:8081/TRAZiT-API/moduleProjectRnD/ProjectRnDAPIactions?actionName=FORMULA_ADD_INGREDIENT&dbName=demo_v0_9_2&procInstanceName=RandD&finalToken=eyJ1c2VyREIiOiJhZG1pbiIsImRhdGV0aW1lRm9ybWF0QXRQbGF0Zm9ybUxldmVsIjoiRElTQUJMRUQiLCJwcm9jc01vZHVsZU5hbWUiOiJpbnNwZWN0aW9uX2xvdCpJTlNQRUNUSU9OX0xPVFN8aW5zdHJ1bWVudHMqSU5TVFJVTUVOVFN8RGVtbypJTlNUUlVNRU5UU3xEaXNlYXNlU3R1ZGllcypDTElOSUNBTF9TVFVESUVTfG1iX2VtKk1PTklUT1JJTkd8c3RvY2sqU1RPQ0tTfG1vbl93YXRlcipNT05JVE9SSU5HfFJhbmREKlJhbmREIFBST0pFQ1RTIiwiZGJOYW1lIjoiZGVtb192MF85XzIiLCJ0eXAiOiJKV1QiLCJ1c2VyX3Byb2NlZHVyZV9oYXNoY29kZXMiOiJpbnNwZWN0aW9uX2xvdCoxKi03MDQyMTQ1NTZ8aW5zdHJ1bWVudHMqMSotOTQ0MTQ0NTQ3fERlbW8qMSoxNzcyNjIzMTI4fERpc2Vhc2VTdHVkaWVzKjEqMTk3NDc3MTczMXxtYl9lbSoxKjIzNDI0MjU0NXxzdG9jayoxKjEzNjEyMjU2OTF8bW9uX3dhdGVyKjEqMjA1MzgwNjg2NXxSYW5kRCoxKjEyMzg0NTgzNjUiLCJlU2lnbiI6ImZpcm1hZGVtbyIsInVzZXJEQlBhc3N3b3JkIjoidHJheml0IiwidXNlck1haWwiOiJORVd0cmF6aXQuaW5mb0BnbWFpbC5jb20iLCJ1c2VyX3Byb2NlZHVyZXMiOiJbaW5zcGVjdGlvbl9sb3QsIGluc3RydW1lbnRzLCBEZW1vLCBEaXNlYXNlU3R1ZGllcywgbWJfZW0sIHN0b2NrLCBtb25fd2F0ZXIsIFJhbmREXSIsImFwcFNlc3Npb25JZCI6IjYzODgiLCJhcHBTZXNzaW9uU3RhcnRlZERhdGUiOiJUdWUgTWF5IDIxIDE0OjM0OjE1IFVUQyAyMDI0IiwidXNlclJvbGUiOiJzdXBlcnVzZXIiLCJhbGciOiJIUzI1NiIsImludGVybmFsVXNlcklEIjoiNDU0ODkyMjMifQ.eyJpc3MiOiJMYWJQTEFORVRkZXN0cmFuZ2lzSW5UaGVOaWdodCJ9.PNpQDZobs2EcR4L1pRUXE0lLDBNIZH2CDxexKTfidjk&formulaName=formula+nueva+1&ingredient=Almid%C3%B3n+de+ma%C3%ADz&quantity=100&quantityUom=mg&&isForTesting=false';
 
         let APIParams = this.getAPICommonParams(this.action)
         let endPointUrl = this.getActionAPIUrl(this.action)
@@ -118,13 +147,14 @@ export class CameraView extends ApiFunctions(LitElement) {
           alert(endPointUrl)
           return
         }
+/*
         if (this.config !== undefined && this.config.backendUrl !== undefined) {
           params = this.config.backendUrl + endPointUrl
         } else {
           let userSession = JSON.parse(sessionStorage.getItem("userSession"))
           params = userSession.backendUrl + endPointUrl
         }
-
+*/
         /*let targetValue = {
           rawValueResult: '',
           resultId: this.selectedItem.result_id,
@@ -133,9 +163,9 @@ export class CameraView extends ApiFunctions(LitElement) {
           variableName: this.selectedItem.param_name
         } */       
         let actionParams = this.jsonParam(this.action, this.selectedItem, undefined, this.selectedItem, undefined, undefined, undefined)
-        params = params + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(actionParams)
-          //+ '&' + new URLSearchParams(credDialogArgs)        
-        console.log('_upload', 'action', this.action.actionName, params)
+        // params = params + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(actionParams)
+        //   //+ '&' + new URLSearchParams(credDialogArgs)        
+        // console.log('_upload', 'action', this.action.actionName, params)
 
         Object.keys(actionParams).forEach(key => {
           form.append(key, actionParams[key]);
@@ -143,27 +173,29 @@ export class CameraView extends ApiFunctions(LitElement) {
         Object.keys(APIParams).forEach(key => {
           form.append(key, APIParams[key]);
         });
+        let params=this.config.backendUrl + endPointUrl
         //params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
-
         // Call fetchApi with the FormData
-        let response = await fetch(this.config.backendUrl + endPointUrl, { //params
+        //let response = await fetch(this.config.backendUrl + endPointUrl, { //params
+        let response = await fetch(params, {
             method: 'POST',
             body: form,
             credentials: 'same-origin'
-        });
-
+        })
+        .then(response => response.json())
+        .catch(error => console.error(error))
         if (response.status === 200) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'processed_report.txt'; // Adjust the filename as needed
-            document.body.appendChild(a); // Append to the document to make it clickable
-            a.click(); // Trigger the download
-            a.remove(); // Remove the element after the download
+            // const blob = await response.blob();
+            // const url = window.URL.createObjectURL(blob);
+            // const a = document.createElement('a');
+            // a.href = url;
+            // a.download = 'processed_report.txt'; // Adjust the filename as needed
+            // document.body.appendChild(a); // Append to the document to make it clickable
+            // a.click(); // Trigger the download
+            // a.remove(); // Remove the element after the download
         } else {
-            const errorText = await response.text();
-            throw new Error(errorText);
+            // const errorText = await response.text();
+            // throw new Error(errorText);
         }
     } catch (e) {
         requestResult = { error: 1, message: e.message };

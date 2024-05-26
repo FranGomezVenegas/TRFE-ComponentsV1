@@ -157,7 +157,8 @@ export class Dropzone extends ApiFunctions(LitElement) {
 
 
     let form = new FormData();
-    Array.prototype.forEach.call(this.files, f => form.append('files', f))
+    form.append('file', this.files[0]);
+    //Array.prototype.forEach.call(this.files, f => form.append('files', f))
 
 //    form.append('title', 'Sample');
 //    form.append('picture', this.imageBlob);
@@ -178,13 +179,27 @@ export class Dropzone extends ApiFunctions(LitElement) {
       form.append(key, APIParams[key]);
     });
     let params=this.config.backendUrl + endPointUrl
-    params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
-    return fetch(params, {
+    //params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
+    let response = await fetch(params, {
       method: 'POST', // 'GET', 'PUT', 'DELETE', etc.
-      body: form  // Coordinate the body type with 'Content-Type'
+      body: form,  // Coordinate the body type with 'Content-Type'
+      credentials: 'same-origin'
     })
     .then(response => response.json())
     .catch(error => console.error(error))
+    if (response.status === 200) {
+      //const blob = await response.blob();
+      //const url = window.URL.createObjectURL(blob);
+      //const a = document.createElement('a');
+      //a.href = url;
+      //a.download = 'processed_report.txt'; // Adjust the filename as needed
+      //document.body.appendChild(a); // Append to the document to make it clickable
+      //a.click(); // Trigger the download
+      //a.remove(); // Remove the element after the download
+    } else {
+        //const errorText = await response.text();
+        //throw new Error(errorText);
+    }    
   }
 
 }window.customElements.define('drop-zone', Dropzone);
