@@ -516,12 +516,14 @@ export class PlatformLogin extends CommonCore {
           bubbles: true,
           composed: true          
         }))
+        let isProcManagement="proc_management"===this.role
         sessionStorage.setItem("userSession", JSON.stringify({
           ...j,
           userName: this.user.value,
           userRole: this.role,
           dbName: this.config.dbName,
-          backendUrl: this.config.backendUrl
+          backendUrl: this.config.backendUrl,
+          isProcManagement: isProcManagement
         }))
       } else {
         if (document.fullscreenElement) {

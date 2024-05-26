@@ -525,12 +525,33 @@ export const ProjectRandD=
                     "dialogInfo": {
                       "name": "genericDialog",
                       "fields": [
-                        {
-                          "text1": {
-                            "label_en": "Analysis Code",
-                            "label_es": "Código de análisis"
-                          }
-                        },
+                        {"list1": {
+                          "label_en": "Category", "label_es": "Categoría", "optional": true,
+                          "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                          "valuesFromMasterData": {
+                            "propertyNameContainer": "analysis",
+                            "propertyNameContainerLevelPropertyKeyName": "code",
+                            "propertyKeyName": "code", "propertyKeyValueEn": "code", "propertyKeyValueEs": "code"
+                          },
+                          "dependencyActionFields":[
+                            {"field": "text4", "staticValue": "hola" },
+                            {"field": "text3", "fieldValue": "name" },
+                            {"field": "list2", "allRecordEntryWithList": "inv_reference", 
+                              "propertyNameInDestination": "category_and_references"}
+                          ],
+                          "dependencyFieldBehaviorForAll":
+                            {"rule": "whenEmpty", "resetValue": true, "action": "disable", 
+                              "exceptionFields":[ "list2"]}
+                          ,
+                          "dependencyFieldBehavior":[
+                            {"field": "text4", "rule": "whenEmpty", "resetValue": true}, 
+                            {"field": "text5", "rule": "whenEmpty"}, 
+                            {"field": "list2", "rule": "whenEmpty", "resetValue": true},
+                            {"field": "number2", "rule": "whenEmpty", "resetValue": true, 
+                              "action": "hide"}
+                          ]
+                  
+                        }},
                         {
                           "text2": {
                             "label_en": "Analysis version",

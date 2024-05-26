@@ -96,12 +96,6 @@ export function ListsFunctions(base) {
                     const fieldElement = this[curFld.field];
                     switch(curFld.rule){
                         case "whenEmpty":
-                            // let currentFldValue=""
-                            // if (isList===true){
-                            //     currentFldValue=itemKeyName
-                            // }else{
-                            //     currentFldValue=fieldElement.value
-                            // }
                             if (itemKeyName.length==0){
                                 
                                 if (curFld.resetValue!==undefined&&curFld.resetValue===true){
@@ -130,11 +124,34 @@ export function ListsFunctions(base) {
                                         this[curFld.field].disabled=false
                                         break;
                                 }
-                                // this[curFld.field].disabled=false
-                                // if (curFld.hide !== undefined) {
-                                //     fieldElement.style.display = '';  // Hide or show based on the rule
-                                // }
                             }           
+                            break;
+                        case "whenThisFieldValueIs":
+                                if (curFld.checkValue !== undefined && this[curFld.field].value === curFld.checkValue) {
+                                    switch(curFld.action){
+                                        case "disable":
+                                            this[curFld.field].disabled = true;
+                                            break;
+                                        case "hide":
+                                            fieldElement.style.display = 'none';
+                                            break;
+                                        default:
+                                            this[curFld.field].disabled = true;
+                                            break;
+                                    }
+                                } else {
+                                    switch(curFld.action){
+                                        case "disable":
+                                            this[curFld.field].disabled = false;
+                                            break;
+                                        case "hide":
+                                            fieldElement.style.display = '';
+                                            break;
+                                        default:
+                                            this[curFld.field].disabled = false;
+                                            break;
+                                    }
+                                }
                             break;
                         default:
                     }
@@ -319,8 +336,13 @@ export function ListsFunctions(base) {
             `
         }   
         getProcMasterData(){
+            let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+            this.isProcManagement=userSession.isProcManagement
             if (this.isProcManagement===undefined||this.isProcManagement!==true){
-                let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+                //let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+
+                
+
                 //console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
                 let findProc =[]
                 if (this.area!==undefined){

@@ -510,6 +510,7 @@ export function TrazitTestScriptNewStepDialog(base) {
     // listEntries(fld){
 
     scriptStepArguments(fld, data){
+      s
       this.isProcManagement=true
       //alert("Remember to remove line 510, TrazitTestScriptNewStepDialog")
       this.moduleName=sessionStorage.getItem('selectedProcedureModuleName')
@@ -543,6 +544,10 @@ export function TrazitTestScriptNewStepDialog(base) {
     }
 
     listTestEndpointsList() {
+      let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+      this.isProcManagement=userSession.isProcManagement
+      if (this.isProcManagement===undefined||this.isProcManagement===false){return}
+
       let fld = {};
       fld.addBlankValueOnTop = true;
       fld.valuesFromMasterData = {
@@ -606,6 +611,10 @@ export function TrazitTestScriptNewStepDialog(base) {
       // `
     }
     listTestNotificationsList() {
+      let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+      this.isProcManagement=userSession.isProcManagement
+      if (this.isProcManagement===undefined||this.isProcManagement===false){return}
+
       let fld = {};
       fld.addBlankValueOnTop = true;
       fld.valuesFromMasterData = {
@@ -960,17 +969,15 @@ export function TrazitTestScriptNewStepDialog(base) {
       ) {
         return false;
       }
-
+      let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+      this.isProcManagement=userSession.isProcManagement
+      if (this.isProcManagement===undefined||this.isProcManagement===false){return}
       console.log("masterData", data);
       console.log("actionBeingPerformedModel", this.actionBeingPerformedModel);
       let entries = [];
 
       if (data[fldMDDef.propertyNameContainer] === undefined) {
-        alert(
-          "Property " +
-            fldMDDef.propertyNameContainer +
-            " not found in Master Data"
-        );
+        alert('Property ' +fldMDDef.propertyNameContainer +' not found in Master Data');
         return entries;
       }
       if (
