@@ -111,7 +111,10 @@ export function ApiFunctions(base) {
     
 
       refreshMasterData(endPointResponse, actionModel) {
-        
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          this.procInstanceName=currentTabView.procInstanceName
+        }        
         if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
           return
         } 
@@ -132,6 +135,13 @@ export function ApiFunctions(base) {
       }  
 
       getAPICommonParams(action, excludeProcInstanceName = false){
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          if (currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
+        }
+
         if (action===undefined){return}
         let extraParams={}  
         extraParams.actionName=action.actionName
@@ -187,6 +197,11 @@ export function ApiFunctions(base) {
           return jsonParam
       }
       getActionAPIUrl(action){
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          this.procInstanceName=currentTabView.procInstanceName
+        }
+
         //console.log('getActionAPIUrl', this.procInstanceName)
         if (action!==undefined&&action.endPoint!==undefined){
           return action.endPoint ? action.endPoint : this.config.SampleAPIactionsUrl
@@ -216,6 +231,10 @@ export function ApiFunctions(base) {
         }
       }
       getQueryAPIUrl(query){
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          this.procInstanceName=currentTabView.procInstanceName
+        }
         //console.log('getQueryAPIUrl', this.procInstanceName)
         if (query!==undefined&&query.endPoint!==undefined){
           return query.endPoint ? query.endPoint : this.config.SampleAPIqueriesUrl
