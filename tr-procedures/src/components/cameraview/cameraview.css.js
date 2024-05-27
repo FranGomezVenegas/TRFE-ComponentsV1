@@ -49,7 +49,7 @@ export const styles = css`
   .container video, .container canvas {
     border: 1px dashed blue;
     border-radius: 8px;
-    background-color: rgb(255, 255, 224);
+    background-color: rgba(36, 192, 235, 1);
     margin: 10px;
   }
 
