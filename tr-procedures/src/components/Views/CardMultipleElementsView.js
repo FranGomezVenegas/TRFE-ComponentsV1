@@ -4,6 +4,7 @@ import { html, nothing } from "lit";
 export function CardMultipleElementsView(base) {
     return class extends base{
         cardMultipleElementsView(elem, data) {
+          
             //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
             //data = this.getDataFromRoot(elem, data);
             console.log('CardMultipleElementsView >> getDataFromRoot', 'elem', elem, 'data', data)
@@ -12,7 +13,13 @@ export function CardMultipleElementsView(base) {
                 ? html`
                 <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">
                     ${data.map(
-                        (d) => html` ${this.cardController(elem, d)} `
+                        (d) =>html`
+                          ${d.json_model===undefined?
+                            html` ${this.cardController(elem, d)} `
+                          :
+                            html` ${this.cardController(d.json_model, d)} `
+                          }
+                        `
                     )}                                    
                 </div>
                 `
