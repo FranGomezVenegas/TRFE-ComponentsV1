@@ -35,6 +35,8 @@ export function ListsFunctions(base) {
             return 
         }
         dependencyFieldBehaviorForAll(dependencyFieldBehaviorForAll, fldName, itemData, dialogInfo, isList, itemKeyName){
+            
+            if (itemKeyName.length>0&&dependencyFieldBehaviorForAll.rule==='whenEmpty'&&dependencyFieldBehaviorForAll.resetValue===true){return}
             const fields = dialogInfo.fields;
             const exceptionFields = dependencyFieldBehaviorForAll.exceptionFields || []; // Default to an empty array if not present
         
@@ -90,76 +92,146 @@ export function ListsFunctions(base) {
             })
             return
         }
+
         dependencyFieldBehavior(fieldsList, itemData, isList, itemKeyName){
-            fieldsList.map((curFld, index)=>{
-                if (curFld.field!==undefined&&curFld.rule!==undefined){
+            fieldsList.map((curFld, index) => {
+                if (curFld.field !== undefined && curFld.rule !== undefined && this[curFld.field] !== undefined) {
                     const fieldElement = this[curFld.field];
-                    switch(curFld.rule){
+                    switch(curFld.rule) {
                         case "whenEmpty":
-                            if (itemKeyName.length==0){
-                                
-                                if (curFld.resetValue!==undefined&&curFld.resetValue===true){
-                                    this[curFld.field].value=""                                    
+                            if (itemKeyName.length == 0) {
+                                if (curFld.resetValue !== undefined && curFld.resetValue === true) {
+                                    this[curFld.field].value = "";
                                 }
-                                switch(curFld.action){
+                                switch(curFld.action) {
                                     case "disable":
-                                        this[curFld.field].disabled=true
+                                        this[curFld.field].disabled = true;
                                         break;
                                     case "hide":
-                                        fieldElement.style.display = 'none';  // Hide or show based on the rule
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'block';  // Show the element
+                                        }
                                         break;
                                     default:
-                                        this[curFld.field].disabled=true
+                                        this[curFld.field].disabled = true;
                                         break;
                                 }
-                            }else{
-                                switch(curFld.action){
+                            } else {
+                                switch(curFld.action) {
                                     case "disable":
-                                        this[curFld.field].disabled=false;
+                                        this[curFld.field].disabled = false;
                                         break;
                                     case "hide":
-                                        fieldElement.style.display = '';  // Hide or show based on the rule
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = '';  // Show the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
                                         break;
                                     default:
-                                        this[curFld.field].disabled=false
+                                        this[curFld.field].disabled = false;
                                         break;
                                 }
-                            }           
+                            }
                             break;
                         case "whenThisFieldValueIs":
-                                if (curFld.checkValue !== undefined && this[curFld.field].value === curFld.checkValue) {
-                                    switch(curFld.action){
-                                        case "disable":
-                                            this[curFld.field].disabled = true;
-                                            break;
-                                        case "hide":
-                                            fieldElement.style.display = 'none';
-                                            break;
-                                        default:
-                                            this[curFld.field].disabled = true;
-                                            break;
-                                    }
-                                } else {
-                                    switch(curFld.action){
-                                        case "disable":
-                                            this[curFld.field].disabled = false;
-                                            break;
-                                        case "hide":
-                                            fieldElement.style.display = '';
-                                            break;
-                                        default:
-                                            this[curFld.field].disabled = false;
-                                            break;
-                                    }
+                            if (curFld.checkValue !== undefined && itemKeyName === curFld.checkValue) {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = true;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'block';  // Show the element
+                                        }
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled = true;
+                                        break;
                                 }
+                            } else {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = '';  // Show the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                }
+                            }
+                            break;
+                        case "whenThisFieldValueIsNot":
+                            if (curFld.checkValue !== undefined && itemKeyName !== curFld.checkValue) {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Show the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = '';  // Show the element
+                                        }
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                }
+                            } else {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = true;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;    
+                                    default:
+                                        this[curFld.field].disabled = true;
+                                        break;
+                                }
+                            }
                             break;
                         default:
+                            break;
                     }
                 }
-            })
+            });
         }
-
-
+        
+        
         updateListEntries(listFieldName, fldMDDef, newData) {            
             let itemsToInject=this.buildFrontListFromData(this[listFieldName].definition.valuesFromMasterData, newData, true)
            
