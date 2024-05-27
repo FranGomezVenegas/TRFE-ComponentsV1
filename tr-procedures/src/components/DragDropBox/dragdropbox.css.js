@@ -10,12 +10,12 @@ export const styles = css`
   .box-content {
     width: fit-content;
     border-radius: 4px;
-    background-color: #42BFF7;
+    background-color: #24c0eb1a;
     padding: 4px;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    border: 2px solid #03A9F4;
+    border: 2px solid #0465fb;
   }
 
   .box-content_allowmove_false {
@@ -104,7 +104,7 @@ export const styles = css`
   }
 
   .accept-btn {
-    background-color: #24C0EB;
+    background-color: rgba(36, 192, 235, 1);
     border-radius: 4px;
     padding: 8px 12px;
     color: white;
@@ -114,7 +114,7 @@ export const styles = css`
   }
 
   .view-btn {
-    border: 2px solid #24C0EB;
+    border: 2px solid rgba(36, 192, 235, 1);
     background-color: #54CCEF;
     border-radius: 4px;
     padding: 8px 12px;  
