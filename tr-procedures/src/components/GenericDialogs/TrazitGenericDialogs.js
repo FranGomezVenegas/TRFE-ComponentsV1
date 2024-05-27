@@ -822,6 +822,7 @@ export function TrazitGenericDialogs(base) {
     }
 
     defaultValue(e){
+        
         //alert('open defaultValue')
         // if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
         //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
@@ -856,13 +857,16 @@ export function TrazitGenericDialogs(base) {
                 this[keyName].value=fldObj[keyName].default_value
             }
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+                if (this.selectedItems[0]===undefined){return}
                 this[keyName].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
             }            
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj.selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+                if (this.selectedItems[0]===undefined){return}
                 this[keyName].value=this.selectedItems[0][fldObj.selObjectPropertyName]
             }            
-            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&                
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
+                if (this[fldObj[keyName].internalVariableObjName]===undefined||this[fldObj[keyName].internalVariableObjName][0]===undefined){return}                    
                 this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
             }            
         }
