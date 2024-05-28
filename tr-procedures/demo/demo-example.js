@@ -171,6 +171,18 @@ class DemoExample extends LitElement {
     this.pLogin.config.localDefaultView.viewName=viewName
     this.trProc.filterName = filter
     this.pLogin.config.localDefaultView.filterName=filter
+    let tab = [{
+      "lp_frontend_page_name": viewName,
+      "route": "procedures?procName="+ proc +"&viewName="+ viewName +"&filterName="+ filter,
+      "tabLabel_en": '',
+      "tabLabel_es": '',
+      "procInstanceName": proc,
+      "viewName": viewName,
+      "filterName": filter
+    }]
+
+    sessionStorage.setItem("currentOpenView", JSON.stringify(tab[0]))
+
     this.trProc.resetView()
     this.trProc.authorized()
     this.trProc.render()
