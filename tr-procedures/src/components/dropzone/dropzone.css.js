@@ -5,35 +5,30 @@ export const styles = css`
     display: block;
   }
 
+
   .button {
     display: inline-block;
-    background-color: #1d6355;
-    border-radius: 10px;
-    border: 4px double #cccccc;
-    color: #ffffff;
+    color: #0290ee;
     text-align: center;
     font-size: 20px;
-    padding: 8px;
-    width: 100px;
     transition: all 0.5s;
     cursor: pointer;
-    margin: 5px;
   }
   
   .button:hover {
-    background-color: #00ab97;
+    color: #025bee;
   }
 
   .container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
-    padding: 20px 0;
-    background-color: #ffffe0;
+    align-items: center;    
+    flex-wrap: wrap;
+    background-color: #148cfa24;
     min-width: 300px;
     min-height: 200px;
-    border: 2px dashed red;
+    border: 2px dashed #025bee;
     border-radius: 8px;
   }
 
@@ -93,4 +88,26 @@ export const styles = css`
     text-align: center;
     color: #ff3030;
   }
+.file-preview {
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-preview figcaption {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.file-preview img,
+.file-preview canvas,
+.file-preview pre,
+.file-preview a {
+  display: block;
+  margin: 10px 0;
+}
+
 `

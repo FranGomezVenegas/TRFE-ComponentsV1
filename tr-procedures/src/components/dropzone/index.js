@@ -69,26 +69,49 @@ export class Dropzone extends ApiFunctions(LitElement) {
     let reader = new FileReader();
   
     // Set up the FileReader onloadend event
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       let fileContainer = document.createElement("figure");
+      fileContainer.classList.add("file-preview");
+  
+      // Add file name as a caption
+      let caption = document.createElement("figcaption");
+      caption.innerText = name;
+      fileContainer.appendChild(caption);
   
       // Determine how to display the file based on its type
       if (type.startsWith("image/")) {
         // Display image files
         let img = document.createElement("img");
         img.src = reader.result;
+        img.style.maxWidth = "100%";
+        img.style.borderRadius = "8px";
         fileContainer.appendChild(img);
       } else if (type === "application/pdf") {
         // Display PDF files
-        let iframe = document.createElement("iframe");
-        iframe.src = reader.result;
-        iframe.width = "100%";
-        iframe.height = "500px"; // Adjust height as needed
-        fileContainer.appendChild(iframe);
+        let canvas = document.createElement("canvas");
+        canvas.style.maxWidth = "100%";
+        fileContainer.appendChild(canvas);
+  
+        // Use pdf.js to render the first page
+        const pdf = await pdfjsLib.getDocument({ data: reader.result }).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+        page.render(renderContext);
       } else if (type.startsWith("text/") || type === "application/json") {
         // Display text files and JSON
         let textPreview = document.createElement("pre");
-        textPreview.textContent = reader.result;
+        textPreview.textContent = reader.result.split('\n').slice(0, 10).join('\n'); // Preview first 10 lines
+        textPreview.style.whiteSpace = "pre-wrap";
+        textPreview.style.background = "#f5f5f5";
+        textPreview.style.padding = "10px";
+        textPreview.style.borderRadius = "8px";
         fileContainer.appendChild(textPreview);
       } else {
         // Handle other file types (e.g., .doc, .xls) by creating a download link
@@ -96,17 +119,22 @@ export class Dropzone extends ApiFunctions(LitElement) {
         fileLink.href = reader.result;
         fileLink.download = name;
         fileLink.innerText = `Download ${name}`;
+        fileLink.style.display = "block";
+        fileLink.style.margin = "10px 0";
         fileContainer.appendChild(fileLink);
       }
   
-      // Add file name as a caption
-      fileContainer.innerHTML += `<figcaption>${name}</figcaption>`;
       this.previewContent.appendChild(fileContainer);
     };
   
     // Read the file as a Data URL
-    reader.readAsDataURL(file);
+    if (type === "application/pdf") {
+      reader.readAsArrayBuffer(file);
+    } else {
+      reader.readAsDataURL(file);
+    }
   };
+  
         
   _init = () => {
     console.log(this.fileSelector);
