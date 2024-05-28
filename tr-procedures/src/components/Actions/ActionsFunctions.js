@@ -143,6 +143,15 @@ export function ActionsFunctions(base) {
      * set the justification type, generate justification list for non text type
      */
      trazitCheckProcList(isProcManagement) {
+      if (this.procInstanceName===undefined){
+        let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+        this.procInstanceName=currentTabView.procInstanceName
+      }        
+      if (isProcManagement===undefined){
+        let userSession=JSON.parse(sessionStorage.getItem("userSession"))
+        isProcManagement=userSession.isProcManagement
+      }        
+
       if (this.area!==undefined&&this.area==="app"){
         return true
       }
@@ -332,6 +341,10 @@ export function ActionsFunctions(base) {
       }
     }
     checkProcList(isProcManagement) {
+      if (isProcManagement===undefined){
+        let userSession=JSON.parse(sessionStorage.getItem("userSession"))
+        isProcManagement=userSession.isProcManagement
+      }         
       if (this.isProcManagement!==undefined&&this.isProcManagement===true){
         return true
       }
