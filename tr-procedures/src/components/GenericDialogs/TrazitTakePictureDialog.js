@@ -110,7 +110,7 @@ return class extends ApiFunctions(GridFunctions(DialogsFunctions(base))) {
         ${actionModel.dialogInfo===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="UPLOADFILEDIALOG"?nothing:html`
             <tr-dialog id="takePictureDialog" @opened=${this.resetView} ?open=${this.openTakePictureDialog(actionModel)} 
                 heading="" hideActions="" scrimClickAction="">
-                <p class="title">${this.lang==="en"?html`Turn on the cam, Take one picture and upload it`:html`Activa la cámara, toma una foto y súbela`}</p>
+                <p class="title">${this.lang==="en"?html``:html``}</p>
                 <drop-zone id="dropFileZone" .lang=${this.lang} procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${this.selectedItem}"></drop-zone>
             </tr-dialog>
         `}
