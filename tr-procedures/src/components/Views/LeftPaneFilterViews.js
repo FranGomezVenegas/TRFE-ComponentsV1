@@ -98,6 +98,7 @@ export function LeftPaneFilterViews(base) {
       this.selectedItem=this.requestData[i]      
       this.selectedItemInView=this.requestData[i]
       //alert(this.selectedItemInView.name)
+      this.requestUpdate()
       this.render()
     }
   } 

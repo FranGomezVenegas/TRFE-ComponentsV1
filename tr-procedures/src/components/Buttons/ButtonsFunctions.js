@@ -725,6 +725,8 @@ export function ButtonsFunctions(base) {
             this.selectedItems = j
             if (this.selectedItems[0]!==undefined&&this.selectedItems[0]!==null){
               this.selectedItem = this.selectedItems[0]
+              this.selectedItemInView = this.selectedItems[0]
+              this.render()
             }
             console.log('this.selectedItems', this.selectedItems)
             if (j && !j.is_error) {
@@ -748,6 +750,7 @@ export function ButtonsFunctions(base) {
           }
         }
       })
+      this.requestUpdate()
       this.samplesReload = false
     }
     async GetAlternativeViewData(queryDefinition, selObject = {}) {
