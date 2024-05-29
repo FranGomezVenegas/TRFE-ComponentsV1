@@ -29,6 +29,7 @@
     "@spectrum-web-components/tabs": "^0.8.1",
     "@spectrum-web-components/tooltip": "^0.9.0",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
+    "@vaadin/accordion": "^24.3.13",
     "@vaadin/vaadin-context-menu": "^21.0.5",
     "@vaadin/vaadin-grid": "^21.0.3",
     "lit": "^2.0.2",

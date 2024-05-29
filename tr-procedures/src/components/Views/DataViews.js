@@ -1789,7 +1789,7 @@ export function DataViews(base) {
                                           <br />
                                         `
                                       : html`
-                                        ${this.cardField(fld, data)}
+                                          ${this.cardField(fld, data)}                                        
                                         `}
                                   `}
                                 `}  
@@ -1837,14 +1837,30 @@ export function DataViews(base) {
         </li>        
         `
       }
-      if (data[fld.name]===undefined&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){return html``}
+      if ((data[fld.name]===undefined||data[fld.name].length==0)&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){
+        if (fld.KeepJustLabelWhenNoDataMessage!==undefined&&fld.KeepJustLabelWhenNoDataMessage===true){
+          return html`
+          <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
+            <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
+              ${this.fieldLabel(fld)}:
+            </span>
+          </li>
+          `  	
+        }else{
+          return html``
+        }
+      }        
       return html`
         <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
           <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
             ${this.fieldLabel(fld)}:
-          </span>
+          </span>          
           <span class="cardValue" style="${fld.styleForValue !== undefined ? fld.styleForValue : ""}">
-            ${data[fld.name]}
+            ${fld.is_icon !== undefined && fld.is_icon === true ? 
+              html`${this.cellIsIcon(fld, data, undefined)}`          
+            :
+              html`${data[fld.name]}`
+            }
           </span>
         </li>
       `

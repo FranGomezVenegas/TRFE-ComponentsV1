@@ -94,9 +94,10 @@ export function LeftPaneFilterViews(base) {
       `;
     }
 
-
     filterElementClicked = (i) => {
-      this.selectedItem=this.requestData[i]
+      this.selectedItem=this.requestData[i]      
+      this.selectedItemInView=this.requestData[i]
+      //alert(this.selectedItemInView.name)
       this.render()
     }
   } 

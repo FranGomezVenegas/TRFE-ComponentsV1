@@ -213,7 +213,8 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
             procedureName: { type: String },
             showDivider: { type: Boolean },
             selectedTab: { type: Object },
-            isLeftPaneExpanded: { type: Boolean }     
+            isLeftPaneExpanded: { type: Boolean },
+            selectedItemInView: { type: Object },
         }
     }
     constructor() {
@@ -236,6 +237,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         this.showDivider=true
         this.leftSplitDisplayed=true
         this.filterCurrentData={}
+        this.selectedItemInView={}
         this.lotDefault='Testing 2023-03-15T21:20:55.962273'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
     }
 
@@ -582,7 +584,9 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                       .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
                       .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
                       .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-                      .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}"> 
+                      .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}"
+                      .selectedItemInView=${this.selectedItemInView}
+                      > 
                       </objecttabs-composition>              
       
                     `: nothing}
@@ -656,6 +660,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
           .moduleVersion=${this.moduleVersion} 
           ?isProcManagement=${this.isProcManagement} 
           .filterCurrentData=${this.filterCurrentData}
+          .selectedItemInView=${this.selectedItemInView}
           @tab-selected="${(e) => { alert("test") }}"></objecttabs-composition>     
       `
     }

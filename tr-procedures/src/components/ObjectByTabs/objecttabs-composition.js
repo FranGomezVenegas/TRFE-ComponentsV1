@@ -100,7 +100,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     super()
     this.viewModelFromProcModel={}
     this.selectedItem = {}
-    this.selectedItemInView ={}
+    this.selectedItemInView ={}    
     this.selectedTabModelFromProcModel = {}
     this.config = {}
     this.sopsPassed=false    
