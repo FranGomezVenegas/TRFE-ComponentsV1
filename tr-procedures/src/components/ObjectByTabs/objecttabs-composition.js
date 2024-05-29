@@ -351,7 +351,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     return html`<tree-view .specification=${elem.view_definition} .data=${dataArr}></tree-view>`
   }
 
-  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
+  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItemInView) {
     if (data===undefined||elemDef===undefined){return}
     // if (this.selectedItem!==undefined){
     //   console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
