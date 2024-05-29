@@ -1,5 +1,7 @@
 import {html} from 'lit-element';
 import '../treenode';
+import '@vaadin/accordion';
+
 
 export const template = (props) => {
   const {data, specification, level, selectedItems, handleSelectItem, value, handleItemSelected} = props;
@@ -7,7 +9,7 @@ export const template = (props) => {
 
   
   return html`
-    <ul @item-selected=${handleItemSelected}>
+    <vaadin-accordion @item-selected=${handleItemSelected}>
       ${data.map((node) => {
         return html`
           <tree-node
@@ -20,6 +22,6 @@ export const template = (props) => {
           ></tree-node>
         `;
       })}
-    </ul>
+    </vaadin-accordion>
   `;
 };

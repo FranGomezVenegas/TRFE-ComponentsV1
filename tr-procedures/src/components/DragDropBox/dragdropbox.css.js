@@ -19,7 +19,7 @@ export const styles = css`
   }
 
   .box-content_allowmove_false {
-    width: fit-content;
+    width: 100%;
     border-radius: 4px;
     background-color: #aca2a2;
     padding: 4px;
@@ -27,6 +27,7 @@ export const styles = css`
     flex-direction: column;
     gap: 2px;
     border: 2px solid #03A9F4;
+    height:100%;
   }
   .box-content_allowmove_true {
     width: fit-content;
@@ -47,6 +48,7 @@ export const styles = css`
     padding: 2px;
     color: white;
     cursor: pointer;
+    flex:1;
   }
 
   .row-num {
@@ -62,6 +64,7 @@ export const styles = css`
     width: 80px;
     height: 20px;
     text-align: center;
+    flex:1;
   }
 
   .row-content {

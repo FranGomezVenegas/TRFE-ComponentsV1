@@ -70,10 +70,10 @@ export const Stock =
       }
     },
     "actions": [
-		{"actionName": "NEW_INVENTORY_LOT",
+		{"actionName": "zzzNEW_INVENTORY_LOT",
 		"requiresDialog": true,
         "endPointParams": [
-          { "argumentName": "reference", "element": "text1", "defaultValue": ""  },
+          { "argumentName": "reference", "element": "tree1", "defaultValue": ""  },
           { "argumentName": "category", "element": "list1", "defaultValue": "" },
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
@@ -98,6 +98,50 @@ export const Stock =
         "dialogInfo": {          
           "name": "genericDialog",
           "fields": [
+			{"tree1":{
+				"treeElementData":[
+					{
+					  "name": "hola lvl1",
+					  "level2":[
+						{ 
+						  "otro":"hola lvl2"
+						},
+						{ 
+						  "otro":"adios lvl2"
+						}
+					  ]
+					},
+					{
+					  "name": "adios lvl1"
+					}
+				  ],
+				"treeElementSpecification":[
+					{
+					  "key": "name",
+					  "label": "name",
+					  "label2": [
+						"'('",
+						"name",
+						"') '",
+						"name"
+					  ],
+					  "children": "level2"
+					},
+					{
+					  "key": "otro",
+					  "label": "otro",
+					  "label2": [
+						"'('",
+						"otro",
+						"') '",
+						"otro"
+					  ],
+					  "children": "children"
+					}
+				]
+			}
+
+			},
 			{"list1": {
 				"label_en": "Category", "label_es": "Categoría", "optional": true,
 				"addBlankValueOnTop": true, "addBlankValueAtBottom": false,
