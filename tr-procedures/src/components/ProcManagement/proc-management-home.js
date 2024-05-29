@@ -196,10 +196,10 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
 
           if (procScript) {
             if (this.selectedViewDefinition.tabs!==undefined){
-              this.objectByTabs.selectedItem = procScript;
+              this.objectByTabs.selectedItemInView = procScript;
               this.objectByTabs.selectedTabModelFromProcModel =this.selectedViewDefinition;
             }else{            
-              this.objecttabsComposition.selectedItem = procScript;
+              this.objecttabsComposition.selectedItemInView = procScript;
               this.objecttabsComposition.selectedTabModelFromProcModel =this.selectedViewDefinition;
             }
           }
@@ -566,7 +566,7 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
                 .procedureVersion=${this.procedureVersion} 
                 .procInstanceName=${this.procInstanceName} 
                 .config=${this.config}     
-                .selectedItem=${this.mainViewData} 
+                .selectedItemInView=${this.mainViewData} 
                 .moduleName=${this.moduleName} 
                 .moduleVersion=${this.moduleVersion} 
                 ?isProcManagement=${this.isProcManagement}
@@ -1081,7 +1081,7 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
                     .viewName=${this.viewName} 
                     .filterName=${this.filterName} 
                     .model=${this.selectedViewDefinition} 
-                    .selectedItem=${this.selectedItem} 
+                    .selectedItemInView=${this.selectedItem} 
                     .viewModelFromProcModel=${this.selectedViewDefinition} 
                     .config=${this.config}
                   ></object-by-tabs>                        
@@ -1095,7 +1095,7 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
                     .procedureVersion=${this.procedureVersion} 
                     .procInstanceName=${this.procInstanceName} 
                     .config=${this.config}     
-                    .selectedItem=${this.selectedItem}
+                    .selectedItemInView=${this.selectedItem}
                     .moduleName=${this.moduleName}
                     .moduleVersion=${this.moduleVersion}
                     ?isProcManagement=${this.isProcManagement}
