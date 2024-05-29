@@ -41,7 +41,7 @@ export const styles = css`
     position: relative;
     background-color: #025bee;
     color: #ffffff;
-    font-size: 1.1em;
+    font-size: 0.8em
     text-align: center;
     width: 16em;
     padding: 1em 0;

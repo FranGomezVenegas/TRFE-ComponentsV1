@@ -122,7 +122,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     return html`
       <div id="mainDiv">
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
-          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
+          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItemInView)}
         `}
       </div>
       ${this.genericFormDialog()}

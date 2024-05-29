@@ -1,6 +1,35 @@
 export function ClientMethod(base) {
   return class extends base {
 
+    async refreshObjectByTab() {      
+      let viewQuery = {
+        actionName: "ALL_ACTIVE_PROJECTS",
+        label_en: "One Procedure Definition",
+        label_es: "Definición de un proceso",
+        //endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",
+        notUseGrid: true,
+        variableName: "selectedItemView",
+        //endPointResponseVariableName: "all_platform_procedures_list",
+      };
+      await this.GetViewData(false);
+      //await this.GetViewData(false, viewQuery);
+      // As by the specification above, this query will run this endpoint and then moved the data from endPointResponseVariableName response entry
+      // into variableName variable.
+      // In our case all_platform_procedures_list is an array of one entry and this content will be moved to this.selectedProcInstance variable
+      let newProcInstance = this.selectedProcInstance?.[0];
+      if (!newProcInstance) return;
+
+      sessionStorage.setItem("newProcInstance", JSON.stringify(this.selectedProcInstance[0]));
+
+      const event = new CustomEvent("session-storage-updated", {
+        detail: {
+          key: "newProcInstance",
+          value: newProcInstance,
+        },
+      });
+      window.dispatchEvent(event);
+    }
+
     async getSamples() {
       this.samplesReload = true
       this.selectedSamples = []

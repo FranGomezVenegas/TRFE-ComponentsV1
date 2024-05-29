@@ -113,8 +113,10 @@ export function ApiFunctions(base) {
       refreshMasterData(endPointResponse, actionModel) {
         if (this.procInstanceName===undefined){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
-          this.procInstanceName=currentTabView.procInstanceName
-        }        
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
+        }
         if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
           return
         } 
@@ -137,7 +139,7 @@ export function ApiFunctions(base) {
       getAPICommonParams(action, excludeProcInstanceName = false){
         if (this.procInstanceName===undefined){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
-          if (currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
             this.procInstanceName=currentTabView.procInstanceName
           }
         }
@@ -199,7 +201,9 @@ export function ApiFunctions(base) {
       getActionAPIUrl(action){
         if (this.procInstanceName===undefined){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
-          this.procInstanceName=currentTabView.procInstanceName
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
         }
 
         //console.log('getActionAPIUrl', this.procInstanceName)
@@ -233,7 +237,9 @@ export function ApiFunctions(base) {
       getQueryAPIUrl(query){
         if (this.procInstanceName===undefined){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
-          this.procInstanceName=currentTabView.procInstanceName
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
         }
         //console.log('getQueryAPIUrl', this.procInstanceName)
         if (query!==undefined&&query.endPoint!==undefined){
