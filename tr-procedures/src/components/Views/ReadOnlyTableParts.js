@@ -89,8 +89,10 @@ export function ReadOnlyTableParts(base) {
             }
   
             table.TRAZiT-UsersArea thead tr th {
-              background-color: white;
-              color: gray;
+              background-color: #b6d6f3;
+              color: rgb(0 0 0 / 55%);
+              font-size: 16px;
+              font-family: Montserrat;
             }
   
             table {
@@ -98,10 +100,11 @@ export function ReadOnlyTableParts(base) {
               width: 100%;
               font-family: Montserrat;
               font-size: 16px;
+              border solid 1px rgba(78, 162, 240, 0.69);
             }
   
             table.TRAZiT-UsersArea tr {
-              border: none; 
+              border: solid 1px rgba(78, 162, 240, 0.69); 
               border-bottom: 1px solid #dddddd;
             }
   
@@ -112,11 +115,11 @@ export function ReadOnlyTableParts(base) {
             }
   
             table.TRAZiT-UsersArea tr:nth-child(even) {
-              background-color: white;
+              /* background-color: white; */
             }
   
             table.TRAZiT-UsersArea tr:last-child {
-              border: none;
+              /* border: none; */
             }
          
             table.TRAZiT-UsersArea thead {

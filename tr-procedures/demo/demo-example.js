@@ -96,6 +96,16 @@ class DemoExample extends LitElement {
 
   render() {
     return html`
+    <style>
+    #mainbackground{
+      width: 100%;      
+      background: url('images/abstract.jpg'), #ffffff78;
+      background-size: cover;
+      background-position: center;
+      background-blend-mode: overlay;
+      position: relative;
+    }
+    </style>
       <platform-login @authorized=${e=>{
         this.auth=e.target.auth;
         if (this.auth) {
@@ -137,8 +147,10 @@ class DemoExample extends LitElement {
 <!--          <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
           <button @click=${()=>this.logout()}>Logout</button><hr> -->
           </div>
-          <tr-procedures></tr-procedures>          
-          ${this.openTestDefaultView()}
+          <div id="mainbackground">
+            <tr-procedures></tr-procedures>          
+            ${this.openTestDefaultView()}
+          </div>
         </div>
       `}
     `;

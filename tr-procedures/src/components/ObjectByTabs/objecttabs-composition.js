@@ -358,7 +358,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     // }    
     //console.log('elemDef', elemDef)
     return  html`
-        <div style="display:block">
+        <div style="display:block; padding-left:5px;">
           ${elemDef!==undefined&&Array.isArray(elemDef)?
           html`    
             ${elemDef.map((elem, i) =>           
