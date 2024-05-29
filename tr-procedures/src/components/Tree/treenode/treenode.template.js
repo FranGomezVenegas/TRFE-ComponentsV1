@@ -1,6 +1,10 @@
 import {html} from 'lit-element';
 import {classNames} from '../utils';
 import '../treeview';
+import '@vaadin/accordion';
+import '@vaadin/accordion/vaadin-accordion-panel';
+import '@vaadin/vertical-layout';
+
 
 export const template = (props) => {
   const {
@@ -36,8 +40,29 @@ export const template = (props) => {
     event.dataTransfer.setData('item', JSON.stringify(data));
   };
 
+  
+
   return html`
-    <div
+  <vaadin-accordion-panel summary=${label} @click=${handleShowChildrenItem}
+  draggable="true"      
+  >
+    <vaadin-vertical-layout>
+    <ul>
+      ${showChildren && children
+        ? html`<tree-view
+            .data=${children}
+            .selectedItems=${selectedItems}
+            .handleSelectItem=${handleSelectItem}
+            .specification=${specification}
+            .level=${level + 1}
+          ></tree-view>`
+        : ''}
+    </ul>
+    </vaadin-vertical-layout>
+  </vaadin-accordion-panel>  
+</vaadin-accordion>
+
+   <!-- <div
       draggable="true"
       @dragstart=${handleDragStart}
       class="${classNames(
@@ -60,6 +85,6 @@ export const template = (props) => {
             .level=${level + 1}
           ></tree-view>`
         : ''}
-    </ul>
+    </ul> --> 
   `;
 };

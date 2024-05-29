@@ -157,6 +157,9 @@ export function ReadOnlyTableParts(base) {
             .hidden {
               display: none;
             }
+            .selected {
+              background-color: #bdbaba !important;
+            }
   
             .js-context-popup {
               background-color: #24C0EB;
@@ -573,12 +576,12 @@ export function ReadOnlyTableParts(base) {
         cellIsParagraph(fld, data, lang){
             return html`${unsafeHTML(this.getDynamicData(fld.paragraph, data, lang))}
             `
-        }
+        }        
         generateRowButtons(elem, curRow, parentData, index, handle, lang) {
             return html`
             <td>
             ${elem.expandInfoSection?html`
-                <div class="circle" @click="${(e) => this._toggleDetail(e, index)}" title="${lang==='es'?'Información':'Information'}">i</div>`
+            <div class="circle" @click="${(e) => this._toggleDetail(e, index)}" title="${lang==='es'?'Información':'Information'}">i</div>`
             :html``}
             
             ${elem.row_buttons === undefined
@@ -595,7 +598,7 @@ export function ReadOnlyTableParts(base) {
                   
                     ${curRow[elem.children] && curRow[elem.children].length > 0 ? html `
                         <div class="circle"> 
-                            ${curRow[elem.children].length} 
+                          ${curRow[elem.children].length} 
                         </div>
                     ` : html``}
                     <div class="layout horizontal center flex wrap">

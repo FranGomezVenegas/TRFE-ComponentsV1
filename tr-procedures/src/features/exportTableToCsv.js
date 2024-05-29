@@ -16,8 +16,8 @@ export function ExportTableToCsv(base) {
             // Filter and map dataArr to include only the keys present in downloadElements
             if (dataArr!==undefined){
                 dataArr.forEach(item => {
-                    let row = Object.keys(downloadElements).map(key => {
-                        return item.hasOwnProperty(key) ? `"${item[key]}"` : ""; // Ensure to handle potential commas in data
+                    let row = Object.values(downloadElements).map(key => {
+                        return item.hasOwnProperty(key.name) ? `"${item[key.name]}"` : ""; // Ensure to handle potential commas in data
                     }).join(",");
                     contents.push(row);
                 });

@@ -8,6 +8,7 @@ import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../MultiSelect';
+import '../Tree/treeview/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
 
 import {DialogsFunctions} from './DialogsFunctions';
@@ -207,7 +208,11 @@ export function TrazitGenericDialogs(base) {
                 `:nothing}    
             `: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
-                html`            
+                html`   
+                ${!fld.tree1 ?
+                    html``: html`        
+                        <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>         
+                `}          
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
@@ -849,7 +854,7 @@ export function TrazitGenericDialogs(base) {
             let fldObj=element
             let keyName=Object.keys(fldObj)
             
-            // //if (==null){        
+            ////if (==null){        
             // if (this[keyName]!==null&&this[keyName].defval!==undefined&&this[keyName].defval!==null){
             //     alert(this[keyName].defval)
             // }    
@@ -912,7 +917,8 @@ export function TrazitGenericDialogs(base) {
         }
         return fldLbl
     }
-
+    
+    get tree1() {    return this.shadowRoot.querySelector("tree-view#tree1")    }        
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
     get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        

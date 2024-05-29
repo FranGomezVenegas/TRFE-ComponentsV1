@@ -3,6 +3,8 @@ import '@material/mwc-icon';
 import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 import '../grid_with_buttons/tableRowDetail';
+import '@material/mwc-button';
+import print from './dragdropboxprint';
 
 export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
     //console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
@@ -30,9 +32,10 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
     return html` 
     <div style="display:flex; flex-direction:column; gap:12px;">    
     <div style="display:flex; flex-direction:row; gap:12px;">    
-        <div style="width: fit-content; gap: 4px; display: flex; flex-direction: column;">        
+        <div style="width: 100%; gap: 4px; display: flex; flex-direction: column;">        
             <div style="display:flex; justify-content: space-between; align-items: center;"> 
                 <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
+                <mwc-icon-button icon="print" @click=${() => { print(selectedBox!==undefined, componentRef) }}></mwc-icon-button>
                 ${selectedBox===undefined ? html``: html `
                     <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
                     <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
@@ -46,29 +49,31 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
                 </div>
             
             </div>
-
-        ${boxContentStructured===true?
-            html`${boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
-        :
-            html`${boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
-        }
+            <div style="display:flex; justify-content: flex-start; align-items: flex-start;">
+            ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
+                <div >
+                    <mwc-icon style="color:#54CCEF; cursor:pointer; " @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
+                    ${tmpLogic.listBoxViewMode ? html `
+                        ${viewModel.boxPosicsViews.map((view, i) => html `
+                        <div style="display:flex;">
+                            <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}>                            
+                            <label for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}> 
+                                <multi-select id="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)} .label="" .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${view} .options=${{}}> </multi-select>                            
+                            </label><br>                            
+                        </div>                        
+                        `)}
+                    `: 
+                    html ``}
+                </div>
+                `}
+            ${boxContentStructured===true?
+                html`${boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
+            :
+                html`${boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
+            }
+            </div>
         </div>  
-        ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
-        <div >
-            <mwc-icon style="color:#54CCEF; cursor:pointer; margin-top:42px;" @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
-            ${tmpLogic.listBoxViewMode ? html `
-                ${viewModel.boxPosicsViews.map((view, i) => html `
-                <div style="display:flex;">
-                    <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}>                            
-                    <label for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}> 
-                        <multi-select id="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)} .label="" .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${view} .options=${{}}> </multi-select>                            
-                    </label><br>                            
-                </div>                        
-                `)}
-            `: 
-            html ``}
-        </div>
-        `}
+        
 
         ${viewModel.objectsToDragColumns===undefined? html``:html`${dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data, componentRef)}`}
     </div>    
@@ -83,7 +88,7 @@ function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, 
         boxPosicsViews=viewModel.boxPosicsViews
     }
     return  html`
-            <div class="box-content_allowmove_${boxAllowMoveObject}" style="min-width: 200px; min-height: 200px">
+            <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
                 ${viewModel.viewMode == 1 ? html `
                 <div draggable="true" class="draggable-box" @dragover=${(e) => tmpLogic.allowDrop(e)} @drop=${(e) => tmpLogic.dropBox(e, 0, 0)}>
                 ${selectedBox.datas.length > 0 ?
@@ -158,7 +163,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                     
                     </div>
                     ${selectedBox!==undefined ? html `
-                    <div class="box-content_allowmove_${boxAllowMoveObject}">
+                    <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
                         ${viewModel.viewMode == 1 ? html `
                         <div> 
                             <div class="row-content"> 
@@ -249,7 +254,7 @@ function dragObjectsTable20240405(tmpLogic, elem, data){
     let dataArr=getDataFromRoot(elem, data)
     return html`
         ${selectedBox!==undefined ? html `
-        <div class="box-content_allowmove_${boxAllowMoveObject}">
+        <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
             ${viewModel.viewMode == 1 ? html `
             <div> 
                 <div class="row-content"> 
@@ -279,7 +284,7 @@ function dragObjectsTable20240405(tmpLogic, elem, data){
                             ${printObjectData(tmpLogic, selectedBox, axisCols, boxPosicsViews, i, j)}
                             <div class="position">
                                 <span> ${rowN + (j + 1)} </span>
-                                <span> ${ i * axisCols.length + (j + 1) } </span>
+                                <!--<span> ${ i * axisCols.length + (j + 1) } </span>-->
                             </div>
                         </div>
                     </div>
