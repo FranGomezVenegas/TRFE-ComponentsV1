@@ -285,6 +285,12 @@
     "viewName": "rdprojects", 
     "filterName" :  "rdprojects" 
   },
+  "localDefaultView": {
+    "procName":  "RandD", 
+    "viewName": "methodvalidation", 
+    "filterName" :  "methodvalidation" 
+  },
+  
   
   "localDefaultViewqqqq": {
     "procName":  "instruments", 

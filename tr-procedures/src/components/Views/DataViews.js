@@ -2054,6 +2054,9 @@ export function DataViews(base) {
     kpiChartFran(elem, data) {
       if (elem===undefined){return html``}
 
+      if (elem.endPointPropertyArray!==undefined){
+        data = this.getDataFromRoot(elem, data);
+      }
       if ( !((elem.grouper_field_name!==undefined&&data[elem.grouper_field_name])||
           (elem.counter_field_name!==undefined&&data[elem.counter_field_name])) ){
             return html``
@@ -2123,35 +2126,28 @@ export function DataViews(base) {
     getChartData(elem, data) {
       console.log('getChartData', elem, 'data', data, 'this.data', this.data, 'chartData')
       let chartData = [];
-
+      let fakeData = []
+      if (elem.elementName==='fakeTrendlineExample'){
+        fakeData = [
+          ['Diameter', 'Age'],
+          [8, 37], [4, 19.5], [11, 52], [4, 22], [3, 16.5], [6.5, 32.8], [14, 72]
+        ]
+        return fakeData
+      }
+      if (elem.elementName === "cdatatable") {
+        fakeData = [
+          ["Day", "Guardians of the Galaxy", "The Avengers", "Transformers: Age of Extinction",],
+          [1, 37.8, 80.8, 41.8], [2, 30.9, 69.5, 32.4], [3, 25.4, 57, 25.7], [4, 11.7, 18.8, 10.5],
+          [5, 11.9, 17.6, 10.4], [6, 8.8, 13.6, 7.7], [7, 7.6, 12.3, 9.6], [8, 12.3, 29.2, 10.6],
+          [9, 16.9, 42.9, 14.8], [10, 12.8, 30.9, 11.6], [11, 5.3, 7.9, 4.7], 
+          [12, 6.6, 8.4, 5.2], [13, 4.8, 6.3, 3.6], [14, 4.2, 6.2, 3.4],
+        ];
+        return fakeData;
+      }
       if (elem.chartModel==="methodValidation"){
         return this.getChartDataForMethodValidation(elem, data)
       }
-      if (elem.elementName === "cdatatable") {
-        let data = [
-          [
-            "Day",
-            "Guardians of the Galaxy",
-            "The Avengers",
-            "Transformers: Age of Extinction",
-          ],
-          [1, 37.8, 80.8, 41.8],
-          [2, 30.9, 69.5, 32.4],
-          [3, 25.4, 57, 25.7],
-          [4, 11.7, 18.8, 10.5],
-          [5, 11.9, 17.6, 10.4],
-          [6, 8.8, 13.6, 7.7],
-          [7, 7.6, 12.3, 9.6],
-          [8, 12.3, 29.2, 10.6],
-          [9, 16.9, 42.9, 14.8],
-          [10, 12.8, 30.9, 11.6],
-          [11, 5.3, 7.9, 4.7],
-          [12, 6.6, 8.4, 5.2],
-          [13, 4.8, 6.3, 3.6],
-          [14, 4.2, 6.2, 3.4],
-        ];
-        return data;
-      }
+
       if (data===undefined&&this.data!==undefined){data=this.data}
       //data = this.getDataFromRoot(elem, data);
       if (data === undefined && (elem.chart_name===undefined||data[elem.chart_name] === undefined)) {
@@ -2245,8 +2241,8 @@ export function DataViews(base) {
         return chartData;
       }
       let curchtHeader = [];
-      curchtHeader[0] = "Trending";
-      curchtHeader[1] = "Final results";
+      curchtHeader[0] = elem.xAxisSourceData;
+      curchtHeader[1] = elem.sourceData;
       chartData.push(curchtHeader);
       for (let iSerie = 0; iSerie < chartSourceData.length; iSerie++) {
         let curchtHeader = [];
@@ -2264,6 +2260,15 @@ export function DataViews(base) {
     }
     
     getChartOptions(elem) {
+      if (elem.elementName==='fakeTrendlineExample'){
+        return {
+          title: 'Age of sugar maples vs. trunk diameter, in inches',
+          hAxis: {title: 'Diameter'},
+          vAxis: {title: 'Age'},
+          legend: 'none',
+          trendlines: { 0: {} }    // Draw a trendline for data series 0.
+        };
+      }
       let defaultChartOptions = {
         width: "300px",
         backgroundColor: "transparent",
