@@ -260,42 +260,44 @@ export function ButtonsFunctions(base) {
         }                
           ${sectionModel !== undefined && sectionModel.actions && sectionModel.actions.map(action =>
           html`
-          ${this.btnHidden(action) ? nothing :
-              html`${action.button ?
-                html`${action.button.icon ?
-                  html`<mwc-icon-button id="${action.actionName}"
-																																								  
-                  class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
-                  icon="${action.button.icon}" 
-                  title="${action.button.title['label_' + this.lang]}" 
-                  ?disabled=${this.btnDisabled(action, sectionModel)}
-                  ?hidden=${this.btnHidden(action)}
-                  style="${action.button.style !== undefined ? action.button.style : ''}"
-                  .data=${data}
-                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
-                  html`${action.button.img ?
-                    html`<mwc-icon-button  id="${action.actionName}"
-                  class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
-                  title="${action.button.title['label_' + this.lang]}" 
-                  ?disabled=${this.btnDisabled(action, sectionModel)}
-                  ?hidden=${this.btnHidden(action)}
-                  style="${action.button.style !== undefined ? action.button.style : ''}"
-                  .data=${data}
-                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
-                      <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
-                  </mwc-icon-button>` :
-                    html`<mwc-button dense raised id="${action.actionName}"
-                  label="${action.button.title['label_' + this.lang]}" 
-                  ?disabled=${this.btnDisabled(action, sectionModel)}
-                  ?hidden=${this.btnHidden(action)}
-                  style="${action.button.style !== undefined ? action.button.style : ''}"
-                  .data=${data}
-                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+
+              ${this.btnHidden(action, data) ? nothing :
+                  html`${action.button ?
+                    html`${action.button.icon ?
+                      html`<mwc-icon-button id="${action.actionName}"
+                                                                                      
+                      class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
+                      icon="${action.button.icon}" 
+                      title="${action.button.title['label_' + this.lang]}" 
+                      ?disabled=${this.btnDisabled(action, sectionModel)}
+                      ?hidden=${this.btnHidden(action, data)}
+                      style="${action.button.style !== undefined ? action.button.style : ''}"
+                      .data=${data}
+                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                      html`${action.button.img ?
+                        html`<mwc-icon-button  id="${action.actionName}"
+                      class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
+                      title="${action.button.title['label_' + this.lang]}" 
+                      ?disabled=${this.btnDisabled(action, sectionModel)}
+                      ?hidden=${this.btnHidden(action, data)}
+                      style="${action.button.style !== undefined ? action.button.style : ''}"
+                      .data=${data}
+                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
+                          <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
+                      </mwc-icon-button>` :
+                        html`<mwc-button dense raised id="${action.actionName}"
+                      label="${action.button.title['label_' + this.lang]}" 
+                      ?disabled=${this.btnDisabled(action, sectionModel)}
+                      ?hidden=${this.btnHidden(action , data)}
+                      style="${action.button.style !== undefined ? action.button.style : ''}"
+                      .data=${data}
+                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+                        }`
+                      }` :
+                    nothing
                     }`
-                  }` :
-                nothing
-                }`
-            }`
+                }
+          `
         )}
       `
     }
@@ -381,7 +383,7 @@ export function ButtonsFunctions(base) {
       return d
     }
     btnHiddenForRows(action, selRow) {
-      //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)    
+      console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)    
       let d = false
       if (selRow !== undefined && selRow["No Data"] !== undefined) { return true }
       if (action.button.showWhenSelectedItem !== undefined) {
@@ -397,7 +399,8 @@ export function ButtonsFunctions(base) {
               if (selRow[rowArray.column].length == 0) {
                 d = false
               }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (selRow[rowArray.column].length > 0) {
                 d = false
               }
@@ -415,7 +418,8 @@ export function ButtonsFunctions(base) {
             if (selRow[action.button.showWhenSelectedItem.column].length == 0) {
               return false
             } else { return true }
-          } else if (action.button.showWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.showWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.showWhenSelectedItem.value).toUpperCase().includes("NULL*")) {                          
             if (selRow[action.button.showWhenSelectedItem.column].length > 0) {
               return false
             } else { return true }
@@ -433,7 +437,8 @@ export function ButtonsFunctions(base) {
               if (selRow[rowArray.column].length == 0) {
                 d = true
               } else { d = false }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (selRow[rowArray.column].length > 0) {
                 d = true
               } else { d = false }
@@ -451,7 +456,8 @@ export function ButtonsFunctions(base) {
             } else {
               return false
             }
-          } else if (action.button.hideWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("NULL*")) {                          
             if (selRow[action.button.hideWhenSelectedItem.column].length > 0) {
               return true
             } else {
@@ -468,7 +474,10 @@ export function ButtonsFunctions(base) {
       }
       return d
     }
-    btnHidden(action) {
+    btnHidden(action, data) {
+      if (data!==undefined){
+        return this.btnHiddenForRows(action, data)
+      }
       let d = false
       if (action===undefined||action.button===undefined){return d}
       if (action.button.showWhenSelectedItem !== undefined) {
@@ -483,7 +492,8 @@ export function ButtonsFunctions(base) {
               if (this.selectedItems[0][rowArray.column].length == 0) {
                 d = true
               }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (this.selectedItems[0][rowArray.column].length > 0) {
                 d = true
               }
@@ -501,7 +511,8 @@ export function ButtonsFunctions(base) {
             if (this.selectedItems[0][action.button.showWhenSelectedItem.column].length == 0) {
               d = true
             }
-          } else if (action.button.showWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.showWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.showWhenSelectedItem.value).toUpperCase().includes("NULL*")) {
             if (this.selectedItems[0][action.button.showWhenSelectedItem.column].length > 0) {
               d = true
             }
@@ -519,7 +530,8 @@ export function ButtonsFunctions(base) {
               if (this.selectedItems[0][rowArray.column].length == 0) {
                 d = true
               }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (this.selectedItems[0][rowArray.column].length > 0) {
                 d = true
               }
@@ -535,7 +547,8 @@ export function ButtonsFunctions(base) {
             if (this.selectedItems[0][action.button.hideWhenSelectedItem.column].length == 0) {
               d = true
             }
-          } else if (action.button.hideWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("NULL*")) {                          
             if (this.selectedItems[0][action.button.hideWhenSelectedItem.column].length > 0) {
               d = true
             }
