@@ -750,7 +750,7 @@ export function TrazitGenericDialogs(base) {
         if (curValue.length===0){curValue="*NULL*"}
         let matchingEntry = fld.rule.logic.find(entry => entry.value === curValue);
         
-        if (matchingEntry===undefined){
+        if (matchingEntry===undefined){            
             if (curValue.length>0){curValue="*NOT_NULL*"}
             matchingEntry = fld.rule.logic.find(entry => entry.value === curValue);
         }
