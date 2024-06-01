@@ -117,13 +117,16 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       }  
             
       #endpointName_expanded_true {
-        box-shadow: 16px 14px 20px rgba(20, 78, 117, 0.5);
+        
+        box-shadow: inset 6px 20px 49px rgb(167 202 225 / 50%); /* 16px 14px 20px rgba(20, 78, 117, 0.5);*/
         overflow-y : none;
         display: flex;
         flex-direction: column;      
         width: 100%;  
         gap: 12px;  
         padding: 0px 20px;
+        left: 16px;
+        position:relative;
       }
       #endpointName_expanded_false {
         
@@ -444,6 +447,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       this.leftSplitDisplayed = !this.leftSplitDisplayed
     }  
     async filterPerformAction(e, flag) {
+
       //alert('filterPerformAction')
         this.filterCurrentData={}
         //this.filterCurrentData=this.jsonParam(this.viewModelFromProcModel)
@@ -466,7 +470,8 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
           this.filterResponseData.push(this.selectedItems)        
         }else{
           this.filterResponseData=this.selectedItems
-        }        
+        }    
+        
         //this.filterElement(this.filterResponseData)
         //console.log('filterResponseData', this.filterResponseData)
         if (!Array.isArray(this.requestData)){
@@ -605,7 +610,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                     <div style="display:flex;">
                       <mwc-icon-button id="expandleftpane" icon="${this.isLeftPaneExpanded ? 'chevron_left' : 'chevron_right'}" @click=${this.toggleLeftPane}></mwc-icon-button>
 
-                      <div class="search-container" >
+                      <div class="search-container" style="padding-bottom:8px;">
                         <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
                           ${this.viewModelFromProcModel.filter_button["label_" + this.lang]}
                         </sp-button>                    
@@ -617,7 +622,8 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                       `}
                     
                   </div>
-                                      `}
+                `}
+                  
                     ${this.viewModelFromProcModel.filter === undefined || this.isLeftPaneExpanded===false ? nothing : html`
                       ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} 
                     `}
