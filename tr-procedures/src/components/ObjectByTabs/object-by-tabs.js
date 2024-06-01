@@ -211,6 +211,9 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         cursor: pointer; /* Pointer cursor */
         transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
         --mdc-theme-primary: transparent;
+        --mdc-typography-button-font-family: Montserrat;
+        /* Or use general CSS */
+        font-family: Montserrat;        
     }
     
     mwc-button.tabBtn:hover {
