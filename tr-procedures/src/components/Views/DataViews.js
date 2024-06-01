@@ -350,13 +350,15 @@ export function DataViews(base) {
           }
           span.cardLabel {
             font-weight: bold;
-            font-size:10px;
+            font-size:16px;
+            font-family: Montserrat;
             word-break: auto-phrase;
             color: rgb(41, 137, 216); /* #032bbc; */
           }
           span.cardValue {            
             color: rgba(214, 233, 248, 0.37); 
-            font-size:8px; 
+            font-size:16px; 
+            font-family: Montserrat;
             display:inherit;            
             word-break: auto-phrase;
              /* #009879; */
@@ -655,14 +657,16 @@ export function DataViews(base) {
           span.cardLabel {
             font-weight: bold;
             color: rgb(41, 137, 216); 
+            font-family: Montserrat;
             word-break: auto-phrase;
-            font-size:10px; 
+            font-size:16px; 
             /* #032bbc; */
           }
           span.cardValue {
             color: rgba(214, 233, 248, 0.37); 
             word-break: auto-phrase;
-            font-size:8px; 
+            font-family: Montserrat;
+            font-size:16px; 
             display:inherit;
             /* #009879; */
           }
@@ -1027,13 +1031,14 @@ export function DataViews(base) {
       if(elem.children_definition) {
         const childElement = {
           ...elem.children_definition,
-          endPointResponseObject: elem.endPointResponseObject + "_child"
+          endPointResponseObject: elem.children // "_child"
         };
         this.resetFilterIndex(childElement);
       }
     }
 
     parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme, parentData) {
+      console.log('elem', elem, 'dataArr', dataArr, 'parentData', parentData)
       if (directData !== undefined) {
         dataArr = directData;
       } else {
@@ -1059,7 +1064,7 @@ export function DataViews(base) {
       
       const childElement = {
         ...elem.children_definition,
-        endPointResponseObject: elem.endPointResponseObject + "_child"
+        endPointResponseObject: elem.children_definition.endPointResponseObject
       };
       
       const endPointResponseObject = elem.endPointResponseObject;
@@ -1750,7 +1755,7 @@ export function DataViews(base) {
                                               background-color: #ffdedd !important;
                                             }
                                             .title {
-                                              font-size: 8px;
+                                              font-size: 18px;
                                               font-weight: 500;
                                               letter-spacing: 0;
                                               line-height: 1.5em;
@@ -2791,7 +2796,7 @@ export function DataViews(base) {
         return
       }
       parentData=this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
-      //console.log('isSecondLevel', isSecondLevel, 'parentData', parentData)
+      console.log('isSecondLevel', isSecondLevel, 'elem', elem, 'dataArr', dataArr, 'parentData', parentData)
       let tmp=""
       if (elem.theme===undefined){
         tmp = "TRAZiT-UsersArea";

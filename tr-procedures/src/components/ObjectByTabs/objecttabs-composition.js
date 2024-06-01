@@ -61,6 +61,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
           font-weight: bold;
           color: #032bbc;
           font-size: 16px;
+          font-family: Montserrat;
           word-break: auto-phrase;
           color: rgb(41, 137, 216); /* #032bbc; */
   
@@ -68,6 +69,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
         span.cardValue {
           color: #009879;
           font-size:16px; 
+          font-family: Montserrat;
           display:inherit;            
           word-break: auto-phrase;
         }

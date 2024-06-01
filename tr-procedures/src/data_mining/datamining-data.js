@@ -620,15 +620,17 @@ export class DataMiningData extends DataViews(LitElement) {
       span.cardLabel {
         font-weight: bold;
         color: #032bbc;
-        font-size: 10px;
+        font-size: 16px;
+        font-family: Montserrat;
         word-break: auto-phrase;
         color: rgb(41, 137, 216); /* #032bbc; */
 
       }
       span.cardValue {
         color: #009879;
-        font-size:8px; 
+        font-size:16px; 
         display:inherit;            
+        font-family: Montserrat;
         word-break: auto-phrase;
       }
       span.title {
