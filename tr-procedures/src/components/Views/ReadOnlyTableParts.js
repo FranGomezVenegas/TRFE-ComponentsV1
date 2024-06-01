@@ -161,7 +161,8 @@ export function ReadOnlyTableParts(base) {
               display: none;
             }
             .selected {
-              background-color: #bdbaba !important;
+              background: linear-gradient(45deg, #54ccef6e, #03a9f400);
+              /* background-color: #148cfa36 !important; */
             }
   
             .js-context-popup {
