@@ -60,14 +60,14 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
         span.cardLabel {
           font-weight: bold;
           color: #032bbc;
-          font-size: 10px;
+          font-size: 16px;
           word-break: auto-phrase;
           color: rgb(41, 137, 216); /* #032bbc; */
   
         }
         span.cardValue {
           color: #009879;
-          font-size:8px; 
+          font-size:16px; 
           display:inherit;            
           word-break: auto-phrase;
         }
@@ -122,7 +122,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     return html`
       <div id="mainDiv">
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
-          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItemInView)}
+          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
         `}
       </div>
       ${this.genericFormDialog()}
