@@ -155,7 +155,7 @@ export function TrazitFormsElements(base) {
     }
 
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    genericFormElements(fields) {
+    genericFormElements(fields, withEnterKey = false, keydownHandler = null) {
         if (fields===undefined){fields=[]}
         // if (this.actionBeingPerformedModel.dialogInfo === undefined) {
         //     //alert('genericFormElements has no dialogInfo')
@@ -228,77 +228,78 @@ export function TrazitFormsElements(base) {
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="filtertext1" type="text" .value=${this.fldDefaultValue(fld.filtertext1)}  label="${this.fieldLabel(fld.filtertext1)}" 
-                        @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                        @keydown=${withEnterKey ? keydownHandler : nothing}    
+                        ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text1" type="text" .value=${this.fldDefaultValue(fld.text1)}  label="${this.fieldLabel(fld.text1)}" ?disabled=${this.isFieldDisabled(fld.text1)}
-                        @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                        @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text2" type="text" .value=${this.fldDefaultValue(fld.text2)} label="${this.fieldLabel(fld.text2)}" ?disabled=${this.isFieldDisabled(fld.text2)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text3" type="text" .value=${this.fldDefaultValue(fld.text3)} label="${this.fieldLabel(fld.text3)}" ?disabled=${this.isFieldDisabled(fld.text3)}
-                        @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                        @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}                       
                 ${!fld.text4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text4" type="text" .value=${this.fldDefaultValue(fld.text4)} label="${this.fieldLabel(fld.text4)}" ?disabled=${this.isFieldDisabled(fld.text4)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text5" type="text" .value=${this.fldDefaultValue(fld.text)} label="${this.fieldLabel(fld.text5)}"  ?disabled=${this.isFieldDisabled(fld.text5)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text6" type="text" .value=${this.fldDefaultValue(fld.text6)} label="${this.fieldLabel(fld.text6)}"  ?disabled=${this.isFieldDisabled(fld.text6)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text7" type="text" .value=${this.fldDefaultValue(fld.text7)} label="${this.fieldLabel(fld.text7)}"  ?disabled=${this.isFieldDisabled(fld.text7)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text8" type="text" .value=${this.fldDefaultValue(fld.text8)}label="${this.fieldLabel(fld.text8)}" ?disabled=${this.isFieldDisabled(fld.text8)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text9" type="text" .value=${this.fldDefaultValue(fld.text9)} label="${this.fieldLabel(fld.text9)}" ?disabled=${this.isFieldDisabled(fld.text9)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.text10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="text10" type="text" .value=${this.fldDefaultValue(fld.text10)} label="${this.fieldLabel(fld.text10)}" ?disabled=${this.isFieldDisabled(fld.text10)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}                              
                 ${!fld.number1 ?
@@ -306,7 +307,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number1" type="number" 
                     @input=${e=>this.setValidVal(e, fld)} .value=${this.fldDefaultValue(fld.number1)} label="${this.fieldLabel(fld.number1)}" ?disabled=${this.isFieldDisabled(fld.number1)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number2 ?
@@ -314,7 +315,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number2" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number2)}   label="${this.fieldLabel(fld.number2)}" ?disabled=${this.isFieldDisabled(fld.number2)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number3 ?
@@ -322,7 +323,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number3" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number3)}   label="${this.fieldLabel(fld.number3)}" ?disabled=${this.isFieldDisabled(fld.number3)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number4 ?
@@ -330,7 +331,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number4" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number4)}   label="${this.fieldLabel(fld.number4)}" ?disabled=${this.isFieldDisabled(fld.number4)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number5 ?
@@ -338,7 +339,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number5" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number5)}   label="${this.fieldLabel(fld.number5)}" ?disabled=${this.isFieldDisabled(fld.number5)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number6 ?
@@ -346,7 +347,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number6" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number6)}  label="${this.fieldLabel(fld.number6)}" ?disabled=${this.isFieldDisabled(fld.number6)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number7 ?
@@ -354,7 +355,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number7" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number7)}   label="${this.fieldLabel(fld.number7)}" ?disabled=${this.isFieldDisabled(fld.number7)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number8 ?
@@ -362,7 +363,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number8" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number8)}   label="${this.fieldLabel(fld.number8)}" ?disabled=${this.isFieldDisabled(fld.number8)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number9 ?
@@ -370,7 +371,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number9" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number9)}   label="${this.fieldLabel(fld.number9)}" ?disabled=${this.isFieldDisabled(fld.number9)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number10 ?
@@ -378,7 +379,7 @@ export function TrazitFormsElements(base) {
                     <div class="layout horizontal flex center-center">
                     <mwc-textfield class="layout flex" id="number10" type="number" @input=${e=>this.setValidVal(e, fld)}
                     .value=${this.fldDefaultValue(fld.number10)}   label="${this.fieldLabel(fld.number10)}" ?disabled=${this.isFieldDisabled(fld.number10)}
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.checkbox1 ?

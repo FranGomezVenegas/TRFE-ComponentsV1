@@ -182,7 +182,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         background-size: 20px 20px; /* Adjust size to create a subtle pattern */
         background-position: 0 0, 10px 10px;
         overflow-y: scroll;
-        width: 25%;
+        width: 17%;
         display: flex;
         flex-direction: column;
         align-items: end;
@@ -554,140 +554,142 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       //   this.shadowRoot.querySelector('#leftSplit').style.dipslay='none'
       // }
     }
-    render() {      
+    handleKeyDown(event) {
+      if (event.key === 'Enter') {
+        this.filterPerformAction();
+      }
+    }
+    
+    render() {
       return html`
-      ${this.genericFormDialog()}
-      
-        ${this.desktop ?
-          html`     
-          ${this.viewModelFromProcModel.filter === undefined ? html`              
-              ${this.tabsBlock()}  
+        ${this.genericFormDialog()}
 
-          ` : html`    
-          <style>
-          .split-view {
-            display: flex;
-            /* Other styles for your split view */
-          }
-          
-          .divider {
-            background-color: #ccc; /* Light grey color */
-            width: 8px; /* Increase the width to make it more noticeable */
-            cursor: ew-resize; /* Change the cursor to indicate it can be dragged */
-            position: relative;
-            z-index: 1; /* Ensure it's above other content */
-          }
-          
-          .divider::before {
-            content: '';
-            position: absolute;
-            left: -4px; /* Adjust for a larger clickable area */
-            right: -4px; /* Adjust for a larger clickable area */
-            top: 0;
-            bottom: 0;
-            background-color: transparent; /* Transparent, but clickable */
-          }
-          
-          .divider:hover {
-            background-color: #aaa; /* Darker grey on hover */
-          }
-          
-          .divider:active {
-            background-color: #888; /* Even darker grey when actively being dragged */
-          }
-          
-          </style>         
-            <sp-split-view show-divider=${this.showDivider} class="split-view">              
-              <div style="display:flex; width: 100%; background:transparent;">
-                <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__left">
-                  <div id="endpointName_expanded_${this.isLeftPaneExpanded}">      
-  
-																																										
-						
-				  
-											   
-                    ${this.viewModelFromProcModel.filter_button === undefined ? nothing : html`
-                    <div style="display:flex;">
-                      <mwc-icon-button id="expandleftpane" icon="${this.isLeftPaneExpanded ? 'chevron_left' : 'chevron_right'}" @click=${this.toggleLeftPane}></mwc-icon-button>
+        ${this.desktop
+          ? html`
+              ${this.viewModelFromProcModel.filter === undefined
+                ? html`
+                    ${this.tabsBlock()}
+                  `
+                : html`
+                    <style>
+                      .split-view {
+                        display: flex;
+                        /* Other styles for your split view */
+                      }
 
-                      <div class="search-container" style="padding-bottom:8px;">
-                        <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
-                          ${this.viewModelFromProcModel.filter_button["label_" + this.lang]}
-                        </sp-button>                    
-                      </div>    
-                      ${this.viewModelFromProcModel.left_panel === undefined ? nothing : html`
-                        <div style="flex-basis: auto; width: auto;">                        
-                          ${this.getButton(this.viewModelFromProcModel.left_panel, {}, true)}
+                      .divider {
+                        background-color: #ccc; /* Light grey color */
+                        width: 8px; /* Increase the width to make it more noticeable */
+                        cursor: ew-resize; /* Change the cursor to indicate it can be dragged */
+                        position: relative;
+                        z-index: 1; /* Ensure it's above other content */
+                      }
+
+                      .divider::before {
+                        content: '';
+                        position: absolute;
+                        left: -4px; /* Adjust for a larger clickable area */
+                        right: -4px; /* Adjust for a larger clickable area */
+                        top: 0;
+                        bottom: 0;
+                        background-color: transparent; /* Transparent, but clickable */
+                      }
+
+                      .divider:hover {
+                        background-color: #aaa; /* Darker grey on hover */
+                      }
+
+                      .divider:active {
+                        background-color: #888; /* Even darker grey when actively being dragged */
+                      }
+                    </style>
+                    <sp-split-view show-divider=${this.showDivider} class="split-view">
+                      <div style="display:flex; width: 100%; background:transparent;">
+                        <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__left">
+                          <div id="endpointName_expanded_${this.isLeftPaneExpanded}">
+                            ${this.viewModelFromProcModel.filter_button === undefined
+                              ? nothing
+                              : html`
+                                  <div style="display:flex;">
+                                    <mwc-icon-button id="expandleftpane" icon="${this.isLeftPaneExpanded ? 'chevron_left' : 'chevron_right'}" @click=${this.toggleLeftPane}></mwc-icon-button>
+                                    <div class="search-container" style="padding-bottom:8px;">
+                                      <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
+                                        ${this.viewModelFromProcModel.filter_button["label_" + this.lang]}
+                                      </sp-button>
+                                    </div>
+                                    ${this.viewModelFromProcModel.left_panel === undefined
+                                      ? nothing
+                                      : html`
+                                          <div style="flex-basis: auto; width: auto;">
+                                            ${this.getButton(this.viewModelFromProcModel.left_panel, {}, true)}
+                                          </div>
+                                        `}
+                                  </div>
+                                `}
+                            ${this.viewModelFromProcModel.filter === undefined || this.isLeftPaneExpanded === false
+                              ? nothing
+                              : html`
+                                  ${this.genericFormElements(this.viewModelFromProcModel.filter, true, this.handleKeyDown)}
+                                `}
+                          </div>
+                          ${this.filterElement(this.filterResponseData)}
                         </div>
-                      `}
-                    
-                  </div>
-                `}
-                  
-                    ${this.viewModelFromProcModel.filter === undefined || this.isLeftPaneExpanded===false ? nothing : html`
-                      ${this.genericFormElements(this.viewModelFromProcModel.filter, true)} 
-                    `}
-                  </div>
-                  ${this.filterElement(this.filterResponseData)}
-                </div>
-
-                <div class="resizer" id="dragMe" style="width: 15px;"></div>
-
-                <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__right">
-                  <div id="document" style="width: 100%;">
-                    ${this.tabsBlock()}  
-                    <div class="layout horizontal">
-                    ${this.viewModelFromProcModel&&this.viewModelFromProcModel.printable&&this.viewModelFromProcModel.printable.active===true ?
-                    html`
-                      <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>                
-                    `: nothing}
-                
-                    ${this.viewModelFromProcModel&&this.viewModelFromProcModel.download&&this.viewModelFromProcModel.download.active===true ?
-                      html`    
-                      <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>                
-                    `: nothing}
-                    </div>
-                  ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`            
-                      <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
-                      .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
-                      .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
-                      .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-                      .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}"
-                      .selectedItemInView=${this.selectedItemInView}
-                      > 
-                      </objecttabs-composition>              
-      
-                    `: nothing}
-                  </div>
-                </div>
+                        <div class="resizer" id="dragMe" style="width: 15px;"></div>
+                        <div id="rightSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__right">
+                          <div id="document" style="width: 100%;">
+                            ${this.tabsBlock()}
+                            <div class="layout horizontal">
+                              ${this.viewModelFromProcModel && this.viewModelFromProcModel.printable && this.viewModelFromProcModel.printable.active === true
+                                ? html`
+                                    <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>
+                                  `
+                                : nothing}
+                              ${this.viewModelFromProcModel && this.viewModelFromProcModel.download && this.viewModelFromProcModel.download.active === true
+                                ? html`
+                                    <mwc-icon-button icon="download" @click=${this.downloadDataTableToCSV}></mwc-icon-button>
+                                  `
+                                : nothing}
+                            </div>
+                            ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel
+                              ? html`
+                                  <objecttabs-composition style="position:relative; left: 30px; top:86px; width:95%; display:block;" .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
+                                    .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}
+                                    .selectedItem=${this.selectedItem} .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
+                                    .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
+                                    .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert('test') }}"
+                                    .selectedItemInView=${this.selectedItemInView}>
+                                  </objecttabs-composition>
+                                `
+                              : nothing}
+                          </div>
+                        </div>
+                      </div>
+                    </sp-split-view>
+                  `}
+            `
+          : html`
+              <div id="rightSplit">
+                ${this.tabsBlock()}
+                ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel
+                  ? html`
+                      <objecttabs-composition .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
+                        .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}
+                        .viewName=${this.viewName} .filterName=${this.filterName} .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
+                        .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel} .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert('test') }}">
+                      </objecttabs-composition>
+                    `
+                  : nothing}
               </div>
-            </sp-split-view>
-          `}
-      ` : html`        
-        <div id="rightSplit">
-        ${this.tabsBlock()}  
-
-        ${this.viewModelFromProcModel !== undefined && this.viewModelFromProcModel.view_definition !== undefined && this.viewModelFromProcModel ? html`
-            <objecttabs-composition .selectedTabModelFromProcModel=${this.viewModelFromProcModel.view_definition.reportElements}
-              .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config} .viewName=${this.viewName} .filterName=${this.filterName} 
-              .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-              .selectedItem=${this.selectedProcInstance} .viewModelFromProcModel=${this.viewModelFromProcModel}      
-              .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}">
-            </objecttabs-composition>              
-          `: nothing}
-        </div>
-        `
-        }
-    `;
+            `}
+      `;
     }
   
     tabsBlock() {
       return html`
         ${this.viewModelFromProcModel.tabs ? html`
           <div class="layout horizontal flex" style="position:relative; top:10px;">
-            ${this.viewModelFromProcModel.tabs !== undefined && this.viewModelFromProcModel.tabs.length > 1 ? html`
-              <div class="tabs-container">              
-																																										
+            ${this.viewModelFromProcModel.tabs.length > 1 ? html`
+              <div class="tabs-container">
                 ${this.viewModelFromProcModel.tabs.map(t => html`
                   <mwc-button
                     class="tabBtn ${this.selectedTab === t ? 'selected' : ''}"
@@ -705,10 +707,9 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       `;
     }
     
-
-    selectedTabContent(){      
-      if (Object.keys(this.selectedTabModelFromProcModel).length === 0){
-        this.selectedTabModelFromProcModel=this.viewModelFromProcModel.tabs[0]
+    selectedTabContent() {
+      if (Object.keys(this.selectedTabModelFromProcModel).length === 0) {
+        this.selectedTabModelFromProcModel = this.viewModelFromProcModel.tabs[0];
       }
       //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
       //console.log("this.filterCurrentData", this.filterCurrentData);
@@ -729,9 +730,11 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
           ?isProcManagement=${this.isProcManagement} 
           .filterCurrentData=${this.filterCurrentData}
           .selectedItemInView=${this.selectedItemInView}
-          @tab-selected="${(e) => { alert("test") }}"></objecttabs-composition>     
-      `
+          @tab-selected="${(e) => { alert('test') }}">
+        </objecttabs-composition>     
+      `;
     }
+    
     tabOnOpenView() {
       // <objecttabs-composition 
       // .lang=${this.lang} .masterData=${this.masterData}
