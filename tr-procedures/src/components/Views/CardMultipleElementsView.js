@@ -213,7 +213,7 @@ export function CardMultipleElementsView(base) {
                     ${elem2.type==="spectestScripts" ? this.specScripts(elem, true) : nothing}
                     ${elem2.type==="buttonsOnly" ? 
                     
-                      this.buttonsOnly(elem2, elem2.endPointResponseObject=="ROOT"? data: data[elem2.endPointResponseObject]) : nothing}
+                      this.buttonsOnly(elem2, data) : nothing}
                     ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
         
                   `: nothing}
