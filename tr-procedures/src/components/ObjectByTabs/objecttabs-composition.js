@@ -120,11 +120,12 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     this.dispatchEvent(new CustomEvent('tab-selected', {bubbles: true,composed: true}));  
   }
   render(){
+    //this.selectedItem=this.selectedItemInView
     //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
     return html`
       <div id="mainDiv">
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
-          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
+          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItemInView, this.selectedItem)}
         `}
       </div>
       ${this.genericFormDialog()}
@@ -248,7 +249,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     }
   }
 
-  print2LevelsObject(elem, data){    
+  print2LevelsObject(elem, data, data2){    
     console.log(elem.elements)
     return html`    
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
@@ -267,7 +268,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
-            ${elem2.type==="parentReadOnlyTable" ? this.parentReadOnlyTable(elem2, data, true, undefined, undefined,): nothing}
+            ${elem2.type==="parentReadOnlyTable" ? this.parentReadOnlyTable(elem2, data2, true, undefined, undefined,): nothing}
             ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 
@@ -298,7 +299,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     </div>
   `
   }
-  print1LevelObject(elem, data){   
+  print1LevelObject(elem, data, data2){   
     
     return html`    
       ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
@@ -313,7 +314,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
       ${elem.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem, data, true): nothing}
       ${elem.type==="parentReadOnlyTable" ? 
-      this.parentReadOnlyTable(elem, data, true, undefined, undefined,undefined,elem.theme,): nothing}
+      this.parentReadOnlyTable(elem, data2, true, undefined, undefined,undefined,elem.theme,): nothing}
 
       ${elem.type==="dragDropBoxes" ? this.dragDropBoxes(elem, data[elem.endPointResponseObject]) : nothing}
 
@@ -353,7 +354,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     return html`<tree-view .specification=${elem.view_definition} .data=${dataArr}></tree-view>`
   }
 
-  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItemInView) {
+  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data, data2) {
     if (data===undefined||elemDef===undefined){return}
     // if (this.selectedItem!==undefined){
     //   console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
@@ -367,7 +368,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
             html`
               ${elem.is_translation===undefined||(elem.is_translation!==undefined&&elem.is_translation===true&&elem.lang!==undefined&&elem.lang===this.lang) ?
               html`              
-                ${elem.elements!==undefined? html` ${this.print2LevelsObject(elem, data)}`: html`${this.print1LevelObject(elem, data)}`}
+                ${elem.elements!==undefined? html` ${this.print2LevelsObject(elem, data, data2)}`: html`${this.print1LevelObject(elem, data, data2)}`}
               `:nothing}
             `                
             )}
@@ -375,7 +376,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
             html`
             ${elemDef.is_translation===undefined||(elemDef.is_translation!==undefined&&elemDef.is_translation===true&&elemDef.lang!==undefined&&elemDef.lang===this.lang) ?
             html`              
-              ${elemDef.elements!==undefined? html` ${this.print2LevelsObject(elemDef, data)}`: html`${this.print1LevelObject(elemDef, data)}`}
+              ${elemDef.elements!==undefined? html` ${this.print2LevelsObject(elemDef, data, data2)}`: html`${this.print1LevelObject(elemDef, data, data2)}`}
             `:nothing}
           `}
         </div>
