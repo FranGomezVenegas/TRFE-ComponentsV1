@@ -1064,7 +1064,7 @@ export function DataViews(base) {
       
       const childElement = {
         ...elem.children_definition,
-        endPointResponseObject: elem.children_definition.endPointResponseObject
+        endPointResponseObject: elem.children
       };
       
       const endPointResponseObject = elem.endPointResponseObject;
