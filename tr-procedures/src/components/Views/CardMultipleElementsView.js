@@ -156,6 +156,14 @@ export function CardMultipleElementsView(base) {
       console.log(elem.cardElements)
       return html` 
     <style>
+    #main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px; /* espacio entre los elementos */
+    }
+    #main > div {
+      flex: 1 1 calc(50% - 10px); /* Dos columnas con espacio */
+    }
     div#mainaddborder {
         border: 0.72px solid rgba(36, 192, 235, 1);
         border-radius: 10px;
@@ -165,8 +173,14 @@ export function CardMultipleElementsView(base) {
         flex:1;        
         position: relative;                  
         top: 2px;
-        left: 2px;                  
-      }       
+        left: 2px; 
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* espacio entre los elementos */                 
+      } 
+      #mainaddborder > div {
+        flex: 1 1 calc(50% - 10px); /* Dos columnas con espacio */
+      }      
     </style>
     <div id="main${elem.add_border !== undefined && elem.add_border == true ? "addborder" : ""}"
         class="${elem.class !== undefined && elem.class === 'vertical' ? 'layout vertical flex wrap' : ''}" style="${elem.style !== undefined ? elem.style : ""}">

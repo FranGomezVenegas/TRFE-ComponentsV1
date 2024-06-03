@@ -1458,6 +1458,9 @@ export function DataViews(base) {
     }
     kpiCardSomeElementsMain(elem, data) {
       console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
+      if (Array.isArray(data) && data.length > 0) {
+        data=data[0]
+      }
       return html`
         ${elem === undefined || elem.title === undefined
           ? nothing
