@@ -75,6 +75,21 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
           #vaadin-text-field-input{
           background-color: #d0f1fa;
           }
+          vaadin-grid::part(row) {
+            background-color: transparent;
+          }
+      
+          vaadin-grid::part(header-cell) {
+            background-color: transparent;
+          }
+      
+          vaadin-grid::part(body-cell) {
+            background-color: transparent;
+          }
+      
+          vaadin-grid::part(footer-cell) {
+            background-color: transparent;
+          }          
         `
       ];
     }
@@ -265,7 +280,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
               html`
               ${addContextMenu!==undefined&&addContextMenu===true?html`
                 <vaadin-context-menu .items=${this.contextMenuItems} @item-selected="${this.contextMenuAction}">
-                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;" theme="row-dividers" column-reordering-allowed multi-sort 
                   @active-item-changed=${this.activeItemChanged}
                   .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                   ${gridRowDetailsRenderer(this.detailRenderer)}
@@ -275,7 +290,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
                 </vaadin-grid>
                 </vaadin-context-menu>`
               :html`
-                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;"  theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${this.activeItemChanged}
                 .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                 ${gridRowDetailsRenderer(this.detailRenderer)}

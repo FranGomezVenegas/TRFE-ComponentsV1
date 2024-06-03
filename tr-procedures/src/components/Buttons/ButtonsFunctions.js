@@ -15,21 +15,21 @@ export function ButtonsFunctions(base) {
       return html`
         <style>
           mwc-icon-button#lang {        
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
           }
           mwc-button {
-            background-color: rgba(36, 192, 235, 1);
+            background-color: #1473e6; /* rgba(36, 192, 235, 1); */
             font-family: Montserrat;
             font-weight: bold;
             font-size: 19px;
-            --mdc-theme-primary:rgba(36, 192, 235, 1);
+            --mdc-theme-primary:#1473e6; /* rgba(36, 192, 235, 1); */
             border-radius: 12px;
           }
           mwc-button.button {        
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -44,7 +44,7 @@ export function ButtonsFunctions(base) {
             border-radius: 12px;
           }            
           mwc-icon-button {        
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -57,7 +57,7 @@ export function ButtonsFunctions(base) {
           }        
           mwc-icon-button#video {
             color : #FFFFFF;
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
           }
           sp-button {
             background : #24C0EB;
@@ -148,21 +148,21 @@ export function ButtonsFunctions(base) {
       return html`
         <style>
           mwc-icon-button#lang {        
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
           }
           mwc-button {
-            background-color: rgba(36, 192, 235, 1);
+            background-color: #1473e6; /* rgba(36, 192, 235, 1); */
             font-family: Montserrat;
             font-weight: bold;
             font-size: 19px;
-            --mdc-theme-primary:rgba(36, 192, 235, 1);
+            --mdc-theme-primary:#1473e6; /* rgba(36, 192, 235, 1); */
             border-radius: 12px;
           }
           mwc-button.button {        
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -177,7 +177,7 @@ export function ButtonsFunctions(base) {
             border-radius: 12px;
           }            
           mwc-icon-button {        
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -190,11 +190,11 @@ export function ButtonsFunctions(base) {
           }                
           mwc-icon-button#video {
             color : #FFFFFF;
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
           }
           sp-button {
             background : #24C0EB;
-            background : rgba(36, 192, 235, 1);
+            background : #1473e6; /* rgba(36, 192, 235, 1); */
             border-color : inherit !important;
             border-radius : 35px;
             -moz-border-radius : 35px;
