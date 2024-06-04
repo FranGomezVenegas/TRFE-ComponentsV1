@@ -251,6 +251,9 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
 
   print2LevelsObject(elem, data, data2){    
     console.log(elem.elements)
+    if (this.isEmptyObject(data2)) {
+      data2 = data;
+    }
     return html`    
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
@@ -299,8 +302,13 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     </div>
   `
   }
+  isEmptyObject(obj) {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
   print1LevelObject(elem, data, data2){   
-    
+    if (this.isEmptyObject(data2)) {
+      data2 = data;
+    }    
     return html`    
       ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="card" ? this.kpiCard(elem, data[elem.endPointResponseObject]) : nothing}
