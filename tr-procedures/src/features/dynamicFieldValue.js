@@ -15,7 +15,8 @@ export function FeaturesDynamicFieldValue(base) {
           }
           const regex = /\{(fld|variable)\?(\w+)(?:(?:\s*==\s*(['"]?.+['"]?))?\s*\?\s*(['"]?[^:}]+['"]?)\s*:\s*(['"]?[^}]+['"]?)|([^}]+))\}|{(fld|variable):(\w+)\}/g;
           return templateString.replace(regex, (match, type, key, comparisonValue, truePart, falsePart, switchCases, simpleType, simpleKey) => {
-              if (type && key) {
+            //console.log({ match, type, key, comparisonValue, truePart, falsePart, switchCases, simpleType, simpleKey });  
+            if (type && key) {
                   // Handle conditional expression
                   return this.evaluateExpression(data, type, key, truePart, falsePart, comparisonValue, switchCases);
               } else if (simpleType) {
