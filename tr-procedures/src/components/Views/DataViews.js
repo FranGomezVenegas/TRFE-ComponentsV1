@@ -31,11 +31,11 @@ import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 
 import '../DragDropBox/index';  
+import { FeaturesDynamicFieldValue } from "../../features/dynamicFieldValue";
 
 export function DataViews(base) {
-
   let contextMenu = undefined;
-  return class extends TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
+  return class extends FeaturesDynamicFieldValue(TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(
           (
@@ -55,7 +55,7 @@ export function DataViews(base) {
         )
       )
     )
-  )))) {
+  ))))) {
     kpiChartFran1(elem, data) {
       if (elem===undefined){return html``}
       if (elem.hideNoDataMessage!==undefined&&elem.hideNoDataMessage===true&&data===undefined){return html``}
@@ -1833,12 +1833,14 @@ export function DataViews(base) {
       if (fld.paragraph!==undefined){
         let fldValue=unsafeHTML(this.getDynamicData(fld.paragraph, data, this.lang))
         if (fldValue===undefined&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){return html``}
-        
+        let fldLabel=this.fieldLabel(fld)
         return html`
         <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
-          <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
-            ${this.fieldLabel(fld)}:
-          </span>
+          ${fldLabel===undefined?nothing:html`
+            <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
+              ${fldLabel}:
+            </span>
+          `}
           <span class="cardValue" style="${fld.styleForValue !== undefined ? fld.styleForValue : ""}">
             ${fldValue}
           </span>
@@ -1874,6 +1876,7 @@ export function DataViews(base) {
       `
     }
     fieldLabel(fld) {
+      if (fld.hideLabel!==undefined&&fld.hideLabel===true){return ''}
       return fld["label_" + this.lang] !== undefined
         ? fld["label_" + this.lang]
         : fld.name;
