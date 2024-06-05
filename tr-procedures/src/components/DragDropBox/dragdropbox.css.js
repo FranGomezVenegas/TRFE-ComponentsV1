@@ -43,8 +43,8 @@ export const styles = css`
   .box {
     width: 80px;
     height: 80px;
-    background-color: #42BFF7;  
-    border: 2px solid #03A9F4;
+    background-color: rgb(191 231 241); 
+    border: 2px solid rgb(119 206 230);
     padding: 2px;
     color: white;
     cursor: pointer;
