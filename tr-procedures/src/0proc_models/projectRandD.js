@@ -2148,6 +2148,65 @@ export const ProjectRandD=
                   "label_es": "UDM"
                 }
               ],
+              "smartFilter": {
+                "filterValues":{},
+                "applyFilterButton":{
+                  "title":{
+                    label_en: 'Apply Filter',
+                    label_es: 'Aplicar Filtro',
+                  }
+                },
+                "clearFilterButton":{
+                  "title":{
+                    label_en: 'Clear Filter',
+                    label_es: 'Limpiar Filtro',
+                  }
+                },
+                "displayFilterButton":{
+                  "title":{
+                    label_en: 'Display Filter',
+                    label_es: 'Mostrar Filtro',
+                  }
+                },
+                dialogInfo: {
+                  name: 'genericDialog',
+      
+                  "fields": [
+                    {
+                      "name": "name",
+                      "label_en": "Name",
+                      "label_es": "Name",
+                      "type":"text",
+                    },
+                    {
+                      "name": "purpose",
+                      "label_en": "Purpose",
+                      "label_es": "Purpose",
+                      "type":"text",
+                    },
+                    // {
+                    //   "name": "location_name",
+                    //   "type":"select",
+                    //   "label_en": "location_name",
+                    //   "label_es": "location_name",
+                    //   "select_options":[
+                    //     {
+                    //       "name":"E02",
+                    //       "lable_en":"E02",
+                    //       "lable_es":"E02",
+                    //       "value":"E02"
+                    //     },
+                    //     {
+                    //       "name":"C01",
+                    //       "lable_en":"C01",
+                    //       "lable_es":"C01",
+                    //       "value":"C01"
+                    //     }
+                    //   ]
+                    // }
+                    ],
+                }
+              },
               "row_buttons": [
                 {
                   "actionName": "FORMULA_UPDATE_INGREDIENT",

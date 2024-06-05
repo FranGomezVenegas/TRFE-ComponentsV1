@@ -24,6 +24,8 @@ import "@google-web-components/google-chart";
 import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 import '../grid_with_buttons/tableRowDetail';
+import '@material/mwc-button';
+import '@material/mwc-textfield';
 
 import { ReadOnlyTableParts } from "./ReadOnlyTableParts";
 
@@ -38,7 +40,7 @@ export function DataViews(base) {
   return class extends FeaturesDynamicFieldValue(TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(
-          (
+        (
           TrazitInvestigationsDialog(
             ModuleEnvMonitDialogsMicroorganism(
               TrazitEnterResultWithSpec(
@@ -57,9 +59,9 @@ export function DataViews(base) {
     )
   ))))) {
     kpiChartFran1(elem, data) {
-      if (elem===undefined){return html``}
-      if (elem.hideNoDataMessage!==undefined&&elem.hideNoDataMessage===true&&data===undefined){return html``}
-      if (data===undefined&&this.data!==undefined){data=this.data}
+      if (elem === undefined) { return html`` }
+      if (elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage === true && data === undefined) { return html`` }
+      if (data === undefined && this.data !== undefined) { data = this.data }
       //console.log('kpiChartFran', 'elem', elem, 'data', this.data)
       return html`
         ${elem.display_chart !== true
@@ -72,11 +74,10 @@ export function DataViews(base) {
                 type="${elem.chart_type}"
                 .data="${this.getChartData(elem, data)}"
                 .options="${this.getChartOptions(elem)}"
-                style="${
-                  elem.chart_style !== undefined
-                    ? elem.chart_style
-                    : "height:400px; width: 100%;"
-                }
+                style="${elem.chart_style !== undefined
+              ? elem.chart_style
+              : "height:400px; width: 100%;"
+            }
               ></google-chart>
             `}
       `;
@@ -174,31 +175,31 @@ export function DataViews(base) {
       return html`
         <div style="position:relative;">
           ${elem === undefined || elem.title === undefined
-            ? nothing
-            : html`<span
+          ? nothing
+          : html`<span
                 style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;"
                 >${elem.title["label_" + this.lang]}</span
               >`}
           ${elem === undefined || data === undefined
-            ? nothing
-            : html` <json-viewer style=${elem.style!==undefined?elem.style: "padding:0px; padding-left:20px; top:-15px;"}
+          ? nothing
+          : html` <json-viewer style=${elem.style !== undefined ? elem.style : "padding:0px; padding-left:20px; top:-15px;"}
                 >${JSON.stringify(
-                  this.getDataFromRoot(elem, data)
-                )}</json-viewer
+            this.getDataFromRoot(elem, data)
+          )}</json-viewer
               >`}
         </div>
       `;
     }
-    kpiReportTitle(elem, data) {    
+    kpiReportTitle(elem, data) {
       return html`    
         <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]}</p>
       `;
     }
     kpiReportTitleLvl2(elem, data, lang) {
-      if (elem.title===undefined&&(elem.title.text_en===undefined||elem.title.label_en===undefined)){
+      if (elem.title === undefined && (elem.title.text_en === undefined || elem.title.label_en === undefined)) {
         return html``
       }
-      if (elem.title.text_en!==undefined){
+      if (elem.title.text_en !== undefined) {
         return html`
         <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">            
           ${unsafeHTML(this.getDynamicData(elem.title, data, lang))}
@@ -206,16 +207,15 @@ export function DataViews(base) {
         `
       }
       return html`    
-          <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">${            
-              elem.title["label_" + this.lang]
-          }</p>
+          <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]
+        }</p>
           `;
     }
     kpiRecoveryRate() {
       //console.log('kpiRecoveryRate', this.data.recoveryrate_datatable)
       return html`
         ${!this.data.recoveryrate_datatable ||
-        !this.data.recoveryrate_datatable.data
+          !this.data.recoveryrate_datatable.data
           ? nothing
           : html`
               <lit-datatable
@@ -248,7 +248,7 @@ export function DataViews(base) {
     readOnlyTableByGroupOrig(elem, dataArr, isSecondLevel = false) {
       console.log("readOnlyTableByGroup", elem, dataArr);
       dataArr = this.getDataFromRoot(elem, dataArr);
-      console.log("Mejori",dataArr);      
+      console.log("Mejori", dataArr);
       return html`
         <style>
           .table-group-container {
@@ -271,20 +271,20 @@ export function DataViews(base) {
         </style>
         <div class="table-group-container">
           ${dataArr === undefined
-            ? html`No Data`
-            : html`
+          ? html`No Data`
+          : html`
                 ${Object.entries(dataArr).map(
-                  ([key, value]) =>
-                    html`
+            ([key, value]) =>
+              html`
                       ${this.readOnlyTable(
-                        elem,
-                        Object.entries(value).map,
-                        isSecondLevel,
-                        value,
-                        key
-                      )}
+                elem,
+                Object.entries(value).map,
+                isSecondLevel,
+                value,
+                key
+              )}
                     `
-                )}
+          )}
               `}
         </div>
       `;
@@ -380,82 +380,80 @@ export function DataViews(base) {
             style="display: flex; flex-direction: column; text-align: center;"
           >
             ${elem === undefined || elem.title === undefined
-              ? nothing
-              : html` <p>
+          ? nothing
+          : html` <p>
                   <span class="title ${isSecondLevel}">${elem.title}</span>
                 </p>`}
             <div class="layout horizontal center flex wrap">
               ${this.getButton(elem, dataArr, true)}
             </div>
             ${elem.columns === undefined
-              ? html`No columns defined`
-              : html`
+          ? html`No columns defined`
+          : html`
                   <table class="styled-table-bygroup">
                     ${Object.entries(dataArr)
-                      .sort()
-                      .map(
-                        ([key, value]) =>
-                          html`
+              .sort()
+              .map(
+                ([key, value]) =>
+                  html`
                   <thead>          
                     <tr>
-                    <th style="color:#24c0eb; background-color: #d6e9f8; text-transform:uppercase; font-size:16px;" colspan=" ${
-                      elem.columns.length} ">
+                    <th style="color:#24c0eb; background-color: #d6e9f8; text-transform:uppercase; font-size:16px;" colspan=" ${elem.columns.length} ">
                       
-                      ${elem.showGroupEntryObjectName!==undefined&&elem.showGroupEntryObjectName===true?
-                      html`${key} ${ Object.keys(value)[0]}`: 
+                      ${elem.showGroupEntryObjectName !== undefined && elem.showGroupEntryObjectName === true ?
+                      html`${key} ${Object.keys(value)[0]}` :
                       html`${key}`
-                      }</th>
+                    }</th>
                     </tr>
                     <tr class="headercolumns">
                       ${elem.columns.map(
-                        (fld) =>
-                          html`
+                      (fld) =>
+                        html`
                             <td style="background-color:#7ccee6; color: white;">
                               ${fld["label_" + this.lang]}
                             </td>
                           `
-                      )}                  
+                    )}                  
                     </tr>
                   </thead>
                   <tbody>
-                  ${
-                    value === undefined || !Array.isArray(value)
+                  ${value === undefined || !Array.isArray(value)
                       ? html`No Data`
                       : html`
                           ${value.sort().map(
-                            (p) =>
-                              html`
+                        (p) =>
+                          html`
                                 <tr>
                                   ${elem.columns.map(
-                                    (fld) =>
-                                      html`
+                            (fld) =>
+                              html`
                                         ${fld.name === "pretty_spec"
-                                          ? html`
+                                  ? html`
                                               <td>
                                                 <span style="color:green"
                                                   >${p[
-                                                    "spec_text_green_area_" +
-                                                      this.lang
-                                                  ]}</span
+                                    "spec_text_green_area_" +
+                                    this.lang
+                                    ]}</span
                                                 >
                                                 <span style="color:orange"
                                                   >${p[
-                                                    "spec_text_yellow_area_" +
-                                                      this.lang
-                                                  ]}</span
+                                    "spec_text_yellow_area_" +
+                                    this.lang
+                                    ]}</span
                                                 >
                                                 <span style="color:red"
                                                   >${p[
-                                                    "spec_text_red_area_" +
-                                                      this.lang
-                                                  ]}</span
+                                    "spec_text_red_area_" +
+                                    this.lang
+                                    ]}</span
                                                 >
                                               </td>
                                             `
-                                          : html`
+                                  : html`
                                               ${fld.as_progress !== undefined &&
-                                              fld.as_progress === true
-                                                ? html`
+                                      fld.as_progress === true
+                                      ? html`
                                                     <style>
                                                       .w3-responsive {
                                                         display: block;
@@ -517,14 +515,14 @@ export function DataViews(base) {
                                                         <div
                                                           class="w3-background w3-round-xlarge"
                                                           title="${this.titleLang(
-                                                            fld
-                                                          )}"
+                                        fld
+                                      )}"
                                                         >
                                                           <div
                                                             class="w3-container w3-blue w3-round-xlarge"
                                                             style="width:${p[
-                                                              fld.name
-                                                            ]}%"
+                                        fld.name
+                                        ]}%"
                                                           >
                                                             ${p[fld.name]}%
                                                           </div>
@@ -533,51 +531,51 @@ export function DataViews(base) {
                                                       <br />
                                                     </td>
                                                   `
-                                                : html`
+                                      : html`
                                                     <td>
                                                       ${fld.fix_value_prefix !==
-                                                      undefined
-                                                        ? fld.fix_value_prefix
-                                                        : ""}${p[
-                                                        fld.name
-                                                      ]}${fld.fix_value_suffix !==
-                                                      undefined
-                                                        ? fld.fix_value_suffix
-                                                        : ""}
+                                          undefined
+                                          ? fld.fix_value_prefix
+                                          : ""}${p[
+                                          fld.name
+                                          ]}${fld.fix_value_suffix !==
+                                            undefined
+                                            ? fld.fix_value_suffix
+                                            : ""}
                                                       ${fld.fix_value2_prefix !==
-                                                      undefined
-                                                        ? fld.fix_value2_prefix
-                                                        : ""}${fld.name2 !==
-                                                      undefined
-                                                        ? p[fld.name2]
-                                                        : ""}${fld.fix_value2_suffix !==
-                                                      undefined
-                                                        ? fld.fix_value2_suffix
-                                                        : ""}
+                                          undefined
+                                          ? fld.fix_value2_prefix
+                                          : ""}${fld.name2 !==
+                                            undefined
+                                            ? p[fld.name2]
+                                            : ""}${fld.fix_value2_suffix !==
+                                              undefined
+                                              ? fld.fix_value2_suffix
+                                              : ""}
                                                       ${fld.fix_value3_prefix !==
-                                                      undefined
-                                                        ? fld.fix_value3_prefix
-                                                        : ""}${fld.name3 !==
-                                                      undefined
-                                                        ? p[fld.name3]
-                                                        : ""}${fld.fix_value3_suffix !==
-                                                      undefined
-                                                        ? fld.fix_value3_suffix
-                                                        : ""}
+                                          undefined
+                                          ? fld.fix_value3_prefix
+                                          : ""}${fld.name3 !==
+                                            undefined
+                                            ? p[fld.name3]
+                                            : ""}${fld.fix_value3_suffix !==
+                                              undefined
+                                              ? fld.fix_value3_suffix
+                                              : ""}
                                                     </td>
                                                   `}
                                             `}
                                       `
-                                  )}
+                          )}
                                 </tr>
                               `
-                          )}
+                      )}
                         `
-                  }
+                    }
                   </tbody>
                 </table>
               `
-                      )}
+              )}
                   </table>
                 `}
           </div>
@@ -684,8 +682,8 @@ export function DataViews(base) {
         </style>
         <div style="display: flex; flex-direction: column; text-align: center;">
           ${elem === undefined || elem.title === undefined
-            ? nothing
-            : html` <p>
+          ? nothing
+          : html` <p>
                 <span class="title ${isSecondLevel}"
                   >${elem.title["label_" + this.lang]}</span
                 >
@@ -698,13 +696,13 @@ export function DataViews(base) {
               ${this.getButton(elem, dataArr, true)}
             </div>
             ${elem.columns === undefined
-              ? html`No columns defined`
-              : html`
+          ? html`No columns defined`
+          : html`
                   ${Object.entries(dataArr)
-                    .sort()
-                    .map(
-                      ([key, value]) =>
-                        html`
+              .sort()
+              .map(
+                ([key, value]) =>
+                  html`
                           <table class="styled-table-bygroup">
                             <thead>
                               <tr>
@@ -717,68 +715,68 @@ export function DataViews(base) {
                               </tr>
                               <tr class="headercolumns">
                                 ${elem.columns.map(
-                                  (fld) =>
-                                    html`
+                    (fld) =>
+                      html`
                                       ${this.fieldsToDiscard(fld) === true
-                                        ? nothing
-                                        : html`<td
+                          ? nothing
+                          : html`<td
                                             style="background-color:#7ccee6; color: white; font-weight: bold;"
                                           >
                                             ${fld["label_" + this.lang]}
                                           </td>`}
                                     `
-                                )}
+                  )}
                               </tr>
                             </thead>
                             <tbody>
                               ${value === undefined || !Array.isArray(value)
-                                ? html`No Data`
-                                : html`
+                      ? html`No Data`
+                      : html`
                                     ${value.sort().map(
-                                      (p) =>
-                                        html`
+                        (p) =>
+                          html`
                                           <tr>
                                             ${elem.columns.map(
-                                              (fld) =>
-                                                html`
+                            (fld) =>
+                              html`
                                                   ${this.fieldsToDiscard(
-                                                    fld
-                                                  ) === true
-                                                    ? nothing
-                                                    : html`
+                                fld
+                              ) === true
+                                  ? nothing
+                                  : html`
                                                         ${fld.name ===
-                                                        "pretty_spec"
-                                                          ? html`
+                                      "pretty_spec"
+                                      ? html`
                                                               <td>
                                                                 <span
                                                                   style="color:green"
                                                                   >${p[
-                                                                    "spec_text_green_area_" +
-                                                                      this.lang
-                                                                  ]}</span
+                                        "spec_text_green_area_" +
+                                        this.lang
+                                        ]}</span
                                                                 >
                                                                 <span
                                                                   style="color:orange"
                                                                   >${p[
-                                                                    "spec_text_yellow_area_" +
-                                                                      this.lang
-                                                                  ]}</span
+                                        "spec_text_yellow_area_" +
+                                        this.lang
+                                        ]}</span
                                                                 >
                                                                 <span
                                                                   style="color:red"
                                                                   >${p[
-                                                                    "spec_text_red_area_" +
-                                                                      this.lang
-                                                                  ]}</span
+                                        "spec_text_red_area_" +
+                                        this.lang
+                                        ]}</span
                                                                 >
                                                               </td>
                                                             `
-                                                          : html`
+                                      : html`
                                                               ${fld.as_progress !==
-                                                                undefined &&
-                                                              fld.as_progress ===
-                                                                true
-                                                                ? html`
+                                          undefined &&
+                                          fld.as_progress ===
+                                          true
+                                          ? html`
                                                                     <style>
                                                                       .w3-responsive {
                                                                         display: block;
@@ -843,88 +841,88 @@ export function DataViews(base) {
                                                                         <div
                                                                           class="w3-background w3-round-xlarge"
                                                                           title="${this.titleLang(
-                                                                            fld
-                                                                          )}"
+                                            fld
+                                          )}"
                                                                         >
                                                                           <div
                                                                             class="w3-container w3-blue w3-round-xlarge"
                                                                             style="width:${p[
-                                                                              fld
-                                                                                .name
-                                                                            ]}%"
+                                            fld
+                                              .name
+                                            ]}%"
                                                                           >
                                                                             ${p[
-                                                                              fld
-                                                                                .name
-                                                                            ]}%
+                                            fld
+                                              .name
+                                            ]}%
                                                                           </div>
                                                                         </div>
                                                                       </div>
                                                                       <br />
                                                                     </td>
                                                                   `
-                                                                : html`
+                                          : html`
                                                                     <td>
                                                                       ${fld.fix_value_prefix !==
-                                                                      undefined
-                                                                        ? fld.fix_value_prefix
-                                                                        : ""}${p[
-                                                                        fld.name
-                                                                      ]}${fld.fix_value_suffix !==
-                                                                      undefined
-                                                                        ? fld.fix_value_suffix
-                                                                        : ""}
+                                              undefined
+                                              ? fld.fix_value_prefix
+                                              : ""}${p[
+                                              fld.name
+                                              ]}${fld.fix_value_suffix !==
+                                                undefined
+                                                ? fld.fix_value_suffix
+                                                : ""}
                                                                       ${fld.fix_value2_prefix !==
-                                                                      undefined
-                                                                        ? fld.fix_value2_prefix
-                                                                        : ""}${fld.name2 !==
-                                                                      undefined
-                                                                        ? p[
-                                                                            fld
-                                                                              .name2
-                                                                          ]
-                                                                        : ""}${fld.fix_value2_suffix !==
-                                                                      undefined
-                                                                        ? fld.fix_value2_suffix
-                                                                        : ""}
+                                              undefined
+                                              ? fld.fix_value2_prefix
+                                              : ""}${fld.name2 !==
+                                                undefined
+                                                ? p[
+                                                fld
+                                                  .name2
+                                                ]
+                                                : ""}${fld.fix_value2_suffix !==
+                                                  undefined
+                                                  ? fld.fix_value2_suffix
+                                                  : ""}
                                                                       ${fld.fix_value3_prefix !==
-                                                                      undefined
-                                                                        ? fld.fix_value3_prefix
-                                                                        : ""}${fld.name3 !==
-                                                                      undefined
-                                                                        ? p[
-                                                                            fld
-                                                                              .name3
-                                                                          ]
-                                                                        : ""}${fld.fix_value3_suffix !==
-                                                                      undefined
-                                                                        ? fld.fix_value3_suffix
-                                                                        : ""}
+                                              undefined
+                                              ? fld.fix_value3_prefix
+                                              : ""}${fld.name3 !==
+                                                undefined
+                                                ? p[
+                                                fld
+                                                  .name3
+                                                ]
+                                                : ""}${fld.fix_value3_suffix !==
+                                                  undefined
+                                                  ? fld.fix_value3_suffix
+                                                  : ""}
                                                                     </td>
                                                                   `}
                                                             `}
                                                       `}
                                                 `
-                                            )}
+                          )}
                                           </tr>
                                         `
-                                    )}
+                      )}
                                   `}
                             </tbody>
                           </table>
                         `
-                    )}
+              )}
                 `}
           </div>
         </div>
       `;
     }
 
-    handleTableRowClick(event, rowSelected, elem) {      
-      if(rowSelected[elem.children] == 0) {
+    handleTableRowClick(event, rowSelected, elem) {
+      if (rowSelected[elem.children] == 0) {
         if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
           alert("There is no data");
-          this.selectedItemInView={}
+          this.selectedItemInView = {}
         }
       }
       //alert(el);
@@ -977,27 +975,27 @@ export function DataViews(base) {
       const popup = this.shadowRoot.querySelector(".js-context-popup");
       contextMenu = popup;
       popup.innerHTML = "";
-      let menuOptionsArr=[]
-      if (elem.rowButtonsAsContextMenu!==undefined&&elem.rowButtonsAsContextMenu===true){
-        menuOptionsArr=elem.row_buttons
-      }else{
-        if (elem.contextmenu_buttons!==undefined){
-          menuOptionsArr=elem.contextmenu_buttons
+      let menuOptionsArr = []
+      if (elem.rowButtonsAsContextMenu !== undefined && elem.rowButtonsAsContextMenu === true) {
+        menuOptionsArr = elem.row_buttons
+      } else {
+        if (elem.contextmenu_buttons !== undefined) {
+          menuOptionsArr = elem.contextmenu_buttons
         }
       }
-      
+
       menuOptionsArr.map((item, i) => {
         let newIcon = document.createElement('mwc-icon-button');
         newIcon.setAttribute('icon', item.button.icon);
         newIcon.style.color = "white";
 
         let newLabel = document.createElement('label');
-        newLabel.textContent = item.button.title["label_"+this.lang]
+        newLabel.textContent = item.button.title["label_" + this.lang]
 
         let newDiv = document.createElement('div');
         newDiv.style.display = "flex";
         newDiv.style.flexDirection = "row";
-        newDiv.style.alignItems =  "center";
+        newDiv.style.alignItems = "center";
         newDiv.style.cursor = "pointer"
         newDiv.appendChild(newIcon);
         newDiv.appendChild(newLabel);
@@ -1012,7 +1010,7 @@ export function DataViews(base) {
       popup.style.flexDirection = "column";
       document.body.addEventListener('click', this.closeContextMenu);
     }
-    
+
     closeContextMenu(e) {
       contextMenu.style.display = "none";
     }
@@ -1028,7 +1026,7 @@ export function DataViews(base) {
         [endPointResponseObject]: undefined
       }
 
-      if(elem.children_definition) {
+      if (elem.children_definition) {
         const childElement = {
           ...elem.children_definition,
           endPointResponseObject: elem.children // "_child"
@@ -1050,7 +1048,7 @@ export function DataViews(base) {
         const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
         this.resetFilterIndex(elem);
 
-        if(!isToggling) {
+        if (!isToggling) {
           this.selectedTableIndex = {
             ...this.selectedTableIndex,
             [endPointResponseObject]: idx
@@ -1061,17 +1059,17 @@ export function DataViews(base) {
       const handleResetParentFilter = (elem) => {
         this.resetFilterIndex(elem);
       }
-      
+
       const childElement = {
         ...elem.children_definition,
         endPointResponseObject: elem.children
       };
-      
+
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
       const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
-      if (parentData===undefined){
-        parentData= selectedIdx !== undefined ? dataArr[0] : undefined;
+      if (parentData === undefined) {
+        parentData = selectedIdx !== undefined ? dataArr[0] : undefined;
       }
       return html`
         ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme, parentData)}
@@ -1081,16 +1079,16 @@ export function DataViews(base) {
 
     rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData, theme) {
       let tmp = elem.theme
-      if(typeof(tmp) == "undefined") {
+      if (typeof (tmp) == "undefined") {
         tmp = "TRAZiT-UsersArea";
       }
       //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
-/*      if (directData !== undefined) {
-        dataArr = directData;
-      } else {
-        dataArr = this.getDataFromRoot(elem, dataArr);
-      }
-*/
+      /*      if (directData !== undefined) {
+              dataArr = directData;
+            } else {
+              dataArr = this.getDataFromRoot(elem, dataArr);
+            }
+      */
       return html`
         <style>
           table.styled-table-for-rolesandactions th{
@@ -1209,8 +1207,8 @@ export function DataViews(base) {
         </style>
         <div style="display: flex; flex-direction: column; text-align: center;">
           ${elem === undefined || elem.title === undefined
-            ? nothing
-            : html` <p>
+          ? nothing
+          : html` <p>
                 <span class="title ${isSecondLevel}"
                   >${elem.title["label_" + this.lang]}</span
                 >
@@ -1220,83 +1218,83 @@ export function DataViews(base) {
             <thead>
               <tr>
                 ${dataArr === undefined || dataArr[0] === undefined
-                  ? html`${this.lang == "en" ? "Not applicable" : "No aplica"}`
-                  : html`
+          ? html`${this.lang == "en" ? "Not applicable" : "No aplica"}`
+          : html`
                       ${dataArr[0].map(
-                        (fld) =>
-                          html`
+            (fld) =>
+              html`
                             ${typeof fld === "object"
-                              ? html`${this.fieldsToDiscard(fld) === true
-                                  ? nothing
-                                  : html`<th
+                  ? html`${this.fieldsToDiscard(fld) === true
+                    ? nothing
+                    : html`<th
                                       style="text-align: center; color:white; font-weight:normal;"
                                     >
                                       ${fld.label}
                                     </th>`} `
-                              : html`
+                  : html`
                                   <th style="text-align: center; color:white; font-weight:normal;">
                                     ${fld}
                                   </th>
                                 `}
                           `
-                      )}
+          )}
                     `}
               </tr>
             </thead>
             <tbody>
               ${dataArr === undefined || dataArr[0] === undefined
-                ? nothing
-                : html`
+          ? nothing
+          : html`
                     ${dataArr.map(
-                      (p, iRow) =>
-                        html`
+            (p, iRow) =>
+              html`
                           ${iRow == 0
-                            ? nothing
-                            : html`
+                  ? nothing
+                  : html`
                                 <tr>
                                   ${p.map(
-                                    (fld, iCol) =>
-                                      html`
+                    (fld, iCol) =>
+                      html`
                                         ${iCol == 0 || iCol == 1
-                                          ? html` ${typeof dataArr[0][iCol] ===
-                                            "object"
-                                              ? html`
+                          ? html` ${typeof dataArr[0][iCol] ===
+                            "object"
+                            ? html`
                                                   ${this.fieldsToDiscard(
-                                                    dataArr[0][iCol]
-                                                  ) === true
-                                                    ? nothing
-                                                    : html`<td
+                              dataArr[0][iCol]
+                            ) === true
+                                ? nothing
+                                : html`<td
                                                         class="title1"
                                                         style="font-size: 1.6vmin; font-weight: unset; font-family: Montserrat;"
                                                       >
                                                         ${fld}
                                                       </td>`}
                                                 `
-                                              : html`<td>${fld}</td>`}`
-                                          : html`
+                            : html`<td>${fld}</td>`}`
+                          : html`
                                               ${fld !== undefined &&
-                                              fld.length > 0
-                                                ? html`<td
+                              fld.length > 0
+                              ? html`<td
                                                     class="present"
                                                     title="Assigned"
                                                   >
                                                     ${fld === "ALL"
-                                                      ? this.lang === "es"
-                                                        ? "TODOS"
-                                                        : "ALL"
-                                                      : fld}
+                                  ? this.lang === "es"
+                                    ? "TODOS"
+                                    : "ALL"
+                                  : fld}
                                                   </td>`
-                                                : html`<td
+                              : html`<td
                                                     class="absent"
                                                     title="NOT assigned"
                                                   ></td>`}
                                             `}
                                       `
-                                  )}
+                  )}
                                 </tr>
                               `}
                         `
-                    )}
+          )}
                   `}
             </tbody>
           </table>
@@ -1325,12 +1323,12 @@ export function DataViews(base) {
         
         </style>
         ${this.kpiCardSomeElementsMain(elem, this.getDataFromRoot(elem, data))}          
-      `;      
+      `;
     }
-    cardExpandSectionForScriptStep(elem, data){
-      let jsonElem={}
-      jsonElem.endPointPropertyArray=["ROOT"]
-      jsonElem.style="background-color:white;" 
+    cardExpandSectionForScriptStep(elem, data) {
+      let jsonElem = {}
+      jsonElem.endPointPropertyArray = ["ROOT"]
+      jsonElem.style = "background-color:white;"
       return html`
         ${this.scriptStepArguments(elem, data)}        
         ${this.jsonViewer(jsonElem, JSON.parse(data.dynamic_data))}
@@ -1346,8 +1344,8 @@ export function DataViews(base) {
         ${Array.isArray(data) && data.length > 0
           ? html`
               ${data.map(
-                (d) => html` ${this.kpiCardSomeElementsMain(elem, d)} `
-              )}
+            (d) => html` ${this.kpiCardSomeElementsMain(elem, d)} `
+          )}
             `
           : nothing}
       `;
@@ -1363,9 +1361,9 @@ export function DataViews(base) {
       }
       //let rValue=true
       const rValue = elem.mantadoryPropertiesInVariableName.every((curProp) => {
-        if (Array.isArray(dataArr)){
-          return dataArr[0]!==undefined && dataArr[0][curProp] !== undefined;
-        }else{
+        if (Array.isArray(dataArr)) {
+          return dataArr[0] !== undefined && dataArr[0][curProp] !== undefined;
+        } else {
           return dataArr[curProp] !== undefined;
         }
       });
@@ -1403,11 +1401,11 @@ export function DataViews(base) {
         this.videosourceEl.src = mimeUrl;
       }
 
-      console.log(" window.innerWidth;",  window.innerWidth);
+      console.log(" window.innerWidth;", window.innerWidth);
 
       this.dialogEl.style.marginTop = `200px`;
       this.dialogEl.style.marginLeft = `316px`;
-      if(window.innerWidth < 800) {
+      if (window.innerWidth < 800) {
         this.dialogEl.style.marginLeft = `100px`;
       }
       this.dialogEl.style.border = "1px solid rgb(36, 192, 235)";
@@ -1442,10 +1440,9 @@ export function DataViews(base) {
     buttonsOnly(elem, data) {
       //console.log('buttonsOnly', 'elem', elem, 'data', data)
       return html`
-        ${
-          elem === undefined || elem.title === undefined
-            ? nothing
-            : html`<span
+        ${elem === undefined || elem.title === undefined
+          ? nothing
+          : html`<span
                 style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;"
                 >${elem.title["label_" + this.lang]}</span
               >`
@@ -1459,7 +1456,7 @@ export function DataViews(base) {
     kpiCardSomeElementsMain(elem, data) {
       console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
       if (Array.isArray(data) && data.length > 0) {
-        data=data[0]
+        data = data[0]
       }
       return html`
         ${elem === undefined || elem.title === undefined
@@ -1471,8 +1468,8 @@ export function DataViews(base) {
         ${data === undefined
           ? html`${elem.hideNoDataMessage !== undefined &&
             elem.hideNoDataMessage
-              ? ""
-              : "No columns defined"}`
+            ? ""
+            : "No columns defined"}`
           : html`
               <style>
                 ul.column-list {
@@ -1630,9 +1627,9 @@ export function DataViews(base) {
               </style>
               <div
                 id="main${elem.add_border !== undefined &&
-                elem.add_border == true
-                  ? "addborder"
-                  : ""}"
+              elem.add_border == true
+              ? "addborder"
+              : ""}"
                 class="layout vertical flex wrap"
                 style="${elem.style !== undefined ? elem.style : ""}"
               >
@@ -1642,20 +1639,20 @@ export function DataViews(base) {
                 <ul
                   style="align-items: baseline;"
                   class="column-list${elem.num_columns !== undefined
-                    ? elem.num_columns
-                    : ""}"
+              ? elem.num_columns
+              : ""}"
                 >
-                ${elem.fieldsToDisplay===undefined?nothing:
-                html`
+                ${elem.fieldsToDisplay === undefined ? nothing :
+              html`
                   ${elem.fieldsToDisplay.map(
-                    (fld, i) =>
-                      html`
+                (fld, i) =>
+                  html`
                         ${this.fieldsToDiscard(fld) === true
-                          ? nothing
-                          : html`                              
+                      ? nothing
+                      : html`                              
                               ${fld.as_ppt !== undefined &&
-                              (fld.as_ppt === true || fld.as_video === true)
-                                ? html`
+                          (fld.as_ppt === true || fld.as_video === true)
+                          ? html`
                                     <mwc-icon-button
                                       icon="fullscreen"
                                       .isvideo=${data.is_video}
@@ -1664,8 +1661,8 @@ export function DataViews(base) {
                                       .fld=${fld}
                                     ></mwc-icon-button>
                                     ${data.is_video === undefined ||
-                                    data.is_video === false
-                                      ? html`
+                              data.is_video === false
+                              ? html`
                                           <iframe
                                             src=${data[fld.name]}
                                             @click=${this.openDialogFrame}
@@ -1682,37 +1679,34 @@ export function DataViews(base) {
                                             ></iframe>
                                           </div>
                                         `
-                                      : html`
-                            <video id="${
-                              data[fld.name]
-                            }-${i}" controls slot="cover-photo"
+                              : html`
+                            <video id="${data[fld.name]
+                                }-${i}" controls slot="cover-photo"
                             @play=${() =>
-                              this.stopOthers(`${data[fld.name]}-${i}`)}>
+                                  this.stopOthers(`${data[fld.name]}-${i}`)}>
                             <source type="video/mp4" src="${data[fld.name]}">
                             </video>
 <!---
-                              <video controls type="video/mp4" src=${
-                                data[fld.name]
-                              } controlsList="nodownload"oncontextmenu="return false" onselectstart="return false" ondragstart="return false"></video>
+                              <video controls type="video/mp4" src=${data[fld.name]
+                                } controlsList="nodownload"oncontextmenu="return false" onselectstart="return false" ondragstart="return false"></video>
                               <div id="dialog-frame" class="dialog">
-                              <mwc-icon-button icon="fullscreen_exit" @click=${
-                                this.closeDialogFrame
-                              }></mwc-icon-button> 
+                              <mwc-icon-button icon="fullscreen_exit" @click=${this.closeDialogFrame
+                                }></mwc-icon-button> 
                                 <video id="video-source" type="video/mp4" controls controlsList="nodownload"oncontextmenu="return false" onselectstart="return false" ondragstart="return false" >
                                 </video>-->
                               </div>
                             `}
                                   `
-                                : html`
+                          : html`
                                 ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`   
                                 <span class="cardLabel" style="${elem.styleForLabel !== undefined ? elem.styleForLabel : ""}">${this.fieldLabel(fld)}:</span>
                                 <span class="cardValue" style="${elem.styleForValue !== undefined ? elem.styleForValue : ""}">
-                                  <multi-select .label=${this.purpose} .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${data[fld.name]} .options=${{}}> </multi-select>
+                                  <multi-select .label=${this.purpose} .props=${{ "readOnly": true, "displayLabel": false }} .activeOptions=${data[fld.name]} .options=${{}}> </multi-select>
                                 </span>
-                                `:html`                                      
+                                `: html`                                      
                                     ${fld.as_progress !== undefined &&
-                                    fld.as_progress === true
-                                      ? html`
+                                fld.as_progress === true
+                                ? html`
                                           <style>
                                             .w3-responsive {
                                               display: block;
@@ -1787,32 +1781,32 @@ export function DataViews(base) {
                                               >
                                                 ${fld.name}:
                                                 ${data[fld.name] ===
-                                                  undefined ||
-                                                data[fld.name].length == 0
-                                                  ? "0"
-                                                  : data[fld.name]}%
+                                    undefined ||
+                                    data[fld.name].length == 0
+                                    ? "0"
+                                    : data[fld.name]}%
                                               </div>
                                             </div>
                                           </div>
                                           <br />
                                         `
-                                      : html`
+                                : html`
                                           ${this.cardField(fld, data)}                                        
                                         `}
                                   `}
                                 `}  
                             `}
                       `
-                  )}
+              )}
                 `}
                 </ul>
               </div>
             `}
       `;
     }
-    cardField(fld, data){
-      if (fld.fix_value_suffix!==undefined||fld.name2!==undefined){
-        if (data[fld.name]===undefined&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){return html``}
+    cardField(fld, data) {
+      if (fld.fix_value_suffix !== undefined || fld.name2 !== undefined) {
+        if (data[fld.name] === undefined && fld.hideNoDataMessage !== undefined && fld.hideNoDataMessage === true) { return html`` }
         return html`
           <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
             <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
@@ -1820,13 +1814,13 @@ export function DataViews(base) {
             </span>
             <span class="cardValue" style="${fld.styleForValue !== undefined ? fld.styleForValue : ""}">
               ${data[fld.name]}
-              ${fld.fix_value_suffix !==undefined? fld.fix_value_suffix: ""}
-              ${fld.fix_value2_prefix !==undefined? fld.fix_value2_prefix: ""}
-              ${fld.name2 !== undefined? data[fld.name2]: ""}
-              ${fld.fix_value2_suffix !==undefined? fld.fix_value2_suffix: ""}
-              ${fld.fix_value3_prefix !==undefined? fld.fix_value3_prefix: ""}
-              ${fld.name3 !== undefined? data[fld.name3]: ""}
-              ${fld.fix_value3_suffix !==undefined? fld.fix_value3_suffix: ""}
+              ${fld.fix_value_suffix !== undefined ? fld.fix_value_suffix : ""}
+              ${fld.fix_value2_prefix !== undefined ? fld.fix_value2_prefix : ""}
+              ${fld.name2 !== undefined ? data[fld.name2] : ""}
+              ${fld.fix_value2_suffix !== undefined ? fld.fix_value2_suffix : ""}
+              ${fld.fix_value3_prefix !== undefined ? fld.fix_value3_prefix : ""}
+              ${fld.name3 !== undefined ? data[fld.name3] : ""}
+              ${fld.fix_value3_suffix !== undefined ? fld.fix_value3_suffix : ""}
             </span>
           </li>`
         }
@@ -1847,30 +1841,30 @@ export function DataViews(base) {
         </li>        
         `
       }
-      if ((data[fld.name]===undefined||data[fld.name].length==0)&&fld.hideNoDataMessage!==undefined&&fld.hideNoDataMessage===true){
-        if (fld.KeepJustLabelWhenNoDataMessage!==undefined&&fld.KeepJustLabelWhenNoDataMessage===true){
+      if ((data[fld.name] === undefined || data[fld.name].length == 0) && fld.hideNoDataMessage !== undefined && fld.hideNoDataMessage === true) {
+        if (fld.KeepJustLabelWhenNoDataMessage !== undefined && fld.KeepJustLabelWhenNoDataMessage === true) {
           return html`
           <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
             <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
               ${this.fieldLabel(fld)}:
             </span>
           </li>
-          `  	
-        }else{
+          `
+        } else {
           return html``
         }
-      }        
+      }
       return html`
         <li class="cardItem" style="${fld.styleForBlock !== undefined ? fld.styleForBlock : ""}">
           <span class="cardLabel" style="${fld.styleForLabel !== undefined ? fld.styleForLabel : ""}">
             ${this.fieldLabel(fld)}:
           </span>          
           <span class="cardValue" style="${fld.styleForValue !== undefined ? fld.styleForValue : ""}">
-            ${fld.is_icon !== undefined && fld.is_icon === true ? 
-              html`${this.cellIsIcon(fld, data, undefined)}`          
-            :
-              html`${data[fld.name]}`
-            }
+            ${fld.is_icon !== undefined && fld.is_icon === true ?
+          html`${this.cellIsIcon(fld, data, undefined)}`
+          :
+          html`${data[fld.name]}`
+        }
           </span>
         </li>
       `
@@ -1912,10 +1906,9 @@ export function DataViews(base) {
 
       //console.log('kpiCard', 'elem', elem, 'data', this.data)
       return html`
-              ${
-                !data
-                  ? nothing
-                  : html`
+              ${!data
+          ? nothing
+          : html`
                       <style>
                         li.cardelement {
                           color: #032bbc;
@@ -1956,23 +1949,23 @@ export function DataViews(base) {
                       </style>
                       <div class="layout horizontal flex wrap">
                         ${myDataArr.map(
-                          (curData) =>
-                            html`
+            (curData) =>
+              html`
                               ${this.loadDialogs()}
                               <div class="card">
                                 <sp-card-ext
                                   heading="${elem.title === undefined
-                                    ? ""
-                                    : elem.title["label_" + this.lang] ===
-                                      undefined
-                                    ? "-"
-                                    : elem.title["label_" + this.lang]}"
+                  ? ""
+                  : elem.title["label_" + this.lang] ===
+                    undefined
+                    ? "-"
+                    : elem.title["label_" + this.lang]}"
                                   subheading="${elem.subtitle === undefined
-                                    ? ""
-                                    : elem.subtitle["label_" + this.lang] ===
-                                      undefined
-                                    ? "-"
-                                    : elem.subtitle["label_" + this.lang]}"
+                  ? ""
+                  : elem.subtitle["label_" + this.lang] ===
+                    undefined
+                    ? "-"
+                    : elem.subtitle["label_" + this.lang]}"
                                 >
                                   <div slot="ribbon"></div>
                                   <div slot="footer">
@@ -1980,50 +1973,50 @@ export function DataViews(base) {
                                       class="layout horizontal center flex wrap"
                                     >
                                       ${this.getButton(
-                                        elem,
-                                        curData,
-                                        isProcManagement
-                                      )}
+                      elem,
+                      curData,
+                      isProcManagement
+                    )}
                                     </div>
                                     ${elem.fieldsToDisplay === undefined
-                                      ? nothing
-                                      : elem.fieldsToDisplay.map(
-                                          (d) =>
-                                            html`<li class="cardelement">
+                  ? nothing
+                  : elem.fieldsToDisplay.map(
+                    (d) =>
+                      html`<li class="cardelement">
                                               ${d["label_" + this.lang]}:
                                               ${curData[
-                                                d.field_name
-                                              ]}${d.fix_value_suffix !==
-                                              undefined
-                                                ? d.fix_value_suffix
-                                                : ""}
+                        d.field_name
+                        ]}${d.fix_value_suffix !==
+                          undefined
+                          ? d.fix_value_suffix
+                          : ""}
                                               ${d.fix_value2_prefix !==
-                                              undefined
-                                                ? d.fix_value2_prefix
-                                                : ""}${d.name2 !== undefined
-                                                ? curData[d.field_name2]
-                                                : ""}${d.fix_value2_suffix !==
-                                              undefined
-                                                ? d.fix_value2_suffix
-                                                : ""}
+                          undefined
+                          ? d.fix_value2_prefix
+                          : ""}${d.name2 !== undefined
+                            ? curData[d.field_name2]
+                            : ""}${d.fix_value2_suffix !==
+                              undefined
+                              ? d.fix_value2_suffix
+                              : ""}
                                               ${d.fix_value3_prefix !==
-                                              undefined
-                                                ? d.fix_value3_prefix
-                                                : ""}${d.name3 !== undefined
-                                                ? curData[d.field_name3]
-                                                : ""}${d.fix_value3_suffix !==
-                                              undefined
-                                                ? d.fix_value3_suffix
-                                                : ""}
+                          undefined
+                          ? d.fix_value3_prefix
+                          : ""}${d.name3 !== undefined
+                            ? curData[d.field_name3]
+                            : ""}${d.fix_value3_suffix !==
+                              undefined
+                              ? d.fix_value3_suffix
+                              : ""}
                                             </li>`
-                                        )}
+                  )}
                                   </div>
                                 </sp-card-ext>
                               </div>
                               <audit-dialog
                                 @sign-audit=${this.setAudit}
                                 .actionBeingPerformedModel=${this
-                                  .actionBeingPerformedModel}
+                  .actionBeingPerformedModel}
                                 .filterName=${this.filterName}
                                 .lang=${this.lang}
                                 .windowOpenable=${this.windowOpenable}
@@ -2031,15 +2024,15 @@ export function DataViews(base) {
                                 .procInstanceName=${this.procInstanceName}
                                 .viewName=${this.viewName}
                                 .viewModelFromProcModel=${this
-                                  .viewModelFromProcModel}
+                  .viewModelFromProcModel}
                                 .selectedItems=${this.selectedItems}
                                 .config=${this.config}
                               ></audit-dialog>
                             `
-                        )}
+          )}
                       </div>
                     `
-              }
+        }
               </div>
             `;
     }
@@ -2063,18 +2056,18 @@ export function DataViews(base) {
       return;
     }
     kpiChartFran(elem, data) {
-      if (elem===undefined){return html``}
+      if (elem === undefined) { return html`` }
 
-      if (elem.endPointPropertyArray!==undefined){
+      if (elem.endPointPropertyArray !== undefined) {
         data = this.getDataFromRoot(elem, data);
       }
-      if ( !((elem.grouper_field_name!==undefined&&data[elem.grouper_field_name])||
-          (elem.counter_field_name!==undefined&&data[elem.counter_field_name])) ){
-            return html``
-          }
+      if (!((elem.grouper_field_name !== undefined && data[elem.grouper_field_name]) ||
+        (elem.counter_field_name !== undefined && data[elem.counter_field_name]))) {
+        return html``
+      }
 
-      if (elem.hideNoDataMessage!==undefined&&elem.hideNoDataMessage===true&&data===undefined){return html``}
-      if (data===undefined&&this.data!==undefined){data=this.data}
+      if (elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage === true && data === undefined) { return html`` }
+      if (data === undefined && this.data !== undefined) { data = this.data }
 
       console.log('kpiChartFran', 'elem', elem, 'data', data)
       return html`
@@ -2138,7 +2131,7 @@ export function DataViews(base) {
       console.log('getChartData', elem, 'data', data, 'this.data', this.data, 'chartData')
       let chartData = [];
       let fakeData = []
-      if (elem.elementName==='fakeTrendlineExample'){
+      if (elem.elementName === 'fakeTrendlineExample') {
         fakeData = [
           ['Diameter', 'Age'],
           [8, 37], [4, 19.5], [11, 52], [4, 22], [3, 16.5], [6.5, 32.8], [14, 72]
@@ -2150,18 +2143,18 @@ export function DataViews(base) {
           ["Day", "Guardians of the Galaxy", "The Avengers", "Transformers: Age of Extinction",],
           [1, 37.8, 80.8, 41.8], [2, 30.9, 69.5, 32.4], [3, 25.4, 57, 25.7], [4, 11.7, 18.8, 10.5],
           [5, 11.9, 17.6, 10.4], [6, 8.8, 13.6, 7.7], [7, 7.6, 12.3, 9.6], [8, 12.3, 29.2, 10.6],
-          [9, 16.9, 42.9, 14.8], [10, 12.8, 30.9, 11.6], [11, 5.3, 7.9, 4.7], 
+          [9, 16.9, 42.9, 14.8], [10, 12.8, 30.9, 11.6], [11, 5.3, 7.9, 4.7],
           [12, 6.6, 8.4, 5.2], [13, 4.8, 6.3, 3.6], [14, 4.2, 6.2, 3.4],
         ];
         return fakeData;
       }
-      if (elem.chartModel==="methodValidation"){
+      if (elem.chartModel === "methodValidation") {
         return this.getChartDataForMethodValidation(elem, data)
       }
 
-      if (data===undefined&&this.data!==undefined){data=this.data}
+      if (data === undefined && this.data !== undefined) { data = this.data }
       //data = this.getDataFromRoot(elem, data);
-      if (data === undefined && (elem.chart_name===undefined||data[elem.chart_name] === undefined)) {
+      if (data === undefined && (elem.chart_name === undefined || data[elem.chart_name] === undefined)) {
         if (this.selectedItem !== undefined) {
           data = this.selectedItem;
         } else {
@@ -2227,15 +2220,15 @@ export function DataViews(base) {
       }
       return labelValue;
     }
-    getChartDataForMethodValidationFran(elem, data){
-      let chartData=[]
-      if (data===undefined||elem===undefined){return chartData}
-      
+    getChartDataForMethodValidationFran(elem, data) {
+      let chartData = []
+      if (data === undefined || elem === undefined) { return chartData }
+
       //curchtHeader.push(elem.label_item);
       for (let iSerie = 0; iSerie < data[chartSourceData].length; iSerie++) {
         let curchtHeader = [];
-        curchtHeader[0]=data[chartSourceData][xAxisSouceData]
-        curchtHeader[1]=data[chartSourceData][sourceData]
+        curchtHeader[0] = data[chartSourceData][xAxisSouceData]
+        curchtHeader[1] = data[chartSourceData][sourceData]
         chartData.push(curchtHeader);
       }
       return chartData
@@ -2246,7 +2239,7 @@ export function DataViews(base) {
       if (data === undefined || elem === undefined) {
         return chartData;
       }
-    
+
       const chartSourceData = data[elem.chartSourceData];
       if (!chartSourceData || !Array.isArray(chartSourceData)) {
         return chartData;
@@ -2258,7 +2251,7 @@ export function DataViews(base) {
       for (let iSerie = 0; iSerie < chartSourceData.length; iSerie++) {
         let curchtHeader = [];
         let currentData = chartSourceData[iSerie];
-        
+
         // Make sure xAxisSourceData and sourceData exist in the current data object
         if (currentData[elem.xAxisSourceData] !== undefined && currentData[elem.sourceData] !== undefined) {
           curchtHeader[0] = Number(currentData[elem.xAxisSourceData]);
@@ -2266,16 +2259,16 @@ export function DataViews(base) {
           chartData.push(curchtHeader);
         }
       }
-    
+
       return chartData;
     }
-    
+
     getChartOptions(elem) {
-      if (elem.elementName==='fakeTrendlineExample'){
+      if (elem.elementName === 'fakeTrendlineExample') {
         return {
           title: 'Age of sugar maples vs. trunk diameter, in inches',
-          hAxis: {title: 'Diameter'},
-          vAxis: {title: 'Age'},
+          hAxis: { title: 'Diameter' },
+          vAxis: { title: 'Age' },
           legend: 'none',
           trendlines: { 0: {} }    // Draw a trendline for data series 0.
         };
@@ -2308,11 +2301,11 @@ export function DataViews(base) {
         <datamining-google-chart-ext
           id="chart1"
           @redrawed=${(e) =>
-            this.dispatchEvent(
-              new CustomEvent("chart-images", {
-                detail: { imgUri: e.target.imageURI },
-              })
-            )}
+          this.dispatchEvent(
+            new CustomEvent("chart-images", {
+              detail: { imgUri: e.target.imageURI },
+            })
+          )}
           style="margin: 5px 5px 30px 8px"
           type="line"
           options='{"height": ${this.chartH}, "width": ${this.chartW}}'
@@ -2320,11 +2313,11 @@ export function DataViews(base) {
         <datamining-google-chart-ext
           id="chart2"
           @redrawed=${(e) =>
-            this.dispatchEvent(
-              new CustomEvent("chart-images", {
-                detail: { imgUri: e.target.imageURI },
-              })
-            )}
+          this.dispatchEvent(
+            new CustomEvent("chart-images", {
+              detail: { imgUri: e.target.imageURI },
+            })
+          )}
           style="margin: 5px 5px 30px 8px"
           type="line"
           options='{"height": ${this.chartH}, "width": ${this.chartW}}'
@@ -2344,52 +2337,52 @@ export function DataViews(base) {
             >
               <div slot="footer">
                 ${this.data.sampleFieldsToDisplay.map(
-                  (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
-                )}
+          (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
+        )}
               </div>
             </sp-card-ext>
             <sp-card-ext heading="Stages" nonSubHeading>
               <div slot="footer" class="layout vertical">
                 ${this.data.stages.map(
-                  (d) =>
-                    html`
+          (d) =>
+            html`
                       ${this.stageTitle(d.current_stage)}
                       ${this.stageTimingCapture(d)}
                       <sp-card-ext
                         heading="${d.current_stage}"
                         ?nonSubHeading=${!d.started_on}
                         subheading="${d.started_on}${d.ended_on &&
-                        ` >> ${d.ended_on}`}"
+              ` >> ${d.ended_on}`}"
                       >
                         <div slot="footer">
                           ${d.current_stage == "Sampling"
-                            ? html`
+                ? html`
                                 ${d.data.map(
-                                  (data) =>
-                                    html`<li class="cardItem">
+                  (data) =>
+                    html`<li class="cardItem">
                                       ${data.field_name}: ${data.field_value}
                                     </li>`
-                                )}
+                )}
                               `
-                            : html`${d.current_stage == "Incubation"
-                                ? html`
+                : html`${d.current_stage == "Incubation"
+                  ? html`
                                     ${d.data.map(
-                                      (data) =>
-                                        html`
+                    (data) =>
+                      html`
                                           <sp-card-ext
                                             heading="Incubation 1"
                                             nonSubHeading
                                           >
                                             <div slot="footer">
                                               ${data.incubation_1.map(
-                                                (f) =>
-                                                  html`${f.field_name
-                                                    ? html`<li class="cardItem">
+                        (f) =>
+                          html`${f.field_name
+                            ? html`<li class="cardItem">
                                                         ${f.field_name}:
                                                         ${f.field_value}
                                                       </li>`
-                                                    : nothing}`
-                                              )}
+                            : nothing}`
+                      )}
                                             </div>
                                           </sp-card-ext>
                                           <sp-card-ext
@@ -2398,72 +2391,72 @@ export function DataViews(base) {
                                           >
                                             <div slot="footer">
                                               ${data.incubation_2.map(
-                                                (f) =>
-                                                  html`${f.field_name
-                                                    ? html`<li class="cardItem">
+                        (f) =>
+                          html`${f.field_name
+                            ? html`<li class="cardItem">
                                                         ${f.field_name}:
                                                         ${f.field_value}
                                                       </li>`
-                                                    : nothing}`
-                                              )}
+                            : nothing}`
+                      )}
                                             </div>
                                           </sp-card-ext>
                                         `
-                                    )}
+                  )}
                                   `
-                                : html`${d.current_stage == "PlateReading"
-                                    ? html`
+                  : html`${d.current_stage == "PlateReading"
+                    ? html`
                                         ${d.data.map(
-                                          (data) =>
-                                            html`${data.field_name ==
-                                            "raw_value"
-                                              ? html`<li class="cardItem">
+                      (data) =>
+                        html`${data.field_name ==
+                          "raw_value"
+                          ? html`<li class="cardItem">
                                                   Number of Colonies:
                                                   ${data.field_value}
                                                 </li>`
-                                              : nothing}`
-                                        )}
+                          : nothing}`
+                    )}
                                       `
-                                    : html`${d.current_stage ==
-                                      "MicroorganismIdentification"
-                                        ? html`
+                    : html`${d.current_stage ==
+                      "MicroorganismIdentification"
+                      ? html`
                                             ${d.data.map(
-                                              (data) =>
-                                                html`${data.field_name ===
-                                                  "microorganism_count" ||
-                                                data.field_name ===
-                                                  "microorganism_list"
-                                                  ? html`<li class="cardItem">
+                        (data) =>
+                          html`${data.field_name ===
+                            "microorganism_count" ||
+                            data.field_name ===
+                            "microorganism_list"
+                            ? html`<li class="cardItem">
                                                       ${data.field_name}:
                                                       ${data.field_value}
                                                     </li>`
-                                                  : nothing}`
-                                            )}
+                            : nothing}`
+                      )}
                                           `
-                                        : html`
+                      : html`
                                             ${d.data.map(
-                                              (data) =>
-                                                html`${data.field_name == "name"
-                                                  ? html`${data.field_name}:
+                        (data) =>
+                          html`${data.field_name == "name"
+                            ? html`${data.field_name}:
                                                     ${data.field_value}`
-                                                  : nothing}`
-                                            )}
+                            : nothing}`
+                      )}
                                           `}`}`}`}
                         </div>
                         ${d.current_stage == "Sampling"
-                          ? html`<mwc-icon
+                ? html`<mwc-icon
                               slot="actions"
                               title="Open"
                               placement="bottom-end"
                               ?hidden=${this.data.sampleFieldToRetrieve
-                                .current_stage == "END"}
+                    .current_stage == "END"}
                               @click=${this.openSample}
                               >file_open</mwc-icon
                             >`
-                          : nothing}
+                : nothing}
                       </sp-card-ext>
                     `
-                )}
+        )}
               </div>
             </sp-card-ext>
           `
@@ -2479,11 +2472,9 @@ export function DataViews(base) {
       });
       strContent += `<h2>Stages</h2>`;
       this.data.stages.forEach((d) => {
-        strContent += `<table border="1" cellpadding="3" style="margin-bottom: 10px; border-collapse: collapse; width: 100%;"><tr><th>${
-          d.current_stage
-        }<br>${d.started_on}${
-          d.ended_on && ` >> ${d.ended_on}`
-        }</th></tr><tr><td>`;
+        strContent += `<table border="1" cellpadding="3" style="margin-bottom: 10px; border-collapse: collapse; width: 100%;"><tr><th>${d.current_stage
+          }<br>${d.started_on}${d.ended_on && ` >> ${d.ended_on}`
+          }</th></tr><tr><td>`;
         if (d.current_stage == "Sampling") {
           d.data.forEach((data) => {
             strContent += `Sampling Date: ${data.sampling_date}`;
@@ -2537,18 +2528,18 @@ export function DataViews(base) {
               >
                 <div slot="footer">
                   ${this.data.incubatorFieldsToDisplay.map(
-                    (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
-                  )}
+          (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
+        )}
                 </div>
               </sp-card-ext>
               <google-chart-ext
                 id="chart1"
                 @redrawed=${(e) =>
-                  this.dispatchEvent(
-                    new CustomEvent("chart-images", {
-                      detail: { imgUri: e.target.imageURI },
-                    })
-                  )}
+            this.dispatchEvent(
+              new CustomEvent("chart-images", {
+                detail: { imgUri: e.target.imageURI },
+              })
+            )}
                 style="margin: 5px 5px 30px 8px"
                 type="line"
                 options='{"height": ${this.chartH}, "width": ${this.chartW}}'
@@ -2568,18 +2559,18 @@ export function DataViews(base) {
               >
                 <div slot="footer">
                   ${this.data.batchFieldsToDisplay.map(
-                    (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
-                  )}
+          (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
+        )}
                 </div>
               </sp-card-ext>
               <google-chart-ext
                 id="chart1"
                 @redrawed=${(e) =>
-                  this.dispatchEvent(
-                    new CustomEvent("chart-images", {
-                      detail: { imgUri: e.target.imageURI },
-                    })
-                  )}
+            this.dispatchEvent(
+              new CustomEvent("chart-images", {
+                detail: { imgUri: e.target.imageURI },
+              })
+            )}
                 style="margin: 5px 5px 30px 8px"
                 type="line"
                 options='{"height": ${this.chartH}, "width": ${this.chartW}}'
@@ -2591,11 +2582,11 @@ export function DataViews(base) {
             >
               <div slot="footer" class="layout horizontal flex wrap">
                 ${this.data.SAMPLES_ARRAY.map(
-                  (d, i) =>
-                    html`${d.sample_id}${i < this.data.SAMPLES_ARRAY.length - 1
-                      ? ", "
-                      : ""}`
-                )}
+              (d, i) =>
+                html`${d.sample_id}${i < this.data.SAMPLES_ARRAY.length - 1
+                  ? ", "
+                  : ""}`
+            )}
               </div>
             </sp-card-ext>
           `
@@ -2612,18 +2603,18 @@ export function DataViews(base) {
               >
                 <div slot="footer">
                   ${this.data.prodLotFieldsToDisplay.map(
-                    (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
-                  )}
+          (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
+        )}
                 </div>
               </sp-card-ext>
               <google-chart-ext
                 id="chart1"
                 @redrawed=${(e) =>
-                  this.dispatchEvent(
-                    new CustomEvent("chart-images", {
-                      detail: { imgUri: e.target.imageURI },
-                    })
-                  )}
+            this.dispatchEvent(
+              new CustomEvent("chart-images", {
+                detail: { imgUri: e.target.imageURI },
+              })
+            )}
                 style="margin: 5px 5px 30px 8px"
                 type="line"
                 options='{"height": ${this.chartH}, "width": ${this.chartW}}'
@@ -2631,11 +2622,11 @@ export function DataViews(base) {
               <google-chart-ext
                 id="chart2"
                 @redrawed=${(e) =>
-                  this.dispatchEvent(
-                    new CustomEvent("chart-images", {
-                      detail: { imgUri: e.target.imageURI },
-                    })
-                  )}
+            this.dispatchEvent(
+              new CustomEvent("chart-images", {
+                detail: { imgUri: e.target.imageURI },
+              })
+            )}
                 style="margin: 5px 5px 30px 8px"
                 type="line"
                 options='{"height": ${this.chartH}, "width": ${this.chartW}}'
@@ -2687,9 +2678,8 @@ export function DataViews(base) {
         });
         strContent += this.chartContent();
         let batches = this.sampleData.SAMPLES_ARRAY.map((d) => d.sample_id);
-        strContent += `<table border="1" cellpadding="3" style="margin: 10px auto; border-collapse: collapse; width: 100%;"><tr><th>Batch Content (${
-          this.sampleData.NUM_SAMPLES
-        } samples)</th></tr><tr><td>${batches.join(", ")}</td></tr></table>`;
+        strContent += `<table border="1" cellpadding="3" style="margin: 10px auto; border-collapse: collapse; width: 100%;"><tr><th>Batch Content (${this.sampleData.NUM_SAMPLES
+          } samples)</th></tr><tr><td>${batches.join(", ")}</td></tr></table>`;
       }
       return strContent;
     }
@@ -2704,11 +2694,9 @@ export function DataViews(base) {
         strContent += `<tr><th>Sample ID</th><th>Sampling Date</th><th>Sampling Date End</th><th>Raw Value</th></tr>`;
         this.data.sample.forEach((s) => {
           if (s.spec_code) {
-            strContent += `<tr><td>${s.sample_id}</td><td>${
-              s.sampling_date
-            }</td><td>${s.sampling_date_end}</td><td>${
-              s.raw_value ? s.raw_value : ""
-            }</td></tr>`;
+            strContent += `<tr><td>${s.sample_id}</td><td>${s.sampling_date
+              }</td><td>${s.sampling_date_end}</td><td>${s.raw_value ? s.raw_value : ""
+              }</td></tr>`;
           }
         });
         strContent += `</table>`;
@@ -2732,11 +2720,9 @@ export function DataViews(base) {
         });
         strContent += `<h2>Stages</h2>`;
         this.data.stages.forEach((d) => {
-          strContent += `<table border="1" cellpadding="3" style="margin-bottom: 10px; border-collapse: collapse; width: 100%;"><tr><th>${
-            d.current_stage
-          }<br>${d.started_on}${
-            d.ended_on && ` >> ${d.ended_on}`
-          }</th></tr><tr><td>`;
+          strContent += `<table border="1" cellpadding="3" style="margin-bottom: 10px; border-collapse: collapse; width: 100%;"><tr><th>${d.current_stage
+            }<br>${d.started_on}${d.ended_on && ` >> ${d.ended_on}`
+            }</th></tr><tr><td>`;
           if (d.current_stage == "Sampling") {
             d.data.forEach((data) => {
               strContent += `Sampling Date: ${data.sampling_date}`;
@@ -2796,26 +2782,84 @@ export function DataViews(base) {
     get audit() {
       return this.shadowRoot.querySelector("audit-dialog");
     }
- 
+
+    toggleFilterVisibility(element) {
+      const filterDiv = this.shadowRoot.getElementById('smartFilterDiv');
+      if (filterDiv.classList.contains('hidden')) {
+        filterDiv.classList.remove('hidden');
+        filterDiv.classList.add('visible');
+      } else {
+        filterDiv.classList.remove('visible');
+        filterDiv.classList.add('hidden');
+      }
+    }
+
+    handleFilter(elem) {
+      let filterDiv = this.shadowRoot.querySelectorAll(`.search-container input`)
+      filterDiv.forEach((elm,i) => {
+        let value = elm.value;
+        let name = elm.getAttribute('name')
+        if (elem.children_definition.smartFilter.dialogInfo.fields[i]?.name) {
+          elem.children_definition.smartFilter.filterValues[name] = value
+        }                      
+      })  
+      console.log(elem.children_definition.smartFilter.filterValues)              
+      this.requestUpdate();
+    }
+
+    clearFilter(elem) {
+      let filterDiv = this.shadowRoot.querySelectorAll(`.search-container input`)
+      filterDiv.forEach((elm,i) => {
+        elm.value = ''                      
+      }) 
+      elem.children_definition.smartFilter.filterValues = {};
+      this.requestUpdate();
+    }
+
+    toggleFilter() {
+      let filter = this.shadowRoot.querySelector('.search-container');
+      filter.style.display = filter.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    applyFilterToTheData(curDataForThisCard, filterValues) {
+   
+      const uniqueItemsSet = new Set();
+      for (const key in filterValues) {
+              const filterValue = filterValues[key];
+              if (Array.isArray(curDataForThisCard)) {
+                  const filteredItems = curDataForThisCard.filter(item => {
+                      if (item[key] && filterValue) {
+                        return item[key] == filterValue;
+                      }
+                      return false
+                  });  
+                  console.log(filteredItems)                         
+                  filteredItems.forEach(item => uniqueItemsSet.add(item));            
+          }
+      }
+      return Array.from(uniqueItemsSet);
+  
+  }
+
     readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
-      if (elem===undefined){
+      if (elem === undefined) {
         return
       }
-      parentData=this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
+      parentData = this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
       console.log('isSecondLevel', isSecondLevel, 'elem', elem, 'dataArr', dataArr, 'parentData', parentData)
-      let tmp=""
-      if (elem.theme===undefined){
+      let tmp = ""
+      if (elem.theme === undefined) {
         tmp = "TRAZiT-UsersArea";
-      }else{
+      } else {
         tmp = elem.theme;
       }
-      if(elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
+      if (elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
         tmp = sessionStorage.getItem('tableTheme');
       }
-      if(typeof(tmp) != "undefined") {
+      if (typeof (tmp) != "undefined") {
         sessionStorage.setItem('tableTheme', tmp);
       }
-      if(typeof(tmp) == "undefined") {
+      if (typeof (tmp) == "undefined") {
         tmp = "TRAZiT-UsersArea";
         sessionStorage.setItem('tableTheme', tmp);
       }
@@ -2837,13 +2881,20 @@ export function DataViews(base) {
       if (dataArr === undefined || !Array.isArray(dataArr)) {
         return html``;
       } else {
-        if(dataArr.length > 0 && dataArr[0].action_name) {
+        if (dataArr.length > 0 && dataArr[0].action_name) {
           sessionStorage.setItem('steps', JSON.stringify(dataArr))
         }
       }
       const styles = this.getTableStyles(elem);
       const title = this.addViewTitle(elem, alternativeTitle, isSecondLevel)
-      const actionButtons = this.getActionsButtons(elem, dataArr)
+      const actionButtons = this.getActionsButtons(elem, dataArr);
+
+      if(dataArr && elem?.children_definition?.smartFilter?.filterValues && Object.keys(elem?.children_definition?.smartFilter?.filterValues).length != 0){
+        dataArr=this.applyFilterToTheData(dataArr,elem.children_definition.smartFilter.filterValues);
+     }
+      
+
+
       return html`     
         ${styles}   
         <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
@@ -2851,17 +2902,118 @@ export function DataViews(base) {
             ${title}
             ${actionButtons}
             ${elem.columns === undefined
-              ? html`${elem.hideNoDataMessage !== undefined &&
-                elem.hideNoDataMessage
-                  ? ""
-                  : "No columns defined"}`
-              : html`
+          ? html`${elem.hideNoDataMessage !== undefined &&
+            elem.hideNoDataMessage
+            ? ""
+            : "No columns defined"}`
+          : html`
+              <style>
+              .search-container {
+                background: #fff;
+                padding: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        
+            .search-input {
+                display: flex;
+                flex-wrap: nowrap;
+                margin-right: 10px;
+            }
+        
+            .search-input input {
+                flex: 1;
+                padding: 10px;
+                margin-right: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+        
+            .search-input input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 123, 255, 0.3);
+            }
+        
+            .search-buttons {
+                display: flex;
+            }
+        
+            .search-buttons button {
+                padding: 10px 20px;
+                margin-left: 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s, box-shadow 0.3s;
+            }
+        
+            .search-buttons button:hover {
+                background-color: #007bff;
+            }
+        
+            .search-buttons button:active {
+                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+        
+            .search-buttons .apply-filter {
+                background-color: #007bff;
+                color: white;
+            }
+        
+            .search-buttons .clear-filter {
+                background-color: #6c757d;
+                color: white;
+            }
+        
+            .toggle-filter {
+              display:flex;
+              width:120px;
+                background-color: #007bff;
+                color: white;
+                padding: 10px 20px;
+                margin-left: 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s, box-shadow 0.3s;               
+                transition: color 0.3s;
+            }
+        
+            .toggle-filter:hover {
+                color: #fff;
+            }
+              </style>
+              ${elem?.children_definition?.smartFilter?.filterValues && 
+                html`
+                <button class="toggle-filter" @click="${()=>{this.toggleFilter()}}">Display Filter</button>
+
+                <div class="search-container">
+                    <div class="search-input">
+                        <input type="text" id="name" name="name" placeholder="Name">
+                        <input type="text" id="purpose" name="purpose" placeholder="Purpose">
+                    </div>
+                    <div class="search-buttons">
+                        <button class="apply-filter" @click="${()=>this.handleFilter(elem)}">Apply</button>
+                        <button class="clear-filter" @click="${()=>this.clearFilter(elem)}">Clear</button>
+                    </div>
+                </div>
+                `
+              }
+
+              
                   <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
                     <thead>
                       <tr>
                         ${elem.columns.map((fld, idx) => {
-                            if(idx === 0 && parentElement !== null && parentElement !== undefined) {
-                              return html` 
+            if (idx === 0 && parentElement !== null && parentElement !== undefined) {
+              return html` 
                                 <th>
                                   <mwc-icon-button 
                                     class="icon resetBtn" 
@@ -2872,13 +3024,13 @@ export function DataViews(base) {
                                   ${fld["label_" + this.lang]} <span class="resize-handle"></span>
                                 </th>
                               `;
-                            }
-                            return html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th>`;
-                          }
-                        )}
+            }
+            return html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th>`;
+          }
+          )}
                         ${elem.row_buttons === undefined
-                          ? nothing 
-                          : html`
+              ? nothing
+              : html`
                             <th>
                               ${this.lang === "en" ? "Actions" : "Acciones"} 
                               <span class="resize-handle"></span>
@@ -2889,37 +3041,37 @@ export function DataViews(base) {
                     <tbody>
                       <div class="js-context-popup">
                       </div>
-                      ${dataArr === undefined || !Array.isArray(dataArr) ? 
-                        html `No Data` : 
-                        html`
+                      ${dataArr === undefined || !Array.isArray(dataArr) ?
+              html`No Data` :
+              html`
                          
                           ${dataArr.map((p, idx) => {
-                            return html`
+                return html`
                               <tr
                               @click=${(event) => {
-                                if(handler) {
-                                  if(p[elem.children] && p[elem.children].length > 0) {
-                                    if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
-                                      handler(event, p, elem, idx);
-                                    }
-                                  }
-                                }
-                                this.handleTableRowClick(event, p, elem)
-                              }}
+                    if (handler) {
+                      if (p[elem.children] && p[elem.children].length > 0) {
+                        if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
+                          handler(event, p, elem, idx);
+                        }
+                      }
+                    }
+                    this.handleTableRowClick(event, p, elem)
+                  }}
                               @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
                               class="${selectedIdx === idx ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"  
                               >
                                 ${this.getRowsInfo(elem, p, idx, this.lang, parentData, handler)}
                               </tr>
-                              ${elem.expandInfoSection!==undefined?html`
+                              ${elem.expandInfoSection !== undefined ? html`
                                 <table-row-detail id="detail${idx}" .data="${p}" .elem="${elem}">
                                 <div slot="details">                                
                                   <!-- Contenido detallado específico para la fila 1 -->
                                 </div>
                                 </table-row-detail>
-                              `:html``}
+                              `: html``}
                             `}
-                          )}
+              )}
                         `}
                     </tbody>
                   </table>
@@ -2928,7 +3080,7 @@ export function DataViews(base) {
         </div>
       `;
     }
-    dragDropBoxes(elem, data){
+    dragDropBoxes(elem, data) {
       import('../DragDropBox/drag-box')
       //console.log('elem', elem)
       return html`
