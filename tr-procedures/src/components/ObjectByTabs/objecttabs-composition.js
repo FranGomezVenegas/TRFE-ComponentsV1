@@ -303,6 +303,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
   `
   }
   isEmptyObject(obj) {
+    if (obj===null||obj===undefined){return true}
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
   print1LevelObject(elem, data, data2){   
