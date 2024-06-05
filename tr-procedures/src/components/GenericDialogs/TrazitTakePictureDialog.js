@@ -97,13 +97,14 @@ return class extends ApiFunctions(GridFunctions(DialogsFunctions(base))) {
                 background-color: 4fcad029;
             }       
             .title {
-                text-align: center;
+                text-align: center;    
+                font-size: 22px;
             }
         </style>
         ${actionModel.dialogInfo===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"?nothing:html`
             <tr-dialog id="takePictureDialog" @opened=${this.resetView} ?open=${this.openTakePictureDialog(actionModel)} 
                 heading="" hideActions="" scrimClickAction="">
-                <p class="title">${this.lang==="en"?html`Turn on the cam, Take one picture and upload it`:html`Activa la cámara, toma una foto y súbela`}</p>
+                <p class="title" >${this.lang==="en"?html`Turn on the cam, Take one picture and upload it`:html`Activa la cámara, toma una foto y súbela`}</p>
                 <camera-view id="cameraView" .lang=${this.lang} procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${this.selectedItem}"></camera-view>
             </tr-dialog>
         `}

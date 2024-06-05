@@ -24,7 +24,7 @@ export const styles = css`
     font-family : Montserrat;
     font-weight : bold;
     font-size : 19px;
-    background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+    background: rgb(36, 192, 235) none repeat scroll 0% 0%; 
     font-family: Montserrat;
     font-weight: bold;
     font-size: 19px;
@@ -49,7 +49,7 @@ export const styles = css`
   .container video, .container canvas {
     border: 1px dashed blue;
     border-radius: 8px;
-    background-color: rgba(36, 192, 235, 1);
+    background-color: #18829f80; /* rgba(36, 192, 235, 1); */
     margin: 10px;
   }
 
