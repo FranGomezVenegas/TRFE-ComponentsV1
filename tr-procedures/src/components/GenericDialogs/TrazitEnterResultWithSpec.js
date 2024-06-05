@@ -548,7 +548,7 @@ return class extends ActionsFunctions(LitElement) {
     }
 
     valRendererInstrument(result) {
-      alert(result.param_type)
+      //alert(result.param_type)
       //console.log('valRendererInstrument', 'result', result)
       if (result.is_locked) {
         return html`
