@@ -1559,7 +1559,8 @@ export function DataViews(base) {
                   overflow: hidden;
                   flex-basis: calc(33.33% - 10px);
                   position: relative;                  
-                  left: -12px;                  
+                  left: -12px;   
+                  align-content: flex-start;               
                 }
                 iframe {
                   width: 100%;
