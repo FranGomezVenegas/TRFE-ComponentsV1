@@ -187,12 +187,12 @@ export function CardMultipleElementsView(base) {
          
         <mwc-icon-button icon="print" @click=${() => { this.printCard(i) }}></mwc-icon-button> 
             ${elem.type === "reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
-                    
+            ${elem.cardElements===undefined?nothing:html`        
               ${elem.cardElements.map((elem2, i) => {
-        return html`
+                return html`
                 
                   ${elem2.is_translation === undefined || (elem2.is_translation !== undefined && elem2.is_translation === true && elem2.lang !== undefined && elem2.lang === this.lang) ?
-            html`      
+                  html`      
                        
                     ${elem2.type === "reportTitle" ? this.kpiReportTitleLvl2(elem2, data, this.lang) : nothing}
                     ${elem2.type === "card" ? this.kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
@@ -232,7 +232,8 @@ export function CardMultipleElementsView(base) {
         
                   `: nothing}
                 `
-      })} 
+              })} 
+            `}
             
     </div>
 `
