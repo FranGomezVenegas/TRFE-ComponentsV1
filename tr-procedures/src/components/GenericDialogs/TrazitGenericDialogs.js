@@ -9,6 +9,7 @@ import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../MultiSelect';
 import '../Tree/treeview/index';
+import '../speclimitquantitative/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
 
 import {DialogsFunctions} from './DialogsFunctions';
@@ -209,6 +210,11 @@ export function TrazitGenericDialogs(base) {
             `: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
                 html`   
+                ${!fld.acceptancecriteria ?
+                    html``: html`        
+                        <speclimit-quantitative id="acceptancecriteria" .fld=${fld.acceptancecriteria} ></speclimit-quantitative>         
+                `}          
+
                 ${!fld.tree1 ?
                     html``: html`        
                         <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>         
@@ -917,7 +923,8 @@ export function TrazitGenericDialogs(base) {
         }
         return fldLbl
     }
-    
+     
+    get acceptancecriteria() {return this.shadowRoot.querySelector("speclimit-quantitative#acceptancecriteria")    }        
     get tree1() {    return this.shadowRoot.querySelector("tree-view#tree1")    }        
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
