@@ -864,7 +864,7 @@ export const Stock =
           "name": "genericDialog",
           "fields": [
 			{"list1": {
-			  "items": [
+			  "xxxxitems": [
 			  { "keyName": "Estándares Primarios", "keyValue_en": "Estándares Primarios", "keyValue_es": "Estándares Primarios" }
 			  ],
 			  "label_en": "Reference", "label_es": "Referencia", "optional": true,
