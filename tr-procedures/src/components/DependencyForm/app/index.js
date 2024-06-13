@@ -98,6 +98,7 @@ export class DependencyForm extends LitElement {
     //this.rowSelectedData={}
     this.willUpdateData = undefined;
     this.toggles = {};
+    if (this.endpoints === undefined) return [];
     const idx = this.endpoints.findIndex(
       (endpoint) => endpoint.keyName === e.target.value
     );
