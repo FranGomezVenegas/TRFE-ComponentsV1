@@ -299,6 +299,9 @@ export function ListsFunctions(base) {
         
             // Check if there is dynamic data provided (through actions based on another field's selection)
             if (fld.items && fld.items.length > 0) {
+                if (fld.valuesFromMasterData){
+                    alert('This element has both, items and valuesFromMasterData, be careful and use only one. it will use the items...')
+                }
                 newList = [...newList, ...fld.items]; // merge static or dynamically set items
             } else if (fld.valuesFromMasterData) {
                 // Handle values from a master data source
