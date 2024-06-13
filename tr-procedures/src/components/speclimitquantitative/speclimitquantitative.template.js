@@ -23,29 +23,29 @@ export const template = (
       </select>
     </div>
     <div>
-      <label for="input">Entrada:</label>
+      <label for="input"></label><br>
       <div class="input-container">
         <span>${getPrefix(selectedRule)}</span>
-        ${selectedRule === 1 
+        ${selectedRule === 1 || selectedRule === 2
           ? html`
               <input
                 type="text"
                 .value="${inputValue1}"
-                maxlength="8"
+                maxlength="6"
                 @input="${handleInputChange1}"
                 placeholder="X"/>
-              <span>y</span>
+              <span> y </span>
               <input
                 type="text"
                 .value="${inputValue2}"
-                maxlength="8"
+                maxlength="6"
                 @input="${handleInputChange2}"
-                placeholder="Y"/> incluidos`
+                placeholder="Y"/>  ${selectedRule===1?` incluidos`:``}`
           : html`
               <input
                 type="text"
                 .value="${inputValue1}"
-                maxlength="8"
+                maxlength="6"
                 @input="${handleInputChange1}"
                 placeholder=""/>`
         }
@@ -60,12 +60,19 @@ export const template = (
 function getPrefix(selectedRule) {
   switch (selectedRule) {
     case 1:
-      return 'entre ';
+      return 'Entre ';
     case 2:
-      return 'menor de ';
+      return 'Entre ';
     case 3:
-      return 'menor o igual a ';
+      return 'Menor de ';
+    case 4:
+      return 'Menor o igual a ';
+    case 5:
+      return 'Mayor de ';
+    case 6:
+      return 'Mayor o igual a ';
     default:
       return '';
   }
 }
+
