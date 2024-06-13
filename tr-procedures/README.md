@@ -27,6 +27,7 @@ v0.2.4 improved file attachments dialog
 v0.2.5 readOnlyTable, let cell be edited directly having one action linked and moving the focus to the next row,same column.
 v0.2.6 Fix for tables disappearing when clicking on it and for tabs
 v0.2.7 Styling, thin padding for th and td
+v0.2.8 Styling applied same style from specLimitsQuantitative to cell edit for tables and Enter Results dialog
 
 ## Requirements Tracking
 

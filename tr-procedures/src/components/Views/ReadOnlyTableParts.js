@@ -525,6 +525,30 @@ export function ReadOnlyTableParts(base) {
           const id = `col_${columnIndex}_row_${rowIndex}`; // Changed ID format
           //console.log('Rendering cell:', columnIndex, rowIndex);
           return html`
+          <style>
+            input {
+              border-style: solid;
+              border-color: #999999;
+              border-width: 1px;
+              border-radius: 7px;
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              background-color: #FFFFFF;
+              padding: 8px;
+              flex: 1;
+            }
+            .input-container {
+              display: flex;
+              align-items: center;
+            }
+            .input-container span {
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              margin: 0 4px;
+            }          
+          </style>
             <input class="enterResultVal" id="${id}" 
               type="number" 
               .step=${fld.step !== undefined ? fld.step : ''} 
