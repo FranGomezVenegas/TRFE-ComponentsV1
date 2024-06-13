@@ -12,6 +12,10 @@ export function ActionsFunctions(base) {
               this.selectedItems.push(data)
               }
           }
+          let targetValue={}
+          if (selectedItemPropertyName!==undefined){
+            targetValue.boxValue=selectedItemPropertyName.value
+          }
           console.log('actionMethod', 'action', action, 'selectedItems', this.selectedItems, 'parentData', parentData)
           if (action === undefined) {
               alert('action not passed as argument')
@@ -34,12 +38,12 @@ export function ActionsFunctions(base) {
               } else {
               if (this[selectedItemPropertyName] === undefined) {
                   if (data === undefined) {
-                  this.trazitNoDialogRequired(action, null, null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
+                  this.trazitNoDialogRequired(action, null, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
                   } else {
-                  this.trazitNoDialogRequired(action, data, null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
+                  this.trazitNoDialogRequired(action, data, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
                   }
               } else {
-                  this.trazitNoDialogRequired(action, this[selectedItemPropertyName][0], null, isProcManagement, undefined, parentData, dragEntry, dropEntry)
+                  this.trazitNoDialogRequired(action, this[selectedItemPropertyName][0], targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
               }
               return
               }
