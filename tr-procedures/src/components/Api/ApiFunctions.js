@@ -459,8 +459,8 @@ export function ApiFunctions(base) {
           }else{
             jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
           }
-        } else if (p.targetValue) {
-          jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
+        } else if (p.targetValue) {          
+          jsonParam[p.argumentName] = p.targetValuePropertyName!==undefined?targetValue[p.targetValuePropertyName]: targetValue[p.argumentName] 
         } else if (p.fixValue) {
           jsonParam[p.argumentName] = p.fixValue
         } else if (p.contextVariableName) {
