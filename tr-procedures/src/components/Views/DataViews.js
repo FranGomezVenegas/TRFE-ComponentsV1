@@ -922,7 +922,7 @@ export function DataViews(base) {
       if (rowSelected[elem.children] == 0) {
         if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
           alert("There is no data");
-          this.selectedItemInView = {}
+          this.selectedItem = {}
         }
       }
       //alert(el);
@@ -930,8 +930,8 @@ export function DataViews(base) {
       //if (this.selectedItemInView===undefined||Object.keys(this.selectedItemInView).length === 0){
       //  this.selectedItemInView=undefined
       //}else{
-      this.selectedItemInView = rowSelected;
-      console.log('selectedItemInView', this.selectedItemInView)
+      this.selectedItem = rowSelected;
+      //console.log('selectedItemInView', this.selectedItemInView)
       //}
       // const event2 = new CustomEvent('action-performed', {
       //   bubbles: true, // Allow the event to bubble up the DOM tree
@@ -1036,13 +1036,13 @@ export function DataViews(base) {
     }
 
     parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme, parentData) {
-      console.log('elem', elem, 'dataArr', dataArr, 'parentData', parentData)
+      //console.log('elem', elem, 'dataArr', dataArr, 'parentData', parentData)
       if (directData !== undefined) {
         dataArr = directData;
       } else {
         dataArr = this.getDataFromRoot(elem, dataArr);
       }
-      console.log(elem, dataArr)
+      //console.log(elem, dataArr)
       const handleFilter = (event, p, elem, idx) => {
         const endPointResponseObject = elem.endPointResponseObject;
         const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
@@ -1067,9 +1067,12 @@ export function DataViews(base) {
 
       const endPointResponseObject = elem.endPointResponseObject;
       const selectedIdx = this.selectedTableIndex[endPointResponseObject];
-      const childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
-      if (parentData === undefined) {
-        parentData = selectedIdx !== undefined ? dataArr[0] : undefined;
+      let childDataArr = undefined
+      if (dataArr!==undefined&&dataArr[0]!==undefined){
+        childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
+        if (parentData === undefined) {
+          parentData = selectedIdx !== undefined ? dataArr[0] : undefined;
+        }
       }
       return html`
         ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme, parentData)}
@@ -1167,12 +1170,12 @@ export function DataViews(base) {
         }
 
         table.TRAZiT-DefinitionArea th {
-          padding: 16px 20px;
+          padding: 5px 5px;
           border: 1px solid #dddddd !important;
         }
 
         td, th {
-          padding: 16px 20px;
+          padding: 5px 5px;
           border: 1px solid #dddddd !important;
         }
 
@@ -2070,7 +2073,7 @@ export function DataViews(base) {
       if (elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage === true && data === undefined) { return html`` }
       if (data === undefined && this.data !== undefined) { data = this.data }
 
-      console.log('kpiChartFran', 'elem', elem, 'data', data)
+      //console.log('kpiChartFran', 'elem', elem, 'data', data)
       return html`
         ${elem.display_chart !== true
           ? nothing
@@ -2091,7 +2094,7 @@ export function DataViews(base) {
       if (chartObj !== undefined && chartObj !== null) {
         chartObj.style.setProperty("width", "1600px");
       }
-      console.log("chartStyle", "chartName", chartName, chartObj);
+      //console.log("chartStyle", "chartName", chartName, chartObj);
     }
 
     addNumericValue(rule, value) {
@@ -2129,7 +2132,7 @@ export function DataViews(base) {
       return true;
     }
     getChartData(elem, data) {
-      console.log('getChartData', elem, 'data', data, 'this.data', this.data, 'chartData')
+      //console.log('getChartData', elem, 'data', data, 'this.data', this.data, 'chartData')
       let chartData = [];
       let fakeData = []
       if (elem.elementName === 'fakeTrendlineExample') {
@@ -2847,7 +2850,7 @@ export function DataViews(base) {
         return
       }
       parentData = this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
-      console.log('isSecondLevel', isSecondLevel, 'elem', elem, 'dataArr', dataArr, 'parentData', parentData)
+      //console.log('isSecondLevel', isSecondLevel, 'elem', elem, 'dataArr', dataArr, 'parentData', parentData)
       let tmp = ""
       if (elem.theme === undefined) {
         tmp = "TRAZiT-UsersArea";
@@ -3046,26 +3049,26 @@ export function DataViews(base) {
               html`No Data` :
               html`
                          
-                          ${dataArr.map((p, idx) => {
+                          ${dataArr.map((p, rowIndex) => {
                 return html`
                               <tr
                               @click=${(event) => {
                     if (handler) {
                       if (p[elem.children] && p[elem.children].length > 0) {
                         if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
-                          handler(event, p, elem, idx);
+                          handler(event, p, elem, rowIndex);
                         }
                       }
                     }
                     this.handleTableRowClick(event, p, elem)
                   }}
                               @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
-                              class="${selectedIdx === idx ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"  
+                              class="${selectedIdx === rowIndex ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"  
                               >
-                                ${this.getRowsInfo(elem, p, idx, this.lang, parentData, handler)}
+                                ${this.getRowsInfo(elem, p, rowIndex, this.lang, parentData, handler)}
                               </tr>
                               ${elem.expandInfoSection !== undefined ? html`
-                                <table-row-detail id="detail${idx}" .data="${p}" .elem="${elem}">
+                                <table-row-detail id="detail${rowIndex}" .data="${p}" .elem="${elem}">
                                 <div slot="details">                                
                                   <!-- Contenido detallado específico para la fila 1 -->
                                 </div>
