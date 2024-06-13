@@ -1,4 +1,5 @@
 import { html } from "lit-element";
+import './uploadNotification'
 
 export const template = (props) => {
   const { name, label, handleUpload, getFile, fileName } = props;
@@ -13,7 +14,9 @@ export const template = (props) => {
         title="Click to upload the file" @click=${handleUpload}></mwc-icon-button>
       <div id="error"></div>
       ${fileName}
-      <div id="preview"></div>
+      <div id="preview">
+      <upload-notification></upload-notification>
+      </div>
     </div>
   `;
 };

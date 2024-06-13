@@ -265,6 +265,7 @@ export const DemoViews = [
   {"label":"R and D", "proc_instance_name": "RandD", "views":[
     {"proc_instance_name": "RandD", "view_name": "rdprojects", "filter_name": "rdprojects", "title": "rd projects"},
     {"proc_instance_name": "RandD", "view_name": "methodvalidation", "filter_name": "methodvalidation", "title": "Method Validation"},
+    {"proc_instance_name": "RandD", "view_name": "analysisDesign", "filter_name": "analysisDesign", "title": "analysisDesign"},
     
     {"proc_instance_name": "RandD", "view_name": "stability", "filter_name": "stability", "title": "stabilities"}
 	]},

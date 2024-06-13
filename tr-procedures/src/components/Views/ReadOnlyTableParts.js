@@ -131,12 +131,12 @@ export function ReadOnlyTableParts(base) {
             }
   
             table.TRAZiT-DefinitionArea th {
-              padding: 16px 20px;
+              padding: 5px 5px;
               border: 1px solid #dddddd !important;
             }
   
             td, th {
-              padding: 16px 20px;
+              padding: 5px 5px;
               border: 1px solid #dddddd !important;
             }
   
@@ -490,9 +490,12 @@ export function ReadOnlyTableParts(base) {
         
 
 
-        cellContentController(elem, fld, data, lang, index){
+        cellContentController(elem, fld, data, lang, columnIndex, rowIndex){
+          //alert(fld.name+' '+fld.edit)
             let applyOther=true
-            if (fld.name === "pretty_spec" || fld.name === "reportTitle") {
+            if (fld.edit!==undefined&&fld.edit===true){
+              applyOther = false;
+            } else if (fld.name === "pretty_spec" || fld.name === "reportTitle") {
                 applyOther = false;
             } else if (fld.is_tag_list !== undefined &&fld.is_tag_list === true) {
                 applyOther = false;
@@ -504,17 +507,100 @@ export function ReadOnlyTableParts(base) {
                 applyOther = false;
             }                  
             return html`
-                                  
+            ${fld.edit!==undefined&&fld.edit===true?
+            html`
+                ${this.cellEditNumeric(fld, data, lang, columnIndex, rowIndex)}
+            `:html`
                 ${fld.name === "pretty_spec"==="reportTitle" ? this.cellIsPrettySpec(fld, data, lang) : nothing}
                 ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? this.cellIsTagList(fld, data, lang) : nothing}
                 ${fld.as_progress !== undefined && fld.as_progress === true ? this.cellIsAsProgress(fld, data, lang) : nothing}
                 ${fld.as_paragraph !== undefined && fld.as_paragraph === true ? this.cellIsParagraph(fld, data, lang) : nothing}
-                ${fld.is_icon !== undefined && fld.is_icon === true ? this.cellIsIcon(fld, data, index) : nothing}
-                ${applyOther===true?this.cellIsOther(elem, fld, data, lang, index) : nothing}
-            
+                ${fld.is_icon !== undefined && fld.is_icon === true ? this.cellIsIcon(fld, data, columnIndex) : nothing}
+                ${applyOther===true?this.cellIsOther(elem, fld, data, lang, columnIndex) : nothing}
+            `}
             `
         }
 
+        cellEditNumeric(fld, data, lang, columnIndex, rowIndex) {
+          const id = `col_${columnIndex}_row_${rowIndex}`; // Changed ID format
+          //console.log('Rendering cell:', columnIndex, rowIndex);
+          return html`
+          <style>
+            input {
+              border-style: solid;
+              border-color: #999999;
+              border-width: 1px;
+              border-radius: 7px;
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              background-color: #FFFFFF;
+              padding: 8px;
+              flex: 1;
+            }
+            .input-container {
+              display: flex;
+              align-items: center;
+            }
+            .input-container span {
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              margin: 0 4px;
+            }          
+          </style>
+            <input class="enterResultVal" id="${id}" 
+              type="number" 
+              .step=${fld.step !== undefined ? fld.step : ''} 
+              .min=${fld.min !== undefined ? fld.min : ''} 
+              .max=${fld.max !== undefined ? fld.max : ''} 
+              .value=${data[fld.name]} 
+              @input=${e => this.setValidVal(e, data)}
+              @keydown=${e => this.cellEditOnKeyDown(e, fld, columnIndex, rowIndex, data)}>          
+          `;
+        }
+        
+        cellEditOnKeyDown(event, fld, columnIndex, rowIndex, data) {
+         // console.log('cellEditOnKeyDown triggered:', event.key, event.code);
+          if (event.key === 'Enter' || event.code === 'Enter') {
+            event.preventDefault();
+            //console.log('Enter key pressed, calling handleKeyDown');
+            this.cellEditHandleKeyDown(event, fld, columnIndex, rowIndex, data);
+          } else {
+            //console.log('Other key pressed:', event.key);
+          }
+        }
+        
+        cellEditHandleKeyDown(event, fld, columnIndex, rowIndex, data) {
+          //console.log('cellEditHandleKeyDown called');
+          this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+          this.cellEditMoveToNextRow(columnIndex, rowIndex);
+        }
+        
+        cellEditMoveToNextRow(columnIndex, rowIndex) {
+          const nextRowIndex = rowIndex + 1;
+          const nextInputId = `#col_${columnIndex}_row_${nextRowIndex}`;
+          //console.log(`Attempting to focus next input: ${nextInputId}`);
+        
+          let nextInput = this.shadowRoot.querySelector(nextInputId);
+          
+          if (!nextInput) {
+            //console.log(`Next input not found immediately: ${nextInputId}`);
+            setTimeout(() => {
+              nextInput = this.shadowRoot.querySelector(nextInputId);
+              if (nextInput) {
+              //  console.log(`Focusing next input after delay: ${nextInputId}`);
+                nextInput.focus();
+              } else {
+              //  console.warn(`Next input still not found after delay: ${nextInputId}`);
+              }
+            }, 100);
+          } else {
+            //console.log(`Focusing next input immediately: ${nextInputId}`);
+            nextInput.focus();
+          }
+        }
+                        
         cellIsPrettySpec(fld, data, lang){
             return html`   cellIsPrettySpec             
                     <span style="color:green">${data["spec_text_green_area_" + lang]}</span>
@@ -613,22 +699,23 @@ export function ReadOnlyTableParts(base) {
                 </td>    
             `
         }
-        getRowsInfo(elem, curRow, idx, lang, parentData, handler){
+        getRowsInfo(elem, curRow, rowIndex, lang, parentData, handler){
+          //console.log(rowIndex)
           return html`
-              ${elem.columns.map((fld, index) =>                     
+              ${elem.columns.map((fld, columnIndex) =>                     
                   html`
                   <td>
                       ${fld.tooltip !== undefined ? html`
                           <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${curRow}">                        
-                              ${this.cellContentController(elem, fld, curRow, lang, index)}                    
+                              ${this.cellContentController(elem, fld, curRow, lang, columnIndex, rowIndex)}                    
                           </grid-cell-tooltip>
                       `:html`
-                          ${this.cellContentController(elem, fld, curRow, lang, index)}
+                          ${this.cellContentController(elem, fld, curRow, lang, columnIndex, rowIndex)}
                       `}
                   </td>
                   `
               )}
-              ${this.generateRowButtons(elem, curRow, parentData, idx, handler, lang)}
+              ${this.generateRowButtons(elem, curRow, parentData, rowIndex, handler, lang)}
           `
           }
       

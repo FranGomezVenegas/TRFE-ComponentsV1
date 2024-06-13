@@ -2118,7 +2118,8 @@ export const DemoInstruments ={
             { "argumentName": "decision", "element": "list1" }
         ]
     },	
-      { "actionName": "INSTRUMENT_EVENT_VARIABLES",
+    { "actionName": "INSTRUMENT_EVENT_VARIABLES",
+    
 		"requiresDialog": true,
         "alertMsg": {
           "empty": { "label_en": "No pending results to enter result", "label_es": "No hay resultados pendientes de resultados" }

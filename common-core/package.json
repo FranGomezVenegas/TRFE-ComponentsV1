@@ -3,7 +3,7 @@
   "description": "Component for the common business logic",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "main": "index.js",
   "module": "index.js",
   "dependencies": {

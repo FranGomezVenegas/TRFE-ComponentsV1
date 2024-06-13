@@ -20,6 +20,14 @@ npm run start
 v0.0.1 model up to 2.0
 v0.0.2 model 2.1
 v0.1.0 QA cleaning, sonarcloud
+v0.2.1 multilist default values
+v0.2.2 fix issue when clicking one rowButton having the children open
+v0.2.3 dropzone to upload file, preview duplicated page preview fixed
+v0.2.4 improved file attachments dialog
+v0.2.5 readOnlyTable, let cell be edited directly having one action linked and moving the focus to the next row,same column.
+v0.2.6 Fix for tables disappearing when clicking on it and for tabs
+v0.2.7 Styling, thin padding for th and td
+v0.2.8 Styling applied same style from specLimitsQuantitative to cell edit for tables and Enter Results dialog
 
 ## Requirements Tracking
 

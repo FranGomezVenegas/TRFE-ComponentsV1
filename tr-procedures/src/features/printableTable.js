@@ -148,12 +148,12 @@ export function PrintableTable(base) {
                         }
               
                         table.TRAZiT-DefinitionArea th {
-                          padding: 16px 20px;
+                          padding: 5px 5px;
                           border: 1px solid #dddddd !important;
                         }
               
                         td, th {
-                          padding: 16px 20px;
+                          padding: 5px 5px;
                           border: 1px solid #dddddd !important;
                         }
               

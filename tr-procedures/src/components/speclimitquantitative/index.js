@@ -87,7 +87,7 @@ export class SpeclimitQuantitative extends LitElement {
     }
 
     if (!regex.test(fullInput)) {
-      this.errorMessage = 'Formato de entrada no válido para la regla seleccionada';
+      this.errorMessage = 'Formato de entrada no válido para la regla seleccionada, usa punto (.) como separador decimal';
     } else if ((this.selectedRule === 1 || this.selectedRule === 2) && parseFloat(this.inputValue1) >= parseFloat(this.inputValue2)) {
       this.errorMessage = 'El primer valor debe ser menor que el segundo valor';
     } else {
