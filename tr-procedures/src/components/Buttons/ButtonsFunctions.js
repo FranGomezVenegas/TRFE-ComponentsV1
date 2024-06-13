@@ -134,8 +134,8 @@ export function ButtonsFunctions(base) {
 
     getButton(sectionModel, data, isProcManagement) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
-      console.log("getButtondatasectionModel", sectionModel);
-      console.log('getButtondata', data)
+      //console.log("getButtondatasectionModel", sectionModel);
+      //console.log('getButtondata', data)
 							  
 						   
 																																											 
@@ -383,7 +383,7 @@ export function ButtonsFunctions(base) {
       return d
     }
     btnHiddenForRows(action, selRow) {
-      console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)    
+      //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)    
       let d = false
       if (selRow !== undefined && selRow["No Data"] !== undefined) { return true }
       if (action.button.showWhenSelectedItem !== undefined) {
