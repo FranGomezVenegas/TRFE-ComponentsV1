@@ -47,7 +47,7 @@ return class extends ApiFunctions(GridFunctions(DialogsFunctions(base))) {
         }
     }
     takePictureFormDialog(actionModel) {
-        console.log(actionModel)
+        //console.log(actionModel)
         if (actionModel === undefined) {
             actionModel = this.actionBeingPerformedModel
         }
