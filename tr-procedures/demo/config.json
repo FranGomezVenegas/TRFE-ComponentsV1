@@ -285,7 +285,7 @@
     "viewName": "rdprojects", 
     "filterName" :  "rdprojects" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzz": {
     "procName":  "RandD", 
     "viewName": "methodvalidation", 
     "filterName" :  "methodvalidation" 
