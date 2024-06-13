@@ -213,13 +213,17 @@ export function CardMultipleElementsView(base) {
         <mwc-icon-button icon="visibility" @click=${() => { this.hideCard(i) }}></mwc-icon-button> 
             ${elem.type === "reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
             ${elem.cardElements===undefined?nothing:html`        
-              ${elem.cardElements.map((elem2, i) => {
+              ${elem.cardElements.map((elem2, index) => {
                 return html`
                 
                   ${elem2.is_translation === undefined || (elem2.is_translation !== undefined && elem2.is_translation === true && elem2.lang !== undefined && elem2.lang === this.lang) ?
                   html`      
                        
-                    ${elem2.type === "reportTitle" ? this.kpiReportTitleLvl2(elem2, data, this.lang, this.hideCard, i) : nothing}
+                    ${elem2.type === "reportTitle" ? html`
+                    <div @click="${()=>this.hideCard(i)}">
+                    ${this.kpiReportTitleLvl2(elem2, data, this.lang)}
+                    </div>
+                    ` : nothing}
                     <div id="hidden">
                     ${elem2.type === "card" ? this.kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
                     ${elem2.type === "cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}

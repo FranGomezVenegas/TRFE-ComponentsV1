@@ -195,13 +195,13 @@ export function DataViews(base) {
         <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]}</p>
       `;
     }
-    kpiReportTitleLvl2(elem, data, lang, hideCard, index) {
+    kpiReportTitleLvl2(elem, data, lang) {
       if (elem.title === undefined && (elem.title.text_en === undefined || elem.title.label_en === undefined)) {
         return html``
       }
       if (elem.title.text_en !== undefined) {
         return html`
-        <p @click="${()=>hideCard(index, this)}"><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">            
+        <p><span style="color: rgb(20, 115, 230);font-size: 24px;margin-top: 10px;font-weight: bold;" id="reportTitle">            
           ${unsafeHTML(this.getDynamicData(elem.title, data, lang))}
         </p>
         `
