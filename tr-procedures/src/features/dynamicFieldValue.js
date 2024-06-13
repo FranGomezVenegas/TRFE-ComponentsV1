@@ -1,72 +1,58 @@
 export function FeaturesDynamicFieldValue(base) {
-    return class extends (base) {
+  return class extends (base) {
 
-        getDynamicData(curTip, data, lang) {
-            let templateString = curTip["text"]
-            if (curTip["text_" + lang] !== undefined) {
+      getDynamicData(curTip, data, lang) {
+          let templateString = curTip["text"];
+          if (curTip["text_" + lang] !== undefined) {
               templateString = curTip["text_" + lang];
-            }  
-            //console.log('lang', lang, templateString)
-            return this.replaceTagsInDynamicValue(templateString, data)
-        }        
-        replaceTagsInDynamicValue(templateString, data) {
+          }
+          return this.replaceTagsInDynamicValue(templateString, data);
+      }
+
+      replaceTagsInDynamicValue(templateString, data) {
           if (templateString === undefined) {
               return '';
           }
-          const regex = /\{(fld|variable)\?(\w+)(?:(?:\s*==\s*(['"]?.+['"]?))?\s*\?\s*(['"]?[^:}]+['"]?)\s*:\s*(['"]?[^}]+['"]?)|([^}]+))\}|{(fld|variable):(\w+)\}/g;
-          return templateString.replace(regex, (match, type, key, comparisonValue, truePart, falsePart, switchCases, simpleType, simpleKey) => {
-            //console.log({ match, type, key, comparisonValue, truePart, falsePart, switchCases, simpleType, simpleKey });  
-            if (type && key) {
-                  // Handle conditional expression
-                  return this.evaluateExpression(data, type, key, truePart, falsePart, comparisonValue, switchCases);
-              } else if (simpleType) {
-                  // Handle simple replacement
-                  return simpleType === 'fld' ? data[simpleKey] ?? match : this.variable[simpleKey] ?? match;
+          const regex = /\{(fld|variable)\:(\w+)\}|\{(fld|variable)\?(\w+)(?:\s*(==|!=)\s*(['"]?.+['"]?))?\s*\?\s*([^:}]+)\s*:\s*([^}]+)\}/g;
+          return templateString.replace(regex, (match, type, key, condType, condKey, operator, comparisonValue, truePart, falsePart) => {
+              if (type && key) {
+                  return this.simpleReplacement(type, key, data, match);
+              } else if (condType && condKey) {
+                  return this.evaluateExpression(data, condType, condKey, truePart, falsePart, comparisonValue, operator);
               }
               return match;
           });
-        }
-        
-        evaluateExpression(data, type, key, truePart, falsePart, comparisonValue, switchCases) {
-            try {
-              if (truePart && truePart.startsWith('{') && !truePart.endsWith('}')) {
-                truePart += '}';
-              }              
-              if (falsePart && falsePart.startsWith('{') && !falsePart.endsWith('}')) {
-                falsePart += '}';
-              }              
-              const value = type === 'fld' ? data[key] : this.variable[key];
-          
-              // Handling switch-like expressions
-              if (switchCases) {
-                const cases = switchCases.split(/\s*:\s*/);
-                for (let i = 0; i < cases.length; i += 1) {
-                    //const caseValue = cases[i]?.trim().replace(/['"]/g, '');
-                    //const caseResult = cases[i + 1]?.trim();          
-                    const parts = cases[i].split('?');
-                    const caseValue = parts[0];
-                    const caseResult = parts[1];
-                    if (caseValue === value){// || (i === cases.length - 1 && caseResult !== null)) {
-                        return caseResult;
-                    }
-                }
-                return cases[cases.length-1]; // Default case if no match
-              }
-          
-              // Handling comparison expressions
-              if (comparisonValue !== undefined) {
-                const match = value === comparisonValue.replace(/['"]/g, '');
-                return match ? this.replaceTagsInDynamicValue(truePart, data) : this.replaceTagsInDynamicValue(falsePart, data);
-              }
-          
-              // Handling boolean values
-              return value ? this.replaceTagsInDynamicValue(truePart, data) : this.replaceTagsInDynamicValue(falsePart, data);
-            } catch (e) {
-              console.error("Error evaluating expression: ", e);
-              return ''; // Return a default value or handle the error as needed
-            }
+      }
+
+      simpleReplacement(type, key, data, match) {
+          if (type === 'fld') {
+              return data[key] !== undefined ? data[key] : match;
           }
-          
-     
-    }
+          return match;
+      }
+
+      evaluateExpression(data, type, key, truePart, falsePart, comparisonValue, operator) {
+          try {
+              const value = type === 'fld' ? data[key] : this.variable[key];
+              if (comparisonValue !== undefined) {
+                  const match = (operator === '==' && value === comparisonValue.replace(/['"]/g, '')) ||
+                                (operator === '!=' && value !== comparisonValue.replace(/['"]/g, ''));
+                  if (match) {
+                      return this.replaceTagsInDynamicValue(truePart, data);
+                  } else {
+                      return this.replaceTagsInDynamicValue(falsePart, data);
+                  }
+              }
+
+              if (value) {
+                  return this.replaceTagsInDynamicValue(truePart, data);
+              } else {
+                  return this.replaceTagsInDynamicValue(falsePart, data);
+              }
+          } catch (e) {
+              console.error("Error evaluating expression: ", e);
+              return '';
+          }
+      }
+  }
 }
