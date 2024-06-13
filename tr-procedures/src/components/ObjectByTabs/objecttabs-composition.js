@@ -271,7 +271,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
-            ${elem2.type==="parentReadOnlyTable" ? this.parentReadOnlyTable(elem2, data2, true, undefined, undefined,): nothing}
+            ${elem2.type==="parentReadOnlyTable" ? this.parentReadOnlyTable(elem2, data, true, undefined, undefined,): nothing}
             ${elem2.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 
@@ -323,7 +323,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
       ${elem.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem, data, true): nothing}
       ${elem.type==="parentReadOnlyTable" ? 
-      this.parentReadOnlyTable(elem, data2, true, undefined, undefined,undefined,elem.theme,): nothing}
+      this.parentReadOnlyTable(elem, data, true, undefined, undefined,undefined,elem.theme,): nothing}
 
       ${elem.type==="dragDropBoxes" ? this.dragDropBoxes(elem, data[elem.endPointResponseObject]) : nothing}
 
