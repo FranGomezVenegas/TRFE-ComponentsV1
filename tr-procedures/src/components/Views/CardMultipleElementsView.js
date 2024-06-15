@@ -152,6 +152,29 @@ export function CardMultipleElementsView(base) {
 
       return {title,cardStyles,mainDivSkeleton};
     }
+    hideCard(index, thisComponent) {
+      let cardDiv;
+      if (thisComponent) {
+        cardDiv = thisComponent.shadowRoot.querySelectorAll('#mainaddborder');
+      } else {
+        cardDiv = this.shadowRoot.querySelectorAll('#mainaddborder');
+      }
+      if (cardDiv) {
+        let curentDiv = cardDiv[index];
+        const content = curentDiv.querySelectorAll('#hidden');
+        if (content) {
+          content.forEach(element => {
+            if (element.style.display === 'none') {
+              element.style.display = 'block';
+            } else {
+              element.style.display = 'none';
+            }
+          });
+        }
+      }
+      console.log(index);
+    }
+    
     cardController(elem, data, i) {
       console.log(elem.cardElements)
       return html` 
@@ -176,7 +199,8 @@ export function CardMultipleElementsView(base) {
         left: 2px; 
         display: flex;
         flex-wrap: wrap;
-        gap: 10px; /* espacio entre los elementos */                 
+        gap: 10px; /* espacio entre los elementos */    
+        height: fit-content;             
       } 
       #mainaddborder > div {
         flex: 1 1 calc(50% - 10px); /* Dos columnas con espacio */
@@ -186,15 +210,21 @@ export function CardMultipleElementsView(base) {
         class="${elem.class !== undefined && elem.class === 'vertical' ? 'layout vertical flex wrap' : ''}" style="${elem.style !== undefined ? elem.style : ""}">
          
         <mwc-icon-button icon="print" @click=${() => { this.printCard(i) }}></mwc-icon-button> 
+        <mwc-icon-button icon="visibility" @click=${() => { this.hideCard(i) }}></mwc-icon-button> 
             ${elem.type === "reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
             ${elem.cardElements===undefined?nothing:html`        
-              ${elem.cardElements.map((elem2, i) => {
+              ${elem.cardElements.map((elem2, index) => {
                 return html`
                 
                   ${elem2.is_translation === undefined || (elem2.is_translation !== undefined && elem2.is_translation === true && elem2.lang !== undefined && elem2.lang === this.lang) ?
                   html`      
                        
-                    ${elem2.type === "reportTitle" ? this.kpiReportTitleLvl2(elem2, data, this.lang) : nothing}
+                    ${elem2.type === "reportTitle" ? html`
+                    <div @click="${()=>this.hideCard(i)}">
+                    ${this.kpiReportTitleLvl2(elem2, data, this.lang)}
+                    </div>
+                    ` : nothing}
+                    <div id="hidden">
                     ${elem2.type === "card" ? this.kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
                     ${elem2.type === "cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}
                     ${elem2.type === "cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
@@ -229,7 +259,7 @@ export function CardMultipleElementsView(base) {
                     
                       this.buttonsOnly(elem2, data) : nothing}
                     ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
-        
+                    </div>
                   `: nothing}
                 `
               })} 
