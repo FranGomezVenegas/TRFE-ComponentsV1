@@ -153,7 +153,7 @@ export function ApiFunctions(base) {
           let userSession = JSON.parse(sessionStorage.getItem("userSession"))
           extraParams.dbName = userSession.dbName
         }   
-        if (excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
+        if (this.procInstanceName!==undefined&&excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
           extraParams.procInstanceName = this.procInstanceName
         }
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
