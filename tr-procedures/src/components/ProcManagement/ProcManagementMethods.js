@@ -1,5 +1,83 @@
 export function ProcManagementMethods(base) {
   return class extends base {
+    cardActions = [
+      {
+        "actionName": "LOCK_PROCEDURE",
+        "notGetViewData": true,
+        "clientMethod": "procMngRequirementsMethod",
+        "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+        "selectedItemPropertyName": "selectedItems",
+        "requiresDialog": false,
+        "certificationException": true,
+        "secondaryActionToPerform": {
+          "name": "refreshAllProceduresView"
+        },
+        "button": {
+          "icon": "lock",
+          "title": {
+            "label_en": "Lock procedure",
+            "label_es": "Bloquear proceso"
+          },
+          "requiresGridItemSelected": false,
+          "hideWhenSelectedItem": {
+            "column": "locked_for_actions",
+            "value": true
+          }  
+        },
+        "endPointParams": [
+          {
+            "argumentName": "procedureName",
+            "selObjectPropertyName": "procedure_name"
+          },
+          {
+            "argumentName": "procedureVersion",
+            "selObjectPropertyName": "procedure_version"
+          },
+          {
+            "argumentName": "procInstanceName",
+            "selObjectPropertyName": "proc_instance_name"
+          }
+        ]
+      },
+      {
+        "actionName": "UNLOCK_PROCEDURE",
+        "notGetViewData": true,
+        "clientMethod": "procMngRequirementsMethod",
+        "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+        "selectedItemPropertyName": "selectedItems",
+        "requiresDialog": false,
+        "certificationException": true,
+        "secondaryActionToPerform": {
+          "name": "refreshAllProceduresView"
+        },
+        "button": {
+          "icon": "lock_open",
+          "title": {
+            "label_en": "Unlock procedure",
+            "label_es": "Desbloquear proceso"
+          },
+          "requiresGridItemSelected": false,
+          "showWhenSelectedItem": {
+            "column": "locked_for_actions",
+            "value": true
+          }  
+        },
+        "endPointParams": [
+          {
+            "argumentName": "procedureName",
+            "selObjectPropertyName": "procedure_name"
+          },
+          {
+            "argumentName": "procedureVersion",
+            "selObjectPropertyName": "procedure_version"
+          },
+          {
+            "argumentName": "procInstanceName",
+            "selObjectPropertyName": "proc_instance_name"
+          }
+        ]
+      }      
+    ];
     selectedProcedureInstance(e) {
       this.selectedProcInstance = this.allProcedures.find(
         (item) => item.proc_instance_name === e.currentTarget.id
