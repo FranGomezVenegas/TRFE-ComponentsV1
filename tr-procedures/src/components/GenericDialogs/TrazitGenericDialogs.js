@@ -876,10 +876,11 @@ export function TrazitGenericDialogs(base) {
         //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
         //     return 
         // }
-        if (this.fieldsShouldBeReset===true){
+       
+        //if (this.fieldsShouldBeReset===true){
             this.resetFields()
             this.fieldsShouldBeReset=false
-        }
+        //}
         let dlgFlds=undefined
         if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
             this.actionBeingPerformedModel.dialogInfo.fields
@@ -919,7 +920,7 @@ export function TrazitGenericDialogs(base) {
         //alert('reset Fields now')   
         let dlgFlds=undefined
         if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
-            this.actionBeingPerformedModel.dialogInfo.fields
+            dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         }
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
@@ -934,11 +935,15 @@ export function TrazitGenericDialogs(base) {
                     if (!keyName[0].includes('SelectedRow')){
                         this[keyName[0]].value=[]
                     }
+                }else if (keyName[0].includes('multi')){
+                    fldObj.defaultValue ? this[keyName[0]].activeOptions=this.selectedItem[fldObj.defaultValue] : this[keyName[0]].activeOptions={}
+                    this[keyName[0]].setClosed()                    
                 }else{
                     if (this[keyName]!==undefined&&this[keyName[0]]!==undefined){
                         this[keyName[0]].value=""
                     }
                 }
+
             }
             //this.actionWhenOtherThanListValueChanged(e, element, this.actionBeingPerformedModel.dialogInfo, this.selectedItems[0]);
         }

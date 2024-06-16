@@ -173,6 +173,11 @@ export class MultiSelect extends navigator(LitElement) {
     this.open = true;
     this.requestUpdate();
   }
+  
+  setClosed() {
+    this.open = false;
+    this.requestUpdate();
+  }
 }
 
 window.customElements.define('multi-select', MultiSelect);

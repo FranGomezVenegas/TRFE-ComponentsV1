@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import { template } from './kpiChart.template';
+import { template } from './kpiChart.template.js';
 import { styles } from './kpiChart.css.js';
 
 export class KpiChart extends LitElement {
