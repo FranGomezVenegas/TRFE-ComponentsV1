@@ -7,6 +7,7 @@ import "../qrcode-scanner/index";
 import '../Calendar/index';
 import '../Tree/treeview/index'
 import '../MolecularEditor/molecular-editor';
+import '../jsonDiffViewer/jsondiffviewermain';
 export const template = (props) => {
   const { selectedItems, handleSelectItem, getSelectedItems } = props;
 
@@ -20,8 +21,15 @@ export const template = (props) => {
     const item = JSON.parse(itemStr);
     console.log(item);
   }
-
+  let oldVersion={}
+  oldVersion={"name": "old version", "description": "This is the old version"}
+  let newVersion={}
+  newVersion={"name": "new version", "description": "This is the new version"}
   return html`
+  
+  <json-diff-viewer old-version=${oldVersion} 
+  new-version=${newVersion}>
+  </json-diff-viewer>
   <molecular-editor></molecular-editor>
   <tree-view id="mytree" .data=${props.treeElementData} .specification=${props.treeElementSpecification} @item-selected=${props.treeSelection}></tree-view>
   <calendar-component></calendar-component>
