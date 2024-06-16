@@ -77,6 +77,8 @@ export const ProjectRandD=
       "actions": [
         {
         "actionName": "NEW_PROJECT",
+        "TRAZiTversion":"1.2",
+        "TRAZiTversionReleaseDate": "Y2024M05D01",
         "notGetViewData": true,
         "requiresDialog": true,
         "certificationException": true,

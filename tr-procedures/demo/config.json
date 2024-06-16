@@ -236,7 +236,7 @@
     "viewName": "tree-view", 
     "filterName" :  "tree-view" 
   },
-  "localDefaultView111231": {
+  "localDefaultView": {
     "procName":  "fake-developers", 
     "viewName": "prototype-elements-view-main", 
     "filterName" :  "prototype-elements-view-main" 
@@ -280,7 +280,7 @@
     "viewName": "stability", 
     "filterName" :  "stability" 
   },  
-  "localDefaultView": {
+  "localDefaultView123": {
     "procName":  "RandD", 
     "viewName": "rdprojects", 
     "filterName" :  "rdprojects" 
