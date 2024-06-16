@@ -16,6 +16,9 @@ export function ApiFunctions(base) {
         this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
         return fetch(urlParams).then(async r => {
           if (r.status == 200) {
+            if (actionModel!==undefined){
+              this.refreshMasterData(j, actionModel)
+            }  
             return r.json()
           } else {
             let err = await r.json()
@@ -29,9 +32,9 @@ export function ApiFunctions(base) {
               composed: true
             }))
           }
-          if (actionModel!==undefined){
-            this.refreshMasterData(j, actionModel)
-          }
+          //if (actionModel!==undefined){
+          //  this.refreshMasterData(j, actionModel)
+          //}
           return j
         }).catch(e => {
           if (e.message == "Unexpected end of JSON input") {
@@ -117,7 +120,9 @@ export function ApiFunctions(base) {
             this.procInstanceName=currentTabView.procInstanceName
           }
         }
-        if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
+        console.log(endPointResponse.master_data)
+        if ( endPointResponse===undefined||endPointResponse.master_data===undefined) {
+         // alert('master Data no se va a refrescar!')
           return
         } 
        // console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
