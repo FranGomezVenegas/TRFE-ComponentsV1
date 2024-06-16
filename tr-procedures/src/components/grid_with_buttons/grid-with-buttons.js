@@ -400,7 +400,10 @@ get rowTooltip() {
       "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
       "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
     }
-    if (this.grid.items[i - 1].is_locked) {
+    let curItem={}
+    curItem=this.grid.items[i - 1]
+    console.log(curItem)
+    if (curItem!==undefined&&curItem.is_locked!==undefined&&curItem.is_locked===true) {
       this.rowTooltip.style.backgroundColor = "#24C0EB"
       this.rowTooltip.style.visibility = "visible"
       let txtValue=labels['locking_reason_label_' + this.lang] + ": "
