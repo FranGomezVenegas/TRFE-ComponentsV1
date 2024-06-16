@@ -30,6 +30,7 @@ v0.2.7 Styling, thin padding for th and td
 v0.2.8 Styling applied same style from specLimitsQuantitative to cell edit for tables and Enter Results dialog
 v0.2.9 avoid is_locked when undefined in grid_with_buttons and button to display/hide cards
 v0.2.10 lock/unlock action for procedures
+v0.2.11 Disabledd jsonDiffViewer
 
 ## Requirements Tracking
 

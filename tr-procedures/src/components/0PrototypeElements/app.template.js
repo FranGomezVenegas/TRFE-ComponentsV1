@@ -27,9 +27,9 @@ export const template = (props) => {
   newVersion={"name": "new version", "description": "This is the new version"}
   return html`
   
-  <json-diff-viewer old-version=${oldVersion} 
+ <!-- <json-diff-viewer old-version=${oldVersion} 
   new-version=${newVersion}>
-  </json-diff-viewer>
+  </json-diff-viewer> -->
   <molecular-editor></molecular-editor>
   <tree-view id="mytree" .data=${props.treeElementData} .specification=${props.treeElementSpecification} @item-selected=${props.treeSelection}></tree-view>
   <calendar-component></calendar-component>
