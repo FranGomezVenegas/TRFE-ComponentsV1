@@ -525,42 +525,75 @@ export function ReadOnlyTableParts(base) {
           const id = `col_${columnIndex}_row_${rowIndex}`; // Changed ID format
           //console.log('Rendering cell:', columnIndex, rowIndex);
           return html`
-          <style>
-            input {
-              border-style: solid;
-              border-color: #999999;
-              border-width: 1px;
-              border-radius: 7px;
-              font-family: Montserrat;
-              font-weight: bold;
-              /* font-size: 19px; */
-              background-color: #FFFFFF;
-              padding: 8px;
-              flex: 1;
-            }
-            .input-container {
-              display: flex;
-              align-items: center;
-            }
-            .input-container span {
-              font-family: Montserrat;
-              font-weight: bold;
-              /* font-size: 19px; */
-              margin: 0 4px;
-            }          
-          </style>
             <input class="enterResultVal" id="${id}" 
               type="number" 
               .step=${fld.step !== undefined ? fld.step : ''} 
               .min=${fld.min !== undefined ? fld.min : ''} 
               .max=${fld.max !== undefined ? fld.max : ''} 
               .value=${data[fld.name]} 
-              @input=${e => this.setValidVal(e, data)}
-              @keydown=${e => this.cellEditOnKeyDown(e, fld, columnIndex, rowIndex, data)}>          
+              @input=${e => this.cellEditSetValidVal(e, data)}
+              @keydown=${e => this.cellEditOnKeyDown(e, fld, columnIndex, rowIndex, data)}
+              @paste=${e => this.cellEditOnPaste(e, fld, columnIndex, rowIndex, data)}>          
           `;
         }
         
+        cellEditOnPaste(event, fld, columnIndex, rowIndex, data) {
+          event.preventDefault();
+        
+          const clipboardData = event.clipboardData || window.clipboardData;
+          const pastedData = clipboardData.getData('Text');
+        
+          console.log('Pasted data:', pastedData);
+        
+          const rows = pastedData.split('\n').filter(row => row.trim() !== '');
+          
+          console.log('Rows:', rows);
+        
+          rows.forEach((row, index) => {
+            const currentRowIndex = rowIndex + index;
+            const nextInputId = `col_${columnIndex}_row_${currentRowIndex}`;
+            console.log(`Processing input ID: ${nextInputId}`);
+            const nextInput = this.shadowRoot.querySelector(`#${nextInputId}`);
+        
+            if (nextInput) {
+              const currentValue = nextInput.value.trim();
+              const newValue = row.trim();
+        
+              if (currentValue !== '') {
+                const replace = confirm(`The cell ${nextInputId} is not empty. Replace "${currentValue}" with "${newValue}"?`);
+                if (replace) {
+                  console.log(`Replacing value in ${nextInputId}:`, newValue);
+                  nextInput.value = newValue;
+                  this.cellEditSetValidVal(event, data);
+                  this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+                  this.cellEditMoveToNextRow(columnIndex, rowIndex);
+                } else {
+                  console.log(`Keeping existing value in ${nextInputId}:`, currentValue);
+                }
+              } else {
+                console.log(`Setting value in empty cell ${nextInputId}:`, newValue);
+                nextInput.value = newValue;
+                this.cellEditSetValidVal(event, data);
+                this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+                this.cellEditMoveToNextRow(columnIndex, rowIndex);      
+              }
+            } else {
+              console.warn(`Next input with ID ${nextInputId} not found`);
+            }
+          });
+        }
+
+        
+        cellEditSetValidVal(event, data) {
+          const input = event.target;
+          const value = input.value;
+        
+          console.log('Validating and setting value:', value);
+          // Actualiza tus datos aquí según sea necesario
+        }
+        
         cellEditOnKeyDown(event, fld, columnIndex, rowIndex, data) {
+         // alert('this.cellEditOnKeyDown'+ + event.key)
          // console.log('cellEditOnKeyDown triggered:', event.key, event.code);
           if (event.key === 'Enter' || event.code === 'Enter') {
             event.preventDefault();
