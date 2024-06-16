@@ -284,7 +284,7 @@ export function ListsFunctions(base) {
             )}`;
         }
         entriesForTheList(fld, multilist=false) {
-            console.log('entriesForTheList', fld, multilist);
+            //console.log('entriesForTheList', fld, multilist);
             let blankEmpty = {keyName: "", keyValue_en: "", keyValue_es: "", allRecord: {}};
             let newList = [];
         
