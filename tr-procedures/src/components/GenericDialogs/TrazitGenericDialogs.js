@@ -329,24 +329,26 @@ export function TrazitGenericDialogs(base) {
                     <mwc-textarea id="textarea1" label="${this.fieldLabel(fld.textarea1)}" rows=10 cols=100></mwc-textarea>            
                     </div>
                 `} 
-                ${!fld.number1 ?
+                ${!fld.number111 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number1" type="number" 
-                    .value=${this.numDays} @change=${e => this.numDays = e.target.value}
-                    @input=${e=>this.setNumberMask(e, fld.number1)}
-                    label="${this.fieldLabel(fld.number1)}"
+                    <mwc-textfield class="layout flex" id="number111" type="number" 
+                    .value=${this.fldDefaultValue(fld.number111)}                      
+                    @input=${e=>this.setNumberMask(e, fld.number111)}
+                    label="${this.fieldLabel(fld.number111)}"
                     @keypress=${e => e.keyCode == 13}></mwc-textfield>                 
                     </div>
                 `}   
 
-                ${!fld.number12 ?
+                ${!fld.number1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number1" type="number" 
-                    @input=${e=>this.setValidVal(e, fld)} label="${this.fieldLabel(fld.number1)}" ?disabled=${this.isFieldDisabled(fld.number1)} 
-                    .value=${this.fldDefaultValue(fld.number1)} 
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                        <mwc-textfield class="layout flex" id="number1" type="number"
+                            .value=${String(this.fldDefaultValue(fld.number1))}
+                            @input=${e => this.setValidVal(e, fld)}
+                            label="${this.fieldLabel(fld.number1)}"
+                            ?disabled=${this.isFieldDisabled(fld.number1)}
+                            @keypress=${e => e.keyCode === 13 && this.acceptedGenericDialog()}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number2 ?
@@ -1087,11 +1089,14 @@ export function TrazitGenericDialogs(base) {
       }
     }        
 
-    fldDefaultValue(fldDef){
+    async fldDefaultValue(fldDef){
         let curArgName=""
         //console.log('fldDefaultValue', fldDef)
         if (fldDef.default_value){
             return fldDef.default_value
+        } else if (fldDef.getNextId!==undefined&&fldDef.getNextId===true&&fldDef.internalVariableObjName!==undefined){
+            console.log(this[fldDef.internalVariableObjName].length+1)
+            return String(this[fldDef.internalVariableObjName].length+1)
         } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          
             if (this[fldDef.internalVariableSimpleObjName]===undefined||this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
               let msg=""
