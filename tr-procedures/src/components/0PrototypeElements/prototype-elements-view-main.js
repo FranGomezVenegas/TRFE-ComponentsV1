@@ -11,6 +11,7 @@ export class PrototypeElementsViewMain extends LitElement {
   static get properties() {
     return {
       entity: { type: String },
+      lang: { type: String },
       selectedItems: { type: Object },
       treeElementData: { type: Array},
       treeElementSpecification:{ type: Array}
@@ -76,6 +77,7 @@ export class PrototypeElementsViewMain extends LitElement {
   render() {
     return template({
       selectedItems: this.selectedItems,
+      lang:this.lang,
       handleSelectItem: this._handleSelectItem,
       getSelectedItems: this._getSelectedItems,
       treeElementData: this.treeElementData,
