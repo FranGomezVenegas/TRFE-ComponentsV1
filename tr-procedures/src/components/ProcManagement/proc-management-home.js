@@ -12,7 +12,11 @@ import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { ProcManagementMethods } from "./ProcManagementMethods";
 import {TrazitTestScriptNewStepDialog} from "../GenericDialogs/TrazitTestScriptNewStepDialog";
 import { PrintViews } from "./procManagementPrint";
-export class ProcManagementHome extends ButtonsFunctions(PrintViews(TrazitTestScriptNewStepDialog(ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore)))))) {
+
+import { CredDialog } from '@trazit/cred-dialog';
+import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
+
+export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunctions(PrintViews(TrazitTestScriptNewStepDialog(ProcManagementMethods(ApiFunctions(TrazitFormsElements(CredDialog))))))) {
   static get properties() {
     return {
       config: { type: Object },
@@ -394,6 +398,7 @@ export class ProcManagementHome extends ButtonsFunctions(PrintViews(TrazitTestSc
 
   render() {
     return html`
+     ${this.credentialsDialog()}
       ${this.selectedProcInstance === undefined
         ? html`
             <style>
