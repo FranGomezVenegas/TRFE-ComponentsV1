@@ -354,7 +354,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         <tree-view-main></tree-view-main>
       `:html``}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'PrototypeElementsViewMain' ? html`
-        <prototype-elements-view-main></prototype-elements-view-main>
+        <prototype-elements-view-main .config=${this.config} .lang=${this.lang}></prototype-elements-view-main>
       `:html``}
 
       
