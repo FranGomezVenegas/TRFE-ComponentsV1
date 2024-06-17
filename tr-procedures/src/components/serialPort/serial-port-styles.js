@@ -9,12 +9,12 @@ export const styles = css`
     border-radius: 8px;
     background-color: #f9f9f9;
     font-family: Arial, sans-serif;
-    width: 300px;
+    width: 450px; /* Ancho fijo */
   }
 
   button {
     padding: 8px 16px;
-    margin: 8px;
+    margin-top: 8px;
     border: none;
     border-radius: 4px;
     background-color: #007bff;
@@ -26,15 +26,19 @@ export const styles = css`
     background-color: #0056b3;
   }
 
-  pre {
-    max-height: 200px;
-    overflow-y: auto;
-    background: #e9ecef;
+  .icon-button {
     padding: 8px;
+    margin-top: 8px;
+    border: none;
     border-radius: 4px;
-    font-size: 14px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .icon-button:hover {
+    background-color: #007bff;
   }
 
   textarea {
@@ -46,6 +50,16 @@ export const styles = css`
     resize: none;
     font-size: 14px;
     margin-top: 8px;
+    white-space: pre-wrap; /* Mantener formato en log */
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
   }
 
   input[type="number"] {
@@ -64,9 +78,5 @@ export const styles = css`
 
   div {
     margin-top: 16px;
-  }
-  
-  div.buttons { 
-    display:flex;
   }
 `;
