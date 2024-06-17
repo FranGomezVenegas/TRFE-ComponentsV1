@@ -158,9 +158,9 @@ export function ActionsFunctions(base) {
         isProcManagement=userSession.isProcManagement
       }        
 
-      if (this.area!==undefined&&this.area==="app"){
-        return true
-      }
+      // if (this.area!==undefined&&this.area==="app"){
+      //   return true
+      // }
       let bypass = true
       this.justificationType = null
       this.justificationList = null
