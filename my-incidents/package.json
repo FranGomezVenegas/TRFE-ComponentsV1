@@ -3,7 +3,7 @@
   "description": "Component incidents of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "module": "index.js",
   "scripts": {

@@ -220,7 +220,7 @@ export class MyIncidents extends CommonCore {
   addDialogTitle(){
     if (this.category.name===undefined){return html``}//${this.action}`}
     return html`
-      ${this.dialogType=="ZZZcreate"?html`<button disabled><img .src="/images/incidentType/${this.category.name}_${this.flag}.webp" style="width:80px; background-color: transparent;"></button>`:html``}
+      ${this.dialogType=="ZZZcreate"?html`<button disabled><img .src="/images/incidentType/${this.category.name}_${this.flag}.png" style="width:80px; background-color: transparent;"></button>`:html``}
     <!--${this.action}        -->
     `
   }
@@ -253,7 +253,7 @@ export class MyIncidents extends CommonCore {
       return html`
         <div style="display: grid; ${gridStyle}" class="reopenPart">
           ${incidentsType.map((curType, idx) => html`
-            <button style="width:100px; border: none; background-color: transparent;" @click=${() =>{this.newTicketForm(curType)}}><img .src="/images/incidentType/${curType.name}_${this.lang}.webp" style="width:100%"></button><br><br></br>
+            <button style="width:100px; border: none; background-color: transparent;" @click=${() =>{this.newTicketForm(curType)}}><img .src="/images/incidentType/${curType.name}_${this.lang}.png" style="width:100%"></button><br><br></br>
           `)}
         </div>
       `
@@ -295,7 +295,7 @@ export class MyIncidents extends CommonCore {
   buttonsByTypeAndAction(){
     switch (this.dialogType){
       case "createStep2":
-        return html`<img .src="/images/incidentType/${this.category.name}_${this.flag}.webp" style="width:80px; background-color: transparent; position: absolute; top:-10px; left:-15px;">
+        return html`<img .src="/images/incidentType/${this.category.name}_${this.flag}.png" style="width:80px; background-color: transparent; position: absolute; top:-10px; left:-15px;">
         <sp-button class="dialogButton" size="m" @click=${this.createIncident}>${langConfig.button.new["label_"+this.lang]}</sp-button>`
       case "confirm":
         return html`<sp-button class="dialogButton" size="m" @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"}>${langConfig.button.confirm["label_"+this.lang]}</sp-button>`

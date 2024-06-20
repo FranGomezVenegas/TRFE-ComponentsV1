@@ -17,7 +17,9 @@ npm i my-incidents
 <my-incidents></my-incidents>
 ```
 
+## Versioning track
 
+v0.0.2 image extension is png, not webp
 
 ## Tooling configs
 
