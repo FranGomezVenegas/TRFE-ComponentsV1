@@ -7,7 +7,9 @@ import "../qrcode-scanner/index";
 import '../Calendar/index';
 import '../Tree/treeview/index'
 import '../MolecularEditor/molecular-editor';
-import '../jsonDiffViewer/jsondiffviewermain';
+//import '../jsonDiffViewer/jsondiffviewermain';
+import '../serialPort/serial-port';
+//import '../LabelPrinter/label-printer-main';
 export const template = (props) => {
   const { selectedItems, handleSelectItem, getSelectedItems } = props;
 
@@ -26,7 +28,8 @@ export const template = (props) => {
   let newVersion={}
   newVersion={"name": "new version", "description": "This is the new version"}
   return html`
-  
+  <!-- <zebra-printer-component></zebra-printer-component> -->
+  <serial-port-component lang=${props.lang} .sendEnabled="${true}" .isTimeoutEditable="${false}" .showAlert="${false}"></serial-port-component>
  <!-- <json-diff-viewer old-version=${oldVersion} 
   new-version=${newVersion}>
   </json-diff-viewer> -->
