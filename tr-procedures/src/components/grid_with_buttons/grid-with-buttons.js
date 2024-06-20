@@ -41,7 +41,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
         //super.styles,
         css`
           :host {
-            display: block;
+                display: block;
           }
           .tabContainer {
             overflow: auto;
@@ -89,7 +89,15 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
       
           vaadin-grid::part(footer-cell) {
             background-color: transparent;
-          }          
+          }     
+          .vaadin-grid-container {
+            height: 50vh; /* Ajustar la altura del contenedor */
+            display: flex;
+            flex-direction: column;
+          }
+          vaadin-grid::part(header-cell) {
+            background-color: white; /* Estilo para el encabezado */
+          }              
         `
       ];
     }
@@ -268,7 +276,11 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
   ${this.abstract ? 
       nothing :
       html`
-        
+        <style>
+         vaadin-grid::part(header-cell) {
+          background-color: white;
+          } 
+        </style>
         <!-- ${this.viewModelFromProcModel.topCompositions!==undefined ? nothing: html`${this.getTitle()}`}-->
         ${this.getTitleElement()}
         <div class="layout horizontal flex wrap">
@@ -279,8 +291,9 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
             ${this.ready ? 
               html`
               ${addContextMenu!==undefined&&addContextMenu===true?html`
+              
                 <vaadin-context-menu .items=${this.contextMenuItems} @item-selected="${this.contextMenuAction}">
-                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;" theme="row-dividers" column-reordering-allowed multi-sort 
+                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;height:65vh;" theme="row-dividers" column-reordering-allowed multi-sort 
                   @active-item-changed=${this.activeItemChanged}
                   .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                   ${gridRowDetailsRenderer(this.detailRenderer)}
@@ -288,16 +301,17 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
                 >
                   ${this.gridList(this.viewModelFromProcModel)}
                 </vaadin-grid>
-                </vaadin-context-menu>`
-              :html`
-                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;"  theme="row-dividers" column-reordering-allowed multi-sort 
+                </vaadin-context-menu>              
+              `:html`              
+                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;height:65vh;"  theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${this.activeItemChanged}
                 .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                 ${gridRowDetailsRenderer(this.detailRenderer)}
                 ${this.setCellListener()}                
                 >
                 ${this.gridList(this.viewModelFromProcModel)}
-              </vaadin-grid>`
+              </vaadin-grid>
+              `
               }
               
               <div id="rowTooltip">&nbsp;</div>

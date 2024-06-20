@@ -35,6 +35,8 @@ v0.2.12 Run the refreshMasterData just in case of request status 200 and the res
 v0.2.13 [- #369. Reset Fields one action performed](https://github.com/FranGomezVenegas/FrontE-Issues/issues/369)
 v0.2.14 Proc-definition main cards view compatible with confirm dialogs, added serialPort and TrackWise Integrity to prototype
 v0.2.15 fix for reset values when selecting entries from one list element
+v0.2.16 Integrated some dev solutions into the master
+v0.2.17 vaadin-grid for grid-with-buttons, header backgroundcolor white and height 65vh
 
 This area want to track the requirements that made this web component to become a reality.
 
