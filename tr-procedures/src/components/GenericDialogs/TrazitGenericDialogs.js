@@ -198,7 +198,9 @@ export function TrazitGenericDialogs(base) {
     }            
     </style>
         <tr-dialog id="genericDialog"  
-            @opened=${() => {this.defaultValue()}}  ?open=${this.openGenericDialog(actionModel)}  heading="" hideActions="" scrimClickAction="">
+            @opened=${(e) => {if (e.target === this.genericDialog) {this.defaultValue();}}}  
+
+            ?open=${this.openGenericDialog(actionModel)}  heading="" hideActions="" scrimClickAction="">
         
         ${actionModel!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo!==undefined&&actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true ?
         html`
@@ -867,8 +869,11 @@ export function TrazitGenericDialogs(base) {
         // </vaadin-grid>
     }
 
-    defaultValue(e){
-        
+    defaultValue(){
+        if (this.fieldsShouldBeReset) {
+            this.resetFields();
+            this.fieldsShouldBeReset = false;
+        }        
         //alert('open defaultValue')
         // if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
         //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
@@ -880,8 +885,8 @@ export function TrazitGenericDialogs(base) {
         // }
        
         //if (this.fieldsShouldBeReset===true){
-            this.resetFields()
-            this.fieldsShouldBeReset=false
+            //this.resetFields()
+            //this.fieldsShouldBeReset=false
         //}
         let dlgFlds=undefined
         if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
