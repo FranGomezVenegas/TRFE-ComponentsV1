@@ -15,8 +15,8 @@ export const template = (props) => {
       <div id="error"></div>
       ${fileName}
       <div id="preview">
-      <upload-notification></upload-notification>
       </div>
+      <upload-notification></upload-notification>
     </div>
   `;
 };

@@ -20,14 +20,16 @@ export class Dropzone extends ApiFunctions(LitElement) {
       action: { type: Object },
       selectedItem: { type: Object },
       procInstanceName: String,
-      fileName: { type: String }
+      fileName: { type: String },
+      close: { type: Function },
     };
   }
 
   constructor() {
     super();
     this.files = [];
-  }
+    this.close = () => {};
+  } 
 
   firstUpdated() {
     this.container = this.shadowRoot.querySelector('.container');
@@ -35,9 +37,11 @@ export class Dropzone extends ApiFunctions(LitElement) {
     this.errorContent = this.shadowRoot.querySelector('#error');
     this.previewContent = this.shadowRoot.querySelector('#preview');
     this._init();
-    this.addEventListener('success', (event) => {
-      this.shadowRoot.querySelector('upload-notification').show(event.detail.message);
-  });
+    
+    this.addEventListener('upload-success', async (event) => {
+      const upload = this.shadowRoot.querySelector('upload-notification')
+      await upload.show(event.detail.message);        
+    });
   }
 
   render() {
@@ -174,20 +178,45 @@ export class Dropzone extends ApiFunctions(LitElement) {
     });
     let params = this.config.backendUrl + endPointUrl;
 
-    let response = await fetch(params, {
-      method: 'POST',
-      body: form,
-      credentials: 'same-origin'
-    })
-      .then(response => response.json())
-      .catch(error => console.error(error));
-
-    if (response.status === 200) {
-      // Handle successful upload
-    } else {
-      // Handle upload error
+    try {
+      const response = await fetch(params, {
+        method: 'POST',
+        body: form,
+        credentials: 'same-origin'
+      });
+  
+      if (response.ok) {
+        // Dispatch the success event if the response is OK
+        this.dispatchEvent(new CustomEvent('upload-success', {
+          detail: { message: 'File Uploaded successfully!' },
+          bubbles: true,
+          composed: true
+        }));
+      } else {
+        // Handle non-OK responses
+        console.error('Upload failed with status:', response.status);
+        setTimeout(() => {
+          if (typeof this.close === 'function') {
+            this.close();
+          }
+        }, 300);
+      }
+  
+      return response.json();
+    } catch (error) {
+      // Handle network errors or other fetch-related errors
+      console.error('Upload failed with error:', error);
+      setTimeout(() => {
+        if (typeof this.close === 'function') {
+          this.close();
+        }
+      }, 300);
     }
+    
+
+
   };
+  
 }
 
 window.customElements.define('drop-zone', Dropzone);
