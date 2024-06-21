@@ -167,8 +167,7 @@ export class MyIncidents extends CommonCore {
   render() {
     let hasConfirmDate=false    
     if (this.selectedItem!==null&this.selectedItem!==undefined&&this.selectedItem.date_confirmed!==undefined){
-      hasConfirmDate=String(this.selectedItem.date_confirmed).length>0
-      alert(this.dialogType+' '+this.selectedItem.date_confirmed+' '+hasConfirmDate)
+      hasConfirmDate=String(this.selectedItem.date_confirmed).length>0      
     }
     return html`
     <div class="layout horizontal center flex wrap">
@@ -462,14 +461,21 @@ export class MyIncidents extends CommonCore {
   }
 
   reopenIncident() {
-    if (!this.icdNote.validity.valid) {
-      return this.icdNote.focus()
+    if (this.icdNote===null){
+      this.incidentAPI({
+        actionName: 'REOPEN_INCIDENT',
+        incidentId: this.icdId.value
+      })
+    }else{
+      if (!this.icdNote.validity.valid) {
+        return this.icdNote.focus()
+      }
+      this.incidentAPI({
+        actionName: 'REOPEN_INCIDENT',
+        incidentId: this.icdId.value,
+        note: this.icdNote.value
+      })
     }
-    this.incidentAPI({
-      actionName: 'REOPEN_INCIDENT',
-      incidentId: this.icdId.value,
-      note: this.icdNote.value
-    })
   }
 
   openDialog(type) {

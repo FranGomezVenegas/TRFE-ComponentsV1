@@ -21,6 +21,8 @@ npm i my-incidents
 
 v0.0.2 image extension is png, not webp
 v0.0.3 label for dialog on closing fixed, should say close it. confirm button is dynamic, once the ticket was confirmed then no longer appears
+v0.0.4 For reopen incident, if the dialog has no note element then it should not be put in context for the endpoint
+
 ## Tooling configs
 
 For most of the tools, the configuration is in the `package.json` to minimize the amount of files in your project.
