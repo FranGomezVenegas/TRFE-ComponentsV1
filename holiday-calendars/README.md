@@ -7,6 +7,11 @@ Component to display the list of holidays calendars
 npm i holiday-calendars
 ```
 
+## Versioning track
+
+v0.0.2 NEW_CALENDAR using addToFieldNameAndValue instead of isAdhocField that will not long being in use
+
+
 ## Usage
 
 ```html

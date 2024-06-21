@@ -32,8 +32,7 @@ const viewInfoDefinition = {
       "endPoint": "/app/HolidayCalendarAPIactions",
       "endPointParams": [ 
         { "argumentName": "name", "element": "text1" },
-        { "isAdhocField": true, "argumentName": "fieldName", "defaultValue": "description" },
-        { "isAdhocField": true, "argumentName": "fieldValue", "element": "text2", "fieldType":"STRING" }
+        {"argumentName": "description", "element": "text2", "addToFieldNameAndValue": true, "fieldType":"STRING"}        
       ],
     "button": {
       "icon": "create_new_folder",
