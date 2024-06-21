@@ -165,11 +165,18 @@ export class MyIncidents extends CommonCore {
   }
 
   render() {
+    let hasConfirmDate=false    
+    if (this.selectedItem!==null&this.selectedItem!==undefined&&this.selectedItem.date_confirmed!==undefined){
+      hasConfirmDate=String(this.selectedItem.date_confirmed).length>0
+      alert(this.dialogType+' '+this.selectedItem.date_confirmed+' '+hasConfirmDate)
+    }
     return html`
     <div class="layout horizontal center flex wrap">
       <mwc-icon-button icon="refresh" @click=${this.getOpenIncidents}></mwc-icon-button>
       <mwc-icon-button style="color:#c9252d" .title="${langConfig.button.new["label_"+this.lang]}" icon="add" @click=${()=>{this.action=`${langConfig.button.new["label_"+this.lang]} Incident`;this.openDialog("createStep1")}}></mwc-icon-button>
-      <mwc-icon-button style="color:#12805c" .title="${langConfig.button.confirm["label_"+this.lang]}" icon="check" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.confirm["label_"+this.lang]} Incident`;this.openDialog("confirm")}}></mwc-icon-button>
+      ${hasConfirmDate?nothing:html`
+          <mwc-icon-button style="color:#12805c" .title="${langConfig.button.confirm["label_"+this.lang]}" icon="check" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.confirm["label_"+this.lang]} Incident`;this.openDialog("confirm")}}></mwc-icon-button>
+      `}      
       <mwc-icon-button style="color:#0d66d0" .title="${langConfig.button.note["label_"+this.lang]}" icon="note_add" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.note["label_"+this.lang]}`;this.openDialog("note")}}></mwc-icon-button>
       <mwc-icon-button style="color:#747474" .title="${langConfig.button.close["label_"+this.lang]}" icon="close" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.close["label_"+this.lang]} Incident`;this.openDialog("close")}}></mwc-icon-button>
       <mwc-icon-button .title="${langConfig.button.reopen["label_"+this.lang]}" icon="lock_open" @click=${()=>{this.action=`${langConfig.button.reopen["label_"+this.lang]} Incident`;this.openDialog("reopen")}} ?disabled=${!this.closedIds.length}></mwc-icon-button>
@@ -302,7 +309,7 @@ export class MyIncidents extends CommonCore {
       case "note":
         return html`<sp-button class="dialogButton" size="m" @click=${this.addNote} ?hidden=${this.dialogType!="note"}>${langConfig.button.note["label_"+this.lang]}</sp-button>`
       case "close":
-        return html`<sp-button class="dialogButton" size="m" @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>${langConfig.button.reopen["label_"+this.lang]}</sp-button>`
+        return html`<sp-button class="dialogButton" size="m" @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>${langConfig.button.close["label_"+this.lang]}</sp-button>`
       case "reopen":
         return html`<sp-button class="dialogButton" size="m" @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} ?disabled=${!this.closedIds.length}>${langConfig.button.reopen["label_"+this.lang]}</sp-button>`
       default: return html``
