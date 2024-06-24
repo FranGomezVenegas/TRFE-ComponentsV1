@@ -3,7 +3,7 @@
   "description": "Component core for procedures elements with dynamic model",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "@material/mwc-switch": "^0.27.0",
     "@material/mwc-textarea": "^0.27.0",
     "@material/mwc-textfield": "^0.27.0",
+    "@material/ripple": "^14.0.0",
     "@mpachnis/mp-calendar": "^3.1.1",
     "@spectrum-web-components/card": "^0.10.11",
     "@spectrum-web-components/split-view": "^0.4.3",

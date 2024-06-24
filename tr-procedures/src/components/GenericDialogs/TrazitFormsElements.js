@@ -227,9 +227,9 @@ export function TrazitFormsElements(base) {
                 ${!fld.filtertext1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext1" type="text" .value=${this.fldDefaultValue(fld.filtertext1)}  label="${this.fieldLabel(fld.filtertext1)}" 
-                        @keydown=${withEnterKey ? keydownHandler : nothing}    
-                        ></mwc-textfield>
+                    <mwc-textfield class="layout flex" id="filtertext1" type="text" .value=${fld.filtertext1.default_value ? fld.filtertext1.default_value : ''}  label="${this.fieldLabel(fld.filtertext1)}"  ?disabled=${this.isFieldDisabled(fld.filtertext1)} 
+                        @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+
                     </div>
                 `}          
                 ${!fld.text1 ?
@@ -239,376 +239,327 @@ export function TrazitFormsElements(base) {
                         @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text2 ?
+                ${!fld.filtertext2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${this.fldDefaultValue(fld.text2)} label="${this.fieldLabel(fld.text2)}" ?disabled=${this.isFieldDisabled(fld.text2)}
+                    <mwc-textfield class="layout flex" id="filtertext2" type="text" .value=${this.fldDefaultValue(fld.filtertext2)} label="${this.fieldLabel(fld.filtertext2)}" ?disabled=${this.isFieldDisabled(fld.filtertext2)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text3 ?
+                ${!fld.filtertext3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text3" type="text" .value=${this.fldDefaultValue(fld.text3)} label="${this.fieldLabel(fld.text3)}" ?disabled=${this.isFieldDisabled(fld.text3)}
+                    <mwc-textfield class="layout flex" id="filtertext3" type="text" .value=${this.fldDefaultValue(fld.filtertext3)} label="${this.fieldLabel(fld.filtertext3)}" ?disabled=${this.isFieldDisabled(fld.filtertext3)}
                         @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}                       
-                ${!fld.text4 ?
+                ${!fld.filtertext4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text4" type="text" .value=${this.fldDefaultValue(fld.text4)} label="${this.fieldLabel(fld.text4)}" ?disabled=${this.isFieldDisabled(fld.text4)}
+                    <mwc-textfield class="layout flex" id="filtertext4" type="text" .value=${this.fldDefaultValue(fld.filtertext4)} label="${this.fieldLabel(fld.filtertext4)}" ?disabled=${this.isFieldDisabled(fld.filtertext4)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text5 ?
+                ${!fld.filtertext5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text5" type="text" .value=${this.fldDefaultValue(fld.text)} label="${this.fieldLabel(fld.text5)}"  ?disabled=${this.isFieldDisabled(fld.text5)}
+                    <mwc-textfield class="layout flex" id="filtertext5" type="text" .value=${this.fldDefaultValue(fld.text)} label="${this.fieldLabel(fld.filtertext5)}"  ?disabled=${this.isFieldDisabled(fld.filtertext5)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text6 ?
+                ${!fld.filtertext6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text6" type="text" .value=${this.fldDefaultValue(fld.text6)} label="${this.fieldLabel(fld.text6)}"  ?disabled=${this.isFieldDisabled(fld.text6)}
+                    <mwc-textfield class="layout flex" id="filtertext6" type="text" .value=${this.fldDefaultValue(fld.filtertext6)} label="${this.fieldLabel(fld.filtertext6)}"  ?disabled=${this.isFieldDisabled(fld.filtertext6)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text7 ?
+                ${!fld.filtertext7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text7" type="text" .value=${this.fldDefaultValue(fld.text7)} label="${this.fieldLabel(fld.text7)}"  ?disabled=${this.isFieldDisabled(fld.text7)}
+                    <mwc-textfield class="layout flex" id="filtertext7" type="text" .value=${this.fldDefaultValue(fld.filtertext7)} label="${this.fieldLabel(fld.filtertext7)}"  ?disabled=${this.isFieldDisabled(fld.filtertext7)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text8 ?
+                ${!fld.filtertext8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text8" type="text" .value=${this.fldDefaultValue(fld.text8)}label="${this.fieldLabel(fld.text8)}" ?disabled=${this.isFieldDisabled(fld.text8)}
+                    <mwc-textfield class="layout flex" id="filtertext8" type="text" .value=${this.fldDefaultValue(fld.filtertext8)}label="${this.fieldLabel(fld.filtertext8)}" ?disabled=${this.isFieldDisabled(fld.filtertext8)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text9 ?
+                ${!fld.filtertext9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text9" type="text" .value=${this.fldDefaultValue(fld.text9)} label="${this.fieldLabel(fld.text9)}" ?disabled=${this.isFieldDisabled(fld.text9)}
+                    <mwc-textfield class="layout flex" id="filtertext9" type="text" .value=${this.fldDefaultValue(fld.filtertext9)} label="${this.fieldLabel(fld.filtertext9)}" ?disabled=${this.isFieldDisabled(fld.filtertext9)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
-                ${!fld.text10 ?
+                ${!fld.filtertext10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text10" type="text" .value=${this.fldDefaultValue(fld.text10)} label="${this.fieldLabel(fld.text10)}" ?disabled=${this.isFieldDisabled(fld.text10)}
+                    <mwc-textfield class="layout flex" id="filtertext10" type="text" .value=${this.fldDefaultValue(fld.filtertext10)} label="${this.fieldLabel(fld.filtertext10)}" ?disabled=${this.isFieldDisabled(fld.filtertext10)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}                              
-                ${!fld.number1 ?
+                ${!fld.filternumber1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number1" type="number" 
-                    @input=${e=>this.setValidVal(e, fld)} .value=${this.fldDefaultValue(fld.number1)} label="${this.fieldLabel(fld.number1)}" ?disabled=${this.isFieldDisabled(fld.number1)}
+                    <mwc-textfield class="layout flex" id="filternumber1" type="number" 
+                    @input=${e=>this.setValidVal(e, fld)} .value=${this.fldDefaultValue(fld.filternumber1)} label="${this.fieldLabel(fld.filternumber1)}" ?disabled=${this.isFieldDisabled(fld.filternumber1)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number2 ?
+                ${!fld.filternumber2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number2" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number2)}   label="${this.fieldLabel(fld.number2)}" ?disabled=${this.isFieldDisabled(fld.number2)}
+                    <mwc-textfield class="layout flex" id="filternumber2" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber2)}   label="${this.fieldLabel(fld.filternumber2)}" ?disabled=${this.isFieldDisabled(fld.filternumber2)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number3 ?
+                ${!fld.filternumber3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number3" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number3)}   label="${this.fieldLabel(fld.number3)}" ?disabled=${this.isFieldDisabled(fld.number3)}
+                    <mwc-textfield class="layout flex" id="filternumber3" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber3)}   label="${this.fieldLabel(fld.filternumber3)}" ?disabled=${this.isFieldDisabled(fld.filternumber3)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number4 ?
+                ${!fld.filternumber4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number4" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number4)}   label="${this.fieldLabel(fld.number4)}" ?disabled=${this.isFieldDisabled(fld.number4)}
+                    <mwc-textfield class="layout flex" id="filternumber4" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber4)}   label="${this.fieldLabel(fld.filternumber4)}" ?disabled=${this.isFieldDisabled(fld.filternumber4)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number5 ?
+                ${!fld.filternumber5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number5" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number5)}   label="${this.fieldLabel(fld.number5)}" ?disabled=${this.isFieldDisabled(fld.number5)}
+                    <mwc-textfield class="layout flex" id="filternumber5" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber5)}   label="${this.fieldLabel(fld.filternumber5)}" ?disabled=${this.isFieldDisabled(fld.filternumber5)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number6 ?
+                ${!fld.filternumber6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number6" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number6)}  label="${this.fieldLabel(fld.number6)}" ?disabled=${this.isFieldDisabled(fld.number6)}
+                    <mwc-textfield class="layout flex" id="filternumber6" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber6)}  label="${this.fieldLabel(fld.filternumber6)}" ?disabled=${this.isFieldDisabled(fld.filternumber6)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number7 ?
+                ${!fld.filternumber7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number7" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number7)}   label="${this.fieldLabel(fld.number7)}" ?disabled=${this.isFieldDisabled(fld.number7)}
+                    <mwc-textfield class="layout flex" id="filternumber7" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber7)}   label="${this.fieldLabel(fld.filternumber7)}" ?disabled=${this.isFieldDisabled(fld.filternumber7)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number8 ?
+                ${!fld.filternumber8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number8" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number8)}   label="${this.fieldLabel(fld.number8)}" ?disabled=${this.isFieldDisabled(fld.number8)}
+                    <mwc-textfield class="layout flex" id="filternumber8" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber8)}   label="${this.fieldLabel(fld.filternumber8)}" ?disabled=${this.isFieldDisabled(fld.filternumber8)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number9 ?
+                ${!fld.filternumber9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number9" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number9)}   label="${this.fieldLabel(fld.number9)}" ?disabled=${this.isFieldDisabled(fld.number9)}
+                    <mwc-textfield class="layout flex" id="filternumber9" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber9)}   label="${this.fieldLabel(fld.filternumber9)}" ?disabled=${this.isFieldDisabled(fld.filternumber9)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.number10 ?
+                ${!fld.filternumber10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number10" type="number" @input=${e=>this.setValidVal(e, fld)}
-                    .value=${this.fldDefaultValue(fld.number10)}   label="${this.fieldLabel(fld.number10)}" ?disabled=${this.isFieldDisabled(fld.number10)}
+                    <mwc-textfield class="layout flex" id="filternumber10" type="number" @input=${e=>this.setValidVal(e, fld)}
+                    .value=${this.fldDefaultValue(fld.filternumber10)}   label="${this.fieldLabel(fld.filternumber10)}" ?disabled=${this.isFieldDisabled(fld.filternumber10)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}   
-                ${!fld.checkbox1 ?
+                ${!fld.filtercheckbox1 ?
                     html``: html`        
-                    <mwc-formfield label="${this.fieldLabel(fld.checkbox1)}" >
-                        <mwc-checkbox id="checkbox1" ?checked=${this.fldDefaultValue(fld.checkbox1)} ?disabled=${this.isFieldDisabled(fld.checkbox1)}
-                        @change=${e => { this.checkbox1.value=this.checkbox1.checked}} value="${this.fldDefaultValue(fld.checkbox1)}"
+                    <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox1)}" >
+                        <mwc-checkbox id="filtercheckbox1" ?checked=${this.fldDefaultValue(fld.filtercheckbox1)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox1)}
+                        @change=${e => { this.filtercheckbox1.value=this.filtercheckbox1.checked}} value="${this.fldDefaultValue(fld.filtercheckbox1)}"
                         ></mwc-checkbox>
                     </mwc-formfield>
                 `}                              
-                    ${!fld.checkbox2 ?
+                    ${!fld.filtercheckbox2 ?
                     html``: html`        
-                    <mwc-formfield label="${this.fieldLabel(fld.checkbox2)}" >
-                        <mwc-checkbox id="checkbox2" ?checked=${this.fldDefaultValue(fld.checkbox2)} ?disabled=${this.isFieldDisabled(fld.checkbox2)}
-                        @change=${e => { this.checkbox2.value=this.checkbox2.checked}} value="${this.fldDefaultValue(fld.checkbox2)}"
+                    <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox2)}" >
+                        <mwc-checkbox id="filtercheckbox2" ?checked=${this.fldDefaultValue(fld.filtercheckbox2)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox2)}
+                        @change=${e => { this.filtercheckbox2.value=this.filtercheckbox2.checked}} value="${this.fldDefaultValue(fld.filtercheckbox2)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox3 ?
+                    ${!fld.filtercheckbox3 ?
                     html``: html`        
-                    <mwc-formfield label="${this.fieldLabel(fld.checkbox3)}" >
-                        <mwc-checkbox id="checkbox3" ?checked=${this.fldDefaultValue(fld.checkbox3)} ?disabled=${this.isFieldDisabled(fld.checkbox3)}
-                        @change=${e => { this.checkbox3.value=this.checkbox3.checked}} value="${this.fldDefaultValue(fld.checkbox3)}"
+                    <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox3)}" >
+                        <mwc-checkbox id="filtercheckbox3" ?checked=${this.fldDefaultValue(fld.filtercheckbox3)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox3)}
+                        @change=${e => { this.filtercheckbox3.value=this.filtercheckbox3.checked}} value="${this.fldDefaultValue(fld.filtercheckbox3)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox4 ?
+                    ${!fld.filtercheckbox4 ?
                     html``: html`        
-                    <mwc-formfield label="${this.fieldLabel(fld.checkbox4)}" >
-                        <mwc-checkbox id="checkbox4" ?checked=${this.fldDefaultValue(fld.checkbox4)} ?disabled=${this.isFieldDisabled(fld.checkbox4)}
-                        @change=${e => { this.checkbox4.value=this.checkbox4.checked}} value="${this.fldDefaultValue(fld.checkbox4)}"
+                    <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox4)}" >
+                        <mwc-checkbox id="filtercheckbox4" ?checked=${this.fldDefaultValue(fld.filtercheckbox4)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox4)}
+                        @change=${e => { this.filtercheckbox4.value=this.filtercheckbox4.checked}} value="${this.fldDefaultValue(fld.filtercheckbox4)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox5 ?
+                    ${!fld.filtercheckbox5 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox5)}" >
-                        <mwc-checkbox id="checkbox5" ?checked=${this.fldDefaultValue(fld.checkbox5)} @change=${e => { this.checkbox5.value=this.checkbox5.checked}}
-                        value="${this.fldDefaultValue(fld.checkbox5)}" ?disabled=${this.isFieldDisabled(fld.checkbox5)}
+                        <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox5)}" >
+                        <mwc-checkbox id="filtercheckbox5" ?checked=${this.fldDefaultValue(fld.filtercheckbox5)} @change=${e => { this.filtercheckbox5.value=this.filtercheckbox5.checked}}
+                        value="${this.fldDefaultValue(fld.filtercheckbox5)}" ?disabled=${this.isFieldDisabled(fld.filtercheckbox5)}
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox6 ?
+                    ${!fld.filtercheckbox6 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox6)}" >
-                        <mwc-checkbox id="checkbox6" ?checked=${this.fldDefaultValue(fld.checkbox6)} ?disabled=${this.isFieldDisabled(fld.checkbox6)}
-                        @change=${e => { this.checkbox6.value=this.checkbox6.checked}} value="${this.fldDefaultValue(fld.checkbox6)}"
+                        <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox6)}" >
+                        <mwc-checkbox id="filtercheckbox6" ?checked=${this.fldDefaultValue(fld.filtercheckbox6)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox6)}
+                        @change=${e => { this.filtercheckbox6.value=this.filtercheckbox6.checked}} value="${this.fldDefaultValue(fld.filtercheckbox6)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox7 ?
+                    ${!fld.filtercheckbox7 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox7)}" >
-                        <mwc-checkbox id="checkbox7" ?checked=${this.fldDefaultValue(fld.checkbox7)} ?disabled=${this.isFieldDisabled(fld.checkbox7)}
-                        @change=${e => { this.checkbox7.value=this.checkbox7.checked}} value="${this.fldDefaultValue(fld.checkbox7)}"
+                        <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox7)}" >
+                        <mwc-checkbox id="filtercheckbox7" ?checked=${this.fldDefaultValue(fld.filtercheckbox7)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox7)}
+                        @change=${e => { this.filtercheckbox7.value=this.filtercheckbox7.checked}} value="${this.fldDefaultValue(fld.filtercheckbox7)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox8 ?
+                    ${!fld.filtercheckbox8 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox8)}" >
-                        <mwc-checkbox id="checkbox8" ?checked=${this.fldDefaultValue(fld.checkbox8)} ?disabled=${this.isFieldDisabled(fld.checkbox8)}
-                        @change=${e => { this.checkbox8.value=this.checkbox8.checked}} value="${this.fldDefaultValue(fld.checkbox8)}"
+                        <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox8)}" >
+                        <mwc-checkbox id="filtercheckbox8" ?checked=${this.fldDefaultValue(fld.filtercheckbox8)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox8)}
+                        @change=${e => { this.filtercheckbox8.value=this.filtercheckbox8.checked}} value="${this.fldDefaultValue(fld.filtercheckbox8)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox9 ?
+                    ${!fld.filtercheckbox9 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox9)}" >
-                        <mwc-checkbox id="checkbox9" ?checked=${this.fldDefaultValue(fld.checkbox9)} ?disabled=${this.isFieldDisabled(fld.checkbox9)}
-                        @change=${e => { this.checkbox9.value=this.checkbox9.checked}} value="${this.fldDefaultValue(fld.checkbox9)}"
+                        <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox9)}" >
+                        <mwc-checkbox id="filtercheckbox9" ?checked=${this.fldDefaultValue(fld.filtercheckbox9)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox9)}
+                        @change=${e => { this.filtercheckbox9.value=this.filtercheckbox9.checked}} value="${this.fldDefaultValue(fld.filtercheckbox9)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
-                    ${!fld.checkbox10 ?
+                    ${!fld.filtercheckbox10 ?
                     html``: html`        
-                        <mwc-formfield label="${this.fieldLabel(fld.checkbox10)}" >
-                        <mwc-checkbox id="checkbox10" ?checked=${this.fldDefaultValue(fld.checkbox10)} ?disabled=${this.isFieldDisabled(fld.checkbox10)}
-                        @change=${e => { this.checkbox10.value=this.checkbox10.checked}} value="${this.fldDefaultValue(fld.checkbox10)}"
+                        <mwc-formfield label="${this.fieldLabel(fld.filtercheckbox10)}" >
+                        <mwc-checkbox id="filtercheckbox10" ?checked=${this.fldDefaultValue(fld.filtercheckbox10)} ?disabled=${this.isFieldDisabled(fld.filtercheckbox10)}
+                        @change=${e => { this.filtercheckbox10.value=this.filtercheckbox10.checked}} value="${this.fldDefaultValue(fld.filtercheckbox10)}"
                     ></mwc-checkbox>
                         </mwc-formfield>
                     `}                              
 
-                    ${!fld.date1 ?html``: html`<mwc-textfield id="date1" label="${this.fieldLabel(fld.date1)}"  ?disabled=${this.isFieldDisabled(fld.date1)} type="date"></mwc-textfield>`}
-                    ${!fld.date2 ?html``: html`<mwc-textfield id="date2" label="${this.fieldLabel(fld.date2)}"  ?disabled=${this.isFieldDisabled(fld.date2)} type="date"></mwc-textfield>`}
-                    ${!fld.date3 ?html``: html`<mwc-textfield id="date3" label="${this.fieldLabel(fld.date3)}"  ?disabled=${this.isFieldDisabled(fld.date3)} type="date"></mwc-textfield>`}
-                    ${!fld.date4 ?html``: html`<mwc-textfield id="date4" label="${this.fieldLabel(fld.date4)}"  ?disabled=${this.isFieldDisabled(fld.date4)} type="date"></mwc-textfield>`}
-                    ${!fld.date5 ?html``: html`<mwc-textfield id="date5" label="${this.fieldLabel(fld.date5)}"  ?disabled=${this.isFieldDisabled(fld.date5)} type="date"></mwc-textfield>`}                           
-                    ${!fld.date6 ?html``: html`<mwc-textfield id="date6" label="${this.fieldLabel(fld.date6)}"  ?disabled=${this.isFieldDisabled(fld.date6)} type="date"></mwc-textfield>`} 
-                    ${!fld.date7 ?html``: html`<mwc-textfield id="date7" label="${this.fieldLabel(fld.date7)}"  ?disabled=${this.isFieldDisabled(fld.date7)} type="date"></mwc-textfield>`}
-                    ${!fld.date8 ?html``: html`<mwc-textfield id="date8" label="${this.fieldLabel(fld.date8)}"  ?disabled=${this.isFieldDisabled(fld.date8)} type="date"></mwc-textfield>`}
-                    ${!fld.date9 ?html``: html`<mwc-textfield id="date9" label="${this.fieldLabel(fld.date9)}"  ?disabled=${this.isFieldDisabled(fld.date9)} type="date"></mwc-textfield>`}
-                    ${!fld.date10 ?html``: html`<mwc-textfield id="date10" label="${this.fieldLabel(fld.date10)}  ?disabled=${this.isFieldDisabled(fld.date10)}" type="date"></mwc-textfield>`}
+                    ${!fld.filterdate1 ?html``: html`<mwc-textfield id="filterdate1" label="${this.fieldLabel(fld.filterdate1)}"  ?disabled=${this.isFieldDisabled(fld.filterdate1)} type="date"></mwc-textfield>`}
+                    ${!fld.filterdate2 ?html``: html`<mwc-textfield id="filterdate2" label="${this.fieldLabel(fld.filterdate2)}"  ?disabled=${this.isFieldDisabled(fld.filterdate2)} type="date"></mwc-textfield>`}
+                    ${!fld.filterdate3 ?html``: html`<mwc-textfield id="filterdate3" label="${this.fieldLabel(fld.filterdate3)}"  ?disabled=${this.isFieldDisabled(fld.filterdate3)} type="date"></mwc-textfield>`}
+                    ${!fld.filterdate4 ?html``: html`<mwc-textfield id="date4" label="${this.fieldLabel(fld.filterdate4)}"  ?disabled=${this.isFieldDisabled(fld.filterdate4)} type="date"></mwc-textfield>`}
+                    ${!fld.filterdate5 ?html``: html`<mwc-textfield id="date5" label="${this.fieldLabel(fld.filterdate5)}"  ?disabled=${this.isFieldDisabled(fld.filterdate5)} type="date"></mwc-textfield>`}                           
+                    ${!fld.filterdate6 ?html``: html`<mwc-textfield id="date6" label="${this.fieldLabel(fld.filterdate6)}"  ?disabled=${this.isFieldDisabled(fld.filterdate6)} type="date"></mwc-textfield>`} 
+                    ${!fld.filterdate7 ?html``: html`<mwc-textfield id="date7" label="${this.fieldLabel(fld.filterdate7)}"  ?disabled=${this.isFieldDisabled(fld.filterdate7)} type="date"></mwc-textfield>`}
+                    ${!fld.filterdate8 ?html``: html`<mwc-textfield id="date8" label="${this.fieldLabel(fld.filterdate8)}"  ?disabled=${this.isFieldDisabled(fld.filterdate8)} type="date"></mwc-textfield>`}
+                    ${!fld.filterdate9 ?html``: html`<mwc-textfield id="date9" label="${this.fieldLabel(fld.filterdate9)}"  ?disabled=${this.isFieldDisabled(fld.filterdate9)} type="date"></mwc-textfield>`}
+                    ${!fld.filterdate10 ?html``: html`<mwc-textfield id="filterdate10" label="${this.fieldLabel(fld.filterdate10)}  ?disabled=${this.isFieldDisabled(fld.filterdate10)}" type="date"></mwc-textfield>`}
 
-                    ${!fld.datetime1 ?html``: html`<input id="datetime1" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime2 ?html``: html`<input id="datetime2" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime3 ?html``: html`<input id="datetime3" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime4 ?html``: html`<input id="datetime4" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime5 ?html``: html`<input id="datetime5" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime6 ?html``: html`<input id="datetime6" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime7 ?html``: html`<input id="datetime7" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime8 ?html``: html`<input id="datetime8" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime9 ?html``: html`<input id="datetime9" type="datetime-local" dialogInitialFocus>`}   
-                    ${!fld.datetime10 ?html``: html`<input id="datetime10" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime1 ?html``: html`<input id="datetime1" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime2 ?html``: html`<input id="datetime2" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime3 ?html``: html`<input id="datetime3" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime4 ?html``: html`<input id="datetime4" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime5 ?html``: html`<input id="datetime5" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime6 ?html``: html`<input id="datetime6" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime7 ?html``: html`<input id="datetime7" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime8 ?html``: html`<input id="datetime8" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime9 ?html``: html`<input id="datetime9" type="datetime-local" dialogInitialFocus>`}   
+                    ${!fld.filterdatetime10 ?html``: html`<input id="datetime10" type="datetime-local" dialogInitialFocus>`}   
 
                     
                     ${!fld.filterdaterange1 ?
                         html``: html`    
                             <div style="display:flex">    
-                            <mwc-textfield id="filterdaterange1dateStart" label="${this.fieldLabel(fld.filterdaterange1.dateStart)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.dateStart)}"></mwc-textfield>
-                            <mwc-textfield id="filterdaterange1dateEnd" label="${this.fieldLabel(fld.filterdaterange1.dateEnd)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.dateEnd)}"></mwc-textfield>
+                            <mwc-textfield id="filterdaterange1dateStart" label="${this.fieldLabel(fld.filterdaterange1.filterdateStart)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.filterdateStart)}"></mwc-textfield>
+                            <mwc-textfield id="filterdaterange1dateEnd" label="${this.fieldLabel(fld.filterdaterange1.filterdateEnd)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.filterdateEnd)}"></mwc-textfield>
                             </div>
                         `}                       
-                    ${!fld.daterange1 ?
+                    ${!fld.filterdaterange1 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange1dateStart" label="${this.fieldLabel(fld.daterange1.dateStart)}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange1dateEnd" label="${this.fieldLabel(fld.daterange1.dateEnd)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange1dateStart" label="${this.fieldLabel(fld.filterdaterange1.filterdateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange1dateEnd" label="${this.fieldLabel(fld.filterdaterange1.filterdateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
-                    ${!fld.daterange2 ?
+                    ${!fld.filterdaterange2 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange2dateStart" label="${this.fieldLabel(fld.daterange2.dateStart)}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange2dateEnd" label="${this.fieldLabel(fld.daterange2.dateEnd)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange2dateStart" label="${this.fieldLabel(fld.filterdaterange2.filterdateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange2dateEnd" label="${this.fieldLabel(fld.filterdaterange2.filterdateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
-                    ${!fld.daterange3 ?
+                    ${!fld.filterdaterange3 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange3dateStart" label="${this.fieldLabel(fld.daterange3.dateStart)}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange3dateEnd" label="${this.fieldLabel(fld.daterange3.dateEnd)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange3dateStart" label="${this.fieldLabel(fld.filterdaterange3.filterdateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange3dateEnd" label="${this.fieldLabel(fld.filterdaterange3.filterdateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
-                    ${!fld.daterange4 ?
+                    ${!fld.filterdaterange4 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange4dateStart" label="${this.fieldLabel(fld.daterange4.dateStart)}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange4dateEnd" label="${this.fieldLabel(fld.daterange4.dateEnd)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange4dateStart" label="${this.fieldLabel(fld.filterdaterange4.filterdateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange4dateEnd" label="${this.fieldLabel(fld.filterdaterange4.filterdateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                       
-                    ${!fld.daterange5 ?
+                    ${!fld.filterdaterange5 ?
                     html``: html`    
                         <div style="display:flex">    
-                        <mwc-textfield id="daterange5dateStart" label="${this.fieldLabel(fld.daterange5.dateStart)}" type="date"></mwc-textfield>
-                        <mwc-textfield id="daterange5dateEnd" label="${this.fieldLabel(fld.daterange5.dateEnd)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange5dateStart" label="${this.fieldLabel(fld.filterdaterange5.filterdateStart)}" type="date"></mwc-textfield>
+                        <mwc-textfield id="daterange5dateEnd" label="${this.fieldLabel(fld.filterdaterange5.filterdateEnd)}" type="date"></mwc-textfield>
                         </div>
                     `}                                   
 
-                ${!fld.list1 ?html``: html`        
-                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected}  ?disabled=${this.isFieldDisabled(fld.list1)} >
-                        ${this.listEntries(fld.list1)}</mwc-select>`}  
-                ${!fld.list2 ?html``: html`        
-                    <mwc-select id="list2" label="${this.fieldLabel(fld.list2)}" ?disabled=${this.isFieldDisabled(fld.list2)} >
-                        ${this.listEntries(fld.list2)}</mwc-select>`}  
-                ${!fld.list3 ?html``: html`        
-                    <mwc-select id="list3" label="${this.fieldLabel(fld.list3)}" ?disabled=${this.isFieldDisabled(fld.list3)} >
-                        ${this.listEntries(fld.list3)}</mwc-select>`}  
-                ${!fld.list4 ?html``: html`        
-                    <mwc-select id="list4" label="${this.fieldLabel(fld.list4)}"  ?disabled=${this.isFieldDisabled(fld.list4)} >
-                        ${this.listEntries(fld.list4)}</mwc-select>`}  
-                ${!fld.list5 ?html``: html`        
-                    <mwc-select id="list5" label="${this.fieldLabel(fld.list5)}"  ?disabled=${this.isFieldDisabled(fld.list5)} >
-                        ${this.listEntries(fld.list5)}</mwc-select>`}  
-                ${!fld.list6 ?html``: html`        
-                    <mwc-select id="list6" label="${this.fieldLabel(fld.list6)}" ?disabled=${this.isFieldDisabled(fld.list6)} >
-                        ${this.listEntries(fld.list6)}</mwc-select>`}  
-                ${!fld.list7 ?html``: html`        
-                    <mwc-select id="list7" label="${this.fieldLabel(fld.list7)}" ?disabled=${this.isFieldDisabled(fld.list7)} >
-                        ${this.listEntries(fld.list7)}</mwc-select>`}  
-                ${!fld.list8 ?html``: html`        
-                    <mwc-select id="list8" llabel="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)} >
-                        ${this.listEntries(fld.list8)}</mwc-select>`}  
-                ${!fld.list9 ?html``: html`        
-                    <mwc-select id="list9" label="${this.fieldLabel(fld.list9)}" ?disabled=${this.isFieldDisabled(fld.list9)} >
-                        ${this.listEntries(fld.list9)}</mwc-select>`}  
-                ${!fld.list10 ?html``: html`        
-                    <mwc-select id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)} >
-                        ${this.listEntries(fld.list10)}</mwc-select>`}  
+                ${!fld.filterlist1 ?html``: html`        
+                    <mwc-select id="list1" label="${this.fieldLabel(fld.filterlist1)}" @selected=${this.valueSelected}  ?disabled=${this.isFieldDisabled(fld.filterlist1)} >
+                        ${this.filterlistEntries(fld.filterlist1)}</mwc-select>`}  
+                ${!fld.filterlist2 ?html``: html`        
+                    <mwc-select id="list2" label="${this.fieldLabel(fld.filterlist2)}" ?disabled=${this.isFieldDisabled(fld.filterlist2)} >
+                        ${this.filterlistEntries(fld.filterlist2)}</mwc-select>`}  
+                ${!fld.filterlist3 ?html``: html`        
+                    <mwc-select id="list3" label="${this.fieldLabel(fld.filterlist3)}" ?disabled=${this.isFieldDisabled(fld.filterlist3)} >
+                        ${this.filterlistEntries(fld.filterlist3)}</mwc-select>`}  
+                ${!fld.filterlist4 ?html``: html`        
+                    <mwc-select id="list4" label="${this.fieldLabel(fld.filterlist4)}"  ?disabled=${this.isFieldDisabled(fld.filterlist4)} >
+                        ${this.filterlistEntries(fld.filterlist4)}</mwc-select>`}  
+                ${!fld.filterlist5 ?html``: html`        
+                    <mwc-select id="list5" label="${this.fieldLabel(fld.filterlist5)}"  ?disabled=${this.isFieldDisabled(fld.filterlist5)} >
+                        ${this.filterlistEntries(fld.filterlist5)}</mwc-select>`}  
+                ${!fld.filterlist6 ?html``: html`        
+                    <mwc-select id="list6" label="${this.fieldLabel(fld.filterlist6)}" ?disabled=${this.isFieldDisabled(fld.filterlist6)} >
+                        ${this.filterlistEntries(fld.filterlist6)}</mwc-select>`}  
+                ${!fld.filterlist7 ?html``: html`        
+                    <mwc-select id="list7" label="${this.fieldLabel(fld.filterlist7)}" ?disabled=${this.isFieldDisabled(fld.filterlist7)} >
+                        ${this.filterlistEntries(fld.filterlist7)}</mwc-select>`}  
+                ${!fld.filterlist8 ?html``: html`        
+                    <mwc-select id="list8" llabel="${this.fieldLabel(fld.filterlist8)}" ?disabled=${this.isFieldDisabled(fld.filterlist8)} >
+                        ${this.filterlistEntries(fld.filterlist8)}</mwc-select>`}  
+                ${!fld.filterlist9 ?html``: html`        
+                    <mwc-select id="list9" label="${this.fieldLabel(fld.filterlist9)}" ?disabled=${this.isFieldDisabled(fld.filterlist9)} >
+                        ${this.filterlistEntries(fld.filterlist9)}</mwc-select>`}  
+                ${!fld.filterlist10 ?html``: html`        
+                    <mwc-select id="list10" label="${this.fieldLabel(fld.filterlist10)}" ?disabled=${this.isFieldDisabled(fld.filterlist10)} >
+                        ${this.filterlistEntries(fld.filterlist10)}</mwc-select>`}  
 
-                    ${!fld.listMDSamplerPersonalAreas ?
-                    html``: html`        
-                        <mwc-select id="listMDSamplerPersonalAreas" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDSamplerPersonalAreas&&fld.listMDSamplerPersonalAreas["label_" + this.lang]}">
-                        ${this.masterData.samplerPersonalAreas.map((c, i) =>
-                        html`<mwc-list-item value="${c.key}" ?selected=${i == 0}>${c["label_"+this.lang]}</mwc-list-item>`
-                        )}
-                        </mwc-select>
-                `}           
-                ${!fld.listMDprocedureUsers ?
-                    html``: html`        
-                        <mwc-select id="listMDprocedureUsers" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDprocedureUsers&&fld.listMDprocedureUsers["label_" + this.lang]}">
-                        ${this.MDprocedureUsers.map((c, i) =>
-                        html`<mwc-list-item value="${c.user_name}" ?selected=${i == 0}>${c.user_name}</mwc-list-item>`
-                        )}
-                        </mwc-select>
-                `}         
-                ${!fld.listMDvariablesSet ?
-                    html``: html`        
-                        <mwc-select id="listMDvariablesSet" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDvariablesSet&&fld.listMDvariablesSet["label_" + this.lang]}">
-                        ${this.MDvariablesSet.map((c, i) =>
-                        html`<mwc-list-item value="${c.name}" ?selected=${i == 0}>${c.name}(${c.variables_list})</mwc-list-item>`
-                        )}
-                        </mwc-select>
-                `}           
-                ${!fld.listMDvariables ?
-                    html``: html`        
-                        <mwc-select id="listMDvariables" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listMDvariables&&fld.listMDvariables["label_" + this.lang]}">
-                        ${this.MDvariables.map((c, i) =>
-                        html`<mwc-list-item value="${c.name}" ?selected=${i == 0}>${c.name}(${c.param_type})</mwc-list-item>`
-                        )}
-                        </mwc-select>
-                `}           
-            
-                ${!fld.listSelectedStudyIndividuals ?
-                    html``: html`        
-                        <mwc-select id="listSelectedStudyIndividuals" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listSelectedStudyIndividuals&&fld.listSelectedStudyIndividuals["label_" + this.lang]}">
-                        ${this.selectedStudy.study_individual.map((l, i) =>
-                        html`<mwc-list-item value="${this.listItemValueToGet(fld.listSelectedStudyIndividuals, l)}" ?selected=${i == 0}>${this.listItemValueToDisplay(fld.listSelectedStudyIndividuals, l)}</mwc-list-item>`
-                        )}
-                        </mwc-select>
-                `}    
-                ${!fld.listSelectedStudyIndividualSamples ?
-                    html``: html`        
-                        <mwc-select id="listSelectedStudyIndividualSamples" label="${this.selectedAction&&this.selectedAction.dialogInfo&&fld.listSelectedStudyIndividualSamples&&fld.listSelectedStudyIndividualSamples["label_" + this.lang]}">
-                        ${this.selectedStudy.study_individual.map((l, i) =>
-                        html`<mwc-list-item value="${this.listItemValueToGet(fld.listSelectedStudyIndividualSamples, l)}" ?selected=${i == 0}>${this.listItemValueToDisplay(fld.listSelectedStudyIndividualSamples, l)}</mwc-list-item>`
-                        )}
-                        </mwc-select>
-                `} 
                 `            
             )}   
         `}        
@@ -616,7 +567,7 @@ export function TrazitFormsElements(base) {
     }
     get dateInput() {return this.shadowRoot.querySelector("input#dateInput")}
     setNewDate() {
-      if (this.dateInput.value) {
+      if (this.filterdateInput.value) {
         this.dialogAccept(false)
       }
     }
@@ -715,12 +666,12 @@ export function TrazitFormsElements(base) {
         //   }
         // })
         // console.log('cleanParams', cleanParams)
-        let fld =fields[1].list2//(([key, value]) =>{
+        let fld =fields[1].filterlist2//(([key, value]) =>{
             //cleanParams=value
         //})
         console.log('fld', fld)
         let thisNewList2=[]
-        thisNewList2=this.listEntries(fld)
+        thisNewList2=this.filterlistEntries(fld)
         console.log('thisNewList2', thisNewList2)
         //alert(fields[e.target.id].valuesFromMasterData.recalculateObjectOnEntrySelected)
         //console.log(e.targetValue)
@@ -737,7 +688,7 @@ export function TrazitFormsElements(base) {
             newList.push(blankEmpty)
         }
         if (fld.valuesFromMasterData!==undefined){
-            let MDentriesArr=this.listEntriesFromMasterData(fld.valuesFromMasterData)
+            let MDentriesArr=this.filterlistEntriesFromMasterData(fld.valuesFromMasterData)
             if (MDentriesArr.length>0){
                 MDentriesArr.forEach(item =>newList.push(item))
             }
@@ -830,35 +781,35 @@ export function TrazitFormsElements(base) {
     get filtertext1() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext1")    }    
 
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
-    get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
-    get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        
-    get text4() {    return this.shadowRoot.querySelector("mwc-textfield#text4")    }        
-    get text5() {    return this.shadowRoot.querySelector("mwc-textfield#text5")    }        
-    get text6() {    return this.shadowRoot.querySelector("mwc-textfield#text6")    }        
-    get text7() {    return this.shadowRoot.querySelector("mwc-textfield#text7")    }        
-    get text8() {    return this.shadowRoot.querySelector("mwc-textfield#text8")    }        
-    get text9() {    return this.shadowRoot.querySelector("mwc-textfield#text9")    }        
-    get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    }        
-     get checkbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox1")    }        
-    get checkbox2() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox2")    }        
-    get checkbox3() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox3")    }        
-    get checkbox4() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox4")    }        
-    get checkbox5() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox5")    }        
-    get checkbox6() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox6")    }        
-    get checkbox7() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox7")    }        
-    get checkbox8() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox8")    }        
-    get checkbox9() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox9")    }        
-    get checkbox10() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox10")    }        
-    get date1() {    return this.shadowRoot.querySelector("mwc-textfield#date1")    }        
-    get date2() {    return this.shadowRoot.querySelector("mwc-textfield#date2")    }    
-    get date3() {    return this.shadowRoot.querySelector("mwc-textfield#date3")    }        
+    get filtertext2() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext2")    }        
+    get filtertext3() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext3")    }        
+    get filtertext4() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext4")    }        
+    get filtertext5() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext5")    }        
+    get filtertext6() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext6")    }        
+    get filtertext7() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext7")    }        
+    get filtertext8() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext8")    }        
+    get filtertext9() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext9")    }        
+    get filtertext10() {    return this.shadowRoot.querySelector("mwc-textfield#filtertext10")    }        
+     get filtercheckbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox1")    }        
+    get filtercheckbox2() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox2")    }        
+    get filtercheckbox3() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox3")    }        
+    get filtercheckbox4() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox4")    }        
+    get filtercheckbox5() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox5")    }        
+    get filtercheckbox6() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox6")    }        
+    get filtercheckbox7() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox7")    }        
+    get filtercheckbox8() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox8")    }        
+    get filtercheckbox9() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox9")    }        
+    get filtercheckbox10() {    return this.shadowRoot.querySelector("mwc-checkbox#filtercheckbox10")    }        
+    get filterdate1() {    return this.shadowRoot.querySelector("mwc-textfield#filterdate1")    }        
+    get filterdate2() {    return this.shadowRoot.querySelector("mwc-textfield#filterdate2")    }    
+    get filterdate3() {    return this.shadowRoot.querySelector("mwc-textfield#filterdate3")    }        
     get date4() {    return this.shadowRoot.querySelector("mwc-textfield#date4")    }    
     get date5() {    return this.shadowRoot.querySelector("mwc-textfield#date5")    }        
     get date6() {    return this.shadowRoot.querySelector("mwc-textfield#date6")    }    
     get date7() {    return this.shadowRoot.querySelector("mwc-textfield#date7")    }        
     get date8() {    return this.shadowRoot.querySelector("mwc-textfield#date8")    }    
     get date9() {    return this.shadowRoot.querySelector("mwc-textfield#date9")    }        
-    get date10() {    return this.shadowRoot.querySelector("mwc-textfield#date10")    }    
+    get filterdate10() {    return this.shadowRoot.querySelector("mwc-textfield#filterdate10")    }    
     get datetime1() {    return this.shadowRoot.querySelector("input#datetime1")    }        
     get datetime2() {    return this.shadowRoot.querySelector("input#datetime2")    }    
     get datetime3() {    return this.shadowRoot.querySelector("input#datetime3")    }        
@@ -885,16 +836,16 @@ export function TrazitFormsElements(base) {
     get daterange5dateStart() {    return this.shadowRoot.querySelector("mwc-textfield#daterange5dateStart")    }        
     get daterange5dateEnd() {    return this.shadowRoot.querySelector("mwc-textfield#daterange5dateEnd")    }    
         
-    get number1() {    return this.shadowRoot.querySelector("mwc-textfield#number1")    }    
-    get number2() {    return this.shadowRoot.querySelector("mwc-textfield#number2")    }    
-    get number3() {    return this.shadowRoot.querySelector("mwc-textfield#number3")    }    
-    get number4() {    return this.shadowRoot.querySelector("mwc-textfield#number4")    }    
-    get number5() {    return this.shadowRoot.querySelector("mwc-textfield#number5")    }    
-    get number6() {    return this.shadowRoot.querySelector("mwc-textfield#number6")    }    
-    get number7() {    return this.shadowRoot.querySelector("mwc-textfield#number7")    }    
-    get number8() {    return this.shadowRoot.querySelector("mwc-textfield#number8")    }    
-    get number9() {    return this.shadowRoot.querySelector("mwc-textfield#number9")    }    
-    get number10() {    return this.shadowRoot.querySelector("mwc-textfield#number10")    }    
+    get filternumber1() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber1")    }    
+    get filternumber2() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber2")    }    
+    get filternumber3() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber3")    }    
+    get filternumber4() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber4")    }    
+    get filternumber5() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber5")    }    
+    get filternumber6() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber6")    }    
+    get filternumber7() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber7")    }    
+    get filternumber8() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber8")    }    
+    get filternumber9() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber9")    }    
+    get filternumber10() {    return this.shadowRoot.querySelector("mwc-textfield#filternumber10")    }    
   
     get list1() {    return this.shadowRoot.querySelector("mwc-select#list1")    }
     get list2() {    return this.shadowRoot.querySelector("mwc-select#list2")    }
