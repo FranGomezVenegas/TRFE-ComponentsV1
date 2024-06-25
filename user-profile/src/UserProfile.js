@@ -298,8 +298,9 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       //return
 //      this.config.appAuthenticateApiUrl
       this.actionBeingPerformedModel=action
+      console.log(action)
       this.type = "user"
-      this.credsChecker(actionName, -1, {
+      this.trazitCredsChecker(actionName, -1, {
         newPassword: this.newPwd.value}, action, true, 'user')
     } else if (actionName == "USER_CHANGE_ESIGN") {
       this.type = "esign"
@@ -309,28 +310,28 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
       }
       this.actionBeingPerformedModel=action
       this.type = "esign"
-      this.credsChecker(actionName, -1, {
+      this.trazitCredsChecker(actionName, -1, {
         newEsign: this.newEsg.value}, action, true, 'esign')
     } else if (actionName == "UPDATE_USER_SHIFT") {
       console.log('action', action)
       action.endPoint='/app/PlatformAdminAPIactions'
       this.actionBeingPerformedModel=action
       this.type = "user"
-      this.credsChecker(actionName, -1, {
+      this.trazitCredsChecker(actionName, -1, {
         newShift: this.newShift.value}, this.targetValue, action, true, 'user')
     } else if (actionName == "UPDATE_USER_MAIL") {
       console.log('action', action)
       action.endPoint='/app/PlatformAdminAPIactions'
       this.actionBeingPerformedModel=action
       this.type = "user"
-      this.credsChecker(actionName, -1, {
+      this.trazitCredsChecker(actionName, -1, {
         newMail: this.newMail.value}, this.targetValue, action, true, 'user')
     } else if (actionName == "UPDATE_USER_ALIAS") {
       console.log('action', action)
       action.endPoint='/app/PlatformAdminAPIactions'
       this.actionBeingPerformedModel=action
       this.type = "user"
-      this.credsChecker(actionName, -1, {
+      this.trazitCredsChecker(actionName, -1, {
         newAlias: this.newAlias.value}, this.targetValue, action, true, 'user')
     }
   }
