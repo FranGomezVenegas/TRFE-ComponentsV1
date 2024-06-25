@@ -278,6 +278,7 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
     })
   }
   confirmNewVal(actionName) {
+    sessionStorage.setItem('actionInfoToAPIcall', JSON.stringify(this.actionBeingPerformedModel));
     let action={}
     action.actionName = actionName
     action.endPoint = this.config.appAuthenticateApiUrl

@@ -46,3 +46,7 @@ This area want to track the bugs identified for this Web Component that were alr
 
 - Adapted to model 2.1 - credsChecker in new place.
 - check, notify and stop when the new X value was not entered prior to click the button to perform the action
+
+## Versioning track
+
+v0.0.2 compatible with new credentials dialog artifact
