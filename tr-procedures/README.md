@@ -37,7 +37,8 @@ v0.2.14 Proc-definition main cards view compatible with confirm dialogs, added s
 v0.2.15 fix for reset values when selecting entries from one list element
 v0.2.16 Integrated some dev solutions into the master
 v0.2.17 vaadin-grid for grid-with-buttons, header backgroundcolor white and height 65vh
-v0.2.18 fix for trazit form filtes
+v0.2.18 fix for trazit form filters
+v0.2.19 draft for flipcard
 
 This area want to track the requirements that made this web component to become a reality.
 
