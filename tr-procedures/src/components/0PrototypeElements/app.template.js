@@ -7,6 +7,7 @@ import "../qrcode-scanner/index";
 import '../Calendar/index';
 import '../Tree/treeview/index'
 import '../MolecularEditor/molecular-editor';
+import '../flipcard/flipcard';
 //import '../jsonDiffViewer/jsondiffviewermain';
 import '../serialPort/serial-port';
 //import '../LabelPrinter/label-printer-main';
@@ -27,7 +28,14 @@ export const template = (props) => {
   oldVersion={"name": "old version", "description": "This is the old version"}
   let newVersion={}
   newVersion={"name": "new version", "description": "This is the new version"}
+
+  let flipCardConfig1={flipCardAllowed:true}
+  let flipCardData1={title:"Hola", role:'bye'}
+  let flipCardConfig2={flipCardAllowed:false}
+  let flipCardData2={role: "Hola", title:'bye'}
   return html`
+  <flip-card .config=${flipCardConfig1} .data=${flipCardData1}></flip-card>
+  <flip-card .config=${flipCardConfig2} .data=${flipCardData2}></flip-card>
   <!-- <zebra-printer-component></zebra-printer-component> -->
   <serial-port-component lang=${props.lang} .sendEnabled="${true}" .isTimeoutEditable="${false}" .showAlert="${false}"></serial-port-component>
  <!-- <json-diff-viewer old-version=${oldVersion} 
