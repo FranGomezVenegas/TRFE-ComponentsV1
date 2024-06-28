@@ -6,7 +6,11 @@ export const styles = css`
   * {
     box-sizing: border-box;
   }
-
+  .title {
+    color: #2989d8;
+    font-size: 18px;
+    font-weight: bold;
+  }
   table {
     border-collapse: collapse;
     width: 100%;

@@ -240,7 +240,8 @@ export const DemoViews = [
     {"proc_instance_name": "stock", "view_name": "InventoryLotsReactivos", "filter_name": "InventoryLotsReactivos", "title": "InventoryLotsReactivos"},
     {"proc_instance_name": "stock", "view_name": "InventoryControls", "filter_name": "InventoryControls", "title": "InventoryControls"},
     {"proc_instance_name": "stock", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
-	{"proc_instance_name": "stock", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"}	
+	  {"proc_instance_name": "stock", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"},
+    {"proc_instance_name": "stock", "view_name": "MasterData", "filter_name": "MasterData", "title": "Master Data"}	
   ]},
  {"label":"Raw Material Inspection Lots (demo_lots_raw", "proc_instance_name": "inspection_lot", "views":[
   {"proc_instance_name": "inspection_lot", "view_name": "Home", "filter_name": "Home", "title": "Home"},

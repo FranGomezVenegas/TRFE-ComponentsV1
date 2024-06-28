@@ -39,6 +39,7 @@ v0.2.16 Integrated some dev solutions into the master
 v0.2.17 vaadin-grid for grid-with-buttons, header backgroundcolor white and height 65vh
 v0.2.18 fix for trazit form filters
 v0.2.19 draft for flipcard
+v0.2.20 drag&drop for object by tabs
 
 This area want to track the requirements that made this web component to become a reality.
 

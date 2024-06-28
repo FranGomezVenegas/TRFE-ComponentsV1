@@ -236,11 +236,6 @@
     "viewName": "tree-view", 
     "filterName" :  "tree-view" 
   },
-  "localDefaultView": {
-    "procName":  "fake-developers", 
-    "viewName": "prototype-elements-view-main", 
-    "filterName" :  "prototype-elements-view-main" 
-  },  
   
   "localDefaultView321": {
     "procName":  "inspection_lot", 
@@ -316,6 +311,18 @@
     "procName":  "mb_em", 
     "viewName": "ProductionLots", 
     "filterName" :  "SampleLot" 
+  },  
+  "localDefaultView": {
+    "procName":  "stock", 
+    "viewName": "MasterData", 
+    "filterName" :  "MasterData" 
+  },
+  "localDefaultView2": {
+    "procName":  "fake-developers", 
+    "viewName": "prototype-elements-view-main", 
+    "filterName" :  "prototype-elements-view-main" 
+  },
+  "fakeEnd":{
   }  
-  
+ 
 }

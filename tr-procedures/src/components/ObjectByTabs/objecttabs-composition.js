@@ -6,6 +6,7 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
 
+
 // import { kpiReportTitle, kpiReportTitleLvl2 } from '../../components/kpiChart/kpiChart.main.js';
 // import { kpiCard, kpiCardSomeElementsSingleObject, cardSomeElementsRepititiveObjects } from '../../components/kpiGrid/kpiGrid.main.js';
 // import { jsonViewer } from '../../components/jsonViewer/jsonViewer.main.js';
@@ -312,7 +313,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
             ${elem2.type==="spectestScripts" ? this.specScripts(elem, true) : nothing}
             ${elem2.type==="buttonsOnly" ? this.buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
             ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
-
+            ${elem2.type==="dragDropObjects" ? this.dragDropObjects(elem, data)   : nothing}
           `:nothing}
         `
       })} 
@@ -366,6 +367,8 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
                 ${elem2.type === "spectestScripts" ? specScripts(elem, true) : nothing}
                 ${elem2.type === "buttonsOnly" ? buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
                 ${elem2.type === "tree" ? treeElement(elem2, data) : nothing}
+                ${elem2.type==="dragDropObjects" ? this.dragDropObjects(elem2, data)   : nothing}
+
               ` : nothing}
           `;
         })} 
@@ -421,7 +424,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}   
       ${elem.type==="buttonsOnly" ? this.buttonsOnly(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="tree" ? this.treeElement(elem, data)   : nothing}
- 
+      ${elem.type==="dragDropObjects" ? this.dragDropObjects(elem, data)   : nothing}
     `
   }
 
