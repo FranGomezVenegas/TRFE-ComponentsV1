@@ -1,7 +1,6 @@
 import { css } from 'lit';
 
 export const flipCardStyles = css`
-  /* Your CSS styles here */
   .flip-card-container {
     perspective: 1000px;
   }
@@ -27,7 +26,6 @@ export const flipCardStyles = css`
 
   .flip-card-front,
   .flip-card-back {
-    // width: 100%;
     height: 100%;
     position: absolute;
     backface-visibility: hidden;
@@ -36,7 +34,7 @@ export const flipCardStyles = css`
   }
 
   .flip-card-front {
-    background: linear-gradient(to right bottom, #ca3782, #1e0b36);
+    background: linear-gradient(79deg, #4668db, #9d70cd);
     color: white;
     display: flex;
     align-items: center;
@@ -47,13 +45,13 @@ export const flipCardStyles = css`
   }
 
   .flip-card-back {
-    background-color: white;
+    background: linear-gradient(79deg, #4668db, #9d70cd);
     transform: rotateY(180deg);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color: #333;
+    color: white;
     padding: 20px;
     text-align: center;
   }
@@ -79,7 +77,7 @@ export const flipCardStyles = css`
   .card-cover {
     width: 100%;
     height: 40%;
-    background: linear-gradient(to top right, #ca3782, #1e0b36);
+    background: linear-gradient(to top right, #1e0b36, #ca3782);
     color: white;
     display: flex;
     align-items: center;
@@ -106,7 +104,7 @@ export const flipCardStyles = css`
     list-style: none;
     padding: 0;
     overflow-y: auto;
-    max-height: 200px; /* Adjust as needed */
+    max-height: 200px;
   }
 
   .skills-list li {
@@ -115,7 +113,7 @@ export const flipCardStyles = css`
   }
 
   .flip-button {
-    background-color: #ca3782;
+    background-color: #1e0b36;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -127,7 +125,7 @@ export const flipCardStyles = css`
   }
 
   .flip-button:hover {
-    background-color: #1e0b36;
+    background-color: #ca3782;
   }
 
   .flipped .flip-card-inner {
@@ -141,4 +139,3 @@ export const flipCardStyles = css`
     }
   }
 `;
-
