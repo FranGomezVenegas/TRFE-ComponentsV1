@@ -11,7 +11,7 @@ class FlipCard extends LitElement {
   }
 
   flipCard(event) {
-    event.stopPropagation(); // Prevents the card click event from triggering twice
+    event.stopPropagation();
     this.flipCardElement.classList.toggle('flipped');
   }
 
