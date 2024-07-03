@@ -6026,19 +6026,36 @@ export class LitCKEditor extends LitElement {
     }
   `;
   static data = [];
+  
   constructor() {
     super();
     this.editor = null;
   }
 
-  firstUpdated() {
-    ClassicEditor.create(this.shadowRoot.getElementById('editor'))
-      .then((editor) => {
-        this.editor = editor;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  async firstUpdated() {
+    try {
+      const editorElement = this.shadowRoot.getElementById('editor');
+      this.editor = await ClassicEditor.create(editorElement);
+
+      // Temporary API for demonstration
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.body) {
+          this.editor.setData(data.body);
+        } else {
+          this.editor.setData(''); // Set blank editor if no data
+        }
+      } else {
+        console.error('Failed to load data:', response.status);
+        this.editor.setData(''); // Set blank editor on error
+      }
+    } catch (error) {
+      console.error('Error initializing editor:', error);
+      if (this.editor) {
+        this.editor.setData(''); // Set blank editor on error
+      }
+    }
   }
 
   disconnectedCallback() {
@@ -6048,8 +6065,33 @@ export class LitCKEditor extends LitElement {
     }
   }
 
+  async saveData() {
+    if (this.editor) {
+      const textValue = this.editor.getData();
+      
+      // Temporary API for demonstration
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts/1', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ body: textValue })
+      });
+
+      if (response.ok) {
+        console.log('Data saved successfully');
+        alert('Data saved successfully');
+      } else {
+        console.error('Failed to save data:', response.status);
+      }
+    }
+  }
+
   render() {
-    return html` <div id="editor"></div> `;
+    return html`
+      <div id="editor"></div>
+      <button @click="${this.saveData}">Save</button>
+    `;
   }
 }
 
