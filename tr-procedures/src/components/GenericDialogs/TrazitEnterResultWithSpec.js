@@ -438,12 +438,14 @@ return class extends ActionsFunctions(LitElement) {
       )
     }
     changeUOM() {
-      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)
+      let params = serviceAPIurl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
       this.execResult(params)
     }
-    enterResult() {      
-      let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
+    enterResult() { 
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)     
+      let params = serviceAPIurl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIactionsUrl)
         + '?' + new URLSearchParams(this.reqParams)
    //console.log('enterResult', params)
       this.execResult(params)
@@ -798,7 +800,8 @@ return class extends ActionsFunctions(LitElement) {
           alert(endPointUrl)
           return
       }
-      let params = this.config.backendUrl + endPointUrl
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
+      let params = serviceAPIurl + endPointUrl
       + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
 
@@ -864,7 +867,8 @@ return class extends ActionsFunctions(LitElement) {
           alert(endPointUrl)
           return
       }
-      let params = this.config.backendUrl + endPointUrl
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
+      let params = serviceAPIurl + endPointUrl
       + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)
 
 

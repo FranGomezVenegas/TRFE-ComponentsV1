@@ -34,7 +34,7 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
 //        return false
 //       } 
      // alert(true)
-     this.defaultValue()
+     this.formDefaultValue()
      //this.resetFields()
      return true 
   }
@@ -188,7 +188,8 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
           alert(endPointUrl)
           return
       }
-      let params = this.config.backendUrl + endPointUrl   
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
+      let params = serviceAPIurl + endPointUrl   
         + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams)
       this.fetchApi(params).then(() => {
         this.reload()
@@ -204,7 +205,8 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
           alert(endPointUrl)
           return
       }
-      let params = this.config.backendUrl + endPointUrl        
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
+      let params = serviceAPIurl + endPointUrl        
         + '?' + new URLSearchParams(APIParams) //+ '&'+ new URLSearchParams(extraParams)
 console.log('getOpenInvestigations', 'params', params)        
       this.fetchApi(params).then(j => {
@@ -216,7 +218,8 @@ console.log('getOpenInvestigations', 'params', params)
     }
 
     addInvestObjects() {
-      let params = this.config.backendUrl + this.selectedDialogAction.endPoint
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
+      let params = serviceAPIurl + this.selectedDialogAction.endPoint
         + '?' + new URLSearchParams(this.reqParams)
       this.fetchApi(params).then(() => {
         this.investigationDialog.close()
@@ -232,8 +235,9 @@ console.log('getOpenInvestigations', 'params', params)
           alert(endPointUrl)
           return
       }
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
 //      console.log('capaDecisionAction', 'reqParams', this.reqParams)
-      let params = this.config.backendUrl + endPointUrl   
+      let params = serviceAPIurl + endPointUrl   
         + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams)
       this.fetchApi(params).then(() => {
         this.decisionDialog.close()
@@ -264,7 +268,8 @@ console.log('getOpenInvestigations', 'params', params)
         console.log("Required set decision before close")
         return
       }
-      let params = this.config.backendUrl + endPointUrl
+      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
+      let params = serviceAPIurl + endPointUrl
         + '?' + new URLSearchParams(reqParams)+ '&'+ new URLSearchParams(APIParams)
       this.fetchApi(params).then(() => {
         this.reload()

@@ -632,140 +632,122 @@ export function ButtonsFunctions(base) {
 
 
     async GetViewData(setGrid = true, viewQuery) {
-      // const stack = new Error().stack;
-      // const stackLines = stack.split('\n');
-      // if (stackLines!==null&&stackLines[1]!==null){
-      //   const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
-      //   console.log("Called from: " + callerName);
-      // }  
       if (viewQuery === undefined) {
-        viewQuery = this.viewModelFromProcModel.viewQuery
+        viewQuery = this.viewModelFromProcModel.viewQuery;
       }
-      let queryDefinition = viewQuery
-      if (queryDefinition === undefined) { return }
-      let params = {}
-//      sessionStorage.setItem("viewFilterForQuery", undefined)
-//      let urlParams=sessionStorage.getItem("viewFilterForQuery")
-//      if (urlParams==="undefined"){
-        //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
-        if (viewQuery !== undefined && viewQuery.clientMethod !== undefined) {
-          //alert('Calling '+viewQuery.clientMethod+' from GetViewData')            
-          if (this[viewQuery.clientMethod] === undefined) {
-            alert('not found any clientMethod called ' + viewQuery.clientMethod)
-            return
-          }
-          let j = this[viewQuery.clientMethod]()
-          this.setTheValues(viewQuery, j)
-          return
+      let queryDefinition = viewQuery;
+      if (queryDefinition === undefined) { return; }
+      let params = {};
+    
+      if (viewQuery !== undefined && viewQuery.clientMethod !== undefined) {
+        if (this[viewQuery.clientMethod] === undefined) {
+          alert('not found any clientMethod called ' + viewQuery.clientMethod);
+          return;
         }
-											  
-									   
-			  
-	   
-        if (this.config === undefined || this.config.backendUrl === undefined) {
-          fetch('../../../demo/config.json')
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-              return response.json();
-            })
-            .then(json => {
-              this.config = json;
-            })
-            .catch(error => {
-              console.error('Error fetching config:', error);
-            });
-        }      
-        if (this.config.backendUrl === undefined) {
-          this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
-          //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
-          console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
-          let sessionDbName = JSON.parse(sessionStorage.getItem("userSession")).dbName
-          if (sessionDbName !== undefined) {
-            this.config.dbName = sessionDbName
-          }
-          if (this.config.dbName === undefined) {
-            this.config.dbName = "labplanet"
-            this.config.isForTesting = false
-          }
+        let j = this[viewQuery.clientMethod]();
+        this.setTheValues(viewQuery, j);
+        return;
+      }
+    
+      if (this.config === undefined || this.config.backendUrl === undefined) {
+        fetch('../../../demo/config.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(json => {
+            this.config = json;
+          })
+          .catch(error => {
+            console.error('Error fetching config:', error);
+          });
+      }
+    
+      this.samplesReload = true;
+      this.selectedItems = [];
+      let APIParams = this.getAPICommonParams(queryDefinition);
+      let viewParams = this.jsonParam(queryDefinition);
+      let endPointUrl = this.getQueryAPIUrl(queryDefinition);
+      if (String(endPointUrl).toUpperCase().includes("ERROR")) {
+        alert(endPointUrl);
+        return;
+      }
+      let serviceAPIurl = this.getServiceAPIUrl(viewQuery);
+      if (this.config.backendUrl === undefined && serviceAPIurl === undefined) {
+        serviceAPIurl = "https://platform.trazit.net:8443/TRAZiT-API";
+        let sessionDbName = JSON.parse(sessionStorage.getItem("userSession")).dbName;
+        if (sessionDbName !== undefined) {
+          this.config.dbName = sessionDbName;
         }
-        //console.log('GetViewData', 'queryDefinition', queryDefinition)
-        this.samplesReload = true
-        this.selectedItems = []
-        let APIParams = this.getAPICommonParams(queryDefinition)
-        let viewParams = this.jsonParam(queryDefinition)
-        let endPointUrl = this.getQueryAPIUrl(queryDefinition)
-        if (String(endPointUrl).toUpperCase().includes("ERROR")) {
-          alert(endPointUrl)
-          return
+        if (this.config.dbName === undefined) {
+          this.config.dbName = "labplanet";
+          this.config.isForTesting = false;
         }
-	   
-									 
-												   
-																	  
-							   
-							 
-															  
-													  
-															
-																
-						  
-			  
-	   
-        params = this.config.backendUrl + endPointUrl
-          + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
-//      }
-      //console.log('params', params)          
+      }
+      params = serviceAPIurl + endPointUrl
+        + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams);
+    
       await this.fetchApi(params, false, queryDefinition).then(j => {
         if (queryDefinition.actionName === 'ONE_PROCEDURE_DEFINITION' || queryDefinition.actionName === 'ALL_PROCEDURES_DEFINITION') {
           if (j.master_data !== undefined) {
-            let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-            userSession.proc_management_masterdata = {}
-            userSession.proc_management_masterdata = j.master_data
-            //    alert('added proc_management master_data in userSession, ButtonsFunctions 575')
-            sessionStorage.setItem('userSession', JSON.stringify(userSession))
+            let userSession = JSON.parse(sessionStorage.getItem("userSession"));
+            userSession.proc_management_masterdata = {};
+            userSession.proc_management_masterdata = j.master_data;
+            sessionStorage.setItem('userSession', JSON.stringify(userSession));
           }
         }
         if (queryDefinition.notUseGrid !== undefined && queryDefinition.notUseGrid === true) {
           if (queryDefinition.variableName !== undefined) {
             if (queryDefinition.endPointResponseVariableName !== undefined) {
-              this[queryDefinition.variableName] = j[queryDefinition.endPointResponseVariableName]
+              this[queryDefinition.variableName] = j[queryDefinition.endPointResponseVariableName];
             } else {
-              this[queryDefinition.variableName] = j
+              this[queryDefinition.variableName] = j;
             }
           } else {
-            this.selectedItems = j
-            if (this.selectedItems[0]!==undefined&&this.selectedItems[0]!==null){
-              this.selectedItem = this.selectedItems[0]
-              this.selectedItemInView = this.selectedItems[0]
-              this.render()
+            this.selectedItems = j;
+            if (this.selectedItems[0] !== undefined && this.selectedItems[0] !== null) {
+              this.selectedItem = this.selectedItems[0];
+
+              if (this.selectedItemInView) {
+                if (j.length==1){
+                  this.selectedItemInView =j[0]
+                }else{
+                  const uniqueKey = this.viewModelFromProcModel.viewQuery.selectedItemKeyProperty;
+                  const newItem = j.find(item => item[uniqueKey] === this.selectedItemInView[uniqueKey]);
+                  if (newItem) {
+                    this.selectedItemInView = newItem;
+                  }
+                }
+              }
+
+              this.render();
             }
-            console.log('this.selectedItems', this.selectedItems)
             if (j && !j.is_error) {
-              this.requestData = j
+              this.requestData = j;
             } else {
-              this.requestData = {}
+              this.requestData = {};
             }
           }
-        }
-        else if (setGrid) {
+        } else if (setGrid) {
           if (j && !j.is_error) {
-            this.setGrid(j)
+            this.setGrid(j);
           } else {
-            this.setGrid()
+            this.setGrid();
           }
         } else {
           if (j && !j.is_error) {
-            this.requestData = j
+            this.requestData = j;
           } else {
-            this.requestData = {}
+            this.requestData = {};
           }
         }
-      })
-      this.requestUpdate()
-      this.samplesReload = false
+      });
+      this.requestUpdate();
+      this.samplesReload = false;
     }
+    
     async GetAlternativeViewData(queryDefinition, selObject = {}) {
       if (queryDefinition.clientMethod !== undefined) {
         //alert('Calling '+queryDefinition.clientMethod+' from GetViewData')            
@@ -780,7 +762,8 @@ export function ButtonsFunctions(base) {
       let APIParams = this.getAPICommonParams(queryDefinition)
       let viewParams = this.jsonParam(queryDefinition, selObject)
       let endPointUrl = this.getQueryAPIUrl(queryDefinition)
-      let params = this.config.backendUrl + endPointUrl
+      let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
+      let params = serviceAPIurl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
 
       //console.log('params', params)        
@@ -812,7 +795,8 @@ export function ButtonsFunctions(base) {
       let APIParams = this.getAPICommonParams(currQuery)
       let viewParams = this.jsonParam(currQuery)
       let endPointUrl = this.getQueryAPIUrl(currQuery)
-      let params = this.config.backendUrl + endPointUrl
+      let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
+      let params = serviceAPIurl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
@@ -846,7 +830,8 @@ export function ButtonsFunctions(base) {
         let viewParams = this.jsonParam(currQuery)
         if (currQuery === undefined) { return }
         let endPointUrl = this.getQueryAPIUrl(currQuery)
-        let params = this.config.backendUrl + endPointUrl
+        let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
+        let params = serviceAPIurl + endPointUrl
           //let params = this.config.backendUrl + (currQuery.endPoint ? currQuery.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
 

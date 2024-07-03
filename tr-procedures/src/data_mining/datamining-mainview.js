@@ -20,7 +20,7 @@ export class DataMiningMainView extends ListsFunctions(ButtonsFunctions(LitEleme
       Layouts,
       css`
       sp-split-view {
-        height: calc(100vh - 150px);
+        height: 20%; /* calc(100vh - 150px); */
       }
       #leftSplit {
         padding: 10px;

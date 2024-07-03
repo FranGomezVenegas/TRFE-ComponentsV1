@@ -563,58 +563,7 @@ export class TrazitFormFields extends LitElement {
   }
 
 
-  xgetQueryFilterData() {
-    console.log('getQueryFilterData')
-    this.dataminingData.data = {}
-    //let extraParams = {}
-    // Object.entries(this.activeTab.extraParams).map((
-    //   [key]) => extraParams[key] = this[key].value
-    // )
-    let extraParams=this.jsonParam(this.activeTab.filter.extraParams) 
-    let reqParams = {
-      procInstanceName: this.procName,
-      finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
-      dbName: this.config.dbName,
-      schemaPrefix: this.procName, 
-      actionName: this.activeTab.action, 
-      ...this.activeTab.filter.fixParams,
-      ...extraParams
-    }
-    let params = this.config.backendUrl + (this.activeTab.endPoint ? this.activeTab.endPoint : this.config.EnvMonSampleAPIQueriesStats)
-      + '?' + new URLSearchParams(reqParams)
-    this.fetchApi(params).then(j => {
-      if (j && !j.is_error) {
-        this.data = j
-        if (j.recovery_rate&&j.recovery_rate.data){
-          this.data.recoveryrate_datatable={}
-          this.data.recoveryrate_datatable.conf =[]
-          for (let i=0;i<j.recovery_rate.columns_data.length;i++){
-            let newItem={}
-            newItem.property=j.recovery_rate.columns_data[i].name
-            newItem.header=j.recovery_rate.columns_data[i].name
-            this.data.recoveryrate_datatable.conf.push(newItem)          
-          }
-          this.data.recoveryrate_datatable.data = j.recovery_rate.data
-        }
-        if (j.datatable){
-          this.sampleData=j.datatable
-        }
-        this.chartImgs = []
-      }
-    })
-  }
-
   setPrintContent() {
-     //let header = `Report for the `
-    // if (this.sampleData.sampleFieldToRetrieve) {
-    //   header += `sample ${this.sampleData.sampleFieldToRetrieve.sample_id}`
-    // } else if (this.sampleData.incubatorFieldToRetrieve) {
-    //   header += `incubator ${this.sampleData.incubatorFieldToRetrieve.name}`
-    // } else if (this.sampleData.batchFieldToRetrieve) {
-    //   header += `batch ${this.sampleData.batchFieldToRetrieve.name}`
-    // } else {
-    //   header += `production lot ${this.sampleData.prodLotFieldToRetrieve.name}`
-    // }
     let contentToPrint="Page Empty, nothing to print"
     let dataContent=this.shadowRoot.querySelector("div#kpidata")
     if (dataContent!==undefined&&dataContent!==null){

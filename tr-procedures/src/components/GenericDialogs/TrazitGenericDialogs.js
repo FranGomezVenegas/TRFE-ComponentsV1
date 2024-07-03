@@ -2,13 +2,15 @@ import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
 import '@material/mwc-textarea';
+import '@cicciosgamino/qr-code-element';
 
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../MultiSelect';
-import '../Tree/treeview/index';
+//import '../Tree/treeview/index';
+import '../Tree/tree-viewfran';
 import '../speclimitquantitative/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
 
@@ -58,6 +60,40 @@ export function TrazitGenericDialogs(base) {
       this.genericDialogGridItems=[]
       this.genericDialogGridSelectedItems=[]
     }
+    handleQRCodeDecoded(e) {
+        const decodedData = e.detail.value; // Asumiendo que el evento tiene los datos decodificados
+        const dialogFields = this.actionBeingPerformedModel.dialogInfo.fields;
+        dialogFields.forEach(field => {
+            const keyName = Object.keys(field)[0];
+            const fieldDef = field[keyName];
+            if (fieldDef.qrCodeParsing && decodedData[fieldDef.qrCodeParsing]) {
+                this[keyName].value = decodedData[fieldDef.qrCodeParsing];
+            }
+        });
+    }
+    renderQRCodeScanner(actionModel) {
+        const qrCodeField = actionModel.dialogInfo.fields.find(field => field.qrcode);
+        if (qrCodeField) {
+            return html`
+            <div class="layout horizontal flex center-center">
+                <qr-code-element
+                    continuous
+                    @qrcode-decoded=${this.handleQRCodeDecoded}>
+                </qr-code-element>
+            </div>
+            `;
+        }
+        return nothing;
+    }
+    
+    renderDialogFields(actionModel) {
+        return html`
+        ${actionModel.dialogInfo.fields.map((fld, i) => html`
+            // Renderiza tus campos aquí como antes
+        `)}
+        `;
+    }
+
     openGenericDialog(actionModel = this.actionBeingPerformedModel){
         //alert('openGenericDialog')
         if (actionModel===undefined||actionModel.dialogInfo===undefined){
@@ -210,6 +246,7 @@ export function TrazitGenericDialogs(base) {
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericGridDialog}>
                     ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
             </div>  
+            
             ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?
                 html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
             :html`
@@ -229,6 +266,7 @@ export function TrazitGenericDialogs(base) {
                     ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
                     :html`
                     <ul class="file-list">
+                    ${this.renderQRCodeScanner(actionModel)}
                         ${this.genericDialogGridItems.map((fld, i) =>
                         html`
                         <li class="file-list-item">
@@ -251,8 +289,11 @@ export function TrazitGenericDialogs(base) {
                 `}          
 
                 ${!fld.tree1 ?
-                    html``: html`        
-                        <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>         
+                    html``: html`     
+  <tree-viewfran    id="tree1" .data="${fld.tree1.treeElementData}"   label="${this.fieldLabel(fld.tree1)}" .specification="${fld.tree1.treeElementSpecification}"    
+    @item-selected=${fld.tree1.treeSelection}    .level="${0}"  ></tree-viewfran>                       
+               <!--         <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} 
+               @item-selected=${fld.tree1.treeSelection}></tree-view>         -->
                 `}          
                 ${!fld.text1 ?
                     html``: html`        
@@ -970,7 +1011,7 @@ export function TrazitGenericDialogs(base) {
     }
      
     get acceptancecriteria() {return this.shadowRoot.querySelector("speclimit-quantitative#acceptancecriteria")    }        
-    get tree1() {    return this.shadowRoot.querySelector("tree-view#tree1")    }        
+    get tree1() {    return this.shadowRoot.querySelector("tree-viewfran#tree1")    }        
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
     get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        

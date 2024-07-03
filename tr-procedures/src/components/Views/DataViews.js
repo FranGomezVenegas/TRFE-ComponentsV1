@@ -2826,20 +2826,26 @@ export function DataViews(base) {
     }
 
     applyFilterToTheData(curDataForThisCard, filterValues) {
-   
+      let hasFilters=false
       const uniqueItemsSet = new Set();
       for (const key in filterValues) {
-              const filterValue = filterValues[key];
-              if (Array.isArray(curDataForThisCard)) {
-                  const filteredItems = curDataForThisCard.filter(item => {
-                      if (item[key] && filterValue) {
-                        return item[key] == filterValue;
-                      }
-                      return false
-                  });  
-                  console.log(filteredItems)                         
-                  filteredItems.forEach(item => uniqueItemsSet.add(item));            
+        const filterValue = filterValues[key];
+        if (String(filterValue).length>0){
+          hasFilters=true
+          if (Array.isArray(curDataForThisCard)) {
+              const filteredItems = curDataForThisCard.filter(item => {
+                  if (item[key] && filterValue) {
+                    return item[key].toLowerCase().includes(filterValue.toLowerCase());
+                  }
+                  return false
+              });  
+              console.log(filteredItems)                         
+              filteredItems.forEach(item => uniqueItemsSet.add(item));            
           }
+        }
+      }
+      if (hasFilters===false){
+       return curDataForThisCard   
       }
       return Array.from(uniqueItemsSet);
   

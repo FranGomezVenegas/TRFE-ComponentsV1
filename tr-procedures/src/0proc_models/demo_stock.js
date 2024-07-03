@@ -12,12 +12,13 @@ export const Stock =
 	  "last_change_note_20230327_2": "Added new view, QualificationInProgress"
   },
   "ModuleSettings":{
-	  "actionsEndpoints":[
-		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIactions"}
-	  ],
-	  "queriesEndpoints":[
-		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIqueries"}
-	  ]
+	"serviceAPIurl": "https://platform.trazit.net:8443/TRAZiT-API",
+	"actionsEndpoints":[
+	{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIactions"}
+	],
+	"queriesEndpoints":[
+	{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIqueries"}
+	]
   },
   "MasterData":{
     "component": "ObjectByTabs",
@@ -121,7 +122,7 @@ export const Stock =
 			  "theme":"TRAZiT-DefinitionArea",
 			  "endPointPropertyArray":["active_batches"],
 			  "dataIntegrityCheck":{
-				"dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
+				"dropingEntryRequiredProperties":["sample_id", "study", "temperature"]
 			  },        
 			  "fieldsToDisplay": [
 				{
@@ -148,7 +149,7 @@ export const Stock =
 				  "title": {
 					"label_en": "Add to Batch", "label_es": "Añadir a Tanda"
 				  },
-				  "requiresGridItemSelected": true,
+				  "requiresGridItemSelected": true
 				},
 				"endPointParams": [
 				  { "argumentName": "sampleId", "dragElement": "sample_id" },
@@ -169,7 +170,7 @@ export const Stock =
 			"theme":"TRAZiT-DefinitionArea",
 			"endPointPropertyArray":["variables_set"],
 			"dataIntegrityCheck":{
-			  "dropingEntryRequiredProperties":["param_name"],
+			  "dropingEntryRequiredProperties":["param_name"]
 			},
 			"columns": [
 				{
@@ -200,7 +201,7 @@ export const Stock =
 				"title": {
 				  "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
 				},
-				"requiresGridItemSelected": true,          
+				"requiresGridItemSelected": true       
 			  },
 			  "endPointParams": [
 				{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
@@ -217,7 +218,7 @@ export const Stock =
 				"title": {
 				  "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
 				},
-				"requiresGridItemSelected": true,
+				"requiresGridItemSelected": true
 			  },
 			  "endPointParams": [
 				{ "argumentName": "variableName", "dragElement": "param_name" },
@@ -1869,7 +1870,7 @@ export const Stock =
 				  {
 					"name": "measurement_family",
 					"label_en": "Family",
-					"label_es": "Familia",					
+					"label_es": "Familia"					
 				  },
 				  {
 					"name": "is_base",
@@ -1994,7 +1995,7 @@ export const Stock =
 					{
 					  "name": "measurement_family",
 					  "label_en": "Family",
-					  "label_es": "Familia",					
+					  "label_es": "Familia"				
 					},
 					{
 					  "name": "is_base",
@@ -2059,7 +2060,7 @@ export const Stock =
 				  {
 					"name": "measurement_family",
 					"label_en": "Family",
-					"label_es": "Familia",					
+					"label_es": "Familia"					
 				  },
 				  {
 					"name": "is_base",
@@ -2697,14 +2698,32 @@ export const Stock =
         "dialogInfo": {          
           "name": "genericDialog",
           "fields": [
+			{"qrcode":{}},
 			{"tree1":{
+				"label_en": "Tree", "label_es": "Arbol",
 				"treeElementData":[
 					{
 					  "name": "hola lvl1",
 					  "level2":[
 						{ 
-						  "otro":"hola lvl2"
+						  "otro":"hola lvl2",
+						  "otrolabel":"hola lbl lvl2",
+						  "level3":[
+							{ 
+								"otro":"holaa lvl3"
+							}
+						  ]
+
 						},
+						{ 
+							"otro":"holaa lvl2"
+						},						
+						{ 
+							"otro":"holaaa lvl2"
+						},						
+						{ 
+							"otro":"holaaaaa lvl2"
+						},						
 						{ 
 						  "otro":"adios lvl2"
 						}
@@ -2714,7 +2733,7 @@ export const Stock =
 					  "name": "adios lvl1"
 					}
 				  ],
-				"treeElementSpecification":[
+				"treeElementSpecification":
 					{
 					  "key": "name",
 					  "label": "name",
@@ -2724,25 +2743,36 @@ export const Stock =
 						"') '",
 						"name"
 					  ],
-					  "children": "level2"
-					},
-					{
-					  "key": "otro",
-					  "label": "otro",
-					  "label2": [
-						"'('",
-						"otro",
-						"') '",
-						"otro"
-					  ],
-					  "children": "children"
+					  "children": "level2",
+					  "children_definition":{
+						"key": "otro",
+						"label": "otrolabel",
+						"label2": [
+						  "'('",
+						  "otro",
+						  "') '",
+						  "otro"
+						],
+						"children": "level3",
+						"children_definition":{
+							"key": "otro",
+							"label": "otro",
+							"label2": [
+							  "'('",
+							  "otro",
+							  "') '",
+							  "otro"
+							],
+						}	
+					  },
 					}
-				]
+				
 			}
 
 			},
 			{"list1": {
 				"label_en": "Category", "label_es": "Categoría", "optional": true,
+				"qrCodeParsing": "category",
 				"addBlankValueOnTop": true, "addBlankValueAtBottom": false,
 				"valuesFromMasterData": {
 					"propertyNameContainer": "category_and_references",
@@ -2769,6 +2799,7 @@ export const Stock =
 
 			}},
 			{"list2": { "label_en": "Reference", "label_es": "Referencia",
+				"qrCodeParsing": "reference",
 			  "valuesFromMasterData": {
 				"propertyNameContainer": "category_and_references",
 				"propertyNameContainerLevelPropertyKeyName": "name",
