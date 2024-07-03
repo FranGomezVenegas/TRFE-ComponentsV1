@@ -19,7 +19,7 @@ import './ProgramProc/parameter-limits';
 import './ProgramProc/config-calendar';
 import './ProgramProc/sampling-points';
 import './ProgramProc/sampling-points-map';
-import './ProgramProc/corrective-actions';
+
 
 import {DialogsFunctions} from '../components/GenericDialogs/DialogsFunctions';
 import {ButtonsFunctions} from '../components/Buttons/ButtonsFunctions';
@@ -154,12 +154,7 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
         
         <core-view .lang=${this.lang} .selectedProgram=${this.selectedProgram} ?hidden=${this.tabView!="core"}></core-view>
 
-        <corrective-actions 
-          .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} 
-          .procInstanceName=${this.procInstanceName} .lang=${this.lang} 
-          .selectedProgram=${this.selectedProgram} .config=${this.config} 
-          ?hidden=${this.tabView!="corrective-actions"}>
-        </corrective-actions>
+
         ${super.render()}
       </div>
     `
@@ -233,8 +228,6 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
     if (queryDefinition===undefined){return}
 
     this.samplesReload = true
-    //let params = this.config.backendUrl + this.config.frontEndEnvMonitUrl
-    //  + '?' + new URLSearchParams(this.reqParams)
     this.selectedItems = []      
     let APIParams=this.getAPICommonParams(queryDefinition)
     let viewParams=this.jsonParam(queryDefinition)
@@ -243,7 +236,8 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
         alert(endPointUrl)
         return
     }
-    let params = this.config.backendUrl + endPointUrl
+    let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
+    let params = serviceAPIurl + endPointUrl
     + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(viewParams)    
     await this.fetchApi(params).then(j => {
       if (j && !j.is_error) {
@@ -269,7 +263,8 @@ export class ProgramProc extends ApiFunctions(GridFunctions(ButtonsFunctions(Dia
         alert(endPointUrl)
         return
     }
-    let params = this.config.backendUrl + endPointUrl
+    let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
+    let params = serviceAPIurl + endPointUrl
         + '?' + new URLSearchParams(APIParams)
     this.fetchApi(params).then(j => {
       this.samplesReload = false
