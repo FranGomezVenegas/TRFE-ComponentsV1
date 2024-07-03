@@ -72,7 +72,7 @@ export function TrazitGenericDialogs(base) {
             return true
         }
 
-        this.defaultValue()
+        this.formDefaultValue()
         if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
             return false
        }    
@@ -198,7 +198,7 @@ export function TrazitGenericDialogs(base) {
     }            
     </style>
         <tr-dialog id="genericDialog"  
-            @opened=${(e) => {if (e.target === this.genericDialog) {this.defaultValue();}}}  
+             
 
             ?open=${this.openGenericDialog(actionModel)}  heading="" hideActions="" scrimClickAction="">
         
@@ -869,7 +869,7 @@ export function TrazitGenericDialogs(base) {
         // </vaadin-grid>
     }
 
-    defaultValue(){
+    formDefaultValue(){
         if (this.fieldsShouldBeReset) {
             this.resetFields();
             this.fieldsShouldBeReset = false;
@@ -1147,7 +1147,7 @@ export function TrazitGenericDialogs(base) {
             return fldDef.defaultValue // get value from default value (i.e incubator)
         }
         } else if (fldDef.selObjectPropertyName) {
-            return selObject[fldDef.selObjectPropertyName] // get value from selected item
+            return this.selectedItem[fldDef.selObjectPropertyName] // get value from selected item
         } else if (fldDef.targetValue) {
             return targetValue[fldDef.argumentName] // get value from target element passed
         } else if (fldDef.fixValue) {

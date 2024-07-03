@@ -280,6 +280,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
             procedureVersion: { type: Number },
             procedureName: { type: String },
             showDivider: { type: Boolean },
+            hideLeftPane: { type: Boolean },
             selectedTab: { type: Object },
             isLeftPaneExpanded: { type: Boolean },
             selectedItemInView: { type: Object },
@@ -302,14 +303,20 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         this.selectedItems=[]
         this.selectedItemLoaded=false
         this.desktop = true
+        this.hideLeftPane=false
         this.showDivider=true
         this.leftSplitDisplayed=true
         this.filterCurrentData={}
-        this.selectedItemInView={}
-        this.lotDefault='Testing 2023-03-15T21:20:55.962273'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
+        this.selectedItemInView={}        
     }
 
     firstUpdated() {
+      //alert(this.viewModelFromProcModel.hideLeftPane)
+      if (this.viewModelFromProcModel.hideLeftPane!==undefined){
+        this.hideLeftPane=this.viewModelFromProcModel.hideLeftPane
+        this.filterPerformAction()
+      }
+
       const resizer = this.shadowRoot.getElementById("dragMe");
       let leftSide = undefined
       let rightSide = undefined
@@ -606,9 +613,10 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                         background-color: #888; /* Even darker grey when actively being dragged */
                       }
                     </style>
-                    <sp-split-view show-divider=${this.showDivider} class="split-view">
+                    <sp-split-view show-divider=${this.showDivider} class="split-view" >
                       <div style="display:flex; width: 100%; background:transparent;">
-                        <div id="leftSplit" class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__left">
+                        <div id="leftSplit" style=${this.hideLeftPane ? 'display: none;' : ''}
+                        class="${this.leftSplitDisplayed !== undefined && this.leftSplitDisplayed ? '' : 'collapsed'} container__left">
                           <div id="endpointName_expanded_${this.isLeftPaneExpanded}">
                             ${this.viewModelFromProcModel.filter_button === undefined
                               ? nothing
@@ -718,6 +726,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       //console.log("this.filterCurrentData", this.filterCurrentData);
       return html`
         <objecttabs-composition 
+          style="padding: 20px; left: 50px; width: 90%; position: relative; display: flex; "
           .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} 
           .lang=${this.lang} 

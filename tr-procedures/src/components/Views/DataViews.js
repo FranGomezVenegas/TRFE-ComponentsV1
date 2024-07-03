@@ -3095,5 +3095,15 @@ export function DataViews(base) {
   
       `
     }
+    dragDropObjects(elem, data) {
+      import('../DragDropTable/drag-drop')
+      console.log('elem', elem, 'data', data)
+      return html`
+        <drag-drop .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .model=${elem} ?ready="true" .data=${data}
+          .viewModelFromProcModel=${elem} .config=${this.config}></drag-drop>      
+      `
+    }    
   };
 }

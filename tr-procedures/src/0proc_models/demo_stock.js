@@ -19,6 +19,2605 @@ export const Stock =
 		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIqueries"}
 	  ]
   },
+  "MasterData":{
+    "component": "ObjectByTabs",
+	"hideLeftPane": true,
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Master data",
+      "fix_text_es": "Datos maestros",
+      "name": ""
+    },
+    "viewQuery": {
+      "actionName": "ALL_MASTER_DATA",
+	    "notUseGrid": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        {
+          "argumentName": "specCode",
+		  "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"          
+        }
+      ]
+    },
+    "filter_button": {
+		"label_en": "Search",
+		"label_es": "Buscar"
+	},
+	"filter": [
+	{
+		"filtertext1": {
+		"label_en": "Reference",
+		"label_es": "Referencia",
+		"default_value": ""
+		}
+	}
+	],
+	"xxxfilterResultDetail":{
+		"type":"list",
+		"detail":[
+			{"field": "name"}
+	]  		
+	},	
+	"actions": [],
+	"tabs": [
+		{
+			"tabLabel_en": "Variables set by drag&drop", "tabLabel_es": "Conjunto de variables arrastrando",
+			"view_definition": [
+				{
+					"type": "dragDropObjects",
+    
+		  "objects":[
+			{ "dragEnable": true,
+			  "dropEnable": false,
+			  "title":{
+				"label_en":"Variables", "label_es":"Variables"
+			  },
+			  "name": "1",
+			  "type": "table",
+			  "theme":"TRAZiT-DefinitionArea",
+			  "endPointPropertyArray":["variables"],
+			  "columns": [
+				{
+				  "name": "param_name",
+				  "label_en": "Param Name",
+				  "label_es": "Nombre del parámetro"
+				},
+				{
+				  "name": "param_type",
+				  "label_en": "Type",
+				  "label_es": "Tipo",
+				  "as_paragraph":"{fld:param_type} - {fld:allowed_values}"
+				},
+				{
+				  "name": "allowed_values",
+				  "label_en": "Allowed values",
+				  "label_es": "Valores permitidos"
+				},
+				{
+				  "name": "required",
+				  "label_en": "Required",
+				  "label_es": "Obligatorio"
+				}
+			  ]
+
+			},  
+			{ "dragEnable": true,
+			  "dropEnable": true,
+			  "name": "2",
+			  "acceptEntriesOnlyFromObjects":["11", "3"],
+			  "type": "cards",
+			  "title": "Testing Script Coverage",
+			  "add_border":true,
+			  "num_columns": 1,        
+			  "theme":"TRAZiT-DefinitionArea",
+			  "endPointPropertyArray":["active_batches"],
+			  "dataIntegrityCheck":{
+				"dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
+			  },        
+			  "fieldsToDisplay": [
+				{
+				  "name": "name",
+				  "label_en": "name",
+				  "label_es": "name"
+				},
+				{
+				  "name": "incub_stage",
+				  "label_en": "incub_stage",
+				  "label_es": "incub_stage"
+				},
+				{
+				  "name": "incubation_start",
+				  "label_en": "incubation_start",
+				  "label_es": "incubation_start"
+				}
+			  ],
+			  "dropAction": { 
+				"actionName": "EM_BATCH_INCUB_ADD_SMP",
+				"endPointUrl": "Samples",
+				"requiresDialog": false,
+				"button": {
+				  "title": {
+					"label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+				  },
+				  "requiresGridItemSelected": true,
+				},
+				"endPointParams": [
+				  { "argumentName": "sampleId", "dragElement": "sample_id" },
+				  { "argumentName": "batchTemplateId", "dropElement": "name" },
+				  { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+				  { "argumentName": "batchName", "dropElement": "name" }			  
+				]
+			  }  
+			},
+			{ "dragEnable": false,
+			"dropEnable": true,
+			"title":{
+				"label_en":"Variables Set", "label_es":"Conjunto Variables"
+			  },
+
+			"name": "3",
+			"type": "table",
+			"theme":"TRAZiT-DefinitionArea",
+			"endPointPropertyArray":["variables_set"],
+			"dataIntegrityCheck":{
+			  "dropingEntryRequiredProperties":["param_name"],
+			},
+			"columns": [
+				{
+				  "name": "name",
+				  "label_en": "Code",
+				  "label_es": "Código"
+				},
+				{
+				  "name": "active",
+				  "label_en": "Active",
+				  "label_es": "Activo",
+				  "is_icon":true
+				},
+				{
+				  "name": "description",
+				  "label_en": "Description",
+				  "label_es": "Descripción",
+				  "is_icon": true
+				}
+			  ],			
+
+			"rowbuttons": { 
+			  "actionName": "EM_BATCH_INCUB_ADD_SMP",
+			  "endPointUrl": "Samples",
+			  "requiresDialog": false,          
+			  "alternativeItemPropertyName": "selectedSamples",
+			  "button": {
+				"title": {
+				  "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+				},
+				"requiresGridItemSelected": true,          
+			  },
+			  "endPointParams": [
+				{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+				{ "argumentName": "batchTemplateId", "defaultValue": 1 },
+				{ "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+				{ "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" }			  
+			  ]
+			},        
+			"dropAction": { 
+			  "actionName": "ADD_VARIABLE_TO_VARIABLES_SET",
+			  "endPointUrl": "Samples",
+			  "requiresDialog": false,
+			  "button": {
+				"title": {
+				  "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+				},
+				"requiresGridItemSelected": true,
+			  },
+			  "endPointParams": [
+				{ "argumentName": "variableName", "dragElement": "param_name" },
+				{ "argumentName": "variableSetName", "dropElement": "name" }	  
+			  ]
+			}  
+		  }        
+		  ]					
+				}
+			]
+		},
+		{"tabLabel_en": "References by category", "tabLabel_es": "Referencias por categoría", "view": "Variables",
+			"view_definition": [
+			  {
+				"actions": []
+			  },
+			  {
+				"type": "parentReadOnlyTable",
+				"endPointResponseObject": "inv_category",
+				"smartFilter": true,
+				"columns": [
+				  {
+					"name": "name",
+					"label_en": "Code",
+					"label_es": "Código"
+				  }
+				],
+				"actions": [
+					{
+						"actionName": "CONFIG_NEW_CATEGORY",
+						"requiresDialog": true,
+						"notGetViewData": false,
+						"selectedItemPropertyName": "selectedItems",	  
+						"button": {
+						  "icon": "edit",
+						  "title": {
+							"label_en": "Add new category",
+							"label_es": "Añadir nueva categoría"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "text1": {
+								"label_en": "New category name",
+								"label_es": "Nombre para nueva categoría",
+								"defaultValue": "",
+								"optional": false
+							  }
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "newCategoryName",
+							"element": "text1"							
+						  }
+						]
+					}
+				],
+				"row_buttons": [
+
+				],
+				"children": "inv_reference",
+				"children_definition": {
+					"smartFilter": true,
+				  "title": {
+					"label_en": "References",
+					"label_es": "Referencias"
+				  },
+				  "columns": [
+					{
+					  "name": "name",
+					  "label_en": "Name",
+					  "label_es": "Nombre"
+					},
+					{
+					  "name": "param_type",
+					  "label_en": "Type",
+					  "label_es": "Tipo",
+					  "as_paragraph":"{fld:param_type} - {fld:allowed_values}"
+					},
+					{
+					  "name": "allowed_values",
+					  "label_en": "Allowed values",
+					  "label_es": "Valores permitidos"
+					},
+					{
+					  "name": "required",
+					  "label_en": "Required",
+					  "label_es": "Obligatorio"
+					}
+				  ],
+				  "row_buttons": [
+					{
+						"actionName": "CONFIG_UPDATE_REFERENCE",
+						"requiresDialog": true,
+						"notGetViewData": false,
+						"selectedItemPropertyName": "selectedItems",
+						"button": {
+						  "icon": "edit",
+						  "title": {
+							"label_en": "Edit reference",
+							"label_es": "Configurar referencia"
+						  },
+						  "requiresGridItemSelected": true
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "checkbox1": {
+								"label_en": "Requires Qualification?",
+								"label_es": "¿Requiere Cualificación?",
+								"selObjectPropertyName": "lot_requires_qualif",
+								"optional": false
+							  }
+							},
+							{
+							  "number1": {
+								"label_en": "Min Stock",
+								"label_es": "Stock Mínimo",
+								"selObjectPropertyName": "min_stock",
+								"optional": true
+							  }
+							},
+							{
+							  "list2": {
+								"label_en": "UOM",
+								"label_es": "UDM",
+								"selObjectPropertyName": "min_stock_uom",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"optional": true,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "multilist1": {
+								"label_en": "Other Allowed UOMs",
+								"label_es": "Otras UDM aceptadas",
+								"selObjectPropertyName": "allowed_uoms",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "min Stock Type",
+								"label_es": "Tipo Stock Mínimo",
+								"selObjectPropertyName": "min_stock_type",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox2": {
+								"label_en": "Requires control for Available for use",
+								"label_es": "¿Requiere control disponible para uso?",
+								"selObjectPropertyName": "requires_availables_for_use",
+								"optional": true
+							  }
+							},
+							{
+							  "number2": {
+								"label_en": "Min Available for use",
+								"label_es": "Minimo en Disponible para uso",
+								"selObjectPropertyName": "min_availables_for_use",
+								"optional": true
+							  }
+							},
+							{
+								"list4": {
+								  "label_en": "min Available for use stock Type",
+								  "label_es": "Tipo Stock Para Mínimo disponible",
+								  "selObjectPropertyName": "min_availables_for_use_type",
+								  "optional": true,
+								  "addBlankValueOnTop": true,
+								  "items": [
+									{
+									  "keyName": "QUANTITY",
+									  "keyValue_en": "Quantity",
+									  "keyValue_es": "Cantidad"
+									},
+									{
+									  "keyName": "PB ITEMS",
+									  "keyValue_en": "Items",
+									  "keyValue_es": "Items"
+									}
+								  ]
+								}
+							},							
+							{
+							  "checkbox3": {
+								"label_en": "Allow Some open at a time?",
+								"label_es": "¿Permitir abrir varios a la vez?",
+								"selObjectPropertyName": "allow_opening_some_at_a_time",
+								"optional": true
+							  }
+							},
+							{
+								"list5": {
+									"label_en": "Qualification Variables Set",
+									"label_es": "Conjunto Variables para Cualificación",
+									"selectedItemPropertyName": "qualif_variables_set",
+									"optional": true,
+									"addBlankValueOnTop": true,
+									  "addBlankValueAtBottom": false,
+									  "valuesFromMasterData": {
+										"propertyNameContainer": "variables_set",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name",
+										"propertyKeyValueEn": "name",
+										"propertyKeyValueEs": "name"
+									  }
+								}
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "category",
+							"selObjectPropertyName": "category"
+						  },
+						  {
+							"argumentName": "referenceName",
+							"selObjectPropertyName": "name"
+						  },
+						  {
+							"argumentName": "lot_requires_qualif",
+							"element": "checkbox1",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true,
+							"fieldType": "BOOLEAN"
+						  },
+						  {
+							"argumentName": "min_stock",
+							"element": "number1",
+							"addToFieldNameAndValue": true,
+							"fieldType": "INTEGER",
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_stock_uom",
+							"element": "list2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "allowed_uoms",
+							"element": "multilist1",
+							"defaultValue": "",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_stock_type",
+							"element": "list3",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "requires_availables_for_use",
+							"element": "checkbox2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_availables_for_use",
+							"element": "number2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_availables_for_use_type",
+							"element": "list4",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "allow_opening_some_at_a_time",
+							"element": "checkbox3",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "qualif_variables_set",
+							"element": "list5",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  }
+						]
+					}
+				  ],
+				  "actions": [
+					{
+						"actionName": "CONFIG_ADD_REFERENCE",
+						"requiresDialog": true,
+						"button": {
+						  "icon": "create_new_folder",
+						  "title": {
+							"label_en": "New",
+							"label_es": "Nuevo"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "text1": {
+								"label_en": "New Reference Name",
+								"label_es": "Nombre nueva Referencia"
+							  }
+							},
+							{
+							  "list1": {
+								"label_en": "Category",
+								"label_es": "Categoría",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "category_and_references",
+								  "propertyNameContainerLevelPropertyKeyName": "name",
+								  "propertyKeyName": "name",
+								  "propertyKeyValueEn": "name",
+								  "propertyKeyValueEs": "name"
+								}
+							  }
+							},
+							{
+							  "checkbox1": {
+								"label_en": "Requires Qualification?",
+								"label_es": "¿Requiere Cualificación?",
+								"defaultValue": false
+							  }
+							},
+							{
+							  "number1": {
+								"label_en": "Min Stock",
+								"label_es": "Stock Mínimo",
+								"optional": true
+							  }
+							},
+							{
+							  "list2": {
+								"label_en": "UOM",
+								"label_es": "UDM",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": "pretty_name",
+								  "propertyKeyValueEs": "pretty_name"
+								},
+								"dependencyFieldBehavior": [
+								  {
+									"field": "multilist1",
+									"rule": "whenEmpty",
+									"resetValue": true,
+									"action": "hide"
+								  }
+								]
+							  }
+							},
+							{
+							  "multilist1": {
+								"label_en": "Other Allowed UOMs",
+								"label_es": "Otras UDM aceptadas",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "min Stock Type",
+								"label_es": "Tipo Stock Mínimo",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox2": {
+								"label_en": "Requires control for Available for use",
+								"label_es": "¿Requiere control disponible para uso?",
+								"optional": true
+							  }
+							},
+							{
+							  "number2": {
+								"label_en": "Min Available for use",
+								"label_es": "Minimo en Disponible para uso",
+								"optional": true
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "Type",
+								"label_es": "Tipo",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox3": {
+								"label_en": "Allow Some open at a time?",
+								"label_es": "¿Permitir abrir varios a la vez?",
+								"optional": true
+							  }
+							},
+							{
+								"list5": {
+									"label_en": "Qualification Variables Set",
+									"label_es": "Conjunto Variables para Cualificación",
+									"optional": true,
+									"addBlankValueOnTop": true,
+									  "addBlankValueAtBottom": false,
+									  "valuesFromMasterData": {
+										"propertyNameContainer": "variables_set",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name",
+										"propertyKeyValueEn": "name",
+										"propertyKeyValueEs": "name"
+									  }
+								}
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "name",
+							"element": "text1"
+						  },
+						  {
+							"argumentName": "category",
+							"element": "list1"
+						  },
+						  {
+							"argumentName": "lotRequiresQualif",
+							"element": "checkbox1"
+						  },
+						  {
+							"argumentName": "minStock",
+							"element": "number1"
+						  },
+						  {
+							"argumentName": "minStockUom",
+							"element": "list2"
+						  },
+						  {
+							"argumentName": "allowedUoms",
+							"element": "multilist1",
+							"defaultValue": ""
+						  },
+						  {
+							"argumentName": "minStockType",
+							"element": "list3"
+						  },
+						  {
+							"argumentName": "requiresAvailableForUse",
+							"element": "checkbox2"
+						  },
+						  {
+							"argumentName": "minAvailablesForUse",
+							"element": "number2"
+						  },
+						  {
+							"argumentName": "minAvailablesForUseType",
+							"element": "list3"
+						  },
+						  {
+							"argumentName": "allowedOpeningSomeAtaTime",
+							"element": "checkbox3"
+						  },
+						  {
+							"argumentName": "qualificationVariablesSet",
+							"element": "list5"
+						  }
+						]
+					}					
+				  ]
+				}
+			  }
+			]
+		},			
+		{"tabLabel_en": "References", "tabLabel_es": "Referencias", "view": "Variables",
+			"view_definition": [
+			  {
+				"actions": []
+			  },
+			  {
+				"type": "parentReadOnlyTable",
+				"endPointResponseObject": "inv_reference",
+				"columns": [
+					{
+						"name": "category",
+						"label_en": "Category",
+						"label_es": "Categoría"
+					},					
+					{
+					  "name": "name",
+					  "label_en": "Name",
+					  "label_es": "Nombre"
+					},
+					{
+						"name": "min_stock",
+						"label_en": "Min Stock",
+						"label_es": "Min Stock"
+					},
+					{
+						"name": "min_stock_uom",
+						"label_en": "Units",
+						"label_es": "Unidades"
+					}
+				],
+				"actions": [
+					{
+						"actionName": "CONFIG_NEW_CATEGORY",
+						"requiresDialog": true,
+						"notGetViewData": false,
+						"selectedItemPropertyName": "selectedItems",
+						"button": {
+						  "icon": "edit",
+						  "title": {
+							"label_en": "Add new category",
+							"label_es": "Añadir nueva categoría"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "text1": {
+								"label_en": "New category name",
+								"label_es": "Nombre para nueva categoría",
+								"defaultValue": "",
+								"optional": false
+							  }
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "newCategoryName",
+							"element": "text1"							
+						  }
+						]
+					},					
+					{
+						"actionName": "CONFIG_ADD_REFERENCE",
+						"requiresDialog": true,
+						"button": {
+						  "icon": "create_new_folder",
+						  "title": {
+							"label_en": "New",
+							"label_es": "Nuevo"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "text1": {
+								"label_en": "New Reference Name",
+								"label_es": "Nombre nueva Referencia"
+							  }
+							},
+							{
+							  "list1": {
+								"label_en": "Category",
+								"label_es": "Categoría",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "category_and_references",
+								  "propertyNameContainerLevelPropertyKeyName": "name",
+								  "propertyKeyName": "name",
+								  "propertyKeyValueEn": "name",
+								  "propertyKeyValueEs": "name"
+								}
+							  }
+							},
+							{
+							  "checkbox1": {
+								"label_en": "Requires Qualification?",
+								"label_es": "¿Requiere Cualificación?",
+								"defaultValue": false
+							  }
+							},
+							{
+							  "number1": {
+								"label_en": "Min Stock",
+								"label_es": "Stock Mínimo",
+								"optional": true
+							  }
+							},
+							{
+							  "list2": {
+								"label_en": "UOM",
+								"label_es": "UDM",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": "pretty_name",
+								  "propertyKeyValueEs": "pretty_name"
+								},
+								"dependencyFieldBehavior": [
+								  {
+									"field": "multilist1",
+									"rule": "whenEmpty",
+									"resetValue": true,
+									"action": "hide"
+								  }
+								]
+							  }
+							},
+							{
+							  "multilist1": {
+								"label_en": "Other Allowed UOMs",
+								"label_es": "Otras UDM aceptadas",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "min Stock Type",
+								"label_es": "Tipo Stock Mínimo",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox2": {
+								"label_en": "Requires control for Available for use",
+								"label_es": "¿Requiere control disponible para uso?",
+								"optional": true
+							  }
+							},
+							{
+							  "number2": {
+								"label_en": "Min Available for use",
+								"label_es": "Minimo en Disponible para uso",
+								"optional": true
+							  }
+							},							
+							{
+							  "checkbox3": {
+								"label_en": "Allow Some open at a time?",
+								"label_es": "¿Permitir abrir varios a la vez?",
+								"optional": true
+							  }
+							},
+							{
+								"list5": {
+									"label_en": "Qualification Variables Set",
+									"label_es": "Conjunto Variables para Cualificación",
+									"optional": true,
+									"addBlankValueOnTop": true,
+								  	"addBlankValueAtBottom": false,
+								  	"valuesFromMasterData": {
+										"propertyNameContainer": "variables_set",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name",
+										"propertyKeyValueEn": "name",
+										"propertyKeyValueEs": "name"
+								  	}
+								}
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "name",
+							"element": "text1"
+						  },
+						  {
+							"argumentName": "category",
+							"element": "list1"
+						  },
+						  {
+							"argumentName": "lotRequiresQualif",
+							"element": "checkbox1"
+						  },
+						  {
+							"argumentName": "minStock",
+							"element": "number1"
+						  },
+						  {
+							"argumentName": "minStockUom",
+							"element": "list2"
+						  },
+						  {
+							"argumentName": "allowedUoms",
+							"element": "multilist1",
+							"defaultValue": ""
+						  },
+						  {
+							"argumentName": "minStockType",
+							"element": "list3"
+						  },
+						  {
+							"argumentName": "requiresAvailableForUse",
+							"element": "checkbox2"
+						  },
+						  {
+							"argumentName": "minAvailablesForUse",
+							"element": "number2"
+						  },
+						  {
+							"argumentName": "minAvailablesForUseType",
+							"element": "list3"
+						  },
+						  {
+							"argumentName": "allowedOpeningSomeAtaTime",
+							"element": "checkbox3"
+						  },
+						  {
+							"argumentName": "qualificationVariablesSet",
+							"element": "list5"
+						  }
+						]
+					}
+
+				],
+				"row_buttons": [
+					{
+						"actionName": "CONFIG_UPDATE_REFERENCE",
+						"requiresDialog": true,
+						"notGetViewData": false,
+						"selectedItemPropertyName": "selectedItems",
+						"button": {
+						  "icon": "edit",
+						  "title": {
+							"label_en": "Edit reference",
+							"label_es": "Configurar referencia"
+						  },
+						  "requiresGridItemSelected": true
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "checkbox1": {
+								"label_en": "Requires Qualification?",
+								"label_es": "¿Requiere Cualificación?",
+								"selObjectPropertyName": "lot_requires_qualif",
+								"optional": false
+							  }
+							},
+							{
+							  "text1": {
+								"label_en": "Min Stock",
+								"label_es": "Stock Mínimo",
+								"selObjectPropertyName": "min_stock",
+								"optional": true
+							  }
+							},
+							{
+							  "list2": {
+								"label_en": "UOM",
+								"label_es": "UDM",
+								"selObjectPropertyName": "min_stock_uom",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"optional": true,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "multilist1": {
+								"label_en": "Other Allowed UOMs",
+								"label_es": "Otras UDM aceptadas",
+								"selObjectPropertyName": "allowed_uoms",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "min Stock Type",
+								"label_es": "Tipo Stock Mínimo",
+								"selObjectPropertyName": "min_stock_type",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox2": {
+								"label_en": "Requires control for Available for use",
+								"label_es": "¿Requiere control disponible para uso?",
+								"selObjectPropertyName": "requires_availables_for_use",
+								"optional": true
+							  }
+							},
+							{
+							  "number2": {
+								"label_en": "Min Available for use",
+								"label_es": "Minimo en Disponible para uso",
+								"selObjectPropertyName": "min_availables_for_use",
+								"optional": true
+							  }
+							},
+							{
+								"list4": {
+								  "label_en": "min Available for use stock Type",
+								  "label_es": "Tipo Stock Para Mínimo disponible",
+								  "selObjectPropertyName": "min_availables_for_use_type",
+								  "optional": true,
+								  "addBlankValueOnTop": true,
+								  "items": [
+									{
+									  "keyName": "QUANTITY",
+									  "keyValue_en": "Quantity",
+									  "keyValue_es": "Cantidad"
+									},
+									{
+									  "keyName": "PB ITEMS",
+									  "keyValue_en": "Items",
+									  "keyValue_es": "Items"
+									}
+								  ]
+								}
+							},							
+							{
+							  "checkbox3": {
+								"label_en": "Allow Some open at a time?",
+								"label_es": "¿Permitir abrir varios a la vez?",
+								"selObjectPropertyName": "allow_opening_some_at_a_time",
+								"optional": true
+							  }
+							},
+							{
+								"list5": {
+									"label_en": "Qualification Variables Set",
+									"label_es": "Conjunto Variables para Cualificación",
+									"selectedItemPropertyName": "qualif_variables_set",
+									"optional": true,
+									"addBlankValueOnTop": true,
+									  "addBlankValueAtBottom": false,
+									  "valuesFromMasterData": {
+										"propertyNameContainer": "variables_set",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name",
+										"propertyKeyValueEn": "name",
+										"propertyKeyValueEs": "name"
+									  }
+								}
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "category",
+							"selObjectPropertyName": "category"
+						  },
+						  {
+							"argumentName": "referenceName",
+							"selObjectPropertyName": "name"
+						  },
+						  {
+							"argumentName": "lot_requires_qualif",
+							"element": "checkbox1",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true,
+							"fieldType": "BOOLEAN"
+						  },
+						  {
+							"argumentName": "min_stock",
+							"element": "number1",
+							"addToFieldNameAndValue": true,
+							"fieldType": "INTEGER",
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_stock_uom",
+							"element": "list2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "allowed_uoms",
+							"element": "multilist1",
+							"defaultValue": "",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_stock_type",
+							"element": "list3",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "requires_availables_for_use",
+							"element": "checkbox2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_availables_for_use",
+							"element": "number2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_availables_for_use_type",
+							"element": "list4",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "allow_opening_some_at_a_time",
+							"element": "checkbox3",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "qualif_variables_set",
+							"element": "list5",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  }
+						]
+					}
+
+				]
+			  }
+			]
+		},			
+		{ "tabLabel_en": "Variables", "tabLabel_es": "Variables", "view": "Variables",
+			"view_definition": [
+			  {   
+				"actions": [
+				]
+			  },
+			  { "type": "readOnlyTable", "endPointResponseObject": "variables",
+				"columns": [
+				  {
+					"name": "param_name",
+					"label_en": "Param Name",
+					"label_es": "Nombre del parámetro"
+				  },
+				  {
+					"name": "param_type",
+					"label_en": "Type",
+					"label_es": "Tipo",
+					"as_paragraph":"{fld:param_type} - {fld:allowed_values}"
+				  },
+				  {
+					"name": "allowed_values",
+					"label_en": "Allowed values",
+					"label_es": "Valores permitidos"
+				  },
+				  {
+					"name": "required",
+					"label_en": "Required",
+					"label_es": "Obligatorio"
+				  }
+				]
+			  }
+			]
+		},
+		{"tabLabel_en": "Variables Set", "tabLabel_es": "Conjunto Variables", "view": "Variables",
+			"view_definition": [
+			  {
+				"actions": []
+			  },
+			  {
+				"type": "parentReadOnlyTable",
+				"endPointResponseObject": "variables_set",
+				"columns": [
+				  {
+					"name": "name",
+					"label_en": "Code",
+					"label_es": "Código"
+				  },
+				  {
+					"name": "active",
+					"label_en": "Active",
+					"label_es": "Activo",
+					"is_icon":true
+				  },
+				  {
+					"name": "description",
+					"label_en": "Description",
+					"label_es": "Descripción",
+					"is_icon": true
+				  }
+				],
+				"actions": [
+				  {
+					"actionName": "ANALYSIS_NEW",
+					"notGetViewData": false,
+					"requiresDialog": true,
+					"certificationException": true,
+					"button": {
+					  "icon": "person_add",
+					  "title": {
+						"label_en": "Add Analysis",
+						"label_es": "Añadir análisis"
+					  },
+					  "requiresGridItemSelected": false
+					},
+					"dialogInfo": {
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "text1": {
+							"label_en": "Analysis Code",
+							"label_es": "Código de análisis"
+						  }
+						},
+						{
+						  "text2": {
+							"label_en": "Analysis version",
+							"label_es": "Versión del análisis"
+						  }
+						}
+					  ]
+					},
+					"endPointParams": [
+					  {
+						"argumentName": "code",
+						"element": "text1",
+						"defaultValue": ""
+					  },
+					  {
+						"argumentName": "config_version",
+						"element": "text2",
+						"defaultValue": ""
+					  },
+					  {
+						"argumentName": "fieldName",
+						"value": "active"
+					  },
+					  {
+						"argumentName": "fieldValue",
+						"value": "true*Boolean"
+					  }
+					]
+				  },
+				  {
+					"actionName": "ANALYSIS_REACTIVATE",
+					"notGetViewData": false,
+					"requiresDialog": true,
+					"certificationException": true,
+					"button": {
+					  "icon": "toggle_on",
+					  "title": {
+						"label_en": "Reactivate analysis",
+						"label_es": "Reactivar análisis"
+					  },
+					  "requiresGridItemSelected": false
+					},
+					"dialogInfo": {
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"label_en": "Analysis Code",
+							"label_es": "Código de análisis",
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "propertyNameContainer": "analysis",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "code",
+							  "propertyKeyValueEn": [
+								"code"
+							  ],
+							  "propertyKeyValueEs": [
+								"code"
+							  ]
+							}
+						  }
+						},
+						{
+						  "text2": {
+							"label_en": "Analysis version",
+							"label_es": "Versión del análisis"
+						  }
+						}
+					  ]
+					},
+					"endPointParams": [
+					  {
+						"argumentName": "code",
+						"element": "list1"
+					  },
+					  {
+						"argumentName": "configVersion",
+						"element": "text2"
+					  }
+					]
+				  },
+				  {
+					"actionName": "ANALYSIS_DEACTIVATE",
+					"notGetViewData": false,
+					"requiresDialog": true,
+					"certificationException": true,
+					"button": {
+					  "icon": "toggle_off",
+					  "title": {
+						"label_en": "Deactivate analysis",
+						"label_es": "Desactivar análisis"
+					  },
+					  "requiresGridItemSelected": false
+					},
+					"dialogInfo": {
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"label_en": "Analysis Code",
+							"label_es": "Código de análisis",
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "propertyNameContainer": "analysis",
+							  "propertyNameContainerLevelPropertyKeyName": "name",
+							  "propertyKeyName": "code",
+							  "propertyKeyValueEn": [
+								"code"
+							  ],
+							  "propertyKeyValueEs": [
+								"code"
+							  ]
+							}
+						  }
+						},
+						{
+						  "text2": {
+							"label_en": "Analysis version",
+							"label_es": "Versión del análisis"
+						  }
+						}
+					  ]
+					},
+					"endPointParams": [
+					  {
+						"argumentName": "code",
+						"element": "list1"
+					  },
+					  {
+						"argumentName": "configVersion",
+						"element": "text2"
+					  }
+					]
+				  }
+				],
+				"row_buttons": [
+				  {
+					"actionName": "ANALYSIS_ADD_METHOD",
+					"notGetViewData": false,
+					"requiresDialog": true,
+					"certificationException": true,
+					"button": {
+					  "icon": "playlist_add",
+					  "title": {
+						"label_en": "Add Analysis Method",
+						"label_es": "Añadir método analítico"
+					  },
+					  "requiresGridItemSelected": false
+					},
+					"dialogInfo": {
+					  "name": "genericDialog",
+					  "fields": [
+						{
+						  "list1": {
+							"label_en": "Method Code",
+							"label_es": "Código de método",
+							"addBlankValueOnTop": true,
+							"addBlankValueAtBottom": false,
+							"valuesFromMasterData": {
+							  "propertyNameContainer": "methods",
+							  "filterInFirstLevel": false,
+							  "propertyNameContainerLevelPropertyKeyName": "code",
+							  "propertyKeyName": "code",
+							  "propertyKeyValueEn": "code",
+							  "propertyKeyValueEs": "code"
+							}
+						  }
+						},
+						{
+						  "text2": {
+							"label_en": "Method version",
+							"label_es": "Versión del método",
+							"optional": false
+						  }
+						},
+						{
+						  "text3": {
+							"label_en": "Expiry Interval Info",
+							"label_es": "Información del intervalo de caducidad",
+							"optional": true
+						  }
+						}
+					  ]
+					},
+					"endPointParams": [
+					  {
+						"argumentName": "methodName",
+						"element": "list1"
+					  },
+					  {
+						"argumentName": "methodVersion",
+						"element": "text2",
+						"defaultValue": ""
+					  },
+					  {
+						"argumentName": "code",
+						"selObjectPropertyName": "code"
+					  },
+					  {
+						"argumentName": "configVersion",
+						"selObjectPropertyName": "config_version"
+					  },
+					  {
+						"argumentName": "expiryIntervalInfo",
+						"element": "text3",
+						"defaultValue": ""
+					  }
+					]
+				  },
+				  {
+					"actionName": "ANALYSIS_APPROVAL_FOR_USE",
+					"notGetViewData": false,
+					"requiresDialog": false,
+					"certificationException": true,
+					"requiresGridItemSelected": false,
+					"button": {
+					  "icon": "check_box",
+					  "title": {
+						"label_en": "Approve analysis for use",
+						"label_es": "Aprobar análisis para su uso"
+					  }
+					},
+					"endPointParams": [
+					  {
+						"argumentName": "code",
+						"selObjectPropertyName": "code"
+					  },
+					  {
+						"argumentName": "configVersion",
+						"selObjectPropertyName": "config_version"
+					  }
+					]
+				  }
+				],
+				"children": "variables",
+				"children_definition": {
+				  "title": {
+					"label_en": "Variables",
+					"label_es": "Variables"
+				  },
+				  "columns": [
+					{
+					  "name": "param_name",
+					  "label_en": "Param Name",
+					  "label_es": "Nombre del parámetro"
+					},
+					{
+					  "name": "param_type",
+					  "label_en": "Type",
+					  "label_es": "Tipo",
+					  "as_paragraph":"{fld:param_type} - {fld:allowed_values}"
+					},
+					{
+					  "name": "allowed_values",
+					  "label_en": "Allowed values",
+					  "label_es": "Valores permitidos"
+					},
+					{
+					  "name": "required",
+					  "label_en": "Required",
+					  "label_es": "Obligatorio"
+					}
+				  ],
+				  "row_buttons": [
+					{
+					  "actionName": "ANALYSIS_ADD_PARAM",
+					  "notGetViewData": false,
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "button": {
+						"icon": "person_add",
+						"title": {
+						  "label_en": "Add Analysis Params",
+						  "label_es": "Añadir parámetros de análisis"
+						},
+						"requiresGridItemSelected": false
+					  },
+					  "dialogInfo": {
+						"name": "genericDialog",
+						"fields": [
+						  {
+							"text1": {
+							  "label_en": "Param Name",
+							  "label_es": "Nombre del parámetro",
+							  "optional": false
+							}
+						  },
+						  {
+							"text2": {
+							  "label_en": "Number of replicas ",
+							  "label_es": "Número de réplicas",
+							  "optional": false
+							}
+						  },
+						  {
+							"text3": {
+							  "label_en": "UOM Conversion Mode",
+							  "label_es": "Modo de conversión de UOM",
+							  "optional": true
+							}
+						  },
+						  {
+							"text4": {
+							  "label_en": "Linked Calc",
+							  "label_es": "Cálculo enlanzado",
+							  "optional": true
+							}
+						  },
+						  {
+							"text5": {
+							  "label_en": "List Entry",
+							  "label_es": "Lista de entradas",
+							  "optional": true
+							}
+						  },
+						  {
+							"text6": {
+							  "label_en": "Param Type",
+							  "label_es": "Tipo parámetro",
+							  "optional": false
+							}
+						  },
+						  {
+							"text7": {
+							  "label_en": "UOM",
+							  "label_es": "UOM",
+							  "optional": false
+							}
+						  },
+						  {
+							"text8": {
+							  "label_en": "Analysis Version",
+							  "label_es": "Versión análisis",
+							  "optional": false
+							}
+						  }
+						]
+					  },
+					  "endPointParams": [
+						{
+						  "argumentName": "code",
+						  "selObjectPropertyName": "analysis"
+						},
+						{
+						  "argumentName": "configVersion",
+						  "element": "text8"
+						},
+						{
+						  "argumentName": "methodName",
+						  "selObjectPropertyName": "method_name"
+						},
+						{
+						  "argumentName": "paramName",
+						  "element": "text1",
+						  "defaultValue": " "
+						},
+						{
+						  "argumentName": "paramType",
+						  "element": "text6",
+						  "defaultValue": " "
+						},
+						{
+						  "argumentName": "numReplicas",
+						  "element": "text2",
+						  "defaultValue": "0"
+						},
+						{
+						  "argumentName": "uom",
+						  "element": "text7",
+						  "defaultValue": " "
+						},
+						{
+						  "argumentName": "uomConversionMode",
+						  "element": "text3",
+						  "defaultValue": " "
+						},
+						{
+						  "argumentName": "calcLinked",
+						  "element": "text4",
+						  "defaultValue": " "
+						},
+						{
+						  "argumentName": "listEntry",
+						  "element": "text5",
+						  "defaultValue": " "
+						}
+					  ]
+					},
+					{
+					  "actionName": "ANALYSIS_REMOVE_METHOD",
+					  "notGetViewData": false,
+					  "requiresDialog": true,
+					  "certificationException": true,
+					  "button": {
+						"icon": "playlist_remove",
+						"title": {
+						  "label_en": "Remove Analysis Method",
+						  "label_es": "Borrar método analítico"
+						},
+						"requiresGridItemSelected": false
+					  },
+					  "dialogInfo": {
+						"name": "genericDialog",
+						"fields": [
+						  {
+							"zzzlist1": {
+							  "label_en": "Analysis Code",
+							  "label_es": "Código de análisis",
+							  "addBlankValueOnTop": true,
+							  "addBlankValueAtBottom": false,
+							  "valuesFromSelectedItem": {
+								"internalVariableSingleObjName": "selectedItem",
+								"internalVariableSingleObjProperty": "analysis_method",
+								"filterInFirstLevel": true,
+								"propertyKeyName": "method_name",
+								"propertyKeyValueEn": [
+								  "method_name"
+								],
+								"propertyKeyValueEs": [
+								  "method_name"
+								]
+							  }
+							}
+						  },
+						  {
+							"text2": {
+							  "label_en": "Method version",
+							  "label_es": "Versión del método"
+							}
+						  }
+						]
+					  },
+					  "endPointParams": [
+						{
+						  "argumentName": "methodName",
+						  "selObjectPropertyName": "method_name"
+						},
+						{
+						  "argumentName": "code",
+						  "selObjectPropertyName": "analysis"
+						},
+						{
+						  "argumentName": "configVersion",
+						  "element": "text2"
+						}
+					  ]
+					}
+				  ],
+				  "actions": [],
+				  "children": "analysis_method_params",
+				  "children_definition": {
+					"title": {
+					  "label_en": "Analysis Params",
+					  "label_es": "Parámetros analíticos"
+					},
+					"columns": [
+					  {
+						"name": "param_name",
+						"label_en": "Param Name",
+						"label_es": "Nombre parámetro"
+					  },
+					  {
+						"name": "param_type",
+						"label_en": "Param type",
+						"label_es": "Tipo parámetro"
+					  },
+					  {
+						"name": "mandatory",
+						"label_en": "Mandatory",
+						"label_es": "Obligatorio"
+					  },
+					  {
+						"name": "list_entry",
+						"label_en": "List entry",
+						"label_es": "Lista de entrada"
+					  },
+					  {
+						"name": "calc_linked",
+						"label_en": "Calc linked",
+						"label_es": "Calculos enlazados"
+					  },
+					  {
+						"name": "uom",
+						"label_en": "UOM",
+						"label_es": "UOM"
+					  },
+					  {
+						"name": "uom_conversion_mode",
+						"label_en": "UOM conversion mode",
+						"label_es": "Modo conversión UOM"
+					  }
+					],
+					"actions": []
+				  }
+				}
+			  }
+			]
+		},		
+		{ "tabLabel_en": "Units", "tabLabel_es": "Unidades", "view": "Variables",
+			"view_definition": [
+			  { "type": "parentReadOnlyTable", "endPointResponseObject": "units_of_measurement",
+				"columns": [
+				  {
+					"name": "name",
+					"label_en": "Name",
+					"label_es": "Nombre"
+				  },
+				  {
+					"name": "measurement_family",
+					"label_en": "Family",
+					"label_es": "Familia",					
+				  },
+				  {
+					"name": "is_base",
+					"label_en": "Is the base unit?",
+					"label_es": "¿Es la unidad base?",
+					"is_icon": true
+				  },
+				  {
+					"name": "factor_value",
+					"label_en": "Factor",
+					"label_es": "Factor"
+				  },
+				  {
+					"name": "offset_value",
+					"label_en": "Offset",
+					"label_es": "Offset"
+				  }
+				],
+				"actions":[
+
+				],
+				"row_buttons":[
+					{
+						"actionName": "REMOVE_INDIVIDUAL_UOM",
+						"notGetViewData": false,
+						"requiresDialog": false,
+						"certificationException": true,
+						"button": {
+						  "icon": "remove",
+						  "title": {
+							"label_en": "Remove only this unit",
+							"label_es": "Borrar solo esta unidad"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "familyName",
+							"selObjectPropertyName": "measurement_family"
+						  },
+						  {
+							"argumentName": "unitsName",
+							"selObjectPropertyName": "name"
+						  }
+						]
+					  },
+					  {
+						"actionName": "REMOVE_ALL_UOMS_FROM_FAMILY",
+						"notGetViewData": false,
+						"requiresDialog": false,
+						"certificationException": true,
+						"button": {
+						  "icon": "delete_forever",
+						  "title": {
+							"label_en": "Remove all family units",
+							"label_es": "Borrar todas las unidades de la familia"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "familyName",
+							"selObjectPropertyName": "measurement_family"
+						  }
+						]
+					  }
+				]
+			  }
+			]
+		},
+		{"tabLabel_en": "Dictionary Units per family", "tabLabel_es": "Diccionario unidades por familia", "view": "Variables",
+			"view_definition": [
+			  {
+				"actions": []
+			  },
+			  {
+				"type": "parentReadOnlyTable",
+				"endPointResponseObject": "uoms_dictionary_by_family",
+				"columns": [
+				  {
+					"name": "group",
+					"label_en": "Family",
+					"label_es": "Familia"
+				  }
+				],
+				"actions": [
+				],
+				"row_buttons": [
+				  {
+					"actionName": "ADD_ALL_UOMS_FROM_FAMILY",
+					"notGetViewData": false,
+					"requiresDialog": false,
+					"certificationException": true,
+					"button": {
+					  "icon": "playlist_add",
+					  "title": {
+						"label_en": "Add all family units",
+						"label_es": "Añadir todas las unidades de la familia"
+					  },
+					  "requiresGridItemSelected": false
+					},
+					"endPointParams": [
+					  {
+						"argumentName": "familyName",
+						"selObjectPropertyName": "group"
+					  }
+					]
+				  }
+				],
+				"children": "entries",
+				"children_definition": {
+				  "title": {
+					"label_en": "Units",
+					"label_es": "Unidades"
+				  },
+				  "columns": [
+					{
+					  "name": "name",
+					  "label_en": "Name",
+					  "label_es": "Nombre"
+					},
+					{
+					  "name": "measurement_family",
+					  "label_en": "Family",
+					  "label_es": "Familia",					
+					},
+					{
+					  "name": "is_base",
+					  "label_en": "Is the base unit?",
+					  "label_es": "¿Es la unidad base?",
+					  "is_icon": true
+					},
+					{
+					  "name": "factor_value",
+					  "label_en": "Factor",
+					  "label_es": "Factor"
+					},
+					{
+					  "name": "offset_value",
+					  "label_en": "Offset",
+					  "label_es": "Offset"
+					}
+				  ],
+				  "row_buttons": [
+					{
+					  "actionName": "ADD_INDIVIDUAL_UOM",
+					  "notGetViewData": false,
+					  "requiresDialog": false,
+					  "certificationException": true,
+					  "button": {
+						"icon": "person_add",
+						"title": {
+						  "label_en": "Add only this unit",
+						  "label_es": "Añadir solo esta unidad"
+						},
+						"requiresGridItemSelected": false
+					  },
+					  "endPointParams": [
+						{
+						  "argumentName": "familyName",
+						  "selObjectPropertyName": "measurement_family"
+						},
+						{
+						  "argumentName": "unitsName",
+						  "selObjectPropertyName": "name"
+						}
+					  ]
+					}
+				  ]
+				}
+			  }
+			]
+		},	
+		{ "tabLabel_en": "Dictionary of Units", "tabLabel_es": "Diccionario de Unidades", "view": "Variables",
+			"view_definition": [
+			  {   
+				"actions": [
+				]
+			  },
+			  { "type": "readOnlyTable", "endPointResponseObject": "uoms_dictionary",
+				"columns": [
+				  {
+					"name": "name",
+					"label_en": "Name",
+					"label_es": "Nombre"
+				  },
+				  {
+					"name": "measurement_family",
+					"label_en": "Family",
+					"label_es": "Familia",					
+				  },
+				  {
+					"name": "is_base",
+					"label_en": "Is the base unit?",
+					"label_es": "¿Es la unidad base?",
+					"is_icon": true
+				  },
+				  {
+					"name": "factor_value",
+					"label_en": "Factor",
+					"label_es": "Factor"
+				  },
+				  {
+					"name": "offset_value",
+					"label_en": "Offset",
+					"label_es": "Offset"
+				  }
+				],
+				"actions":[
+
+				],
+				"row_buttons":[
+					{
+						"actionName": "ADD_INDIVIDUAL_UOM",
+						"notGetViewData": false,
+						"requiresDialog": false,
+						"certificationException": true,
+						"button": {
+						  "icon": "person_add",
+						  "title": {
+							"label_en": "Add only this unit",
+							"label_es": "Añadir solo esta unidad"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "familyName",
+							"selObjectPropertyName": "measurement_family"
+						  },
+						  {
+							"argumentName": "unitsName",
+							"selObjectPropertyName": "name"
+						  }
+						]
+					},					
+					{
+						"actionName": "ADD_ALL_UOMS_FROM_FAMILY",
+						"notGetViewData": false,
+						"requiresDialog": false,
+						"certificationException": true,
+						"button": {
+						  "icon": "playlist_add",
+						  "title": {
+							"label_en": "Add all family units",
+							"label_es": "Añadir todas las unidades de la familia"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "familyName",
+							"selObjectPropertyName": "measurement_family"
+						  }
+						]
+					}	
+				]
+			  }
+			]
+		}
+	]
+  },
+  "MasterData2":{
+	"langConfig": {
+	  "gridHeader": {
+		"name": {
+		  "label_en": "Name",
+		  "label_es": "Nombre",
+		  "width": "20%",
+		  "sort": false,
+		  "filter": true,
+		  "align": "left"
+		},
+		"category": {
+		  "label_en": "Category",
+		  "label_es": "Categoría",
+		  "width": "20%",
+		  "sort": false,
+		  "filter": true
+		},
+		"min_stock_uom": {
+		  "label_en": "UOM",
+		  "label_es": "UDM",
+		  "width": "20%",
+		  "sort": false,
+		  "filter": true,
+		  "align": "left"
+		},
+		"allowed_uoms": {
+		  "label_en": "Allowed UOMs",
+		  "label_es": "UDM permitidas",
+		  "width": "20%",
+		  "sort": false,
+		  "filter": true,
+		  "align": "left"
+		},
+		"lot_requires_qualif": {
+		  "label_en": "Requires Qualif?",
+		  "label_es": "¿Necesita Cualif?",
+		  "width": "20%",
+		  "sort": true,
+		  "filter": false
+		}
+	  },
+	  "title": {
+		"configReferences": {
+		  "label_es": "Maestro de Referencias",
+		  "label_en": "Master of References"
+		}
+	  }
+	},
+	"component": "TableWithButtons",
+	"viewQuery": {
+	  "button": {
+		"icon": "refresh",
+		"title": {
+		  "label_es": "Recargar",
+		  "label_en": "Refresh"
+		}
+	  },
+	  "addRefreshButton": true,
+	  "actionName": "ALL_INVENTORY_REFERENCES"
+	},
+	"actions": [
+	  {
+		"actionName": "CONFIG_ADD_REFERENCE",
+		"requiresDialog": true,
+		"button": {
+		  "icon": "create_new_folder",
+		  "title": {
+			"label_en": "New",
+			"label_es": "Nuevo"
+		  },
+		  "requiresGridItemSelected": false
+		},
+		"dialogInfo": {
+		  "name": "genericDialog",
+		  "fields": [
+			{
+			  "text1": {
+				"label_en": "New Reference Name",
+				"label_es": "Nombre nueva Referencia"
+			  }
+			},
+			{
+			  "list1": {
+				"label_en": "Category",
+				"label_es": "Categoría",
+				"addBlankValueOnTop": true,
+				"addBlankValueAtBottom": false,
+				"valuesFromMasterData": {
+				  "propertyNameContainer": "category_and_references",
+				  "propertyNameContainerLevelPropertyKeyName": "name",
+				  "propertyKeyName": "name",
+				  "propertyKeyValueEn": "name",
+				  "propertyKeyValueEs": "name"
+				}
+			  }
+			},
+			{
+			  "checkbox1": {
+				"label_en": "Requires Qualification?",
+				"label_es": "¿Requiere Cualificación?",
+				"defaultValue": false
+			  }
+			},
+			{
+			  "number1": {
+				"label_en": "Min Stock",
+				"label_es": "Stock Mínimo",
+				"optional": true
+			  }
+			},
+			{
+			  "list2": {
+				"label_en": "UOM",
+				"label_es": "UDM",
+				"addBlankValueOnTop": true,
+				"addBlankValueAtBottom": false,
+				"valuesFromMasterData": {
+				  "propertyNameContainer": "units_of_measurement",
+				  "propertyKeyName": "pretty_name",
+				  "propertyKeyValueEn": "pretty_name",
+				  "propertyKeyValueEs": "pretty_name"
+				},
+				"dependencyFieldBehavior": [
+				  {
+					"field": "multilist1",
+					"rule": "whenEmpty",
+					"resetValue": true,
+					"action": "hide"
+				  }
+				]
+			  }
+			},
+			{
+			  "multilist1": {
+				"label_en": "Other Allowed UOMs",
+				"label_es": "Otras UDM aceptadas",
+				"addBlankValueOnTop": true,
+				"addBlankValueAtBottom": false,
+				"valuesFromMasterData": {
+				  "propertyNameContainer": "units_of_measurement",
+				  "propertyKeyName": "pretty_name",
+				  "propertyKeyValueEn": [
+					"pretty_name"
+				  ],
+				  "propertyKeyValueEs": [
+					"pretty_name"
+				  ]
+				}
+			  }
+			},
+			{
+			  "list3": {
+				"label_en": "min Stock Type",
+				"label_es": "Tipo Stock Mínimo",
+				"optional": true,
+				"addBlankValueOnTop": true,
+				"items": [
+				  {
+					"keyName": "QUANTITY",
+					"keyValue_en": "Quantity",
+					"keyValue_es": "Cantidad"
+				  },
+				  {
+					"keyName": "PB ITEMS",
+					"keyValue_en": "Items",
+					"keyValue_es": "Items"
+				  }
+				]
+			  }
+			},
+			{
+			  "checkbox2": {
+				"label_en": "Requires control for Available for use",
+				"label_es": "¿Requiere control disponible para uso?",
+				"optional": true
+			  }
+			},
+			{
+			  "number2": {
+				"label_en": "Min Available for use",
+				"label_es": "Minimo en Disponible para uso",
+				"optional": true
+			  }
+			},
+			{
+			  "list3": {
+				"label_en": "Type",
+				"label_es": "Tipo",
+				"optional": true,
+				"addBlankValueOnTop": true,
+				"items": [
+				  {
+					"keyName": "QUANTITY",
+					"keyValue_en": "Quantity",
+					"keyValue_es": "Cantidad"
+				  },
+				  {
+					"keyName": "PB ITEMS",
+					"keyValue_en": "Items",
+					"keyValue_es": "Items"
+				  }
+				]
+			  }
+			},
+			{
+			  "checkbox3": {
+				"label_en": "Allow Some open at a time?",
+				"label_es": "¿Permitir abrir varios a la vez?",
+				"optional": true
+			  }
+			},
+			{
+				"list5": {
+					"label_en": "Qualification Variables Set",
+					"label_es": "Conjunto Variables para Cualificación",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					  "addBlankValueAtBottom": false,
+					  "valuesFromMasterData": {
+						"propertyNameContainer": "variables_set",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"propertyKeyName": "name",
+						"propertyKeyValueEn": "name",
+						"propertyKeyValueEs": "name"
+					  }
+				}
+			}
+		]
+		},
+		"endPointParams": [
+		  {
+			"argumentName": "name",
+			"element": "text1"
+		  },
+		  {
+			"argumentName": "category",
+			"element": "list1"
+		  },
+		  {
+			"argumentName": "lotRequiresQualif",
+			"element": "checkbox1"
+		  },
+		  {
+			"argumentName": "minStock",
+			"element": "number1"
+		  },
+		  {
+			"argumentName": "minStockUom",
+			"element": "list2"
+		  },
+		  {
+			"argumentName": "allowedUoms",
+			"element": "multilist1",
+			"defaultValue": ""
+		  },
+		  {
+			"argumentName": "minStockType",
+			"element": "list3"
+		  },
+		  {
+			"argumentName": "requiresAvailableForUse",
+			"element": "checkbox2"
+		  },
+		  {
+			"argumentName": "minAvailablesForUse",
+			"element": "number2"
+		  },
+		  {
+			"argumentName": "minAvailablesForUseType",
+			"element": "list3"
+		  },
+		  {
+			"argumentName": "allowedOpeningSomeAtaTime",
+			"element": "checkbox3"
+		  },
+		  {
+			"argumentName": "qualificationVariablesSet",
+			"element": "list5"
+		  }
+		]
+	  },
+	  {
+		"actionName": "CONFIG_UPDATE_REFERENCE",
+		"requiresDialog": true,
+		"notGetViewData": false,
+		"selectedItemPropertyName": "selectedItems",
+		"button": {
+		  "icon": "edit",
+		  "title": {
+			"label_en": "Edit reference",
+			"label_es": "Configurar referencia"
+		  },
+		  "requiresGridItemSelected": true
+		},
+		"dialogInfo": {
+		  "name": "genericDialog",
+		  "fields": [
+			{
+			  "checkbox1": {
+				"label_en": "Requires Qualification?",
+				"label_es": "¿Requiere Cualificación?",
+				"defaultValue": false,
+				"optional": false
+			  }
+			},
+			{
+			  "number1": {
+				"label_en": "Min Stock",
+				"label_es": "Stock Mínimo",
+				"optional": true
+			  }
+			},
+			{
+			  "list2": {
+				"label_en": "UOM",
+				"label_es": "UDM",
+				"addBlankValueOnTop": true,
+				"addBlankValueAtBottom": false,
+				"optional": true,
+				"valuesFromMasterData": {
+				  "propertyNameContainer": "units_of_measurement",
+				  "propertyKeyName": "pretty_name",
+				  "propertyKeyValueEn": [
+					"pretty_name"
+				  ],
+				  "propertyKeyValueEs": [
+					"pretty_name"
+				  ]
+				}
+			  }
+			},
+			{
+			  "multilist1": {
+				"label_en": "Other Allowed UOMs",
+				"label_es": "Otras UDM aceptadas",
+				"addBlankValueOnTop": true,
+				"addBlankValueAtBottom": false,
+				"valuesFromMasterData": {
+				  "propertyNameContainer": "units_of_measurement",
+				  "propertyKeyName": "pretty_name",
+				  "propertyKeyValueEn": [
+					"pretty_name"
+				  ],
+				  "propertyKeyValueEs": [
+					"pretty_name"
+				  ]
+				}
+			  }
+			},
+			{
+			  "list3": {
+				"label_en": "min Stock Type",
+				"label_es": "Tipo Stock Mínimo",
+				"optional": true,
+				"addBlankValueOnTop": true,
+				"items": [
+				  {
+					"keyName": "QUANTITY",
+					"keyValue_en": "Quantity",
+					"keyValue_es": "Cantidad"
+				  },
+				  {
+					"keyName": "PB ITEMS",
+					"keyValue_en": "Items",
+					"keyValue_es": "Items"
+				  }
+				]
+			  }
+			},
+			{
+			  "checkbox2": {
+				"label_en": "Requires control for Available for use",
+				"label_es": "¿Requiere control disponible para uso?",
+				"optional": true
+			  }
+			},
+			{
+			  "number2": {
+				"label_en": "Min Available for use",
+				"label_es": "Minimo en Disponible para uso",
+				"optional": true
+			  }
+			},
+			{
+			  "checkbox3": {
+				"label_en": "Allow Some open at a time?",
+				"label_es": "¿Permitir abrir varios a la vez?",
+				"optional": true
+			  }
+			},
+			{
+				"list5": {
+					"label_en": "Qualification Variables Set",
+					"label_es": "Conjunto Variables para Cualificación",
+					"selectedItemPropertyName": "qualif_variables_set",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					  "addBlankValueAtBottom": false,
+					  "valuesFromMasterData": {
+						"propertyNameContainer": "variables_set",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"propertyKeyName": "name",
+						"propertyKeyValueEn": "name",
+						"propertyKeyValueEs": "name"
+					  }
+				}
+			}
+		  ]
+		},
+		"endPointParams": [
+		  {
+			"argumentName": "category",
+			"selObjectPropertyName": "category"
+		  },
+		  {
+			"argumentName": "referenceName",
+			"selObjectPropertyName": "name"
+		  },
+		  {
+			"argumentName": "lot_requires_qualif",
+			"element": "checkbox1",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true,
+			"fieldType": "BOOLEAN"
+		  },
+		  {
+			"argumentName": "min_stock",
+			"element": "number1",
+			"addToFieldNameAndValue": true,
+			"fieldType": "INTEGER",
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "min_stock_uom",
+			"element": "list2",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "allowed_uoms",
+			"element": "multilist1",
+			"defaultValue": "",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "min_stock_type",
+			"element": "list3",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "requires_availables_for_use",
+			"element": "checkbox2",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "min_availables_for_use",
+			"element": "number2",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "min_availables_for_use_type",
+			"element": "number2",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "allow_opening_some_at_a_time",
+			"element": "checkbox3",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  },
+		  {
+			"argumentName": "qualif_variables_set",
+			"element": "list5",
+			"addToFieldNameAndValue": true,
+			"notAddWhenValueIsBlank": true
+		  }
+		]
+	  }
+	]
+  },  
   "InventoryLotsGeneral": {
 	"component": "TableWithButtons",
     "langConfig": {
@@ -4020,11 +6619,20 @@ export const Stock =
 			  }
 			},
 			{
-			  "text4": {
-				"label_en": "Qualification Variables Set",
-				"label_es": "Conjunto Variables para Cualificación",
-				"optional": true
-			  }
+				"list5": {
+					"label_en": "Qualification Variables Set",
+					"label_es": "Conjunto Variables para Cualificación",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					  "addBlankValueAtBottom": false,
+					  "valuesFromMasterData": {
+						"propertyNameContainer": "variables_set",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"propertyKeyName": "name",
+						"propertyKeyValueEn": "name",
+						"propertyKeyValueEs": "name"
+					  }
+				}
 			}
 		  ]
 		},
@@ -4076,7 +6684,7 @@ export const Stock =
 		  },
 		  {
 			"argumentName": "qualificationVariablesSet",
-			"element": "text4"
+			"element": "list5"
 		  }
 		]
 	  },
@@ -4084,9 +6692,6 @@ export const Stock =
 		"requiresDialog": true,
 		"notGetViewData": true,
 		"selectedItemPropertyName": "selectedItems",
-		"secondaryActionToPerform": {
-		  "name": "refreshSelProcData"
-		},
 		"button": {
 		  "icon": "manufacturing",
 		  "title": {
@@ -4224,11 +6829,21 @@ export const Stock =
 			  }
 			},
 			{
-			  "text4": {
-				"label_en": "Qualification Variables Set",
-				"label_es": "Conjunto Variables para Cualificación",
-				"optional": true
-			  }
+				"list5": {
+					"label_en": "Qualification Variables Set",
+					"label_es": "Conjunto Variables para Cualificación",
+					"selectedItemPropertyName": "qualif_variables_set",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					  "addBlankValueAtBottom": false,
+					  "valuesFromMasterData": {
+						"propertyNameContainer": "variables_set",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"propertyKeyName": "name",
+						"propertyKeyValueEn": "name",
+						"propertyKeyValueEs": "name"
+					  }
+				}
 			}
 		  ]
 		},
@@ -4299,7 +6914,7 @@ export const Stock =
 		  },
 		  {
 			"argumentName": "qualificationVariablesSet",
-			"element": "text4",
+			"element": "list5",
 			"addToFieldNameAndValue": true,
 			"notAddWhenValueIsBlank": true
 		  }
@@ -4349,7 +6964,22 @@ export const Stock =
 				]			  
 			}},
 			{"checkbox3": {"label_en": "Allow Some open at a time?","label_es": "¿Permitir abrir varios a la vez?", "optional":true}},
-			{"text4": {"label_en": "Qualification Variables Set","label_es": "Conjunto Variables para Cualificación", "optional":true}}            
+			{
+				"list5": {
+					"label_en": "Qualification Variables Set",
+					"label_es": "Conjunto Variables para Cualificación",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					  "addBlankValueAtBottom": false,
+					  "valuesFromMasterData": {
+						"propertyNameContainer": "variables_set",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"propertyKeyName": "name",
+						"propertyKeyValueEn": "name",
+						"propertyKeyValueEs": "name"
+					  }
+				}
+			}
           ]
         },
         "endPointParams": [
@@ -4364,7 +6994,7 @@ export const Stock =
           {"argumentName": "minAvailablesForUse",       "element": "number2"  },
           {"argumentName": "minAvailablesForUseType",   "element": "list3"    },
           {"argumentName": "allowedOpeningSomeAtaTime", "element": "checkbox3"},
-          {"argumentName": "qualificationVariablesSet", "element": "text4"    }
+          {"argumentName": "qualificationVariablesSet", "element": "list5"    }
         ]
       }
     ]
