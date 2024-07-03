@@ -13,7 +13,8 @@ export class QRCodeScanner extends LitElement {
       decoded: { type: String },
       encoded: { type: String },
       isDetecting: { type: Boolean },
-      startDetectBtn: { state: true }
+      startDetectBtn: { state: true },
+      stopDetectBtn: { state: true }
     };
   }
 
@@ -29,19 +30,28 @@ export class QRCodeScanner extends LitElement {
       decoded: this.decoded,
       encoded: this.encoded,
       isDetecting: this.isDetecting,
-      handleDecoded: this._onDecoded
+      handleDecoded: this._onDecoded,
+      stopDetect: this._stopDetect
     });
   }
 
   firstUpdated() {
     this.encodeInput = this.shadowRoot.querySelector("#encode");
     this.startDetectBtn = this.shadowRoot.querySelector("#startDetect");
+    this.stopDetectBtn = this.shadowRoot.querySelector("#stopDetect");
     this.encodeInput.addEventListener('change', this._changeEncode);
     this.startDetectBtn.addEventListener('click', this._startDetect);
+    if (this.stopDetectBtn) {
+      this.stopDetectBtn.addEventListener('click', this._stopDetect);
+    }
   }
 
   _startDetect = () => {
     this.isDetecting = true;
+  }
+
+  _stopDetect = () => {
+    this.isDetecting = false;
   }
 
   _changeEncode = (event) => {

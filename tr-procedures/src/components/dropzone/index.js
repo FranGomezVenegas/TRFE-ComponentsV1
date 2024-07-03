@@ -176,7 +176,8 @@ export class Dropzone extends ApiFunctions(LitElement) {
     Object.keys(APIParams).forEach(key => {
       form.append(key, APIParams[key]);
     });
-    let params = this.config.backendUrl + endPointUrl;
+    let serviceAPIurl=this.getServiceAPIUrl(this.action)
+    let params = serviceAPIurl + endPointUrl;
 
     try {
       const response = await fetch(params, {
