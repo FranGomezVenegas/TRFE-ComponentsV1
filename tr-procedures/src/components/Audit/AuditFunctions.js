@@ -4,13 +4,14 @@ export function AuditFunctions(base) {
     return class extends ApiFunctions(base) {
         getObjectAuditInfo(dataElement = this.selectedItems[0]) {
             let extraParams=this.jsonParam(this.actionBeingPerformedModel, dataElement, {})   
+            let serviceAPIurl=this.getServiceAPIUrl(action)
             let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)
             let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
             if (String(endPointUrl).toUpperCase().includes("ERROR")){
                 alert(endPointUrl)
                 return
             }
-            let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
+            let params = serviceAPIurl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
               + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
             params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(j => {
@@ -40,7 +41,8 @@ export function AuditFunctions(base) {
             })
           }
         signAudit() {
-        let params = this.config.backendUrl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
+          let serviceAPIurl=this.getServiceAPIUrl(this.selectedDialogAction.endPoint)  
+        let params = serviceAPIurl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
             + '?' + new URLSearchParams(this.reqParams)
             params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(() => {
