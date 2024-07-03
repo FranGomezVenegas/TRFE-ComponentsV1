@@ -334,28 +334,27 @@ export class DataMiningData extends DataViews(LitElement) {
   }
 
   downloadDataTableToCSV() {
+    const delimiter = ';'; // Definimos el delimitador como punto y coma
     console.log('this.activeTab', this.activeTab)
     let csvContent = "data:text/csv;charset=utf-8,"
     let header = [], contents = []
     contents = this.getTraceabilityInfo()
-    for (let i=0; i<this.data[this.activeTab.download.elements[0].elementName].length; i++) {
-      //if (this.data[this.activeTab.download.elements[0].elementName][i].spec_code) {
+    for (let i = 0; i < this.data[this.activeTab.download.elements[0].elementName].length; i++) {
         if (!header.length) {
-          Object.entries(this.data[this.activeTab.download.elements[0].elementName][i]).map(([key]) => {
-            header.push(key)
-          })
-          contents.push(header)
+            Object.entries(this.data[this.activeTab.download.elements[0].elementName][i]).map(([key]) => {
+                header.push(key)
+            })
+            contents.push(header)
         }
         let content = []
         Object.entries(this.data[this.activeTab.download.elements[0].elementName][i]).map(([key, val]) => {
-          content.push(val)
-        })        
+            content.push(val)
+        })
         contents.push(content)
-      //}
     }
-    contents.forEach(rowArray => {      
-      let row = rowArray.join(",")
-      csvContent += row + "\r\n";
+    contents.forEach(rowArray => {
+        let row = rowArray.join(delimiter)
+        csvContent += row + "\r\n";
     })
     let encodedUri = encodeURI(csvContent);
     let link = document.createElement("a");
@@ -366,9 +365,10 @@ export class DataMiningData extends DataViews(LitElement) {
     let cYear = currentDate.getFullYear()
 
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", this.activeTab["label_"+this.lang]+'_'+cYear+cMonth+cDay+".csv");
+    link.setAttribute("download", this.activeTab["label_" + this.lang] + '_' + cYear + cMonth + cDay + ".csv");
     link.click()
-  }
+}
+
 
   openSample() {}
 
