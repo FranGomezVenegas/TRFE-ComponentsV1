@@ -526,6 +526,7 @@ export class AuditDialog extends ActionsFunctions(TrazitCredentialsDialogs(Butto
   }
   fieldToBeHighlighted(auditRow, rowFldName){
     //console.log('fieldToBeHighlighted', auditRow, rowFldName)
+    if (this.highlightFields==null){return "";}
     if (this.highlightFields.length==0){return "";}
     if (auditRow.table_name===undefined){return "";}
     if (auditRow.action_name===undefined){return "";}

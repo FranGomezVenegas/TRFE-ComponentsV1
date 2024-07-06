@@ -1,11 +1,11 @@
 {
   "dbName": "demo_v0_9_2",
   "isForTesting": false,
-  "backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
+  "backendUrlOvh": "https://platform.trazit.net:8443/TRAZiT-API",
   "dbNameDemo2": "demo_v0_9_2",
   "backendUrlNonSecure": "http://51.75.202.142:8888/TRAZiT-API",
   "backendUrlhttps": "http://51.75.202.142:8888/TRAZiT-API",
-  "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
+  "backendUrl": "http://localhost:8081/TRAZiT-API",
   "backendUrlLabP": "http://platform.trazit.net:8888/LabPLANET-API",
   "backendUrlLocalLabPLANETAPI": "http://localhost:8080/LabPLANET-API",
 
