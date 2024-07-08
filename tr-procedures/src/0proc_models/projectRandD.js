@@ -52,6 +52,7 @@ export const ProjectRandD=
       "actionName": "ALL_ACTIVE_PROJECTS",
       "notUseGrid": true,
       "responseArray": true,
+      "selectedItemKeyProperty": "name",
       "addRefreshButton": true,      
       "button": {
         "icon": "refresh",
@@ -1909,7 +1910,6 @@ export const ProjectRandD=
             "actions": [
               {
                 "actionName": "NEW_FORMULA",
-                "notGetViewData": true,
                 "requiresDialog": true,
                 "certificationException": true,
                 "button": {

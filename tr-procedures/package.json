@@ -3,7 +3,7 @@
   "description": "Component core for procedures elements with dynamic model",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.2.20",
+  "version": "0.2.25",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
@@ -16,6 +16,7 @@
     "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@doubletrade/lit-datatable": "^2.0.0",
     "@google-web-components/google-chart": "^5.1.0",
+    "@granite-elements/granite-qrcode-scanner": "^3.0.3",
     "@lrnwebcomponents/lrndesign-diff-2-html": "^0.0.23",
     "@material/line-ripple": "^14.0.0",
     "@material/mwc-button": "^0.27.0",
@@ -41,9 +42,11 @@
     "@vaadin/vertical-layout": "^24.3.13",
     "chart.js": "^4.4.2",
     "diff2html": "^3.4.48",
+    "jsbarcode": "^3.11.6",
     "lit": "^2.0.2",
     "lit-element-router": "^2.0.3",
-    "lit-vaadin-helpers": "^0.2.1"
+    "lit-vaadin-helpers": "^0.2.1",
+    "qrcode": "^1.5.3"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.3.5",

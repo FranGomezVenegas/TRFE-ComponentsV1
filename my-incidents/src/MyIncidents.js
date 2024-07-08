@@ -16,6 +16,7 @@ import '@vaadin/vaadin-grid/vaadin-grid-filter';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 import '@trazit/tr-dialog/tr-dialog';
 import './history-item';
+import {ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions.js';
 
 const langConfig = {
   field: {
@@ -85,7 +86,7 @@ const langConfig = {
   }
 };
 
-export class MyIncidents extends CommonCore {
+export class MyIncidents extends ApiFunctions(CommonCore) {
   static get styles() {
     return [
       Layouts, Alignment,
@@ -330,7 +331,8 @@ export class MyIncidents extends CommonCore {
 
   getOpenIncidents() {
     this.histories = []
-    this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
+    let serviceAPIurl=this.getServiceAPIUrl(undefined)
+    this.fetchApi(serviceAPIurl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: 'USER_OPEN_INCIDENTS'
@@ -357,7 +359,8 @@ export class MyIncidents extends CommonCore {
   }
   getClosedIds() {
     this.closedIds = []
-    this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
+    let serviceAPIurl=this.getServiceAPIUrl(undefined)
+    this.fetchApi(serviceAPIurl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       actionName: 'CLOSED_INCIDENTS_LAST_N_DAYS',
@@ -385,7 +388,8 @@ export class MyIncidents extends CommonCore {
     }
     if (e.detail.value) {
       this.selectedItem = e.detail.value
-      this.fetchApi(this.config.backendUrl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
+      let serviceAPIurl=this.getServiceAPIUrl(undefined)
+      this.fetchApi(serviceAPIurl + this.config.frontEndIncidentsUrl + '?' + new URLSearchParams({
         dbName: this.config.dbName,
         finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
         actionName: 'INCIDENT_DETAIL_FOR_GIVEN_INCIDENT',
@@ -399,7 +403,8 @@ export class MyIncidents extends CommonCore {
   }
 
   incidentAPI(params) {
-    this.fetchApi(this.config.backendUrl + this.config.ApiIncidentsUrl + '?' + new URLSearchParams({
+    let serviceAPIurl=this.getServiceAPIUrl(undefined)
+    this.fetchApi(serviceAPIurl + this.config.ApiIncidentsUrl + '?' + new URLSearchParams({
       dbName: this.config.dbName,
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken,
       ...params

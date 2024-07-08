@@ -202,7 +202,7 @@ export class CommonCore extends LitElement {
     })
   }
   refreshMasterData(endPointResponse) {
-    //console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
+    console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
     if (this.procInstanceName===undefined||endPointResponse===undefined||endPointResponse.master_data===undefined) {
       return
     }  

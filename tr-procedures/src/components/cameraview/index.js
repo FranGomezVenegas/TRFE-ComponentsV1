@@ -143,16 +143,17 @@ export class CameraView extends ApiFunctions(LitElement) {
 
         let APIParams = this.getAPICommonParams(this.action)
         let endPointUrl = this.getActionAPIUrl(this.action)
+        let serviceAPIurl=this.getServiceAPIUrl(this.action)
         if (String(endPointUrl).toUpperCase().includes("ERROR")) {
           alert(endPointUrl)
           return
         }
 /*
-        if (this.config !== undefined && this.config.backendUrl !== undefined) {
-          params = this.config.backendUrl + endPointUrl
+        if (this.config !== undefined && serviceAPIurl !== undefined) {
+          params = serviceAPIurl + endPointUrl
         } else {
           let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-          params = userSession.backendUrl + endPointUrl
+          params = serviceAPIurl + endPointUrl
         }
 */
         /*let targetValue = {
@@ -173,10 +174,10 @@ export class CameraView extends ApiFunctions(LitElement) {
         Object.keys(APIParams).forEach(key => {
           form.append(key, APIParams[key]);
         });
-        let params=this.config.backendUrl + endPointUrl
+        let params=serviceAPIurl + endPointUrl
         //params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
         // Call fetchApi with the FormData
-        //let response = await fetch(this.config.backendUrl + endPointUrl, { //params
+        //let response = await fetch(serviceAPIurl + endPointUrl, { //params
         let response = await fetch(params, {
             method: 'POST',
             body: form,

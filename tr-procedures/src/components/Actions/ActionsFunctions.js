@@ -268,60 +268,66 @@ export function ActionsFunctions(base) {
           gridSelectedItem = this.genericDialogGridSelectedItems[0]
         }
       }
-      //let actionParams = this.jsonParam(action, selectedItem, targetValue, gridSelectedItem, parentData, dragEntry, dropEntry)
+      
       let APIParams = this.getAPICommonParams(action)
+      let serviceAPIurl = this.getServiceAPIUrl(action)
       let endPointUrl = this.getActionAPIUrl(action)
       if (String(endPointUrl).toUpperCase().includes("ERROR")) {
         alert(endPointUrl)
         return
       }
       let params = ""
-      if (this.config !== undefined && this.config.backendUrl !== undefined) {
-        params = this.config.backendUrl + endPointUrl
-      } else {
-        let userSession = JSON.parse(sessionStorage.getItem("userSession"))
-        params = userSession.backendUrl + endPointUrl
-      }
-      params = params + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(actionParams)
-        + '&' + new URLSearchParams(credDialogArgs)
-      //console.log('trazitPerformAPICall', 'action', action, 'selectedItem', selectedItem, 'actionParams', actionParams)
-  
-      await this.fetchApi(params).then(j => {
-        //console.log('trazitPerformAPICall: into the fetchApi', 'action', action)
+      params = serviceAPIurl + endPointUrl
+      params = params + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(actionParams) + '&' + new URLSearchParams(credDialogArgs)
+    
+      try {
+        const j = await this.fetchApi(params)
+        
+        if (action !== undefined) {
+          await this.refreshMasterData(j, action)
+        }
+    
         if (action.notGetViewData === undefined || action.notGetViewData === false) {
           this.GetViewData()
         }
+    
         this.selectedItems[0] = selectedItem;
         action = this.actionBeingPerformedModel
         let actionRefreshQuery = []
-        if (action.dialogInfo!==undefined&&action.dialogInfo.name!==undefined&&action.dialogInfo.name==='resultDialog'){
-          if (action.dialogInfo.keyFldName!==undefined){
+        if (action.dialogInfo !== undefined && action.dialogInfo.name !== undefined && action.dialogInfo.name === 'resultDialog') {
+          if (action.dialogInfo.keyFldName !== undefined) {
             this.actionMethodResults(action, this.selectedItems, this.selectedItems[0][action.dialogInfo.keyFldName])
-          }else{
-            if (action.dialogInfo.viewQuery.endPointParams[0].selObjectPropertyName!==undefined){
+          } else {
+            if (action.dialogInfo.viewQuery.endPointParams[0].selObjectPropertyName !== undefined) {
               this.actionMethodResults(action, this.selectedItems, this.selectedItems[0][action.dialogInfo.viewQuery.endPointParams[0].selObjectPropertyName])
-            }else{
+            } else {
               this.actionMethodResults(action, this.selectedItems, '')
             }
           }
         }
+    
         if (action !== undefined && action.dialogInfo !== undefined && action.dialogInfo.name !== undefined
           && action !== null && action.dialogInfo !== null && action.dialogInfo.name !== null) {
           if (this[action.dialogInfo.name] !== undefined) {
             this[action.dialogInfo.name].close()
           }
         }
+    
         if (action.secondaryActionToPerform !== undefined) {
           this[action.secondaryActionToPerform.name]()
         }
+    
         if (action.variableToSetResponse !== undefined) {
           if (this[action.variableToSetResponse] !== undefined) {
             this[action.variableToSetResponse] = j
           }
         }
-  
-      })
+    
+      } catch (error) {
+        console.error('Error performing API call:', error)
+      }
     }
+    
   
     credsChecker(actionName, objId, params={}, action, isProcManagement, gridSelectionData, parentData, dragEntry, dropEntry) {
       console.log('credsChecker', 'isProcManagement', isProcManagement, 'action', action, 'parentData', parentData)

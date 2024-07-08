@@ -4,21 +4,25 @@ export function AuditFunctions(base) {
     return class extends ApiFunctions(base) {
         getObjectAuditInfo(dataElement = this.selectedItems[0]) {
             let extraParams=this.jsonParam(this.actionBeingPerformedModel, dataElement, {})   
+            let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)
             let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)
             let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
             if (String(endPointUrl).toUpperCase().includes("ERROR")){
                 alert(endPointUrl)
                 return
             }
-            let params = this.config.backendUrl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
+            let params = serviceAPIurl + (this.actionBeingPerformedModel.endPoint ? this.actionBeingPerformedModel.endPoint : this.config.SampleAPIqueriesUrl)
               + '?' + new URLSearchParams(APIParams) + '&'+ new URLSearchParams(extraParams)
             params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(j => {
               if (j && !j.is_error) {
                 let auditRecords=[]
+                this.audit.highlightFields =[]
                 if (j.audit_info!==undefined){
                   auditRecords = j.audit_info
-                  this.audit.highlightFields = j.highlight_fields
+                  if (j.highlight_fields!==undefined&&j.highlight_fields!==null){
+                    this.audit.highlightFields = j.highlight_fields
+                  }
                 }else{
                   this.audit.highlightFields =[]
                   auditRecords = j
@@ -40,7 +44,8 @@ export function AuditFunctions(base) {
             })
           }
         signAudit() {
-        let params = this.config.backendUrl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
+          let serviceAPIurl=this.getServiceAPIUrl(this.selectedDialogAction.endPoint)  
+        let params = serviceAPIurl + (this.selectedDialogAction.endPoint ? this.selectedDialogAction.endPoint : this.config.ApiEnvMonitSampleUrl)
             + '?' + new URLSearchParams(this.reqParams)
             params = params.replace(/\|/g, "%7C");
             this.fetchApi(params).then(() => {

@@ -111,6 +111,7 @@ export function ApiFunctions(base) {
     
 
       refreshMasterData(endPointResponse, actionModel) {
+        console.log('refresh master data')
         if (this.procInstanceName===undefined){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
           if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
@@ -122,7 +123,7 @@ export function ApiFunctions(base) {
          // alert('master Data no se va a refrescar!')
           return
         } 
-       // console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
+        console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
         let userSession = JSON.parse(sessionStorage.getItem("userSession"))
         let findProcIndex = 0
         if (actionModel.area!==undefined){          
@@ -200,6 +201,38 @@ export function ApiFunctions(base) {
           }
           return jsonParam
       }
+
+      getServiceAPIUrl(action){
+       // alert('getServiceAPIUrl')
+        if (action!==undefined&&action.serviceAPIurl!==undefined){
+          return action.serviceAPIurl
+        }
+        if (this.procInstanceName===undefined){
+          return this.config.backendUrl
+        }
+        let procInstanceModel={}
+        if (!this.config.local) {
+          let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
+          if (findProc.length) {
+            if (findProc[0].serviceAPIurl!==undefined){
+              procInstanceModel= findProc[0].procModel
+              let serviceInProcModel=procInstanceModel.ModuleSettings.serviceAPIurl
+              if (serviceInProcModel!==undefined&&serviceInProcModel.length>0)
+              return serviceInProcModel
+            }
+            return this.config.backendUrl
+          }
+        }else{
+          procInstanceModel=ProceduresModel[this.procInstanceName]
+          let serviceInProcModel=procInstanceModel.ModuleSettings.serviceAPIurl
+          if (serviceInProcModel!==undefined&&serviceInProcModel.length>0)
+          return serviceInProcModel
+        }
+
+        return this.config.backendUrl
+      }
+      
+
       getActionAPIUrl(action){
         if (this.procInstanceName===undefined){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
