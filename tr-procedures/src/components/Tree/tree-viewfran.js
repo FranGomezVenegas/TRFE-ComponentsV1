@@ -11,7 +11,8 @@ class TreeViewFran extends LitElement {
       selectedItems: { type: Object },
       showChildren: { type: Object },
       value: { type: String },
-      label: { type: String }
+      label: { type: String },
+      expanded:{type: Boolean}
     };
   }
 
@@ -21,6 +22,7 @@ class TreeViewFran extends LitElement {
     this.specification = {};
     this.selectedItems = {};
     this.showChildren = {};
+    this.expanded=false
     this.value = '';
     this.label = 'Select an item';
   }
@@ -57,7 +59,7 @@ class TreeViewFran extends LitElement {
         display: flex;
         align-items: center;
         padding: 6px;
-        border: 1px solid #ccc;
+        border: 1px solid #999;
         border-radius: 4px;
         cursor: pointer;
         background-color: #fff;
@@ -129,6 +131,7 @@ class TreeViewFran extends LitElement {
   handleToggleDropdown(e) {
     e.stopPropagation();
     this.showChildren = !this.showChildren;
+    this.expanded=true
     this.requestUpdate();
   }
 
@@ -138,6 +141,7 @@ class TreeViewFran extends LitElement {
     e.stopPropagation();
     this.label = item[specification.key];
     this.showChildren = false;
+
     this.requestUpdate();
   }
 
@@ -200,8 +204,7 @@ class TreeViewFran extends LitElement {
   render() {
     const hasValue = !!this.value;
     const selectedItem = this.findSelectedItem(this.data, this.specification, this.value);
-    const selectedLabel = selectedItem ? selectedItem[this.specification.label] || selectedItem[this.specification.key] : '';
-
+    const selectedLabel = selectedItem ? selectedItem[this.specification.label] || selectedItem[this.specification.key] : '';    
     return html`
       <div class="main">
         <div class="value ${hasValue ? 'selected' : ''}" @click=${this.handleToggleDropdown}>
@@ -217,11 +220,13 @@ class TreeViewFran extends LitElement {
             : ''}
         </div>
         <div class="label ${hasValue ? 'selected' : ''}">${this.label}</div>
-        <div class="dropdown ${this.showChildren ? 'show' : ''}">
-          <mwc-list>
-            ${this.data.map((item) => this.renderItem(item, this.specification))}
-          </mwc-list>
-        </div>
+        ${this.expanded?html`
+          <div class="dropdown ${this.showChildren ? 'show' : ''}">
+            <mwc-list>
+              ${this.data.map((item) => this.renderItem(item, this.specification))}
+            </mwc-list>
+          </div>
+        `:html``}
       </div>
     `;
   }
