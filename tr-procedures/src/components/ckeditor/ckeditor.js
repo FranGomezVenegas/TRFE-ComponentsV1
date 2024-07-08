@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import './ckeditor-js';
+import { MyCustomUploadAdapterPlugin } from './ckeditor-upload-plugin';
 
 export class LitCKEditor extends LitElement {
   static styles = css`
@@ -6035,7 +6036,9 @@ export class LitCKEditor extends LitElement {
   async firstUpdated() {
     try {
       const editorElement = this.shadowRoot.getElementById('editor');
-      this.editor = await ClassicEditor.create(editorElement);
+      this.editor = await ClassicEditor.create(editorElement, {
+        extraPlugins: [MyCustomUploadAdapterPlugin],
+      });
 
       // Temporary API for demonstration
       const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
