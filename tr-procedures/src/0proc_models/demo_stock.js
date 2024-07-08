@@ -2673,8 +2673,9 @@ export const Stock =
 		{"actionName": "zzzNEW_INVENTORY_LOT",
 		"requiresDialog": true,
         "endPointParams": [
-          { "argumentName": "reference", "element": "tree1", "defaultValue": ""  },
-          { "argumentName": "category", "element": "list1", "defaultValue": "" },
+          { "argumentName": "referenceTree", "element": "tree1", "defaultValue": ""  },
+          { "argumentName": "category", "element": "listLinked1", "defaultValue": "" },
+		  { "argumentName": "reference", "element": "listLinked2", "defaultValue": ""  },
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
 		  { "argumentName": "quantityUom", "fixValue": "mL" },
@@ -2732,7 +2733,7 @@ export const Stock =
 					{
 					  "name": "adios lvl1"
 					}
-				  ],
+				],
 				"treeElementSpecification":
 					{
 					  "key": "name",
@@ -2765,51 +2766,45 @@ export const Stock =
 							],
 						}	
 					  },
-					}
+				}
 				
-			}
-
+				},
 			},
-			{"list1": {
-				"label_en": "Category", "label_es": "Categoría", "optional": true,
-				"qrCodeParsing": "category",
-				"addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-				"valuesFromMasterData": {
+			
+			{"twoListsLinked": {
+				"listLinked1": {
+				  "label_en": "Category", "label_es": "Categoría", "optional": true,
+				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+				  "xxxitems": [
+					{ "keyName": '1', "keyValue_en":"Option 1", "keyValue_es":"Opción 1", "label": 'Option 1' },
+					{ "keyName": '2', "keyValue_en":"Option 2", "keyValue_es":"Opción 2", "label": 'Option 2' }
+					
+				  ],
+				  "valuesFromMasterData": {
 					"propertyNameContainer": "category_and_references",
 					"propertyNameContainerLevelPropertyKeyName": "name",
-					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
+					"filterDependency": ["list1"],
+					"selectedEntryFromFilterPropertyName": "inv_reference",
+					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
+					}					  
 				},
-				"dependencyActionFields":[
-					{"field": "text4", "staticValue": "hola" },
-					{"field": "text3", "fieldValue": "name" },
-					{"field": "list2", "allRecordEntryWithList": "inv_reference", 
-						"propertyNameInDestination": "category_and_references"}
-				],
-				"dependencyFieldBehaviorForAll":
-					{"rule": "whenEmpty", "resetValue": true, "action": "disable", 
-						"exceptionFields":[ "list2"]}
-				,
-				"dependencyFieldBehavior":[
-					{"field": "text4", "rule": "whenEmpty", "resetValue": true}, 
-					{"field": "text5", "rule": "whenEmpty"}, 
-					{"field": "list2", "rule": "whenEmpty", "resetValue": true},
-					{"field": "number2", "rule": "whenEmpty", "resetValue": true, 
-						"action": "hide"}
-				]
-
-			}},
-			{"list2": { "label_en": "Reference", "label_es": "Referencia",
-				"qrCodeParsing": "reference",
-			  "valuesFromMasterData": {
-				"propertyNameContainer": "category_and_references",
-				"propertyNameContainerLevelPropertyKeyName": "name",
-				"filterDependency": ["list1"],
-				"selectedEntryFromFilterPropertyName": "inv_reference",
-				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
-			  }			
-
-			}
-			},
+				"listLinked2": {
+				  "label_en": "Reference", "label_es": "Referencia",
+				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+				  "xxxitems": [
+					{ "keyName": 'a', "keyValue_en":"Option 1-A", "keyValue_es":"Opción 1-A", "label": 'Option A', "parentValue": '1' },
+					{ "keyName": 'b', "keyValue_en":"Option 2-B", "keyValue_es":"Opción 2-B", "label": 'Option B', "parentValue": '2' }					
+				  ],
+				  "valuesFromMasterData": {
+					"propertyNameContainer": "category_and_references",
+					"propertyNameContainerLevelPropertyKeyName": "name",
+					"filterDependency": ["list1"],
+					"selectedEntryFromFilterPropertyName": "inv_reference",
+					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
+					}					  
+				}
+			  },			
+			},			
             {"text2": { "label_en": "lot id", "label_es": "id Lote" ,
 				}
 			},

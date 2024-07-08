@@ -412,11 +412,15 @@ export function ListsFunctions(base) {
         }   
         getProcMasterData(){
             let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+            if (this.procInstanceName===undefined){                
+                this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")
+            }
+            //sessionStorage.getItem("currentProcInstanceName")
             this.isProcManagement=userSession.isProcManagement
             if (this.isProcManagement===undefined||this.isProcManagement!==true){
                 //let userSession = JSON.parse(sessionStorage.getItem("userSession"))
 
-                
+                //alert(this.procInstanceName)
 
                 //console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
                 let findProc =[]
@@ -442,6 +446,7 @@ export function ListsFunctions(base) {
         }
         listEntriesFromMasterData(fldMDDef){
             this.getProcMasterData()
+            console.log(fldMDDef, this.masterData)
             return this.buildFrontListFromData(fldMDDef, this.masterData)
         }
     
