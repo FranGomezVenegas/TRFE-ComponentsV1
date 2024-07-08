@@ -427,13 +427,16 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     // if (this.viewModelFromProcModel!==undefined){
     //   console.log('render', this.viewModelFromProcModel, 'windowOpenable', this.windowOpenable)
     // }
+    //alert('TrProcedures '+this.procName)
+    sessionStorage.setItem('currentProcInstanceName', this.procName)
+
     return html`   
       ${this.windowOpenable=="yes" ? 
       html`      
         ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component !== null&&this.viewModelFromProcModel.component !== undefined
           &&this.viewModelFromProcModel.component.toLowerCase() == 'tablewithbuttons' ? html`
           <grid-with-buttons id="gridwithbuttons" .viewModelFromProcModel=${this.viewModelFromProcModel} viewName=${this.viewName} 
-            filterName=${this.filterName} procInstanceName=${this.procName} lang=${this.lang}
+            filterName=${this.filterName} .procInstanceName=${this.procName} lang=${this.lang}
             .config=${this.config} .reqParams=${this.reqParams} .masterData=${this.masterData} ?ready="false">
           </grid-with-buttons>
         `: html`
