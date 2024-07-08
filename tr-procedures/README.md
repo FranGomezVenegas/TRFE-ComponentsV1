@@ -48,7 +48,8 @@ v0.2.23 some changes:
     Tree-view for dialogs
     preview-files component
 v0.2.24 refresh master data wrong chronologically, run when the getViewData was performed and should be about to this to get the master data from the action, not the query.    
-
+v0.2.25 fix for highlights in audit, ckeditor and upload by POST
+v0.2.26 audit dialog included for objecttab-composition, required for inspection lots
 
 [- #196. Check Mandatory Fields not filled](https://github.com/FranGomezVenegas/FE-Issues/issues/196)
 [- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)

@@ -5,7 +5,7 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 //import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
-
+import '../Audit/audit-dialog';
 
 // import { kpiReportTitle, kpiReportTitleLvl2 } from '../../components/kpiChart/kpiChart.main.js';
 // import { kpiCard, kpiCardSomeElementsSingleObject, cardSomeElementsRepititiveObjects } from '../../components/kpiGrid/kpiGrid.main.js';
@@ -164,6 +164,11 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
         : nothing}
       ${this.decisionTemplate()}      
       ${super.render()}
+      <audit-dialog @sign-audit=${this.setAudit} .actionBeingPerformedModel=${this.actionBeingPerformedModel} 
+          .filterName=${this.filterName} .lang=${this.lang} .windowOpenable=${this.windowOpenable}
+          .sopsPassed=${this.sopsPassed} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName} 
+          .viewModelFromProcModel=${this.viewModelFromProcModel}
+          .selectedItems=${this.selectedItems} .config=${this.config}></audit-dialog>
 
     ` 
   }
@@ -489,6 +494,6 @@ resetTable() {
   }
 } 
 
-
+get audit() {return this.shadowRoot.querySelector("audit-dialog")}    
 }
 window.customElements.define('objecttabs-composition', ObjecttabsComposition);

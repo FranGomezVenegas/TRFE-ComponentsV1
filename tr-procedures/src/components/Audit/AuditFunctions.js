@@ -17,28 +17,32 @@ export function AuditFunctions(base) {
             this.fetchApi(params).then(j => {
               if (j && !j.is_error) {
                 let auditRecords=[]
-                this.audit.highlightFields =[]
-                if (j.audit_info!==undefined){
-                  auditRecords = j.audit_info
-                  if (j.highlight_fields!==undefined&&j.highlight_fields!==null){
-                    this.audit.highlightFields = j.highlight_fields
-                  }
-                }else{
+                if (this.audit!==null){
                   this.audit.highlightFields =[]
-                  auditRecords = j
-                }
-                if (Array.isArray(auditRecords)){
-                  auditRecords.forEach(audit => {
-                    audit.collapse = true
-                    if (audit.sublevel && audit.sublevel.length) {
-                      audit.sublevel.forEach(level => {
-                        level.collapse = false
-                      })
+                  if (j.audit_info!==undefined){
+                    auditRecords = j.audit_info
+                    if (j.highlight_fields!==undefined&&j.highlight_fields!==null){
+                      this.audit.highlightFields = j.highlight_fields
                     }
-                  })                
-                  this.audit.audits = auditRecords
-                  this.audit.requestUpdate()
+                  }else{
+                    this.audit.highlightFields =[]
+                    auditRecords = j
+                  }
+                  if (Array.isArray(auditRecords)){
+                    auditRecords.forEach(audit => {
+                      audit.collapse = true
+                      if (audit.sublevel && audit.sublevel.length) {
+                        audit.sublevel.forEach(level => {
+                          level.collapse = false
+                        })
+                      }
+                    })                
+                    this.audit.audits = auditRecords
+                    this.audit.requestUpdate()
+                  }
                // this.audit.auditDialog.show()
+              }else{
+                alert("Audit element not loaded, please contact TRAZiT frontend development team")
               }
               }
             })
