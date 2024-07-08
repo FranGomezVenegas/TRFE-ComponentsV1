@@ -131,6 +131,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
       this.localProceduresModels=ProceduresModel
       this.masterData={}
       this.contextMenuItems=[]
+      this.procInstanceName=''
     }
     resetView(){
       this.selectedItems=[]
@@ -140,6 +141,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
       return html`
         <div id="gridwithbuttons">      
           ${this.topCompositionBlock()} 
+
           ${this.abstractBlock()}
           ${this.bottomCompositionBlock()}  
           <div style="display:none">
@@ -149,7 +151,19 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
         </div>
       `
     }
+    firstUpdated() {
+      // Asegúrate de que el valor de procInstanceName se mantenga aquí
+      console.log('firstUpdated: ', this.procInstanceName);
+    }
+  
+    updated(changedProperties) {
+      // Rastrear cambios en las propiedades
+      if (changedProperties.has('procInstanceName')) {
+        console.log('updated: procInstanceName changed to ', this.procInstanceName);
+      }
+    }    
     loadDialogs(){
+      //alert('loadDialogs '+this.procInstanceName)
       //console.log('loadDialogs')
       return html`
       ${this.credentialsDialog()} 
@@ -271,9 +285,9 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
   abstractBlock(){
     //console.log('abstractBlock')
     let addContextMenu=this.addContextMenu()    
-  return html`
-  ${this.loadDialogs()} 
-  ${this.abstract ? 
+    return html`
+      ${this.loadDialogs()} 
+      ${this.abstract ? 
       nothing :
       html`
         <style>
