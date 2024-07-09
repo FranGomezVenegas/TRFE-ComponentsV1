@@ -49,7 +49,7 @@ class TableRowDetail extends DataViews(LitElement) {
 
 
 print2LevelsObject(elem, data){    
-    console.log(elem.elements)
+    //console.log(elem.elements)
     if (elem.expandInfoSectionDetail===undefined){return html``}
     return html`    
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
