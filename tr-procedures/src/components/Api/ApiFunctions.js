@@ -156,7 +156,7 @@ export function ApiFunctions(base) {
           let userSession = JSON.parse(sessionStorage.getItem("userSession"))
           extraParams.dbName = userSession.dbName
         }   
-        if (this.procInstanceName!==undefined&&excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
+        if (this.procInstanceName!==undefined&&excludeProcInstanceName!==undefined&&excludeProcInstanceName===false&&String(this.procInstanceName).length>0){
           extraParams.procInstanceName = this.procInstanceName
         }
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
@@ -499,7 +499,11 @@ export function ApiFunctions(base) {
         } else if (p.fixValue) {
           jsonParam[p.argumentName] = p.fixValue
         } else if (p.contextVariableName) {
-          jsonParam[p.argumentName] = this[p.contextVariableName]
+          if (this[p.contextVariableName]!==undefined&&String(this[p.contextVariableName]).length>0){
+            jsonParam[p.argumentName] = this[p.contextVariableName]
+          }else{
+            jsonParam[p.argumentName] = sessionStorage.getItem(p.contextVariableName)
+          }
         } else if (p.parentElementProperty) {
           jsonParam[p.argumentName] = parentElementData[p.parentElementProperty]
         } else {

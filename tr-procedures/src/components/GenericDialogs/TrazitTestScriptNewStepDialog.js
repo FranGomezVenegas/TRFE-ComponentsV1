@@ -510,7 +510,7 @@ export function TrazitTestScriptNewStepDialog(base) {
     // listEntries(fld){
 
     scriptStepArguments(fld, data){
-      s
+      
       this.isProcManagement=true
       //alert("Remember to remove line 510, TrazitTestScriptNewStepDialog")
       this.moduleName=sessionStorage.getItem('selectedProcedureModuleName')
@@ -526,7 +526,7 @@ export function TrazitTestScriptNewStepDialog(base) {
       );
       if (idx === -1) return [];
       let endpointParams =endPointList[idx]?.arguments_array ?? [];  
-      console.log(endpointParams)    
+      //console.log(endpointParams)    
       return html`
         ${endpointParams.map((curParam, curParamIdx) => html` 
             <span style="color:blue;">${curParam.name}:</span><span style="color:green;">${this.dataArgumentValue(data,curParamIdx)}</span> `
@@ -972,8 +972,8 @@ export function TrazitTestScriptNewStepDialog(base) {
       let userSession = JSON.parse(sessionStorage.getItem("userSession"))
       this.isProcManagement=userSession.isProcManagement
       if (this.isProcManagement===undefined||this.isProcManagement===false){return}
-      console.log("masterData", data);
-      console.log("actionBeingPerformedModel", this.actionBeingPerformedModel);
+      //console.log("masterData", data);
+      //console.log("actionBeingPerformedModel", this.actionBeingPerformedModel);
       let entries = [];
 
       if (data[fldMDDef.propertyNameContainer] === undefined) {
@@ -1056,7 +1056,7 @@ export function TrazitTestScriptNewStepDialog(base) {
           blankEmpty.arguments_array = item.arguments_array;
           entries.push(blankEmpty);
         });
-        console.log("entries at end", entries);
+        //console.log("entries at end", entries);
         return entries;
       }
       //let blankEmpty={keyName:"1", keyValue_en:"2", keyValue_es:"3"}

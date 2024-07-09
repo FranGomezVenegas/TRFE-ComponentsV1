@@ -52,6 +52,7 @@ v0.2.25 fix for highlights in audit, ckeditor and upload by POST
 v0.2.26 audit dialog included for objecttab-composition, required for inspection lots
 v0.2.27 twolistslinked
 v0.2.28 tree-viewfran
+v0.2.29 set contextVariableValue variables in storageSession and get it from there when not in context
 
 [- #196. Check Mandatory Fields not filled](https://github.com/FranGomezVenegas/FE-Issues/issues/196)
 [- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)
