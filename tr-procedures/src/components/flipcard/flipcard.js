@@ -13,16 +13,23 @@ class FlipCard extends navigator(LitElement) {
         flipCardAllowed: {type: Boolean},
         clickLinkAllowed: {type: Boolean},
         data: {type: Object},  
-
+        // imageUrl: {type: String},
+        // imageHeight: {type: String},
+        // imageWidth: {type: String},
     }
   }
+  
   constructor() {
-      super()
-      this.config={} 
-      this.data={}
-      this.flipCardAllowed=false
-      this.clickLinkAllowed=false
-  }  
+    super()
+    this.config={} 
+    this.data={role:"Hello World",title:"flip component"}
+    this.flipCardAllowed=true
+    this.clickLinkAllowed=true
+    // this.imageUrl = 'https://images.unsplash.com/photo-1720247521700-3bda3ce35077?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    // this.imageHeight = '200px'; // Default values
+    // this.imageWidth = '300px';  // Default values
+}
+
   firstUpdated() {
     this.flipCardElement = this.shadowRoot.querySelector('.flip-card');
   }
@@ -32,28 +39,38 @@ class FlipCard extends navigator(LitElement) {
     this.flipCardElement.classList.toggle('flipped');
   }
 
-  setConfigVariables(){
-    if (this.config!==undefined&&this.config.flipCardAllowed!==undefined){this.flipCardAllowed=this.config.flipCardAllowed}
-    if (this.config!==undefined&&this.config.clickLinkAllowed!==undefined){this.clickLinkAllowed=this.config.clickLinkAllowed}
+  setConfigVariables() {
+    if (this.config!==undefined && this.config.flipCardAllowed!==undefined) {
+      this.flipCardAllowed = this.config.flipCardAllowed;
+    }
+    if (this.config!==undefined && this.config.clickLinkAllowed!==undefined) {
+      this.clickLinkAllowed = this.config.clickLinkAllowed;
+    }
+    // if (this.config!==undefined && this.config.imageUrl!==undefined) {
+    //   this.imageUrl = this.config.imageUrl;
+    // }
+    // if (this.config!==undefined && this.config.imageHeight!==undefined) {
+    //   this.imageHeight = this.config.imageHeight;
+    // }
+    // if (this.config!==undefined && this.config.imageWidth!==undefined) {
+    //   this.imageWidth = this.config.imageWidth;
+    // }
   }
-  render() {
-    this.setConfigVariables()
+    render() {
+    this.setConfigVariables();
     return html`
-      <div class="flip-card-container">
-      
-        ${this.clickLinkAllowed===false? html`
-          <div class="flip-card">`: html`
-          <div class="flip-card" @click="${()=>{this._elementClicked()}}">
-        `}
+      <div class="flip-card-container">  
+        <div class="flip-card" @click ="${this.clickLinkAllowed ? this._elementClicked : () => {}}">
           <div class="flip-card-inner">
             <div class="flip-card-front">
               <div class="card-content">
                 <div class="card-header">
-                ${this.data.role===undefined?nothing: html`<p class="card-role">${this.data.role}</p>`}
-                ${this.data.title===undefined?nothing: html`<p class="card-title">${this.data.title}</p>`}
+                  ${this.data.role===undefined?nothing: html`<p class="card-role">${this.data.role}</p>`}
+                  ${this.data.title===undefined?nothing: html`<p class="card-title">${this.data.title}</p>`}
                 </div>
                 ${this.flipCardAllowed===false? nothing: html`<button class="flip-button" @click="${this.flipCard}">Flip Card</button>`}
               </div>
+              
             </div>
             <div class="flip-card-back">
               <div class="card-cover">
@@ -79,6 +96,7 @@ class FlipCard extends navigator(LitElement) {
       </div>
     `;
   }
+  
   _elementClicked(){
     alert('hola')
     let procName=this.data.procName 
