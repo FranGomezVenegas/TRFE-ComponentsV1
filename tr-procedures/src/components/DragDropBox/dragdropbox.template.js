@@ -362,51 +362,52 @@ function boxesTable(tmpLogic, elem, data, lang){
     `    
 }
 
-function getDataFromRoot(elem, data) {
+function getDataFromRoot(elem, curDataForThisCard, filterValues) {
     if (elem !== undefined && elem.contextVariableName !== undefined) {
       if (this[elem.contextVariableName] !== undefined) {
-        data = this[elem.contextVariableName];
+        curDataForThisCard = this[elem.contextVariableName];
       }
     }
-    if (data === null || data === undefined) {
+    if (curDataForThisCard === null || curDataForThisCard === undefined) {
       return undefined;
     }
     if (elem.endPointPropertyArray !== undefined) {
       if (elem.endPointPropertyArray.length === 0) {
-        return data;
+        return curDataForThisCard;
       }
       if (
         elem.endPointPropertyArray.length === 1 &&
         elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
       ) {
-        return data;
+        curDataForThisCard=applyFilterToTheData(curDataForThisCard, filterValues)
+        return curDataForThisCard;
       }
       //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
       //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
       let i = 0;
       let subJSON = {};
-      //data = data[elem.endPointPropertyArray[0]][0]
+      //curDataForThisCard = curDataForThisCard[elem.endPointPropertyArray[0]][0]
       for (i = 0; i < elem.endPointPropertyArray.length; i++) {
-        if (data === null) {
+        if (curDataForThisCard === null) {
           return undefined;
         }
         let propertyName = elem.endPointPropertyArray[i];
-        if (Array.isArray(data[propertyName])) {
+        if (Array.isArray(curDataForThisCard[propertyName])) {
           if (i < elem.endPointPropertyArray.length - 1) {
-            subJSON = data[propertyName][0];
+            subJSON = curDataForThisCard[propertyName][0];
           } else {
-            return data[propertyName];
+            return applyFilterToTheData(curDataForThisCard[propertyName], filterValues);
           }
         } else {
-          subJSON = data[propertyName];
+          subJSON = curDataForThisCard[propertyName];
         }
         if (typeof subJSON === "undefined") {
-          return data;
+          return applyFilterToTheData(curDataForThisCard, filterValues);
         } else {
-          data = subJSON;
+          curDataForThisCard = subJSON;
         }
       }
-      return data;
+      return applyFilterToTheData(curDataForThisCard, filterValues);
       if (typeof subJSON === "undefined") {
         return undefined;
       } else if (elem.endPointPropertyArray.length % 2 === 0) {
@@ -427,23 +428,24 @@ function getDataFromRoot(elem, data) {
         elem.endPointResponseObject !== undefined &&
         elem.endPointResponseObject2 !== undefined
       ) {
-        let dataToRet = [];
-        dataToRet = data[elem.endPointResponseObject];
-        if (dataToRet !== undefined) {
-          return dataToRet[elem.endPointResponseObject2];
+        let curDataForThisCardToRet = [];
+        curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
+        if (curDataForThisCardToRet !== undefined) {
+            
+          return applyFilterToTheData(curDataForThisCardToRet[elem.endPointResponseObject2],  filterValues);
         } else {
           return [];
         }
       } else {
         if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
-          if (!Array.isArray(data)) {
-            let dataArr = [];
-            dataArr.push(data);
-            return dataArr;
+          if (!Array.isArray(curDataForThisCard)) {
+            let curDataForThisCardArr = [];
+            curDataForThisCardArr.push(curDataForThisCard);
+            return applyFilterToTheData(curDataForThisCardArr,  filterValues);
           }
-          return data;
+          return applyFilterToTheData(curDataForThisCard,  filterValues);
         } else {
-          return data[elem.endPointResponseObject];
+          return applyFilterToTheData(curDataForThisCard[elem.endPointResponseObject],  filterValues);
         }
       }
     }

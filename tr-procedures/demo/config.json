@@ -9,27 +9,73 @@
   "backendUrlLabP": "http://platform.trazit.net:8888/LabPLANET-API",
   "backendUrlLocalLabPLANETAPI": "http://localhost:8080/LabPLANET-API",
 
-  "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
+	"appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
 
-  "frontEndEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIqueries",
-  "EnvMonSampleAPIQueriesStats": "/moduleenvmon/EnvMonAPIstats",
-  "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIactions",
-  "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPIactions",
-  "frontEndEnvMonitIncubationUrl": "/moduleenvmon/EnvMonIncubationAPIqueries",
-  "frontEndEnvMonitUrl": "/moduleenvmon/EnvMonAPIqueries",
-  "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPIactions",
+	"frontEndEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIqueries",
+	"EnvMonSampleAPIQueriesStats": "/moduleenvmon/EnvMonAPIstats",
+	"ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIactions",
+	"ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPIactions",
+	"frontEndEnvMonitIncubationUrl": "/moduleenvmon/EnvMonIncubationAPIqueries",
+	"frontEndEnvMonitUrl": "/moduleenvmon/EnvMonAPIqueries",
+	"ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPIactions",
 
-  "ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
-  "ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
-  "PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
-  "PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
+	"ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
+	"ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
+	"PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
+	"PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
 
-  "GenomaStudyAPIactionsUrl": "/modulegenoma/GenomaStudyAPIactions",
-  "GenomaStudyAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIqueries",
+	"GenomaStudyAPIactionsUrl": "/modulegenoma/GenomaStudyAPIactions",
+	"GenomaStudyAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIqueries",
 
-  "SampleAPIactionsUrl": "/modulesample/SampleAPIactions",
-  "SampleAPIqueriesUrl": "/modulesample/SampleAPIqueries",
+	"SampleAPIactionsUrl": "/modulesample/SampleAPIactions",
+	"SampleAPIqueriesUrl": "/modulesample/SampleAPIqueries",
 
+	"local": true,
+	"localDefaultView142": {
+		"procName": "proc-deploy",
+		"viewName": "SampleEnterResult",
+		"filterName": "ER-FQ"
+	},
+	"localDefaultView2131231": {
+		"procName": "genoma-1",
+		"viewName": "ProjectManager",
+		"filterName": "ProjectManager"
+	},
+	"localDefaultViewsssssa": {
+		"procName": "app-proc",
+		"viewName": "PlatformInstruments",
+		"filterName": "InstrumentsList"
+	},
+	"localDefaultViewcccccc": {
+		"procName": "app-proc",
+		"viewName": "EventsInProgress",
+		"filterName": "EventsER"
+	},
+	"localDefaultViewrr": {
+		"procName": "app-proc",
+		"viewName": "InstrumentReport",
+		"filterName": "InstrumentReport"
+	},
+	"localDefaultViewxxxxa": {
+		"procName": "app-proc",
+		"viewName": "ConfigInstrumentFamilies",
+		"filterName": "ConfigInstrumentFamilies"
+	},
+	"localDefaultViewxxxxa3": {
+		"procName": "app-proc",
+		"viewName": "Home",
+		"filterName": "Home"
+	},
+	"localDefaultView12312": {
+		"procName": "app-proc",
+		"viewName": "EventsCalendar",
+		"filterName": "EventsCalendar"
+	},
+	"localDefaultView1231": {
+		"procName": "mp-release1",
+		"viewName": "SpecView",
+		"filterName": "SpecView"
+	},
 
   "local": true,
   "localDefaultView142": {

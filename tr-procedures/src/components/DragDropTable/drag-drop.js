@@ -4,6 +4,7 @@ import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
+import '@material/mwc-select';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
