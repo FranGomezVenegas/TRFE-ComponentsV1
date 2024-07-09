@@ -1,4 +1,4 @@
-# Introduction
+# Introductions
 
 Collection of trazit components
 
