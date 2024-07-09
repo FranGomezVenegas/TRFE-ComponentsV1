@@ -31,50 +31,208 @@ export const template = (props, data, lang) => {
 
 }
 
-function myTable(elem, dataArr, lang, props) {
-    dataArr=getDataFromRoot(elem, dataArr)
-    return html`
-        <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;"> 
-            <thead>
-                ${elem.columns.map((column, i) => html`<th>${column["label_"+lang]}</th>`)}
-            </thead>
-            <tbody>
-                ${dataArr === undefined || !Array.isArray(dataArr) ? html `No Data` : 
-                html`  
-                    ${dataArr.map((p, idx) => { return html `
-                    <tr class="dragdropabletr" draggable="${elem.dragEnable}"  @dragstart=${(e) => props.dragTableTr(e, elem, p)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, elem, p)}>
-                        ${elem.columns.map((fld, index) =>         
-                            html`<td>${p[fld.name]}</td>`
-                        )}
-                        ${elem.row_buttons === undefined? html`` : html`
-                        <td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
-                        `}
-                    </tr>
-              
-                    `})}
-                `}
-            </tr>            
-            </tbody>
-        </table>
-    `;
+function myTable(elem, dataArr, lang, props, thisComponent) {  
+  dataArr=getDataFromRoot(elem, dataArr)
+ if(dataArr && Object.keys(elem.smartFilter.filterValues).length != 0){
+    dataArr=applyFilterToTheData(dataArr,elem.smartFilter.filterValues);
+ }
+ 
+
+ const renderTable = () => {
+  return html`
+      <div style="flex:1;">
+          <!-- Smart Filter UI -->
+          ${elem.smartFilter ? html`
+              <div class="smart-filter-container">
+                  <div>
+                      <span>
+                          <button class="smart-filter-button" @click="${() => { thisComponent.toggleFilterDialog(elem.name) }}">
+                              ${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}
+                          </button>
+                      </span>
+                  </div>
+                  <div id="smartFilterDiv_${elem.name}" ?hidden="${thisComponent.hideFilters(elem.name)}">
+                      ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
+                          html`
+                              ${!fld ? html`` : html`
+                                  ${fld.type === 'select' ? html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
+                                          <mwc-select id="list1" name="${fld.name}">
+                                              <mwc-list-item value="" name="">Select</mwc-list-item>
+                                              ${fld.select_options.map((c, i) =>
+                                                  html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
+                                              )}
+                                          </mwc-select>
+                                      </div>
+                                  ` : html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
+                                          <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
+                                              value=${fld.default_value ? fld.default_value : ''}
+                                              label="${fld["label_" + lang]}"
+                                              @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
+                                          </mwc-textfield>
+                                      </div>
+                                  `}
+                              `}
+                          `
+                      )}
+                      <div class="smart-filter-actions">
+                          <span>
+                              <button class="smart-filter-button" @click="${() => handleFilter(elem, thisComponent)}">
+                                  ${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}
+                              </button>
+                          </span>
+                          <span>
+                              <button class="smart-filter-button" @click="${() => handleClear(elem, thisComponent)}">
+                                  ${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}
+                              </button>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          ` : undefined}
+          <!-- Table -->
+          <table class="dragdropable TRAZiT-DefinitionArea">
+              <thead>
+                  ${elem.columns.map((column, i) => html`<th>${column["label_" + lang]}</th>`)}
+              </thead>
+              <tbody>
+                  ${dataArr === undefined || !Array.isArray(dataArr) ? html `No Data` :
+                      html`
+                          ${dataArr.map((p, idx) => html`
+                              <tr class="dragdropabletr" draggable="${elem.dragEnable}"
+                                  @dragstart=${(e) => props.dragTableTr(e, elem, p)}
+                                  @dragover=${(e) => props.allowDropTr(e)}
+                                  @drop=${(e) => props.dropTableTr(e, elem, p)}>
+                                  ${elem.columns.map((fld, index) =>
+                                      html`<td>${p[fld.name]}</td>`
+                                  )}
+                                  ${elem.row_buttons === undefined ? html`` : html`
+                                      <td>
+                                          <div class="layout horizontal center flex wrap">
+                                              ${thisComponent.getButtonForRows(elem.row_buttons, p, false, parentData)}
+                                          </div>
+                                      </td>
+                                  `}
+                              </tr>
+                          `)}
+                      `}
+              </tbody>
+          </table>
+      </div>
+  `;
+};
+
+
+  return renderTable();
 }
 
-function cardSomeElementsRepititiveObjects(elem, data, lang, props) {
+
+function handleFilter(elem,thisComponent){
+  let filterDiv = thisComponent.shadowRoot.querySelectorAll(`#smartFilterDiv_${elem.name} mwc-textfield`)
+  console.log(filterDiv)
+  let selectFilterDiv = thisComponent.shadowRoot.querySelector(`#smartFilterDiv_${elem.name} mwc-select`)          
+  filterDiv.forEach((elm,i) => {
+    let value = elm.shadowRoot.querySelector('.mdc-text-field__input').value
+    if (elem.smartFilter.dialogInfo.fields[i]?.name) {
+      elem.smartFilter.filterValues[elem.smartFilter.dialogInfo.fields[i].name] = value
+    }                      
+  })
+  if (selectFilterDiv) {
+    let name = selectFilterDiv.getAttribute('name')
+    let value = selectFilterDiv.shadowRoot.querySelector('input').value;
+    console.log(selectFilterDiv.shadowRoot.querySelector('input'))
+    elem.smartFilter.filterValues[name] = value
+  }            
+  thisComponent.requestUpdate(); 
+}
+
+
+function handleClear(elem,thisComponent){
+  elem.smartFilter.filterValues = {}
+      let filterDiv = thisComponent.shadowRoot.querySelectorAll(`#smartFilterDiv_${elem.name} mwc-textfield`)
+      let selectFilterDiv = thisComponent.shadowRoot.querySelector(`#smartFilterDiv_${elem.name} mwc-select`)    
+      if (selectFilterDiv) {
+        selectFilterDiv.shadowRoot.querySelector('input').value = 'null'
+      }
+     
+      filterDiv.forEach((elm, i) => {
+        const input = elm.shadowRoot.querySelector('.mdc-text-field__input');
+        if (input) {
+            input.value = '';
+        }
+    });       
+    thisComponent.requestUpdate()
+}
+function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent) {
   //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
+  
   data = getDataFromRoot(elem, data);
+  if(data && Object.keys(elem.smartFilter.filterValues).length != 0){
+    data=applyFilterToTheData(data,elem.smartFilter.filterValues);
+ }
   console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
   return html`
-    ${Array.isArray(data) && data.length > 0
-      ? html`
+      <div style="flex:1;">
+      <!-- Smart Filter UI -->
+      ${elem.smartFilter ? html`
+                        <div class="smart-filter-container">
+                  <div>
+                      <span>
+                          <button class="smart-filter-button" @click="${() => { thisComponent.toggleFilterDialog(elem.name) }}">
+                              ${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}
+                          </button>
+                      </span>
+                  </div>
+                  <div id="smartFilterDiv_${elem.name}" ?hidden="${thisComponent.hideFilters(elem.name)}">
+                      ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
+                          html`
+                              ${!fld ? html`` : html`
+                                  ${fld.type === 'select' ? html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
+                                          <mwc-select id="list1" name="${fld.name}">
+                                              <mwc-list-item value="" name="">Select</mwc-list-item>
+                                              ${fld.select_options.map((c, i) =>
+                                                  html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
+                                              )}
+                                          </mwc-select>
+                                      </div>
+                                  ` : html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
+                                          <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
+                                              value=${fld.default_value ? fld.default_value : ''}
+                                              label="${fld["label_" + lang]}"
+                                              @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
+                                          </mwc-textfield>
+                                      </div>
+                                  `}
+                              `}
+                          `
+                      )}
+                      <div class="smart-filter-actions">
+                          <span>
+                              <button class="smart-filter-button" @click="${() => handleFilter(elem, thisComponent)}">
+                                  ${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}
+                              </button>
+                          </span>
+                          <span>
+                              <button class="smart-filter-button" @click="${() => handleClear(elem, thisComponent)}">
+                                  ${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}
+                              </button>
+                          </span>
+                      </div>
+                  </div>
+              </div>
+
+      ` : undefined}
           ${data.map(
-            (d, i) => html` ${kpiCardSomeElementsMain(elem, d, lang, props)} `
+            (d, i) => html` ${kpiCardSomeElementsMain(elem, d, lang, props,thisComponent)} `
           )}
-        `
-      : html``}
+          </div>        
   `;
 }
-function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
-  //console.log('kpiCardSomeElementsMain', 'elem', elem, 'curDataForThisCard', curDataForThisCard)
+function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props,thisComponent) {
+  //console.log('kpiCardSomeElementsMain', 'elem', elem, 'curDataForThisCard', curDataForThisCard)  
   return html`
     ${elem === undefined || elem.title === undefined
       ? html``
@@ -87,7 +245,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
         elem.hideNoDataMessage
           ? ""
           : "No columns defined"}`
-      : html`
+      : html`     
           <div
             id="main${elem.add_border !== undefined &&
             elem.add_border == true
@@ -112,7 +270,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                   html`
                     ${fieldsToDiscard(fld) === true
                       ? html``
-                      : html`                      
+                      : html`
                           ${fld.as_ppt !== undefined &&
                           (fld.as_ppt === true || fld.as_video === true)
                             ? html`
@@ -143,7 +301,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                                       </div>
                                     `
                                   : html`
-                       
+
 <!---
                           <video controls type="video/mp4" src=${
                             curDataForThisCard[fld.name]
@@ -151,19 +309,19 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                           <div id="dialog-frame" class="dialog">
                           <mwc-icon-button icon="fullscreen_exit" @click=${
                             this.closeDialogFrame
-                          }></mwc-icon-button> 
+                          }></mwc-icon-button>
                             <video id="video-source" type="video/mp4" controls controlsList="nodownload"oncontextmenu="return false" onselectstart="return false" ondragstart="return false" >
                             </video>-->
                           </div>
                         `}
                               `
                             : html`
-                            ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`   
+                            ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`
                             <span class="cardLabel">${fieldLabel(fld, lang)}:</span>
-                            <span class="cardValue">                               
+                            <span class="cardValue">
                               <multi-select .label=${this.purpose} .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${curDataForThisCard[fld.name]} .options=${{}}> </multi-select>
                             </span>
-                            `:html`                                      
+                            `:html`
                                 ${fld.as_progress !== undefined &&
                                 fld.as_progress === true
                                   ? html`
@@ -225,7 +383,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                                           font-weight: bold;
                                           color: rgb(41, 137, 216); /* #032bbc; */
                                         }
-                                        span.cardMainValue {            
+                                        span.cardMainValue {
                                           color: rgba(214, 233, 248, 0.37); /* #009879; */
                                         }
                                       </style>
@@ -268,7 +426,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                                       </li>
                                     `}
                               `}
-                            `}  
+                            `}
                         `}
                   `
               )}
@@ -290,7 +448,6 @@ function titleLang(colDef) {
   } else {
     return colDef.name;
   }
-  return titleStr;
 }
 function fieldsToDiscard(fld) {
   if (fld.is_translation === undefined || fld.is_translation === false) {
@@ -318,97 +475,118 @@ function trElementType(elem){
     `
 }
 
+function applyFilterToTheData(curDataForThisCard, filterValues) {
+   
+    const uniqueItemsSet = new Set();
+    for (const key in filterValues) {
+            const filterValue = filterValues[key];
+            if (Array.isArray(curDataForThisCard)) {
+                const filteredItems = curDataForThisCard.filter(item => {
+                    if (item[key] && filterValue) {
+                      return item[key] == filterValue;
+                    }
+                    return false
+                });  
+                console.log(filteredItems)                         
+                filteredItems.forEach(item => uniqueItemsSet.add(item));            
+        }
+    }
+    return Array.from(uniqueItemsSet);
+
+}
+
+
 function getDataFromRoot(elem, curDataForThisCard) {
-    if (elem !== undefined && elem.contextVariableName !== undefined) {
-      if (this[elem.contextVariableName] !== undefined) {
-        curDataForThisCard = this[elem.contextVariableName];
-      }
+  if (elem !== undefined && elem.contextVariableName !== undefined) {
+    if (this[elem.contextVariableName] !== undefined) {
+      curDataForThisCard = this[elem.contextVariableName];
     }
-    if (curDataForThisCard === null || curDataForThisCard === undefined) {
-      return undefined;
-    }
-    if (elem.endPointPropertyArray !== undefined) {
-      if (elem.endPointPropertyArray.length === 0) {
-        return curDataForThisCard;
-      }
-      if (
-        elem.endPointPropertyArray.length === 1 &&
-        elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
-      ) {
-        return curDataForThisCard;
-      }
-      //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
-      //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
-      let i = 0;
-      let subJSON = {};
-      //curDataForThisCard = curDataForThisCard[elem.endPointPropertyArray[0]][0]
-      for (i = 0; i < elem.endPointPropertyArray.length; i++) {
-        if (curDataForThisCard === null) {
-          return undefined;
-        }
-        let propertyName = elem.endPointPropertyArray[i];
-        if (Array.isArray(curDataForThisCard[propertyName])) {
-          if (i < elem.endPointPropertyArray.length - 1) {
-            subJSON = curDataForThisCard[propertyName][0];
-          } else {
-            return curDataForThisCard[propertyName];
-          }
-        } else {
-          subJSON = curDataForThisCard[propertyName];
-        }
-        if (typeof subJSON === "undefined") {
-          return curDataForThisCard;
-        } else {
-          curDataForThisCard = subJSON;
-        }
-      }
+  }
+  if (curDataForThisCard === null || curDataForThisCard === undefined) {
+    return undefined;
+  }
+  if (elem.endPointPropertyArray !== undefined) {
+    if (elem.endPointPropertyArray.length === 0) {
       return curDataForThisCard;
-      if (typeof subJSON === "undefined") {
+    }
+    if (
+      elem.endPointPropertyArray.length === 1 &&
+      elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
+    ) {
+      return curDataForThisCard;
+    }
+    //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
+    //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
+    let i = 0;
+    let subJSON = {};
+    //curDataForThisCard = curDataForThisCard[elem.endPointPropertyArray[0]][0]
+    for (i = 0; i < elem.endPointPropertyArray.length; i++) {
+      if (curDataForThisCard === null) {
         return undefined;
-      } else if (elem.endPointPropertyArray.length % 2 === 0) {
-        // If the input array has an even number of elements, skip one more object level before recursing
-        return getValueFromNestedJSON(
-          subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-        );
+      }
+      let propertyName = elem.endPointPropertyArray[i];
+      if (Array.isArray(curDataForThisCard[propertyName])) {
+        if (i < elem.endPointPropertyArray.length - 1) {
+          subJSON = curDataForThisCard[propertyName][0];
+        } else {
+          return curDataForThisCard[propertyName];
+        }
       } else {
-        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
-        return getValueFromNestedJSON(
-          subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-        );
+        subJSON = curDataForThisCard[propertyName];
+      }
+      if (typeof subJSON === "undefined") {
+        return curDataForThisCard;
+      } else {
+        curDataForThisCard = subJSON;
+      }
+    }
+    return curDataForThisCard;
+    if (typeof subJSON === "undefined") {
+      return undefined;
+    } else if (elem.endPointPropertyArray.length % 2 === 0) {
+      // If the input array has an even number of elements, skip one more object level before recursing
+      return getValueFromNestedJSON(
+        subJSON,
+        elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+      );
+    } else {
+      // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
+      return getValueFromNestedJSON(
+        subJSON,
+        elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+      );
+    }
+  } else {
+    if (
+      elem.endPointResponseObject !== undefined &&
+      elem.endPointResponseObject2 !== undefined
+    ) {
+      let curDataForThisCardToRet = [];
+      curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
+      if (curDataForThisCardToRet !== undefined) {
+        return curDataForThisCardToRet[elem.endPointResponseObject2];
+      } else {
+        return [];
       }
     } else {
-      if (
-        elem.endPointResponseObject !== undefined &&
-        elem.endPointResponseObject2 !== undefined
-      ) {
-        let curDataForThisCardToRet = [];
-        curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
-        if (curDataForThisCardToRet !== undefined) {
-          return curDataForThisCardToRet[elem.endPointResponseObject2];
-        } else {
-          return [];
+      if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
+        if (!Array.isArray(curDataForThisCard)) {
+          let curDataForThisCardArr = [];
+          curDataForThisCardArr.push(curDataForThisCard);
+          return curDataForThisCardArr;
         }
+        return curDataForThisCard;
       } else {
-        if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
-          if (!Array.isArray(curDataForThisCard)) {
-            let curDataForThisCardArr = [];
-            curDataForThisCardArr.push(curDataForThisCard);
-            return curDataForThisCardArr;
-          }
-          return curDataForThisCard;
-        } else {
-          return curDataForThisCard[elem.endPointResponseObject];
-        }
+        return curDataForThisCard[elem.endPointResponseObject];
       }
     }
   }
+} 
 export const template2 = (props) => {
-    return html`    
+    return html`
         <div style="display:flex; flex-direction:row; gap:12px;">
         ${props.curDataForThisCard.tableData.map((taData, ii) => html`
-            <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;"> 
+            <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;">
                 <thead>
                         ${props.data.tableDefinition.columns.map((column, i) => html`
                             <th>${column.label_en}</th>
@@ -416,9 +594,9 @@ export const template2 = (props) => {
                     <tr>
                 </thead>
                 <tbody>
-                    ${taData.map((data, index) => 
+                    ${taData.map((data, index) =>
                     props.data.tableDefinition.dragEnable[ii] && props.data.tableDefinition.dropEnable[ii] ? html `
-                    <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, ii, index)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, ii, index)}>                    
+                    <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, ii, index)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, ii, index)}>
                         <td> ${data.id} </td>
                         <td> ${data.study} </td>
                         <td> ${data.temperature} </td>
@@ -428,7 +606,7 @@ export const template2 = (props) => {
                     <td> ${data.id} </td>
                         <td> ${data.study} </td>
                         <td> ${data.temperature} </td>
-                    </tr> ` : 
+                    </tr> ` :
                     props.data.tableDefinition.dragEnable[ii] ? html `
                     <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, ii, index)}>
                         <td> ${data.id} </td>

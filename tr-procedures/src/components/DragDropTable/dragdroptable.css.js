@@ -255,5 +255,111 @@ export const styles = css`
     .card {
       flex: 0 0 calc(100% - 20px);
     }
-  }  
+  }
+  
+  /* Smart Filter Container */
+.smart-filter-container {
+    background: rgb(36, 192, 235);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Smart Filter Buttons */
+.smart-filter-button {
+    background: linear-gradient(79deg, #4668db, #9d70cd);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.smart-filter-button:hover {
+    opacity: 0.9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.smart-filter-button:active {
+    transform: translateY(2px);
+}
+
+/* Smart Filter Fields */
+.smart-filter-field {
+    margin: 10px 0;
+}
+
+.smart-filter-field mwc-select, .smart-filter-field mwc-textfield {
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.smart-filter-field mwc-select:hover, .smart-filter-field mwc-textfield:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Smart Filter Actions */
+.smart-filter-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 15px;
+    text-align: left;
+}
+
+th {
+    background: linear-gradient(79deg, #4668db, #9d70cd);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+tr:hover {
+    background: #f1f1f1;
+    transition: background 0.3s ease;
+}
+
+/* Row Buttons */
+.row-button {
+    background: linear-gradient(79deg, #4668db, #9d70cd);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.row-button:hover {
+    opacity: 0.9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.row-button:active {
+    transform: translateY(2px);
+}
+
+
 `

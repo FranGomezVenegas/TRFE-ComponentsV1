@@ -1004,6 +1004,71 @@ export const FakeDevelopers = {
         "dropEnable": false,
         "name": "1",
         "type": "table",
+        smartFilter: {
+          "filterValues":{},
+          "applyFilterButton":{
+            "title":{
+              label_en: 'Apply Filter',
+              label_es: 'Aplicar Filtro',
+            }
+          },
+          "clearFilterButton":{
+            "title":{
+              label_en: 'Clear Filter',
+              label_es: 'Limpiar Filtro',
+            }
+          },
+          "displayFilterButton":{
+            "title":{
+              label_en: 'Display Filter',
+              label_es: 'Mostrar Filtro',
+            }
+          },
+          dialogInfo: {
+            name: 'genericDialog',
+
+            "fields": [
+              {
+                "name": "sample_id",
+                "label_en": "id",
+                "label_es": "id",
+                "type":"text",
+              },
+              {
+                "name": "location_name",
+                "label_en": "location_name",
+                "label_es": "location_name",
+                "type":"text",
+              },
+              {
+                "name": "pending_incub",
+                "label_en": "pending_incub",
+                "label_es": "pending_incub",
+                "type":"text",
+              },
+              {
+                "name": "location_name",
+                "type":"select",
+                "label_en": "location_name",
+                "label_es": "location_name",
+                "select_options":[
+                  {
+                    "name":"E02",
+                    "lable_en":"E02",
+                    "lable_es":"E02",
+                    "value":"E02"
+                  },
+                  {
+                    "name":"C01",
+                    "lable_en":"C01",
+                    "lable_es":"C01",
+                    "value":"C01"
+                  }
+                ]
+              }
+              ],
+          }
+        },
         "theme":"TRAZiT-DefinitionArea",
         "endPointPropertyArray":["samplesWithAnyPendingIncubation"],
         "columns": [
@@ -1029,6 +1094,65 @@ export const FakeDevelopers = {
         "name": "2",
         "acceptEntriesOnlyFromObjects":["11", "3"],
         "type": "cards",
+        smartFilter: {
+          "filterValues":{},
+          "applyFilterButton":{
+            "title":{
+              label_en: 'Apply Filter',
+              label_es: 'Aplicar Filtro',
+            }
+          },
+          "clearFilterButton":{
+            "title":{
+              label_en: 'Clear Filter',
+              label_es: 'Limpiar Filtro',
+            }
+          },
+          "displayFilterButton":{
+            "title":{
+              label_en: 'Display Filter',
+              label_es: 'Mostrar Filtro',
+            }
+          },
+          dialogInfo: {
+            name: 'genericDialog',
+
+            "fields": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre",
+                "type":"text",
+              },
+              {
+                "name": "incub_stage",
+                "label_en": "Incub Stage",
+                "label_es": "Etapa de incubación",
+                "type":"text",
+              },
+              {
+                "name": "incubation_start",
+                "label_en": "Incubation Start",
+                "label_es": "Inicio de incubación",
+                "type":"text",
+              },
+              {
+                "name": "incub_stage",
+                "type":"select",
+                "label_en": "Incub Stage",
+                "label_es": "Etapa de incubación",
+                "select_options":[
+                  {
+                    "name":"1",
+                    "lable_en":"1",
+                    "lable_es":"1",
+                    "value":"1"
+                  }
+                ]
+              }
+              ],
+          }
+        },
         "title": "Testing Script Coverage",
         "add_border":true,
         "num_columns": 1,        
@@ -1076,6 +1200,65 @@ export const FakeDevelopers = {
       "dropEnable": false,
       "name": "3",
       "type": "table",
+      smartFilter: {
+        "filterValues":{},
+        "applyFilterButton":{
+          "title":{
+            label_en: 'Apply Filter',
+            label_es: 'Aplicar Filtro',
+          }
+        },
+        "clearFilterButton":{
+          "title":{
+            label_en: 'Clear Filter',
+            label_es: 'Limpiar Filtro',
+          }
+        },
+        "displayFilterButton":{
+          "title":{
+            label_en: 'Display Filter',
+            label_es: 'Mostrar Filtro',
+          }
+        },
+        dialogInfo: {
+          name: 'genericDialog',
+
+          "fields": [
+            {
+              "name": "name",
+              "label_en": "Name",
+              "label_es": "Nombre",
+              "type":"text",
+            },
+            {
+              "name": "incub_stage",
+              "label_en": "Incub Stage",
+              "label_es": "Etapa de incubación",
+              "type":"text",
+            },
+            {
+              "name": "incubation_start",
+              "label_en": "Incubation Start",
+              "label_es": "Inicio de incubación",
+              "type":"text",
+            },
+            {
+              "name": "incub_stage",
+              "type":"select",
+              "label_en": "Incub Stage",
+              "label_es": "Etapa de incubación",
+              "select_options":[
+                {
+                  "name":"1",
+                  "lable_en":"1",
+                  "lable_es":"1",
+                  "value":"1"
+                }
+              ]
+            }
+            ],
+        }
+      },
       "theme":"TRAZiT-DefinitionArea",
       "endPointPropertyArray":["active_batches"],
       "dataIntegrityCheck":{
