@@ -1,7 +1,7 @@
 import { html } from "lit-element";
 import '@material/mwc-icon';
 
-export const template = (props, data, lang) => {    
+export const template = (props, data, lang, thisComponent) => {    
   return html`
     <div style="display:flex; flex-direction:row; gap:12px;">
       ${props.definition.map((curTable, ii) => 
@@ -15,8 +15,8 @@ export const template = (props, data, lang) => {
                   <span class="title">${curTable.title["label_" + lang]}</span>
                 </p>
               `}              
-              ${curTable.type === 'table' ? myTable(curTable, data, lang, props) : html``}
-              ${curTable.type === 'cards' ? cardSomeElementsRepititiveObjects(curTable, data, lang, props) : html``}
+              ${curTable.type === 'table' ? myTable(curTable, data, lang, props, thisComponent) : html``}
+              ${curTable.type === 'cards' ? cardSomeElementsRepititiveObjects(curTable, data, lang, props, thisComponent) : html``}
               ${curTable.type !== 'table' && curTable.type !== 'cards' ? 
                 html`The type ${curTable.type} is not recognized` 
                 : 
@@ -225,7 +225,8 @@ function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent
               </div>
 
       ` : undefined}
-          ${data.map(
+
+          ${Array.isArray(data) && data?.map(
             (d, i) => html` ${kpiCardSomeElementsMain(elem, d, lang, props,thisComponent)} `
           )}
           </div>        

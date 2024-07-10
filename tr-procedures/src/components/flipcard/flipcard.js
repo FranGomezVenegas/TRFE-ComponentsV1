@@ -13,22 +13,25 @@ class FlipCard extends navigator(LitElement) {
         flipCardAllowed: {type: Boolean},
         clickLinkAllowed: {type: Boolean},
         data: {type: Object},  
-        // imageUrl: {type: String},
-        // imageHeight: {type: String},
-        // imageWidth: {type: String},
+        imageUrl: {type: String},
+        imageHeight: {type: String},
+        imageWidth: {type: String},
     }
   }
   
   constructor() {
-    super()
-    this.config={} 
-    this.data={role:"Hello World",title:"flip component"}
-    this.flipCardAllowed=true
-    this.clickLinkAllowed=true
-    // this.imageUrl = 'https://images.unsplash.com/photo-1720247521700-3bda3ce35077?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-    // this.imageHeight = '200px'; // Default values
-    // this.imageWidth = '300px';  // Default values
-}
+    super();
+    this.config = {}; 
+    this.data = {
+      role: "Hello World",
+      title: "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a"
+    };
+    this.flipCardAllowed = true;
+    this.clickLinkAllowed = true;
+    this.imageUrl = 'https://images.unsplash.com/photo-1720475376136-bf9bf6c0c782?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+    this.imageHeight = '50px'; // Default values
+    this.imageWidth = '100%';  // Default values
+  }
 
   firstUpdated() {
     this.flipCardElement = this.shadowRoot.querySelector('.flip-card');
@@ -40,37 +43,37 @@ class FlipCard extends navigator(LitElement) {
   }
 
   setConfigVariables() {
-    if (this.config!==undefined && this.config.flipCardAllowed!==undefined) {
+    if (this.config && this.config.flipCardAllowed !== undefined) {
       this.flipCardAllowed = this.config.flipCardAllowed;
     }
-    if (this.config!==undefined && this.config.clickLinkAllowed!==undefined) {
+    if (this.config && this.config.clickLinkAllowed !== undefined) {
       this.clickLinkAllowed = this.config.clickLinkAllowed;
     }
-    // if (this.config!==undefined && this.config.imageUrl!==undefined) {
-    //   this.imageUrl = this.config.imageUrl;
-    // }
-    // if (this.config!==undefined && this.config.imageHeight!==undefined) {
-    //   this.imageHeight = this.config.imageHeight;
-    // }
-    // if (this.config!==undefined && this.config.imageWidth!==undefined) {
-    //   this.imageWidth = this.config.imageWidth;
-    // }
+    if (this.config && this.config.imageUrl !== undefined) {
+      this.imageUrl = this.config.imageUrl;
+    }
+    if (this.config && this.config.imageHeight !== undefined) {
+      this.imageHeight = this.config.imageHeight;
+    }
+    if (this.config && this.config.imageWidth !== undefined) {
+      this.imageWidth = this.config.imageWidth;
+    }
   }
-    render() {
+
+  render() {
     this.setConfigVariables();
     return html`
       <div class="flip-card-container">  
-        <div class="flip-card" @click ="${this.clickLinkAllowed ? this._elementClicked : () => {}}">
+        <div class="flip-card">
           <div class="flip-card-inner">
             <div class="flip-card-front">
               <div class="card-content">
                 <div class="card-header">
-                  ${this.data.role===undefined?nothing: html`<p class="card-role">${this.data.role}</p>`}
-                  ${this.data.title===undefined?nothing: html`<p class="card-title">${this.data.title}</p>`}
+                  ${this.data.role === undefined ? nothing : html`<p class="card-role">${this.data.role}</p>`}
+                  ${this.data.title === undefined ? nothing : html`<p class="card-title">${this.data.title}</p>`}
                 </div>
-                ${this.flipCardAllowed===false? nothing: html`<button class="flip-button" @click="${this.flipCard}">Flip Card</button>`}
+                ${this.imageUrl ? html`<img src="${this.imageUrl}" alt="Dynamic Image" style="height:${this.imageHeight}; width:${this.imageWidth};" />` : nothing}
               </div>
-              
             </div>
             <div class="flip-card-back">
               <div class="card-cover">
@@ -89,21 +92,21 @@ class FlipCard extends navigator(LitElement) {
                   <li>Naming Conventions</li>
                 </ul>
               </div>
-              <button class="flip-button" @click="${this.flipCard}">Flip Card</button>
             </div>
           </div>
         </div>
+        ${this.flipCardAllowed ? html`<button class="flip-button" @click="${this.flipCard}">Flip Card</button>` : nothing}
       </div>
     `;
   }
   
   _elementClicked(){
-    alert('hola')
-    let procName=this.data.procName 
-    let vwName=this.data.vwName
-    let fltrName=this.data.fltrName
-    if (procName===undefined){
-      procName=this.procName
+    alert('hola');
+    let procName = this.data.procName;
+    let vwName = this.data.vwName;
+    let fltrName = this.data.fltrName;
+    if (procName === undefined){
+      procName = this.procName;
     }
     console.log("elementClicked", procName, vwName, fltrName);
     this._selectedMenu(
@@ -115,6 +118,7 @@ class FlipCard extends navigator(LitElement) {
         fltrName
     );
   } 
+
   _selectedMenu = (route) => {
     this.shadowRoot
       .querySelectorAll("sp-action-menu")

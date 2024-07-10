@@ -3,17 +3,24 @@ import { css } from 'lit';
 export const flipCardStyles = css`
   .flip-card-container {
     perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    overflow: auto; /* Added to show scrollbar if content exceeds */
+    max-height: 400px; /* Adjust as needed */
   }
 
   .flip-card {
-    width: 300px;
-    height: 400px;
+    width: 300px; /* Set a fixed width for the flip card */
+    height: 400px; /* Set a fixed height for the flip card */
     position: relative;
     transition: transform 0.6s;
     transform-style: preserve-3d;
     cursor: pointer;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Added to contain flip card content */
   }
 
   .flip-card-inner {
@@ -24,22 +31,33 @@ export const flipCardStyles = css`
     position: relative;
   }
 
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
   .flip-card-front,
   .flip-card-back {
+    width: 100%;
     height: 100%;
     position: absolute;
     backface-visibility: hidden;
     border-radius: 10px;
-    overflow: hidden;
+    box-sizing: border-box;
   }
 
   .flip-card-front {
     background: linear-gradient(79deg, #4668db, #9d70cd);
     color: white;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     padding: 20px;
     text-align: center;
   }
@@ -48,15 +66,15 @@ export const flipCardStyles = css`
     background: linear-gradient(79deg, #4668db, #9d70cd);
     transform: rotateY(180deg);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    color: white;
     padding: 20px;
     text-align: center;
   }
 
   .card-header {
+    width: 100%;
     margin-bottom: 20px;
   }
 
@@ -69,7 +87,7 @@ export const flipCardStyles = css`
 
   .card-title {
     font-family: 'VT323', monospace;
-    font-size: 3.6rem;
+    font-size: 2.4rem;
     font-weight: 100;
     margin-bottom: 10px;
   }
@@ -122,6 +140,10 @@ export const flipCardStyles = css`
     border-radius: 5px;
     margin-top: 20px;
     transition: background-color 0.3s ease;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .flip-button:hover {
