@@ -215,6 +215,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         import('./module_sample/log-sample-module-sample')
         return
       case 'ProcHome':
+        this.windowOpenable=true
         import('./proc-homes/index')
         return
       default:
