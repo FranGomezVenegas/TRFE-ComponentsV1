@@ -4,23 +4,23 @@ export const flipCardStyles = css`
   .flip-card-container {
     perspective: 1000px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
     margin: 20px 0;
-    overflow: auto; /* Added to show scrollbar if content exceeds */
-    max-height: 400px; /* Adjust as needed */
+    gap: 20px; /* Espacio entre las tarjetas */
   }
 
   .flip-card {
-    width: 300px; /* Set a fixed width for the flip card */
-    height: 400px; /* Set a fixed height for the flip card */
+    width: calc((100% / var(--cards-per-row, 3)) - 20px); /* Ajuste dinámico para 3 columnas por defecto */
+    height: var(--flip-card-height, 400px);
     position: relative;
     transition: transform 0.6s;
     transform-style: preserve-3d;
     cursor: pointer;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Added to contain flip card content */
+    overflow: hidden;
   }
 
   .flip-card-inner {
@@ -34,7 +34,7 @@ export const flipCardStyles = css`
   .card-content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     max-width: 100%;
     max-height: 100%;
@@ -49,6 +49,7 @@ export const flipCardStyles = css`
     backface-visibility: hidden;
     border-radius: 10px;
     box-sizing: border-box;
+    padding: 10px 0; /* Reducir el padding superior */
   }
 
   .flip-card-front {
@@ -57,8 +58,7 @@ export const flipCardStyles = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: flex-start; /* Alinear contenido al principio */
     text-align: center;
   }
 
@@ -68,14 +68,13 @@ export const flipCardStyles = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: flex-start; /* Alinear contenido al principio */
     text-align: center;
   }
 
   .card-header {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reducir el margen inferior */
   }
 
   .card-role {
@@ -86,15 +85,15 @@ export const flipCardStyles = css`
   }
 
   .card-title {
-    font-family: 'VT323', monospace;
+    font-family: Montserrat;
     font-size: 2.4rem;
     font-weight: 100;
     margin-bottom: 10px;
   }
 
   .card-cover {
-    width: 100%;
-    height: 40%;
+    width: 90%;
+    height: 25%; /* Ajustar la altura */
     background: linear-gradient(to top right, #1e0b36, #ca3782);
     color: white;
     display: flex;
@@ -104,12 +103,11 @@ export const flipCardStyles = css`
   }
 
   .card-heading-text {
-    font-family: 'VT323', monospace;
-    font-size: 2.4rem;
+    font-family: Montserrat;
+    font-size: 2.1rem;
     font-weight: 300;
     text-transform: uppercase;
-    padding: 10px 15px;
-    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px 15px;    
     border-radius: 5px;
   }
 
@@ -140,23 +138,39 @@ export const flipCardStyles = css`
     border-radius: 5px;
     margin-top: 20px;
     transition: background-color 0.3s ease;
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
   }
 
   .flip-button:hover {
     background-color: #ca3782;
   }
 
+  .button-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 20px;
+  }
+
   .flipped .flip-card-inner {
     transform: rotateY(180deg);
   }
 
+  .text-normal {
+    color: white;
+  }
+
+  .text-warning {
+    color: yellow;
+  }
+
+  .text-critical {
+    color: #7b0a1f;
+  }
+
   @media only screen and (max-width: 600px) {
     .flip-card {
-      width: 80%;
+      width: calc(100% - 20px); /* Ajuste para pantallas pequeñas */
       height: auto;
     }
   }

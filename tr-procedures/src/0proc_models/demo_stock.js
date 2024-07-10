@@ -20,6 +20,52 @@ export const Stock =
 	{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIqueries"}
 	]
   },
+  "Home":{
+	"component": "ProcHome",
+    "title": {
+		"fix_text_en": "Home, Stocks",
+		"fix_text_es": "Inicio, Stocks",
+		"name": ""
+	},
+	"view_definition": [
+		{
+			"type":"flipcard",
+			"config": { flipCardAllowed: true, cardsPerRow:5 },
+			"data":[
+				{
+					contentOnFront: {
+						cardTitle: { label_en: "All Inventory", label_es: "Todo el Stock" },
+						textTop: { label_en: "Hello", label_es: "Esto es un texto", type: "normal" },
+						textLow: { label_en: "Goodbye", label_es: "Un ejemplo más", type: "warning" }
+					},
+					contentOnBack: {
+						cardTitle: { label_en: "All Inventory", label_es: "Todo el Stock" },
+						detail: { label_en: ["All Inventory", "Critical!"], label_es: ["Todo el Stock", "Crítico!"], types: ["normal", "critical"] }
+					},
+					procInstanceName: 'stock',
+					viewName: 'MasterData',
+					flipCardAllowed: true,
+					clickLinkAllowed: true
+				},
+				{
+					contentOnFront: {
+						cardTitle: { label_en: "All Inventory", label_es: "Todo el Stock" },
+						textTop: { label_en: "Hello", label_es: "Esto es un texto", type: "normal" },
+						textLow: { label_en: "Goodbye", label_es: "Un ejemplo más", type: "warning" }
+					},
+					contentOnBack: {
+						cardTitle: { label_en: "All Inventory", label_es: "Todo el Stock" },
+						detail: { label_en: ["All Inventory", "Critical!"], label_es: ["Todo el Stock", "Crítico!"], types: ["normal", "critical"] }
+					},
+					procInstanceName: 'stock',
+					viewName: 'MasterData',
+					flipCardAllowed: true,
+					clickLinkAllowed: true
+				}				
+			]
+		}
+	]	
+  },
   "MasterData":{
     "component": "ObjectByTabs",
 	"hideLeftPane": true,
