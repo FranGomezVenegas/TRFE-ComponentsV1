@@ -214,6 +214,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'ModuleSampleLogSample':
         import('./module_sample/log-sample-module-sample')
         return
+      case 'ProcHome':
+        import('./proc-homes/index')
+        return
       default:
         alert('In TrProcedures, not found component '+this.viewModelFromProcModel.component)
         return
@@ -368,6 +371,14 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}>
         </log-sample-module-sample>        
       `:html``}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ProcHome' ? html`
+        <proc-homes 
+          .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed}  .lang=${this.lang}
+          .procInstanceName=${this.procName} .viewName=${this.viewName}   .filterName=${this.filterName}  
+          .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}>
+        </proc-homes>        
+      `:html``}
+
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitProgramProc' ? html`
         <program-proc .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
