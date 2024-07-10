@@ -53,6 +53,7 @@ v0.2.26 audit dialog included for objecttab-composition, required for inspection
 v0.2.27 twolistslinked
 v0.2.28 tree-viewfran
 v0.2.29 set contextVariableValue variables in storageSession and get it from there when not in context
+v0.2.30 api functions, when the view or button requires apply subViewFilter then it was endpointParams or subViewFilter and we need to have arguments complementary in both places.
 
 [- #196. Check Mandatory Fields not filled](https://github.com/FranGomezVenegas/FE-Issues/issues/196)
 [- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)

@@ -611,7 +611,470 @@ export const MonWater= {
         }
       ]      
   },
-  "SampleEnterResult": {
+  "SampleEnterResult":{
+    "component": "TableWithButtons",
+    "langConfig": {
+      "gridHeader": {
+        "sample_id": {
+          "label_en": "Sample ID",
+          "label_es": "ID Muestra",
+          "sort": true,
+          "filter": false
+        },
+        "program_name": {
+          "label_en": "Project",
+          "label_es": "Programa",
+          "sort": true,
+          "filter": false
+        },
+        "location_name": {
+          "label_en": "Location",
+          "label_es": "Ubicación",
+          "sort": true,
+          "filter": false
+        },
+        "sampling_date": {
+          "label_en": "sampling Date",
+          "label_es": "ID Fecha de Muestreo",
+          "sort": true,
+          "filter": false
+        },
+        "spec_code": {
+          "label_en": "Spec",
+          "label_es": "Especificación",
+          "sort": true,
+          "filter": false
+        }
+      },
+      "title": [
+        {
+          "ER-FQ": {
+            "label_en": "My english title FQ",
+            "label_es": "My Spanish title FQ"
+          }
+        },
+        {
+          "ER-MB": {
+            "label_en": "My english title MB",
+            "label_es": "My Spanish title MB"
+          }
+        }
+      ]
+    },
+    "viewQuery": {
+      "actionName": "SAMPLES_INPROGRESS_LIST",
+      "addRefreshButton": false,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      },
+      "endPointParams": [
+        {
+          "argumentName": "sampleFieldToRetrieve",
+          "value": "sample_id|current_stage|status|status_previous|sampling_date|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name"
+        },
+        {
+          "argumentName": "whereFieldsValue",
+          "value": "LOGGED-RECEIVED-INCOMPLETE-COMPLETE*String|prog_pers_template|-"
+        },
+        {
+          "argumentName": "whereFieldsName",
+          "value": "status in-|sample_config_code not in*|sampling_date is not null"
+        },
+        {
+          "argumentName": "addSampleAnalysisFieldToRetrieve",
+          "value": "method_name|testing_group"
+        },
+        {
+          "argumentName": "addSampleAnalysis",
+          "value": false
+        },
+        {
+          "argumentName": "addSampleAnalysisResult",
+          "value": false
+        },
+        {
+          "argumentName": "includeOnlyIfResultsInProgress",
+          "value": true
+        }
+      ],
+      "subViewFilter": {        
+          "ER-FQ": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsName",
+              "value": "testing_group|status not in-"
+            },
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "FQ*String|REVIEWED-CANCELED*String"
+            }
+          ],
+          "ER-MB": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsName",
+              "value": "testing_group|status not in-"
+            },
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "MB*String|REVIEWED-CANCELED*String"
+            }
+          ]        
+      }     
+    },
+    "row_buttons": [],
+    "enableContextMenu": false,
+    "addActionsInContextMenu": true,
+    "actions": [
+      {
+        "actionName": "ENTERRESULT",
+        "requiresDialog": true,
+        "endPointUrl": "Samples",
+        "alertMsg": {
+          "empty": {
+            "label_en": "No pending results to enter result",
+            "label_es": "No hay resultados pendientes de resultados"
+          }
+        },
+        "button": {
+          "icon": "document_scanner",
+          "title": {
+            "label_en": "Enter Result",
+            "label_es": "Ingrese el Resultado"
+          },
+          "requiresGridItemSelected": true
+        },
+        "dialogInfo": {
+          "name": "resultDialog",
+          "subQueryName": "getResult",
+          "viewQuery": {
+            "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+            "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "selObjectPropertyName": "sample_id"
+              }
+            ],
+            "subViewFilter": {
+              "ER-FQ": [
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsName",
+                  "value": "testing_group|status not in-"
+                },
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsValue",
+                  "value": "FQ*String|REVIEWED-CANCELED*String"
+                }
+              ],
+              "ER-MB": [
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsName",
+                  "value": "testing_group|status not in-"
+                },
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsValue",
+                  "value": "MB*String|REVIEWED-CANCELED*String"
+                }
+              ]
+            }
+          },
+          "automatic": true,
+          "resultHeader": {
+            "spec_eval": {
+              "label_en": "Spec Eval",
+              "label_es": "Eval Espec"
+            },
+            "result_id": {
+              "label_en": "Result Id",
+              "label_es": "Id Resultado"
+            },
+            "analysis": {
+              "label_en": "Analysis",
+              "label_es": "Análísis"
+            },
+            "param_name": {
+              "label_en": "Parameter",
+              "label_es": "Parámetro"
+            },
+            "raw_value": {
+              "label_en": "Value",
+              "label_es": "Valor"
+            },
+            "uom": {
+              "label_en": "UOM",
+              "label_es": "UOM"
+            }
+          },
+          "resultHeaderObjectLabelTopLeft": {
+            "label_en": "Sample: ",
+            "label_es": "Muestra: "
+          },
+          "action": [
+            {
+              "actionName": "ENTERRESULT",
+              "notGetViewData": true,
+              "requiresDialog": false,
+              "endPointUrl": "Samples",
+              "clientMethod": "enterResult",
+              "endPointParams": [
+                {
+                  "argumentName": "rawValueResult",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "resultId",
+                  "targetValue": true
+                }
+              ]
+            },
+            {
+              "actionName": "RESULT_CHANGE_UOM",
+              "clientMethod": "changeUOM",
+              "endPointParams": [
+                {
+                  "argumentName": "newResultUom",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "resultId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleAnalysisResultFieldToRetrieve",
+            "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
+          },
+          {
+            "argumentName": "sortFieldsName",
+            "value": "test_id|result_id"
+          },
+          {
+            "argumentName": "sampleAnalysisWhereFieldsName",
+            "value": "testing_group|status not in"
+          },
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ],
+        "subViewFilter": {
+          "ER-FQ": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "FQ|REVIEWED*String"
+            }
+          ],
+          "ER-MB": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "MB|REVIEWED*String"
+            }
+          ]
+        }
+      },
+      {
+        "actionName": "ENTERRESULT",
+        "requiresDialog": true,
+        "endPointUrl": "Samples",
+        "alertMsg": {
+          "empty": {
+            "label_en": "No pending results to enter result",
+            "label_es": "No hay resultados pendientes de resultados"
+          }
+        },
+        "button": {
+          "icon": "document_scanner",
+          "title": {
+            "label_en": "Enter Result",
+            "label_es": "Ingrese el Resultado"
+          },
+          "requiresGridItemSelected": true
+        },
+        "dialogInfo": {
+          "name": "resultDialog",
+          "subQueryName": "getResult",
+          "viewQuery": {
+            "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
+            "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "selObjectPropertyName": "sample_id"
+              }
+            ],
+            "subViewFilter": {
+              "ER-FQ": [
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsName",
+                  "value": "testing_group|status not in-"
+                },
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsValue",
+                  "value": "FQ*String|REVIEWED-CANCELED*String"
+                }
+              ],
+              "ER-MB": [
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsName",
+                  "value": "testing_group|status not in-"
+                },
+                {
+                  "argumentName": "sampleAnalysisWhereFieldsValue",
+                  "value": "MB*String|REVIEWED-CANCELED*String"
+                }
+              ]
+            }
+          },
+          "automatic": true,
+          "resultHeader": {
+            "spec_eval": {
+              "label_en": "Spec Eval",
+              "label_es": "Eval Espec"
+            },
+            "result_id": {
+              "label_en": "Result Id",
+              "label_es": "Id Resultado"
+            },
+            "analysis": {
+              "label_en": "Analysis",
+              "label_es": "Análísis"
+            },
+            "param_name": {
+              "label_en": "Parameter",
+              "label_es": "Parámetro"
+            },
+            "raw_value": {
+              "label_en": "Value",
+              "label_es": "Valor"
+            },
+            "uom": {
+              "label_en": "UOM",
+              "label_es": "UOM"
+            }
+          },
+          "resultHeaderObjectLabelTopLeft": {
+            "label_en": "Sample: ",
+            "label_es": "Muestra: "
+          },
+          "action": [
+            {
+              "actionName": "ENTERRESULT",
+              "notGetViewData": true,
+              "requiresDialog": false,
+              "endPointUrl": "Samples",
+              "clientMethod": "enterResult",
+              "endPointParams": [
+                {
+                  "argumentName": "rawValueResult",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "resultId",
+                  "targetValue": true
+                }
+              ]
+            },
+            {
+              "actionName": "RESULT_CHANGE_UOM",
+              "clientMethod": "changeUOM",
+              "endPointParams": [
+                {
+                  "argumentName": "newResultUom",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "resultId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleAnalysisResultFieldToRetrieve",
+            "value": "result_id|analysis|method_name|method_version|param_name|param_type|raw_value|uom|spec_eval|spec_eval_detail|status|min_val_allowed|min_allowed_strict|max_val_allowed|max_allowed_strict"
+          },
+          {
+            "argumentName": "sortFieldsName",
+            "value": "test_id|result_id"
+          },
+          {
+            "argumentName": "sampleAnalysisWhereFieldsName",
+            "value": "testing_group|status not in"
+          },
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ],
+        "subViewFilter": {
+          "ER-FQ": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "FQ|REVIEWED*String"
+            }
+          ],
+          "ER-MB": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "MB|REVIEWED*String"
+            }
+          ]
+        }
+      },
+      {
+        "actionName": "GET_SAMPLE_AUDIT",
+        "buttonForQuery": true,
+        "requiresDialog": true,
+        "endPoint": "/modulesample/SampleAPIqueries",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Sample Audit",
+            "label_es": "Auditoría de Muestra"
+          },
+          "requiresGridItemSelected": true
+        },
+        "clientMethod": "getObjectAuditInfo",
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ],
+        "dialogInfo": {
+          "name": "auditDialog",
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "requiresDialog": false,
+              "notGetViewData": true,
+              "endPointUrl": "Samples",
+              "clientMethod": "signAudit",
+              "endPointParams": [
+                {
+                  "argumentName": "auditId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+
+  },
+  "SampleEnterResult20240710": {
     "component": "TableWithButtons",
     "langConfig": {
       "title": {

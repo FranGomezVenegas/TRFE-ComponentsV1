@@ -178,14 +178,14 @@ export function ApiFunctions(base) {
           if (action.endPointParams) {
             action.endPointParams.forEach(p => {
               this.buildJsonParam(jsonParam, p, selObject, targetValue, selGridObject, parentElementData, dragEntry, dropEntry)
-            })
-            return jsonParam
+            })            
+            //return jsonParam
           }
           if (action.extraParams) {
             action.extraParams.forEach(p => {
               this.buildJsonParam(jsonParam, p, selObject, targetValue, selGridObject, parentElementData, dragEntry, dropEntry)
             })
-            return jsonParam
+            //return jsonParam
           }
           //console.log('jsonParam', 'action', action, 'filterName', this.filterName)
           if (action.subViewFilter!==undefined&&this.filterName!==undefined){
@@ -197,7 +197,7 @@ export function ApiFunctions(base) {
             action.subViewFilter[this.filterName].forEach(p => {
               this.buildJsonParam(jsonParam, p, selObject, targetValue, selGridObject, parentElementData, dragEntry, dropEntry)
             })
-            return jsonParam
+            //return jsonParam
           }
           return jsonParam
       }
