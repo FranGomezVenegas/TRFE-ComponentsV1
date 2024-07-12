@@ -12,7 +12,8 @@ export class StagesView extends navigator(LitElement) {
       stages: { type: Array},
       currentstage: { type: Number },
       data:{type: Object},
-      lang: {type: String}
+      lang: {type: String},
+      ejemplo:{type: String}
     };
   }
 
@@ -22,6 +23,7 @@ export class StagesView extends navigator(LitElement) {
     this.currentstage = 0;
     this.data = {}
     this.lang=''
+    this.example='mi valor por defecto'
   }
 
   render() {
