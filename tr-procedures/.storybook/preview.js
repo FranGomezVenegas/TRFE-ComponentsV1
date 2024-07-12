@@ -7,7 +7,13 @@ const preview = {
         date: /Date$/i,
       },
     },
+    docs: {
+      container: DocsContainer,
+      page: DocsPage,
+    },
   },
 };
+
+import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
 
 export default preview;
