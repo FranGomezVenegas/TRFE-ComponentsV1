@@ -5,9 +5,17 @@ export function GridFunctions(base) {
     return class extends ButtonsFunctions(base) {
 
         getTitle(sectionModel = this.viewModelFromProcModel) {
+            
             let textToDisplay=this.filterName
-            if (sectionModel.langConfig&&sectionModel.langConfig.title[this.filterName]) {
-                textToDisplay=sectionModel.langConfig.title[this.filterName]["label_"+this.lang]
+            if (this.filterName===undefined||this.filterName==='undefined'){
+                textToDisplay=sectionModel.langConfig.title["label_"+this.lang]
+            }else{
+                if (sectionModel.langConfig&&sectionModel.langConfig.title[this.filterName]) {
+                    textToDisplay=sectionModel.langConfig.title[this.filterName]["label_"+this.lang]
+                }
+            }
+            if (textToDisplay===undefined||textToDisplay==='undefined'){
+                textToDisplay=''
             }
                 let viewDisabled=this.disabledByCertification({})
                 if (viewDisabled){
