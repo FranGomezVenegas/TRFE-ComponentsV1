@@ -1,5 +1,5 @@
 import {LitElement, html, css} from 'lit';
-import './ckeditor-js';
+import './ckeditor-js.js';
 import { MyCustomUploadAdapterPlugin } from './ckeditor-upload-plugin';
 
 export class LitCKEditor extends LitElement {
@@ -6071,18 +6071,34 @@ export class LitCKEditor extends LitElement {
   }
 
   async saveData() {
+    const form = new FormData();
     if (this.editor) {
       const textValue = this.editor.getData();
       let myArgument='&textValue='+textValue
       // Temporary API for demonstration
-      const response = await fetch('https://platform.trazit.net:8443/TRAZiT-API/app/PlatformAdminAPIactions', {
-        method: 'POST',
-        actionName: 'SAVE_NEW_TEXT',
+      let actionParams={
+        actionName: 'UPDATE_TEXT',
+        id: 10,
         dbName: 'demo_v0_9_2',
         procInstanceName: 'app',
         finalToken: 'eyJ1c2VyREIiOiJhZG1pbiIsImRhdGV0aW1lRm9ybWF0QXRQbGF0Zm9ybUxldmVsIjoiRElTQUJMRUQiLCJwcm9jc01vZHVsZU5hbWUiOiJpbnNwZWN0aW9uX2xvdCpJTlNQRUNUSU9OX0xPVFN8aW5zdHJ1bWVudHMqSU5TVFJVTUVOVFN8RGVtbypJTlNUUlVNRU5UU3xEaXNlYXNlU3R1ZGllcypDTElOSUNBTF9TVFVESUVTfG1iX2VtKk1PTklUT1JJTkd8c3RvY2sqU1RPQ0tTfG1vbl93YXRlcipNT05JVE9SSU5HfFJhbmREKlBST0pFQ1RfUkR8YXBwKmFwcCIsImRiTmFtZSI6ImRlbW9fdjBfOV8yIiwidHlwIjoiSldUIiwidXNlcl9wcm9jZWR1cmVfaGFzaGNvZGVzIjoiaW5zcGVjdGlvbl9sb3QqMSotNzA0MjE0NTU2fGluc3RydW1lbnRzKjEqLTEwMzcwNjEzNXxEZW1vKjEqMTc3MjYyMzEyOHxEaXNlYXNlU3R1ZGllcyoxKjE5NzQ3NzE3MzF8bWJfZW0qMSoyMzQyNDI1NDV8c3RvY2sqMSotOTU5NTcyNDc4fG1vbl93YXRlcioxKjIwNTM4MDY4NjV8UmFuZEQqMSoxODk3ODgwNjQ5fGFwcCoxKi0xIiwiZVNpZ24iOiJmaXJtYWRlbW8iLCJ1c2VyREJQYXNzd29yZCI6InRyYXppdCIsInVzZXJNYWlsIjoiTkVXdHJheml0LmluZm9AZ21haWwuY29tIiwidXNlcl9wcm9jZWR1cmVzIjoiW2luc3BlY3Rpb25fbG90LCBpbnN0cnVtZW50cywgRGVtbywgRGlzZWFzZVN0dWRpZXMsIG1iX2VtLCBzdG9jaywgbW9uX3dhdGVyLCBSYW5kRCwgYXBwXSIsImFwcFNlc3Npb25JZCI6Ijg1MjkiLCJhcHBTZXNzaW9uU3RhcnRlZERhdGUiOiJXZWQgSnVsIDAzIDE4OjEzOjQyIFVUQyAyMDI0IiwidXNlclJvbGUiOiJzdXBlcnVzZXIiLCJhbGciOiJIUzI1NiIsImludGVybmFsVXNlcklEIjoiNDU0ODkyMjMifQ.eyJpc3MiOiJMYWJQTEFORVRkZXN0cmFuZ2lzSW5UaGVOaWdodCJ9.jtJmzS4E9SLB7rY8g1GM8MNHDy_NU1sQJVh1V3d2r04',
         textValue: textValue,
         isForTesting: false
+      }
+      if (actionParams!==undefined){
+        Object.keys(actionParams).forEach(key => {
+          form.append(key, actionParams[key]);
+        });
+      }
+      // if (APIParams!==undefined){
+      //   Object.keys(APIParams).forEach(key => {
+      //     form.append(key, APIParams[key]);
+      //   });
+      // }
+      const response = await fetch('http://localhost:8081/TRAZiT-API/app/PlatformAdminAPIactions', {
+        method: 'POST',
+        body: form,
+        credentials: 'same-origin'
       });
 
       if (response.ok) {
