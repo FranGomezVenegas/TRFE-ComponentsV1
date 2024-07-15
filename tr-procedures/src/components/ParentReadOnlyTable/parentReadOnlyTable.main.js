@@ -1,26 +1,23 @@
-import { LitElement } from 'lit-element';
-import { template } from './parentReadOnlyTable.template';
-import { styles } from './parentReadOnlyTable.css';
+import { LitElement } from 'lit';
+//import { stylesParTbl } from './styles';
 
 export class ParentReadOnlyTable extends LitElement {
   static get styles() {
-    return styles;
+    return [styles];
   }
 
   static get properties() {
     return {
+      elem: { type: Object },
       data: { type: Array }
     };
   }
 
-  constructor() {
-    super();
-    this.data = [];
-  }
-
   render() {
-    return template(this.data);
+    // Asegúrate de que data es un arreglo antes de pasarlo a la plantilla
+    const data = Array.isArray(this.data) ? this.data : [];
+    return template(this.elem, data);
   }
 }
 
-window.customElements.define('parent-read-only-table', ParentReadOnlyTable);
+customElements.define('parent-read-only-table', ParentReadOnlyTable);

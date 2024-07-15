@@ -147,12 +147,15 @@ export function ActionsFunctions(base) {
      * set the justification type, generate justification list for non text type
      */
      trazitCheckProcList(isProcManagement) {
-      if (this.procInstanceName===undefined){
+      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
-        if (currentTabView!==null&&currentTabView!==undefined){
+        if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
           this.procInstanceName=currentTabView.procInstanceName
         }
-      }        
+      }
+      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+        this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
+      }      
       if (isProcManagement===undefined){
         let userSession=JSON.parse(sessionStorage.getItem("userSession"))
         isProcManagement=userSession.isProcManagement

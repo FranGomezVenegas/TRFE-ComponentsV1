@@ -211,20 +211,7 @@ export function DataViews(base) {
         }</p>
           `;
     }
-    kpiRecoveryRate() {
-      //console.log('kpiRecoveryRate', this.data.recoveryrate_datatable)
-      return html`
-        ${!this.data.recoveryrate_datatable ||
-          !this.data.recoveryrate_datatable.data
-          ? nothing
-          : html`
-              <lit-datatable
-                .data="${this.data.recoveryrate_datatable.data}"
-                .conf="${this.data.recoveryrate_datatable.conf}"
-              ></lit-datatable>
-            `}
-      `;
-    }
+
     kpiGrid(elem, data = this.data) {
       //console.log('kpiGrid', elem, "data", this.data[elem.elementName])
       let fldsToDisplay = [];
@@ -3109,6 +3096,16 @@ export function DataViews(base) {
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
           .model=${elem} ?ready="true" .data=${data}
           .viewModelFromProcModel=${elem} .config=${this.config}></drag-drop>      
+      `
+    }    
+    calendar(elem, data) {
+      import('../Calendar/index')
+      console.log('calendar', 'elem', elem, 'data', data)
+      return html`
+        <calendar-component .fakeData=${false} .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .model=${elem} ?ready="true" .data=${data}
+          .viewModelFromProcModel=${elem} .config=${this.config}></calendar-component>      
       `
     }    
   };

@@ -50,7 +50,7 @@ export const Stock =
 				{
 					contentOnFront: {
 						cardTitle: { label_en: "All Inventory", label_es: "Todo el Stock" },
-						textTop: { label_en: "Hello", label_es: "Esto es un texto", type: "normal" },
+						textTop: { label_en: "Helloss", label_es: "Esto es un texto", type: "normal" },
 						textLow: { label_en: "Goodbye", label_es: "Un ejemplo más", type: "warning" }
 					},
 					contentOnBack: {

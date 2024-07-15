@@ -10,34 +10,65 @@ class CalendarComponent extends LitElement {
   }
   firstUpdated() {
     super.firstUpdated();
-    this.events = events.program_calendar.dates;
-    this.holidays_calendar = events.program_calendar.holidays_calendar;
-    this.firstDayOfWeek = events.program_calendar.day_of_week;
-    this.schedule_size_unit = events.program_calendar.schedule_size_unit
-    this.currentDate = events.program_calendar.start_date
-      ? new Date(events.program_calendar.start_date)
-      : new Date();
-    this.firstDateOfWeek = new Date(
-      this.currentDate.getFullYear(),
-      this.currentDate.getMonth(),
-      this.currentDate.getDate() - (this.firstDayOfWeek === "MONDAY" ? (this.currentDate.getDay() === 0 ? 6 : this.currentDate.getDay() - 1) : this.currentDate.getDay())
-    );
-    console.log(this.firstDateOfWeek)
-    this.calendarStartDate = new Date(
-      new Date(events.program_calendar.start_date).setHours(0, 0, 0)
-    );
-    this.calendarEndDate = new Date(
-      new Date(events.program_calendar.end_date).setHours(0, 0, 0)
-    );
-    this.currentDisplayedYear = events.program_calendar.start_date
-      ? new Date(events.program_calendar.start_date).getFullYear()
-      : new Date().getFullYear();
-    this.currentDisplayedMonth = events.program_calendar.start_date
-      ? new Date(events.program_calendar.start_date).getMonth()
-      : new Date().getMonth();
-    this.currentYear = events.program_calendar.start_date
-      ? new Date(events.program_calendar.start_date).getFullYear()
-      : new Date().getFullYear();
+    if (this.fakeData){
+      this.events = events.program_calendar.dates;
+      this.holidays_calendar = events.program_calendar.holidays_calendar;
+      this.firstDayOfWeek = events.program_calendar.day_of_week;
+      this.schedule_size_unit = events.program_calendar.schedule_size_unit
+      this.currentDate = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date)
+        : new Date();
+      this.firstDateOfWeek = new Date(
+        this.currentDate.getFullYear(),
+        this.currentDate.getMonth(),
+        this.currentDate.getDate() - (this.firstDayOfWeek === "MONDAY" ? (this.currentDate.getDay() === 0 ? 6 : this.currentDate.getDay() - 1) : this.currentDate.getDay())
+      );
+      console.log(this.firstDateOfWeek)
+      this.calendarStartDate = new Date(
+        new Date(events.program_calendar.start_date).setHours(0, 0, 0)
+      );
+      this.calendarEndDate = new Date(
+        new Date(events.program_calendar.end_date).setHours(0, 0, 0)
+      );
+      this.currentDisplayedYear = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date).getFullYear()
+        : new Date().getFullYear();
+      this.currentDisplayedMonth = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date).getMonth()
+        : new Date().getMonth();
+      this.currentYear = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date).getFullYear()
+        : new Date().getFullYear();
+    }else{
+      this.events = events.program_calendar.dates;
+      this.holidays_calendar = events.program_calendar.holidays_calendar;
+      this.firstDayOfWeek = events.program_calendar.day_of_week;
+      this.schedule_size_unit = events.program_calendar.schedule_size_unit
+      this.currentDate = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date)
+        : new Date();
+      this.firstDateOfWeek = new Date(
+        this.currentDate.getFullYear(),
+        this.currentDate.getMonth(),
+        this.currentDate.getDate() - (this.firstDayOfWeek === "MONDAY" ? (this.currentDate.getDay() === 0 ? 6 : this.currentDate.getDay() - 1) : this.currentDate.getDay())
+      );
+      console.log(this.firstDateOfWeek)
+      this.calendarStartDate = new Date(
+        new Date(events.program_calendar.start_date).setHours(0, 0, 0)
+      );
+      this.calendarEndDate = new Date(
+        new Date(events.program_calendar.end_date).setHours(0, 0, 0)
+      );
+      this.currentDisplayedYear = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date).getFullYear()
+        : new Date().getFullYear();
+      this.currentDisplayedMonth = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date).getMonth()
+        : new Date().getMonth();
+      this.currentYear = events.program_calendar.start_date
+        ? new Date(events.program_calendar.start_date).getFullYear()
+        : new Date().getFullYear();      
+    }
     this.setDayBasedOnStartWeek =
       (this.firstDayOfWeek.toLowerCase() || 'SUNDAY') === 'monday' ? 1 : 2;
     this.dayNames = getDayNames(this.firstDayOfWeek || 'SUNDAY');

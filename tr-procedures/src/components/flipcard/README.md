@@ -5,6 +5,8 @@
 ### config (Object)
 - `flipCardAllowed` (boolean): Indica si se permite voltear la tarjeta. (Opcional)
 - `cardsPerRow` (number): Número de tarjetas por fila. (Opcional)
+- `height` (string): (Opcional) The width, if no present the default width is 50px
+- `width` (string): (Opcional) The width, if no present the default width is 100%
 
 ### data (Array)
 - `textLow` (string): Texto en la parte inferior de la tarjeta. (Obligatorio)

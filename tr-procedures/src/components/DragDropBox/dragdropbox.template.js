@@ -449,5 +449,25 @@ function getDataFromRoot(elem, curDataForThisCard, filterValues) {
         }
       }
     }
+    function applyFilterToTheData(curDataForThisCard, filterValues) {
+   
+        const uniqueItemsSet = new Set();
+        for (const key in filterValues) {
+                const filterValue = filterValues[key];
+                if (Array.isArray(curDataForThisCard)) {
+                    const filteredItems = curDataForThisCard.filter(item => {
+                        if (item[key] && filterValue) {
+                          return item[key] == filterValue;
+                        }
+                        return false
+                    });  
+                    console.log(filteredItems)                         
+                    filteredItems.forEach(item => uniqueItemsSet.add(item));            
+            }
+        }
+        return Array.from(uniqueItemsSet);
+    
+    }
   }
+
 

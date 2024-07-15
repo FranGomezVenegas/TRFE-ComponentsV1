@@ -170,12 +170,16 @@ export class Dropzone extends ApiFunctions(LitElement) {
 
     let actionParams = this.jsonParam(this.action, this.selectedItem, undefined, this.selectedItem, undefined, undefined, undefined);
 
-    Object.keys(actionParams).forEach(key => {
-      form.append(key, actionParams[key]);
-    });
-    Object.keys(APIParams).forEach(key => {
-      form.append(key, APIParams[key]);
-    });
+    if (actionParams!==undefined){
+      Object.keys(actionParams).forEach(key => {
+        form.append(key, actionParams[key]);
+      });
+    }
+    if (APIParams!==undefined){
+      Object.keys(APIParams).forEach(key => {
+        form.append(key, APIParams[key]);
+      });
+    }
     let serviceAPIurl=this.getServiceAPIUrl(this.action)
     let params = serviceAPIurl + endPointUrl;
 

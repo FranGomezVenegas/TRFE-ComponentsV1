@@ -123,7 +123,8 @@ export class CalendarData extends DataViews(TrazitGenericDialogs(TrazitFormsElem
             leftSplitDisplayed: { type: Boolean },
 
             selectedCalendarDate: { type: Array },
-            selectedCalendar: { type: Object },      
+            selectedCalendar: { type: Object },  
+            fakeData:{type:Boolean}    
         }
     }
     constructor() {
@@ -147,6 +148,7 @@ export class CalendarData extends DataViews(TrazitGenericDialogs(TrazitFormsElem
 
         this.selectedCalendar={}
         this.selectedCalendarDate=[]
+        this.fakeData=false
     }
     title() {      
       return html`

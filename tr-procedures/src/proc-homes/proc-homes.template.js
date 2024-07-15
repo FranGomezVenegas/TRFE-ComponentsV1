@@ -1,11 +1,10 @@
 import { html } from 'lit-element';
 
 export const template = (props) => {
-    if (props.viewModelFromProcModel===undefined||props.viewModelFromProcModel.view_definition===undefined){return html``}
+    if (props.viewModelFromProcModel === undefined || props.viewModelFromProcModel.view_definition === undefined) { return html``; }
     let index = 0;
     return html`
-    <div style="position:relative;">
-    d
+    <div class="container">
         ${props.viewModelFromProcModel === undefined || props.viewModelFromProcModel.title === undefined
         ? nothing
         : html`<span
@@ -13,10 +12,10 @@ export const template = (props) => {
             >${props.viewModelFromProcModel.title["fix_text_" + props.lang]}</span
             >`}
         ${props.viewModelFromProcModel.view_definition.map((elem) => html`  
-            ${elem.type==="flipcard" ? html`
+            ${elem.type === "flipcard" ? html`
                 <flip-card .lang=${props.lang} .config=${elem.config} .data=${elem.data}></flip-card>
             ` : nothing}
         `)}  
     </div>
-    `
-}
+    `;
+};

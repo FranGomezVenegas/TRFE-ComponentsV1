@@ -7,6 +7,14 @@ import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
 import '../Audit/audit-dialog';
 
+import '../../components/kpiReportTitle/kpiReportTitle.main.js';
+import '../../components/kpiReportTitleLvl2/kpiReportTitleLvl2.main.js';
+import '../../components/kpiRecoveryRate/kpiRecoveryRate.main.js';
+import '../../components/kpiGrid/kpiGrid.main.js';
+import '../../components/readOnlyTableByGroup/readOnlyTableByGroup.main.js';
+import '../../components/jsonViewer/jsonViewer.main.js';
+
+
 // import { kpiReportTitle, kpiReportTitleLvl2 } from '../../components/kpiChart/kpiChart.main.js';
 // import { kpiCard, kpiCardSomeElementsSingleObject, cardSomeElementsRepititiveObjects } from '../../components/kpiGrid/kpiGrid.main.js';
 // import { jsonViewer } from '../../components/jsonViewer/jsonViewer.main.js';
@@ -430,6 +438,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="buttonsOnly" ? this.buttonsOnly(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="tree" ? this.treeElement(elem, data)   : nothing}
       ${elem.type==="dragDropObjects" ? this.dragDropObjects(elem, data)   : nothing}
+      ${elem.type==="Calendar" ? this.calendar(elem, data)   : nothing}
     `
   }
 

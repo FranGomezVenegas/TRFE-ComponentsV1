@@ -66,11 +66,6 @@
 		"viewName": "Home",
 		"filterName": "Home"
 	},
-	"localDefaultView12312": {
-		"procName": "app-proc",
-		"viewName": "EventsCalendar",
-		"filterName": "EventsCalendar"
-	},
 	"localDefaultView1231": {
 		"procName": "mp-release1",
 		"viewName": "SpecView",
@@ -343,11 +338,6 @@
     "viewName": "PlatformInstruments", 
     "filterName" :  "InstrumentsList" 
   },
-  "localDefaultViewzzz": {
-    "procName":  "fake-developers", 
-    "viewName": "ck-editor", 
-    "filterName" :  "ck-editor" 
-  },
   "localDefaultView111": {
     "procName":  "mb_em", 
     "viewName": "ProductionLots", 
@@ -365,9 +355,24 @@
   },
   "localDefaultView": {
     "procName":  "stock", 
+    "viewName": "Home", 
+    "filterName" :  "Home" 
+  },
+  "localDefaultViewffff": {
+    "procName":  "stock", 
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
+	"localDefaultView22": {
+		"procName": "instruments",
+		"viewName": "EventsCalendar",
+		"filterName": "EventsCalendar"
+	},
+  "localDefaultView": {
+    "procName":  "fake-developers", 
+    "viewName": "ck-editor", 
+    "filterName" :  "ck-editor" 
+  },
 
   "fakeEnd":{
   }  

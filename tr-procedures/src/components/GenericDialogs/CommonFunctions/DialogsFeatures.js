@@ -12,7 +12,8 @@ export function DialogsFeatures(base) {
             return false
         }   
     
-        fieldLabel(fld){        
+        fieldLabel(fld){      
+            if (fld===undefined){return ''}  
             let fldLbl= fld["label_" + this.lang]
             if (fld.optional===undefined||fld.optional===false){
                 fldLbl="* "+fldLbl

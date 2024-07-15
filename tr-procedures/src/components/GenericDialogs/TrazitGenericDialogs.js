@@ -1148,6 +1148,7 @@ export function TrazitGenericDialogs(base) {
     }        
 
     async fldDefaultValue(fldDef){
+        if (fldDef===undefined){return ''}
         let curArgName=""
         //console.log('fldDefaultValue', fldDef)
         if (fldDef.default_value){

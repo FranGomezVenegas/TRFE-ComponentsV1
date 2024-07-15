@@ -1,6 +1,6 @@
-import { css } from 'lit-element';
+import { css } from 'lit';
 
-export const styles = css`
+export const stylesParTbl = css`
   table {
     width: 100%;
     border-collapse: collapse;

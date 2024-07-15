@@ -1,26 +1,23 @@
-import { LitElement } from 'lit-element';
-import { template } from './kpiGrid.template.js';
-import { styles } from './kpiGrid.css.js/index.js';
+import { LitElement } from 'lit';
+import { styles } from './styles.js';
+import { template } from './template.js';
 
 export class KpiGrid extends LitElement {
   static get styles() {
-    return styles;
+    return [styles];
   }
 
   static get properties() {
     return {
-      gridData: { type: Array }
+      elem: { type: Object },
+      data: { type: Object },
+      lang: { type: String }
     };
   }
 
-  constructor() {
-    super();
-    this.gridData = [];
-  }
-
   render() {
-    return template(this.gridData);
+    return template(this.elem, this.data, this.lang);
   }
 }
 
-window.customElements.define('kpi-grid', KpiGrid);
+customElements.define('kpi-grid', KpiGrid);

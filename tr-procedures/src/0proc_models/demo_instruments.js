@@ -2466,12 +2466,602 @@ export const DemoInstruments ={
       }
     ]
   },
-  "EventsCalendar": {
+  "EventsCalendar":{
+    "component": "ObjectByTabs",
+	  "hideLeftPane": false,
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Master data",
+      "fix_text_es": "Datos maestros",
+      "name": ""
+    },
+    "viewQuery": {
+      "actionName": "INSTRUMENT_EVENTS_CALENDAR",
+	    "notUseGrid": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        { "argumentName": "instrumentName", "element": "filtertext1"},
+        { "argumentName": "familyName", "element": "filtertext2"},
+        { "argumentName": "startDate", "element": "filterdaterange1dateStart"},
+        { "argumentName": "endDate", "element": "filterdaterange1dateEnd"}
+      ]
+    },
+    "filter_button": {
+		"label_en": "Search",
+		"label_es": "Buscar"
+	},
+  "filter": [
+		{"filterdaterange1":{
+			"dateStart":{ "label_en": "Sampling Start Date", "label_es": "Fecha Inicio Muestreo", "default_value": "" },
+			"dateEnd":{ "label_en": "Sampling End Date", "label_es": "Fecha Fin Muestreo", "default_value": "" }}
+		},
+		{"filtertext1": {
+			"label_en": "Instrument to get", "label_es": "Instrumento a cargar","default_value": ""}
+		},
+		{"filtertext2": {
+		  "label_en": "Families to get", "label_es": "Familias a cargar", "default_value": ""}
+		}
+	],		
+	"actions": [],
+	"tabs": [
+		{"tabLabel_en": "References by category", "tabLabel_es": "Referencias por categoría", "view": "Variables",
+			"view_definition": [
+			  {
+				"actions": []
+			  },
+			  {
+				"type": "Calendar",
+				"endPointResponseObject": "raw_data",
+				"smartFilter": true,
+				"columns": [
+				  {
+					"name": "name",
+					"label_en": "Code",
+					"label_es": "Código"
+				  }
+				],
+				"actions": [
+					{
+						"actionName": "CONFIG_NEW_CATEGORY",
+						"requiresDialog": true,
+						"notGetViewData": false,
+						"selectedItemPropertyName": "selectedItems",	  
+						"button": {
+						  "icon": "edit",
+						  "title": {
+							"label_en": "Add new category",
+							"label_es": "Añadir nueva categoría"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "text1": {
+								"label_en": "New category name",
+								"label_es": "Nombre para nueva categoría",
+								"defaultValue": "",
+								"optional": false
+							  }
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "newCategoryName",
+							"element": "text1"							
+						  }
+						]
+					}
+				],
+				"row_buttons": [
+
+				],
+				"children": "inv_reference",
+				"children_definition": {
+					"smartFilter": true,
+				  "title": {
+					"label_en": "References",
+					"label_es": "Referencias"
+				  },
+				  "columns": [
+					{
+					  "name": "name",
+					  "label_en": "Name",
+					  "label_es": "Nombre"
+					},
+					{
+					  "name": "param_type",
+					  "label_en": "Type",
+					  "label_es": "Tipo",
+					  "as_paragraph":"{fld:param_type} - {fld:allowed_values}"
+					},
+					{
+					  "name": "allowed_values",
+					  "label_en": "Allowed values",
+					  "label_es": "Valores permitidos"
+					},
+					{
+					  "name": "required",
+					  "label_en": "Required",
+					  "label_es": "Obligatorio"
+					}
+				  ],
+				  "row_buttons": [
+					{
+						"actionName": "CONFIG_UPDATE_REFERENCE",
+						"requiresDialog": true,
+						"notGetViewData": false,
+						"selectedItemPropertyName": "selectedItems",
+						"button": {
+						  "icon": "edit",
+						  "title": {
+							"label_en": "Edit reference",
+							"label_es": "Configurar referencia"
+						  },
+						  "requiresGridItemSelected": true
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "checkbox1": {
+								"label_en": "Requires Qualification?",
+								"label_es": "¿Requiere Cualificación?",
+								"selObjectPropertyName": "lot_requires_qualif",
+								"optional": false
+							  }
+							},
+							{
+							  "number1": {
+								"label_en": "Min Stock",
+								"label_es": "Stock Mínimo",
+								"selObjectPropertyName": "min_stock",
+								"optional": true
+							  }
+							},
+							{
+							  "list2": {
+								"label_en": "UOM",
+								"label_es": "UDM",
+								"selObjectPropertyName": "min_stock_uom",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"optional": true,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "multilist1": {
+								"label_en": "Other Allowed UOMs",
+								"label_es": "Otras UDM aceptadas",
+								"selObjectPropertyName": "allowed_uoms",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "min Stock Type",
+								"label_es": "Tipo Stock Mínimo",
+								"selObjectPropertyName": "min_stock_type",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox2": {
+								"label_en": "Requires control for Available for use",
+								"label_es": "¿Requiere control disponible para uso?",
+								"selObjectPropertyName": "requires_availables_for_use",
+								"optional": true
+							  }
+							},
+							{
+							  "number2": {
+								"label_en": "Min Available for use",
+								"label_es": "Minimo en Disponible para uso",
+								"selObjectPropertyName": "min_availables_for_use",
+								"optional": true
+							  }
+							},
+							{
+								"list4": {
+								  "label_en": "min Available for use stock Type",
+								  "label_es": "Tipo Stock Para Mínimo disponible",
+								  "selObjectPropertyName": "min_availables_for_use_type",
+								  "optional": true,
+								  "addBlankValueOnTop": true,
+								  "items": [
+									{
+									  "keyName": "QUANTITY",
+									  "keyValue_en": "Quantity",
+									  "keyValue_es": "Cantidad"
+									},
+									{
+									  "keyName": "PB ITEMS",
+									  "keyValue_en": "Items",
+									  "keyValue_es": "Items"
+									}
+								  ]
+								}
+							},							
+							{
+							  "checkbox3": {
+								"label_en": "Allow Some open at a time?",
+								"label_es": "¿Permitir abrir varios a la vez?",
+								"selObjectPropertyName": "allow_opening_some_at_a_time",
+								"optional": true
+							  }
+							},
+							{
+								"list5": {
+									"label_en": "Qualification Variables Set",
+									"label_es": "Conjunto Variables para Cualificación",
+									"selectedItemPropertyName": "qualif_variables_set",
+									"optional": true,
+									"addBlankValueOnTop": true,
+									  "addBlankValueAtBottom": false,
+									  "valuesFromMasterData": {
+										"propertyNameContainer": "variables_set",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name",
+										"propertyKeyValueEn": "name",
+										"propertyKeyValueEs": "name"
+									  }
+								}
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "category",
+							"selObjectPropertyName": "category"
+						  },
+						  {
+							"argumentName": "referenceName",
+							"selObjectPropertyName": "name"
+						  },
+						  {
+							"argumentName": "lot_requires_qualif",
+							"element": "checkbox1",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true,
+							"fieldType": "BOOLEAN"
+						  },
+						  {
+							"argumentName": "min_stock",
+							"element": "number1",
+							"addToFieldNameAndValue": true,
+							"fieldType": "INTEGER",
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_stock_uom",
+							"element": "list2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "allowed_uoms",
+							"element": "multilist1",
+							"defaultValue": "",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_stock_type",
+							"element": "list3",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "requires_availables_for_use",
+							"element": "checkbox2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_availables_for_use",
+							"element": "number2",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "min_availables_for_use_type",
+							"element": "list4",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "allow_opening_some_at_a_time",
+							"element": "checkbox3",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  },
+						  {
+							"argumentName": "qualif_variables_set",
+							"element": "list5",
+							"addToFieldNameAndValue": true,
+							"notAddWhenValueIsBlank": true
+						  }
+						]
+					}
+				  ],
+				  "actions": [
+					{
+						"actionName": "CONFIG_ADD_REFERENCE",
+						"requiresDialog": true,
+						"button": {
+						  "icon": "create_new_folder",
+						  "title": {
+							"label_en": "New",
+							"label_es": "Nuevo"
+						  },
+						  "requiresGridItemSelected": false
+						},
+						"dialogInfo": {
+						  "name": "genericDialog",
+						  "fields": [
+							{
+							  "text1": {
+								"label_en": "New Reference Name",
+								"label_es": "Nombre nueva Referencia"
+							  }
+							},
+							{
+							  "list1": {
+								"label_en": "Category",
+								"label_es": "Categoría",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "category_and_references",
+								  "propertyNameContainerLevelPropertyKeyName": "name",
+								  "propertyKeyName": "name",
+								  "propertyKeyValueEn": "name",
+								  "propertyKeyValueEs": "name"
+								}
+							  }
+							},
+							{
+							  "checkbox1": {
+								"label_en": "Requires Qualification?",
+								"label_es": "¿Requiere Cualificación?",
+								"defaultValue": false
+							  }
+							},
+							{
+							  "number1": {
+								"label_en": "Min Stock",
+								"label_es": "Stock Mínimo",
+								"optional": true
+							  }
+							},
+							{
+							  "list2": {
+								"label_en": "UOM",
+								"label_es": "UDM",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": "pretty_name",
+								  "propertyKeyValueEs": "pretty_name"
+								},
+								"dependencyFieldBehavior": [
+								  {
+									"field": "multilist1",
+									"rule": "whenEmpty",
+									"resetValue": true,
+									"action": "hide"
+								  }
+								]
+							  }
+							},
+							{
+							  "multilist1": {
+								"label_en": "Other Allowed UOMs",
+								"label_es": "Otras UDM aceptadas",
+								"addBlankValueOnTop": true,
+								"addBlankValueAtBottom": false,
+								"valuesFromMasterData": {
+								  "propertyNameContainer": "units_of_measurement",
+								  "propertyKeyName": "pretty_name",
+								  "propertyKeyValueEn": [
+									"pretty_name"
+								  ],
+								  "propertyKeyValueEs": [
+									"pretty_name"
+								  ]
+								}
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "min Stock Type",
+								"label_es": "Tipo Stock Mínimo",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox2": {
+								"label_en": "Requires control for Available for use",
+								"label_es": "¿Requiere control disponible para uso?",
+								"optional": true
+							  }
+							},
+							{
+							  "number2": {
+								"label_en": "Min Available for use",
+								"label_es": "Minimo en Disponible para uso",
+								"optional": true
+							  }
+							},
+							{
+							  "list3": {
+								"label_en": "Type",
+								"label_es": "Tipo",
+								"optional": true,
+								"addBlankValueOnTop": true,
+								"items": [
+								  {
+									"keyName": "QUANTITY",
+									"keyValue_en": "Quantity",
+									"keyValue_es": "Cantidad"
+								  },
+								  {
+									"keyName": "PB ITEMS",
+									"keyValue_en": "Items",
+									"keyValue_es": "Items"
+								  }
+								]
+							  }
+							},
+							{
+							  "checkbox3": {
+								"label_en": "Allow Some open at a time?",
+								"label_es": "¿Permitir abrir varios a la vez?",
+								"optional": true
+							  }
+							},
+							{
+								"list5": {
+									"label_en": "Qualification Variables Set",
+									"label_es": "Conjunto Variables para Cualificación",
+									"optional": true,
+									"addBlankValueOnTop": true,
+									  "addBlankValueAtBottom": false,
+									  "valuesFromMasterData": {
+										"propertyNameContainer": "variables_set",
+										"propertyNameContainerLevelPropertyKeyName": "name",
+										"propertyKeyName": "name",
+										"propertyKeyValueEn": "name",
+										"propertyKeyValueEs": "name"
+									  }
+								}
+							}
+						  ]
+						},
+						"endPointParams": [
+						  {
+							"argumentName": "name",
+							"element": "text1"
+						  },
+						  {
+							"argumentName": "category",
+							"element": "list1"
+						  },
+						  {
+							"argumentName": "lotRequiresQualif",
+							"element": "checkbox1"
+						  },
+						  {
+							"argumentName": "minStock",
+							"element": "number1"
+						  },
+						  {
+							"argumentName": "minStockUom",
+							"element": "list2"
+						  },
+						  {
+							"argumentName": "allowedUoms",
+							"element": "multilist1",
+							"defaultValue": ""
+						  },
+						  {
+							"argumentName": "minStockType",
+							"element": "list3"
+						  },
+						  {
+							"argumentName": "requiresAvailableForUse",
+							"element": "checkbox2"
+						  },
+						  {
+							"argumentName": "minAvailablesForUse",
+							"element": "number2"
+						  },
+						  {
+							"argumentName": "minAvailablesForUseType",
+							"element": "list3"
+						  },
+						  {
+							"argumentName": "allowedOpeningSomeAtaTime",
+							"element": "checkbox3"
+						  },
+						  {
+							"argumentName": "qualificationVariablesSet",
+							"element": "list5"
+						  }
+						]
+					}					
+				  ]
+				}
+			  }
+			]
+		},		
+	]
+  },
+  "EventsCalendarOld": {
 	"component": "CalendarData",
 	"hasOwnComponent": true,
 	"showTitleOnTop": true,
 	"title": {
-	  "fix_text_en": "Events Calendar",
+	  "fix_text_en": "Events Calendar 111",
 	  "fix_text_es": "Calendario de Eventos",
 	  "name": "name --- puede que sea instrument_name o instrument" 
 	},

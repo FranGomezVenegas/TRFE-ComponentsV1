@@ -18,7 +18,7 @@ export const App = {
     "langConfig": {
 	"title": {
         "WhiteIpList": {
-          "label_en": "White (Accepted) IPs List",
+          "label_en": "White (Accjjjjjepted) IPs List",
           "label_es": "Lista de IPs aceptadas (Blancas)"
         }
       },

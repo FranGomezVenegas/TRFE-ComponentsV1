@@ -129,8 +129,8 @@ export const DemoViews = [
 
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "stability", "filter_name": "stability", "title": "stability"},
     
-    {"proc_instance_name": "fake-developers", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"},
-	  {"proc_instance_name": "fake-developers", "view_name": "ck-editor", "filter_name": "ck-editor", "title": "ck-editor"}
+    {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"},
+	  {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "ck-editor", "filter_name": "ck-editor", "title": "ck-editor"}
   ]},      
   {"label":"genoma (genoma-1)", "proc_instance_name": "genoma-1", "views":[
     {"proc_instance_name": "genoma-1", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
@@ -234,6 +234,7 @@ export const DemoViews = [
     {"proc_instance_name": "instruments", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"}
   ]},  
   {"label":"Inventory Management (stock)", "proc_instance_name": "stock", "views":[
+    {"proc_instance_name": "stock", "view_name": "Home", "filter_name": "Home", "title": "Home"},
     {"proc_instance_name": "stock", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
     {"proc_instance_name": "stock", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
     {"proc_instance_name": "stock", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLotsGeneral", "title": "InventoryLots"},

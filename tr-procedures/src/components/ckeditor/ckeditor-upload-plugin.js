@@ -1,7 +1,7 @@
 export class MyUploadAdapter {
     constructor(loader) {
       this.loader = loader;
-      this.url = 'http://localhost:8081/TRAZiT-API/app/PlatformAdminAPIactions'; // Replace with your image upload URL
+      this.url = 'https://platform.trazit.net:8443/TRAZiT-API/app/PlatformAdminAPIactions'; // Replace with your image upload URL
     }
   
     async upload() {

@@ -480,8 +480,6 @@ return class extends ActionsFunctions(LitElement) {
       this.enterResults = []
     }
 
-
-
     valRenderer(result) {
       let rawValue=''
       if (this.actionBeingPerformedModel.actionName.toUpperCase().includes('SECOND')){

@@ -1,5 +1,5 @@
 import { html } from 'lit';
-
+import { until } from 'lit/directives/until.js';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
@@ -227,7 +227,7 @@ export function TrazitFormsElements(base) {
                 ${!fld.filtertext1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext1" type="text" .value=${fld.filtertext1.default_value ? fld.filtertext1.default_value : ''}  label="${this.fieldLabel(fld.filtertext1)}"  ?disabled=${this.isFieldDisabled(fld.filtertext1)} 
+                    <mwc-textfield class="layout flex" id="filtertext1" type="text" .value=${until(this.fldDefaultValue(fld.filtertext1), '')} label="${this.fieldLabel(fld.filtertext1)}"  ?disabled=${this.isFieldDisabled(fld.filtertext1)} 
                         @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
 
                     </div>
@@ -235,70 +235,70 @@ export function TrazitFormsElements(base) {
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${this.fldDefaultValue(fld.text1)}  label="${this.fieldLabel(fld.text1)}" ?disabled=${this.isFieldDisabled(fld.text1)}
+                    <mwc-textfield class="layout flex" id="text1" type="text" .value=${until(this.fldDefaultValue(fld.text1), '')}  label="${this.fieldLabel(fld.text1)}" ?disabled=${this.isFieldDisabled(fld.text1)}
                         @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext2" type="text" .value=${this.fldDefaultValue(fld.filtertext2)} label="${this.fieldLabel(fld.filtertext2)}" ?disabled=${this.isFieldDisabled(fld.filtertext2)}
+                    <mwc-textfield class="layout flex" id="filtertext2" type="text" .value=${until(this.fldDefaultValue(fld.filtertext2), '')} label="${this.fieldLabel(fld.filtertext2)}" ?disabled=${this.isFieldDisabled(fld.filtertext2)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext3" type="text" .value=${this.fldDefaultValue(fld.filtertext3)} label="${this.fieldLabel(fld.filtertext3)}" ?disabled=${this.isFieldDisabled(fld.filtertext3)}
+                    <mwc-textfield class="layout flex" id="filtertext3" type="text" .value=${until(this.fldDefaultValue(fld.filtertext3), '')} label="${this.fieldLabel(fld.filtertext3)}" ?disabled=${this.isFieldDisabled(fld.filtertext3)}
                         @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}                       
                 ${!fld.filtertext4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext4" type="text" .value=${this.fldDefaultValue(fld.filtertext4)} label="${this.fieldLabel(fld.filtertext4)}" ?disabled=${this.isFieldDisabled(fld.filtertext4)}
+                    <mwc-textfield class="layout flex" id="filtertext4" type="text" .value=${until(this.fldDefaultValue(fld.filtertext4), '')} label="${this.fieldLabel(fld.filtertext4)}" ?disabled=${this.isFieldDisabled(fld.filtertext4)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext5" type="text" .value=${this.fldDefaultValue(fld.text)} label="${this.fieldLabel(fld.filtertext5)}"  ?disabled=${this.isFieldDisabled(fld.filtertext5)}
+                    <mwc-textfield class="layout flex" id="filtertext5" type="text" .value=${until(this.fldDefaultValue(fld.filtertext5), '')} label="${this.fieldLabel(fld.filtertext5)}"  ?disabled=${this.isFieldDisabled(fld.filtertext5)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext6" type="text" .value=${this.fldDefaultValue(fld.filtertext6)} label="${this.fieldLabel(fld.filtertext6)}"  ?disabled=${this.isFieldDisabled(fld.filtertext6)}
+                    <mwc-textfield class="layout flex" id="filtertext6" type="text" .value=${until(this.fldDefaultValue(fld.filtertext6), '')} label="${this.fieldLabel(fld.filtertext6)}"  ?disabled=${this.isFieldDisabled(fld.filtertext6)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext7" type="text" .value=${this.fldDefaultValue(fld.filtertext7)} label="${this.fieldLabel(fld.filtertext7)}"  ?disabled=${this.isFieldDisabled(fld.filtertext7)}
+                    <mwc-textfield class="layout flex" id="filtertext7" type="text" .value=${until(this.fldDefaultValue(fld.filtertext7), '')} label="${this.fieldLabel(fld.filtertext7)}"  ?disabled=${this.isFieldDisabled(fld.filtertext7)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext8" type="text" .value=${this.fldDefaultValue(fld.filtertext8)}label="${this.fieldLabel(fld.filtertext8)}" ?disabled=${this.isFieldDisabled(fld.filtertext8)}
+                    <mwc-textfield class="layout flex" id="filtertext8" type="text" .value=${until(this.fldDefaultValue(fld.filtertext8), '')} label="${this.fieldLabel(fld.filtertext8)}" ?disabled=${this.isFieldDisabled(fld.filtertext8)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext9" type="text" .value=${this.fldDefaultValue(fld.filtertext9)} label="${this.fieldLabel(fld.filtertext9)}" ?disabled=${this.isFieldDisabled(fld.filtertext9)}
+                    <mwc-textfield class="layout flex" id="filtertext9" type="text" .value=${until(this.fldDefaultValue(fld.filtertext9), '')} label="${this.fieldLabel(fld.filtertext9)}" ?disabled=${this.isFieldDisabled(fld.filtertext9)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}          
                 ${!fld.filtertext10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="filtertext10" type="text" .value=${this.fldDefaultValue(fld.filtertext10)} label="${this.fieldLabel(fld.filtertext10)}" ?disabled=${this.isFieldDisabled(fld.filtertext10)}
+                    <mwc-textfield class="layout flex" id="filtertext10" type="text" .value=${until(this.fldDefaultValue(fld.filtertext10), '')} label="${this.fieldLabel(fld.filtertext10)}" ?disabled=${this.isFieldDisabled(fld.filtertext10)}
                     @keydown=${withEnterKey ? keydownHandler : nothing} ></mwc-textfield>
                     </div>
                 `}                              
@@ -489,8 +489,8 @@ export function TrazitFormsElements(base) {
                     ${!fld.filterdaterange1 ?
                         html``: html`    
                             <div style="display:flex">    
-                            <mwc-textfield id="filterdaterange1dateStart" label="${this.fieldLabel(fld.filterdaterange1.filterdateStart)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.filterdateStart)}"></mwc-textfield>
-                            <mwc-textfield id="filterdaterange1dateEnd" label="${this.fieldLabel(fld.filterdaterange1.filterdateEnd)}" type="date" value="${this.fldDefaultValue(fld.filterdaterange1.filterdateEnd)}"></mwc-textfield>
+                            <mwc-textfield id="filterdaterange1dateStart" label="${this.fieldLabel(fld.filterdaterange1.filterdateStart)}" type="date" value="${until(this.fldDefaultValue(fld.filterdaterange1.filterdateStart), '')}"></mwc-textfield>
+                            <mwc-textfield id="filterdaterange1dateEnd" label="${this.fieldLabel(fld.filterdaterange1.filterdateEnd)}" type="date" value="${until(this.fldDefaultValue(fld.filterdaterange1.filterdateEnd), '')}"></mwc-textfield>
                             </div>
                         `}                       
                     ${!fld.filterdaterange1 ?
