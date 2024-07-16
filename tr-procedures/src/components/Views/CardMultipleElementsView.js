@@ -141,8 +141,48 @@ export function CardMultipleElementsView(base) {
 
       let lastDiv = elem.querySelector('table');
       if (lastDiv) {
-        cardElement += lastDiv.outerHTML; 
-      }     
+          // Clone the table to avoid modifying the original element
+          let clonedTable = lastDiv.cloneNode(true);
+
+          // Remove the last th element in the thead
+          let thead = clonedTable.querySelector('thead');
+          if (thead) {
+              let thElements = thead.querySelectorAll('th');
+              if (thElements.length > 0) {
+                  thElements[thElements.length - 1].remove();
+              }
+          }
+
+          // Remove the last td element in each tr of the tbody
+          let tbody = clonedTable.querySelector('tbody');
+          if (tbody) {
+              let trElements = tbody.querySelectorAll('tr');
+              trElements.forEach(tr => {
+                  let tdElements = tr.querySelectorAll('td');
+                  if (tdElements.length > 0) {
+                      tdElements[tdElements.length - 1].remove();
+                  }
+
+                  // Replace input elements with their values
+                  tdElements.forEach(td => {
+                      let input = td.querySelector('input');
+                      if (input) {
+                          let value = input.value;
+                          let valueElement = document.createElement('div');
+                          valueElement.textContent = value;
+                          td.replaceChild(valueElement, input);
+                      }
+                  });
+              });
+          }
+
+          // Add the modified table's outerHTML to cardElement
+          cardElement += clonedTable.outerHTML;
+      }
+
+
+
+  
 
 
       const clonedDiv = elem.cloneNode(false);
