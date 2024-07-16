@@ -789,19 +789,21 @@ export function ButtonsFunctions(base) {
       }
     
       if (this.config === undefined || this.config.backendUrl === undefined) {
-        fetch('../../../demo/config.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(json => {
-            this.config = json;
-          })
-          .catch(error => {
-            console.error('Error fetching config:', error);
-          });
+        // fetch('../../../demo/config.json')
+        //   .then(response => {
+        //     if (!response.ok) {
+        //       throw new Error(`HTTP error! Status: ${response.status}`);
+        //     }
+        //     return response.json();
+        //   })
+        //   .then(json => {
+        //     this.config = json;
+        //   })
+        //   .catch(error => {
+        //     console.error('Error fetching config:', error);
+        //   });
+
+          this.config=JSON.parse(sessionStorage.getItem("userSession"))
       }
     
       this.samplesReload = true;
@@ -828,6 +830,12 @@ export function ButtonsFunctions(base) {
       params = serviceAPIurl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams);
     
+      // Emitir evento para mostrar el progreso circular
+      this.dispatchEvent(new CustomEvent('show-progress', {
+        bubbles: true,
+        composed: true
+      }));
+
       await this.fetchApi(params, false, queryDefinition).then(j => {
         if (queryDefinition.actionName === 'ONE_PROCEDURE_DEFINITION' || queryDefinition.actionName === 'ALL_PROCEDURES_DEFINITION') {
           if (j.master_data !== undefined) {
@@ -883,6 +891,13 @@ export function ButtonsFunctions(base) {
           }
         }
       });
+
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));
+
       this.requestUpdate();
       this.samplesReload = false;
     }
@@ -906,6 +921,11 @@ export function ButtonsFunctions(base) {
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
 
       //console.log('params', params)
+      // Emitir evento para mostrar el progreso circular
+      this.dispatchEvent(new CustomEvent('show-progress', {
+        bubbles: true,
+        composed: true
+      }));      
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.setGrid(j)
@@ -913,6 +933,11 @@ export function ButtonsFunctions(base) {
           this.setGrid()
         }
       })
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));      
       this.samplesReload = false
     }
 
@@ -937,6 +962,13 @@ export function ButtonsFunctions(base) {
       let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
       let params = serviceAPIurl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
+      
+      // Emitir evento para mostrar el progreso circular
+      this.dispatchEvent(new CustomEvent('show-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+      
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.genericDialogGridItems = j
@@ -945,6 +977,12 @@ export function ButtonsFunctions(base) {
           this.genericDialogGridItems = []
         }
       })
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+
 
     }
 
@@ -975,6 +1013,11 @@ export function ButtonsFunctions(base) {
           + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
 
         //console.log('params', params)
+        // Emitir evento para mostrar el progreso circular
+        this.dispatchEvent(new CustomEvent('show-progress', {
+          bubbles: true,
+          composed: true
+        }));        
         await this.fetchApi(params).then(j => {
           if (j && !j.is_error) {
             //alert(j.length)
@@ -985,6 +1028,12 @@ export function ButtonsFunctions(base) {
           }
         })
       }
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+
       this.samplesReload = false
     }
 

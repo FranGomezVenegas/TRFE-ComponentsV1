@@ -7,7 +7,8 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-docs',
     '@chromatic-com/storybook',
-    '@storybook/addon-webpack5-compiler-swc'
+    '@storybook/addon-webpack5-compiler-swc',
+    '@storybook/addon-links'
   ],
   framework: {
     name: '@storybook/web-components-webpack5',

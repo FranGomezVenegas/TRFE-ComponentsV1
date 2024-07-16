@@ -207,6 +207,11 @@ _upload = async () => {
       }
 
       console.log('_upload', 'action', this.action.actionName, params);
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('show-progress', {
+        bubbles: true,
+        composed: true
+      }));      
 
       // Call fetchApi with the FormData
       let response = await fetch(params, {
@@ -228,7 +233,19 @@ _upload = async () => {
           const errorText = await response.text();
           throw new Error(errorText);
       }
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+
   } catch (e) {
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+
       result = { error: 1, message: e.message };
   }
   console.log(result);

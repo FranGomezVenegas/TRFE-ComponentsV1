@@ -178,6 +178,12 @@ export class CameraView extends ApiFunctions(LitElement) {
         //params=params.replace('https://platform.trazit.net:8443/', 'http://localhost:8081/')
         // Call fetchApi with the FormData
         //let response = await fetch(serviceAPIurl + endPointUrl, { //params
+      // Emitir evento para ocultar el progreso circular
+        this.dispatchEvent(new CustomEvent('show-progress', {
+          bubbles: true,
+          composed: true
+        }));      
+
         let response = await fetch(params, {
             method: 'POST',
             body: form,
@@ -201,6 +207,12 @@ export class CameraView extends ApiFunctions(LitElement) {
     } catch (e) {
         requestResult = { error: 1, message: e.message };
     }
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+
     console.log(requestResult);
     return requestResult;
 

@@ -402,7 +402,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
   render() {
     return html`
      ${this.credentialsDialog()}
-      ${this.selectedProcInstance === undefined
+      ${this.selectedProcInstance === undefined||this.selectedProcInstance === null
         ? html`
             <style>
               $red: #aa392e;

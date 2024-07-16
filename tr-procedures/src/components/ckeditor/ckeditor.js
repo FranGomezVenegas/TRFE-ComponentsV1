@@ -6095,6 +6095,12 @@ export class LitCKEditor extends LitElement {
       //     form.append(key, APIParams[key]);
       //   });
       // }
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('show-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+
       const response = await fetch('http://localhost:8081/TRAZiT-API/app/PlatformAdminAPIactions', {
         method: 'POST',
         body: form,
@@ -6107,6 +6113,12 @@ export class LitCKEditor extends LitElement {
       } else {
         console.error('Failed to save data:', response.status);
       }
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('hide-progress', {
+        bubbles: true,
+        composed: true
+      }));      
+
     }
   }
 

@@ -57,6 +57,9 @@ v0.2.30 api functions, when the view or button requires apply subViewFilter then
 v0.2.31 Flipcard draft and added to the home pages.
 v0.2.32 fix for upload aws files
 v0.2.33 fix, not display undefined when title is empty
+v0.2.34 get backendUrl from sessionStorage when not in context instead of fetching the config file due to the path to config.json is not always in the same path
+v0.2.35 Added spinning for GetViewData and all POST actions with files
+
 [- #196. Check Mandatory Fields not filled](https://github.com/FranGomezVenegas/FE-Issues/issues/196)
 [- #197. Reset Fields one action performed](https://github.com/FranGomezVenegas/FE-Issues/issues/197)
 [- #198. Not allowed negative numDays for Reactivate Dialog](https://github.com/FranGomezVenegas/FE-Issues/issues/198)

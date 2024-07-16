@@ -71,6 +71,11 @@ export function ApiFunctions(base) {
         if (formData) {
             fetchOptions.body = formData;
         }
+        // Emitir evento para ocultar el progreso circular
+        this.dispatchEvent(new CustomEvent('show-progress', {
+          bubbles: true,
+          composed: true
+        }));      
     
         return fetch(urlParams, fetchOptions).then(async r => {
             if (r.status == 200) {
@@ -80,6 +85,12 @@ export function ApiFunctions(base) {
                 throw err;
             }
         }).then(j => {
+            // Emitir evento para ocultar el progreso circular
+            this.dispatchEvent(new CustomEvent('hide-progress', {
+              bubbles: true,
+              composed: true
+            }));      
+
             if (log) {
                 this.dispatchEvent(new CustomEvent('success', {
                     detail: { ...j, log: log },
@@ -92,6 +103,12 @@ export function ApiFunctions(base) {
             }
             return j;
         }).catch(e => {
+          // Emitir evento para ocultar el progreso circular
+          this.dispatchEvent(new CustomEvent('hide-progress', {
+            bubbles: true,
+            composed: true
+          }));      
+
             if (e.message == "Unexpected end of JSON input") {
                 this.dispatchEvent(new CustomEvent("error", {
                     detail: { ...e },
@@ -107,11 +124,13 @@ export function ApiFunctions(base) {
                 return e;
             }
         });
+        
     }
     
 
       refreshMasterData(endPointResponse, actionModel) {
         console.log('refresh master data')
+        if (this.procInstanceName===null){return}
         if (this.procInstanceName===undefined||this.procInstanceName.length==0){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
           if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
@@ -278,13 +297,13 @@ export function ApiFunctions(base) {
         }
       }
       getQueryAPIUrl(query){
-        if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+        if (this.procInstanceName===undefined||this.procInstanceName===null||String(this.procInstanceName).length==0){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
           if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
             this.procInstanceName=currentTabView.procInstanceName
           }
         }
-        if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+        if (this.procInstanceName===undefined||this.procInstanceName===null||String(this.procInstanceName).length==0){
           this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
         }
         //console.log('getQueryAPIUrl', this.procInstanceName)

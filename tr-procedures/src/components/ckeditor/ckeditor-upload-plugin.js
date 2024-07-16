@@ -25,6 +25,11 @@ export class MyUploadAdapter {
                 formData.append(key, actionParams[key]);
               });
             }
+            // Emitir evento para ocultar el progreso circular
+            this.dispatchEvent(new CustomEvent('show-progress', {
+              bubbles: true,
+              composed: true
+            }));      
     
             fetch(this.url, {
               method: 'POST',
@@ -33,11 +38,21 @@ export class MyUploadAdapter {
             })
               .then(response => response.json())
               .then(data => {
+                // Emitir evento para ocultar el progreso circular
+                this.dispatchEvent(new CustomEvent('hide-progress', {
+                  bubbles: true,
+                  composed: true
+                }));      
                 resolve({
-                  default: data.uploadedImageAwsUrl // Reemplazar con la URL de la imagen subida
+                  default: data.uploadedImageAwsUrl // Reemplazar con la URL de la imagen subida                  
                 });
               })
               .catch(error => {
+                // Emitir evento para ocultar el progreso circular
+                this.dispatchEvent(new CustomEvent('hide-progress', {
+                  bubbles: true,
+                  composed: true
+                }));      
                 reject(error);
               });
           })

@@ -3,7 +3,7 @@
   "description": "Component core for procedures elements with dynamic model",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.2.33",
+  "version": "0.2.35",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
@@ -54,7 +54,7 @@
     "@spectrum-web-components/theme": "^0.8.15",
     "@storybook/addon-docs": "^8.2.1",
     "@storybook/addon-essentials": "^8.2.2",
-    "@storybook/addon-links": "^8.1.0",
+    "@storybook/addon-links": "^8.2.4",
     "@storybook/addon-webpack5-compiler-swc": "^1.0.2",
     "@storybook/blocks": "^8.2.2",
     "@storybook/test": "^8.2.2",

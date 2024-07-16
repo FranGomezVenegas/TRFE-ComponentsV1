@@ -184,6 +184,11 @@ export class Dropzone extends ApiFunctions(LitElement) {
     let params = serviceAPIurl + endPointUrl;
 
     try {
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('show-progress', {
+        bubbles: true,
+        composed: true
+      }));            
       const response = await fetch(params, {
         method: 'POST',
         body: form,
@@ -217,9 +222,11 @@ export class Dropzone extends ApiFunctions(LitElement) {
         }
       }, 300);
     }
-    
-
-
+    // Emitir evento para ocultar el progreso circular
+    this.dispatchEvent(new CustomEvent('hide-progress', {
+      bubbles: true,
+      composed: true
+    }));      
   };
   
 }
