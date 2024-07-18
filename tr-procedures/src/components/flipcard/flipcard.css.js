@@ -21,7 +21,8 @@ export const flipCardStyles = css`
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    background-color: #fff; /* Asegura un fondo blanco */
+    min-width:300px;
+    max-width:350px;
   }
 
   .flip-card-inner {
@@ -105,7 +106,7 @@ export const flipCardStyles = css`
 
   .card-heading-text {
     font-family: Montserrat;
-    font-size: 2.1rem;
+    font-size: 1.5rem;
     font-weight: 300;
     text-transform: uppercase;
     padding: 10px 15px;    
@@ -134,7 +135,7 @@ export const flipCardStyles = css`
     color: white;
     border: none;
     padding: 10px 20px;
-    font-size: 1.6rem;
+    font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
     margin-top: 20px;

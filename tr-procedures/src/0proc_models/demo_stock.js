@@ -22,6 +22,360 @@ export const Stock =
   },
   "Home":{
 	"component": "ProcHome",
+	"title": {
+	  "fix_text_en": "Home, Stocks",
+	  "fix_text_es": "Inicio, Stocks",
+	  "name": ""
+	},
+	"view_definition": [
+	  {
+		"type": "flipcard",
+		"config": {
+		  "flipCardAllowed": true,
+		  "cardsPerRow": 4
+		},
+		"data": [
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Stock",
+				"label_es": "Stock"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "normal"
+			  },
+			  "textLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Stock",
+				"label_es": "Stock"
+			  },
+			  "detail": {
+				"label_en": [
+				  "",
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "InventoryLotsGeneral",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  },
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Culture Media",
+				"label_es": "Medios de cultivo"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "critical"
+			  },
+			  "xtextLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Culture Media",
+				"label_es": "Medios de cultivo"
+			  },
+			  "detail": {
+				"label_en": [
+				  "",
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "InventoryLotsMediosDeCultivo",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  },
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Primary Standard",
+				"label_es": "Estánderes Primarios"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "critical"
+			  },
+			  "textLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Primary Standard",
+				"label_es": "Estánderes Primarios"
+			  },
+			  "detail": {
+				"label_en": [
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "InventoryLotsEstandPrim",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  },
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Secondary Standard",
+				"label_es": "Estánderes Secundarios"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "critical"
+			  },
+			  "textLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Secondary Standard",
+				"label_es": "Estánderes Secundarios"
+			  },
+			  "detail": {
+				"label_en": [
+				  "",
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "InventoryLotsEstandSec",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  },
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Consumables",
+				"label_es": "Material Fungibles"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "critical"
+			  },
+			  "textLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Consumables",
+				"label_es": "Material Fungibles"
+			  },
+			  "detail": {
+				"label_en": [
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "InventoryLotsMatFung",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  },
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Commercial Reagent and Preparation",
+				"label_es": "Reactivo comercial y preparado"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "critical"
+			  },
+			  "textLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Commercial Reagent and Preparation",
+				"label_es": "Reactivo comercial y preparado"
+			  },
+			  "detail": {
+				"label_en": [
+				  "",
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "InventoryLotsReactivos",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  },
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Other",
+				"label_es": "Otros"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "critical"
+			  },
+			  "textLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Other",
+				"label_es": "Otros"
+			  },
+			  "detail": {
+				"label_en": [
+				  "",
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "InventoryLotsOtros",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  },
+		  {
+			"contentOnFront": {
+			  "cardTitle": {
+				"label_en": "Qualifications in Progress",
+				"label_es": "Qualificaciones en Curso"
+			  },
+			  "textTop": {
+				"label_en": "",
+				"label_es": "",
+				"type": "critical"
+			  },
+			  "textLow": {
+				"label_en": "",
+				"label_es": "",
+				"type": "warning"
+			  }
+			},
+			"contentOnBack": {
+			  "cardTitle": {
+				"label_en": "Qualifications in Progress",
+				"label_es": "Qualificaciones en Curso"
+			  },
+			  "detail": {
+				"label_en": [
+				  "",
+				  ""
+				],
+				"label_es": [
+				  "",
+				  ""
+				],
+				"types": [
+				  "normal",
+				  "critical"
+				]
+			  }
+			},
+			"procInstanceName": "stock",
+			"viewName": "QualificationsInProgress",
+			"flipCardAllowed": true,
+			"clickLinkAllowed": true
+		  }
+		  
+		]
+	  }
+	]
+  },
+  "Home2":{
+	"component": "ProcHome",
     "title": {
 		"fix_text_en": "Home, Stocks",
 		"fix_text_es": "Inicio, Stocks",
