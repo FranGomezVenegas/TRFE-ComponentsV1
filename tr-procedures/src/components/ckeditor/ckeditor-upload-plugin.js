@@ -1,4 +1,4 @@
-export class MyUploadAdapter {
+export default class MyUploadAdapter {
     constructor(loader) {
       this.loader = loader;
       this.url = 'https://platform.trazit.net:8443/TRAZiT-API/app/PlatformAdminAPIactions'; // Replace with your image upload URL
