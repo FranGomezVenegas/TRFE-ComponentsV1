@@ -1,0 +1,51 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="Frontend Concepts/Header area/TwoList Linked" />
+
+# Two List Linked
+
+This section explains the concepts related to managing linked lists in the frontend.
+The main purpose is to enable dynamic filtering and updating of lists based on the selected values of another list.
+
+## Concept Overview
+
+Linked lists will help link related values ​​to organize better display of information and minimize typing errors.
+
+### Key Functions
+
+- **listLinked1**: The primary list whose values will affect the entries of the secondary list.
+- **listLinked2**: The secondary list whose entries are dynamically based on the current value of `listLinked1`.
+
+
+
+```Json example
+{"twoListsLinked": {
+				"listLinked1": {
+				  "label_en": "Category", "label_es": "Categoría", "optional": true,
+				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                  "xxxitems": [
+                        { "keyName": '1', "keyValue_en":"Option 1", "keyValue_es":"Opción 1", "label": 'Option 1' },
+                        { "keyName": '2', "keyValue_en":"Option 2", "keyValue_es":"Opción 2", "label": 'Option 2' }		
+                        ]		 					  
+				},
+				"listLinked2": {
+				  "label_en": "Reference", "label_es": "Referencia",
+				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+				  "valuesFromMasterData": {
+					"propertyNameContainer": "category_and_references",
+					"propertyNameContainerLevelPropertyKeyName": "name",
+					"filterDependency": ["list1"],
+					"selectedEntryFromFilterPropertyName": "inv_reference",
+					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
+					}					  
+				}
+			  }		
+			}
+ ```			
+
+ #### Master Data
+
+    - **propertyNameContainer**: The entry in master data where all entries for the list1 values are.
+    - **propertyNameContainerLevelPropertyKeyName**: The property by which filter from the list1 value.
+    - **selectedEntryFromFilterPropertyName**: The property were the array of entries is located into propertyNameContainer
+    - **propertyKeyName** / propertyKeyValueEn / propertyKeyValueEs: The key and the two labels (en/es) to push into the list of entries.
