@@ -43,8 +43,8 @@ export const styles = css`
 
   textarea {
     width: 100%;
-    height: 100px;
-    padding: 8px;
+    height: 150px;
+    padding-top: 8px;
     border-radius: 4px;
     border: 1px solid #ccc;
     resize: none;
@@ -55,7 +55,7 @@ export const styles = css`
 
   input[type="text"] {
     width: 100%;
-    padding: 8px;
+    padding-top: 8px;
     margin-bottom: 8px;
     border-radius: 4px;
     border: 1px solid #ccc;
