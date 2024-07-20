@@ -11,12 +11,14 @@ class SerialPortComponent extends LitElement {
     this.reader = null;
     this.writer = null;
     this.port = null;
-    this.timeout = 3; // Tiempo de espera por defecto en segundos
+    this.timeout = 4; // Tiempo de espera por defecto en segundos
+    this.baudRate = 9600;
     this.messageTimeout = null;
     this.value = ''; // Propiedad para guardar el mensaje completo
     this.sendEnabled = true; // Propiedad para habilitar o deshabilitar el envío de datos
     this.canSendData = true; // Propiedad para habilitar o deshabilitar el campo de envío de datos tras la conexión
     this.lang = 'en'; // Idioma por defecto
+    this.logAreaHeight = 150; 
     this.messages = {
       enterText: {
         en: 'Enter text to send',
@@ -29,6 +31,10 @@ class SerialPortComponent extends LitElement {
       closeConnection: {
         en: 'Close Connection',
         es: 'Cerrar conexión'
+      },
+      clearLog:{
+        en: 'Clear log',
+        es: 'Borrar log'
       },
       timeout: {
         en: 'Timeout (seconds)',
@@ -73,6 +79,9 @@ class SerialPortComponent extends LitElement {
   static get properties() {
     return {
       output: { type: String },
+      timeout: { type: Number },
+      logAreaHeight: { type: Number },
+      baudRate: { type: Number },
       value: { type: String }, // Propiedad para guardar el mensaje completo
       sendEnabled: { type: Boolean }, // Propiedad para habilitar o deshabilitar el envío de datos
       canSendData: { type: Boolean }, // Propiedad para habilitar o deshabilitar el campo de envío de datos tras la conexión
@@ -116,8 +125,11 @@ class SerialPortComponent extends LitElement {
 
   async connectAndSendData() {
     try {
+      if (this.baudRate===undefined){
+        this.baudRate=9600
+      }
       this.port = await navigator.serial.requestPort();
-      await this.port.open({ baudRate: 9600 });
+      await this.port.open({ baudRate: this.baudRate });
 
       const portName = this.messages.portOpen[this.lang];
       this.logMessage(`${portName}`, true);
@@ -258,7 +270,7 @@ class SerialPortComponent extends LitElement {
   }
 
   render() {
-    return html`${template(this.sendEnabled, this.lang, this.messages, this.isTimeoutEditable, this.handleKeyDown.bind(this), this.canSendData)}`;
+    return html`${template(this.logAreaHeight, this.timeout, this.sendEnabled, this.lang, this.messages, this.isTimeoutEditable, this.handleKeyDown.bind(this), this.canSendData)}`;
   }
 }
 
