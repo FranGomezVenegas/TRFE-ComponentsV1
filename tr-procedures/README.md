@@ -81,6 +81,7 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.36 #380. The table readOnlyTable needs its own lateral scroll](https://github.com/FranGomezVenegas/FrontE-Issues/issues/380)
 [- v0.2.37 Serial Port view]
 [- v0.2.38 not change ready in resetView for grid with buttons]
+[- v0.2.39 serial port with table for the readings]
 
 
 
