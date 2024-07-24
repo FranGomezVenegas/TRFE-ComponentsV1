@@ -60,15 +60,6 @@ export default {
         type: { summary: 'object' },
       },
     },
-    baudRate2: {
-      description: 'The baud rate for the serial communication',
-      control: 'number',
-      table: {
-        category: 'config',
-        type: { summary: 'number' },
-        defaultValue: { summary: 9600 },
-      },
-    },
     dataBits: {
       description: 'The number of data bits per byte',
       control: 'number',
@@ -104,74 +95,13 @@ export default {
         type: { summary: 'boolean' },
         defaultValue: { summary: false },
       },
-    },
-    data: {
-      description: 'Array of available serial ports',
-      control: 'array',
-      table: {
-        type: { summary: 'array' },
-      },
-    },
-    portName: {
-      description: 'The name of the serial port',
-      control: 'text',
-      table: {
-        category: 'data',
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
-    path: {
-      description: 'The path of the serial port',
-      control: 'text',
-      table: {
-        category: 'data',
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
-    manufacturer: {
-      description: 'The manufacturer of the serial port',
-      control: 'text',
-      table: {
-        category: 'data',
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
-    serialNumber: {
-      description: 'The serial number of the port',
-      control: 'text',
-      table: {
-        category: 'data',
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
-    vendorId: {
-      description: 'The vendor ID of the port',
-      control: 'text',
-      table: {
-        category: 'data',
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
-    productId: {
-      description: 'The product ID of the port',
-      control: 'text',
-      table: {
-        category: 'data',
-        type: { summary: 'string' },
-        defaultValue: { summary: '' },
-      },
-    },
+    }
   },
 };
 
-const Template = ({ lang, baudRate, logAreaHeight, sendEnabled, timeout, isTimeoutEditable, showAlert, config, data }) => html`
+const Template = ({ lang, baudRate, logAreaHeight, sendEnabled, timeout, isTimeoutEditable, showAlert, config }) => html`
   
-  <serial-port-component .config=${config} logAreaHeight=${logAreaHeight} baudRate=${baudRate} timeout=${timeout} .data=${data} lang=${lang} .sendEnabled="${sendEnabled}" .isTimeoutEditable="${isTimeoutEditable}" .showAlert="${showAlert}"></serial-port-component>
+  <serial-port-component .config=${config} logAreaHeight=${logAreaHeight} baudRate=${baudRate} timeout=${timeout}  lang=${lang} .sendEnabled="${sendEnabled}" .isTimeoutEditable="${isTimeoutEditable}" .showAlert="${showAlert}"></serial-port-component>
 `;
 
 export const Default = Template.bind({});
@@ -190,8 +120,4 @@ Default.args = {
     parity: 'none',
     flowControl: false,
   },
-  data: [
-    { portName: "COM1", path: "/dev/ttyS1", manufacturer: "Manufacturer1", serialNumber: "12345", vendorId: "1A2B", productId: "1C2D" },
-    { portName: "COM2", path: "/dev/ttyS2", manufacturer: "Manufacturer2", serialNumber: "67890", vendorId: "3E4F", productId: "5G6H" },
-  ],
 };
