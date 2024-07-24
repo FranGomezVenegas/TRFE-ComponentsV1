@@ -135,7 +135,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     }
     resetView(){
       this.selectedItems=[]
-      this.ready=false;
+      //this.ready=false;
     }
   render() {
       return html`

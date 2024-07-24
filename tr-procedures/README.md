@@ -79,6 +79,8 @@ v0.2.33 fix, not display undefined when title is empty
 v0.2.34 get backendUrl from sessionStorage when not in context instead of fetching the config file due to the path to config.json is not always in the same path
 v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.36 #380. The table readOnlyTable needs its own lateral scroll](https://github.com/FranGomezVenegas/FrontE-Issues/issues/380)
+[- v0.2.37 Serial Port view]
+[- v0.2.38 not change ready in resetView for grid with buttons]
 
 
 
