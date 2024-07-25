@@ -1,7 +1,10 @@
 export function ActionsFunctions(base) {
   return class extends (base) {
-      trazitButtonsMethod(e, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData, dragEntry, dropEntry) {
+      trazitButtonsMethod(e, isRowButton, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData, dragEntry, dropEntry) {
           e.stopPropagation();
+          if (isRowButton!==true&&this.selectedItems!==undefined&&this.selectedItems.length>1){
+            alert("New feature for multiselect not available yet, please select single row at a time")
+          }
           sessionStorage.setItem('actionName', action.actionName);
           selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
           console.log('actionMethod', this.selectedProcInstance, isProcManagement)
