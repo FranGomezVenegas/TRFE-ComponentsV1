@@ -353,7 +353,7 @@
     "viewName": "prototype-elements-view-main", 
     "filterName" :  "prototype-elements-view-main" 
   },
-  "localDefaultView": {
+  "localDefaultView1": {
     "procName":  "stock", 
     "viewName": "Home", 
     "filterName" :  "Home" 
@@ -363,16 +363,21 @@
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
-	"localDefaultView22": {
+	"localDefaultView2": {
 		"procName": "instruments",
 		"viewName": "EventsCalendar",
 		"filterName": "EventsCalendar"
 	},
-  "localDefaultView": {
+  "localDefaultView22": {
     "procName":  "fake-developers", 
     "viewName": "ck-editor", 
     "filterName" :  "ck-editor" 
   },
+  "localDefaultView": {
+    "procName":  "stock", 
+    "viewName": "InventoryLotsGeneral", 
+    "filterName" :  "InventoryLots.1" 
+  },  
 
   "fakeEnd":{
   }  

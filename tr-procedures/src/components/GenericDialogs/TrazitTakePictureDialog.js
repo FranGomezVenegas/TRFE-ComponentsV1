@@ -34,18 +34,25 @@ return class extends ApiFunctions(GridFunctions(DialogsFunctions(base))) {
         }        
 
     }
-    openTakePictureDialog(actionModel = this.actionBeingPerformedModel){        
-        if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined
-            ||(actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"
-            &&actionModel.dialogInfo.name.toString().toUpperCase()!=="UPLOADFILEDIALOG")){
+    openTakePictureDialog(actionModel = this.actionBeingPerformedModel){   
+        
+        if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined){
             return false
-       }    
-       return true 
+        }    
+        console.log('openTakePictureDialog.open?', 'name', actionModel.dialogInfo.name)     
+        if (actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"
+                &&actionModel.dialogInfo.name.toString().toUpperCase()!=="UPLOADFILEDIALOG"){
+            return false
+        }    
+        return true 
     }    
-    resetView(){
-        if (this.cameraView!==null){
-            this.cameraView._init()
-        }
+    resetView(actionModel = this.actionBeingPerformedModel){
+        if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined
+            ||actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"){
+                if (this.cameraView!==null){
+                    this.cameraView._init()
+                }
+        }        
     }
     close(){
         const uploadDialog = this.shadowRoot.querySelector('#uploadDialog')
@@ -107,14 +114,14 @@ return class extends ApiFunctions(GridFunctions(DialogsFunctions(base))) {
             }
         </style>
         ${actionModel.dialogInfo===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"?nothing:html`
-            <tr-dialog id="takePictureDialog" @opened=${this.resetView} ?open=${this.openTakePictureDialog(actionModel)} 
+            <tr-dialog id="takePictureDialog" @opened=${this.resetView(actionModel)} ?open=${this.openTakePictureDialog(actionModel)} 
                 heading="" hideActions="" scrimClickAction="">
                 <p class="title" >${this.lang==="en"?html`Turn on the cam, Take one picture and upload it`:html`Activa la cámara, toma una foto y súbela`}</p>
                 <camera-view id="cameraView" .lang=${this.lang} procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${this.selectedItem}"></camera-view>
             </tr-dialog>
         `}
           
-                    <tr-dialog id="uploadDialog" @opened=${this.resetView} ?open=${this.openTakePictureDialog(actionModel)} 
+                    <tr-dialog id="uploadDialog" @opened=${this.resetView(actionModel)} ?open=${this.openTakePictureDialog(actionModel)} 
                 heading="" hideActions="" scrimClickAction="">
                 <p class="title">${this.lang==="en"?html``:html``}</p>
                 <drop-zone id="dropFileZone" .lang=${this.lang} procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .close="${()=>{this.close()}}" .selectedItem="${this.selectedItem}"></drop-zone>
