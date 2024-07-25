@@ -4,6 +4,7 @@ export function ActionsFunctions(base) {
           e.stopPropagation();
           if (isRowButton!==true&&this.selectedItems!==undefined&&this.selectedItems.length>1){
             alert("New feature for multiselect not available yet, please select single row at a time")
+            return
           }
           sessionStorage.setItem('actionName', action.actionName);
           selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
