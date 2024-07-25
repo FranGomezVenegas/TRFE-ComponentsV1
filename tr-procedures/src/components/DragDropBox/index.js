@@ -178,7 +178,7 @@ export class DragDropBox extends ActionsFunctions(GridFunctions(DialogsFunctions
     }
     //this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");    
-    this.trazitButtonsMethod(e, this.viewModelFromProcModel.dropAction, true, undefined, undefined, this.selectedBox, false, undefined, this.selectedBox, this.dragElement)
+    this.trazitButtonsMethod(e, false, this.viewModelFromProcModel.dropAction, true, undefined, undefined, this.selectedBox, false, undefined, this.selectedBox, this.dragElement)
     return
   }
 

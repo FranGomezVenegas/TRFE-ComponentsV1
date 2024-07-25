@@ -1,4 +1,4 @@
-import { html, nothing } from "lit";
+import { html, nothing, LitElement } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { ButtonsFunctions } from "../Buttons/ButtonsFunctions";
@@ -47,7 +47,7 @@ export function DataViews(base) {
                 TrazitReactivateObjectsDialog(
                   TrazitGenericDialogs(
                     ModuleEnvMonitClientMethods(
-                      AuditFunctions(ButtonsFunctions(base))
+                      AuditFunctions(ButtonsFunctions(LitElement))
                     )
                   )
                 )
@@ -84,6 +84,9 @@ export function DataViews(base) {
     }
 
     getDataFromRoot(elem, data) {
+      if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.viewQuery.dataResponse!==undefined&&this.viewModelFromProcModel.viewQuery.dataResponse==="ArrayInRoot"){
+        return data.queryData?data.queryData:''
+      }
       if (elem !== undefined && elem.contextVariableName !== undefined) {
         if (this[elem.contextVariableName] !== undefined) {
           data = this[elem.contextVariableName];
@@ -192,7 +195,11 @@ export function DataViews(base) {
     }
     kpiReportTitle(elem, data) {
       return html`    
-        <p><span style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;" id="reportTitle">${elem.title["label_" + this.lang]}</p>
+        <p style="text-align: center;">
+          <span style="color: rgb(20, 115, 230); font-size: 30px; margin-top: 10px; font-weight: bold;" id="reportTitle">
+            ${elem.title["label_" + this.lang]}
+          </span>
+        </p>
       `;
     }
     kpiReportTitleLvl2(elem, data, lang) {
@@ -906,26 +913,39 @@ export function DataViews(base) {
     }
 
     handleTableRowClick(event, rowSelected, elem) {
+      function isEqual(obj1, obj2) {
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
+      }
+      // Check if rowSelected exists in selectedItem and remove it if found
+      let rowIndex=-1
+      if (this.selectedItems!==undefined){
+        rowIndex = this.selectedItems.findIndex(item => JSON.stringify(item) === JSON.stringify(rowSelected));
+      }
+      if (rowIndex !== -1) {
+        this.selectedItems.splice(rowIndex, 1);
+      }else{
+        if (elem.allowMultiSelection===undefined||elem.allowMultiSelection===false){
+          this.selectedItems=[]
+        }
+        this.selectedItems.push(rowSelected)
+      }
+
+      // Check if rowSelected exists in selectedItem and remove it if found
+      if (isEqual(this.selectedItem, rowSelected)) {
+        this.selectedItem = {}; // Clear selectedItem if they are the same
+      } else {
+        this.selectedItem=rowSelected
+      }
       if (rowSelected[elem.children] == 0) {
         if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
           alert("There is no data");
-          this.selectedItem = {}
+          this.selectedItem = [];
         }
+      } else {
+        // Set selectedItem to rowSelected if it's not already set
+        this.selectedItem = rowSelected;
       }
-      //alert(el);
-
-      //if (this.selectedItemInView===undefined||Object.keys(this.selectedItemInView).length === 0){
-      //  this.selectedItemInView=undefined
-      //}else{
-      this.selectedItem = rowSelected;
-      //console.log('selectedItemInView', this.selectedItemInView)
-      //}
-      // const event2 = new CustomEvent('action-performed', {
-      //   bubbles: true, // Allow the event to bubble up the DOM tree
-      //   composed: true, // Allow the event to cross the shadow DOM boundary
-      // });
-
-      // this.dispatchEvent(event2);
+    
       sessionStorage.setItem('rowSelectedData', JSON.stringify(rowSelected));
       this.render();
       const popup = this.shadowRoot.querySelector(".js-context-popup");
@@ -933,6 +953,7 @@ export function DataViews(base) {
         popup.style.display = "none";
       }
     }
+    
 
     connectedCallback() {
       super.connectedCallback();
@@ -2837,300 +2858,331 @@ export function DataViews(base) {
       return Array.from(uniqueItemsSet);
   
   }
-
-    readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
-      if (elem === undefined) {
-        return
+  readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
+    if (elem === undefined) {
+      return;
+    }
+    parentData = this.selectedItemInView; //sessionStorage.getItem('rowSelectedData')
+    let tmp = elem.theme ? elem.theme : "TRAZiT-UsersArea";
+    if (elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
+      tmp = sessionStorage.getItem('tableTheme');
+    }
+    sessionStorage.setItem('tableTheme', tmp);
+  
+    const endPointResponseObject = elem.endPointResponseObject;
+    const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+  
+    if (isSecondLevel === undefined) {
+      isSecondLevel = false;
+    }
+    if (directData !== undefined) {
+      dataArr = directData;
+    } else {
+      dataArr = this.getDataFromRoot(elem, dataArr);
+    }
+    if (!this.dataContainsRequiredProperties(elem, dataArr)) {
+      return nothing;
+    }
+  
+    if (dataArr === undefined || !Array.isArray(dataArr)) {
+      return html``;
+    } else {
+      if (dataArr.length > 0 && dataArr[0].action_name) {
+        sessionStorage.setItem('steps', JSON.stringify(dataArr));
       }
-      parentData = this.selectedItemInView //sessionStorage.getItem('rowSelectedData')
-      //console.log('isSecondLevel', isSecondLevel, 'elem', elem, 'dataArr', dataArr, 'parentData', parentData)
-      let tmp = ""
-      if (elem.theme === undefined) {
-        tmp = "TRAZiT-UsersArea";
+    }
+  
+    const styles = this.getTableStyles(elem);
+    const title = this.addViewTitle(elem, alternativeTitle, isSecondLevel);
+    const actionButtons = this.getActionsButtons(elem, dataArr);
+  
+    if (dataArr && elem?.children_definition?.smartFilter?.filterValues && Object.keys(elem?.children_definition?.smartFilter?.filterValues).length != 0) {
+      dataArr = this.applyFilterToTheData(dataArr, elem.children_definition.smartFilter.filterValues);
+    }
+  
+    // Sorting function
+    const sortData = (field, ascending) => {
+      dataArr.sort((a, b) => {
+        if (a[field] < b[field]) return ascending ? -1 : 1;
+        if (a[field] > b[field]) return ascending ? 1 : -1;
+        return 0;
+      });
+      this.requestUpdate(); // Trigger re-render
+    };
+  
+    // Function to check if an item is selected
+    const isItemSelected = (item) => {
+      return this.selectedItems && this.selectedItems.some(selected => JSON.stringify(selected) === JSON.stringify(item));
+    };
+  
+    // Function to handle select/deselect all
+    const handleSelectAll = (event) => {
+      if (event.target.checked) {
+        this.selectedItems = [...dataArr];
       } else {
-        tmp = elem.theme;
+        this.selectedItems = [];
       }
-      if (elem.endPointResponseObject == "procedure_user_requirements_tree_child") {
-        tmp = sessionStorage.getItem('tableTheme');
-      }
-      if (typeof (tmp) != "undefined") {
-        sessionStorage.setItem('tableTheme', tmp);
-      }
-      if (typeof (tmp) == "undefined") {
-        tmp = "TRAZiT-UsersArea";
-        sessionStorage.setItem('tableTheme', tmp);
-      }
-      const endPointResponseObject = elem.endPointResponseObject;
-      const selectedIdx = this.selectedTableIndex[endPointResponseObject];
-
-      if (isSecondLevel === undefined) {
-        isSecondLevel = false;
-      }
-      if (directData !== undefined) {
-        dataArr = directData;
-      } else {
-        dataArr = this.getDataFromRoot(elem, dataArr);
-      }
-      if (!this.dataContainsRequiredProperties(elem, dataArr)) {
-        return nothing;
-      }
-
-      if (dataArr === undefined || !Array.isArray(dataArr)) {
-        return html``;
-      } else {
-        if (dataArr.length > 0 && dataArr[0].action_name) {
-          sessionStorage.setItem('steps', JSON.stringify(dataArr))
-        }
-      }
-      const styles = this.getTableStyles(elem);
-      const title = this.addViewTitle(elem, alternativeTitle, isSecondLevel)
-      const actionButtons = this.getActionsButtons(elem, dataArr);
-
-      if(dataArr && elem?.children_definition?.smartFilter?.filterValues && Object.keys(elem?.children_definition?.smartFilter?.filterValues).length != 0){
-        dataArr=this.applyFilterToTheData(dataArr,elem.children_definition.smartFilter.filterValues);
-     }
-      
-
-
-      return html`     
-        ${styles}   
-        <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline;">
-          <div style="display: flex; flex-direction: column; text-align: center;">
-            ${title}
-            ${actionButtons}
-            ${elem.columns === undefined
-          ? html`${elem.hideNoDataMessage !== undefined &&
-            elem.hideNoDataMessage
-            ? ""
-            : "No columns defined"}`
-          : html`
-              <style>
-    .table-container {
-      max-height: 400px; /* Adjust the height as needed */
-      overflow-y: auto;
-    }
-
-    .styled-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .styled-table thead th {
-      position: sticky;
-      top: 0;
-      background: #fff; /* Adjust background as needed */
-      z-index: 1;
-    }
-
-    .styled-table th, .styled-table td {
-      padding: 10px;
-      border: 1px solid #ddd;
-    }
-
-    .styled-table tbody tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-
-    .styled-table tbody tr:hover {
-      background-color: #ddd;
-    }
-
-    /* Custom scrollbar for Chrome, Safari, and Edge */
-    .table-container::-webkit-scrollbar {
-      width: 12px; /* Width of the scrollbar */
-    }
-
-    .table-container::-webkit-scrollbar-track {
-      background: linear-gradient(79deg, rgb(70, 104, 219), rgb(157, 112, 205)); /* Background of the track */
-    }
-
-    .table-container::-webkit-scrollbar-thumb {
-      background: linear-gradient(79deg, rgb(157, 112, 205), rgb(70, 104, 219)); /* Color of the scroll thumb */
-      border-radius: 10px; /* Rounded corners */
-    }
-
-    .table-container::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(79deg, rgb(157, 112, 205), rgb(70, 104, 219)); /* Hover color */
-    }
-
-    /* Custom scrollbar for Firefox */
-    .table-container {
-      scrollbar-width: thin; /* Thin scrollbar */
-      scrollbar-color: linear-gradient(79deg, rgb(157, 112, 205), rgb(70, 104, 219)) linear-gradient(79deg, rgb(70, 104, 219), rgb(157, 112, 205)); /* Thumb and track colors */
-    }     
-              .search-container {
-                background: #fff;
-                padding: 10px;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                display: flex;
-                align-items: center;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-        
-            .search-input {
-                display: flex;
-                flex-wrap: nowrap;
-                margin-right: 10px;
-            }
-        
-            .search-input input {
-                flex: 1;
-                padding: 10px;
-                margin-right: 10px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-                transition: border-color 0.3s, box-shadow 0.3s;
-            }
-        
-            .search-input input:focus {
-                outline: none;
-                border-color: #007bff;
-                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 123, 255, 0.3);
-            }
-        
-            .search-buttons {
-                display: flex;
-            }
-        
-            .search-buttons button {
-                padding: 10px 20px;
-                margin-left: 10px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s, box-shadow 0.3s;
-            }
-        
-            .search-buttons button:hover {
-                background-color: #007bff;
-            }
-        
-            .search-buttons button:active {
-                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-        
-            .search-buttons .apply-filter {
-                background-color: #007bff;
-                color: white;
-            }
-        
-            .search-buttons .clear-filter {
-                background-color: #6c757d;
-                color: white;
-            }
-        
-            .toggle-filter {
-              display:flex;
-              width:120px;
-                background-color: #007bff;
-                color: white;
-                padding: 10px 20px;
-                margin-left: 10px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s, box-shadow 0.3s;               
-                transition: color 0.3s;
-            }
-        
-            .toggle-filter:hover {
-                color: #fff;
-            }
-              </style>
-              ${elem?.children_definition?.smartFilter?.filterValues && 
-                html`
-                <button class="toggle-filter" @click="${()=>{this.toggleFilter()}}">Display Filter</button>
-
-                <div class="search-container">
-                    <div class="search-input">
-                        <input type="text" id="name" name="name" placeholder="Name">
-                        <input type="text" id="purpose" name="purpose" placeholder="Purpose">
-                    </div>
-                    <div class="search-buttons">
-                        <button class="apply-filter" @click="${()=>this.handleFilter(elem)}">Apply</button>
-                        <button class="clear-filter" @click="${()=>this.clearFilter(elem)}">Clear</button>
-                    </div>
-                </div>
-                `
-              }
-
-              <div class="table-container">
+      this.requestUpdate();
+    };
+  
+    return html`
+      ${styles}
+      <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline; width: 100%;">
+        <div style="display: flex; flex-direction: column; text-align: center; width: 100%;">
+          ${title}
+          ${actionButtons}
+          ${elem.columns === undefined
+            ? html`${elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage ? "" : "No columns defined"}`
+            : html`
+                <style>
+                  * {
+                    font-family: 'Montserrat', sans-serif;
+                  }
+                  .table-container {
+                    max-height: 400px; /* Adjust the height as needed */
+                    overflow-y: auto;
+                    overflow-x: auto;
+                    width: 100%;
+                  }
+                  .styled-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                  }
+                  .styled-table thead th {
+                    position: sticky;
+                    top: 0;
+                    background: #fff; /* Adjust background as needed */
+                    z-index: 1;
+                  }
+                  .styled-table th, .styled-table td {
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    text-align: left;
+                  }
+                  .styled-table tbody tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                  }
+                  .styled-table tbody tr:hover {
+                    background-color: #ddd;
+                  }
+                  .styled-table tbody tr.selected-row {
+                    background-color: #FFDDB3; /* Highlight color for selected rows */
+                  }
+                  .sort-icons {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                  }
+                  .sort-icon {
+                    cursor: pointer;
+                    display: block;
+                    width: 0;
+                    height: 0;
+                    border-left: 7px solid transparent;
+                    border-right: 7px solid transparent;
+                    margin-left: 5px;
+                    position: relative;
+                  }
+                  .sort-asc {
+                    border-bottom: 10px solid #4c7fad;
+                  }
+                  .sort-desc {
+                    border-top: 10px solid #4c7fad;
+                  }
+                  .sort-icon:hover::after {
+                    content: attr(data-tooltip);
+                    position: absolute;
+                    top: 25px;
+                    left: 10px;
+                    background: #b6d6f3;
+                    color: white;
+                    padding: 5px;
+                    border-radius: 5px;
+                    white-space: nowrap;
+                    z-index: 10;
+                    font-family: 'Montserrat', sans-serif;
+                  }
+                  @media screen and (max-width: 768px) {
+                    .styled-table th, .styled-table td {
+                      padding: 8px;
+                      font-size: 14px;
+                    }
+                  }
+                  .search-container {
+                    background: #fff;
+                    padding: 10px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    max-width: 100%;
+                    margin: 0 auto;
+                    margin-left: 10px;
+                  }
+  
+                  .search-input {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    margin-right: 10px;
+                    width: 100%;
+                  }
+  
+                  .search-input input {
+                    flex: 1;
+                    padding: 10px;
+                    margin-right: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+                    transition: border-color 0.3s, box-shadow 0.3s;
+                  }
+  
+                  .search-input input:focus {
+                    outline: none;
+                    border-color: #007bff;
+                    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 123, 255, 0.3);
+                  }
+  
+                  .search-buttons {
+                    display: flex;
+                  }
+  
+                  .search-buttons button {
+                    padding: 10px 20px;
+                    margin-left: 10px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s, box-shadow 0.3s;
+                  }
+  
+                  .search-buttons button:hover {
+                    background-color: #007bff;
+                  }
+  
+                  .search-buttons button:active {
+                    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+                  }
+  
+                  .search-buttons .apply-filter {
+                    background-color: #007bff;
+                    color: white;
+                  }
+  
+                  .search-buttons .clear-filter {
+                    background-color: #6c757d;
+                    color: white;
+                  }
+  
+                  .toggle-filter {
+                    display: flex;
+                    width: 120px;
+                    background-color: #007bff;
+                    color: white;
+                    padding: 10px 20px;
+                    margin-left: 10px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s, box-shadow 0.3s;               
+                    transition: color 0.3s;
+                  }
+  
+                  .toggle-filter:hover {
+                    color: #fff;
+                  }
+                </style>
+                ${elem?.children_definition?.smartFilter?.filterValues
+                  ? html`
+                      <button class="toggle-filter" @click="${() => { this.toggleFilter() }}">Display Filter</button>
+                      <div class="search-container">
+                        <div class="search-input">
+                          <input type="text" id="name" name="name" placeholder="Name">
+                          <input type="text" id="purpose" name="purpose" placeholder="Purpose">
+                        </div>
+                        <div class="search-buttons">
+                          <button class="apply-filter" @click="${() => this.handleFilter(elem)}">Apply</button>
+                          <button class="clear-filter" @click="${() => this.clearFilter(elem)}">Clear</button>
+                        </div>
+                      </div>
+                    `
+                  : nothing}
+                <div class="table-container">
                   <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
                     <thead>
                       <tr>
+                        ${elem.allowMultiSelection ? html`<th><input type="checkbox" @change=${handleSelectAll}></th>` : nothing}
                         ${elem.columns.map((fld, idx) => {
-            if (idx === 0 && parentElement !== null && parentElement !== undefined) {
-              return html` 
-                                <th>
-                                  <mwc-icon-button 
-                                    class="icon resetBtn" 
-                                    icon="refresh" 
-                                    @click=${() => handleResetParentFilter(parentElement)}
-                                  ></mwc-icon-button>
-
-                                  ${fld["label_" + this.lang]} <span class="resize-handle"></span>
-                                </th>
-                              `;
-            }
-            return html` <th>${fld["label_" + this.lang]} <span class="resize-handle"></span></th>`;
-          }
-          )}
-                        ${elem.row_buttons === undefined
-              ? nothing
-              : html`
+                          const fieldName = fld["name"];
+                          if (idx === 0 && parentElement !== null && parentElement !== undefined) {
+                            return html`
+                              <th>
+                                <mwc-icon-button class="icon resetBtn" icon="refresh" @click=${() => handleResetParentFilter(parentElement)}></mwc-icon-button>
+                                ${fld["label_" + this.lang]}
+                                <span class="resize-handle"></span>
+                                <div class="sort-icons">
+                                  <span class="sort-icon sort-asc" data-tooltip="${this.lang==="es"?`Orden ascendente`:`Sort ascending`}" @click=${() => sortData(fieldName, true)}></span>
+                                  <span class="sort-icon sort-desc" data-tooltip="${this.lang==="es"?`Orden descendente`:`Sort descending`}" @click=${() => sortData(fieldName, false)}></span>
+                                </div>
+                              </th>`;
+                          }
+                          return html`
                             <th>
-                              ${this.lang === "en" ? "Actions" : "Acciones"} 
+                              ${fld["label_" + this.lang]}
                               <span class="resize-handle"></span>
-                            </th>
-                          `}
+                              <div class="sort-icons">
+                                <span class="sort-icon sort-asc" data-tooltip="${this.lang==="es"?`Orden ascendente`:`Sort ascending`}" @click=${() => sortData(fieldName, true)}></span>
+                                <span class="sort-icon sort-desc" data-tooltip="${this.lang==="es"?`Orden descendente`:`Sort descending`}" @click=${() => sortData(fieldName, false)}></span>
+                              </div>
+                            </th>`;
+                        })}
+                        ${elem.row_buttons === undefined ? nothing : html`<th>${this.lang === "en" ? "Actions" : "Acciones"} <span class="resize-handle"></span></th>`}
                       </tr>
                     </thead>
                     <tbody>
-                      <div class="js-context-popup">
-                      </div>
-                      ${dataArr === undefined || !Array.isArray(dataArr) ?
-              html`No Data` :
-              html`
-                         
-                          ${dataArr.map((p, rowIndex) => {
-                return html`
-                              <tr
-                              @click=${(event) => {
-                    if (handler) {
-                      if (p[elem.children] && p[elem.children].length > 0) {
-                        if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
-                          handler(event, p, elem, rowIndex);
-                        }
-                      }
-                    }
-                    this.handleTableRowClick(event, p, elem)
-                  }}
-                              @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
-                              class="${selectedIdx === rowIndex ? "selected" : selectedIdx !== undefined ? "hidden" : ""}"  
-                              >
-                                ${this.getRowsInfo(elem, p, rowIndex, this.lang, parentData, handler)}
-                              </tr>
-                              ${elem.expandInfoSection !== undefined ? html`
-                                <table-row-detail id="detail${rowIndex}" .data="${p}" .elem="${elem}">
-                                <div slot="details">                                
-                                  <!-- Contenido detallado específico para la fila 1 -->
-                                </div>
-                                </table-row-detail>
-                              `: html``}
-                            `}
-              )}
-                        `}
+                      <div class="js-context-popup"></div>
+                      ${dataArr === undefined || !Array.isArray(dataArr)
+                        ? html`No Data`
+                        : html`
+                            ${dataArr.map((p, rowIndex) => {
+                              const isSelected = isItemSelected(p);
+                              return html`
+                                <tr
+                                  @click=${(event) => {
+                                    if (handler) {
+                                      if (p[elem.children] && p[elem.children].length > 0) {
+                                        if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
+                                          handler(event, p, elem, rowIndex);
+                                        }
+                                      }
+                                    }
+                                    this.handleTableRowClick(event, p, elem);
+                                  }}
+                                  @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
+                                  class="${isSelected ? 'selected-row' : ''}"
+                                >
+                                  ${elem.allowMultiSelection ? html`<td><input type="checkbox" ?checked=${isSelected}></td>` : nothing}
+                                  ${this.getRowsInfo(elem, p, rowIndex, this.lang, parentData, handler)}
+                                </tr>
+                                ${elem.expandInfoSection !== undefined
+                                  ? html`
+                                      <table-row-detail id="detail${rowIndex}" .data="${p}" .elem="${elem}">
+                                        <div slot="details"></div>
+                                      </table-row-detail>
+                                    `
+                                  : html``}
+                              `;
+                            })}
+                          `}
                     </tbody>
                   </table>
                 </div>
-                `}
-          </div>
+              `}
         </div>
-      `;
-    }
+      </div>
+    `;
+  }
+  
     dragDropBoxes(elem, data) {
       import('../DragDropBox/drag-box')
       //console.log('elem', elem)
@@ -3154,12 +3206,75 @@ export function DataViews(base) {
     }    
     calendar(elem, data) {
       import('../Calendar/index')
-      console.log('calendar', 'elem', elem, 'data', data)
+      let dataArr = this.getDataFromRoot(elem, data);
+      console.log('calendar', 'elem', elem, 'data', data, 'dataArr', dataArr)
+
+      let events={"program_calendar": {
+        "calendar_id": 1,
+        "program_name": "LlenadoViales",
+        "program_config_version": 1,
+        "schedule_size_unit": "MONTHS",
+        "schedule_size": 12,
+        
+        "viewCurrentDate":"today",
+        "start_date": "2023-11-01",
+
+        "end_date": "2024-12-31",
+        "day_of_week": "MONDAY",
+        "holidays_calendar": [
+          {
+            "id": 1,
+            "description_en": "Spanish labor calendar",
+            "description_es": "Calendario laboral español",
+            "dates": [
+              {
+                "id": 1,
+                "date": "2023-11-02",
+                "description_en": "King's day",
+                "description_es": "Dia de los Reyes"
+              }
+            ]
+          }
+        ],
+        "program_calendar_recursive_entry": [
+          {
+            "id": 1,
+            "start_date": "2023-01-01",
+            "end_date": "2023-01-31",
+            "purpose_en": "All Fridays on January",
+            "purpose_es": "Todos los viernes de Enero"
+          }
+        ],
+      }}    
+      if (dataArr!==undefined){  
+        let holidayDay={created_on:"2023-11-01", instrument:"All saints", is_holidays:true}
+        dataArr.push(holidayDay)
+        let holidayDay2={created_on:"2023-11-16", instrument:"Invented holidays", is_holidays:true}
+        dataArr.push(holidayDay2)
+        events.program_calendar.dates=dataArr
+      }
+      let calendarConfig={
+        "datesDateField":"created_on",
+        "eventListsFields":[
+          {"field": "instrument", "label_en": "Instrument", "label_es": "Instrumento"},
+          {"field": "event_type", "label_en": "Event", "label_es": "Evento"}
+        ],
+        "hoverDateDialog":{
+          "entryTitleFld":"instrument",
+          "eventListsFields":[
+            {"field": "instrument", "label_en": "Instrument", "label_es": "Instrumento"},
+            {"field": "event_type", "label_en": "Event", "label_es": "Evento"}
+          ],  
+          "dialogWidth": "300px", // Añade estas líneas
+          "dialogHeight": "300px" // Añade estas líneas        
+        }
+      }
+
       return html`
         <calendar-component .fakeData=${false} .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
-          .model=${elem} ?ready="true" .data=${data}
-          .viewModelFromProcModel=${elem} .config=${this.config}></calendar-component>      
+          .model=${elem} ?ready="true" .dataAllInOneData=${events}
+          .viewModelFromProcModel=${elem} .config=${calendarConfig}></calendar-component>      
       `
     }    
   };

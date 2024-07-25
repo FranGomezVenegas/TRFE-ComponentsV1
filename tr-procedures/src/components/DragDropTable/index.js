@@ -433,7 +433,7 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
     }
     //this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");
-    this.trazitButtonsMethod(e, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)         
+    this.trazitButtonsMethod(e, false, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)         
     this.requestUpdate();
   }
 

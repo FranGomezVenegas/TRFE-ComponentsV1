@@ -106,14 +106,14 @@ export function ButtonsFunctions(base) {
                   title="${action.button.title['label_' + this.lang]}"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-icon-button>` :
+                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, data, isProcManagement, parentData)}></mwc-icon-button>` :
                 html`${action.button.img ?
                   html`<mwc-icon-button
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   title="${action.button.title['label_' + this.lang]}" id="${action.actionName}"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}>
+                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, data, isProcManagement, parentData)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised
@@ -121,7 +121,7 @@ export function ButtonsFunctions(base) {
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-button>`
+                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, data, isProcManagement, parentData)}></mwc-button>`
                   }`
                 }` :
               nothing
@@ -136,7 +136,54 @@ export function ButtonsFunctions(base) {
       //console.log("getButtondatasectionModel", sectionModel);
       //console.log('getButtondata', data)
 							  
-						   
+      let printable={enable: true, icon:"print", title:{label_en:"Print", label_es: "Imprimir"}}
+      if (sectionModel.viewQuery!==undefined&&sectionModel.viewQuery.printable!==undefined){
+        if (sectionModel.viewQuery.printable.enable!==undefined){
+          printable.enable=sectionModel.viewQuery.printable.enable
+        }
+        if (sectionModel.viewQuery.printable.title!==undefined){
+          printable.title=sectionModel.viewQuery.printable.title
+        }
+        if (sectionModel.viewQuery.printable.icon!==undefined){
+          printable.icon=sectionModel.viewQuery.printable.icon
+        }
+      }
+      if (sectionModel.printable!==undefined){
+        if (sectionModel.printable.enable!==undefined){
+          printable.enable=sectionModel.printable.enable
+        }
+        if (sectionModel.printable.title!==undefined){
+          printable.title=sectionModel.printable.title
+        }
+        if (sectionModel.printable.icon!==undefined){
+          printable.icon=sectionModel.printable.icon
+        }
+      }
+      
+      let downloadable={enable: true, icon:"download", title:{label_en:"Export", label_es: "Exportar"}}
+      if (sectionModel.viewQuery!==undefined&&sectionModel.viewQuery.downloadable!==undefined){
+        if (sectionModel.viewQuery.downloadable.enable!==undefined){
+          downloadable.enable=sectionModel.viewQuery.downloadable.enable
+        }
+        if (sectionModel.viewQuery.downloadable.title!==undefined){
+          downloadable.title=sectionModel.viewQuery.downloadable.title
+        }
+        if (sectionModel.viewQuery.downloadable.icon!==undefined){
+          downloadable.icon=sectionModel.viewQuery.downloadable.icon
+        }
+      }
+      if (sectionModel.downloadable!==undefined){
+        if (sectionModel.downloadable.enable!==undefined){
+          downloadable.enable=sectionModel.downloadable.enable
+        }
+        if (sectionModel.downloadable.title!==undefined){
+          downloadable.title=sectionModel.downloadable.title
+        }
+        if (sectionModel.downloadable.icon!==undefined){
+          downloadable.icon=sectionModel.downloadable.icon
+        }
+      }
+
 																																											 
 															
 									 
@@ -237,24 +284,23 @@ export function ButtonsFunctions(base) {
               style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
           </mwc-icon-button>` : nothing
         }
-        ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.printable && sectionModel.viewQuery.printable.enable && sectionModel.viewQuery.printable.enable === true ?
-          html`
+        ${printable.enable===true ?html`
           <mwc-icon-button 
-              ${sectionModel.viewQuery.button===undefined||sectionModel.viewQuery.button.class===undefined?'':html`class="${sectionModel.viewQuery.button.class}"`}
-              icon="${sectionModel.viewQuery.printable.icon}" id="printable" 
-              title="${sectionModel.viewQuery.printable.title['label_' + this.lang]}"             
+              ${printable.button===undefined||printable.button.class===undefined?'':html`class="${printable.button.class}"`}
+              icon="${printable.icon}" id="printable" 
+              title="${printable.title['label_' + this.lang]}"             
               @click=${() => this.printTable()}
-              style="${sectionModel.viewQuery.button!==undefined&&sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+              style="${printable.button!==undefined&&printable.button.style !== undefined ? printable.button.style : ''}">
           </mwc-icon-button>` : nothing
         }
-        ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.downloadable && sectionModel.viewQuery.downloadable.enable && sectionModel.viewQuery.downloadable.enable === true ?
+        ${downloadable.enable === true ?
           html`
           <mwc-icon-button 
-          ${sectionModel.viewQuery.button===undefined||sectionModel.viewQuery.button.class===undefined?'':html`class="${sectionModel.viewQuery.button.class}"`}
-              icon="${sectionModel.viewQuery.downloadable.icon}" id="downloadable" 
-              title="${sectionModel.viewQuery.downloadable.title['label_' + this.lang]}"             
-              @click=${() => this.downloadDataTableToCSV(gridDefinition, gridAllData, sectionModel.viewQuery.downloadable)}
-              style="${sectionModel.viewQuery.button!==undefined&&sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+          ${downloadable.button===undefined||downloadable.button.class===undefined?'':html`class="${downloadable.button.class}"`}
+              icon="${downloadable.icon}" id="downloadable" 
+              title="${downloadable.title['label_' + this.lang]}"             
+              @click=${() => this.downloadDataTableToCSV(gridDefinition, gridAllData, downloadable)}
+              style="${downloadable.button!==undefined&&downloadable.button.style !== undefined ? downloadable.button.style : ''}">
           </mwc-icon-button>` : nothing
         }                
           ${sectionModel !== undefined && sectionModel.actions && sectionModel.actions.map(action =>
@@ -272,7 +318,7 @@ export function ButtonsFunctions(base) {
                       ?hidden=${this.btnHidden(action, data)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
-                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
                       html`${action.button.img ?
                         html`<mwc-icon-button  id="${action.actionName}"
                       class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
@@ -281,7 +327,7 @@ export function ButtonsFunctions(base) {
                       ?hidden=${this.btnHidden(action, data)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
-                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
+                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}>
                           <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                       </mwc-icon-button>` :
                         html`<mwc-button dense raised id="${action.actionName}"
@@ -290,7 +336,7 @@ export function ButtonsFunctions(base) {
                       ?hidden=${this.btnHidden(action , data)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
-                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
                         }`
                       }` :
                     nothing
@@ -410,7 +456,7 @@ export function ButtonsFunctions(base) {
 					?disabled=${this.btnDisabled(action, sectionModel)}
 					?hidden=${this.btnHidden(action)}
 					style="${action.button.style !== undefined ? action.button.style : ''}"
-					@click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
 					html`${action.button.img ?
 					  html`<mwc-icon-button  id="${action.actionName}"
 					class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
@@ -418,7 +464,7 @@ export function ButtonsFunctions(base) {
 					?disabled=${this.btnDisabled(action, sectionModel)}
 					?hidden=${this.btnHidden(action)}
 					style="${action.button.style !== undefined ? action.button.style : ''}"
-					@click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
+					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}>
 						<img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
 					</mwc-icon-button>` :
 					  html`<mwc-button dense raised id="${action.actionName}"
@@ -426,7 +472,7 @@ export function ButtonsFunctions(base) {
 					?disabled=${this.btnDisabled(action, sectionModel)}
 					?hidden=${this.btnHidden(action)}
 					style="${action.button.style !== undefined ? action.button.style : ''}"
-					@click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
 					  }`
 					}` :
 				  nothing
@@ -845,6 +891,12 @@ export function ButtonsFunctions(base) {
             sessionStorage.setItem('userSession', JSON.stringify(userSession));
           }
         }
+        if (queryDefinition.dataResponse!==undefined&&queryDefinition.dataResponse==="ArrayInRoot"){
+          let arrayToSingleObject={}
+          arrayToSingleObject.queryData=j
+          this.selectedItemInView=arrayToSingleObject
+          return
+        }
         if (queryDefinition.notUseGrid !== undefined && queryDefinition.notUseGrid === true) {
           if (queryDefinition.variableName !== undefined) {
             if (queryDefinition.endPointResponseVariableName !== undefined) {
@@ -853,6 +905,7 @@ export function ButtonsFunctions(base) {
               this[queryDefinition.variableName] = j;
             }
           } else {
+
             this.selectedItems = j;
             if (this.selectedItems[0] !== undefined && this.selectedItems[0] !== null) {
               this.selectedItem = this.selectedItems[0];

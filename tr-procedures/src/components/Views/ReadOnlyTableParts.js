@@ -565,7 +565,7 @@ export function ReadOnlyTableParts(base) {
                   console.log(`Replacing value in ${nextInputId}:`, newValue);
                   nextInput.value = newValue;
                   this.cellEditSetValidVal(event, data);
-                  this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+                  this.trazitButtonsMethod(event, true, fld.action, true, 1, event.target, data);
                   this.cellEditMoveToNextRow(columnIndex, rowIndex);
                 } else {
                   console.log(`Keeping existing value in ${nextInputId}:`, currentValue);
@@ -574,7 +574,7 @@ export function ReadOnlyTableParts(base) {
                 console.log(`Setting value in empty cell ${nextInputId}:`, newValue);
                 nextInput.value = newValue;
                 this.cellEditSetValidVal(event, data);
-                this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+                this.trazitButtonsMethod(event, true, fld.action, true, 1, event.target, data);
                 this.cellEditMoveToNextRow(columnIndex, rowIndex);      
               }
             } else {
@@ -606,7 +606,7 @@ export function ReadOnlyTableParts(base) {
         
         cellEditHandleKeyDown(event, fld, columnIndex, rowIndex, data) {
           //console.log('cellEditHandleKeyDown called');
-          this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+          this.trazitButtonsMethod(event, true, fld.action, true, 1, event.target, data);
           this.cellEditMoveToNextRow(columnIndex, rowIndex);
         }
         
