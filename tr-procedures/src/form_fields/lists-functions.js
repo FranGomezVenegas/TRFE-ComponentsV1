@@ -590,7 +590,7 @@ export function ListsFunctions(base) {
             let entries = [];
         
             // Apply the filter defined in the current node configuration
-            const filteredData = data
+            let filteredData = data
             if (config.filterStaticValue!==undefined){
                 filteredData=data.filter(item => item[config.filterKey] === config.filterStaticValue);
             }
