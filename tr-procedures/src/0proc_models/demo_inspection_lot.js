@@ -3038,7 +3038,129 @@ export const DemoInspectionLot =
       }
     ]
   },
-  "lotsPendingUsageDecision": {
+  "LotsPendingUsageDecision":{
+    "component": "TableWithButtons",
+    "langConfig": {
+      "gridHeader": {
+        "name": {
+          "label_en": "Name",
+          "label_es": "Nombre",
+          "width": "80%",
+          "sort": false,
+          "filter": true,
+          "align": "left"
+        },
+        "spec_code": {
+          "label_en": "Specification",
+          "label_es": "Especificación",
+          "width": "20%",
+          "sort": true,
+          "filter": false
+        },
+        "inventory_management": {
+          "label_en": "Inventory Management?",
+          "label_es": "¿Gestionar inventario?",
+          "width": "20%",
+          "sort": true,
+          "filter": false
+        },
+        "perform_bulk_control": {
+          "label_en": "Perform Bulk Control?",
+          "label_es": "¿Inspección de Bultos?",
+          "width": "20%",
+          "sort": true,
+          "filter": false
+        },
+        "allow_adhoc_bulk_addition": {
+          "label_en": "Allow add adhoc bulks?",
+          "label_es": "¿Permitir añadir Bultos adhoc?",
+          "width": "20%",
+          "sort": true,
+          "filter": false
+        },
+        "sampling_algorithm": {
+          "label_en": "Sampling algorithm",
+          "label_es": "Algoritmo de muestras",
+          "width": "20%",
+          "sort": true,
+          "filter": false
+        }
+      },
+      "title": {
+        "label_en": "",
+        "label_es": ""
+      }
+    },
+    "viewQuery": {
+      "actionName": "GET_LOTS_PENDING_USAGE_DECISION",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      },
+      "endPointParams": []
+    },
+    "row_buttons": [],
+    "enableContextMenu": true,
+    "addActionsInContextMenu": false,
+    "actions": [
+      {
+        "actionName": "LOT_TAKE_USAGE_DECISION",
+        "requiresDialog": true,
+        "button": {
+          "icon": "event",
+          "title": {
+            "label_en": "Take Usage Decision",
+            "label_es": "Tomar Decisión de uso"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "list1": {
+                "label_en": "Decision",
+                "label_es": "Decisión",
+                "items": [
+                  {
+                    "keyName": "ACCEPTED",
+                    "keyValue_en": "Accepted",
+                    "keyValue_es": "Aceptado"
+                  },
+                  {
+                    "keyName": "ACCEPTED_WITH_RESTRICTIONS",
+                    "keyValue_en": "Accepted with restrictions",
+                    "keyValue_es": "Aceptado con restricciones"
+                  },
+                  {
+                    "keyName": "REJECTED",
+                    "keyValue_en": "Rejected",
+                    "keyValue_es": "Rechazado"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "lotName",
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "lotUsageDecision",
+            "element": "list1"
+          }
+        ]
+      }
+    ]
+  },
+  "lotsPendingUsageDecision20240723": {
     "component": "TableWithButtons",
     "langConfig": {
       "title": {

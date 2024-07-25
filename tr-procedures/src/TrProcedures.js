@@ -172,10 +172,14 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'Tabs':
         import('./components/Tabs/tabs-main-view')
         return
+      case 'SerialPort':
+        import('./components/serialPort/serial-port')
+        return    
       case 'Flowchart':
         import('./components/FlowChart/flow-chart')
         return  
       case 'ObjectByTabs':
+      case 'SingleView':
         import('./components/ObjectByTabs/object-by-tabs')
         return  
       case 'PrototypeElementsViewMain':
@@ -348,6 +352,12 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'Flowchart' ? html`
         <flow-chart .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></flow-chart>
       `:html``}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'SerialPort' ? html`
+        <serial-port-component logareaheight="550" baudrate="9600" timeout="4" .lang=${this.lang}
+          .model=${ProceduresModel[this.procName]} .procName=${this.procName}></serial-port-component>
+      `:html``}
+
+      
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitHomeAir' ? html`
         <home-air .config=${this.config} .desktop=${this.desktop} .lang=${this.lang} .model=${ProceduresModel[this.procName]} .procName=${this.procName}></home-air>
       `:html``}
@@ -389,8 +399,8 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         <sample-incubation-view .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .config=${this.config}></sample-incubation-view>      
-      `: nothing}
-      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ObjectByTabs' ? html`
+      `: nothing} 
+      ${this.viewModelFromProcModel&&(this.viewModelFromProcModel.component == 'ObjectByTabs'||this.viewModelFromProcModel.component == 'SingleView') ? html`
         <object-by-tabs .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
           .model=${this.viewModelFromProcModel}

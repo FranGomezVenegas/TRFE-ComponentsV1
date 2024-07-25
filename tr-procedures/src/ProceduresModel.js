@@ -16,7 +16,7 @@ import { ProjectRandD } from './0proc_models/projectRandD';
 import { MonWater } from './0proc_models/mon_water';
 import { Stock } from './0proc_models/demo_stock';
 import { DemoInstruments } from './0proc_models/demo_instruments'; 
-import { DemoLotsRaw } from './0proc_models/demo_lots_raw';
+import { DemoInspectionLot } from './0proc_models/demo_inspection_lot';
 import { DiseaseStudy } from './0proc_models/disease-study';
 
 export const ProceduresModel = {
@@ -36,7 +36,7 @@ export const ProceduresModel = {
   ['instruments']: DemoInstruments,
   ['mon_water']: MonWater,
   ['stock']: Stock,
-  ['inspection_lot']: DemoLotsRaw,
+  ['inspection_lot']: DemoInspectionLot,
   ['DiseaseStudies']: DiseaseStudy,
   
   ['RandD']: ProjectRandD,
@@ -124,6 +124,8 @@ export const DemoViews = [
   {"label":"fake-developers", "proc_instance_name": "fake-developers", "isSpecial":true, "views":[
     {"proc_instance_name": "fake-developers", "view_name": "culture-medium", "filter_name": "culture-medium", "title": "ModuleEnvMonitCultureMedium"},
     {"proc_instance_name": "fake-developers", "view_name": "tree-view", "filter_name": "tree-view", "title": "TreeView"},
+    {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "serial-port", "filter_name": "drag-drop", "title": "Serial Port"},
+    
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-drop", "filter_name": "drag-drop", "title": "DragDropTables"},
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "mb_em", "view_name": "drag-box", "filter_name": "drag-box", "title": "DragDropBoxes"},
 
@@ -255,10 +257,13 @@ export const DemoViews = [
     {"proc_instance_name": "inspection_lot", "view_name": "ReviewTestingGroup", "filter_name": "RTG-FQ", "title": "RTG-FQ"},
     {"proc_instance_name": "inspection_lot", "view_name": "ReviewTestingGroup", "filter_name": "RTG-MB", "title": "RTG-MB"},
     {"proc_instance_name": "inspection_lot", "view_name": "ReviewSample", "filter_name": "Review", "title": "ReviewSample"},
+    
+    {"proc_instance_name": "inspection_lot", "view_name": "lotsPendingUsageDecision", "filter_name": "Browser", "title": "lotsPendingUsageDecision"},
+    {"proc_instance_name": "inspection_lot", "view_name": "lotsPendingUsageDecision20240723", "filter_name": "Browser", "title": "lotsPendingUsageDecision20240723"},
     {"proc_instance_name": "inspection_lot", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
-	{"proc_instance_name": "inspection_lot", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
-  {"proc_instance_name": "inspection_lot", "view_name": "analysisDesign", "filter_name": "analysisDesign", "title": "analysisDesign"},
-	{"proc_instance_name": "inspection_lot", "view_name": "SpecDesign", "filter_name": "SpecDesign", "title": "SpecDesign"}
+  	{"proc_instance_name": "inspection_lot", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
+    {"proc_instance_name": "inspection_lot", "view_name": "analysisDesign", "filter_name": "analysisDesign", "title": "analysisDesign"},
+	  {"proc_instance_name": "inspection_lot", "view_name": "SpecDesign", "filter_name": "SpecDesign", "title": "SpecDesign"}
 	]},
   {"label":"Disease Study", "proc_instance_name": "DiseaseStudies", "views":[
     {"proc_instance_name": "DiseaseStudies", "view_name": "MyStudies", "filter_name": "MyStudies", "title": "My Studies"},

@@ -10,6 +10,9 @@ export const FakeDevelopers = {
 		{ "name": "PlatformAdmin" , "url" : "/app/PlatformAdminAPIactions"}
 	  ]
   },	
+  "serial-port":{
+    "component": "SerialPort",
+  },  
   "ck-editor":{
     "component": "ckEditor",
   },  
