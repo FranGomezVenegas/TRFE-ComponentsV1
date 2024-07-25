@@ -133,7 +133,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
       this.contextMenuItems=[]
       this.procInstanceName=''
     }
-    resetView(){
+    resetTableWithButtonsView(){
       this.selectedItems=[]
       //this.ready=false;
     }
