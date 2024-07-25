@@ -3117,11 +3117,13 @@ export const Stock =
 				  "name": "lot_name",
 				  "label_en": "Name",
 				  "label_es": "Nombre",
+				  
 				  "width": "50px", // Define the width of this column
 				  "maxLines": 2 // Text will wrap and truncate after 2 lines
 				},
 				{
 				  "name": "category",
+				  "addToSmartFilter": true,
 				  "label_en": "Category",
 				  "label_es": "Categoría",
 				  "width": "100px" // Define the width of this column
@@ -3634,7 +3636,28 @@ export const Stock =
 						{ "argumentName": "reference", "selObjectPropertyName": "reference" }
 					]
 				}
-			]
+			],
+			"smartFilter": {	
+				"filterValues":{},			
+				"applyFilterButton":{
+				  "title":{
+					label_en: 'Apply Filter',
+					label_es: 'Aplicar Filtro',
+				  }
+				},
+				"clearFilterButton":{
+				  "title":{
+					label_en: 'Clear Filter',
+					label_es: 'Limpiar Filtro',
+				  }
+				},
+				"displayFilterButton":{
+				  "title":{
+					label_en: 'Display Filter',
+					label_es: 'Mostrar Filtro',
+				  }
+				}
+			}			
 		}
 	]
   },   

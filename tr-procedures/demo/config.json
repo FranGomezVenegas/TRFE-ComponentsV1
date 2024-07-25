@@ -378,6 +378,11 @@
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
+	"localDefaultView": {
+		"procName": "instruments",
+		"viewName": "PlatformInstruments",
+		"filterName": "InstrumentsList"
+	},
 
   "fakeEnd":{
   }  

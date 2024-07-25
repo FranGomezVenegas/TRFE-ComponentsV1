@@ -85,7 +85,7 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.40 grid-with-buttons, resetView function name changed due to it impacted with other places]
 [- v0.2.41 use Object By Tabs to replace Vaadin grid asap](https://github.com/FranGomezVenegas/FrontE-Issues/issues/380)
 [- v0.2.42 multi-select and created SingleView as ObjectByTabs for single view-tab, to replace vaading table with buttons](https://github.com/FranGomezVenegas/FrontE-Issues/issues/365)
-
-
+[- v0.2.43 smart filter for readOnlyTable](https://github.com/FranGomezVenegas/FrontE-Issues/issues/217)
+[- v0.2.44 in ButtonsFunctions the query for grid for dialog had a typo when added the getServiceUrl line]
 
 

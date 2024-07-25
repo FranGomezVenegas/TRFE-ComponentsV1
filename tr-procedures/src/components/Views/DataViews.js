@@ -2807,24 +2807,6 @@ export function DataViews(base) {
     }
 
     handleFilter(elem) {
-      let filterDiv = this.shadowRoot.querySelectorAll(`.search-container input`)
-      filterDiv.forEach((elm,i) => {
-        let value = elm.value;
-        let name = elm.getAttribute('name')
-        if (elem.children_definition.smartFilter.dialogInfo.fields[i]?.name) {
-          elem.children_definition.smartFilter.filterValues[name] = value
-        }                      
-      })  
-      console.log(elem.children_definition.smartFilter.filterValues)              
-      this.requestUpdate();
-    }
-
-    clearFilter(elem) {
-      let filterDiv = this.shadowRoot.querySelectorAll(`.search-container input`)
-      filterDiv.forEach((elm,i) => {
-        elm.value = ''                      
-      }) 
-      elem.children_definition.smartFilter.filterValues = {};
       this.requestUpdate();
     }
 
@@ -2832,32 +2814,73 @@ export function DataViews(base) {
       let filter = this.shadowRoot.querySelector('.search-container');
       filter.style.display = filter.style.display === 'none' ? 'flex' : 'none';
     }
+    
+    updateFilterValue(elem, event) {
+      const input = event.target;
+      const value = input.value;
+      const name = input.getAttribute('name');
+      if (name) {
+          elem.smartFilter.filterValues[name] = value;
+      }
+  }
+      clearFilter(elem, context) {
+        let filterContainer = context.shadowRoot.querySelector('.search-container');
+        let filterInputs = filterContainer.querySelectorAll('input');
+        filterInputs.forEach(elm => {
+            elm.value = '';
+        });
+        elem.smartFilter.filterValues = {};
+        this.requestUpdate();
+    }
+    
+    isNumeric(str) {
+      if (typeof str != "string") return false 
+      return !isNaN(str) && 
+             !isNaN(parseFloat(str)) 
+    }
 
     applyFilterToTheData(curDataForThisCard, filterValues) {
-      let hasFilters=false
+      let hasFilters = false;
       const uniqueItemsSet = new Set();
+
       for (const key in filterValues) {
-        const filterValue = filterValues[key];
-        if (String(filterValue).length>0){
-          hasFilters=true
-          if (Array.isArray(curDataForThisCard)) {
-              const filteredItems = curDataForThisCard.filter(item => {
-                  if (item[key] && filterValue) {
-                    return item[key].toLowerCase().includes(filterValue.toLowerCase());
-                  }
-                  return false
-              });  
-              console.log(filteredItems)                         
-              filteredItems.forEach(item => uniqueItemsSet.add(item));            
+          let filterValue = filterValues[key];
+          if (filterValue !== null && filterValue !== undefined && String(filterValue).length > 0) {
+              hasFilters = true;
+
+              // Convert filter value to the appropriate type
+              const tempNumber = Number(filterValue)
+              if (this.isNumeric(filterValue)) {
+                  filterValue = Number(filterValue);
+              } else if (filterValue.toLowerCase() === 'true' || filterValue.toLowerCase() === 'false') {
+                  filterValue = filterValue.toLowerCase() === 'true';
+              }
+
+              if (Array.isArray(curDataForThisCard)) {
+                  const filteredItems = curDataForThisCard.filter(item => {
+                      if (item[key] !== undefined && item[key] !== null) {
+                          const itemValue = item[key];
+                          if (typeof itemValue === 'string' && typeof filterValue === 'string') {
+                              return itemValue.toLowerCase().includes(filterValue.toLowerCase());
+                          } else if (typeof itemValue === 'number' && typeof filterValue === 'number') {
+                              return itemValue === filterValue;
+                          } else if (typeof itemValue === 'boolean' && typeof filterValue === 'boolean') {
+                              return itemValue === filterValue;
+                          }
+                      }
+                      return false;
+                  });
+                  filteredItems.forEach(item => uniqueItemsSet.add(item));
+              }
           }
-        }
       }
-      if (hasFilters===false){
-       return curDataForThisCard   
+
+      if (!hasFilters) {
+          return curDataForThisCard;
       }
       return Array.from(uniqueItemsSet);
-  
   }
+
   readOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, handler, handleResetParentFilter, parentElement, theme, parentData) {
     if (elem === undefined) {
       return;
@@ -2896,8 +2919,10 @@ export function DataViews(base) {
     const title = this.addViewTitle(elem, alternativeTitle, isSecondLevel);
     const actionButtons = this.getActionsButtons(elem, dataArr);
   
-    if (dataArr && elem?.children_definition?.smartFilter?.filterValues && Object.keys(elem?.children_definition?.smartFilter?.filterValues).length != 0) {
-      dataArr = this.applyFilterToTheData(dataArr, elem.children_definition.smartFilter.filterValues);
+    if(dataArr && elem?.smartFilter?.filterValues && Object.keys(elem?.smartFilter?.filterValues).length != 0){
+    //  console.log(dataArr)
+    //  console.log(elem.smartFilter.filterValues)
+      dataArr=this.applyFilterToTheData(dataArr,elem.smartFilter.filterValues);
     }
   
     // Sorting function
@@ -2924,7 +2949,37 @@ export function DataViews(base) {
       }
       this.requestUpdate();
     };
-  
+    let smartFilter= {				
+      "applyFilterButton":{
+        "title":{
+        label_en: 'Apply Filter',
+        label_es: 'Aplicar Filtro',
+        }
+      },
+      "clearFilterButton":{
+        "title":{
+        label_en: 'Clear Filter',
+        label_es: 'Limpiar Filtro',
+        }
+      },
+      "displayFilterButton":{
+        "title":{
+        label_en: 'Display/Hide Filter',
+        label_es: 'Mostrar/Ocultar Filtro',
+        }
+      }
+    }  
+    if (elem!==undefined&&elem.smartFilter!==undefined&&elem.smartFilter.applyFilterButton!==undefined&&elem.smartFilter.applyFilterButton.title!==undefined){
+      smartFilter.applyFilterButton.title=elem.smartFilter.applyFilterButton.title
+    }
+    if (elem!==undefined&&elem.smartFilter!==undefined&&elem.smartFilter.clearFilterButton!==undefined&&elem.smartFilter.clearFilterButton.title!==undefined){
+      smartFilter.clearFilterButton.title=elem.smartFilter.clearFilterButton.title
+    }
+    if (elem!==undefined&&elem.smartFilter!==undefined&&elem.smartFilter.displayFilterButton!==undefined&&elem.smartFilter.displayFilterButton.title!==undefined){
+      smartFilter.displayFilterButton.title=elem.smartFilter.displayFilterButton.title
+    }
+    let smartFilterVisible=false
+    smartFilterVisible=elem.columns.some(column => column.addToSmartFilter === true);
     return html`
       ${styles}
       <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline; width: 100%;">
@@ -3092,21 +3147,34 @@ export function DataViews(base) {
                     color: #fff;
                   }
                 </style>
-                ${elem?.children_definition?.smartFilter?.filterValues
-                  ? html`
-                      <button class="toggle-filter" @click="${() => { this.toggleFilter() }}">Display Filter</button>
-                      <div class="search-container">
-                        <div class="search-input">
-                          <input type="text" id="name" name="name" placeholder="Name">
-                          <input type="text" id="purpose" name="purpose" placeholder="Purpose">
-                        </div>
+                ${elem?.smartFilter?.filterValues && smartFilterVisible &&
+                    html` 
+                    <button class="toggle-filter" @click="${()=>{this.toggleFilter()}}">Display/Hide Filter</button>
+                    <div class="search-container">
+                      <!--  <div class="search-input">
+                            ${elem.columns.map(column => html`
+                                <input type="text" id="${column.name}" name="${column.name}" placeholder="${column.label_en}">
+                            `)}
+                        </div> -->
+                          <div class="search-input">
+                      ${elem.columns.map(column => html`
+                        ${column.addToSmartFilter!==undefined&&column.addToSmartFilter===true?html`
+                          <input 
+                              type="text" 
+                              id="${column.name}" 
+                              name="${column.name}" 
+                              placeholder="${column.label_en}"
+                              @input="${(e) => this.updateFilterValue(elem, e)}">
+                        `:nothing}
+                      `)}
+                  </div>
                         <div class="search-buttons">
-                          <button class="apply-filter" @click="${() => this.handleFilter(elem)}">Apply</button>
-                          <button class="clear-filter" @click="${() => this.clearFilter(elem)}">Clear</button>
+                            <button class="apply-filter" @click="${() => this.handleFilter(elem, this)}">Apply</button>
+                            <button class="clear-filter" @click="${() => this.clearFilter(elem, this)}">Clear</button>
                         </div>
-                      </div>
+                    </div>
                     `
-                  : nothing}
+                }
                 <div class="table-container">
                   <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
                     <thead>

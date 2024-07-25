@@ -1012,7 +1012,7 @@ export function ButtonsFunctions(base) {
       let APIParams = this.getAPICommonParams(currQuery)
       let viewParams = this.jsonParam(currQuery)
       let endPointUrl = this.getQueryAPIUrl(currQuery)
-      let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
+      let serviceAPIurl=this.getServiceAPIUrl(currQuery)
       let params = serviceAPIurl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
       

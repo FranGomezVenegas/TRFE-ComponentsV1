@@ -159,7 +159,1169 @@ export const DemoInstruments ={
       }
     ]
   },
-  "PlatformInstruments": {
+  "PlatformInstruments":{
+    "component": "TableWithButtons",
+    "langConfig": {
+      "gridHeader": {
+        "name": {
+          "label_en": "Name",
+          "label_es": "Nombre",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "20%",
+          "align": "left"
+        },
+        "family": {
+          "label_en": "Family",
+          "label_es": "Familia",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "20%"
+        },
+        "on_line": {
+          "label_en": "On Line",
+          "label_es": "En Linea",
+          "sort": false,
+          "filter": true,
+          "is_icon": true,
+          "width": "10%"
+        },
+        "model_number": {
+          "label_en": "Model",
+          "label_es": "Modelo",
+          "sort": false,
+          "filter": true,
+          "width": "10%"
+        },
+        "serial_number": {
+          "label_en": "Serial N.",
+          "label_es": "N. Serie",
+          "sort": false,
+          "filter": true,
+          "width": "10%"
+        },
+        "supplier": {
+          "label_en": "Supplier",
+          "label_es": "Proveedor",
+          "sort": false,
+          "filter": true,
+          "width": "10%"
+        },
+        "manufacturer": {
+          "label_en": "Manufacturer",
+          "label_es": "fabricante",
+          "sort": false,
+          "filter": true,
+          "width": "10%"
+        },
+        "created_on": {
+          "label_en": "Creation",
+          "label_es": "Creación",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "is_locked": {
+          "label_en": "Is locked?",
+          "label_es": "¿Bloqueado?",
+          "sort": false,
+          "filter": false,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "detail": {
+          "label_en": "Detail",
+          "label_es": "Detalle",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "last_calibration": {
+          "label_en": "Last Cal",
+          "label_es": "Última Cal",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "next_calibration": {
+          "label_en": "Next Cal",
+          "label_es": "Próxima Cal",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "last_prev_maint": {
+          "label_en": "Last PM",
+          "label_es": "Último MP",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        },
+        "next_prev_maint": {
+          "label_en": "Next PM",
+          "label_es": "Próximo MP",
+          "sort": false,
+          "filter": true,
+          "is_icon": false,
+          "width": "10%"
+        }
+      },
+      "title": {
+        "label_en": "",
+        "label_es": ""
+      }
+    },
+    "viewQuery": {
+      "actionName": "ACTIVE_INSTRUMENTS_LIST",
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": true
+      },
+      "endPointParams": []
+    },
+    "enableContextMenu": true,
+    "addActionsInContextMenu": false,
+    "actions": [
+      {
+        "actionName": "NEW_INSTRUMENT",
+        "requiresDialog": true,
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "element": "text1",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "familyName",
+            "element": "list1",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "modelNumber",
+            "element": "text2",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "supplierName",
+            "element": "list2",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "serialNumber",
+            "element": "text3",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "manufacturerName",
+            "element": "list3",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "responsible",
+            "element": "list4",
+            "defaultValue": "",
+            "addToFieldNameAndValue": true,
+            "notAddWhenValueIsBlank": true,
+            "isAdhocField": true
+          },
+          {
+            "argumentName": "responsible_backup",
+            "element": "list5",
+            "defaultValue": "",
+            "addToFieldNameAndValue": true,
+            "notAddWhenValueIsBlank": true,
+            "isAdhocField": true
+          },
+          {
+            "argumentName": "poDate",
+            "element": "date1",
+            "defaultValue": "",
+            "optional": true
+          },
+          {
+            "argumentName": "installationDate",
+            "element": "date2",
+            "defaultValue": ""
+          }
+        ],
+        "button": {
+          "icon": "create_new_folder",
+          "title": {
+            "label_en": "New",
+            "label_es": "Nuevo"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "New Instrument Name",
+                "label_es": "Nombre para nuevo instrumento"
+              }
+            },
+            {
+              "list1": {
+                "label_en": "Family",
+                "label_es": "Familia",
+                "addBlankValueOnTop": true,
+                "addBlankValueAtBottom": false,
+                "valuesFromMasterData": {
+                  "propertyNameContainer": "instruments_family",
+                  "propertyKeyName": "name",
+                  "propertyKeyValueEn": "name",
+                  "propertyKeyValueEs": "name"
+                }
+              }
+            },
+            {
+              "text2": {
+                "label_en": "Model",
+                "label_es": "Modelo"
+              }
+            },
+            {
+              "list2": {
+                "items": [
+                  {
+                    "keyName": "LEICA",
+                    "keyValue_en": "Leica Biosystems",
+                    "keyValue_es": "Leica Biosystems"
+                  },
+                  {
+                    "keyName": "PB INSTRUMENTS",
+                    "keyValue_en": "PB Instruments",
+                    "keyValue_es": "PB Instruments"
+                  },
+                  {
+                    "keyName": "METTLER",
+                    "keyValue_en": "Mettler Toledo",
+                    "keyValue_es": "Mettler Toledo"
+                  },
+                  {
+                    "keyName": "PERKIN ELMER",
+                    "keyValue_en": "Perkin Elmer",
+                    "keyValue_es": "Perkin Elmer"
+                  },
+                  {
+                    "keyName": "AGILENT",
+                    "keyValue_en": "Agilent",
+                    "keyValue_es": "Agilent"
+                  },
+                  {
+                    "keyName": "WATERS",
+                    "keyValue_en": "Waters",
+                    "keyValue_es": "Water"
+                  }
+                ],
+                "label_en": "Supplier",
+                "label_es": "Proveedor"
+              }
+            },
+            {
+              "text3": {
+                "label_en": "Serial Number",
+                "label_es": "Número de Serie"
+              }
+            },
+            {
+              "list3": {
+                "items": [
+                  {
+                    "keyName": "METTLER",
+                    "keyValue_en": "Mettler Toledo",
+                    "keyValue_es": "Mettler Toledo"
+                  },
+                  {
+                    "keyName": "PERKIN ELMER",
+                    "keyValue_en": "Perkin Elmer",
+                    "keyValue_es": "Perkin Elmer"
+                  },
+                  {
+                    "keyName": "AGILENT",
+                    "keyValue_en": "Agilent",
+                    "keyValue_es": "Agilent"
+                  },
+                  {
+                    "keyName": "WATERS",
+                    "keyValue_en": "Waters",
+                    "keyValue_es": "Water"
+                  }
+                ],
+                "label_en": "ManufacturerName",
+                "label_es": "Fabricante"
+              }
+            },
+            {
+              "list4": {
+                "label_en": "Responsible",
+                "label_es": "Responsable",
+                "optional": true,
+                "addBlankValueOnTop": true,
+                "addBlankValueAtBottom": false,
+                "valuesFromMasterData": {
+                  "propertyNameContainer": "users",
+                  "propertyKeyName": "user",
+                  "propertyKeyValueEn": "user",
+                  "propertyKeyValueEs": "user"
+                },
+                "dependencyFieldBehavior": [
+                  {
+                    "field": "list5",
+                    "rule": "whenEmpty",
+                    "resetValue": true,
+                    "action": "hide"
+                  }
+                ]
+              }
+            },
+            {
+              "list5": {
+                "label_en": "Responsible Backup",
+                "label_es": "Backup del responsable",
+                "optional": true,
+                "addBlankValueOnTop": true,
+                "addBlankValueAtBottom": false,
+                "valuesFromMasterData": {
+                  "propertyNameContainer": "users",
+                  "propertyKeyName": "user",
+                  "propertyKeyValueEn": "user",
+                  "propertyKeyValueEs": "user"
+                }
+              }
+            },
+            {
+              "date1": {
+                "label_en": "Purchase Date",
+                "label_es": "Fecha Compra",
+                "optional": true
+              }
+            },
+            {
+              "date2": {
+                "label_en": "Installation Date",
+                "label_es": "Fecha Instalación"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "actionName": "TURN_ON_LINE",
+        "requiresDialog": false,
+        "button": {
+          "img": "activate.svg",
+          "title": {
+            "label_en": "Turn online",
+            "label_es": "Poner en servicio"
+          },
+          "requiresGridItemSelected": true,
+          "showWhenSelectedItem": {
+            "column": "on_line",
+            "value": false
+          }
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ]
+      },
+      {
+        "actionName": "TURN_OFF_LINE",
+        "requiresDialog": false,
+        "button": {
+          "img": "deactivate.svg",
+          "title": {
+            "label_en": "Turn off-line",
+            "label_es": "Poner fuera de uso"
+          },
+          "requiresGridItemSelected": true,
+          "showWhenSelectedItem": {
+            "column": "on_line",
+            "value": true
+          }
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ]
+      },
+      {
+        "actionName": "START_CALIBRATION",
+        "requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_calibration.svg",
+          "title": {
+            "label_en": "Start Calibration",
+            "label_es": "Iniciar Calibración"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ]
+      },
+      {
+        "actionName": "START_PREVENTIVE_MAINTENANCE",
+        "requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_preventive_maintenance.svg",
+          "title": {
+            "label_en": "Start Prev Maint",
+            "label_es": "Iniciar Mant Prev"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ]
+      },
+      {
+        "actionName": "START_SERVICE",
+        "requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_service.svg",
+          "title": {
+            "label_en": "Start Service",
+            "label_es": "Iniciar Servicio"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ]
+      },
+      {
+        "actionName": "START_VERIFICATION",
+        "endPoint": "/app/procs/InstrumentsAPIactions",
+        "requiresDialog": false,
+        "button": {
+          "img": "inst_ev_type_verification.svg",
+          "title": {
+            "label_en": "Start Verification",
+            "label_es": "Iniciar Verificación"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ]
+      },
+      {
+        "actionName": "DECOMMISSION_INSTRUMENT",
+        "endPoint": "/app/procs/InstrumentsAPIactions",
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ],
+        "requiresDialog": false,
+        "button": {
+          "icon": "alarm_off",
+          "title": {
+            "label_en": "Decommission instrument",
+            "label_es": "Retirar instrumento"
+          },
+          "requiresGridItemSelected": true
+        }
+      },
+      {
+        "actionName": "UNDECOMMISSION_INSTRUMENT",
+        "endPoint": "/app/procs/InstrumentsAPIactions",
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ],
+        "clientMethod": "openReactivateObjectDialog",
+        "button": {
+          "icon": "alarm_add",
+          "title": {
+            "label_en": "Undecommission instrument",
+            "label_es": "Recuperar instrumento"
+          },
+          "requiresGridItemSelected": false
+        },
+        "requiresDialog": true,
+        "dialogInfo": {
+          "name": "reactivateObjectDialog",
+          "fieldsObject": {
+            "queryNumDays": {
+              "label_en": "Number of Days",
+              "label_es": "Número de Días"
+            },
+            "objectName": {
+              "label_en": "Instrument to reactivate",
+              "label_es": "Lote de Producción a Reactivar"
+            }
+          },
+          "listDefinition": {
+            "keyFldName": "name",
+            "eachEntryTextGenerator": [
+              {
+                "value": "Instrument: ",
+                "type": "fix"
+              },
+              {
+                "value": "name",
+                "type": "field"
+              }
+            ]
+          },
+          "viewQuery": {
+            "actionName": "DECOMISSIONED_INSTRUMENTS_LAST_N_DAYS",
+            "clientMethod": "getDeactivatedObjects",
+            "endPoint": "/app/procs/InstrumentsAPIqueries",
+            "endPointParams": [
+              {
+                "argumentName": "numDays",
+                "element": "queryNumDays",
+                "fixValue": 7
+              },
+              {
+                "argumentName": "family",
+                "fixValue": "familyCorrecto"
+              }
+            ]
+          },
+          "action": []
+        }
+      },
+      {
+        "actionName": "INSTRUMENT_AUDIT_FOR_GIVEN_INSTRUMENT",
+        "requiresDialog": true,
+        "endPoint": "/app/procs/InstrumentsAPIqueries",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Instrument Audit",
+            "label_es": "Auditoría de Instrumento"
+          },
+          "requiresGridItemSelected": true
+        },
+        "clientMethod": "getObjectAuditInfo",
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          }
+        ],
+        "dialogInfo": {
+          "name": "auditDialog",
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "INSTRUMENTAUDIT_SET_AUDIT_ID_REVIEWED",
+              "requiresDialog": false,
+              "notGetViewData": true,
+              "secondaryActionToPerform": {
+                "name": "getObjectAuditInfo",
+                "endPointParams": [
+                  {
+                    "argumentName": "instrumentName",
+                    "selObjectPropertyName": "name"
+                  }
+                ]
+              },
+              "endPointUrl": "Samples",
+              "clientMethod": "signAudit",
+              "endPointParams": [
+                {
+                  "argumentName": "instrumentName",
+                  "selObjectPropertyName": "name"
+                },
+                {
+                  "argumentName": "auditId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "actionName": "ADD_ATTACHMENT",
+        "requiresDialog": true,
+        "button": {
+          "icon": "add_link",
+          "title": {
+            "label_en": "Add Attachment",
+            "label_es": "Añadir Adjunto"
+          },
+          "requiresGridItemSelected": true
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "Doc Url",
+                "label_es": "Vínculo"
+              }
+            },
+            {
+              "text2": {
+                "label_en": "Title",
+                "label_es": "Título",
+                "optional": true
+              }
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "fileUrl",
+            "element": "text1",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "briefSummary",
+            "element": "text2",
+            "defaultValue": ""
+          }
+        ]
+      },
+      {
+        "actionName": "REMOVE_ATTACHMENT",
+        "requiresDialog": true,
+        "button": {
+          "icon": "link_off",
+          "title": {
+            "label_en": "Remove Attachment",
+            "label_es": "Eliminar Adjunto"
+          },
+          "requiresGridItemSelected": true
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "gridContent": true,
+          "dialogQuery": {
+            "actionName": "GET_INSTR_ATTACHMENTS",
+            "variableForData": "",
+            "endPointParams": [
+              {
+                "argumentName": "instrumentName",
+                "internalVariableObjName": "selectedItems",
+                "internalVariableObjProperty": "name"
+              }
+            ],
+            "xxxsubViewFilter": {
+              "ER-FQ": [],
+              "ER-MB": []
+            }
+          },
+          "langConfig": {
+            "gridHeader": [
+              {
+                "fldName": "file_link",
+                "label_en": "Link",
+                "label_es": "Vínculo",
+                "width": "40%",
+                "sort": false,
+                "filter": true,
+                "align": "left"
+              },
+              {
+                "fldName": "brief_summary",
+                "label_en": "Title",
+                "label_es": "Título",
+                "width": "40%",
+                "sort": false,
+                "filter": true,
+                "align": "left"
+              }
+            ]
+          },
+          "automatic": true
+        },
+        "dialogInfo2": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "Doc Url",
+                "label_es": "Vínculo"
+              }
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "attachmentId",
+            "selObjectPropertyName": "id",
+            "getFromGrid": true
+          }
+        ]
+      },
+      {
+        "actionName": "OPEN_ATTACHMENTS",
+        "requiresDialog": true,
+        "button": {
+          "icon": "attach_file",
+          "title": {
+            "label_en": "Open Attachments",
+            "label_es": "Abrir Adjuntos"
+          },
+          "requiresGridItemSelected": true
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "filesListContent": true,
+          "dialogQuery": {
+            "actionName": "GET_INSTR_ATTACHMENTS",
+            "variableForData": "",
+            "endPointParams": [
+              {
+                "argumentName": "instrumentName",
+                "internalVariableObjName": "selectedItems",
+                "internalVariableObjProperty": "name"
+              },
+              {
+                "argumentName": "family",
+                "internalVariableObjName": "selectedItems",
+                "internalVariableObjProperty": "family"
+              }
+            ]
+          }
+        },
+        "endPointParams": [
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "instrument"
+          },
+          {
+            "argumentName": "family",
+            "selObjectPropertyName": "family"
+          },
+          {
+            "argumentName": "fileUrl",
+            "element": "text1",
+            "defaultValue": ""
+          }
+        ]
+      },
+          {
+            "button": {
+              "requiresGridItemSelected": true,
+              "title": {
+                "label_es": "Crear Investigación",
+                "label_en": "Create Investigation"
+              }
+            },
+            "requiresDialog": false,
+            "endPointParams": [
+              {
+                "selObjectPropertyName": "instrument",
+                "argumentName": "name"
+              },
+              {
+                "selObjectPropertyName": "object_type",
+                "argumentName": "instruments"
+              }
+            ],
+            "actionName": "NEW_INVESTIGATION"
+          },
+          {"actionName": "ADD_INVEST_OBJECTS",          
+            "requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+              {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
+              { "argumentName": "objectToAddObjectType", "selObjectPropertyName": "instruments" },	
+              { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "name" }		
+              ],			
+            "dialogInfo": {
+              "name": "genericDialog",
+              "gridContent": true,			  
+              "langConfig": {
+                "gridHeader": [
+                {"fldName": "id", "label_en": "Investigation", "label_es": "Investigación", "width": "40%",
+                  "sort": false, "filter": true, "align": "left"},
+                  {"fldName": "created_on", "label_en": "Created on", "label_es": "F.Creación", "width": "40%",
+                  "sort": true,"filter": false}			
+                ]
+              },			  
+              "dialogQuery":{
+                "actionName": "OPEN_INVESTIGATIONS",
+                "button": {
+                "icon": "refresh",
+                "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+                },
+                "requiresGridItemSelected": true
+              }
+              }		  
+            }
+          }    
+    ],
+    "row_buttons": [
+      {
+        "actionName": "CHANGE_INSTRUMENT_FAMILY",
+        "notGetViewData": true,
+        "clientMethod": "procMngRequirementsMethod",
+        "endPoint": "/app/procs/InstrumentsAPIqueries",
+        "selectedItemPropertyName": "selectedItems",
+        "requiresDialog": true,
+        "certificationException": true,
+        "secondaryActionToPerform": {
+          "name": "refreshSelProcData"
+        },
+        "button": {
+          "icon": "manage_accounts",
+          "title": {
+            "label_en": "Change Instrument Family",
+            "label_es": "Cambiar Familia Instrumento"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "New Family Name",
+                "label_es": "Nuevo Nombre Familia",
+                "selObjectPropertyName": "name"
+              }
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "procedureName",
+            "contextVariableName": "procedureName"
+          },
+          {
+            "argumentName": "procedureVersion",
+            "contextVariableName": "procedureVersion"
+          },
+          {
+            "argumentName": "procInstanceName",
+            "contextVariableName": "procInstanceName"
+          },
+          {
+            "argumentName": "instrumentName",
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "newFamilyName",
+            "element": "text1",
+            "defaultValue": ""
+          }
+        ]
+      }
+    ]
+  },
+  "Deviations":{
+    "component": "Tabs",
+    "tabs": [
+      {
+        "filter": "pending",
+        "langConfig": {
+          "tab": {
+            "label_es": "Decisión pendiente",
+            "label_en": "Pending Decision"
+          },
+          "gridHeader": {
+              "event_id": {
+                "label_en": "Event Id", "label_es": "Id Evento", "sort": false, "filter": true, "width": "10%"
+              },
+              "instrument": {
+                "label_en": "Instrument", "label_es": "Instrumento", "sort": false, "filter": true, "width": "10%"
+              },
+              "object_type": {
+                "label_en": "Object Type", "label_es": "Tipo de objeto", "sort": false, "filter": true, "width": "10%"
+              }
+          },
+          "title": {
+            "pending": {
+              "label_es": "Decisión pendiente",
+              "label_en": "Pending Decision"
+            }
+          }
+        },
+        "component": "TableWithButtons",
+        "viewQuery": {
+          "button": {
+            "requiresGridItemSelected": true,
+            "icon": "refresh",
+            "title": {
+              "label_es": "Recargar",
+              "label_en": "Reload"
+            }
+          },
+          "actionName": "INVESTIGATION_EVENTS_PENDING_DECISION"
+        },
+        "actions": [
+          {
+            "button": {
+              "requiresGridItemSelected": true,
+              "title": {
+                "label_es": "Crear Investigación",
+                "label_en": "Create Investigation"
+              }
+            },
+            "requiresDialog": false,
+            "endPointParams": [
+              {
+                "selObjectPropertyName": "event_id",
+                "argumentName": "objectToAddObjectName"
+              },
+              {
+                "selObjectPropertyName": "object_type",
+                "argumentName": "objectToAddObjectType"
+              }
+            ],
+            "actionName": "NEW_INVESTIGATION"
+          },
+          {"actionName": "ADD_INVEST_OBJECTS",          
+            "requiresDialog": true,
+            "button": {
+              "title": {
+                "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+              {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
+              { "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type" },	
+              { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "event_id" }		
+              ],			
+            "dialogInfo": {
+              "name": "genericDialog",
+              "gridContent": true,			  
+              "langConfig": {
+                "gridHeader": [
+                {"fldName": "id", "label_en": "Investigation", "label_es": "Investigación", "width": "40%",
+                  "sort": false, "filter": true, "align": "left"},
+                  {"fldName": "created_on", "label_en": "Created on", "label_es": "F.Creación", "width": "40%",
+                  "sort": true,"filter": false}			
+                ]
+              },			  
+              "dialogQuery":{
+                "actionName": "OPEN_INVESTIGATIONS",
+                "button": {
+                "icon": "refresh",
+                "title": {
+                "label_en": "Reload", "label_es": "Recargar"
+                },
+                "requiresGridItemSelected": true
+              }
+              }		  
+            }
+          }        
+        ]
+      },
+      {
+        "filter": "open",
+        "langConfig": {
+          "tab": {
+            "label_es": "Investigaciones",
+            "label_en": "Investigations"
+          },
+          "gridHeader": {
+            "capa_external_system_id": {
+              "filter": true,
+              "label_es": "Id en Sistema CAPAs",
+              "width": "20px",
+              "sort": false,
+              "label_en": "CAPA System Id"
+            },
+            "created_on": {
+              "filter": true,
+              "label_es": "Creación",
+              "width": "30px",
+              "sort": false,
+              "label_en": "Creation"
+            },
+            "capa_external_system_name": {
+              "filter": true,
+              "label_es": "Sistema para CAPAs",
+              "width": "20px",
+              "sort": false,
+              "label_en": "CAPA System"
+            },
+            "external_system_id": {
+              "filter": true,
+              "label_es": "Id Sistema Externo",
+              "width": "20px",
+              "sort": false,
+              "label_en": "External System Id"
+            },
+            "description": {
+              "filter": true,
+              "label_es": "description",
+              "width": "20px",
+              "sort": false,
+              "label_en": "description"
+            },
+            "id": {
+              "filter": true,
+              "label_es": "ID",
+              "width": "12px",
+              "sort": false,
+              "label_en": "ID"
+            },
+            "external_system_name": {
+              "filter": true,
+              "label_es": "Nombre Sistema Externo",
+              "width": "20px",
+              "sort": false,
+              "label_en": "External System Name"
+            },
+            "capa_required": {
+              "filter": true,
+              "label_es": "CAPA Necesario",
+              "width": "20px",
+              "sort": false,
+              "label_en": "capa_required"
+            }
+          },
+          "title": {
+            "open": {
+              "label_es": "Investigaciones en curso",
+              "label_en": "In Progress Investigations"
+            }
+          },
+          "fieldText": {
+            "capa": {
+              "label_es": "¿Requiere CAPA?",
+              "label_en": "CAPA Required"
+            },
+            "capaName": {
+              "label_es": "Nombre Sistema CAPA",
+              "label_en": "CAPA System Name"
+            },
+            "capaId": {
+              "label_es": "Id CAPA",
+              "label_en": "CAPA Id"
+            },
+            "systemId": {
+              "label_es": "Id Sistema",
+              "label_en": "System Id"
+            },
+            "systemName": {
+              "label_es": "Nombre Sistema",
+              "label_en": "System Name"
+            }
+          }
+        },
+        "component": "TableWithButtons",
+        "viewQuery": {
+          "button": {
+            "requiresGridItemSelected": true,
+            "icon": "refresh",
+            "title": {
+              "label_es": "Recargar",
+              "label_en": "Reload"
+            }
+          },
+          "actionName": "OPEN_INVESTIGATIONS"
+        },
+        "actions": [
+          {
+            "button": {
+              "requiresGridItemSelected": true,
+              "title": {
+                "label_es": "Decisión",
+                "label_en": "Decision"
+              }
+            },
+            "requiresDialog": true,
+            "dialogInfo": {
+              "name": "decisionDialog"
+            },
+            "endPointParams": [
+              {
+                "selObjectPropertyName": "id",
+                "argumentName": "investigationId"
+              },
+              {
+                "argumentName": "capaRequired",
+                "targetValue": true
+              },
+              {
+                "argumentName": "capaFieldName",
+                "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id"
+              },
+              {
+                "argumentName": "capaFieldValue",
+                "targetValue": true
+              },
+              {
+                "argumentName": "closeInvestigation",
+                "value": false
+              }
+            ],
+            "actionName": "INVESTIGATION_CAPA_DECISION"
+          },
+          {
+            "clientMethod": "closeInvestigation",
+            "button": {
+              "requiresGridItemSelected": true,
+              "title": {
+                "label_es": "Cerrar",
+                "label_en": "Close"
+              }
+            },
+            "requiresDialog": false,
+            "endPointParams": [
+              {
+                "selObjectPropertyName": "id",
+                "argumentName": "investigationId"
+              }
+            ],
+            "actionName": "CLOSE_INVESTIGATION"
+          }
+        ]
+      }
+    ],
+    "abstract": true
+  },
+  "PlatformInstruments20240725": {
 	"component": "TableWithButtons",
     "langConfig": {
       "title": {
