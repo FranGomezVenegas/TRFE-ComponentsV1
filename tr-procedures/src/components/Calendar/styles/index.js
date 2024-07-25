@@ -3,8 +3,8 @@ import { css } from 'lit';
 export const styles = css`
 .body
  {
-    background: #e5e5e5;
-    font-family: sans-serif;
+    background: rgb(255, 255, 255);
+    font-family: Montserrat;
 }
 
 .month {
@@ -51,7 +51,10 @@ export const styles = css`
     background: #fafaff;
 }
 .day:hover {
-    background: yellow;
+    background: -webkit-linear-gradient(79deg, #4668db1a, #9d70cd99); /* Para Chrome y Safari */
+    background: -moz-linear-gradient(79deg, #4668db1a, #9d70cd99); /* Para Firefox */
+    background: -o-linear-gradient(79deg, #4668db1a, #9d70cd99); /* Para Opera */
+    background: linear-gradient(79deg, #4668db1a, #9d70cd99); /* Estándar */    
     color: #000;
 }
 
@@ -202,13 +205,17 @@ export const styles = css`
     padding: 5px 10px;
     border: none;
     cursor: pointer;
-    font-family: Arial, sans-serif;
+    font-family: Montserrat;
     font-size: 16px;
     transition: background-color 0.2s ease-in-out;
 }
 
 .tab-item.active .tab-button {
-    background-color: #e0e0e0;
+  background: -webkit-linear-gradient(79deg, #4668db, #9d70cd); /* Para Chrome y Safari */
+  background: -moz-linear-gradient(79deg, #4668db, #9d70cd); /* Para Firefox */
+  background: -o-linear-gradient(79deg, #4668db, #9d70cd); /* Para Opera */
+  background: linear-gradient(79deg, #4668db, #9d70cd); /* Estándar */
+  color:white;
 }
 
 .tab-separator {
@@ -219,22 +226,35 @@ export const styles = css`
 
 /* SGR */
 
-.holidayEvent {
-    background-color: gray;
-    color: white;
-}
-
 .currentDate {
     background-color: #95bf0b;
     color: #fff;
 }
 
-.activeEvent {
-    // background-color: #3999aa;
-    background-color: blue;
-    color: #fff;
+.day.holidayEvent {
+  /* estilos para holidayEvent */
+  background-color: gray; /* ejemplo de estilo */
+  color:dark-gray
 }
 
+/* Puedes asegurarte de que activeEvent no sobrescriba holidayEvent */
+.day.activeEvent:not(.holidayEvent) {
+  /* estilos para activeEvent */
+  background: -webkit-linear-gradient(79deg, #4668db, #9d70cd); /* Para Chrome y Safari */
+  background: -moz-linear-gradient(79deg, #4668db, #9d70cd); /* Para Firefox */
+  background: -o-linear-gradient(79deg, #4668db, #9d70cd); /* Para Opera */
+  background: linear-gradient(79deg, #4668db, #9d70cd); /* Estándar */
+  color:white;
+}
+
+.day.holidayWithActiveEvent{
+  /* Estilos para cuando ambos eventos están presentes */
+  background: -webkit-linear-gradient(12deg, #808080, #ffc107); /* Para Chrome y Safari */
+  background: -moz-linear-gradient(12deg, #808080, #ffc107); /* Para Firefox */
+  background: -o-linear-gradient(12deg, #808080, #ffc107); /* Para Opera */
+  background: linear-gradient(12deg, #808080, #ffc107); /* Estándar */
+  color: #8b1212; /* Ejemplo de estilo */
+}
 .privMonthDate {
     color: #e3e1e1;
 }
@@ -334,7 +354,10 @@ export const styles = css`
   }
   
   button {
-    background-color: #4caf50;
+    background: -webkit-linear-gradient(79deg, #4668db1a, #9d70cd99); /* Para Chrome y Safari */
+    background: -moz-linear-gradient(79deg, #4668db1a, #9d70cd99); /* Para Firefox */
+    background: -o-linear-gradient(79deg, #4668db1a, #9d70cd99); /* Para Opera */
+    background: linear-gradient(79deg, #4668db1a, #9d70cd99); /* Estándar */  
     color: white;
     padding: 10px 20px;
     border: none;
@@ -342,9 +365,13 @@ export const styles = css`
     cursor: pointer;
   }
   
-  button:hover {
-    background-color: #45a049;
-  }
+button:hover {
+  background: -webkit-linear-gradient(79deg, #4668db, #9d70cd); /* Para Chrome y Safari */
+  background: -moz-linear-gradient(79deg, #4668db, #9d70cd); /* Para Firefox */
+  background: -o-linear-gradient(79deg, #4668db, #9d70cd); /* Para Opera */
+  background: linear-gradient(79deg, #4668db, #9d70cd); /* Estándar */
+}
+
 
 
 

@@ -1,23 +1,43 @@
 import { LitElement, html, css } from 'lit';
 import { styles } from './styles/index';
-import { events } from './data/event';
-import { getDayNames, formatTime, formatDate, formatDateString } from './utils';
+//import { events } from './data/event';
+import { createEventDescription, getDayNames, formatTime, formatDate, formatDateString } from './utils';
 
 class CalendarComponent extends LitElement {
+  static properties = {
+    dataAllInOneData: { type: Object },
+    config:{ type: Object},
+    showWeekView:{type: Boolean},
+    lang: {type: String}
+    // Otras propiedades que ya tienes...
+  };
+
   static styles = [styles, css``];
   constructor() {
     super();
+    this.showWeekView=false // This view does not work and then it cannot displayed
+    this.dataAllInOneData={}
+    this.config={}
   }
   firstUpdated() {
     super.firstUpdated();
+    if (this.dataAllInOneData.program_calendar===undefined){
+      this.dataAllInOneData.program_calendar={}
+    }
+    //this.dataAllInOneData=this.data
     if (this.fakeData){
-      this.events = events.program_calendar.dates;
-      this.holidays_calendar = events.program_calendar.holidays_calendar;
-      this.firstDayOfWeek = events.program_calendar.day_of_week;
-      this.schedule_size_unit = events.program_calendar.schedule_size_unit
-      this.currentDate = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date)
-        : new Date();
+      this.events = this.dataAllInOneData.program_calendar.dates;
+      this.holidays_calendar = this.dataAllInOneData.program_calendar.holidays_calendar;
+      this.firstDayOfWeek = this.dataAllInOneData.program_calendar.day_of_week;
+      this.schedule_size_unit = this.dataAllInOneData.program_calendar.schedule_size_unit
+      if (this.dataAllInOneData.program_calendar.viewCurrentDate.toLowerCase()=="today"){
+        this.currentDate = new Date()
+      }else{
+        this.currentDate = this.dataAllInOneData.program_calendar.start_date
+          ? new Date(this.dataAllInOneData.program_calendar.start_date)
+          : new Date();        
+      }
+      console.log('currentDate', this.currentDate)
       this.firstDateOfWeek = new Date(
         this.currentDate.getFullYear(),
         this.currentDate.getMonth(),
@@ -25,28 +45,48 @@ class CalendarComponent extends LitElement {
       );
       console.log(this.firstDateOfWeek)
       this.calendarStartDate = new Date(
-        new Date(events.program_calendar.start_date).setHours(0, 0, 0)
+        new Date(this.dataAllInOneData.program_calendar.start_date).setHours(0, 0, 0)
       );
       this.calendarEndDate = new Date(
-        new Date(events.program_calendar.end_date).setHours(0, 0, 0)
+        new Date(this.dataAllInOneData.program_calendar.end_date).setHours(0, 0, 0)
       );
-      this.currentDisplayedYear = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date).getFullYear()
+      this.currentDisplayedYear = this.dataAllInOneData.program_calendar.start_date
+        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
         : new Date().getFullYear();
-      this.currentDisplayedMonth = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date).getMonth()
+      this.currentDisplayedMonth = this.dataAllInOneData.program_calendar.start_date
+        ? new Date(this.dataAllInOneData.program_calendar.start_date).getMonth()
         : new Date().getMonth();
-      this.currentYear = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date).getFullYear()
+      this.currentYear = this.dataAllInOneData.program_calendar.start_date
+        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
         : new Date().getFullYear();
     }else{
-      this.events = events.program_calendar.dates;
-      this.holidays_calendar = events.program_calendar.holidays_calendar;
-      this.firstDayOfWeek = events.program_calendar.day_of_week;
-      this.schedule_size_unit = events.program_calendar.schedule_size_unit
-      this.currentDate = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date)
-        : new Date();
+      this.events = []
+      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.dates!==undefined){
+        this.events = this.dataAllInOneData.program_calendar.dates;
+      }
+      this.holidays_calendar = []
+      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.holidays_calendar!==undefined){
+        this.holidays_calendar = this.dataAllInOneData.program_calendar.holidays_calendar;
+      }
+      this.firstDayOfWeek = "MONDAY"
+      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.day_of_week!==undefined){
+        this.firstDayOfWeek = this.dataAllInOneData.program_calendar.day_of_week;
+      }
+      this.schedule_size_unit = "MONTHS"
+      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.schedule_size_unit!==undefined){
+        this.schedule_size_unit = this.dataAllInOneData.program_calendar.schedule_size_unit
+      }
+      if (this.dataAllInOneData.program_calendar.viewCurrentDate===undefined){
+        this.dataAllInOneData.program_calendar.viewCurrentDate="today"
+      }
+      if (this.dataAllInOneData.program_calendar.viewCurrentDate.toLowerCase()=="today"){
+        this.currentDate = new Date()
+      }else{
+        this.currentDate = this.dataAllInOneData.program_calendar.start_date
+          ? new Date(this.dataAllInOneData.program_calendar.start_date)
+          : new Date();        
+      }
+      console.log('currentDate', this.currentDate)
       this.firstDateOfWeek = new Date(
         this.currentDate.getFullYear(),
         this.currentDate.getMonth(),
@@ -54,19 +94,19 @@ class CalendarComponent extends LitElement {
       );
       console.log(this.firstDateOfWeek)
       this.calendarStartDate = new Date(
-        new Date(events.program_calendar.start_date).setHours(0, 0, 0)
+        new Date(this.dataAllInOneData.program_calendar.start_date).setHours(0, 0, 0)
       );
       this.calendarEndDate = new Date(
-        new Date(events.program_calendar.end_date).setHours(0, 0, 0)
+        new Date(this.dataAllInOneData.program_calendar.end_date).setHours(0, 0, 0)
       );
-      this.currentDisplayedYear = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date).getFullYear()
+      this.currentDisplayedYear = this.dataAllInOneData.program_calendar.start_date
+        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
         : new Date().getFullYear();
-      this.currentDisplayedMonth = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date).getMonth()
+      this.currentDisplayedMonth = this.dataAllInOneData.program_calendar.start_date
+        ? new Date(this.dataAllInOneData.program_calendar.start_date).getMonth()
         : new Date().getMonth();
-      this.currentYear = events.program_calendar.start_date
-        ? new Date(events.program_calendar.start_date).getFullYear()
+      this.currentYear = this.dataAllInOneData.program_calendar.start_date
+        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
         : new Date().getFullYear();      
     }
     this.setDayBasedOnStartWeek =
@@ -116,37 +156,37 @@ class CalendarComponent extends LitElement {
 
       const allEventsContainer = document.createElement('div');
       allEventsContainer.classList.add('event-list-container'); // Add a class for container styling
+      if (this.events!==undefined){
+        this.events.forEach((event, index) => {
+          let listItem = document.createElement('li');
+          listItem.classList.add('event-item');
 
-      this.events.forEach((event, index) => {
-        let listItem = document.createElement('li');
-        listItem.classList.add('event-item');
+          let eventDate = document.createElement('p');
+          eventDate.textContent = `Date: ${event[this.config.datesDateField]}}`;
+          listItem.appendChild(eventDate);
 
-        let eventDate = document.createElement('p');
-        eventDate.textContent = `Date: ${event.date}`;
-        listItem.appendChild(eventDate);
+          let eventDescription = createEventDescription(event, this.config.eventListsFields, this.lang);
+/*          let eventDescription = document.createElement('p');
+          eventDescription.textContent = `${event.description_en}`;
+          eventDescription.classList.add('event-description');*/
+          listItem.appendChild(eventDescription);
 
-        let eventDescription = document.createElement('p');
-        eventDescription.textContent = `${event.description_en}`;
-        eventDescription.classList.add('event-description');
-        listItem.appendChild(eventDescription);
+          if (event.is_holidays) {
+            let holidayLabel = document.createElement('span');
+            holidayLabel.textContent = 'Holiday';
+            holidayLabel.classList.add('event-label');
+            listItem.appendChild(holidayLabel);
+          }
 
-        if (event.is_holidays) {
-          let holidayLabel = document.createElement('span');
-          holidayLabel.textContent = 'Holiday';
-          holidayLabel.classList.add('event-label');
-          listItem.appendChild(holidayLabel);
-        }
-
-        if (event.conflict) {
-          let conflictDetail = document.createElement('p');
-          conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
-          conflictDetail.classList.add('conflict-detail');
-          listItem.appendChild(conflictDetail);
-        }
-
-        allEventsContainer.appendChild(listItem);
-      });
-
+          if (event.conflict) {
+            let conflictDetail = document.createElement('p');
+            conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
+            conflictDetail.classList.add('conflict-detail');
+            listItem.appendChild(conflictDetail);
+          }        
+          allEventsContainer.appendChild(listItem);
+        });
+      }
       this.allEvents.appendChild(allEventsContainer);
     });
 
@@ -220,12 +260,7 @@ class CalendarComponent extends LitElement {
       this.showDayGridView(selectedDate);
       this.currentButton.innerText = 'Day';
     });
-    this.showWeekViewButton.addEventListener('click', () => {
-      console.log('click Week');
-      this.showWeekGridView();
-      this.addDoubleClickEventToWeekHours();
-      this.currentButton.innerText = 'Week';
-    });
+
     this.monthNames = [
       'January',
       'February',
@@ -261,6 +296,14 @@ class CalendarComponent extends LitElement {
       );
       this.shadowRoot.getElementById('calendar').appendChild($monthNode);
       $monthNode.classList.add('full-month');
+      if (this.showWeekView){
+        this.showWeekViewButton.addEventListener('click', () => {
+          console.log('click Week');
+          this.showWeekGridView();
+          this.addDoubleClickEventToWeekHours();
+          this.currentButton.innerText = 'Week';
+        });      
+      }
       this.showCalendarView();      
     } else if (this.schedule_size_unit === 'DAYS') {
       let selectedDate;
@@ -484,18 +527,22 @@ class CalendarComponent extends LitElement {
   }
   handleDayHover = (event) => {
     var hoveredDate = event.currentTarget.getAttribute('data-date');
-    var eventsForHoveredDate = this.events.filter(function (event) {
-      return (
-        new Date(event.date).toDateString() ===
-        new Date(hoveredDate).toDateString()
-      );
-    });
+    var eventsForDate = []  
+    if (this.events!==undefined){    
+      let dateFieldName=this.config.datesDateField
+      var eventsForHoveredDate = this.events.filter(function (event) {
+        return (
+          new Date(event[dateFieldName]).toDateString() ===
+          new Date(hoveredDate).toDateString()
+        );
+      });
+    }
     var existingDropdown = document.querySelector('.event-dropdown');
     if (existingDropdown) {
       existingDropdown.parentNode.removeChild(existingDropdown);
     }
 
-    if (eventsForHoveredDate.length > 0) {
+    if (eventsForHoveredDate!==undefined&&eventsForHoveredDate.length > 0) {
       var dropdown = document.createElement('div');
       dropdown.classList.add('event-dropdown');
 
@@ -516,8 +563,22 @@ class CalendarComponent extends LitElement {
         listItem.style.alignItems = 'center';
         let eventTitle = document.createElement('p');
         eventTitle.style.margin = '0';
-        eventTitle.innerText = event.description_en;
-        listItem.appendChild(eventTitle);
+
+        if (this.config.hoverDateDialog.entryTitleFld!==undefined){
+          eventTitle.textContent=event[this.config.hoverDateDialog.entryTitleFld];
+        }else{
+          eventTitle.textContent=""
+        }
+        let eventDescription = createEventDescription(event, this.config.hoverDateDialog.eventListsFields, this.lang);
+
+        //listItem.appendChild(eventTitle);
+
+        let eventDetails = document.createElement('div');
+        eventDetails.appendChild(eventTitle);
+        eventDetails.appendChild(eventDescription);
+      
+        listItem.appendChild(eventDetails);
+
         var crossIcon = document.createElement('span');
         crossIcon.textContent = '❌';
         crossIcon.style.cursor = 'pointer';
@@ -530,12 +591,13 @@ class CalendarComponent extends LitElement {
           const $dateNode = this.shadowRoot.querySelector(selector);
           if ($dateNode) {
             console.log(this.events);
+            let dateFieldName=this.config.datesDateField
             let matchedEvents = this.events.filter(
-              (e) => e.date === event.date
+              (e) => e.date === event[dateFieldName]
             );
             if (matchedEvents.length === 1) {
               if ($dateNode.classList.contains('holidayEvent')) {
-                $dateNode.classList.remove('holiday-match');
+                $dateNode.classList.remove('holidayWithActiveEvent');
                 $dateNode.classList.remove('activeEvent');
               } else {
                 $dateNode.classList.remove('activeEvent');
@@ -593,14 +655,20 @@ class CalendarComponent extends LitElement {
       dropdown.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
       dropdown.style.padding = '5px';
       dropdown.style.zIndex = '9999';
-      dropdown.style.maxWidth = '200px';
-      dropdown.style.maxHeight = '200px';
+      dropdown.style.maxWidth = this.config.hoverDateDialog.dialogWidth || '400px';
+      dropdown.style.maxHeight = this.config.hoverDateDialog.dialogHeight || '400px';
       dropdown.style.overflowY = 'auto';
 
       header.style.fontWeight = 'bold';
       header.style.paddingBottom = '5px';
       header.style.borderBottom = '1px solid #ccc';
       header.style.marginBottom = '5px';
+
+      // Añadir estas propiedades para dividir el título en dos líneas si es necesario
+      header.style.wordBreak = 'break-word';
+      header.style.whiteSpace = 'normal';
+      //header.style.wordWrap = 'break-word';
+      header.style.width = '100%'; // Asegurarse de que el título ocupe el ancho completo del contenedor
 
       eventList.style.listStyle = 'none';
       eventList.style.padding = '0 5px';
@@ -702,9 +770,10 @@ class CalendarComponent extends LitElement {
     var draggedDate = event.dataTransfer.getData('text/plain');
     var newDate = event.target.dataset.date;
     console.log('Move event from', draggedDate, 'to', newDate);
-    var draggedEvent = events.find(function (event) {
+    let dateFieldName=this.config.datesDateField
+    var draggedEvent = this.this.dataAllInOneData.find(function (event) {
       return (
-        new Date(event.date).toDateString() ===
+        new Date(event[dateFieldName]).toDateString() ===
         new Date(draggedDate).toDateString()
       );
     });
@@ -712,21 +781,21 @@ class CalendarComponent extends LitElement {
     this.updateEventDate(draggedEvent, newDate);
   };
   updateEventDate = (event, newDate) => {
-    const index = events.program_calendar.dates.findIndex(
+    const index = this.events.program_calendar.dates.findIndex(
       (obj) => obj.id === event.id
     );
 
     if (index !== -1) {
-      event.date = new Date(newDate).toISOString().split('T')[0];
-      events.program_calendar.dates[index] = {
-        ...events.program_calendar.dates[index],
+      event[this.config.datesDateField] = new Date(newDate).toISOString().split('T')[0];
+      this.events.program_calendar.dates[index] = {
+        ...this.events.program_calendar.dates[index],
         ...event,
       };
       console.log(
         'Object updated successfully:',
-        events.program_calendar.dates[index]
+        this.events.program_calendar.dates[index]
       );
-      this.updateDateColor(event.date);
+      this.updateDateColor(event[this.config.datesDateField]);
     } else {
       console.log('Object with ID', 'id', 'not found.');
     }
@@ -917,7 +986,10 @@ class CalendarComponent extends LitElement {
     // console.log(selectedDate);
     selectedDateTitleGrid.innerText = selectedDate.toDateString();
     const date = formatDateString(selectedDate);
-    const eventsData = this.events.filter((e) => e.date === date);
+    let eventsData = []
+    if (this.events!==undefined){    
+      eventsData = this.events.filter((e) => e.date === date);
+    }
     if (eventsData.length > 0) {
       eventsData.forEach((event) => {
         const eventElement = document.createElement('div');
@@ -927,7 +999,7 @@ class CalendarComponent extends LitElement {
         eventElement.style.borderRadius = '5px';
 
         const dateElement = document.createElement('div');
-        dateElement.innerText = event.date;
+        dateElement.innerText = event[this.config.datesDateField];
         dateElement.style.fontWeight = 'bold';
         eventElement.appendChild(dateElement);
 
@@ -1006,7 +1078,7 @@ class CalendarComponent extends LitElement {
           eventElement.style.borderRadius = '5px';
 
           const dateElement = document.createElement('div');
-          dateElement.innerText = event.date;
+          dateElement.innerText = event[this.config.datesDateField];
           dateElement.style.fontWeight = 'bold';
           eventElement.appendChild(dateElement);
 
@@ -1021,9 +1093,9 @@ class CalendarComponent extends LitElement {
 
       // var eventsForDate = this.events.filter(function (event) {
       //   return (
-      //     new Date(event.date).getDate() === new Date(currentDay).getDate() &&
-      //     new Date(event.date).getMonth() === new Date(currentDay).getMonth() &&
-      //     new Date(event.date).getFullYear() === new Date(currentDay).getFullYear()
+      //     new Date(event[this.config.datesDateField]).getDate() === new Date(currentDay).getDate() &&
+      //     new Date(event[this.config.datesDateField]).getMonth() === new Date(currentDay).getMonth() &&
+      //     new Date(event[this.config.datesDateField]).getFullYear() === new Date(currentDay).getFullYear()
       //   );
       // });
       // if (eventsForDate.length > 0) {
@@ -1053,10 +1125,6 @@ class CalendarComponent extends LitElement {
       // if (holidayList.length > 0) {
       //   dayNode.classList.add("holidayEvent");
       // }
-
-
-
-
       weekHourGrid.appendChild(dayNode);
 
       for (var j = 0; j < 24; j++) {
@@ -1140,37 +1208,61 @@ class CalendarComponent extends LitElement {
         ) {
           $dayNode.classList.add('currentDate');
         }
-        var eventsForDate = events.filter(function (event) {
-          return (
-            new Date(event.date).getDate() === d + 1 &&
-            new Date(event.date).getMonth() === monthNum &&
-            new Date(event.date).getFullYear() === year
-          );
-        });
-        // var holidayList = holidays_calendar.reduce(function (acc, holiday) {
-        //   var holidaysForDate = holiday.dates.filter(function (date) {
-        //     return (
-        //       new Date(date.date).getDate() === d + 1 &&
-        //       new Date(date.date).getMonth() === monthNum &&
-        //       new Date(date.date).getFullYear() === year
-        //     );
-        //   });
-        //   return acc.concat(holidaysForDate);
-        // }, []);
-        if (eventsForDate.length > 0) {
-          console.log(eventsForDate)
-          eventsForDate.forEach(e => {
-            $dayNode.classList.add('activeEvent');
-            if (e.is_holidays) {
-              $dayNode.classList.add('holidayEvent');
-            }
-            if (e.conflict) {
-              $dayNode.classList.add('holiday-match');
-            } else {
-              $dayNode.classList.add('activeEvent');
-            }
-          })
+        var eventsForDate = []  
+        if (this.events!==undefined){
+          let dateFieldName=this.config.datesDateField
+          eventsForDate = this.events.filter(function (event) {
+            return (
+              new Date(event[dateFieldName]).getDate() === d + 1 &&
+              new Date(event[dateFieldName]).getMonth() === monthNum &&
+              new Date(event[dateFieldName]).getFullYear() === year
+            );
+          });
+          // var holidayList = holidays_calendar.reduce(function (acc, holiday) {
+          //   var holidaysForDate = holiday.dates.filter(function (date) {
+          //     return (
+          //       new Date(date.date).getDate() === d + 1 &&
+          //       new Date(date.date).getMonth() === monthNum &&
+          //       new Date(date.date).getFullYear() === year
+          //     );
+          //   });
+          //   return acc.concat(holidaysForDate);
+          // }, []);
+          if (eventsForDate.length > 0) {
+            console.log(eventsForDate)
+            eventsForDate.forEach(e => {
+              const allHolidays = eventsForDate.every(event => event.is_holidays);
+              const noHolidays = eventsForDate.every(event => !event.is_holidays);
+              const mixedEvents = !allHolidays && !noHolidays;
+            
+              // Limpiar las clases antes de aplicarlas para evitar duplicaciones no deseadas
+              $dayNode.classList.remove('holidayEvent', 'activeEvent', 'holidayWithActiveEvent');
+            
+              // Aplicar la clase correspondiente según las condiciones
+              if (allHolidays) {
+                $dayNode.classList.add('holidayEvent');
+              } else if (noHolidays) {
+                $dayNode.classList.add('activeEvent');
+              } else if (mixedEvents) {
+                $dayNode.classList.add('holidayWithActiveEvent');
+              }
+            
+              // Añadir clases adicionales según el conflicto
+              if (e.conflict) {
+                $dayNode.classList.add('holiday-match');
+              }
 
+/*              $dayNode.classList.add('activeEvent');
+              if (e.is_holidays) {
+                $dayNode.classList.add('holidayEvent');
+              }
+              if (e.conflict) {
+                $dayNode.classList.add('holidayWithActiveEvent');
+              } else {
+                $dayNode.classList.add('activeEvent');
+              }*/
+            })
+          }
           $dayNode.addEventListener('dragstart', this.handleDragStart);
           $dayNode.setAttribute('draggable', true);
         }
@@ -1214,6 +1306,7 @@ class CalendarComponent extends LitElement {
   };
 
   render() {
+    
     return html`
       <div class="body">
         <div class="tabs-container">
@@ -1221,10 +1314,12 @@ class CalendarComponent extends LitElement {
             <li class="tab-item" id="showDayView">
               <button class="tab-button">Day</button>
             </li>
+            ${this.showWeekView?html`
             <li class="tab-item" id="showWeekView">
               <span class="tab-separator"></span
               ><button class="tab-button">Week</button>
             </li>
+            `:html``}
             <li class="tab-item" id="showCurrentMonth">
               <span class="tab-separator"></span
               ><button class="tab-button">Month</button>
