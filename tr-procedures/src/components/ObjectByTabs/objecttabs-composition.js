@@ -438,7 +438,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="buttonsOnly" ? this.buttonsOnly(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="tree" ? this.treeElement(elem, data)   : nothing}
       ${elem.type==="dragDropObjects" ? this.dragDropObjects(elem, data)   : nothing}
-      ${elem.type==="Calendar" ? this.calendar(elem, data)   : nothing}
+      ${elem.type==="Calendar" ? this.calendar(elem, (Object.keys(data).length === 0 && data.constructor === Object) || data === undefined?data2:data)   : nothing}
     `
   }
 

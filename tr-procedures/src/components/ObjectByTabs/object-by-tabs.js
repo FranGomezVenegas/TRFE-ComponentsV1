@@ -612,6 +612,13 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                       .divider:active {
                         background-color: #888; /* Even darker grey when actively being dragged */
                       }
+                      .searchbutton{
+                        background: -webkit-linear-gradient(79deg, #4668db, #9d70cd); /* Para Chrome y Safari */
+                        background: -moz-linear-gradient(79deg, #4668db, #9d70cd); /* Para Firefox */
+                        background: -o-linear-gradient(79deg, #4668db, #9d70cd); /* Para Opera */
+                        background: linear-gradient(79deg, #4668db, #9d70cd); /* Estándar */
+                        color:white;                        
+                      }
                     </style>
                     <sp-split-view show-divider=${this.showDivider} class="split-view" >
                       <div style="display:flex; width: 100%; background:transparent;">
@@ -624,7 +631,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                                   <div style="display:flex;">
                                     <mwc-icon-button id="expandleftpane" icon="${this.isLeftPaneExpanded ? 'chevron_left' : 'chevron_right'}" @click=${this.toggleLeftPane}></mwc-icon-button>
                                     <div class="search-container" style="padding-bottom:8px;">
-                                      <sp-button size="m" slot="primaryAction" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
+                                      <sp-button size="m" slot="primaryAction" class="searchbutton" dialogAction="accept" .viewModelFromProcModel="${this.viewModelFromProcModel}" @click=${this.filterPerformAction}>
                                         ${this.viewModelFromProcModel.filter_button["label_" + this.lang]}
                                       </sp-button>
                                     </div>
@@ -712,21 +719,31 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                 `)}
               </div>
             ` : nothing}
-            ${this.selectedTabContent()}
+            ${this.selectedTabContent('tabs')}
           </div>
-        ` : nothing}
+        ` : html`
+          ${this.viewModelFromProcModel.view_definition ? html`
+            ${this.selectedTabContent('view_definition')}          
+        `:      
+        nothing}
+        `}
       `;
     }
     
-    selectedTabContent() {
-      if (Object.keys(this.selectedTabModelFromProcModel).length === 0) {
-        this.selectedTabModelFromProcModel = this.viewModelFromProcModel.tabs[0];
+    selectedTabContent(type) {
+      if (type==='tabs'){
+        if (Object.keys(this.selectedTabModelFromProcModel).length === 0) {
+          this.selectedTabModelFromProcModel = this.viewModelFromProcModel.tabs[0];
+        }
+      }
+      if (type==='view_definition'){
+        this.selectedTabModelFromProcModel = this.viewModelFromProcModel.view_definition
       }
       //console.log('selectedTabContent', this.viewName, this.selectedTabModelFromProcModel)
       //console.log("this.filterCurrentData", this.filterCurrentData);
       return html`
         <objecttabs-composition 
-          style="padding: 20px; left: 50px; width: 90%; position: relative; display: flex; "
+          style="padding: 20px; left: 50px; width: 90%; position: relative; display: block; "
           .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} 
           .lang=${this.lang} 
