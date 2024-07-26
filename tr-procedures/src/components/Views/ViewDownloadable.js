@@ -89,7 +89,7 @@ return class extends  (base) {
   
     downloadDataTableToCSV() {
         console.log('this.viewModelFromProcModel', this.viewModelFromProcModel)
-        let csvContent = "data:text/csv;charset=utf-8,"
+        let csvContent = "data:text/csv;charset=utf-8;"
         let header = [], contents = []
         contents = this.getTraceabilityInfo()
         let data=this.getDataFromRoot(this.viewModelFromProcModel.download.elements[0], this.selectedItem)

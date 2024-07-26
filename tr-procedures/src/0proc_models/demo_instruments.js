@@ -939,63 +939,58 @@ export const DemoInstruments ={
           }
         ]
       },
-          {
-            "button": {
-              "requiresGridItemSelected": true,
-              "title": {
-                "label_es": "Crear Investigación",
-                "label_en": "Create Investigation"
-              }
-            },
-            "requiresDialog": false,
-            "endPointParams": [
-              {
-                "selObjectPropertyName": "instrument",
-                "argumentName": "name"
-              },
-              {
-                "selObjectPropertyName": "object_type",
-                "argumentName": "instruments"
-              }
-            ],
-            "actionName": "NEW_INVESTIGATION"
+      {"actionName": "NEW_INVESTIGATION",
+        "button": {
+          "icon": "find_in_page",
+          "requiresGridItemSelected": true,
+          "title": {
+            "label_es": "Crear Investigación",
+            "label_en": "Create Investigation"
+          }
+        },
+        "requiresDialog": false,
+        "endPointParams": [
+          { "argumentName": "objectToAddObjectType", "fixValue": "instrument" },	
+          { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "name" }	
+        ],            
+      },
+      {"actionName": "ADD_INVEST_OBJECTS",          
+        "requiresDialog": true,
+        "button": {
+          "icon": "loupe",
+          "title": {
+            "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
           },
-          {"actionName": "ADD_INVEST_OBJECTS",          
-            "requiresDialog": true,
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
+          { "argumentName": "objectToAddObjectType", "fixValue": "instrument" },	
+          { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "name" }	
+          ],			
+        "dialogInfo": {
+          "name": "genericDialog",
+          "gridContent": true,			  
+          "langConfig": {
+            "gridHeader": [
+            {"fldName": "id", "label_en": "Investigation", "label_es": "Investigación", "width": "40%",
+              "sort": false, "filter": true, "align": "left"},
+              {"fldName": "created_on", "label_en": "Created on", "label_es": "F.Creación", "width": "40%",
+              "sort": true,"filter": false}			
+            ]
+          },			  
+          "dialogQuery":{
+            "actionName": "OPEN_INVESTIGATIONS",
             "button": {
-              "title": {
-                "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
-              },
-              "requiresGridItemSelected": true
+            "icon": "refresh",
+            "title": {
+            "label_en": "Reload", "label_es": "Recargar"
             },
-            "endPointParams": [
-              {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
-              { "argumentName": "objectToAddObjectType", "selObjectPropertyName": "instruments" },	
-              { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "name" }		
-              ],			
-            "dialogInfo": {
-              "name": "genericDialog",
-              "gridContent": true,			  
-              "langConfig": {
-                "gridHeader": [
-                {"fldName": "id", "label_en": "Investigation", "label_es": "Investigación", "width": "40%",
-                  "sort": false, "filter": true, "align": "left"},
-                  {"fldName": "created_on", "label_en": "Created on", "label_es": "F.Creación", "width": "40%",
-                  "sort": true,"filter": false}			
-                ]
-              },			  
-              "dialogQuery":{
-                "actionName": "OPEN_INVESTIGATIONS",
-                "button": {
-                "icon": "refresh",
-                "title": {
-                "label_en": "Reload", "label_es": "Recargar"
-                },
-                "requiresGridItemSelected": true
-              }
-              }		  
-            }
-          }    
+            "requiresGridItemSelected": true
+          }
+          }		  
+        }
+      }    
     ],
     "row_buttons": [
       {

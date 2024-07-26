@@ -299,7 +299,7 @@ export function ButtonsFunctions(base) {
           ${downloadable.button===undefined||downloadable.button.class===undefined?'':html`class="${downloadable.button.class}"`}
               icon="${downloadable.icon}" id="downloadable" 
               title="${downloadable.title['label_' + this.lang]}"             
-              @click=${() => this.downloadDataTableToCSV(gridDefinition, gridAllData, downloadable)}
+              @click=${() => this.downloadDataTableToCSV(sectionModel, data, this.selectedItems, downloadable)}
               style="${downloadable.button!==undefined&&downloadable.button.style !== undefined ? downloadable.button.style : ''}">
           </mwc-icon-button>` : nothing
         }                
