@@ -30,9 +30,9 @@ export function PrintableTable(base) {
             //   headerData = headerDataDiv[0].outerHTML
             // }
             let mainDivContent = ''
-            let mainDivContentDiv = this.shadowRoot.querySelectorAll('#gridwithbuttons')
-            console.log(mainDivContent)
-            if (mainDivContentDiv !== undefined) {
+            let mainDivContentDiv = this.shadowRoot.querySelectorAll('#mainDiv')
+            //console.log(mainDivContent)
+            if (mainDivContentDiv !== undefined && mainDivContentDiv.length>0) {
               mainDivContent = mainDivContentDiv[0].outerHTML
             }
             let pagerFooter = ''

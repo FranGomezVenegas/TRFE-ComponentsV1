@@ -3110,7 +3110,10 @@ export const Stock =
 		{"type": "parentReadOnlyTable", 
 			"allowMultiSelection": true,
 			"printable":{"enable": true},
-			"downloadable":{"enable": true},
+			"downloadable":{
+				"enable": true,
+				"allowUserSelectColumns": true
+			},
 			"printable": {"enable": true},	
 			"columns" : [
 				{
