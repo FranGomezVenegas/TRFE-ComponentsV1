@@ -31,7 +31,7 @@ export function PrintableTable(base) {
             // }
             let mainDivContent = ''
             let mainDivContentDiv = this.shadowRoot.querySelectorAll('#mainDiv')
-            //console.log(mainDivContent)
+            console.log(mainDivContent)
             if (mainDivContentDiv !== undefined && mainDivContentDiv.length>0) {
               mainDivContent = mainDivContentDiv[0].outerHTML
             }
