@@ -170,8 +170,8 @@ export function PrintableTable(base) {
                         }
               
                         mwc-icon-button {
-                          --mdc-icon-button-size: 24px;
-                          --mdc-icon-size: 16px;
+                          --mdc-icon-button-size: 35px;
+                          --mdc-icon-size: 25px;
                         }
               
                         .hidden {

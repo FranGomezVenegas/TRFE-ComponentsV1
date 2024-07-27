@@ -135,7 +135,31 @@ export function ButtonsFunctions(base) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
       //console.log("getButtondatasectionModel", sectionModel);
       //console.log('getButtondata', data)
-							  
+
+      let refreshable={enable: true, icon:"refresh", title:{label_en:"Reload", label_es: "Recargar"}}
+      if (sectionModel.viewQuery!==undefined&&sectionModel.viewQuery.addRefreshButton!==undefined){
+        if (sectionModel.viewQuery.refreshable.enable!==undefined){
+          refreshable.enable=sectionModel.viewQuery.refreshable.enable
+        }
+        if (sectionModel.viewQuery.refreshable.title!==undefined){
+          refreshable.title=sectionModel.viewQuery.refreshable.title
+        }
+        if (sectionModel.viewQuery.refreshable.icon!==undefined){
+          refreshable.icon=sectionModel.viewQuery.refreshable.icon
+        }
+      }
+      if (sectionModel.addRefreshButton!==undefined){
+        if (sectionModel.refreshable.enable!==undefined){
+          refreshable.enable=sectionModel.refreshable.enable
+        }
+        if (sectionModel.refreshable.title!==undefined){
+          refreshable.title=sectionModel.refreshable.title
+        }
+        if (sectionModel.refreshable.icon!==undefined){
+          refreshable.icon=sectionModel.refreshable.icon
+        }
+      }
+
       let printable={enable: true, icon:"print", title:{label_en:"Print", label_es: "Imprimir"}}
       if (sectionModel.viewQuery!==undefined&&sectionModel.viewQuery.printable!==undefined){
         if (sectionModel.viewQuery.printable.enable!==undefined){
@@ -274,33 +298,32 @@ export function ButtonsFunctions(base) {
             color: red;
           }
         </style>
-          ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.addRefreshButton && sectionModel.viewQuery.addRefreshButton === true ?
-          html`
+          ${refreshable.enable===true ?html`
           <mwc-icon-button
-              class="${sectionModel.viewQuery.button.class}"
-              icon="${sectionModel.viewQuery.button.icon}" id="refresh"
-              title="${sectionModel.viewQuery.button.title['label_' + this.lang]}"
+              ${refreshable===undefined||refreshable.class===undefined?'':html`class="${refreshable.class}"`}          
+              icon="${refreshable.icon}" id="refresh"
+              title="${refreshable.title['label_' + this.lang]}"
               @click=${() => this.GetViewData()}
-              style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+              style="${refreshable.style !== undefined ? refreshable.style : ''}">
           </mwc-icon-button>` : nothing
         }
         ${printable.enable===true ?html`
           <mwc-icon-button 
-              ${printable.button===undefined||printable.button.class===undefined?'':html`class="${printable.button.class}"`}
+              ${printable===undefined||printable.class===undefined?'':html`class="${printable.class}"`}
               icon="${printable.icon}" id="printable" 
               title="${printable.title['label_' + this.lang]}"             
               @click=${() => this.printTable()}
-              style="${printable.button!==undefined&&printable.button.style !== undefined ? printable.button.style : ''}">
+              style="${printable!==undefined&&printable.style !== undefined ? printable.style : ''}">
           </mwc-icon-button>` : nothing
         }
         ${downloadable.enable === true ?
           html`
           <mwc-icon-button 
-          ${downloadable.button===undefined||downloadable.button.class===undefined?'':html`class="${downloadable.button.class}"`}
+          ${downloadable===undefined||downloadable.class===undefined?'':html`class="${downloadable.class}"`}
               icon="${downloadable.icon}" id="downloadable" 
               title="${downloadable.title['label_' + this.lang]}"             
               @click=${() => this.downloadDataTableToCSV(sectionModel, data, this.selectedItems, downloadable)}
-              style="${downloadable.button!==undefined&&downloadable.button.style !== undefined ? downloadable.button.style : ''}">
+              style="${downloadable!==undefined&&downloadable.style !== undefined ? downloadable.style : ''}">
           </mwc-icon-button>` : nothing
         }                
           ${sectionModel !== undefined && sectionModel.actions && sectionModel.actions.map(action =>
@@ -563,7 +586,7 @@ export function ButtonsFunctions(base) {
     }
     btnHiddenForRows(action, selItems) {
       let selRow=selItems[0]
-      console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)
+      //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)
       let d = false
       if (selRow !== undefined && selRow["No Data"] !== undefined) { return true }
       if (action.button.showWhenSelectedItem !== undefined&&selItems.length===1) {

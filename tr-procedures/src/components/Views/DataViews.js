@@ -1196,8 +1196,8 @@ export function DataViews(base) {
         }
 
         mwc-icon-button {
-          --mdc-icon-button-size: 24px;
-          --mdc-icon-size: 16px;
+        --mdc-icon-button-size: 35px;
+        --mdc-icon-size: 25px;
         }
         
         td.absent {
@@ -2984,8 +2984,13 @@ export function DataViews(base) {
       ${styles}
       <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline; width: 100%;">
         <div style="display: flex; flex-direction: column; text-align: center; width: 100%;">
-          ${title}
-          ${actionButtons}
+          ${title}          
+          <div class="layout horizontal center flex wrap">            
+            ${elem?.smartFilter?.filterValues && smartFilterVisible &&html`               
+              <mwc-icon-button id="smartfilter"	icon="filter_alt"title="Filter" @click=${(e) => this.toggleFilter()}></mwc-icon-button>
+            `}
+            ${actionButtons}
+          </div>
           ${elem.columns === undefined
             ? html`${elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage ? "" : "No columns defined"}`
             : html`
@@ -3148,8 +3153,7 @@ export function DataViews(base) {
                   }
                 </style>
                 ${elem?.smartFilter?.filterValues && smartFilterVisible &&
-                    html` 
-                    <button class="toggle-filter" @click="${()=>{this.toggleFilter()}}">Display/Hide Filter</button>
+                    html`                                         
                     <div class="search-container">
                       <!--  <div class="search-input">
                             ${elem.columns.map(column => html`
