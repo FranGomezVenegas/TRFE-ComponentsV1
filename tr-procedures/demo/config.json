@@ -378,9 +378,9 @@
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
-	"localDefaultView22": {
+	"localDefaultView": {
 		"procName": "instruments",
-		"viewName": "PlatformInstruments",
+		"viewName": "PlatformInstrumentsBalanzas",
 		"filterName": "InstrumentsList"
 	},
 

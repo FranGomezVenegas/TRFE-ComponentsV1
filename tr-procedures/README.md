@@ -88,5 +88,5 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.43 smart filter for readOnlyTable](https://github.com/FranGomezVenegas/FrontE-Issues/issues/217)
 [- v0.2.44 in ButtonsFunctions the query for grid for dialog had a typo when added the getServiceUrl line]
 [- v0.2.45 exporTableToCsv with allowUserSelectColumn behavior](https://github.com/FranGomezVenegas/FrontE-Issues/issues/352)
-
+[- v0.2.46 fix parentReadOnlyTable should pass the selectedItems instead of all dataArr to the buttons]
 
