@@ -90,3 +90,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.45 exporTableToCsv with allowUserSelectColumn behavior](https://github.com/FranGomezVenegas/FrontE-Issues/issues/352)
 [- v0.2.46 fix parentReadOnlyTable should pass the selectedItems instead of all dataArr to the buttons]
 [- v0.2.47 fix for SingleView, ready mechanism to re-run the query when jumping from one view/tab to anoter]
+[- v0.2.48 SingleView compatible with twoicons]

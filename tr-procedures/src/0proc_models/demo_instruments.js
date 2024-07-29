@@ -160,140 +160,114 @@ export const DemoInstruments ={
     ]
   },
   "PlatformInstruments":{
-    "component": "TableWithButtons",
-    "langConfig": {
-      "gridHeader": {
-        "name": {
-          "label_en": "Name",
-          "label_es": "Nombre",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "20%",
-          "align": "left"
-        },
-        "family": {
-          "label_en": "Family",
-          "label_es": "Familia",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "20%"
-        },
-        "on_line": {
-          "label_en": "On Line",
-          "label_es": "En Linea",
-          "sort": false,
-          "filter": true,
-          "is_icon": true,
-          "width": "10%"
-        },
-        "model_number": {
-          "label_en": "Model",
-          "label_es": "Modelo",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "serial_number": {
-          "label_en": "Serial N.",
-          "label_es": "N. Serie",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "supplier": {
-          "label_en": "Supplier",
-          "label_es": "Proveedor",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "manufacturer": {
-          "label_en": "Manufacturer",
-          "label_es": "fabricante",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "created_on": {
-          "label_en": "Creation",
-          "label_es": "Creación",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "is_locked": {
-          "label_en": "Is locked?",
-          "label_es": "¿Bloqueado?",
-          "sort": false,
-          "filter": false,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "detail": {
-          "label_en": "Detail",
-          "label_es": "Detalle",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "last_calibration": {
-          "label_en": "Last Cal",
-          "label_es": "Última Cal",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "next_calibration": {
-          "label_en": "Next Cal",
-          "label_es": "Próxima Cal",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "last_prev_maint": {
-          "label_en": "Last PM",
-          "label_es": "Último MP",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "next_prev_maint": {
-          "label_en": "Next PM",
-          "label_es": "Próximo MP",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        }
-      },
-      "title": {
-        "label_en": "",
-        "label_es": ""
-      }
-    },
+    "component": "SingleView",
+    "hideLeftPane": true,
     "viewQuery": {
       "actionName": "ACTIVE_INSTRUMENTS_LIST",
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
-        "title": {
-          "label_en": "Reload",
-          "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": true
-      },
+      "dataResponse": "ArrayInRoot",
       "endPointParams": []
     },
-    "enableContextMenu": true,
-    "addActionsInContextMenu": false,
-    "actions": [
+    "view_definition": [
+      {
+        "type": "reportTitle",
+        "title": {
+          "label_en": "Active Instruments",
+          "label_es": "Instrumentos Activos"
+        }
+      },
+      {
+        "type": "parentReadOnlyTable",
+        "allowMultiSelection": false,
+        "refreshable": { "enable": true },
+        "printable": { "enable": true },
+        "downloadable": { "enable": true },
+        "columns": [
+          {
+            "name": "name",
+            "label_en": "Name",
+            "label_es": "Nombre",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "family",
+            "label_en": "Family",
+            "label_es": "Familia",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "on_line",
+            "label_en": "On line",
+            "label_es": "En línea",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "model_number",
+            "label_en": "Model",
+            "label_es": "Modelo",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "serial_number",
+            "label_en": "Serial N.",
+            "label_es": "N. Serie",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "supplier",
+            "label_en": "Supplier",
+            "label_es": "Proveedor",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "manufacturer",
+            "label_en": "Manufacturer",
+            "label_es": "Fabricante",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "created_on",
+            "label_en": "Creation",
+            "label_es": "Creación",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "is_locked",
+            "label_en": "Is locked?",
+            "label_es": "¿Bloqueado?",
+            "addToSmartFilter": true
+          },
+          {
+            "name": "detail",
+            "label_en": "Detail?",
+            "label_es": "Detalle",
+            "addToSmartFilter": false
+          },
+          {
+            "name": "last_calibration",
+            "label_en": "Last Cal",
+            "label_es": "Última Cal",
+            "addToSmartFilter": false
+          },
+          {
+            "name": "next_calibration",
+            "label_en": "Next Cal",
+            "label_es": "Próxima Cal",
+            "addToSmartFilter": false
+          },
+          {
+            "name": "last_prev_maint",
+            "label_en": "Last PM",
+            "label_es": "Último PM",
+            "addToSmartFilter": false
+          },
+          {
+            "name": "next_prev_maint",
+            "label_en": "Next PM",
+            "label_es": "Próximo PM",
+            "addToSmartFilter": false
+          }
+        ],
+        "actions": [
       {
         "actionName": "NEW_INSTRUMENT",
         "requiresDialog": true,
@@ -938,59 +912,7 @@ export const DemoInstruments ={
             "defaultValue": ""
           }
         ]
-      },
-      {"actionName": "NEW_INVESTIGATION",
-        "button": {
-          "icon": "find_in_page",
-          "requiresGridItemSelected": true,
-          "title": {
-            "label_es": "Crear Investigación",
-            "label_en": "Create Investigation"
-          }
-        },
-        "requiresDialog": false,
-        "endPointParams": [
-          { "argumentName": "objectToAddObjectType", "fixValue": "instrument" },	
-          { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "name" }	
-        ],            
-      },
-      {"actionName": "ADD_INVEST_OBJECTS",          
-        "requiresDialog": true,
-        "button": {
-          "icon": "loupe",
-          "title": {
-            "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
-          { "argumentName": "objectToAddObjectType", "fixValue": "instrument" },	
-          { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "name" }	
-          ],			
-        "dialogInfo": {
-          "name": "genericDialog",
-          "gridContent": true,			  
-          "langConfig": {
-            "gridHeader": [
-            {"fldName": "id", "label_en": "Investigation", "label_es": "Investigación", "width": "40%",
-              "sort": false, "filter": true, "align": "left"},
-              {"fldName": "created_on", "label_en": "Created on", "label_es": "F.Creación", "width": "40%",
-              "sort": true,"filter": false}			
-            ]
-          },			  
-          "dialogQuery":{
-            "actionName": "OPEN_INVESTIGATIONS",
-            "button": {
-            "icon": "refresh",
-            "title": {
-            "label_en": "Reload", "label_es": "Recargar"
-            },
-            "requiresGridItemSelected": true
-          }
-          }		  
-        }
-      }    
+      }
     ],
     "row_buttons": [
       {
@@ -1049,6 +971,7 @@ export const DemoInstruments ={
         ]
       }
     ]
+  }]
   },
   "Deviations":{
     "component": "Tabs",
@@ -1771,137 +1694,10 @@ export const DemoInstruments ={
   "PlatformInstrumentsBalanzas": {
     "component": "SingleView",
     "hideLeftPane": true,
-    "hasOwnComponent": true,
-    "showTitleOnTop": true,
-    "langConfig": {
-      "gridHeader": {
-        "name": {
-          "label_en": "Name",
-          "label_es": "Nombre",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "20%",
-          "align": "left"
-        },
-        "family": {
-          "label_en": "Family",
-          "label_es": "Familia",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "20%"
-        },
-        "on_line": {
-          "label_en": "On Line",
-          "label_es": "En Línea",
-          "sort": false,
-          "filter": true,
-          "is_icon": true,
-          "width": "10%"
-        },
-        "model_number": {
-          "label_en": "Model",
-          "label_es": "Modelo",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "serial_number": {
-          "label_en": "Serial N.",
-          "label_es": "N. Serie",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "supplier": {
-          "label_en": "Supplier",
-          "label_es": "Proveedor",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "manufacturer": {
-          "label_en": "Manufacturer",
-          "label_es": "Fabricante",
-          "sort": false,
-          "filter": true,
-          "width": "10%"
-        },
-        "created_on": {
-          "label_en": "Creation",
-          "label_es": "Creación",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "is_locked": {
-          "label_en": "Is locked?",
-          "label_es": "¿Bloqueado?",
-          "sort": false,
-          "filter": false,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "detail": {
-          "label_en": "Detail",
-          "label_es": "Detalle",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "last_calibration": {
-          "label_en": "Last Cal",
-          "label_es": "Última Cal",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "next_calibration": {
-          "label_en": "Next Cal",
-          "label_es": "Próxima Cal",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "last_prev_maint": {
-          "label_en": "Last PM",
-          "label_es": "Último MP",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        },
-        "next_prev_maint": {
-          "label_en": "Next PM",
-          "label_es": "Próximo MP",
-          "sort": false,
-          "filter": true,
-          "is_icon": false,
-          "width": "10%"
-        }
-      },
-      "title": {
-        "label_en": "Active Instruments Balances",
-        "label_es": "Balanzas Instrumentos Activos"
-      }
-    },
     "viewQuery": {
       "actionName": "ACTIVE_INSTRUMENTS_LIST",
       "dataResponse": "ArrayInRoot",
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
-        "title": {
-          "label_en": "Reload",
-          "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": true
-      },
+      "requiresGridItemSelected": true,
       "endPointParams": [
         {
           "argumentName": "familyName",
@@ -1919,12 +1715,11 @@ export const DemoInstruments ={
       },
       {
         "type": "parentReadOnlyTable",
-        "allowMultiSelection": false,
-        "printable": {"enable": true},
-        "downloadable": {
-          "enable": true,
-          "allowUserSelectColumns": false
-        },
+        "allowMultiSelection": false, 
+        "refreshable":{ "enable": true}, 
+        "printable":{ "enable": true}, 
+        "downloadable":{"enable": true},       
+        
         "columns": [
           { "name": "name", "label_en": "Name", "label_es": "Nombre", "addToSmartFilter": true },
           { "name": "family", "label_en": "Family", "label_es": "Familia", "addToSmartFilter": true },
@@ -2536,7 +2331,7 @@ export const DemoInstruments ={
           ]
         }
     ]
-  },
+},
   "PlatformInstrumentsHPLC-UPLC": {
 	"component": "Tabs",
 	"tabs": [

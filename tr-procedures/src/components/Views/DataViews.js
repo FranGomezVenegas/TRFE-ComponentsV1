@@ -194,6 +194,24 @@ export function DataViews(base) {
       `;
     }
     kpiReportTitle(elem, data) {
+      //alert(this.filterName)
+      if (this.filterName!==undefined&&this.filterName!==''){        
+          if (typeof this.filterName !== 'string') {
+            throw new Error('filterName must be a string');
+          }
+          const filterName = String(this.filterName);
+
+          function isFilterNameDefined(subViewFilter, filterName) {
+            for (const filter of subViewFilter) {
+              if (filter.hasOwnProperty(filterName)) {
+                return filter[filterName];
+              }
+            }
+            return [];
+          }
+          let subViewFilter=isFilterNameDefined(elem.subViewFilter, filterName) 
+          elem=subViewFilter
+      }
       return html`    
         <p style="text-align: center;">
           <span style="color: rgb(20, 115, 230); font-size: 30px; margin-top: 10px; font-weight: bold;" id="reportTitle">

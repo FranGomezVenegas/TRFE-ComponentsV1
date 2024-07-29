@@ -212,17 +212,31 @@ export function ApiFunctions(base) {
             })
             //return jsonParam
           }
-          //console.log('jsonParam', 'action', action, 'filterName', this.filterName)
           if (action.subViewFilter!==undefined&&this.filterName!==undefined){
-            if (action.subViewFilter[this.filterName]===undefined){
-              alert('This view filter is '+this.filterName+' and the action has subViewFilter but none of them with this name')
+            if (typeof this.filterName !== 'string') {
+              throw new Error('filterName must be a string');
+            }
+            const filterName = String(this.filterName);
+
+            function isFilterNameDefined(subViewFilter, filterName) {
+              for (const filter of subViewFilter) {
+                if (filter.hasOwnProperty(filterName)) {
+                  return filter[filterName];
+                }
+              }
+              return [];
+            }
+            let subViewFilter=isFilterNameDefined(action.subViewFilter, filterName)
+              
+            if (subViewFilter.length>0){
+              subViewFilter.forEach(p => {
+                  this.buildJsonParam(jsonParam, p, selObject, targetValue, selGridObject, parentElementData, dragEntry, dropEntry)
+                })
+            }else{
+              alert('This view filter is '+this.filterName+' and the action has subViewFilter but none of them with this name')              
               jsonParam[p.argumentName] = "ERROR: "+msg
               return jsonParam[p.argumentName]
             }
-            action.subViewFilter[this.filterName].forEach(p => {
-              this.buildJsonParam(jsonParam, p, selObject, targetValue, selGridObject, parentElementData, dragEntry, dropEntry)
-            })
-            //return jsonParam
           }
           return jsonParam
       }
