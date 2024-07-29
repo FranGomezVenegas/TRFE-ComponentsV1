@@ -1,22 +1,8 @@
-import { html } from 'lit';
-import { ButtonsFunctions } from './ButtonsFunctions';
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
 
-export default {
-  title: 'Components/ButtonsFunctions',
-  component: 'buttons-functions', // Asegúrate de que el nombre del componente sea correcto
-};
+<Meta title="Components/ButtonsFunctions doc" />
 
-const Template = (args) => html`<buttons-functions .${args}></buttons-functions>`;
 
-export const Default = Template.bind({});
-Default.args = {
-  // Define los argumentos necesarios aquí
-};
-
-Default.parameters = {
-  docs: {
-    description: {
-      component: `
         # ButtonsFunctions Component
 
         The \`ButtonsFunctions\` component is a highly customizable component that enhances a base class with various button-related functionalities.
@@ -25,6 +11,16 @@ Default.parameters = {
 
         The \`ButtonsFunctions\` function enhances a base class with various button-related functionalities. It extends a base class with functionalities from multiple modules to manage button interactions, styles, and logic.
 
+        ## Buttons areas
+
+        - There are two areas where buttons can be located, on the top of the table (actions) or for each row (rowButtons).
+        - The row buttons are actions to be applied using the current row in context.
+        - #### <span style={{ color: 'blue' }}>**requiresGridItemSelected** </span>
+            The buttons on the top can be row(s) dependant or not, to indicate if rows are required or not for this action the property called requiresGridItemSelected should be set accordingly
+        - #### <span style={{ color: 'blue' }}>**actionForMultiSelect** </span>
+            This only applies for buttons on the top and for those that requiresGridItemSelected. By default all actions are 'single row actions', in case the table is set as multiselection then only those actions
+            set with actionForMultiSelect to true will be displayed.
+        
         ## Variables and Properties
 
         ### 1. \`actions\`
@@ -52,14 +48,22 @@ Default.parameters = {
         - **\`btnHiddenForRows(action, selItems)\`**
           - Determines if a button should be hidden based on the \`showWhenSelectedItem\` and \`hideWhenSelectedItem\` properties.
 
+        # Special Window Buttons 
+
+        - This functionality manages whether or not refreshable, printable and/or downloadable buttons should be added.
+
+        - Those are set through the element definition then those are particular for each table.
+          By default, they have one predefined icon and title. 
+            In case those properties are added at the model level then we can replace the predefined icon and/or title on demand
+
         ### 2. \`refreshable\`
 
         - **Type:** Object
         - **Description:** Defines properties for the refresh button.
         - **Properties:**
-          - \`enable\`: Boolean to enable or disable the refresh button.
-          - \`icon\`: Icon for the refresh button.
-          - \`title\`: An object containing titles in different languages.
+          - \`enable\`: Boolean to enable or disable the refresh button. default: true
+          - \`icon\`: Icon for the refresh button. default: refresh
+          - \`title\`: An object containing titles in different languages. default:label_en:"Reload", label_es: "Recargar"
 
         #### Logic:
 
@@ -71,9 +75,9 @@ Default.parameters = {
         - **Type:** Object
         - **Description:** Defines properties for the print button.
         - **Properties:**
-          - \`enable\`: Boolean to enable or disable the print button.
-          - \`icon\`: Icon for the print button.
-          - \`title\`: An object containing titles in different languages.
+          - \`enable\`: Boolean to enable or disable the print button. default: true
+          - \`icon\`: Icon for the refresh button. default: print
+          - \`title\`: An object containing titles in different languages. default: label_en:"Print", label_es: "Imprimir"
 
         #### Logic:
 
@@ -83,16 +87,20 @@ Default.parameters = {
         ### 4. \`downloadable\`
 
         - **Type:** Object
-        - **Description:** Defines properties for the download button.
+        - **Description:** Provides the ability to export to CSV data.
+            **SelectedData Vs AllData**: It is possible to download all the rows or just the selected ones. Select rows to download just those or not select any and then all rows will be downloaded.
         - **Properties:**
-          - \`enable\`: Boolean to enable or disable the download button.
-          - \`icon\`: Icon for the download button.
-          - \`title\`: An object containing titles in different languages.
+          - \`enable\`: Boolean to enable or disable the download button. default: true
+          - \`icon\`: Icon for the download button. default: download
+          - \`title\`: An object containing titles in different languages. default: label_en:"Export", label_es: "Exportar"
+          - <span style={{ color: 'blue' }}>\`**allowUserSelectColumns**\`</span>: By default the data to be exported to CSV are the displayed columns, by set allowUserSelectColumns to true then the list of other hidden columns will be displayed,
+           the user can unselect / select extra ones and even by drag&drop can change the columns order.
 
         #### Logic:
 
         - **\`downloadDataTableToCSV(sectionModel, data, selectedItems, downloadable)\`**
           - Downloads the data table as a CSV file based on the downloadable button properties.
+
 
         ## Functions
 
@@ -164,7 +172,3 @@ Default.parameters = {
         ## Conclusion
 
         This documentation covers the primary variables, properties, and logic used in the \`ButtonsFunctions.js\` file. Each property and function is explained to provide a clear understanding of their roles and interactions within the code.
-      `,
-    },
-  },
-};

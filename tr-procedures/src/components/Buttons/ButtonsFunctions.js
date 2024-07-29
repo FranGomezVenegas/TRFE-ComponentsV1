@@ -137,7 +137,7 @@ export function ButtonsFunctions(base) {
       //console.log('getButtondata', data)
 
       let refreshable={enable: true, icon:"refresh", title:{label_en:"Reload", label_es: "Recargar"}}
-      if (sectionModel.viewQuery!==undefined&&sectionModel.viewQuery.addRefreshButton!==undefined){
+      if (sectionModel.viewQuery!==undefined&&sectionModel.viewQuery.refreshable!==undefined){
         if (sectionModel.viewQuery.refreshable.enable!==undefined){
           refreshable.enable=sectionModel.viewQuery.refreshable.enable
         }
@@ -148,7 +148,7 @@ export function ButtonsFunctions(base) {
           refreshable.icon=sectionModel.viewQuery.refreshable.icon
         }
       }
-      if (sectionModel.addRefreshButton!==undefined){
+      if (sectionModel.refreshable!==undefined){
         if (sectionModel.refreshable.enable!==undefined){
           refreshable.enable=sectionModel.refreshable.enable
         }
@@ -458,17 +458,15 @@ export function ButtonsFunctions(base) {
 			  color: red;
 			}
 		  </style>
-			${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.addRefreshButton && sectionModel.viewQuery.addRefreshButton === true ?
-			html`
-			<mwc-icon-button
-				class="${sectionModel.viewQuery.button.class}"
-				icon="${sectionModel.viewQuery.button.icon}" id="refresh"
-				title="${sectionModel.viewQuery.button.title['label_' + lang]}"
-				@click=${() => this.GetViewData()}
-				style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
-			</mwc-icon-button>` : nothing
-		  }
-
+      ${refreshable.enable===true ?html`
+        <mwc-icon-button
+            ${refreshable===undefined||refreshable.class===undefined?'':html`class="${refreshable.class}"`}          
+            icon="${refreshable.icon}" id="refresh"
+            title="${refreshable.title['label_' + this.lang]}"
+            @click=${() => this.GetViewData()}
+            style="${refreshable.style !== undefined ? refreshable.style : ''}">
+        </mwc-icon-button>` : nothing
+      }                	  
 			${this.btnHidden(action) ? nothing :
 				html`${action.button ?
 				  html`${action.button.icon ?
@@ -678,8 +676,13 @@ export function ButtonsFunctions(base) {
       return d
     }
     btnHidden(action, selItems) {
-      let selRow=selItems[0]
+      let selRow=selItems[0]      
       if (selItems!==undefined){
+        if (selItems.length>1
+          &&(action.button===undefined||action.button.requiresGridItemSelected===undefined||action.button.requiresGridItemSelected===true)
+          &&(action.actionForMultiSelect===undefined||action.actionForMultiSelect!==true)){
+          return true
+        }
         return this.btnHiddenForRows(action, selItems)
       }
       let d = false

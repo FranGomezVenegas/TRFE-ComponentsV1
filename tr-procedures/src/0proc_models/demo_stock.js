@@ -3113,8 +3113,7 @@ export const Stock =
 			"downloadable":{
 				"enable": true,
 				"allowUserSelectColumns": true
-			},
-			"printable": {"enable": true},	
+			},			
 			"columns" : [
 				{
 				  "name": "lot_name",
@@ -3153,6 +3152,7 @@ export const Stock =
 			"actions": [
 				{"actionName": "zzzNEW_INVENTORY_LOT",
 				"requiresDialog": true,
+				"requiresGridItemSelected": false,
 				"endPointParams": [
 					{ "argumentName": "referenceTree", "element": "tree1", "defaultValue": ""  },
 					{ "argumentName": "category", "element": "listLinked1", "defaultValue": "" },
