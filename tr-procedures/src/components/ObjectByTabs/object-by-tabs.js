@@ -283,7 +283,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
             hideLeftPane: { type: Boolean },
             selectedTab: { type: Object },
             isLeftPaneExpanded: { type: Boolean },
-            selectedItemInView: { type: Object },
+            selectedItemInView: { type: Object }            
         }
     }
     constructor() {
@@ -308,6 +308,18 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         this.leftSplitDisplayed=true
         this.filterCurrentData={}
         this.selectedItemInView={}        
+    }
+    updated(changedProperties) {
+      if (changedProperties.has('ready') && this.ready) {
+        this.refreshView();
+      }
+    }
+    refreshView(){
+      //alert('refreshView')
+      if (this.viewModelFromProcModel.hideLeftPane!==undefined){
+        this.hideLeftPane=this.viewModelFromProcModel.hideLeftPane
+        this.filterPerformAction()
+      }
     }
 
     firstUpdated() {
