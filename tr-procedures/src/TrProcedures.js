@@ -114,6 +114,28 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
     this.masterData={}
   }
 
+  async ensureComponentAndRefresh() {
+    const waitForComponent = async (selector, maxAttempts = 10) => {
+      for (let i = 0; i < maxAttempts; i++) {
+        const component = document.querySelector(selector);
+        if (component) {
+          return component;
+        }
+        await new Promise(resolve => setTimeout(resolve, 100)); // Wait 100ms before trying again
+      }
+      return null;
+    };
+
+    const objectByTabs = await waitForComponent('object-by-tabs');
+    if (objectByTabs) {
+      objectByTabs.refreshView();
+    } else {
+      alert('objectByTabs not present');
+    }
+  }
+
+
+  
   resetView() {
     let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procName)
     if (!this.config.local) {
@@ -180,8 +202,28 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         return  
       case 'ObjectByTabs':
       case 'SingleView':
-        import('./components/ObjectByTabs/object-by-tabs')
-        return  
+        import('./components/ObjectByTabs/object-by-tabs').then(() => {
+          const objectByTabs = this.shadowRoot.querySelector('object-by-tabs');
+          if (objectByTabs) {
+            objectByTabs.ready = false; // Set ready to false to trigger a refresh
+            objectByTabs.ready = true;  // Set ready to true to indicate it's ready
+          } else {
+            alert('objectByTabs not present');
+          }
+        });
+        return;        
+        // if (this.GridWithButtons!==null){
+        //   // This line below is critical to let the system re-run the query and re-populate the variable any time new view is open by the user or jump to another view.
+        //   this.GridWithButtons.ready=false
+        // }    
+        // import('./components/ObjectByTabs/object-by-tabs').then((module) => {
+        //   this.ensureComponentAndRefresh();
+        // });
+        // return;
+
+        // alert('click')
+        // import('./components/ObjectByTabs/object-by-tabs')
+        // return  
       case 'PrototypeElementsViewMain':
         this.windowOpenable=true
         import('./components/0PrototypeElements/prototype-elements-view-main')
