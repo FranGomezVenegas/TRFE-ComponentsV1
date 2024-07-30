@@ -129,7 +129,7 @@ export function ApiFunctions(base) {
     
 
       refreshMasterData(endPointResponse, actionModel) {
-        console.log('refresh master data')
+        //console.log('refresh master data')
         if (this.procInstanceName===null){return}
         if (this.procInstanceName===undefined||this.procInstanceName.length==0){
           let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
@@ -140,7 +140,7 @@ export function ApiFunctions(base) {
         if (this.procInstanceName===undefined||this.procInstanceName.length==0){
           this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
         }
-        console.log(endPointResponse.master_data)
+        //console.log(endPointResponse.master_data)
         if ( endPointResponse===undefined||endPointResponse.master_data===undefined) {
          // alert('master Data no se va a refrescar!')
           return

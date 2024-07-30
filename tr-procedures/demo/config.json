@@ -378,12 +378,21 @@
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
-	"localDefaultView22": {
+	"localDefaultView": {
 		"procName": "instruments",
-		"viewName": "PlatformInstrumentsBalanzas",
+		"viewName": "PlatformInstruments",
 		"filterName": "InstrumentsList"
 	},
-
+	"localDefaultView": {
+		"procName": "inspection_lot",
+		"viewName": "SampleEnterResult",
+		"filterName": "ER-MB"
+	},
+	"localDefaultView": {
+		"procName": "mb_em",
+		"viewName": "LogSamples",
+		"filterName": ""
+	},
   "fakeEnd":{
   }  
  

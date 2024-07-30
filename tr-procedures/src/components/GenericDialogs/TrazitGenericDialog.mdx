@@ -1,0 +1,185 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="TRAZiT Actions/Dialogs/Generic Dialog doc" />
+
+
+        # TRAZiT Generic Dialog
+
+        The \`TrazitGenericDialog\` dialog is a highly adaptative dialog that should be seen as the first solution for any dialog.
+
+        ## Overview
+
+        The \`TrazitGenericDialog\` dialog includes a diversity of possibilities mostly optionals to let use what required for each particular case.
+
+        # Form Vs grid
+
+        - 
+
+        # Field types
+
+        - It includes up to 10 clones of each type of field mentioned below. The reason of cloning each type is due to each one will manage its behavior and value as to be referenced to each one without impacting one to the other, at the same time all behaviors and features are ready to use for each clone of.
+        
+        bla bla bla ... continue from here
+        
+        ## Lists - Multilists
+        - Probably the most rich in features and then complex to set due to the diversity.
+        - ways
+
+        - The row buttons are actions to be applied using the current row in context.
+        - #### <span style={{ color: 'blue' }}>**requiresGridItemSelected** </span>
+            The buttons on the top can be row(s) dependant or not, to indicate if rows are required or not for this action the property called requiresGridItemSelected should be set accordingly
+        - #### <span style={{ color: 'blue' }}>**actionForMultiSelect** </span>
+            This only applies for buttons on the top and for those that requiresGridItemSelected. By default all actions are 'single row actions', in case the table is set as multiselection then only those actions
+            set with **actionForMultiSelect** to true will be displayed.
+        
+        ## Variables and Properties
+
+        ### 1. \`actions\`
+
+        - **Type:** Array
+        - **Description:** An array of action objects that define the buttons and their behaviors.
+        - **Properties:**
+          - \`button\`: An object defining the button's properties.
+            - \`icon\`: The icon displayed on the button.
+            - \`class\`: CSS classes applied to the button.
+            - \`title\`: An object containing titles in different languages.
+              - \`label_en\`: Title in English.
+              - \`label_es\`: Title in Spanish.
+            - \`img\`: The image displayed on the button.
+            - \`requiresGridItemSelected\`: Boolean indicating if a grid item selection is required.
+            - \`showWhenSelectedItem\`: Defines conditions to show the button when an item is selected.
+            - \`hideWhenSelectedItem\`: Defines conditions to hide the button when an item is selected.
+          - \`actionName\`: The name of the action.
+
+        #### Logic:
+
+        - **\`btnDisabled(action, viewModelFromProcModel)\`**
+          - Determines if a button should be disabled based on the \`requiresGridItemSelected\` property and the selected items.
+
+        - **\`btnHiddenForRows(action, selItems)\`**
+          - Determines if a button should be hidden based on the \`showWhenSelectedItem\` and \`hideWhenSelectedItem\` properties.
+
+        # Special Window Buttons 
+
+        - This functionality manages whether or not refreshable, printable and/or downloadable buttons should be added.
+
+        - Those are set through the element definition then those are particular for each table.
+          By default, they have one predefined icon and title. 
+            In case those properties are added at the model level then we can replace the predefined icon and/or title on demand
+
+        ### 2. \`refreshable\`
+
+        - **Type:** Object
+        - **Description:** Defines properties for the refresh button.
+        - **Properties:**
+          - \`enable\`: Boolean to enable or disable the refresh button. default: true
+          - \`icon\`: Icon for the refresh button. default: refresh
+          - \`title\`: An object containing titles in different languages. default:label_en:"Reload", label_es: "Recargar"
+
+        #### Logic:
+
+        - **\`GetViewData(setGrid = true, viewQuery)\`**
+          - Fetches data and updates the view, optionally using the refresh button properties.
+
+        ### 3. \`printable\`
+
+        - **Type:** Object
+        - **Description:** Defines properties for the print button.
+        - **Properties:**
+          - \`enable\`: Boolean to enable or disable the print button. default: true
+          - \`icon\`: Icon for the refresh button. default: print
+          - \`title\`: An object containing titles in different languages. default: label_en:"Print", label_es: "Imprimir"
+
+        #### Logic:
+
+        - **\`printTable()\`**
+          - Prints the table based on the printable button properties.
+
+        ### 4. \`downloadable\`
+
+        - **Type:** Object
+        - **Description:** Provides the ability to export to CSV data.
+            **SelectedData Vs AllData**: It is possible to download all the rows or just the selected ones. Select rows to download just those or not select any and then all rows will be downloaded.
+        - **Properties:**
+          - \`enable\`: Boolean to enable or disable the download button. default: true
+          - \`icon\`: Icon for the download button. default: download
+          - \`title\`: An object containing titles in different languages. default: label_en:"Export", label_es: "Exportar"
+          - <span style={{ color: 'blue' }}>\`**allowUserSelectColumns**\`</span>: By default the data to be exported to CSV are the displayed columns, by set allowUserSelectColumns to true then the list of other hidden columns will be displayed,
+           the user can unselect / select extra ones and even by drag&drop can change the columns order.
+
+        #### Logic:
+
+        - **\`downloadDataTableToCSV(sectionModel, data, selectedItems, downloadable)\`**
+          - Downloads the data table as a CSV file based on the downloadable button properties.
+
+
+        ## Functions
+
+        ### \`getButtonForRows(actions, data, isProcManagement, parentData)\`
+
+        Generates buttons for each row based on the \`actions\` array.
+
+        ### \`getButton(sectionModel, data, isProcManagement)\`
+
+        Generates a button based on the section model.
+
+        ### \`btnDisabled(action, viewModelFromProcModel)\`
+
+        Determines if a button should be disabled.
+
+        ### \`btnHiddenForRows(action, selItems)\`
+
+        Determines if a button should be hidden for rows based on selection.
+
+        ### \`btnHidden(action, selItems)\`
+
+        Determines if a button should be hidden based on the selected items.
+
+        ### \`GetViewData(setGrid = true, viewQuery)\`
+
+        Fetches and sets view data based on the query definition.
+
+        ### \`GetAlternativeViewData(queryDefinition, selObject = {})\`
+
+        Fetches alternative view data.
+
+        ### \`GetQueryForDialogGrid(actionDefinition)\`
+
+        Fetches data for a dialog grid.
+
+        ### \`GetQueriesForDialog(actionDefinition)\`
+
+        Fetches multiple queries for a dialog.
+
+        ### \`getGenericDialogGridItems(dialogInfo)\`
+
+        Fetches generic dialog grid items based on the dialog info.
+
+        ### \`disabledByCertification(action)\`
+
+        Determines if a button should be disabled by certification (returns \`false\` by default).
+
+        ## Styles
+
+        The buttons have various CSS styles applied to them to control their appearance. Here are some examples:
+
+        - **mwc-icon-button#lang**
+          \`\`\`css
+          color: #1473e6;
+          font-family: Montserrat;
+          font-weight: bold;
+          font-size: 19px;
+          \`\`\`
+
+        - **mwc-button**
+          \`\`\`css
+          background-color: #1473e6;
+          font-family: Montserrat;
+          font-weight: bold;
+          font-size: 19px;
+          border-radius: 12px;
+          \`\`\`
+
+        ## Conclusion
+
+        This documentation covers the primary variables, properties, and logic used in the \`ButtonsFunctions.js\` file. Each property and function is explained to provide a clear understanding of their roles and interactions within the code.

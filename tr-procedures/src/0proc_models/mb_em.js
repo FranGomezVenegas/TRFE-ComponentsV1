@@ -164,7 +164,175 @@ export const MbEm=
       }
     ]
   },
-  "LogSamples": {
+  "LogSamples":{
+    "component": "ObjectByTabs",     
+    "hideLeftPane": false, 
+    
+    "viewQuery": { 
+      "actionName": "PROGRAMS_LIST",
+      "notUseGrid": true,
+      "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+      "zzzclientMethod": "getProgramList",
+      "subAction": {
+        "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
+    		"endPoint": "/moduleenvmon/EnvMonAPIqueries",
+        "clientMethod": "getLots"
+      },
+      "requiresGridItemSelected": false
+    },  
+    "filter": [],
+    "filterResultDetail":{
+      "type":"list",
+      "detail":[
+        {"field": "name"}
+        ]  		
+    },    
+    "tabs": [
+        {
+          "tabLabel_en": "Project info",
+          "tabLabel_es": "Información Proyecto",
+          "view": "summary",
+          "view_definition": [
+            {"type": "reportTitle", 
+              "title":{
+                "label_en": "Program Sampling Points", 
+                "label_es": "Puntos de muestro del programa"
+              }
+            },   
+            {"type": "parentReadOnlyTable",  
+              "allowMultiSelection": false, 
+              "refreshable":{ "enable": true}, 
+              "printable":{ "enable": true}, 
+              "downloadable":{"enable": true}, 
+              "endPointPropertyArray": ["sample_points"],		              
+              "columns" : [                                
+                  {"name":"location_name", "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "20%"},
+                  {"name":"spec_code", "label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true, "width": "20%"},
+                  {"name":"spec_variation_name", "label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "20%"},
+                  {"name":"spec_analysis_variation", "label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "20%"},
+                  {"name":"person_ana_definition", "label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"},
+                  {"name":"requires_tracking_sampling_end", "label_en": "Sampling Static?", "label_es": "Muestreo Estático?", "sort": false, "filter": true, "width": "40%"}                   
+              ],             
+              "actions": [
+                {
+                  "actionName": "LOGSAMPLE",
+                  "requiresGridItemSelected": true,
+                  "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                  "requiresDialog": true,
+                  "button": {
+                    "icon": "rule",
+                    "title": {
+                      "label_en": "Log samples",
+                      "label_es": "Registrar muestras"
+                    },
+                  },
+                  "xclientMethod": "logSampleDialog",
+                  "dialogQueries":[
+                    {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                      "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                      "variableForData": "prodLotList"		  
+                    }
+                  ],  
+                  "endPointParams": [
+                    { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                    { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                    { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                    { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                    { "argumentName": "shift", "element": "list1", "addToFieldNameAndValue": true},
+                    { "argumentName": "production_lot", "element": "list2", "addToFieldNameAndValue": true},
+                    { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                  ],                              
+                  "dialogInfo":{
+                    "name": "genericDialog",
+                    "fields": [   
+                      {"text1": { "label_en":"Program", "label_es":"Programa", "disabled": true, "selObjectPropertyName": "program_name" }},
+                      {"text2": { "label_en":"Location", "label_es":"Ubicación", "disabled": true, "selObjectPropertyName": "location_name" }},
+                      {"list1": { 
+                        "items": [
+                        { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+                        { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+                        { "keyName": "NIGHT", "keyValue_en": "Night", "keyValue_es": "Nocturno" }
+                        ],    
+                        "label_en": "Shift", "label_es": "Turno" 
+                      }},                      
+                      {"list2": {    
+                        "label_en": "Production lot", "label_es": "Lote de producción", "optional": true,
+                        "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                        "valuesFromProperty": {
+                          "fixItemsOnTop": [
+                            { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+                          ],
+                          "selObjectPropertyName":"prodLotList",
+                          "propertyKeyName": "lot_name", "propertyKeyValueEn": "lot_name", "propertyKeyValueEs": "lot_name"
+                        }			
+                      }},                      
+                      {"number1": { "label_en":"Num Samples to log", "label_es":"Num muestras a crear", "argumentName": "numSamplesToLog", "default_value": 1 } }                              
+                      
+                    ],  		            
+                    "zzzFields":[
+                      
+                      {"zzzlist2": { "argumentName": "fieldValue", "targetValue": true }},
+
+                    ],                    
+                    "xname" : "pointDialog",
+                    "action": { "actionName": "LOGSAMPLE",
+                      "endPointUrl": "Samples",
+                      "requiresDialog": false,
+                      "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                      "zzzclientMethod": "logSample",
+                      "endPointParams": [
+                        { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                        { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                        { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                        { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                        { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                        { "argumentName": "fieldValue", "targetValue": true },
+                        { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                      ]
+                    }
+                  }
+                }                
+              ],
+              "gridActionOnClick":
+                {
+                  "actionName": "LOGSAMPLE",
+                  "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                  "requiresDialog": true,
+                  "clientMethod": "logSampleDialog",
+                  "dialogQueries":[
+                    {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                      "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                      "variableForData": "prodLotList"		  
+                    }
+                  ],
+              
+                  "dialogInfo":{
+                    "name" : "pointDialog",
+                    "action": { "actionName": "LOGSAMPLE",
+                      "endPointUrl": "Samples",
+                      "requiresDialog": false,
+                      "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                      "clientMethod": "logSample",
+                      "endPointParams": [
+                        { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                        { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                        { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                        { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                        { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                        { "argumentName": "fieldValue", "targetValue": true },
+                        { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                      ]
+                    }
+                  }
+                }          
+            }
+          ]
+        }
+    ]
+  
+    
+  },
+  "LogSamples20240729": {
     "component": "TableWithButtons",
     "langConfig": {
       "title": {
@@ -385,9 +553,9 @@ export const MbEm=
           "requiresGridItemSelected": true
         },
         "dialogInfo": { 
-		  "name": "genericDialog",
+		      "name": "genericDialog",
           "fields": [            
-			{"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" }}
+            {"datetime1": { "label_en": "new Date", "label_es": "Nueva Fecha" }}
           ]  		  
         },
         "endPointParams": [

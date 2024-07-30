@@ -1800,68 +1800,12 @@ export const DemoInspectionLot =
     "actions": []
   },
   "SampleEnterResult": {
-    "component": "TableWithButtons",
-    "langConfig": {
-      "title": {
-        "ER-FQ": {
-          "label_en": "FQ-Testing Pending Results",
-          "label_es": "FQ-Ensayos pendientes entrar resultados"
-        },
-        "ER-MB": {
-          "label_en": "Samples Pending Micro Testing",
-          "label_es": "Muestras pendientes de testeo Microbiológico"
-        }
-      },
-      "gridHeader": {
-        "sample_id": {
-          "label_en": "Sample ID",
-          "label_es": "ID Muestra",
-          "sort": true,
-          "filter": false
-        },
-        "lot_name": {
-          "label_en": "Lot",
-          "label_es": "Lote",
-          "filter": true
-        },
-        "bulk_name": {
-          "label_en": "Bulk",
-          "label_es": "Bulto",
-          "filter": true
-        },
-        "volume": {
-          "label_en": "Volume",
-          "label_es": "Volumen",
-          "sort": true,
-          "filter": false
-        },
-        "volume_uom": {
-          "label_en": "UOM",
-          "label_es": "UDM",
-          "sort": true,
-          "filter": false
-        },
-        "spec_code": {
-          "label_en": "Spec",
-          "label_es": "Especificación",
-          "sort": true,
-          "filter": false
-        }        
-      }
-    },
-	"enableContextMenu": true,
-	"addActionsInContextMenu": true,
+    "component": "SingleView",     
+    "hideLeftPane": true, 
+    
     "viewQuery": {
       "actionName": "SAMPLES_INPROGRESS_LIST",
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
-        "title": {
-          "label_en": "Reload",
-          "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": true
-      },
+      "dataResponse": "ArrayInRoot",
       "endPointParams": [
         {
           "argumentName": "sampleFieldToRetrieve",
@@ -1892,7 +1836,230 @@ export const DemoInspectionLot =
           "value": true
         }
       ],
-      "subViewFilter": {
+      "subViewFilter": [
+        {
+          "ER-FQ": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsName",
+              "value": "testing_group|status not in-"
+            },
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "FQ*String|REVIEWED-CANCELED*String"
+            }
+          ]
+        },
+        {
+          "ER-MB": [
+            {
+              "argumentName": "sampleAnalysisWhereFieldsName",
+              "value": "testing_group|status not in-"
+            },
+            {
+              "argumentName": "sampleAnalysisWhereFieldsValue",
+              "value": "MB*String|REVIEWED-CANCELED*String"
+            }
+          ]
+        }
+      ]     
+    },  
+    "view_definition": [ 
+        {"type": "reportTitle", 
+          "subViewFilter": [
+            {
+              "ER-FQ": 
+              {"title":{"label_en":"Sample Enter Result FQ", "label_es":"Entrar Resultado de la Muestra FQ"} 
+              }          
+            },
+            {
+              "ER-MB": 
+              {"title":{"label_en":"Sample Enter Result MB", "label_es":"Entrar Resultado de la Muestra MB"} 
+              }
+            
+            }
+          ]         
+        }, 
+  
+        {"type": "parentReadOnlyTable",  
+            "allowMultiSelection": false, 
+            "refreshable":{ "enable": true}, 
+            "printable":{ "enable": true}, 
+            "downloadable":{"enable": true}, 
+  
+            "columns" : [ 
+                { 
+                  "name": "sample_id", 
+                  "label_en": "Sample Id", 
+                  "label_es": "Id Muestra" 
+                },
+  
+                { 
+                  "name": "lot_name", 
+                  "label_en": "Lot", 
+                  "label_es": "Lote" 
+                },
+  
+                { 
+                  "name": "bulk_name", 
+                  "label_en": "Bulk", 
+                  "label_es": "Bulto" 
+                },
+  
+                { 
+                  "name": "volume", 
+                  "label_en": "Volume", 
+                  "label_es": "Volumen" 
+                },
+  
+                { 
+                  "name": "volume_uom", 
+                  "label_en": "UOM", 
+                  "label_es": "UDM" 
+                },
+  
+                { 
+                  "name": "spec_code", 
+                  "label_en": "Spec", 
+                  "label_es": "Especificación" 
+                }
+            ],             
+  
+            "actions": [
+      {
+        "actionName": "SAMPLEANALYSISADD",
+        "buttonForQuery": false,
+        "requiresDialog": true,
+        "button": {
+          "icon": "add_task",
+          "title": {
+            "label_en": "Add Analysis",
+            "label_es": "Añadir Ensayo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          },
+          {
+            "argumentName": "analysis",
+            "addToFieldNameAndValue": true,
+            "fieldType": "STRING",
+            "notAddWhenValueIsBlank": true,
+            "getFromGrid": true
+          },
+          {
+            "argumentName": "method_name",
+            "addToFieldNameAndValue": true,
+            "fieldType": "STRING",
+            "notAddWhenValueIsBlank": true,
+            "getFromGrid": true
+          },
+          {
+            "argumentName": "method_version",
+            "addToFieldNameAndValue": true,
+            "fieldType": "INTEGER",
+            "notAddWhenValueIsBlank": true,
+            "getFromGrid": true
+          }
+        ],
+        "dialogInfo": {
+          "name": "genericDialog",
+          "gridContent": true,
+          "masterDataEntryName": "analysis_method",
+          "langConfig": {
+            "gridHeader": [
+              {
+                "fldName": "analysis",
+                "label_en": "Analysis",
+                "label_es": "Ensayo",
+                "width": "40%",
+                "sort": false,
+                "filter": true,
+                "align": "left"
+              },
+              {
+                "fldName": "method_name",
+                "label_en": "Method",
+                "label_es": "Método",
+                "width": "40%",
+                "sort": true,
+                "filter": false
+              },
+              {
+                "fldName": "method_version",
+                "label_en": "Version",
+                "label_es": "Versión",
+                "width": "20%",
+                "sort": true,
+                "filter": false
+              }
+            ]
+          },
+          "automatic": true
+        }
+      },
+      {
+        "actionName": "SAMPLEANALYSISREMOVE",
+        "buttonForQuery": false,
+        "requiresDialog": true,
+        "button": {
+          "icon": "remove_done",
+          "title": {
+            "label_en": "Remove Analysis",
+            "label_es": "Borrar Ensayo"
+          },
+          "requiresGridItemSelected": true
+        },
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id",
+            "getFromGrid": true
+          },
+          {
+            "argumentName": "testId",
+            "selObjectPropertyName": "test_id",
+            "getFromGrid": true
+          },
+          {
+            "argumentName": "analysis",
+            "addToFieldNameAndValue": true,
+            "fieldType": "STRING",
+            "notAddWhenValueIsBlank": true,
+            "getFromGrid": true
+          },
+          {
+            "argumentName": "method_name",
+            "addToFieldNameAndValue": true,
+            "fieldType": "STRING",
+            "notAddWhenValueIsBlank": true,
+            "getFromGrid": true
+          },
+          {
+            "argumentName": "method_version",
+            "addToFieldNameAndValue": true,
+            "fieldType": "INTEGER",
+            "notAddWhenValueIsBlank": true,
+            "getFromGrid": true
+          }
+        ],
+        "dialogInfo": {
+          "name": "genericDialog",
+          "gridContent": true,
+          "dialogQuery": {
+            "actionName": "GET_SAMPLE_ANALYSIS_LIST",
+            "variableForData": "",
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "internalVariableObjName": "selectedItems",
+                "internalVariableObjProperty": "sample_id"
+              }
+            ],
+            "subViewFilter": [
+      {
         "ER-FQ": [
           {
             "argumentName": "sampleAnalysisWhereFieldsName",
@@ -1902,7 +2069,9 @@ export const DemoInspectionLot =
             "argumentName": "sampleAnalysisWhereFieldsValue",
             "value": "FQ*String|REVIEWED-CANCELED*String"
           }
-        ],
+        ]
+      },
+      {
         "ER-MB": [
           {
             "argumentName": "sampleAnalysisWhereFieldsName",
@@ -1914,138 +2083,40 @@ export const DemoInspectionLot =
           }
         ]
       }
-    },
-    "actions": [
-      {
-        "actionName": "GET_SAMPLE_AUDIT",
-        "buttonForQuery": true,
-        "requiresDialog": true,
-        "endPoint": "/modulesample/SampleAPIqueries",
-        "button": {
-          "icon": "rule",
-          "title": {
-            "label_en": "Sample Audit",
-            "label_es": "Auditoría de Muestra"
-          },
-          "requiresGridItemSelected": true
-        },
-        "clientMethod": "getObjectAuditInfo",
-        "endPointParams": [
-          {
-            "argumentName": "sampleId",
-            "selObjectPropertyName": "sample_id"
-          }
-        ],
-        "dialogInfo": {
-          "name": "auditDialog",
-          "automatic": true,
-          "action": [
-            {
-              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
-              "requiresDialog": false,
-              "notGetViewData": true,
-              "xxxxsecondaryActionToPerform": {
-                "name": "getObjectAuditInfo",
-                "endPointParams": [
-                  {
-                    "argumentName": "sampleId",
-                    "selObjectPropertyName": "sample_id"
-                  }
-                ]
-              },
-              "endPointUrl": "Samples",
-              "clientMethod": "signAudit",
-              "endPointParams": [
-                {
-                  "argumentName": "auditId",
-                  "targetValue": true
-                }
-              ]
+    ]
             }
-          ]
-        }
-      },
-      {
-        "actionName": "SAMPLEANALYSISADD",
-        "buttonForQuery": false,
-        "requiresDialog": true,        
-        "button": {
-          "icon": "add_task",
-          "title": {
-            "label_en": "Add Analysis",
-            "label_es": "Añadir Ensayo"
           },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-			{"argumentName": "sampleId", "selObjectPropertyName": "sample_id"},
-			{"argumentName": "analysis", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
-			{"argumentName": "method_name", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
-			{"argumentName": "method_version", "addToFieldNameAndValue": true, "fieldType": "INTEGER", "notAddWhenValueIsBlank":true, "getFromGrid": true}
-        ],
-        "dialogInfo": {
-			"name": "genericDialog",
-			"gridContent": true,
-			"masterDataEntryName": "analysis_method",
-			"langConfig": {
-				"gridHeader": [
-					{"fldName": "analysis", "label_en": "Analysis", "label_es": "Ensayo", "width": "40%",
-					  "sort": false, "filter": true, "align": "left"},
-					{"fldName": "method_name", "label_en": "Method", "label_es": "Método", "width": "40%",
-					  "sort": true,"filter": false},
-					{"fldName": "method_version", "label_en": "Version", "label_es": "Versión", "width": "20%",
-					  "sort": true, "filter": false}			
-				]
-			},
-			"automatic": true
-        }
-      },
-      {
-        "actionName": "SAMPLEANALYSISREMOVE",
-        "buttonForQuery": false,
-        "requiresDialog": true,        
-        "button": {
-          "icon": "remove_done",
-          "title": {
-            "label_en": "Remove Analysis",
-            "label_es": "Borrar Ensayo"
+          "langConfig": {
+            "gridHeader": [
+              {
+                "fldName": "analysis",
+                "label_en": "Analysis",
+                "label_es": "Ensayo",
+                "width": "40%",
+                "sort": false,
+                "filter": true,
+                "align": "left"
+              },
+              {
+                "fldName": "method_name",
+                "label_en": "Method",
+                "label_es": "Método",
+                "width": "40%",
+                "sort": true,
+                "filter": false
+              },
+              {
+                "fldName": "method_version",
+                "label_en": "Version",
+                "label_es": "Versión",
+                "width": "20%",
+                "sort": true,
+                "filter": false
+              }
+            ]
           },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-			{"argumentName": "testId", "selObjectPropertyName": "test_id", "getFromGrid": true},
-			{"argumentName": "analysis", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
-			{"argumentName": "method_name", "addToFieldNameAndValue": true, "fieldType": "STRING", "notAddWhenValueIsBlank":true, "getFromGrid": true},
-			{"argumentName": "method_version", "addToFieldNameAndValue": true, "fieldType": "INTEGER", "notAddWhenValueIsBlank":true, "getFromGrid": true}
-        ],
-        "dialogInfo": {
-			"name": "genericDialog",
-			"gridContent": true,
-			"dialogQuery": {
-				"actionName": "GET_SAMPLE_ANALYSIS_LIST",
-				"variableForData": "",
-				"endPointParams": [
-				  {"argumentName": "sampleId", "internalVariableObjName": "selectedItems", "internalVariableObjProperty":"sample_id"}
-				],
-				"subViewFilter": {
-					"ER-FQ": [
-					],
-					"ER-MB": [
-					]
-				}
-			},					
-			"langConfig": {
-				"gridHeader": [
-					{"fldName": "analysis", "label_en": "Analysis", "label_es": "Ensayo", "width": "40%",
-					  "sort": false, "filter": true, "align": "left"},
-					{"fldName": "method_name", "label_en": "Method", "label_es": "Método", "width": "40%",
-					  "sort": true,"filter": false},
-					{"fldName": "method_version", "label_en": "Version", "label_es": "Versión", "width": "20%",
-					  "sort": true, "filter": false}			
-				]
-			},
-			"automatic": true
-        }
+          "automatic": true
+        }]
       },
       {
         "actionName": "ENTERRESULT",
@@ -2070,7 +2141,7 @@ export const DemoInspectionLot =
           "subQueryName": "getResult",
           "viewQuery": {
             "actionName": "GET_SAMPLE_ANALYSIS_RESULT_LIST",
-            "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+            "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
             "endPointParams": [
               {
                 "argumentName": "sampleId",
@@ -2136,7 +2207,7 @@ export const DemoInspectionLot =
               "actionName": "ENTERRESULT",
               "notGetViewData": true,
               "requiresDialog": false,
-              "zzzendPointUrl": "Samples",
+              "endPointUrl": "Samples",
               "clientMethod": "enterResult",
               "endPointParams": [
                 {
@@ -2197,8 +2268,59 @@ export const DemoInspectionLot =
             }
           ]
         }
+      },
+      {
+        "actionName": "GET_SAMPLE_AUDIT",
+        "buttonForQuery": true,
+        "requiresDialog": true,
+        "endPoint": "/modulesample/SampleAPIqueries",
+        "button": {
+          "icon": "rule",
+          "title": {
+            "label_en": "Sample Audit",
+            "label_es": "Auditoría de Muestra"
+          },
+          "requiresGridItemSelected": true
+        },
+        "clientMethod": "getObjectAuditInfo",
+        "endPointParams": [
+          {
+            "argumentName": "sampleId",
+            "selObjectPropertyName": "sample_id"
+          }
+        ],
+        "dialogInfo": {
+          "name": "auditDialog",
+          "automatic": true,
+          "action": [
+            {
+              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+              "requiresDialog": false,
+              "notGetViewData": true,
+              "xxxxsecondaryActionToPerform": {
+                "name": "getObjectAuditInfo",
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  }
+                ]
+              },
+              "endPointUrl": "Samples",
+              "clientMethod": "signAudit",
+              "endPointParams": [
+                {
+                  "argumentName": "auditId",
+                  "targetValue": true
+                }
+              ]
+            }
+          ]
+        }
       }
     ]
+  
+    
   },
   "ReviewTesting": {
     "component": "TableWithButtons",
@@ -5483,7 +5605,7 @@ export const DemoInspectionLot =
     },
     "viewQuery": {
       "actionName": "GET_SPECS",
-	  "notUseGrid": true,
+	    "notUseGrid": true,
       "button": {
         "icon": "refresh",
         "title": {
@@ -5495,7 +5617,7 @@ export const DemoInspectionLot =
       "endPointParams": [
         {
           "argumentName": "specCode",
-		  "internalVariableSimpleObjName": "filterCurrentData",
+		      "internalVariableSimpleObjName": "filterCurrentData",
           "internalVariableSimpleObjProperty": "filtertext1"          
         }
       ]

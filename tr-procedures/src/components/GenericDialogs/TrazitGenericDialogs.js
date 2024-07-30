@@ -954,12 +954,12 @@ export function TrazitGenericDialogs(base) {
                 this[keyName].value=fldObj[keyName].default_value
             }
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
-                if (this.selectedItems[0]===undefined){return}
-                this[keyName].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
+                if (this.selectedItem[0]===undefined){return}
+                this[keyName].value=this.selectedItem[0][fldObj[keyName].selObjectPropertyName]
             }            
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj.selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
-                if (this.selectedItems[0]===undefined){return}
-                this[keyName].value=this.selectedItems[0][fldObj.selObjectPropertyName]
+                if (this.selectedItem[0]===undefined){return}
+                this[keyName].value=this.selectedItem[0][fldObj.selObjectPropertyName]
             }            
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&                
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){

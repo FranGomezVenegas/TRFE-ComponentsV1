@@ -587,7 +587,7 @@ export function ButtonsFunctions(base) {
       //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)
       let d = false
       if (selRow !== undefined && selRow["No Data"] !== undefined) { return true }
-      if (action.button.showWhenSelectedItem !== undefined&&selItems.length===1) {
+      if (action.button !== undefined&&action.button.showWhenSelectedItem !== undefined&&selItems.length===1) {
         //console.log('btnHidden')
         if (selRow === undefined || selRow === undefined) { return true } // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {
@@ -630,7 +630,7 @@ export function ButtonsFunctions(base) {
             return false
           }
         }
-      } else if (action.button.hideWhenSelectedItem !== undefined&&selItems.length===1) {
+      } else if (action.button !== undefined&&action.button.hideWhenSelectedItem !== undefined&&selItems.length===1) {
         if (selRow === undefined || selRow === undefined) { return true } // keep shown when no selection
         if (Array.isArray(action.button.hideWhenSelectedItem)) {
           action.button.hideWhenSelectedItem.forEach(rowArray => {
@@ -1088,7 +1088,7 @@ export function ButtonsFunctions(base) {
         let viewParams = this.jsonParam(currQuery)
         if (currQuery === undefined) { return }
         let endPointUrl = this.getQueryAPIUrl(currQuery)
-        let serviceAPIurl=this.getServiceAPIUrl(queryDefinition)
+        let serviceAPIurl=this.getServiceAPIUrl(currQuery)
         let params = serviceAPIurl + endPointUrl
           //let params = this.config.backendUrl + (currQuery.endPoint ? currQuery.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)

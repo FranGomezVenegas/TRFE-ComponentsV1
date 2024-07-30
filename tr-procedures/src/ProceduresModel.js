@@ -181,7 +181,7 @@ export const DemoViews = [
   },
   {"label":"EM_MB (mb_em)", "proc_instance_name": "mb_em", "views":[
     {"proc_instance_name": "mb_em", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-    {"proc_instance_name": "mb_em", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
+    {"proc_instance_name": "mb_em", "view_name": "LogSamples", "filter_name": "", "title": "Log Samples"},
     {"proc_instance_name": "mb_em", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
     {"proc_instance_name": "mb_em", "view_name": "SampleCultureMedia", "filter_name": "CultureMediaSMP", "title": "Sample Culture"},
     {"proc_instance_name": "mb_em", "view_name": "SamplePendingSampling", "filter_name": "SamplingSMP", "title": "Location Sampling"},

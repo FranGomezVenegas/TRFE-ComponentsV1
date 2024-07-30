@@ -309,6 +309,13 @@ export function ListsFunctions(base) {
                 if (MDentriesArr.length > 0) {
                     newList = [...newList, ...MDentriesArr];
                 }
+            } else if (fld.valuesFromProperty) {
+                // Handle values from a master data source
+                fld.valuesFromProperty.propertyNameContainer="ROOT"
+                let MDentriesArr = this.listEntriesFromProperty(fld.valuesFromProperty);
+                if (MDentriesArr.length > 0) {
+                    newList = [...newList, ...MDentriesArr];
+                }
             } else if (fld.valuesFromSelectedItem) {
                 // Handle values based on another selected item's data
                 let MDentriesArr = this.listEntriesFromSelectedItem(fld.valuesFromSelectedItem);
@@ -449,7 +456,13 @@ export function ListsFunctions(base) {
             console.log(fldMDDef, this.masterData)
             return this.buildFrontListFromData(fldMDDef, this.masterData)
         }
-    
+        listEntriesFromProperty(fldMDDef){
+            if (this[fldMDDef.selObjectPropertyName]===undefined){
+                alert('selObjectPropertyName '+selObjectPropertyName+' is empty')
+                return
+            }
+            return this.buildFrontListFromData(fldMDDef, this[fldMDDef.selObjectPropertyName])
+        }    
         listEntriesFromSelectedItem(fldMDDef){     
             
             let data=[]
@@ -511,15 +524,19 @@ export function ListsFunctions(base) {
             if (isInjected===undefined||isInjected===false){
                 console.log('masterData', data)
                 console.log('actionBeingPerformedModel', this.actionBeingPerformedModel)                
-                
-                if (data[fldMDDef.propertyNameContainer]===undefined){
-                    alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
-                    return entries
+                if (String(fldMDDef.propertyNameContainer).toUpperCase()==="ROOT"){
+
+                }else{
+                    if (data[fldMDDef.propertyNameContainer]===undefined){
+                        alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
+                        return entries
+                    }
+                    data=data[fldMDDef.propertyNameContainer]
                 }
             }
             if (fldMDDef.filterInFirstLevel===undefined||fldMDDef.filterInFirstLevel!==true){
-                if (data[fldMDDef.propertyNameContainer]!==undefined){
-                    data[fldMDDef.propertyNameContainer].forEach(item =>{
+                if (data!==undefined){
+                    data.forEach(item =>{
                     // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
                         let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
                         blankEmpty.keyName=item[fldMDDef.propertyKeyName]
@@ -529,6 +546,12 @@ export function ListsFunctions(base) {
                         //console.log('blankEmpty', blankEmpty)
                         entries.push(blankEmpty)
                     })
+                }
+                if (fldMDDef.fixItemsOnTop!==undefined){
+                    entries=[...fldMDDef.fixItemsOnTop, ...entries]
+                }
+                if (fldMDDef.fixItemsAtBottom!==undefined){
+                    entries=[...entries, ...fldMDDef.fixItemsAtBottom]
                 }
             }else{
                 // if ((fldMDDef.elementName===undefined||fldMDDef.elementName===null)&&
@@ -572,6 +595,12 @@ export function ListsFunctions(base) {
                     entries.push(blankEmpty)
                 })
                 console.log('entries at end', entries)
+                if (fldMDDef.fixItemsOnTop!==undefined){
+                    entries=[...fldMDDef.fixItemsOnTop, ...entries]
+                }
+                if (fldMDDef.fixItemsAtBottom!==undefined){
+                    entries=[...entries, ...fldMDDef.fixItemsAtBottom]
+                }                
                 return entries
                 
             }        
