@@ -312,7 +312,7 @@ export function ButtonsFunctions(base) {
               ${printable===undefined||printable.class===undefined?'':html`class="${printable.class}"`}
               icon="${printable.icon}" id="printable" 
               title="${printable.title['label_' + this.lang]}"             
-              @click=${() => this.printTable()}
+              @click=${() => this.printTable(sectionModel.index)}
               style="${printable!==undefined&&printable.style !== undefined ? printable.style : ''}">
           </mwc-icon-button>` : nothing
         }
@@ -676,7 +676,7 @@ export function ButtonsFunctions(base) {
       return d
     }
     btnHidden(action, selItems) {
-      let selRow=selItems[0]      
+      // let selRow=selItems[0]      
       if (selItems!==undefined){
         if (selItems.length>1
           &&(action.button===undefined||action.button.requiresGridItemSelected===undefined||action.button.requiresGridItemSelected===true)

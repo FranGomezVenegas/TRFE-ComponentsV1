@@ -254,6 +254,7 @@ export function CardMultipleElementsView(base) {
             ${elem.type === "reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
             ${elem.cardElements===undefined?nothing:html`        
               ${elem.cardElements.map((elem2, index) => {
+                elem2['index'] = i
                 return html`
                 
                   ${elem2.is_translation === undefined || (elem2.is_translation !== undefined && elem2.is_translation === true && elem2.lang !== undefined && elem2.lang === this.lang) ?

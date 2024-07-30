@@ -201,10 +201,12 @@ export function DataViews(base) {
           }
           const filterName = String(this.filterName);
 
-          function isFilterNameDefined(subViewFilter, filterName) {
-            for (const filter of subViewFilter) {
-              if (filter.hasOwnProperty(filterName)) {
-                return filter[filterName];
+          function isFilterNameDefined(subViewFilter, filterName) { 
+            if (subViewFilter) {
+              for (const filter of subViewFilter) {
+                if (filter.hasOwnProperty(filterName)) {
+                  return filter[filterName];
+                }
               }
             }
             return [];
@@ -3198,7 +3200,7 @@ export function DataViews(base) {
                     `
                 }
                 <div class="table-container">
-                  <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
+                  <table data-index="${elem.index}" id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
                     <thead>
                       <tr>
                         ${elem.allowMultiSelection ? html`<th><input type="checkbox" @change=${handleSelectAll}></th>` : nothing}
