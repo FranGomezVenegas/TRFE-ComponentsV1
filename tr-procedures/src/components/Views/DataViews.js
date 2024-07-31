@@ -84,7 +84,7 @@ export function DataViews(base) {
     }
 
     getDataFromRoot(elem, data) {
-      if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.viewQuery.dataResponse!==undefined&&this.viewModelFromProcModel.viewQuery.dataResponse==="ArrayInRoot"){
+      if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel?.viewQuery?.dataResponse!==undefined&&this.viewModelFromProcModel?.viewQuery?.dataResponse==="ArrayInRoot"){
         return data.queryData?data.queryData:''
       }
       if (elem !== undefined && elem.contextVariableName !== undefined) {
@@ -1657,7 +1657,7 @@ export function DataViews(base) {
                   }
                 }
               </style>
-              <div
+              <div data-index="${elem.index}"
                 id="main${elem.add_border !== undefined &&
               elem.add_border == true
               ? "addborder"

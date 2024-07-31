@@ -5,7 +5,7 @@ export function PrintableTable(base) {
             this.setPrintContentTable(index);
             let printWindow = window.open('', '_blank');
             printWindow.document.write(this.printObj.contentWithFooter);
-            printWindow.document.title = 'Title Here';
+            printWindow.document.title = this.printObj.header;
             setTimeout(function () {
                 printWindow.print();
                 printWindow.close();
@@ -14,10 +14,10 @@ export function PrintableTable(base) {
 
         setPrintContentTable(index) {
             const styles = this._getAllStyles();
-            const dataTable = this._getTableHTML(index);
+            const { header, content } = this._getPrintableContent(index);
 
             this.printObj = {
-                header: '.',
+                header: header,
                 contentWithFooter: `
                     <html>
                         <head>
@@ -25,7 +25,7 @@ export function PrintableTable(base) {
                         </head>
                         <body>
                             <div id="print-content" style="display: flex; flex-wrap: wrap; padding-left: 30px; gap: 10px">
-                                ${dataTable}
+                                ${content}
                             </div>
                         </body>
                     </html>
@@ -34,19 +34,22 @@ export function PrintableTable(base) {
         }
 
         _getAllStyles() {
-            const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+            const styles = Array.from(this.shadowRoot.querySelectorAll('style, link[rel="stylesheet"]'))
                 .map(style => style.outerHTML)
                 .join('\n');
             return styles;
         }
 
-        _getTableHTML(index) {
+        _getPrintableContent(index) {
             const table = this.shadowRoot.querySelector(`table[data-index="${index}"]`);
-            if (!table) {
-                console.error(`Table with data-index="${index}" not found.`);
-                return '';
+            if (table) {
+                return this._getTableHTML(table);
+            } else {
+                return this._getFallbackContent(index);
             }
+        }
 
+        _getTableHTML(table) {
             const clonedTable = table.cloneNode(true);
             const headers = clonedTable.querySelectorAll('th');
             let actionsColumnIndex = -1;
@@ -74,7 +77,34 @@ export function PrintableTable(base) {
                 input.parentNode.replaceChild(textNode, input);
             });
 
-            return clonedTable.outerHTML;
+            return { header: 'Table Print', content: clonedTable.outerHTML };
+        }
+
+        _getFallbackContent(index) {
+            const mainDiv = this.shadowRoot.querySelector('#mainDiv > div');
+            if (!mainDiv) {
+                console.error(`Main div not found.`);
+                return { header: 'Error', content: 'Main div not found.' };
+            }
+
+            const targetDivs = mainDiv.querySelector(`div[data-index="${index}"]`);;
+            if (index >= targetDivs?.length) {
+                console.error(`Div with index "${index}" not found.`);
+                return { header: 'Error', content: `Div with index "${index}" not found.` };
+            }
+
+            const targetDiv = targetDivs;
+            const headerTitle = targetDiv.querySelector('p span') ? targetDiv.querySelector('p span').textContent.trim() : 'Print';
+
+            const clonedDiv = targetDiv.cloneNode(true);
+            const inputs = clonedDiv.querySelectorAll('input');
+            inputs.forEach(input => {
+                const value = input.value;
+                const textNode = document.createTextNode(value);
+                input.parentNode.replaceChild(textNode, input);
+            });
+
+            return { header: headerTitle, content: clonedDiv.outerHTML };
         }
     }
 }

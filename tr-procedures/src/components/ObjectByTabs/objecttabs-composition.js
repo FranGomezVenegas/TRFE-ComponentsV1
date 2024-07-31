@@ -289,6 +289,11 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
       ${elem.elements.map((elem2, i) => {
+        if (elem['index'] !== undefined) {
+          elem2['index'] = elem['index']          
+        } else {
+          elem2['index'] = i
+        }
         return html`
           ${elem2.is_translation===undefined||(elem2.is_translation!==undefined&&elem2.is_translation===true&&elem2.lang!==undefined&&elem2.lang===this.lang) ?
           html`              
@@ -460,14 +465,15 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
         <div style="display:block; padding-left:5px;">
           ${elemDef!==undefined&&Array.isArray(elemDef)?
           html`    
-            ${elemDef.map((elem, i) =>           
-            html`
+            ${elemDef.map((elem, i) =>   {    
+               elem['index'] = i
+           return html`
               ${elem.is_translation===undefined||(elem.is_translation!==undefined&&elem.is_translation===true&&elem.lang!==undefined&&elem.lang===this.lang) ?
               html`              
                 ${elem.elements!==undefined? html` ${this.print2LevelsObject(elem, data, data2)}`: html`${this.print1LevelObject(elem, data, data2)}`}
               `:nothing}
             `                
-            )}
+})}
           `:
             html`
             ${elemDef.is_translation===undefined||(elemDef.is_translation!==undefined&&elemDef.is_translation===true&&elemDef.lang!==undefined&&elemDef.lang===this.lang) ?
