@@ -268,12 +268,7 @@ export const MbEm=
                       }},                      
                       {"number1": { "label_en":"Num Samples to log", "label_es":"Num muestras a crear", "argumentName": "numSamplesToLog", "default_value": 1 } }                              
                       
-                    ],  		            
-                    "zzzFields":[
-                      
-                      {"zzzlist2": { "argumentName": "fieldValue", "targetValue": true }},
-
-                    ],                    
+                    ],  		                               
                     "xname" : "pointDialog",
                     "action": { "actionName": "LOGSAMPLE",
                       "endPointUrl": "Samples",

@@ -209,7 +209,7 @@ export const DemoViews = [
   },
   {"label":"EM-Water (mon_water)", "proc_instance_name": "mon_water", "views":[
     {"proc_instance_name": "mon_water", "view_name": "Home", "filter_name": "Home", "title": "Home"},
-    {"proc_instance_name": "mon_water", "view_name": "LogSamples", "filter_name": "SampleLogin", "title": "Log Samples"},
+    {"proc_instance_name": "mon_water", "view_name": "LogSamples", "filter_name": "", "title": "Log Samples"},
     {"proc_instance_name": "mon_water", "view_name": "SamplePending", "filter_name": "Sampling", "title": "Sampling"},
     {"proc_instance_name": "mon_water", "view_name": "ProductionLots", "filter_name": "SampleLot", "title": "Production Lots"},
     {"proc_instance_name": "mon_water", "view_name": "SamplePendingSampling", "filter_name": "SamplingPERS", "title": "Personel Sampling"},
@@ -241,6 +241,7 @@ export const DemoViews = [
     {"proc_instance_name": "stock", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
     {"proc_instance_name": "stock", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLotsGeneral", "title": "InventoryLots"},
     {"proc_instance_name": "stock", "view_name": "InventoryLotsReactivos", "filter_name": "InventoryLotsReactivos", "title": "InventoryLotsReactivos"},
+    {"proc_instance_name": "stock", "view_name": "InventoryLotsEstandPrim", "filter_name": "", "title": "InventoryLotsEstandPrim"},    
     {"proc_instance_name": "stock", "view_name": "InventoryControls", "filter_name": "InventoryControls", "title": "InventoryControls"},
     {"proc_instance_name": "stock", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
 	  {"proc_instance_name": "stock", "view_name": "configReferences", "filter_name": "configReferences", "title": "config References"},

@@ -292,6 +292,7 @@ export function ActionsFunctions(base) {
         
         if (action !== undefined) {
           await this.refreshMasterData(j, action)
+          await this.printLabels(j, action)
         }
     
         if (action.notGetViewData === undefined || action.notGetViewData === false) {

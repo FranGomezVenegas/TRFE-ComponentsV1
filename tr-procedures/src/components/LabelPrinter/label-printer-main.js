@@ -2,7 +2,7 @@
 import { LitElement } from 'lit';
 import { template } from './label-printer-template.js';
 import { styles } from './label-printer-styles.js';
-import './BrowserPrint-Zebra-1.1.250.min.js'; // Asegúrate de que la ruta sea correcta
+import '../../../demo/BrowserPrint-Zebra-1.1.250.min.js'; // Asegúrate de que la ruta sea correcta
 
 class ZebraPrinterComponent extends LitElement {
   static properties = {

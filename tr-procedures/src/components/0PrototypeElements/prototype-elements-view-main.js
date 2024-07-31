@@ -110,9 +110,9 @@ export class PrototypeElementsViewMain extends LitElement {
 
   render() {
     return html`
-      <button @click=${this._handleGenerateLabel}>Generate Label Preview</button>
+<!--      <button @click=${this._handleGenerateLabel}>Generate Label Preview</button>
       <button @click=${() => window.print()}>Print</button>
-      <div id="labelPreviewContainer" style="border: 1px solid #000; width: 400px; height: 600px;"></div>
+      <div id="labelPreviewContainer" style="border: 1px solid #000; width: 400px; height: 600px;"></div> -->
       ${template({
         selectedItems: this.selectedItems,
         lang: this.lang,
