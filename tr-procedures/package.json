@@ -3,7 +3,7 @@
   "description": "Component core for procedures elements with dynamic model",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.2.49",
+  "version": "0.2.51",
   "main": "index.js",
   "module": "index.js",
   "scripts": {

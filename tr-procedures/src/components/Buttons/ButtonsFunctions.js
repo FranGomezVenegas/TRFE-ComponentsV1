@@ -131,7 +131,7 @@ export function ButtonsFunctions(base) {
       `
     }
 
-    getButton(sectionModel, data, isProcManagement) {
+    getButton(sectionModel, data, selectedItems, isProcManagement) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
       //console.log("getButtondatasectionModel", sectionModel);
       //console.log('getButtondata', data)
@@ -322,7 +322,7 @@ export function ButtonsFunctions(base) {
           ${downloadable===undefined||downloadable.class===undefined?'':html`class="${downloadable.class}"`}
               icon="${downloadable.icon}" id="downloadable" 
               title="${downloadable.title['label_' + this.lang]}"             
-              @click=${() => this.downloadDataTableToCSV(sectionModel, data, this.selectedItems, downloadable)}
+              @click=${() => this.downloadDataTableToCSV(sectionModel, data, selectedItems, downloadable)}
               style="${downloadable!==undefined&&downloadable.style !== undefined ? downloadable.style : ''}">
           </mwc-icon-button>` : nothing
         }                

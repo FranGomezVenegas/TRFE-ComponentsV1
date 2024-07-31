@@ -92,3 +92,5 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.47 fix for SingleView, ready mechanism to re-run the query when jumping from one view/tab to anoter]
 [- v0.2.48 SingleView compatible with twoicons]
 [- v0.2.49 Added label preview prototype]
+[- v0.2.50 printable for read only tables]
+[- v0.2.51 export to csv, all data when nothing selected fixed]

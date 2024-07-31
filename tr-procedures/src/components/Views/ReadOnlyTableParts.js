@@ -331,11 +331,11 @@ export function ReadOnlyTableParts(base) {
                 `}  
             `
         }
-        getActionsButtons(elem, dataArr){
+        getActionsButtons(elem, dataArr, selectedItems){
           //console.log('getActionsButtons', dataArr)
             return html`
                 <div class="layout horizontal center flex wrap">
-                    ${this.getButton(elem, dataArr, true)}
+                    ${this.getButton(elem, dataArr, selectedItems, true)}
                 </div>
             `            
         }

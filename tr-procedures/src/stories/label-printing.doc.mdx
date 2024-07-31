@@ -1,0 +1,49 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+
+<Meta title="TRAZiT Concepts/Label Printing" />
+
+# Label Printing
+
+This section explains the concepts and contexts related to managing label printing.
+
+
+## Contexts: Backend / Frontend / Could / Hosted Server
+
+It is important to have on mind the context and the architecture.
+
+The worst scenario is the **Backend** and in Cloud** due to the Backend has no direct contact with the label printers
+  - In this usage case we need to install one application as a middleware to intermediate between the Backend and the label printer(s)
+
+The best usage case is the frontend because and then TRAZiT app can send the job to the label printer.
+  - This case requires to install Zebra Browse Print to allow the browsers printing labels, _refer here_ 
+
+### Actions that requires printing labels
+  - Each action, in TRAZiT, means a pair of request + response where the request is performed on clicking the action (by the frontend) and then the response once the API completes the action-execution (by the backend).
+  This usage case is considered 'Frontend' because it will be the frontend which interacts with the label printer.
+  - The TRAZiT Webapp is prepared as to send for printing when the response includes one property called **labelsToPrint**.
+
+```json
+//labelsToPrint property is one JSON Array then each entry means one label to be printed, as many times as numLabels indicates.
+//zplCode is the ZPL code that the label printer will interpret to print the label according to its format.
+[
+  {
+    
+   zplCode:'^XA^FX Location sampling^CF0,60^CF0,30^FO220,15^FD TRAZiT labels^FS^FO220,50^FDProduct: Aspirine^FS^FO220,80^BY2,3,75^BC^FD1^FS^XZ',
+   numLabels: 2 // this property is optional, when not present then one label is printed
+
+  },
+  {
+   zplCode:'^XA^FX Personnel sampling^CF0,60^CF0,30^FO220,15^FD TRAZiT labels^FS^FO220,50^FDProduct: Aspirine^FS^FO220,80^BY2,3,75^BC^FD2^FS^XZ'   
+  }
+
+### Future features
+
+  - config. Variable to set the behavior print in silent / display on screen
+  - Button for manual label printing, it has to include the variable to set print in silent / display on screen
+  - label format designer, allow user to add/remove content and load one object in context from this entity to emulate how it would be
+  - label printing log in db
+  - specify label printer name or use the default one
+  - label formats by entity
+  - label printer by user
+  
+]

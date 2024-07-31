@@ -2937,7 +2937,7 @@ export function DataViews(base) {
   
     const styles = this.getTableStyles(elem);
     const title = this.addViewTitle(elem, alternativeTitle, isSecondLevel);
-    const actionButtons = this.getActionsButtons(elem, this.selectedItems);
+    const actionButtons = this.getActionsButtons(elem, dataArr, this.selectedItems);
   
     if(dataArr && elem?.smartFilter?.filterValues && Object.keys(elem?.smartFilter?.filterValues).length != 0){
     //  console.log(dataArr)
