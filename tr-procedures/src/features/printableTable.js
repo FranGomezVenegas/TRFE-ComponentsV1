@@ -15,6 +15,7 @@ export function PrintableTable(base) {
         setPrintContentTable(index) {
             const styles = this._getAllStyles();
             const { header, content } = this._getPrintableContent(index);
+            this._getPrintableContent(index);
 
             this.printObj = {
                 header: header,
@@ -25,11 +26,11 @@ export function PrintableTable(base) {
                         </head>
                         <body>
                             <div id="print-content" style="display: flex; flex-wrap: wrap; padding-left: 30px; gap: 10px">
-                                ${content}
+                            ${content}
                             </div>
                         </body>
                     </html>
-                `
+                ` 
             };
         }
 
@@ -43,13 +44,20 @@ export function PrintableTable(base) {
         _getPrintableContent(index) {
             const table = this.shadowRoot.querySelector(`table[data-index="${index}"]`);
             if (table) {
-                return this._getTableHTML(table);
+                return this._getTableHTML(table, index);
             } else {
                 return this._getFallbackContent(index);
             }
         }
 
-        _getTableHTML(table) {
+        _getTableHTML(table, index) {
+            let getAllHeader = this.shadowRoot.querySelectorAll('#mainDiv > div > p')
+            let headerElement = getAllHeader[index]
+            if (!headerElement) {
+                headerElement = getAllHeader[0]
+            }
+            const headerTitle = headerElement.querySelector('span') ? headerElement.querySelector('span').textContent.trim() : '';
+            console.log(headerTitle)
             const clonedTable = table.cloneNode(true);
             const headers = clonedTable.querySelectorAll('th');
             let actionsColumnIndex = -1;
@@ -77,7 +85,7 @@ export function PrintableTable(base) {
                 input.parentNode.replaceChild(textNode, input);
             });
 
-            return { header: 'Table Print', content: clonedTable.outerHTML };
+            return { header: headerTitle, content: headerElement.outerHTML + clonedTable.outerHTML };
         }
 
         _getFallbackContent(index) {
