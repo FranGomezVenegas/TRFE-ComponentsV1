@@ -15,7 +15,7 @@ export class DragDropBox extends ActionsFunctions(GridFunctions(DialogsFunctions
   static get properties() {
     return {
       config: { type: Object },
-      data: { type: Object },
+      data: { type: Array },
       //viewMode: { type: Number},
       selectedIndex1: { type: String },
       selectedIndex2: { type: Number},
@@ -34,7 +34,7 @@ export class DragDropBox extends ActionsFunctions(GridFunctions(DialogsFunctions
     //this.dragBoxData = {id: undefined, x:"", y: "", name:"", temperature:"", study:""};
     this.dropBoxData = {id: undefined, x:"", y: "", name:"", temperature:"", study:""};  
     this.dragTrData = {id: undefined, temperature:"", study:""};
-    this.data = {};
+    this.data = [];
     this.dragElement = undefined;
     this.viewContentIndex = 0;
     this.listBoxViewMode = false;

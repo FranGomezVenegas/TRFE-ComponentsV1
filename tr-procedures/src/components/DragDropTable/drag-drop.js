@@ -114,11 +114,18 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
       this.selectedItems=[]
       this.ready=false;
     }
+    renderOld(){
+      return html`
+<!--        <div style='display:none;'>
+          ${this.ready===false ? html`${this.GetViewData()}`: nothing}            
+        </div> -->
+        <dragdrop-table .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
+          .data=${this.data}
+          .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-table>
+      `
+    }
     render(){
       return html`
-        <div style='display:none;'>
-          ${this.ready===false ? html`${this.GetViewData()}`: nothing}            
-        </div>
         <dragdrop-table .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .data=${this.data}
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-table>

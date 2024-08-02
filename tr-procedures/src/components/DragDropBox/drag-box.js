@@ -93,7 +93,9 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
         actionBeingPerformedModel:{type:Object},
         localProceduresModels: { type: Object},
         masterData:{type: Object},
-        contextMenuItems: { type: Array }
+        contextMenuItems: { type: Array },
+        useFakeData: {type: Boolean},
+        data: { type: Array },
 
       };
     }
@@ -108,21 +110,44 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
       this.localProceduresModels=ProceduresModel
       this.masterData={}
       this.contextMenuItems=[]
+      this.useFakeData=true
+      this.data=[]
     }
+
+    firstUpdated() {
+      if (this.useFakeData){
+        this.data=this.viewModelFromProcModel.fakedata
+      }else{
+        this.filterPerformAction()
+      }
+    }
+  
+    async filterPerformAction(e, flag) {
+  
+      await this.GetViewData(false)
+      this.data=this.requestData
+    }    
     resetView(){
       this.selectedItems=[]
       this.ready=false;
     }
     render(){
       return html`
+        <dragdrop-box .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
+          .data=${this.data}
+          .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-box>
+      `
+    }
+    renderWhenRequiresRefreshDueToMultipleViewsUsingIt(){
+      return html`
         <div style='display:none;'>
           ${this.ready===false ? html`${this.GetViewData()}`: nothing}  
         </div>
         <dragdrop-box .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
-          .data=${this.viewModelFromProcModel.fakedata}
+          .data=${this.data}
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-box>
       `
-    }
+    }    
     renderOriginal() {
       return html`
         <div>      

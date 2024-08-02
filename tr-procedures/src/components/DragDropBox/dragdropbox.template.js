@@ -6,7 +6,7 @@ import '../grid_with_buttons/tableRowDetail';
 import '@material/mwc-button';
 import print from './dragdropboxprint';
 export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
-    //console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
+    console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
     if (viewModel.boxPosicsViews===undefined){
         alert("Not found the property boxPosicsViews, it should be of at least one entry")
         return html``
@@ -188,7 +188,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
             null}
         </div>
         ` :
-        tmpLogic.data.boxContents && tmpLogic.data.boxContents.length > 0 ?
+        tmpLogic && tmpLogic.data && tmpLogic.data.boxContents && tmpLogic.data.boxContents.length > 0 ?
         html `
         ${viewModel.boxesTableColumns===undefined? html``:html`${boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data, lang)}`}                                    
         `: null}
@@ -379,7 +379,7 @@ function getDataFromRoot(elem, curDataForThisCard, filterValues) {
         elem.endPointPropertyArray.length === 1 &&
         elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
       ) {
-        curDataForThisCard=applyFilterToTheData(curDataForThisCard, filterValues)
+        //curDataForThisCard=applyFilterToTheData(curDataForThisCard, filterValues)
         return curDataForThisCard;
       }
       //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
@@ -396,18 +396,20 @@ function getDataFromRoot(elem, curDataForThisCard, filterValues) {
           if (i < elem.endPointPropertyArray.length - 1) {
             subJSON = curDataForThisCard[propertyName][0];
           } else {
-            return applyFilterToTheData(curDataForThisCard[propertyName], filterValues);
+            subJSON = curDataForThisCard[propertyName];
+            //return applyFilterToTheData(curDataForThisCard[propertyName], filterValues);
           }
         } else {
           subJSON = curDataForThisCard[propertyName];
         }
-        if (typeof subJSON === "undefined") {
-          return applyFilterToTheData(curDataForThisCard, filterValues);
-        } else {
+        //if (typeof subJSON === "undefined") {
+        //  return applyFilterToTheData(curDataForThisCard, filterValues);
+        //} else {
           curDataForThisCard = subJSON;
-        }
+        //}
       }
-      return applyFilterToTheData(curDataForThisCard, filterValues);
+      return curDataForThisCard
+      //return applyFilterToTheData(curDataForThisCard, filterValues);
       if (typeof subJSON === "undefined") {
         return undefined;
       } else if (elem.endPointPropertyArray.length % 2 === 0) {

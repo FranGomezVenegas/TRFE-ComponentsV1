@@ -15,13 +15,13 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
 
   static get properties() {
     return {
-      data: { type: Object },
+      data: { type: Array },
       viewModelFromProcModel: { type: Object },
       viewMode: { type: Number},
       selectedIndex1: { type: String },
       selectedIndex2: { type: Number},
       dragTable: {type: Object},
-	  showFilterButton:{type:Boolean}
+	    showFilterButton:{type:Boolean}
     };
   }
 
@@ -30,33 +30,33 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
     this.selectedTr = undefined;
     this.dragData = undefined;
     this.dragTable={}
-
-    this.viewModelFromProcModel={}
-    this.data={}
-    this.data2 = {
-      "table1":
-        [
-          {id: "1", study:"Study 1", temperature: "1º", "extraField":"demo"},
-          {id: "2", study:"Study 2", temperature: "2º", "extraField":"demo"},
-          {id: "3", study:"Study 3", temperature: "3º", "extraField":"demo"},
-          {id: "4", study:"Study 4", temperature: "4º", "extraField":"demo"}
-        ],
-      "table2":
-        [
-          {id: "10", study2:"Study 10", temperature: "10º", "extraField":"demo"},
-          {id: "20", study2:"Study 20", temperature: "20º", "extraField":"demo"},
-          {id: "30", study2:"Study 30", temperature: "30º", "extraField":"demo"},
-          {id: "40", study2:"Study 40", temperature: "40º", "extraField":"demo"}
-        ],
-      "table3":
-        [
-          {id: "5", study3:"Study 5", temperature: "50º", "extraField":"demo"},
-          {id: "6", study3:"Study 6", temperature: "60º", "extraField":"demo"},
-          {id: "7", study3:"Study 7", temperature: "70º", "extraField":"demo"},
-          {id: "8", study3:"Study 8", temperature: "80º", "extraField":"demo"}
-        ]
-    }
-    this.viewModelFromProcModel2= {
+    
+    this.viewModelFromProcModel2={}
+    this.data=[]
+    // this.data = {
+    //   "table1":
+    //     [
+    //       {id: "1", study:"Study 1", temperature: "1º", "extraField":"demo"},
+    //       {id: "2", study:"Study 2", temperature: "2º", "extraField":"demo"},
+    //       {id: "3", study:"Study 3", temperature: "3º", "extraField":"demo"},
+    //       {id: "4", study:"Study 4", temperature: "4º", "extraField":"demo"}
+    //     ],
+    //   "table2":
+    //     [
+    //       {id: "10", study2:"Study 10", temperature: "10º", "extraField":"demo"},
+    //       {id: "20", study2:"Study 20", temperature: "20º", "extraField":"demo"},
+    //       {id: "30", study2:"Study 30", temperature: "30º", "extraField":"demo"},
+    //       {id: "40", study2:"Study 40", temperature: "40º", "extraField":"demo"}
+    //     ],
+    //   "table3":
+    //     [
+    //       {id: "5", study3:"Study 5", temperature: "50º", "extraField":"demo"},
+    //       {id: "6", study3:"Study 6", temperature: "60º", "extraField":"demo"},
+    //       {id: "7", study3:"Study 7", temperature: "70º", "extraField":"demo"},
+    //       {id: "8", study3:"Study 8", temperature: "80º", "extraField":"demo"}
+    //     ]
+    // }
+    this.viewModelFromProcModel= {
         "type": "dragDropTables",
         "tables":[
           { "dragEnable": true,
@@ -338,14 +338,22 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
 
     this.dragElement = undefined;
     this.dragTr = false;
-	this.showFilterButton={
-    '1':false,
-    '2':false,
-    '3':false
+    this.showFilterButton={
+      '1':false,
+      '2':false,
+      '3':false
+    }		
   }
-	
-	
+  firstUpdated() {
+    this.filterPerformAction()
   }
+
+  async filterPerformAction(e, flag) {
+
+    await this.GetViewData(false)
+    this.data=this.requestData
+  }
+
   	toggleFilterDialog(name){
 		this.showFilterButton[name]=!this.showFilterButton[name]
     this.requestUpdate()
@@ -356,6 +364,29 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
 
 	//Filter From The table
   render() {
+    // this.data = {
+    //   "table1":
+    //     [
+    //       {id: "1", study:"Study 1", temperature: "1º", "extraField":"demo"},
+    //       {id: "2", study:"Study 2", temperature: "2º", "extraField":"demo"},
+    //       {id: "3", study:"Study 3", temperature: "3º", "extraField":"demo"},
+    //       {id: "4", study:"Study 4", temperature: "4º", "extraField":"demo"}
+    //     ],
+    //   "table2":
+    //     [
+    //       {id: "10", study2:"Study 10", temperature: "10º", "extraField":"demo"},
+    //       {id: "20", study2:"Study 20", temperature: "20º", "extraField":"demo"},
+    //       {id: "30", study2:"Study 30", temperature: "30º", "extraField":"demo"},
+    //       {id: "40", study2:"Study 40", temperature: "40º", "extraField":"demo"}
+    //     ],
+    //   "table3":
+    //     [
+    //       {id: "5", study3:"Study 5", temperature: "50º", "extraField":"demo"},
+    //       {id: "6", study3:"Study 6", temperature: "60º", "extraField":"demo"},
+    //       {id: "7", study3:"Study 7", temperature: "70º", "extraField":"demo"},
+    //       {id: "8", study3:"Study 8", temperature: "80º", "extraField":"demo"}
+    //     ]
+    // }
     return template({
       definition: this.viewModelFromProcModel.objects,
       dropTableTr: this._dropTableTr,
