@@ -299,12 +299,6 @@
     "viewName": "drag-drop", 
     "filterName" :  "drag-drop" 
   },  
-  "localDefaultViefffw": {
-    "procName":  "fake-developers", 
-    "procNameData":  "mb_em",
-    "viewName": "drag-box", 
-    "filterName" :  "drag-box" 
-  },  
   "localDefaultViewxxx": {
     "procName":  "fake-developers", 
     "procNameData":  "RandD",
@@ -393,6 +387,13 @@
 		"viewName": "LogSamples",
 		"filterName": ""
 	},
+  "localDefaultView": {
+    "procName":  "fake-developers", 
+    "procNameData":  "mb_em",
+    "viewName": "drag-box", 
+    "filterName" :  "drag-box" 
+  },  
+
   "fakeEnd":{
   }  
  

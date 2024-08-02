@@ -3105,7 +3105,7 @@ export const Stock =
 	  },
 	  {
 		"type": "parentReadOnlyTable",
-		"allowMultiSelection": false,
+		"allowMultiSelection": true,
 		"refreshable": {
 		  "enable": true
 		},
@@ -3117,53 +3117,43 @@ export const Stock =
 		},
 		"columns": [
 		  {
+			"name": "category",
 			"label_en": "Category",
 			"label_es": "Categoría",
-			"sort": false,
-			"filter": true,
-			"is_icon": false,
-			"width": "20%",
-			"align": "left"
+			"addToSmartFilter": true
 		  },
 		  {
+			"name": "reference",
 			"label_en": "Reference",
 			"label_es": "Referencia",
-			"sort": false,
-			"filter": true,
-			"is_icon": false,
-			"width": "20%"
+			"addToSmartFilter": true
 		  },
 		  {
+			"name": "lot_name",
 			"label_en": "Name",
 			"label_es": "lot_id",
-			"Nombre": false,
 			"filter": true,
-			"is_icon": false,
-			"width": "10%"
+			"addToSmartFilter": true
 		  },
 		  {
+			"name": "status",
 			"label_en": "Status",
 			"label_es": "Estado",
-			"sort": false,
-			"filter": true,
-			"width": "10%"
+			"addToSmartFilter": true
 		  },
 		  {
+			"name": "quantity",
 			"label_en": "Quantity",
 			"label_es": "Cantidad",
-			"sort": false,
-			"filter": true,
-			"width": "10%"
+			"addToSmartFilter": true
 		  },
 		  {
+			"name": "quantity_uom",
 			"label_en": "uom",
 			"label_es": "uom",
-			"sort": false,
-			"filter": true,
-			"width": "10%"
+			"addToSmartFilter": true
 		  }
 		],
-		"row_buttons": [],
 		"actions": [
 		  {
 			"actionName": "CONFIG_ADD_REFERENCE",
@@ -3472,8 +3462,8 @@ export const Stock =
 			"button": {
 			  "icon": "create_new_folder",
 			  "title": {
-				"label_en": "New",
-				"label_es": "Nuevo"
+				"label_en": "New lot",
+				"label_es": "Nuevo lote"
 			  },
 			  "requiresGridItemSelected": false
 			},
@@ -3666,6 +3656,59 @@ export const Stock =
 			}
 		  },
 		  {
+			"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",
+			"endPoint": "/app/procs/InvTrackingAPIqueries",
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "rule",
+			  "title": {
+				"label_en": "Lot Audit",
+				"label_es": "Auditoría de Lote"
+			  },
+			  "requiresGridItemSelected": true
+			},
+			"clientMethod": "getObjectAuditInfo",
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  }
+			],
+			"dialogInfo": {
+			  "name": "auditDialog",
+			  "automatic": true,
+			  "action": [
+				{
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "requiresDialog": false,
+				  "notGetViewData": true,
+				  "secondaryActionToPerform": {
+					"name": "getObjectAuditInfo",
+					"endPointParams": [
+					  {
+						"argumentName": "lotName",
+						"selObjectPropertyName": "lot_name"
+					  }
+					]
+				  },
+				  "clientMethod": "signAudit",
+				  "endPointParams": [
+					{
+					  "argumentName": "lotName",
+					  "selObjectPropertyName": "lot_name"
+					},
+					{
+					  "argumentName": "auditId",
+					  "targetValue": true
+					}
+				  ]
+				}
+			  ]
+			}
+		  },
+		  {
 			"actionName": "TURN_LOT_AVAILABLE",
 			"requiresDialog": false,
 			"button": {
@@ -3675,7 +3718,7 @@ export const Stock =
 				"label_es": "Poner Disponible"
 			  },
 			  "requiresGridItemSelected": true,
-			  "xshowWhenSelectedItem": [
+			  "showWhenSelectedItem": [
 				{
 				  "column": "is_locked",
 				  "value": false
@@ -3714,7 +3757,7 @@ export const Stock =
 			  "hideWhenSelectedItem": [
 				{
 				  "column": "status",
-				  "value": "AVAILABLE_FOR_USER"
+				  "value": "AVAILABLE_FOR_USE"
 				}
 			  ]
 			},
@@ -3730,6 +3773,134 @@ export const Stock =
 			  {
 				"argumentName": "reference",
 				"selObjectPropertyName": "reference"
+			  }
+			]
+		  },
+		  {
+			"actionName": "COMPLETE_QUALIFICATION",
+			"requiresDialog": true,
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "list8": {
+					"label_en": "Decision",
+					"label_es": "Decisión",
+					"items": [
+					  {
+						"keyName": "ACCEPTED",
+						"keyValue_en": "Accepted",
+						"keyValue_es": "Aceptado"
+					  },
+					  {
+						"keyName": "ACCEPTED_WITH_RESTRICTIONS",
+						"keyValue_en": "Accepted with restrictions",
+						"keyValue_es": "Aceptado con restricciones"
+					  },
+					  {
+						"keyName": "REJECTED",
+						"keyValue_en": "Rejected",
+						"keyValue_es": "Rechazado"
+					  }
+					]
+				  }
+				}
+			  ]
+			},
+			"button": {
+			  "icon": "alarm_on",
+			  "title": {
+				"label_en": "Complete Qualification",
+				"label_es": "Completar Cualificación"
+			  },
+			  "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": {
+				"column": "status",
+				"value": "QUARANTINE"
+			  }
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "decision",
+				"element": "list8"
+			  }
+			]
+		  },
+		  {
+			"actionName": "COMPLETE_QUALIFICATION",
+			"requiresDialog": true,
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "list9": {
+					"label_en": "Decision",
+					"label_es": "Decisión",
+					"items": [
+					  {
+						"keyName": "ACCEPTED",
+						"keyValue_en": "Accepted",
+						"keyValue_es": "Aceptado"
+					  },
+					  {
+						"keyName": "ACCEPTED_WITH_RESTRICTIONS",
+						"keyValue_en": "Accepted with restrictions",
+						"keyValue_es": "Aceptado con restricciones"
+					  },
+					  {
+						"keyName": "REJECTED",
+						"keyValue_en": "Rejected",
+						"keyValue_es": "Rechazado"
+					  }
+					]
+				  }
+				}
+			  ]
+			},
+			"button": {
+			  "icon": "alarm_on",
+			  "title": {
+				"label_en": "Complete Qualification + Available",
+				"label_es": "Completar Cualificación + Disponible"
+			  },
+			  "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": {
+				"column": "status",
+				"value": "QUARANTINE"
+			  }
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "decision",
+				"element": "list9"
+			  },
+			  {
+				"argumentName": "turn_available_lot",
+				"fixValue": "true"
 			  }
 			]
 		  },
@@ -3888,59 +4059,6 @@ export const Stock =
 				"defaultValue": ""
 			  }
 			]
-		  },
-		  {
-			"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",
-			"endPoint": "/app/procs/InvTrackingAPIqueries",
-			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
-			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",
-			"requiresDialog": true,
-			"button": {
-			  "icon": "rule",
-			  "title": {
-				"label_en": "Lot Audit",
-				"label_es": "Auditoría de Lote"
-			  },
-			  "requiresGridItemSelected": true
-			},
-			"clientMethod": "getObjectAuditInfo",
-			"endPointParams": [
-			  {
-				"argumentName": "lotName",
-				"selObjectPropertyName": "lot_name"
-			  }
-			],
-			"dialogInfo": {
-			  "name": "auditDialog",
-			  "automatic": true,
-			  "action": [
-				{
-				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
-				  "requiresDialog": false,
-				  "notGetViewData": true,
-				  "secondaryActionToPerform": {
-					"name": "getObjectAuditInfo",
-					"endPointParams": [
-					  {
-						"argumentName": "lotName",
-						"selObjectPropertyName": "lot_name"
-					  }
-					]
-				  },
-				  "clientMethod": "signAudit",
-				  "endPointParams": [
-					{
-					  "argumentName": "lotName",
-					  "selObjectPropertyName": "lot_name"
-					},
-					{
-					  "argumentName": "auditId",
-					  "targetValue": true
-					}
-				  ]
-				}
-			  ]
-			}
 		  },
 		  {
 			"actionName": "ADD_ATTACHMENT",
@@ -4175,7 +4293,8 @@ export const Stock =
 			  }
 			]
 		  }
-		]
+		],
+		"row_buttons": []
 	  }
 	]
   },

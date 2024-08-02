@@ -460,7 +460,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'dragDropObjects' ? html`
         <drag-drop .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
-          .model=${this.viewModelFromProcModel} ?ready="false"
+          .model=${this.viewModelFromProcModel} ?ready="false" .data=${this.requestData}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></drag-drop>      
       `:nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'Dashboard' ? html`
