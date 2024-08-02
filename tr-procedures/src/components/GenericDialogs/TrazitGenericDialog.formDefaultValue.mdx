@@ -1,0 +1,72 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs';
+
+
+<Meta title="TRAZiT Actions/Dialogs/Generic Dialog doc- Form Default Value possibilities" />
+
+# Form Default Value
+
+![Example of Image](./LOGO_TRAZIT_2023.jpeg)
+
+<video width="320" height="240" controls>
+  <source src="./labelprinting.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+The `formDefaultValue` function initializes form fields with default values based on the specified configuration. Below are examples demonstrating different field configurations and how they are handled by the function.
+
+## Options
+
+### 1. default_value property
+
+When fields have a `default_value` property, `formDefaultValue` assigns this value 'as is' to the corresponding form field.
+
+```json
+{
+  "text1": {
+    "label_en": "Parent Code",
+    "label_es": "Código paterno",
+    "default_value": "demo default value"
+  }
+}
+```
+
+### 2. getNextId property
+
+This feature requires the boolean property **getNextId set to true** and **internalVariableObjName** to set the array variable to count the current length and get the next index
+
+(possible enhancement, getNextMaxId. In this case it would be to get the max value in any entry and return it +1)
+
+
+```json
+{
+    "number1": {
+        "label_en": "Order",
+        "label_es": "Orden",
+        "getNextId" : true,
+        "internalVariableObjName": "selectedItem"
+    }
+}
+```
+
+### 3. selObjectPropertyName property, from the currently selected object.
+
+This feature allow us to set the default value from the currently selected object, specially for tables and cards.
+
+
+```json
+{
+    TBD
+}
+```
+### 4. internalVariableObjName + internalVariableObjProperty properties, from any variable we know is in context
+
+This feature allow us to set the default value from any object in context, this probably requires advanced skills as admin.
+It works for both, objects and arrays. The variable name that contains the data is **internalVariableObjName** and **internalVariableObjProperty** for the property from which get the data
+    In case of one array the data comes from the first entry
+(possible enhancement, add arrayIndex for arrays to decide the index where the entry object is allocated into the array)
+
+```json
+{
+    TBD
+}
+```

@@ -964,8 +964,23 @@ export function TrazitGenericDialogs(base) {
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&                
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
                 if (this[fldObj[keyName].internalVariableObjName]===undefined||this[fldObj[keyName].internalVariableObjName][0]===undefined){return}                    
-                this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
-            }            
+                
+                if (Array.isArray(this[fldObj[keyName].internalVariableObjName])){
+                    this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
+                }else{
+                    this[keyName].value=this[fldObj[keyName].internalVariableObjName][fldObj[keyName].internalVariableObjProperty]
+                }
+            }    
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&                
+                fldObj[keyName].getNextId!==undefined&&fldObj[keyName].getNextId!==null&&fldObj[keyName].getNextId===true){                
+                    //let varName=
+                    if (this[fldObj[keyName].internalVariableObjName]===undefined){
+                        this[keyName].value=1
+                    }else{
+                        this[keyName].value=this[fldObj[keyName].internalVariableObjName].length+1
+                    }
+            }               
+                
         }
     }    
     resetFields(e){           
@@ -1155,7 +1170,7 @@ export function TrazitGenericDialogs(base) {
             return fldDef.default_value
         } else if (fldDef.getNextId!==undefined&&fldDef.getNextId===true&&fldDef.internalVariableObjName!==undefined){
             console.log(this[fldDef.internalVariableObjName].length+1)
-            return String(this[fldDef.internalVariableObjName].length+1)
+            return this[fldDef.internalVariableObjName].length+1
         } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          
             if (this[fldDef.internalVariableSimpleObjName]===undefined||this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
               let msg=""
