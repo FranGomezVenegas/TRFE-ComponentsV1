@@ -436,6 +436,8 @@ export class DragDropBox extends TrazitGenericDialogs(ListsFunctions(ApiFunction
         <table class="dragdropable TRAZiT-DefinitionArea">
           <thead>
             ${elem.columns.map((column, i) => html`<th>${column.label_en}</th>`)}
+                        ${elem.row_buttons === undefined
+                          ? html``: html`<th class="actions-column">${this.lang==='es'?`Acciones`:`Actions`}</th>`}            
           </thead>
           <tbody>
             ${dataArr === undefined || !Array.isArray(dataArr)
@@ -498,7 +500,7 @@ export class DragDropBox extends TrazitGenericDialogs(ListsFunctions(ApiFunction
                         ${elem.row_buttons === undefined
                           ? html``
                           : html`
-                              <td>
+                              <td class="actions-column">
                                 <div class="layout horizontal center flex wrap">
                                   ${this.getButtonForRows(elem.row_buttons, p, false, undefined)}
                                 </div>
@@ -535,19 +537,33 @@ export class DragDropBox extends TrazitGenericDialogs(ListsFunctions(ApiFunction
     const startTime = new Date(p[fld.fldForTimer]);
     const currentTime = new Date();
     const timeDifference = Math.floor((currentTime - startTime) / 1000); // difference in seconds
-
+  
     let timeClass = 'black';
-    if (timeDifference > fld.startWarning && timeDifference < fld.startAlert) {
-      timeClass = 'yellow';
-    } else if (timeDifference >= fld.startAlert) {
-      timeClass = 'red';
-    }
-
+    let timeDifferenceText = `${timeDifference} seconds`;
+    const fontFamily = 'Montserrat';
+  
+    if (isNaN(timeDifference)) {
+      if (this.lang==="es"){
+        timeDifferenceText = 'Tanda sin iniciar';
+      }else{
+        timeDifferenceText = 'Batch not started';
+      }
+      timeClass = 'black';
+    } else {
+      if (timeDifference > fld.startWarning && timeDifference < fld.startAlert) {
+        timeClass = 'yellow';
+      } else if (timeDifference >= fld.startAlert) {
+        timeClass = 'red';
+      }
+    }  
     return {
-      timeDifference: `${timeDifference} seconds`,
-      class: timeClass
+      timeDifference: timeDifferenceText,
+      class: timeClass,
+      style: {
+        fontFamily: fontFamily
+      }
     };
-  }
+  }  
 }
 
 window.customElements.define('dragdrop-box', DragDropBox);

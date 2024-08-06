@@ -9,85 +9,83 @@ import '../ParentReadOnlyTable/main'; // Adjust the import path as needed
 import print from './dragdropboxprint';
 export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
     console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
-    if (viewModel.boxPosicsViews===undefined){
+    if (viewModel.boxPosicsViews === undefined) {
         alert("Not found the property boxPosicsViews, it should be of at least one entry")
         return html``
-        
     }
-    
-    let boxAllowMoveObject=false
-    let boxContentStructured=true    
-    let totalStr=""
-    if (selectedBox!==undefined){
-        boxContentStructured=selectedBox.content_structured
-        if (selectedBox.allow_move_objects!==undefined){
-            boxAllowMoveObject=selectedBox.allow_move_objects
+
+    let boxAllowMoveObject = false
+    let boxContentStructured = true
+    let totalStr = ""
+    if (selectedBox !== undefined) {
+        boxContentStructured = selectedBox.content_structured
+        if (selectedBox.allow_move_objects !== undefined) {
+            boxAllowMoveObject = selectedBox.allow_move_objects
         }
-        if (viewModel.forceAllowMoveObjectAsViewRule!==undefined&&viewModel.forceAllowMoveObjectAsViewRule===true){
-            boxAllowMoveObject=true
+        if (viewModel.forceAllowMoveObjectAsViewRule !== undefined && viewModel.forceAllowMoveObjectAsViewRule === true) {
+            boxAllowMoveObject = true
         }
-        let selectedBoxContentData=selectedBox[viewModel.boxesContentColumns.endPointPropertyArray]
-        let occupied=selectedBoxContentData===undefined?0:selectedBoxContentData.length
-        if (boxContentStructured===true){
-            let total=selectedBox.cols*selectedBox.rows
-            totalStr=String(occupied)+(lang==="en"?' of ':' de ')+ String(total)                
-        }else{
-            totalStr="Total: "+String(occupied)
+        let selectedBoxContentData = selectedBox[viewModel.boxesContentColumns.endPointPropertyArray]
+        let occupied = selectedBoxContentData === undefined ? 0 : selectedBoxContentData.length
+        if (boxContentStructured === true) {
+            let total = selectedBox.cols * selectedBox.rows
+            totalStr = String(occupied) + (lang === "en" ? ' of ' : ' de ') + String(total)
+        } else {
+            totalStr = "Total: " + String(occupied)
         }
     }
     return html`
-    <div style="display:flex; flex-direction:column; gap:12px; margin:30px;">    
-    <div style="display:flex; flex-direction:row; gap:12px;">    
-        <div style="width: 100%; gap: 4px; display: flex; flex-direction: column;">        
-            <div style="display:flex; justify-content: space-between; align-items: center;"> 
-                <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
-                <mwc-icon-button icon="print" @click=${() => { print(selectedBox!==undefined, componentRef) }}></mwc-icon-button>
-                ${selectedBox===undefined ? html`
-                    
-            ${viewModel.boxesTableColumns===undefined? html``:html`${componentRef._boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data, lang, componentRef)}`}                                    
+    <div class="container">    
+        <div class="row"> <!-- flex-direction: row para alinear en fila -->
+            <div class="col">        
+                <div style="display:flex; justify-content: space-between; align-items: center;"> 
+                    <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
+                        <mwc-icon-button icon="print" @click=${() => { print(selectedBox !== undefined, componentRef) }}></mwc-icon-button>
+                        ${selectedBox === undefined ? html`
+                            ${viewModel.boxesTableColumns === undefined ? html`` : html`${componentRef._boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data, lang, componentRef)}`}
+                        ` : html `
+                            <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
+                            <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
+                            <div class="view-btn ${viewModel.viewMode == 2 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(2)}> List View </div>
+                            <div id="totalContentSummary" style="color:#24C0EB; font-weight: bold; font-size: 16px;">${totalStr}</div>
+                            ${viewModel.boxPosicsViews === undefined || viewModel.boxPosicsViews.length == 1 ? html`` : html`
+                                <div id="viewPosicsButton">
+                                    <mwc-icon style="color:#54CCEF; cursor:pointer;" @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
+                                </div>
+                            `}
+                        `}
+                    </div>
+                </div>
 
-                    `: html `
-                    <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
-                    <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
-                    <div class="view-btn ${viewModel.viewMode == 2 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(2)}> List View </div>
-                    
-                `}
-                </div>
-                <div style="color:#24C0EB; font-weight: bold; font-size: 16px;">${totalStr}</div>
-                <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;">
-                    ${viewModel.objectsToDragColumns===undefined?html``:html`<div class="accept-btn" @click=${() => tmpLogic.setViewTable()}> ${tmpLogic.setViewTableButtonLabel()} </div>`}
-                </div>
-            
+                ${boxContentStructured === true ?
+                    html`${boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
+                :
+                    html`${boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
+                }
             </div>
-
-        ${boxContentStructured===true?
-            html`${boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
-        :
-            html`${boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
-        }
-        </div>  
-        ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
-        <div >
-            <mwc-icon style="color:#54CCEF; cursor:pointer;" @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
-            ${tmpLogic.listBoxViewMode ? html `
-                ${viewModel.boxPosicsViews.map((view, i) => html `
-                <div style="display:flex;">
-                    <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}>                            
-                    <label for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}> 
-                        <multi-select id="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)} .label="" .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${view} .options=${{}}> </multi-select>                            
-                    </label><br>                            
-                </div>                        
-                `)}
-            `: 
-            html ``}
+            <div class="col"> <!-- Añadir margen izquierdo y height: 100% -->
+                ${tmpLogic.listBoxViewMode && selectedBox!==undefined ? html `
+                    ${viewModel.boxPosicsViews.map((view, i) => html `
+                    <div style="display:flex;">
+                        <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}>                            
+                        <label for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}> 
+                            <multi-select id="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)} .label="" .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${view} .options=${{}}> </multi-select>                            
+                        </label><br>                            
+                    </div>                        
+                    `)}
+                ` : 
+                html ``}
+            </div>
+            <div class="col"> <!-- Añadir margen izquierdo y height: 100% -->
+                ${viewModel.objectsToDragColumns === undefined ? html`` : html`${dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data, componentRef)}`}
+            </div>
         </div>
-        `}
-
-        ${viewModel.objectsToDragColumns===undefined? html``:html`${dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data, componentRef)}`}
-    </div>    
     </div>        
     `;
 };
+
+
+
 function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject){
     let boxPosicsViews=[]
     if (selectedBox!==undefined&&selectedBox.boxPosicsViews!==undefined){
@@ -222,60 +220,71 @@ function printObjectData(tmpLogic, selectedBox, axisCols, boxPosicsViews, i, j){
     `
 }
 
-function printItemByViewFilter(selItem, tmpLogic, boxPosicsViews, contentStructured){
-    //alert(curFld)
+function printItemByViewFilter(selItem, tmpLogic, boxPosicsViews, contentStructured) {
+    let columns=1
+    if (tmpLogic.numColumnsForInfo!==undefined){
+        columns=tmpLogic.boxPosicsViewNumColumnsForInfo
+    }
     return html`
-    <div class="data-view" style="${contentStructured===true?'':'background-color: #50dcf7; border: 2px solid #1473e6; margin-bottom: 5px;'}"}>
-    ${boxPosicsViews[tmpLogic.viewContentIndex].map((curFld, i) => html`
-        <div>${curFld}: ${selItem[curFld]}</div>
-    `)}
+    <div class="data-view ${contentStructured ? '' : 'custom'}" style="grid-template-columns: repeat(${columns}, 1fr);">
+        ${boxPosicsViews[tmpLogic.viewContentIndex].map((curFld, i) => html`
+            <div>${tmpLogic.includeFieldIndex===undefined?`${i+1}.`:``}${curFld}: ${selItem[curFld]}</div>
+        `)}
     </div>
+    `;
+}
+
+function dragObjectsTable(tmpLogic, elem, data, componentRef) {
+    let dataArr = componentRef.TRAZiTgetDataFromRoot(elem, data)
+    return html`
+    <div style="flex: 1; display: flex; flex-direction: column; height: 100%;"> <!-- Añadido display: flex y height: 100% para ocupar todo el espacio -->
+        <div id="toggleDisplayDroggableTable" style="display:flex; flex-direction:row; gap: 4px; align-items: center;">
+            <div class="accept-btn" @click=${() => tmpLogic.setViewTable()}> ${tmpLogic.setViewTableButtonLabel()}</div>
+        </div>
+        ${tmpLogic.viewTable ? html`
+            <div style="flex: 1; overflow-y: auto;"> <!-- Añadido overflow-y: auto para el scroll vertical -->
+                ${elem.columns === undefined ? html`` : html`
+                    <table class="dragdropable TRAZiT-DefinitionArea" style="width: 100%;"> 
+                        <thead>
+                            ${elem.columns.map((column) => html`<th>${column.label_en}</th>`)}
+                        </thead>
+                        <tbody>
+                            ${dataArr === undefined || !Array.isArray(dataArr) ? html`No Data` : 
+                            html`  
+                                ${dataArr.map((p, idx) => html`
+                                <tr class="dragdropabletr" draggable="true" @dragstart=${(e) => tmpLogic.dragTableTr(e, elem, p)}>
+                                    ${elem.columns.map((fld, index) => fld.is_icon !== undefined && fld.is_icon == true ? 
+                                        fld.icon_class ?
+                                            html`<div class="left-area">
+                                                ${this.iconRenderer(p, fld.name, idx, fld)}
+                                                <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
+                                            </div>` :
+                                            html`${this.iconRenderer(p, fld.name, idx, fld)}
+                                                <img src="${tmpLogic.iconRendererSrc(p, fld.name, idx, fld)}" style="width:20px">` 
+                                        :     
+                                        html`<td @click="${() => componentRef.shadowRoot.querySelector('#detail' + idx).toggle()}">${p[fld.name]}</td>`                    
+                                    )}
+                                    ${elem.row_buttons === undefined ? html`` : html`<td><div class="layout horizontal center flex wrap">${componentRef.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>`}
+                                </tr>
+                                <table-row-detail id="detail${idx}">
+                                <div slot="details">
+                                    <!-- Aquí puedes poner el contenido detallado para esta fila -->
+                                </div>
+                                </table-row-detail>`)}
+                            `}
+                        </tbody>
+                    </table>
+                `}
+            </div>
+        ` : null}
+    </div> 
     `
 }
 
-function dragObjectsTable(tmpLogic, elem, data, componentRef){
-    let dataArr = componentRef.TRAZiTgetDataFromRoot(elem, data)
-    return html`
-    ${tmpLogic.viewTable ? html`
-    <div style="margin-top:42px">
-        <table class="dragdropable TRAZiT-DefinitionArea"> 
-            <thead>
-                ${elem.columns.map((column) => html`<th>${column.label_en}</th>`)}
-            </thead>
-            <tbody>
-                ${dataArr === undefined || !Array.isArray(dataArr) ? html`No Data` : 
-                html`  
-                    ${dataArr.map((p, idx) => html`
-                    <tr class="dragdropabletr" draggable="true" @dragstart=${(e) => tmpLogic.dragTableTr(e, elem, p)}>
-                        ${elem.columns.map((fld, index) => fld.is_icon !== undefined && fld.is_icon == true ? 
-                            fld.icon_class ?
-                                html`<div class="left-area">
-                                    ${this.iconRenderer(p, fld.name, idx, fld)}
-                                    <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                                </div>` :
-                                html`${this.iconRenderer(p, fld.name, idx, fld)}
-                                    <img src="${tmpLogic.iconRendererSrc(p, fld.name, idx, fld)}" style="width:20px">` 
-                            :     
-                            html`<td @click="${() => componentRef.shadowRoot.querySelector('#detail' + idx).toggle()}">${p[fld.name]}</td>`                    
-                        )}
-                        ${elem.row_buttons === undefined ? html`` : html`<td><div class="layout horizontal center flex wrap">${componentRef.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>`}
-                    </tr>
-                    <table-row-detail id="detail${idx}">
-                      <div slot="details">
-                      dd
-                        <!-- Aquí puedes poner el contenido detallado para esta fila -->
-                      </div>
-                    </table-row-detail>`)}
-                `}
-            </tbody>
-        </table>
-    </div> 
-    ` : null}
-    `
-  }
+
   
 function boxContentTable(tmpLogic,elem, selectedBox){
-    let selectedBoxContentData=selectedBox[elem.boxesContentColumns.endPointPropertyArray]
+    let selectedBoxContentData=selectedBox[elem.endPointPropertyArray]
 
     return html`
     <table class="TRAZiT-DefinitionArea dragdropable">

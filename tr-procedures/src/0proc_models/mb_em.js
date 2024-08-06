@@ -2659,10 +2659,10 @@ export const MbEm=
           "buttonForQuery": false,
           "requiresDialog": true,
           "button": {
-            "icon": "add_task",
+            "icon": "link",
             "title": {
-              "label_en": "Add Analysis",
-              "label_es": "Añadir Ensayo"
+              "label_en": "Assign Incubator",
+              "label_es": "Asignar Incubadora"
             },
             "requiresGridItemSelected": false
           },
@@ -2710,58 +2710,6 @@ export const MbEm=
             "automatic": true
           }
         },        
-        {
-          "actionName": "EM_BATCH_ASSIGN_INCUB",
-          "requiresDialog": true,
-          "endPointUrl": "Programs",
-          "clientMethod": "getAssign",
-          "button": {
-            "icon": "link",
-            "title": {
-              "label_en": "Assign Incubator",
-              "label_es": "Asignar Incubadora"
-            },
-            "requiresGridItemSelected": false,
-            "alternativeItemPropertyName": "selectedBatches",
-            "disabledBEState": "incubation_start"
-          },
-          "dialogQueries": [
-            {
-              "actionName": "GET_INCUBATORS_LIST",
-              "endPoint": "/moduleenvmon/EnvMonIncubatorAPIqueries",
-              "variableForData": "incubatorsList",
-              "endPointParams": [
-                {
-                  "argumentName": "incubStage",
-                  "fixValue": "1"
-                }
-              ]
-            }
-          ],
-          "dialogInfo": {
-            "name": "assignDialog",
-            "automatic": true,
-            "action": {
-              "actionName": "EM_BATCH_ASSIGN_INCUB",
-              "endPointUrl": "Batches",
-              "endPointParams": [
-                {
-                  "argumentName": "batchName",
-                  "internalVariableObjName": "selectedBatches",
-                  "internalVariableObjProperty": "name"
-                },
-                {
-                  "argumentName": "incubatorName",
-                  "targetValue": true
-                },
-                {
-                  "argumentName": "incubStage",
-                  "targetValue": true
-                }
-              ]
-            }
-          }
-        },
         {
           "actionName": "EM_BATCH_INCUB_START",
           "endPointUrl": "Programs",
@@ -2883,6 +2831,7 @@ export const MbEm=
         {"name": "id", "criteria":{"type": "selectedBox_value", "selectedBoxPropName": "anyProperty"}}
       ]
     },      
+    "boxPosicsViewNumColumnsForInfo": 2,
     "boxPosicsViews":[
       ["sample_id", "logged_on", "location_name"],
       ["sample_id", "logged_on", "location_name", "program_name", "area"],
