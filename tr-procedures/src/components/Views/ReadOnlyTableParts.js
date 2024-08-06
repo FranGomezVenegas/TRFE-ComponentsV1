@@ -751,8 +751,27 @@ export function ReadOnlyTableParts(base) {
               )}
               ${this.generateRowButtons(elem, curRow, parentData, rowIndex, handler, lang)}
           `
+        }
+
+        titleLang(colDef) {
+          let titleStr = "";
+          if (colDef.title !== undefined) {
+            return colDef.title["label_" + this.lang];
+          } else {
+            return colDef.name;
           }
-      
+          return titleStr;
+        }
+        fieldsToDiscard(fld) {
+          if (fld.is_translation === undefined || fld.is_translation === false) {
+            return false;
+          }
+          if (fld.is_translation === true && fld.name.endsWith(this.lang)) {
+            return false;
+          } else {
+            return true;
+          }
+        }        
    
     }
 }

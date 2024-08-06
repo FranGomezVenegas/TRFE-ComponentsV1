@@ -173,7 +173,7 @@ export class CommonCore extends LitElement {
         throw err
       }
     }).then(j => {
-      this.refreshMasterData(j)
+      this.refreshMasterData(j)      
       if (feedback) {
         this.dispatchEvent(new CustomEvent('success', {
           detail: {...j, log: log},

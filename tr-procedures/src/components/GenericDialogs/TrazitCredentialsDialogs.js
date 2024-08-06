@@ -189,12 +189,16 @@ export function TrazitCredentialsDialogs(base) {
     this.updateComplete.then(() => {
       // manually backgrounding the dialog box
       // password dialog
-      this.dialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
-      this.dialogSurface.style.backgroundSize = "cover";
-      this.dialogSurface.style.backgroundRepeat = "no-repeat";
-      this.dialogSurface.style.textAlign = "center";
-      this.credDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
-      this.credDialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
+      if (this.dialogSurface!==null){
+        this.dialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
+        this.dialogSurface.style.backgroundSize = "cover";
+        this.dialogSurface.style.backgroundRepeat = "no-repeat";
+        this.dialogSurface.style.textAlign = "center";
+      }
+      if (this.credDialog!==null){
+        this.credDialog.shadowRoot.querySelector("h2#title").style.fontSize = "20px";
+        this.credDialog.shadowRoot.querySelector("#content").style.paddingBottom = "0";
+      }
     })
   }
 

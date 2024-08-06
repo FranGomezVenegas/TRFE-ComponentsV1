@@ -345,10 +345,10 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
     }		
   }
   firstUpdated() {
-    this.filterPerformAction()
+    this.filterPerformAction() 
   }
 
-  async filterPerformAction(e, flag) {
+  async filterPerformAction() {
 
     await this.GetViewData(false)
     this.data=this.requestData

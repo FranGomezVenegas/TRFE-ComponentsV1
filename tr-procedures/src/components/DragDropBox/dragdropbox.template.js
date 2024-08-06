@@ -1,9 +1,11 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import '@material/mwc-icon';
 import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 import '../grid_with_buttons/tableRowDetail';
 import '@material/mwc-button';
+import '../ParentReadOnlyTable/main'; // Adjust the import path as needed
+
 import print from './dragdropboxprint';
 export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
     console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
@@ -12,6 +14,7 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
         return html``
         
     }
+    
     let boxAllowMoveObject=false
     let boxContentStructured=true    
     let totalStr=""
@@ -20,7 +23,11 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
         if (selectedBox.allow_move_objects!==undefined){
             boxAllowMoveObject=selectedBox.allow_move_objects
         }
-        let occupied=selectedBox.datas.length
+        if (viewModel.forceAllowMoveObjectAsViewRule!==undefined&&viewModel.forceAllowMoveObjectAsViewRule===true){
+            boxAllowMoveObject=true
+        }
+        let selectedBoxContentData=selectedBox[viewModel.boxesContentColumns.endPointPropertyArray]
+        let occupied=selectedBoxContentData===undefined?0:selectedBoxContentData.length
         if (boxContentStructured===true){
             let total=selectedBox.cols*selectedBox.rows
             totalStr=String(occupied)+(lang==="en"?' of ':' de ')+ String(total)                
@@ -28,14 +35,18 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
             totalStr="Total: "+String(occupied)
         }
     }
-    return html` 
-    <div style="display:flex; flex-direction:column; gap:12px;">    
+    return html`
+    <div style="display:flex; flex-direction:column; gap:12px; margin:30px;">    
     <div style="display:flex; flex-direction:row; gap:12px;">    
         <div style="width: 100%; gap: 4px; display: flex; flex-direction: column;">        
             <div style="display:flex; justify-content: space-between; align-items: center;"> 
                 <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
                 <mwc-icon-button icon="print" @click=${() => { print(selectedBox!==undefined, componentRef) }}></mwc-icon-button>
-                ${selectedBox===undefined ? html``: html `
+                ${selectedBox===undefined ? html`
+                    
+            ${viewModel.boxesTableColumns===undefined? html``:html`${componentRef._boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data, lang, componentRef)}`}                                    
+
+                    `: html `
                     <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
                     <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
                     <div class="view-btn ${viewModel.viewMode == 2 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(2)}> List View </div>
@@ -84,19 +95,20 @@ function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, 
     }else if (viewModel.boxPosicsViews){
         boxPosicsViews=viewModel.boxPosicsViews
     }
+    let selectedBoxContentData=selectedBox[viewModel.boxesContentColumns.endPointPropertyArray]
     return  html`
-            <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
+            <div class="unstructuredbox-content_allowmove_${boxAllowMoveObject}" id='mainBox' draggable="true" class="draggable-box" @dragover=${(e) => tmpLogic.allowDrop(e, boxAllowMoveObject)} @drop=${(e) => tmpLogic.dropInUnstructuredBox(e, 0, 0)}>
                 ${viewModel.viewMode == 1 ? html `
-                <div draggable="true" class="draggable-box" @dragover=${(e) => tmpLogic.allowDrop(e)} @drop=${(e) => tmpLogic.dropBox(e, 0, 0)}>
-                ${selectedBox.datas.length > 0 ?
+                <div >
+                ${selectedBoxContentData.length > 0 ?
                 html `
-                    ${selectedBox.datas.map((selItem ,j) => html `
+                    ${selectedBoxContentData.map((selItem ,j) => html `
                     ${printItemByViewFilter(selItem, tmpLogic, boxPosicsViews, false)}
                     `)}         
                 `:html``}
                 </div>
                 `:
-                selectedBox.datas.length > 0 ?
+                selectedBoxContentData!==undefined ?
                 html `
                     <div style="width: min-width: 556px;">
                     ${boxContentTable(tmpLogic,viewModel.boxesContentColumns, selectedBox)}
@@ -133,9 +145,13 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
     }else if (viewModel.boxPosicsViews){
         boxPosicsViews=viewModel.boxPosicsViews
     }
+    let selectedBoxContentData=undefined
+    if (selectedBox!==undefined){
+        selectedBoxContentData=selectedBox[viewModel.boxesContentColumns.endPointPropertyArray]
+    }
     return html`
         ${selectedBox!==undefined ? html `
-        <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
+        <div class="structuredbox-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
             ${viewModel.viewMode == 1 ? html `
             <div> 
                 <div class="row-content"> 
@@ -149,7 +165,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                     <div class="row-num"> ${rowN} </div>
                     ${boxAllowMoveObject ? 
                     axisCols.map((item1 ,j) => html `
-                    <div class="box ${tmpLogic.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${selectedBox.datas.find((item, index) => item.posX + ((item.posY - 1) * selectedBox.cols) == i * axisCols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``}  @click=${() => tmpLogic.setSelectBoxIndex(rowN + (j + 1), i * axisCols.length + (j + 1))} @dragover=${(e) => tmpLogic.allowDrop(e)} @drop=${(e) => tmpLogic.dropBox(e, j + 1, i + 1)}> 
+                    <div class="box ${tmpLogic.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${selectedBoxContentData.find((item, index) => item.posX + ((item.posY - 1) * selectedBox.cols) == i * axisCols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``}  @click=${() => tmpLogic.setSelectBoxIndex(rowN + (j + 1), i * axisCols.length + (j + 1))} @dragover=${(e) => tmpLogic.allowDrop(e, boxAllowMoveObject)} @drop=${(e) => tmpLogic.dropInStructuredBox(e, j + 1, i + 1)}> 
                         <div draggable="true"  @dragstart=${(e) => tmpLogic.dragBox(e, j + 1, i + 1)} class="draggable-box">                        
                         ${printObjectData(tmpLogic, selectedBox, axisCols, boxPosicsViews, i, j)}
                             <div class="position">
@@ -160,7 +176,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                     </div>
                     `) : 
                     axisCols.map((item1 ,j) => html `
-                    <div class="box ${tmpLogic.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${selectedBox.datas.find((item, index) => item.posX + ((item.posY - 1) * selectedBox.cols) == i * axisCols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``} @click=${() => tmpLogic.setSelectBoxIndex(rowN + (j + 1), i * axisCols.length + (j + 1))}> 
+                    <div class="box ${tmpLogic.selectedIndex1 == rowN + (j + 1) ? "active" : ""}" style=${selectedBoxContentData.find((item, index) => item.posX + ((item.posY - 1) * selectedBox.cols) == i * axisCols.length + (j + 1)) ? `background-color:rgb(80, 220, 247);` : ``} @click=${() => tmpLogic.setSelectBoxIndex(rowN + (j + 1), i * axisCols.length + (j + 1))}> 
                         <div class="draggable-box">
                             ${printObjectData(tmpLogic, selectedBox, axisCols, boxPosicsViews, i, j)}
                             <div class="position">
@@ -179,7 +195,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
             </div>
             ` : 
 
-            selectedBox.datas.length > 0 ?
+            selectedBoxContentData.length > 0 ?
             html `
             <div style="width: min-width: 556px;">
                 ${boxContentTable(tmpLogic,viewModel.boxesContentColumns, selectedBox)}
@@ -190,13 +206,14 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
         ` :
         tmpLogic && tmpLogic.data && tmpLogic.data.boxContents && tmpLogic.data.boxContents.length > 0 ?
         html `
-        ${viewModel.boxesTableColumns===undefined? html``:html`${boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data, lang)}`}                                    
+        ${viewModel.boxesTableColumns===undefined? html``:html`${boxesTable(tmpLogic, viewModel.boxesTableColumns, tmpLogic.data, lang, componentRef)}`}                                    
         `: null}
     </div>
     `
 }
-function printObjectData(tmpLogic, selectedBox, axisCols, boxPosicsViews, i, j){
-    let selItem=selectedBox.datas.find((item, index) => item.posX + ((item.posY - 1) * selectedBox.cols) == i * axisCols.length + (j + 1))    
+function printObjectData(tmpLogic, selectedBox, axisCols, boxPosicsViews, i, j){    
+    let selectedBoxContentData=selectedBox[boxesContentColumns.endPointPropertyArray]
+    let selItem=selectedBoxContentData.find((item, index) => item.posX + ((item.posY - 1) * selectedBox.cols) == i * axisCols.length + (j + 1))    
     if (selItem===undefined){
         return html``
     }
@@ -217,7 +234,7 @@ function printItemByViewFilter(selItem, tmpLogic, boxPosicsViews, contentStructu
 }
 
 function dragObjectsTable(tmpLogic, elem, data, componentRef){
-    let dataArr = getDataFromRoot(elem, data)
+    let dataArr = componentRef.TRAZiTgetDataFromRoot(elem, data)
     return html`
     ${tmpLogic.viewTable ? html`
     <div style="margin-top:42px">
@@ -241,7 +258,7 @@ function dragObjectsTable(tmpLogic, elem, data, componentRef){
                             :     
                             html`<td @click="${() => componentRef.shadowRoot.querySelector('#detail' + idx).toggle()}">${p[fld.name]}</td>`                    
                         )}
-                        ${elem.row_buttons === undefined ? html`` : html`<td><div class="layout horizontal center flex wrap">${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>`}
+                        ${elem.row_buttons === undefined ? html`` : html`<td><div class="layout horizontal center flex wrap">${componentRef.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>`}
                     </tr>
                     <table-row-detail id="detail${idx}">
                       <div slot="details">
@@ -258,6 +275,8 @@ function dragObjectsTable(tmpLogic, elem, data, componentRef){
   }
   
 function boxContentTable(tmpLogic,elem, selectedBox){
+    let selectedBoxContentData=selectedBox[elem.boxesContentColumns.endPointPropertyArray]
+
     return html`
     <table class="TRAZiT-DefinitionArea dragdropable">
     <thead>
@@ -265,9 +284,9 @@ function boxContentTable(tmpLogic,elem, selectedBox){
         ${elem.columns.map((column, i) => html`<th>${column.label_en}</th>`)}
     </thead>
     <tbody>
-        ${selectedBox.datas === undefined || !Array.isArray(selectedBox.datas) ? html `No Data` : 
+        ${selectedBoxContentData === undefined || !Array.isArray(selectedBoxContentData) ? html `No Data` : 
         html`  
-            ${selectedBox.datas.map((p, i) => { return html `
+            ${selectedBoxContentData.map((p, i) => { return html `
             <tr @click=${() => tmpLogic.showBoxContent(p, i)}> 
             
                 <td>${ String.fromCharCode(p.posY + 64) + p.posX}</td>
@@ -287,7 +306,7 @@ function boxContentTable(tmpLogic,elem, selectedBox){
                         html`<td>${p[fld.name]}</td>`                    
                 )} 
                 ${elem.row_buttons === undefined? html`` : html`
-                    <td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
+                    <td><div class="layout horizontal center flex wrap"> ${componentRef.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
                 `}
             </tr>
             `})}
@@ -296,180 +315,18 @@ function boxContentTable(tmpLogic,elem, selectedBox){
     </table>
     `
 }
-
-function boxesTable(tmpLogic, elem, data, lang){
-    let dataArr=getDataFromRoot(elem, data)
-    return html`
-    <table class="dragdropable TRAZiT-DefinitionArea">
-    <thead> 
-        ${elem.columns.map((column, i) => html`<th>${column.label_en}</th>`)}
-    </thead>
-    <tbody>
-        ${dataArr === undefined || !Array.isArray(dataArr) ? html `No Data` : 
-        html`  
-            ${dataArr.map((p, i) => { return html `
-            <tr @click=${() => tmpLogic.showBoxContent(p, i)}> 
-            
-                ${elem.columns.map((fld, index) =>      
-                
-                    fld.is_icon !== undefined && fld.is_icon == true ? 
-                        fld.icon_class ?
-                            html`
-                                ${fld.tooltip !== undefined ? html`
-                                    <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${p}">
-                                    <div class="left-area">
-                                        <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                                    </div>
-                                    </grid-cell-tooltip>
-                                `:html`
-                                    <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                                `}
-                            ` :
-                            html `     
-                            <td>                           
-                                ${fld.tooltip !== undefined ? html`
-                                    <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${p}">
-                                        <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
-                                    </grid-cell-tooltip>
-                                `:html`
-                                <img src="${tmpLogic.iconRendererSrc(p, fld.name, i, fld)}" style="width:20px">
-                                `}
-
-                            </td>
-                            ` 
-                    :     
-                        html`                        
-                            <td>
-                                ${fld.tooltip !== undefined ? html`
-                                    <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${p}">
-                                        ${p[fld.name]}
-                                    </grid-cell-tooltip>
-                                `:html`
-                                ${p[fld.name]}
-                                `}
-
-                            </td>
-                        `
-                )} 
-                ${elem.row_buttons === undefined? html`` : html`
-                    <td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
-                `}
-            </tr>
-            `})}
-        `}
-    </tbody>
-    </table>    
-    `    
+function boxesTableDataViews(tmpLogic, elem, data, lang, componentRef){
+    return html``
+    let dataArr=componentRef.TRAZiTgetDataFromRoot(elem, data)
+    return html`${componentRef.parentReadOnlyTable(elem, undefined, false, dataArr)}`
 }
-
-function getDataFromRoot(elem, curDataForThisCard, filterValues) {
-    if (elem !== undefined && elem.contextVariableName !== undefined) {
-      if (this[elem.contextVariableName] !== undefined) {
-        curDataForThisCard = this[elem.contextVariableName];
-      }
-    }
-    if (curDataForThisCard === null || curDataForThisCard === undefined) {
-      return undefined;
-    }
-    if (elem.endPointPropertyArray !== undefined) {
-      if (elem.endPointPropertyArray.length === 0) {
-        return curDataForThisCard;
-      }
-      if (
-        elem.endPointPropertyArray.length === 1 &&
-        elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
-      ) {
-        //curDataForThisCard=applyFilterToTheData(curDataForThisCard, filterValues)
-        return curDataForThisCard;
-      }
-      //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
-      //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
-      let i = 0;
-      let subJSON = {};
-      //curDataForThisCard = curDataForThisCard[elem.endPointPropertyArray[0]][0]
-      for (i = 0; i < elem.endPointPropertyArray.length; i++) {
-        if (curDataForThisCard === null) {
-          return undefined;
-        }
-        let propertyName = elem.endPointPropertyArray[i];
-        if (Array.isArray(curDataForThisCard[propertyName])) {
-          if (i < elem.endPointPropertyArray.length - 1) {
-            subJSON = curDataForThisCard[propertyName][0];
-          } else {
-            subJSON = curDataForThisCard[propertyName];
-            //return applyFilterToTheData(curDataForThisCard[propertyName], filterValues);
-          }
-        } else {
-          subJSON = curDataForThisCard[propertyName];
-        }
-        //if (typeof subJSON === "undefined") {
-        //  return applyFilterToTheData(curDataForThisCard, filterValues);
-        //} else {
-          curDataForThisCard = subJSON;
-        //}
-      }
-      return curDataForThisCard
-      //return applyFilterToTheData(curDataForThisCard, filterValues);
-      if (typeof subJSON === "undefined") {
-        return undefined;
-      } else if (elem.endPointPropertyArray.length % 2 === 0) {
-        // If the input array has an even number of elements, skip one more object level before recursing
-        return getValueFromNestedJSON(
-          subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-        );
-      } else {
-        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
-        return getValueFromNestedJSON(
-          subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-        );
-      }
-    } else {
-      if (
-        elem.endPointResponseObject !== undefined &&
-        elem.endPointResponseObject2 !== undefined
-      ) {
-        let curDataForThisCardToRet = [];
-        curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
-        if (curDataForThisCardToRet !== undefined) {
-            
-          return applyFilterToTheData(curDataForThisCardToRet[elem.endPointResponseObject2],  filterValues);
-        } else {
-          return [];
-        }
-      } else {
-        if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
-          if (!Array.isArray(curDataForThisCard)) {
-            let curDataForThisCardArr = [];
-            curDataForThisCardArr.push(curDataForThisCard);
-            return applyFilterToTheData(curDataForThisCardArr,  filterValues);
-          }
-          return applyFilterToTheData(curDataForThisCard,  filterValues);
-        } else {
-          return applyFilterToTheData(curDataForThisCard[elem.endPointResponseObject],  filterValues);
-        }
-      }
-    }
-    function applyFilterToTheData(curDataForThisCard, filterValues) {
-   
-        const uniqueItemsSet = new Set();
-        for (const key in filterValues) {
-                const filterValue = filterValues[key];
-                if (Array.isArray(curDataForThisCard)) {
-                    const filteredItems = curDataForThisCard.filter(item => {
-                        if (item[key] && filterValue) {
-                          return item[key] == filterValue;
-                        }
-                        return false
-                    });  
-                    console.log(filteredItems)                         
-                    filteredItems.forEach(item => uniqueItemsSet.add(item));            
-            }
-        }
-        return Array.from(uniqueItemsSet);
-    
-    }
+function boxesTableUsingnewParentReadOnlyTable(tmpLogic, elem, data, lang, componentRef) {
+    let dataArr = componentRef.TRAZiTgetDataFromRoot(elem, data);
+    return html`<newparent-read-only-table .elem=${elem} .dataArr=${dataArr} .lang=${lang}></newparent-read-only-table>`;
   }
+
+
+
+
 
 

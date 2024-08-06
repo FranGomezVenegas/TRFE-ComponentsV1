@@ -384,10 +384,10 @@
 	},
 	"localDefaultView": {
 		"procName": "mb_em",
-		"viewName": "LogSamples",
+		"viewName": "SampleIncubation1", 
 		"filterName": ""
-	},
-  "localDefaultView": {
+	},  
+  "localDefaultView1": {
     "procName":  "fake-developers", 
     "procNameData":  "mb_em",
     "viewName": "drag-box", 

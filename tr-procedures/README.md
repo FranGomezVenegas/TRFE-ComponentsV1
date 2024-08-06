@@ -94,3 +94,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.49 Added label preview prototype]
 [- v0.2.50 printable for read only tables]
 [- v0.2.51 export to csv, all data when nothing selected fixed]
+[- v0.2.52 the refreshable, printable, downloadable enabled by default should be only for tables]

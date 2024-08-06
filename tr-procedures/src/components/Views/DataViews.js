@@ -4,6 +4,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { ButtonsFunctions } from "../Buttons/ButtonsFunctions";
 import { AuditFunctions } from "../Audit/AuditFunctions";
 import "../Audit/audit-dialog";
+import {ApiFunctions } from '../Api/ApiFunctions';
 
 import { ModuleEnvMonitClientMethods } from "../../module_env_monit/ModuleEnvMonitClientMethods";
 import { TrazitGenericDialogs } from "../GenericDialogs/TrazitGenericDialogs";
@@ -32,14 +33,14 @@ import { ReadOnlyTableParts } from "./ReadOnlyTableParts";
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 
-import '../DragDropBox/index';  
+//import '../DragDropBox/index';  
 import { FeaturesDynamicFieldValue } from "../../features/dynamicFieldValue";
 
 export function DataViews(base) {
   let contextMenu = undefined;
   return class extends FeaturesDynamicFieldValue(TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
-      AuditFunctions(
+      AuditFunctions(ApiFunctions
         (
           TrazitInvestigationsDialog(
             ModuleEnvMonitDialogsMicroorganism(
@@ -83,95 +84,6 @@ export function DataViews(base) {
       `;
     }
 
-    getDataFromRoot(elem, data) {
-      if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel?.viewQuery?.dataResponse!==undefined&&this.viewModelFromProcModel?.viewQuery?.dataResponse==="ArrayInRoot"){
-        return data.queryData?data.queryData:''
-      }
-      if (elem !== undefined && elem.contextVariableName !== undefined) {
-        if (this[elem.contextVariableName] !== undefined) {
-          data = this[elem.contextVariableName];
-        }
-      }
-      if (data === null || data === undefined) {
-        return undefined;
-      }
-      if (elem.endPointPropertyArray !== undefined) {
-        if (elem.endPointPropertyArray.length === 0) {
-          return data;
-        }
-        if (
-          elem.endPointPropertyArray.length === 1 &&
-          elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
-        ) {
-          return data;
-        }
-        //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
-        //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
-        let i = 0;
-        let subJSON = {};
-        //data = data[elem.endPointPropertyArray[0]][0]
-        for (i = 0; i < elem.endPointPropertyArray.length; i++) {
-          if (data === null) {
-            return undefined;
-          }
-          let propertyName = elem.endPointPropertyArray[i];
-          if (Array.isArray(data[propertyName])) {
-            if (i < elem.endPointPropertyArray.length - 1) {
-              subJSON = data[propertyName][0];
-            } else {
-              return data[propertyName];
-            }
-          } else {
-            subJSON = data[propertyName];
-          }
-          if (typeof subJSON === "undefined") {
-            return data;
-          } else {
-            data = subJSON;
-          }
-        }
-        return data;
-        if (typeof subJSON === "undefined") {
-          return undefined;
-        } else if (elem.endPointPropertyArray.length % 2 === 0) {
-          // If the input array has an even number of elements, skip one more object level before recursing
-          return getValueFromNestedJSON(
-            subJSON,
-            elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-          );
-        } else {
-          // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
-          return getValueFromNestedJSON(
-            subJSON,
-            elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-          );
-        }
-      } else {
-        if (
-          elem.endPointResponseObject !== undefined &&
-          elem.endPointResponseObject2 !== undefined
-        ) {
-          let dataToRet = [];
-          dataToRet = data[elem.endPointResponseObject];
-          if (dataToRet !== undefined) {
-            return dataToRet[elem.endPointResponseObject2];
-          } else {
-            return [];
-          }
-        } else {
-          if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
-            if (!Array.isArray(data)) {
-              let dataArr = [];
-              dataArr.push(data);
-              return dataArr;
-            }
-            return data;
-          } else {
-            return data[elem.endPointResponseObject];
-          }
-        }
-      }
-    }
 
     jsonViewer(elem, data) {
       // console.log('jsonViewer', 'elem', elem, 'data', data, 'dataToDisplay', data[elem.endPointResponseObject])
@@ -187,7 +99,7 @@ export function DataViews(base) {
           ? nothing
           : html` <json-viewer style=${elem.style !== undefined ? elem.style : "padding:0px; padding-left:20px; top:-15px;"}
                 >${JSON.stringify(
-            this.getDataFromRoot(elem, data)
+            this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel)
           )}</json-viewer
               >`}
         </div>
@@ -261,7 +173,7 @@ export function DataViews(base) {
     }
     readOnlyTableByGroupOrig(elem, dataArr, isSecondLevel = false) {
       console.log("readOnlyTableByGroup", elem, dataArr);
-      dataArr = this.getDataFromRoot(elem, dataArr);
+      dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
       console.log("Mejori", dataArr);
       return html`
         <style>
@@ -307,7 +219,7 @@ export function DataViews(base) {
       if (isSecondLevel === undefined) {
         isSecondLevel = false;
       }
-      dataArr = this.getDataFromRoot(elem, dataArr);
+      dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
       return html`
         <style>
           .styled-table-bygroup {
@@ -601,7 +513,7 @@ export function DataViews(base) {
       if (isSecondLevel === undefined) {
         isSecondLevel = false;
       }
-      dataArr = this.getDataFromRoot(elem, dataArr);
+      dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
       if (dataArr === undefined) {
         return html``;
       }
@@ -1068,7 +980,7 @@ export function DataViews(base) {
       if (directData !== undefined) {
         dataArr = directData;
       } else {
-        dataArr = this.getDataFromRoot(elem, dataArr);
+        dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
       }
       //console.log(elem, dataArr)
       const handleFilter = (event, p, elem, idx) => {
@@ -1094,7 +1006,12 @@ export function DataViews(base) {
       };
 
       const endPointResponseObject = elem.endPointResponseObject;
-      const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+      const selectedIdx = undefined
+      if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined){
+
+//      }else{
+        const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+      }
       let childDataArr = undefined
       if (dataArr!==undefined&&dataArr[0]!==undefined){
         childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
@@ -1117,7 +1034,7 @@ export function DataViews(base) {
       /*      if (directData !== undefined) {
               dataArr = directData;
             } else {
-              dataArr = this.getDataFromRoot(elem, dataArr);
+              dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
             }
       */
       return html`
@@ -1353,7 +1270,7 @@ export function DataViews(base) {
         }
         
         </style>
-        ${this.kpiCardSomeElementsMain(elem, this.getDataFromRoot(elem, data))}          
+        ${this.kpiCardSomeElementsMain(elem, this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel))}          
       `;
     }
     cardExpandSectionForScriptStep(elem, data) {
@@ -1369,8 +1286,8 @@ export function DataViews(base) {
     }
     cardSomeElementsRepititiveObjects(elem, data) {
       //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
-      data = this.getDataFromRoot(elem, data);
-      //console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
+      data = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
+      //console.log('cardSomeElementsRepititiveObjects >> TRAZiTgetDataFromRoot', 'elem', elem, 'data', data)
       return html`
         ${Array.isArray(data) && data.length > 0
           ? html`
@@ -2091,7 +2008,7 @@ export function DataViews(base) {
       if (elem === undefined) { return html`` }
 
       if (elem.endPointPropertyArray !== undefined) {
-        data = this.getDataFromRoot(elem, data);
+        data = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
       }
       if (!((elem.grouper_field_name !== undefined && data[elem.grouper_field_name]) ||
         (elem.counter_field_name !== undefined && data[elem.counter_field_name]))) {
@@ -2185,7 +2102,7 @@ export function DataViews(base) {
       }
 
       if (data === undefined && this.data !== undefined) { data = this.data }
-      //data = this.getDataFromRoot(elem, data);
+      //data = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
       if (data === undefined && (elem.chart_name === undefined || data[elem.chart_name] === undefined)) {
         if (this.selectedItem !== undefined) {
           data = this.selectedItem;
@@ -2913,7 +2830,10 @@ export function DataViews(base) {
     sessionStorage.setItem('tableTheme', tmp);
   
     const endPointResponseObject = elem.endPointResponseObject;
-    const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+    const selectedIdx = undefined
+    if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined){    
+      selectedIdx = this.selectedTableIndex[endPointResponseObject];  
+    }
   
     if (isSecondLevel === undefined) {
       isSecondLevel = false;
@@ -2921,7 +2841,7 @@ export function DataViews(base) {
     if (directData !== undefined) {
       dataArr = directData;
     } else {
-      dataArr = this.getDataFromRoot(elem, dataArr);
+      dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
     }
     if (!this.dataContainsRequiredProperties(elem, dataArr)) {
       return nothing;
@@ -3276,15 +3196,16 @@ export function DataViews(base) {
   }
   
     dragDropBoxes(elem, data) {
-      import('../DragDropBox/drag-box')
-      //console.log('elem', elem)
-      return html`
-      <drag-box .windowOpenable=${true} .sopsPassed=${true} .lang=${this.lang}
-      .procInstanceName="RandD" .desktop=${true} .viewName="rdprojects" .filterName="rdprojects" 
-      .model=${elem} ?ready="false"
-      .viewModelFromProcModel=${elem} .config=${this.config}></drag-box>      
+      return html`not use the component dragDropBoxes, please ask Fran`
+      // import('../DragDropBox/drag-box')
+      // //console.log('elem', elem)
+      // return html`
+      // <drag-box .windowOpenable=${true} .sopsPassed=${true} .lang=${this.lang}
+      // .procInstanceName="RandD" .desktop=${true} .viewName="rdprojects" .filterName="rdprojects" 
+      // .model=${elem} ?ready="false"
+      // .viewModelFromProcModel=${elem} .config=${this.config}></drag-box>      
   
-      `
+      // `
     }
     dragDropObjects(elem, data) {
       import('../DragDropTable/drag-drop')
@@ -3298,7 +3219,7 @@ export function DataViews(base) {
     }    
     calendar(elem, data) {
       import('../Calendar/index')
-      let dataArr = this.getDataFromRoot(elem, data);
+      let dataArr = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
       console.log('calendar', 'elem', elem, 'data', data, 'dataArr', dataArr)
 
       let events={"program_calendar": {

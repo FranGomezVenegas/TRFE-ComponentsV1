@@ -110,6 +110,39 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
       this.data={}
       this.contextMenuItems=[]
     }
+
+    firstUpdated() {
+      this.filterPerformAction() 
+    }    
+    async filterPerformAction() {      
+      await this.GetViewData(false)
+      this.filterResponseData=[]
+      if (!Array.isArray(this.selectedItems)){        
+        this.filterResponseData.push(this.selectedItems)        
+      }else{
+        this.filterResponseData=this.selectedItems
+      }    
+      
+      //this.filterElement(this.filterResponseData)
+      //console.log('filterResponseData', this.filterResponseData)
+      if (!Array.isArray(this.requestData)){
+        this.selectedItem=this.requestData;          
+        //this.selectedItemInView=this.requestData; 
+      }else{
+        if (this.requestData.length===1){
+          if (Array.isArray(this.requestData)){
+            this.selectedItem=this.requestData[0]
+          }else{
+            this.selectedItem={}
+          }
+          this.selectedItemLot=this.selectedItem.lot_name
+          this.selectedItemLoaded=true
+        }else{
+          this.selectedItem=this.requestData[sessionStorage.getItem('specificSearchIndex')];
+        }
+      }        
+    }
+
     resetView(){
       this.selectedItems=[]
       this.ready=false;
@@ -125,7 +158,7 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
       `
     }
     render(){
-      return html`
+      return html` 
         <dragdrop-table .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .data=${this.data}
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-table>

@@ -498,6 +498,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         //console.log('filterResponseData', this.filterResponseData)
         if (!Array.isArray(this.requestData)){
           this.selectedItem=this.requestData;          
+          //this.selectedItemInView=this.requestData; 
         }else{
           if (this.requestData.length===1){
             if (Array.isArray(this.requestData)){

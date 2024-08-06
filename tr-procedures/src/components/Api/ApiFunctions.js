@@ -3,6 +3,204 @@ import { ProceduresModel } from '../../ProceduresModel';
 export function ApiFunctions(base) {
 return class extends (base) {
 
+  TRAZiTgetDataFromRoot(elem, data, viewModelFromProcModel) {
+    if (viewModelFromProcModel!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse==="ArrayInRoot"){
+      return data.queryData?data.queryData:''
+    }
+    if (elem !== undefined && elem.contextVariableName !== undefined) {
+      if (this[elem.contextVariableName] !== undefined) {
+        data = this[elem.contextVariableName];
+      }
+    }
+    if (data === null || data === undefined) {
+      return undefined;
+    }
+    if (elem.endPointPropertyArray !== undefined) {
+      if (elem.endPointPropertyArray.length === 0) {
+        return data;
+      }
+      if (
+        elem.endPointPropertyArray.length === 1 &&
+        elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
+      ) {
+        return data;
+      }
+      //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
+      //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
+      let i = 0;
+      let subJSON = {};
+      //data = data[elem.endPointPropertyArray[0]][0]
+      for (i = 0; i < elem.endPointPropertyArray.length; i++) {
+        if (data === null) {
+          return undefined;
+        }
+        let propertyName = elem.endPointPropertyArray[i];
+        if (Array.isArray(data[propertyName])) {
+          if (i < elem.endPointPropertyArray.length - 1) {
+            subJSON = data[propertyName][0];
+          } else {
+            return data[propertyName];
+          }
+        } else {
+          subJSON = data[propertyName];
+        }
+        if (typeof subJSON === "undefined") {
+          return data;
+        } else {
+          data = subJSON;
+        }
+      }
+      return data;
+      if (typeof subJSON === "undefined") {
+        return undefined;
+      } else if (elem.endPointPropertyArray.length % 2 === 0) {
+        // If the input array has an even number of elements, skip one more object level before recursing
+        return getValueFromNestedJSON(
+          subJSON,
+          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+        );
+      } else {
+        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
+        return getValueFromNestedJSON(
+          subJSON,
+          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+        );
+      }
+    } else {
+      if (
+        elem.endPointResponseObject !== undefined &&
+        elem.endPointResponseObject2 !== undefined
+      ) {
+        let dataToRet = [];
+        dataToRet = data[elem.endPointResponseObject];
+        if (dataToRet !== undefined) {
+          return dataToRet[elem.endPointResponseObject2];
+        } else {
+          return [];
+        }
+      } else {
+        if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
+          if (!Array.isArray(data)) {
+            let dataArr = [];
+            dataArr.push(data);
+            return dataArr;
+          }
+          return data;
+        } else {
+          return data[elem.endPointResponseObject];
+        }
+      }
+    }
+  }
+  getDataFromRoot(elem, curDataForThisCard, filterValues) {
+    if (elem !== undefined && elem.contextVariableName !== undefined) {
+      if (this[elem.contextVariableName] !== undefined) {
+        curDataForThisCard = this[elem.contextVariableName];
+      }
+    }
+    if (curDataForThisCard === null || curDataForThisCard === undefined) {
+      return undefined;
+    }
+    if (elem.endPointPropertyArray !== undefined) {
+      if (elem.endPointPropertyArray.length === 0) {
+        return curDataForThisCard;
+      }
+      if (
+        elem.endPointPropertyArray.length === 1 &&
+        elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
+      ) {
+        //curDataForThisCard=applyFilterToTheData(curDataForThisCard, filterValues)
+        return curDataForThisCard;
+      }
+      //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
+      //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
+      let i = 0;
+      let subJSON = {};
+      //curDataForThisCard = curDataForThisCard[elem.endPointPropertyArray[0]][0]
+      for (i = 0; i < elem.endPointPropertyArray.length; i++) {
+        if (curDataForThisCard === null) {
+          return undefined;
+        }
+        let propertyName = elem.endPointPropertyArray[i];
+        if (Array.isArray(curDataForThisCard[propertyName])) {
+          if (i < elem.endPointPropertyArray.length - 1) {
+            subJSON = curDataForThisCard[propertyName][0];
+          } else {
+            subJSON = curDataForThisCard[propertyName];
+            //return applyFilterToTheData(curDataForThisCard[propertyName], filterValues);
+          }
+        } else {
+          subJSON = curDataForThisCard[propertyName];
+        }
+        //if (typeof subJSON === "undefined") {
+        //  return applyFilterToTheData(curDataForThisCard, filterValues);
+        //} else {
+          curDataForThisCard = subJSON;
+        //}
+      }
+      return curDataForThisCard
+      //return applyFilterToTheData(curDataForThisCard, filterValues);
+      if (typeof subJSON === "undefined") {
+        return undefined;
+      } else if (elem.endPointPropertyArray.length % 2 === 0) {
+        // If the input array has an even number of elements, skip one more object level before recursing
+        return getValueFromNestedJSON(
+          subJSON,
+          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+        );
+      } else {
+        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
+        return getValueFromNestedJSON(
+          subJSON,
+          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+        );
+      }
+    } else {
+      if (
+        elem.endPointResponseObject !== undefined &&
+        elem.endPointResponseObject2 !== undefined
+      ) {
+        let curDataForThisCardToRet = [];
+        curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
+        if (curDataForThisCardToRet !== undefined) {
+            
+          return applyFilterToTheData(curDataForThisCardToRet[elem.endPointResponseObject2],  filterValues);
+        } else {
+          return [];
+        }
+      } else {
+        if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
+          if (!Array.isArray(curDataForThisCard)) {
+            let curDataForThisCardArr = [];
+            curDataForThisCardArr.push(curDataForThisCard);
+            return applyFilterToTheData(curDataForThisCardArr,  filterValues);
+          }
+          return applyFilterToTheData(curDataForThisCard,  filterValues);
+        } else {
+          return applyFilterToTheData(curDataForThisCard[elem.endPointResponseObject],  filterValues);
+        }
+      }
+    }
+    function applyFilterToTheData(curDataForThisCard, filterValues) {
+   
+        const uniqueItemsSet = new Set();
+        for (const key in filterValues) {
+                const filterValue = filterValues[key];
+                if (Array.isArray(curDataForThisCard)) {
+                    const filteredItems = curDataForThisCard.filter(item => {
+                        if (item[key] && filterValue) {
+                          return item[key] == filterValue;
+                        }
+                        return false
+                    });  
+                    console.log(filteredItems)                         
+                    filteredItems.forEach(item => uniqueItemsSet.add(item));            
+            }
+        }
+        return Array.from(uniqueItemsSet);
+    
+    }
+  }
     fetchApi(urlParams, feedback=true, actionModel) { 
       // notification enabled by default, just turn log to false for those what requires no notification   
       let log = true

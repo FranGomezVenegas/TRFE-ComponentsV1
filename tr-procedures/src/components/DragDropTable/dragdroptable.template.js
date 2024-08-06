@@ -497,7 +497,7 @@ function applyFilterToTheData(curDataForThisCard, filterValues) {
 }
 
 
-function getDataFromRoot(elem, curDataForThisCard) {
+function getxxxDataFromRoot(elem, curDataForThisCard) {
   if (elem !== undefined && elem.contextVariableName !== undefined) {
     if (this[elem.contextVariableName] !== undefined) {
       curDataForThisCard = this[elem.contextVariableName];

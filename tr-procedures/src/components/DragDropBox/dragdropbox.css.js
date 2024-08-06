@@ -1,13 +1,14 @@
-import { css } from "lit-element";
+import { css } from "lit";
 
 export const styles = css`
   :host([disabled]) {
+    margin:30px;
   }
   * {
     box-sizing: border-box;
   }
 
-  .box-content {
+  .structuredbox-content {
     width: fit-content;
     border-radius: 4px;
     background-color: #24c0eb1a;
@@ -18,7 +19,7 @@ export const styles = css`
     border: 2px solid #0465fb;
   }
 
-  .box-content_allowmove_false {
+  .structuredbox-content_allowmove_false {
     width: 100%;
     border-radius: 4px;
     background-color: #aca2a2;
@@ -28,8 +29,10 @@ export const styles = css`
     gap: 2px;
     border: 2px solid #03A9F4;
     height:100%;
+    min-width: 300px;
+    min-height: 500px;
   }
-  .box-content_allowmove_true {
+  .structuredbox-content_allowmove_true {
     width: fit-content;
     border-radius: 4px;
     background-color: #20B2AA;
@@ -38,6 +41,44 @@ export const styles = css`
     flex-direction: column;
     gap: 2px;
     border: 2px solid #03A9F4;
+    min-width: 300px;
+    min-height: 500px;
+  }  
+  .unstructuredbox-content {
+    width: fit-content;
+    border-radius: 4px;
+    background-color: #24c0eb1a;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 2px solid #0465fb;
+  }
+
+  .unstructuredbox-content_allowmove_false {
+    width: 100%;
+    border-radius: 4px;
+    background-color: #aca2a2;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 2px solid #03A9F4;
+    height:100%;
+    min-width: 300px;
+    min-height: 500px;
+  }
+  .unstructuredbox-content_allowmove_true {
+    width: fit-content;
+    border-radius: 4px;
+    background-color: #20B2AA;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 2px solid #03A9F4;
+    min-width: 300px;
+    min-height: 500px;
   }  
 
   .box {

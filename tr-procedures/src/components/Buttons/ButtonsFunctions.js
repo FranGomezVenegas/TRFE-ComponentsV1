@@ -5,9 +5,9 @@ import { ProcManagementMethods } from '../../components/ProcManagement/ProcManag
 import { ActionsFunctions } from '../Actions/ActionsFunctions';
 import { ExportTableToCsv } from '../../features/exportTableToCsv';
 import { PrintableTable } from '../../features/printableTable';
+import { ListsFunctions } from '../../form_fields/lists-functions';
 export function ButtonsFunctions(base) {
-  return class extends PrintableTable(ExportTableToCsv(ProcManagementMethods(ClientMethod(ActionsFunctions(ApiFunctions(base)))))) {
-
+  return class extends ListsFunctions(PrintableTable(ExportTableToCsv(ProcManagementMethods(ClientMethod(ActionsFunctions(ApiFunctions(base))))))) {   
 
     getButtonForRows(actions, data, isProcManagement, parentData) {
       //console.log('getButtonForRows', 'actions', actions, 'data', data, 'parentData', parentData)
@@ -148,6 +148,7 @@ export function ButtonsFunctions(base) {
           refreshable.icon=sectionModel.viewQuery.refreshable.icon
         }
       }
+
       if (sectionModel.refreshable!==undefined){
         if (sectionModel.refreshable.enable!==undefined){
           refreshable.enable=sectionModel.refreshable.enable
@@ -208,6 +209,11 @@ export function ButtonsFunctions(base) {
         }
       }
 
+      if (sectionModel.type===undefined||!sectionModel.type.toUpperCase().includes('TABLE')){
+        refreshable.enable=false
+        printable.enable=false
+        downloadable.enable=false
+      }
 																																											 
 															
 									 
@@ -329,7 +335,7 @@ export function ButtonsFunctions(base) {
           ${sectionModel !== undefined && sectionModel.actions && sectionModel.actions.map(action =>
           html`
 
-              ${this.btnHidden(action, data) ? nothing :
+              ${this.btnHidden(action, selectedItems) ? nothing :
                   html`${action.button ?
                     html`${action.button.icon ?
                       html`<mwc-icon-button id="${action.actionName}"
@@ -338,7 +344,7 @@ export function ButtonsFunctions(base) {
                       icon="${action.button.icon}" 
                       title="${action.button.title['label_' + this.lang]}" 
                       ?disabled=${this.btnDisabled(action, sectionModel)}
-                      ?hidden=${this.btnHidden(action, data)}
+                      ?hidden=${this.btnHidden(action, selectedItems)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
                       @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
@@ -347,7 +353,7 @@ export function ButtonsFunctions(base) {
                       class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
                       title="${action.button.title['label_' + this.lang]}" 
                       ?disabled=${this.btnDisabled(action, sectionModel)}
-                      ?hidden=${this.btnHidden(action, data)}
+                      ?hidden=${this.btnHidden(action, selectedItems)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
                       @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}>
@@ -356,7 +362,7 @@ export function ButtonsFunctions(base) {
                         html`<mwc-button dense raised id="${action.actionName}"
                       label="${action.button.title['label_' + this.lang]}" 
                       ?disabled=${this.btnDisabled(action, sectionModel)}
-                      ?hidden=${this.btnHidden(action , data)}
+                      ?hidden=${this.btnHidden(action , selectedItems)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
                       @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
@@ -583,7 +589,11 @@ export function ButtonsFunctions(base) {
       return d
     }
     btnHiddenForRows(action, selItems) {
-      let selRow=selItems[0]
+      
+      let selRow={}
+      if (selItems!==undefined){
+        selRow=selItems[0]
+      }
       //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)
       let d = false
       if (selRow !== undefined && selRow["No Data"] !== undefined) { return true }
@@ -923,8 +933,14 @@ export function ButtonsFunctions(base) {
           let arrayToSingleObject={}
           arrayToSingleObject.queryData=j
           this.selectedItemInView=arrayToSingleObject
+          
+          if (this.viewModelFromProcModel.component === "dragDropBoxes") {
+            sessionStorage.setItem('dragdropboxdata', JSON.stringify(j));
+            window.dispatchEvent(new CustomEvent('dragdropboxdata-changed'));
+          }          
           return
         }
+        queryDefinition.notUseGrid
         if (queryDefinition.notUseGrid !== undefined && queryDefinition.notUseGrid === true) {
           if (queryDefinition.variableName !== undefined) {
             if (queryDefinition.endPointResponseVariableName !== undefined) {
@@ -935,6 +951,11 @@ export function ButtonsFunctions(base) {
           } else {
 
             this.selectedItems = j;
+            if (this.viewModelFromProcModel.component === "dragDropBoxes") {
+              sessionStorage.setItem('dragdropboxdata', JSON.stringify(j));
+              window.dispatchEvent(new CustomEvent('dragdropboxdata-changed'));  
+            }          
+  
             if (this.selectedItems[0] !== undefined && this.selectedItems[0] !== null) {
               this.selectedItem = this.selectedItems[0];
 
@@ -958,15 +979,20 @@ export function ButtonsFunctions(base) {
               this.requestData = {};
             }
           }
-        } else if (setGrid) {
-          if (j && !j.is_error) {
-            this.setGrid(j);
-          } else {
-            this.setGrid();
-          }
+        // } else if (setGrid) {
+        //   if (j && !j.is_error) {
+        //     this.setGrid(j);
+        //   } else {
+        //     this.setGrid();
+        //   }
         } else {
           if (j && !j.is_error) {
             this.requestData = j;
+            if (this.viewModelFromProcModel.component === "dragDropBoxes") {
+              sessionStorage.setItem('dragdropboxdata', JSON.stringify(j));
+              window.dispatchEvent(new CustomEvent('dragdropboxdata-changed'));  
+            }                
+
           } else {
             this.requestData = {};
           }
@@ -978,7 +1004,7 @@ export function ButtonsFunctions(base) {
         bubbles: true,
         composed: true
       }));
-
+      this.ready = true
       this.requestUpdate();
       this.samplesReload = false;
     }

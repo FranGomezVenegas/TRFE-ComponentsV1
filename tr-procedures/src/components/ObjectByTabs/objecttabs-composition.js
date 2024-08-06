@@ -34,7 +34,8 @@ import { CardMultipleElementsView } from '../Views/CardMultipleElementsView';
 
 import {CoaView} from '../../components/Views/CoaView';
 import "../Tree/treeview/index";
-import "../ParentReadOnlyTable/ParentReadOnlyTable";
+import '../ParentReadOnlyTable/ParentReadOnlyTable.js';
+//import "../ParentReadOnlyTable/ParentReadOnlyTable";
 
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 import { TrazitTestScriptNewStepDialog } from '../GenericDialogs/TrazitTestScriptNewStepDialog';
@@ -297,7 +298,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
         return html`
           ${elem2.is_translation===undefined||(elem2.is_translation!==undefined&&elem2.is_translation===true&&elem2.lang!==undefined&&elem2.lang===this.lang) ?
           html`              
-            ${elem2.type==="reportTitle" ? this.kpiReportTitleLvl2(elem2, data[elem.endPointResponseObject], true) : nothing}
+            ${elem2.type==="reportTitle" ? this.kpiReportTitleLvl2(elem2, data, true) : nothing}
             ${elem2.type==="card" ? this.kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
             ${elem2.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}
             ${elem2.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              

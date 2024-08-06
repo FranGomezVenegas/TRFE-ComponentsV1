@@ -2549,8 +2549,7 @@ export const MbEm=
       }
   },
   "SampleIncubation1":{
-    "component": "SingleView",
-    "hideLeftPane": true,
+    "component": "dragDropBoxes",    
     "viewQuery": {
       "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
       "endPointParams": [
@@ -2560,6 +2559,356 @@ export const MbEm=
         }      
       ]
     },
+    "forceAllowMoveObjectAsViewRule": true,
+    "boxesTableKeyField":"name",
+    "boxesTableColumns":{
+      "endPointPropertyArray": ["active_batches"],
+      "columns": [
+        {
+          "name": "allow_move_objects",
+          "label_en": "",
+          "label_es": "",
+          "is_icon":true,
+          "image_name":"ACTIVATE_DEACTIVATE",
+          "icon_name": "allow_move_objects",
+          "tooltip":{
+            "text": "111 the box {fld:name} is {fld?allow_move_objects ? open : closed}",
+            "text_en": "the box {fld:name} is {fld?allow_move_objects ? open : close} {fld?name:Box 1? 'result1' :Caja A' ? 'result2' : 'default'}",
+            "text_es": "La caja {fld:name} está {fld?allow_move_objects ? abierta : cerrada}",
+            "text1": "the box {fld:name} is {fld:allow_move_objects}"
+          }
+        },
+        {
+          "name": "name",
+          "label_en": "name",
+          "label_es": "name"
+        },        
+        {
+          "name": "incubation_incubator",
+          "label_en": "Incubator",
+          "label_es": "Incubadora"
+        },
+        {
+          "name": "incubation_start",
+          "label_en": "Start",
+          "label_es": "F. Iniciado"
+        },
+        {
+          "name": "chrono",
+          "fldForTimer":"incubation_start",
+          "startWarning": "20",
+          "startAlert": "40",
+          "label_en": "Duration",
+          "label_es": "Duración"
+        },
+        
+        {
+          "name": "counter",
+          "propertyName": "SAMPLES_ARRAY",
+          "label_en": "Num Samples",
+          "label_es": "Num Muestras"
+        }        
+      ],
+      "actions": [
+        {
+          "actionName": "EM_BATCH_INCUB_CREATE",
+          "requiresDialog": true,
+          "endPointUrl": "Programs",
+          "button": {
+            "title": {
+              "label_en": "New Batch",
+              "label_es": "Nuevo Lote"
+            },
+            "requiresGridItemSelected": false
+          },
+          "dialogInfo": {
+            "name": "genericDialog",
+            "fields": [
+              {
+                "text1": {
+                  "label_en": "New Batch Name",
+                  "label_es": "Nombre para nueva Tanda"
+                }
+              }
+            ]
+          },
+          "endPointParams": [
+            {
+              "argumentName": "batchName",
+              "element": "text1",
+              "defaultValue": ""
+            },
+            {
+              "argumentName": "batchTemplateId",
+              "defaultValue": 1
+            },
+            {
+              "argumentName": "batchTemplateVersion",
+              "defaultValue": 1
+            },
+            {
+              "argumentName": "incubStage",
+              "fixValue": "1"
+            }
+          ]
+        },
+      ],
+      "row_buttons":[
+        {
+          "actionName": "EM_BATCH_ASSIGN_INCUB",
+          "buttonForQuery": false,
+          "requiresDialog": true,
+          "button": {
+            "icon": "add_task",
+            "title": {
+              "label_en": "Add Analysis",
+              "label_es": "Añadir Ensayo"
+            },
+            "requiresGridItemSelected": false
+          },
+          "endPointParams": [
+            {
+              "argumentName": "batchName",
+              "selObjectPropertyName": "name"
+            },
+            {
+              "argumentName": "incubatorName",
+              "selObjectPropertyName": "name",
+              "getFromGrid": true
+            },
+            {
+              "argumentName": "incubStage",
+              "selObjectPropertyName": "stage",
+              "getFromGrid": true
+            }            
+          ],
+          "dialogInfo": {
+            "name": "genericDialog",
+            "gridContent": true,
+            "masterDataEntryName": "instrument_incubator",
+            "langConfig": {
+              "gridHeader": [
+                {
+                  "fldName": "name",
+                  "label_en": "Incubator",
+                  "label_es": "Incubadora",
+                  "width": "40%",
+                  "sort": false,
+                  "filter": true,
+                  "align": "left"
+                },
+                {
+                  "fldName": "description",
+                  "label_en": "Description",
+                  "label_es": "Descripción",
+                  "width": "40%",
+                  "sort": true,
+                  "filter": false
+                }
+              ]
+            },
+            "automatic": true
+          }
+        },        
+        {
+          "actionName": "EM_BATCH_ASSIGN_INCUB",
+          "requiresDialog": true,
+          "endPointUrl": "Programs",
+          "clientMethod": "getAssign",
+          "button": {
+            "icon": "link",
+            "title": {
+              "label_en": "Assign Incubator",
+              "label_es": "Asignar Incubadora"
+            },
+            "requiresGridItemSelected": false,
+            "alternativeItemPropertyName": "selectedBatches",
+            "disabledBEState": "incubation_start"
+          },
+          "dialogQueries": [
+            {
+              "actionName": "GET_INCUBATORS_LIST",
+              "endPoint": "/moduleenvmon/EnvMonIncubatorAPIqueries",
+              "variableForData": "incubatorsList",
+              "endPointParams": [
+                {
+                  "argumentName": "incubStage",
+                  "fixValue": "1"
+                }
+              ]
+            }
+          ],
+          "dialogInfo": {
+            "name": "assignDialog",
+            "automatic": true,
+            "action": {
+              "actionName": "EM_BATCH_ASSIGN_INCUB",
+              "endPointUrl": "Batches",
+              "endPointParams": [
+                {
+                  "argumentName": "batchName",
+                  "internalVariableObjName": "selectedBatches",
+                  "internalVariableObjProperty": "name"
+                },
+                {
+                  "argumentName": "incubatorName",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "incubStage",
+                  "targetValue": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "actionName": "EM_BATCH_INCUB_START",
+          "endPointUrl": "Programs",
+          "requiresDialog": false,
+          "button": {
+            "icon": "play_circle",
+            "title": {
+              "label_en": "Start Incubator",
+              "label_es": "Iniciar Incubadora"
+            },
+            "requiresGridItemSelected": false
+          },          
+          "endPointParams": [
+            {
+              "argumentName": "batchName",              
+              "selObjectPropertyName": "name"
+            },
+            {
+              "argumentName": "batchTemplateId",
+              "selObjectPropertyName": "incub_batch_config_id" 
+            },
+            {
+              "argumentName": "batchTemplateVersion",
+              "selObjectPropertyName": "incub_batch_config_version"
+            }
+          ]          
+        },
+        {
+          "actionName": "EM_BATCH_INCUB_END",
+          "endPointUrl": "Programs",
+          "requiresDialog": false,
+          "button": {
+            "icon": "stop_circle",
+            "title": {              
+              "label_en": "End Incubator",
+              "label_es": "Termina incubadora"
+            },
+            "requiresGridItemSelected": false            
+          },
+          "endPointParams": [
+            {
+              "argumentName": "batchName",              
+              "selObjectPropertyName": "name"
+            },
+            {
+              "argumentName": "batchTemplateId",
+              "selObjectPropertyName": "incub_batch_config_id" 
+            },
+            {
+              "argumentName": "batchTemplateVersion",
+              "selObjectPropertyName": "incub_batch_config_version"
+            }
+          ]
+        }
+      ]
+    }, 
+    "boxesContentColumns":{
+      "endPointPropertyArray": "SAMPLES_ARRAY",
+      "columns": [
+        {
+          "name": "sample_id",
+          "label_en": "name",
+          "label_es": "name"
+        },
+        {
+          "name": "posX",
+          "label_en": "posX",
+          "label_es": "posX"
+        },
+        {
+          "name": "incubation_start",
+          "label_en": "incubation_start",
+          "label_es": "incubation_start"
+        }
+      ]
+    },    
+    "objectsToDragColumns":{
+      "endPointPropertyArray": ["incub_1"],
+      "columns": [
+        {
+          "name": "sample_id",
+          "label_en": "id",
+          "label_es": "id"
+        },
+        {
+          "name": "logged_on",
+          "label_en": "Logged",
+          "label_es": "Creada"
+        },
+        {
+          "name": "location_name",
+          "label_en": "Location",
+          "label_es": "Ubicación"
+        },
+        {
+          "name": "incubation_batch",
+          "label_en": "Batch",
+          "label_es": "Tanda"
+        },        
+        {
+          "name": "incubation_incubator",
+          "label_en": "Incubator",
+          "label_es": "Incubadora"
+        },
+        {
+          "name": "incubation_start",
+          "label_en": "incubation_start",
+          "label_es": "incubation_start"
+        }
+      ]
+    },
+    "dataIntegrityCheck":{
+      "xdropingEntryRequiredProperties":["sample_id", "study", "temperaturezzz"],
+      "xdropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "values", "values": [1, 3]}},
+        {"name": "id", "criteria":{"type": "range", "min": 1, "max": 4}},
+      ],
+      "xxdropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "selectedBox_value", "selectedBoxPropName": "anyProperty"}}
+      ]
+    },      
+    "boxPosicsViews":[
+      ["sample_id", "logged_on", "location_name"],
+      ["sample_id", "logged_on", "location_name", "program_name", "area"],
+      ["sample_id"]
+    ],
+    "dropAction": { 
+      "actionName": "EM_BATCH_INCUB_ADD_SMP",
+      "endPointUrl": "Samples",
+      "requiresDialog": false,
+      "button": {
+        "title": {
+          "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+        },
+        "requiresGridItemSelected": true,
+      },
+      "endPointParams": [ 
+        { "argumentName": "sampleId", "dropElement": "sample_id" },
+        { "argumentName": "batchTemplateId", "dragElement": "incub_batch_config_id" },
+        { "argumentName": "batchTemplateVersion", "dragElement": "incub_batch_config_version" },
+        { "argumentName": "batchName", "dragElement": "name" }			  
+      ]
+    },
+
+
+
+
     "view_definition": [
       {
         "type": "reportTitle",

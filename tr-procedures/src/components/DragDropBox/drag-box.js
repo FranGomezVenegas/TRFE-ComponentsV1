@@ -4,12 +4,6 @@ import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '@material/mwc-textfield';
-import '@vaadin/vaadin-grid/vaadin-grid';
-import '@vaadin/vaadin-grid/vaadin-grid-column';
-import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
-import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
-import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
-import '@vaadin/vaadin-context-menu/vaadin-context-menu';
 
 import '@trazit/cred-dialog'
 import '../../gridmodel-bottomcomp-chart';
@@ -31,10 +25,10 @@ import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialo
 import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
 
 import '../DragDropBox';
-
+//
 
 import '../Audit/audit-dialog';
-export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement)))))))))))) {
+export class DrapBox extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions(TrazitGenericDialogs(TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog((ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement))))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,
@@ -96,7 +90,7 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
         contextMenuItems: { type: Array },
         useFakeData: {type: Boolean},
         data: { type: Array },
-
+        dragdropboxdata: { type: Array }
       };
     }
   
@@ -110,34 +104,92 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
       this.localProceduresModels=ProceduresModel
       this.masterData={}
       this.contextMenuItems=[]
-      this.useFakeData=true
+      this.useFakeData=false
       this.data=[]
+      this.dragdropboxdata=[]
+    }
+
+
+    connectedCallback() {
+      super.connectedCallback();
+      window.addEventListener('dragdropboxdata-changed', this._onDragdropboxdataChanged.bind(this));
+      this._checkSessionStorage();
+    }
+  
+    disconnectedCallback() {
+      window.removeEventListener('dragdropboxdata-changed', this._onDragdropboxdataChanged.bind(this));
+      super.disconnectedCallback();
+    }
+  
+    _onDragdropboxdataChanged() {
+      const newData = JSON.parse(sessionStorage.getItem('dragdropboxdata'));
+      this.dragdropboxdata = newData;
+      this.refreshData(newData);
+    }
+  
+    _checkSessionStorage() {
+      const data = JSON.parse(sessionStorage.getItem('dragdropboxdata'));
+      if (data && data !== this.dragdropboxdata) {
+        this.dragdropboxdata = data;
+        this.refreshData(data);
+      }
     }
 
     firstUpdated() {
       if (this.useFakeData){
         this.data=this.viewModelFromProcModel.fakedata
-      }else{
+      }else{ 
         this.filterPerformAction()
       }
+      this.dragdropbox;
     }
   
     async filterPerformAction(e, flag) {
   
       await this.GetViewData(false)
       this.data=this.requestData
-    }    
+      console.log('getViewData', this.data)
+    }
+    
+
     resetView(){
       this.selectedItems=[]
       this.ready=false;
     }
+    updated(changedProperties) {
+      if (changedProperties.has('dragdropboxdata')) {
+        this.refreshData(this.dragdropboxdata);
+      }
+      if (changedProperties.has('requestData')) {
+        this.refreshData(this.requestData);
+      }
+
+      
+    }
+  
+    refreshData(newData) {
+      this.data = newData;
+      this.refreshView();
+    }
+  
+    refreshView() {
+      this.dragdropbox.data=this.data      
+      this.dragdropbox.refreshTables()
+      //alert('refreshView');
+    }
+
     render(){
       return html`
-        <dragdrop-box .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
+      ${this.loadDialogs()}
+        <dragdrop-box id="dragdropbox" .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
           .data=${this.data}
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-box>
       `
     }
+    get dragdropbox() {   
+       //alert('get dragdropbox')
+      return this.shadowRoot.querySelector("dragdrop-box#dragdropbox")    }
+    
     renderWhenRequiresRefreshDueToMultipleViewsUsingIt(){
       return html`
         <div style='display:none;'>
@@ -148,12 +200,11 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-box>
       `
     }    
+    
     renderOriginal() {
       return html`
+      ${this.loadDialogs()}
         <div>      
-          ${this.topCompositionBlock()} 
-          ${this.abstractBlock()}
-          ${this.bottomCompositionBlock()}  
           <div style="display:none">
             ${this.ready===false&&this.viewModelFromProcModel.tabs===undefined ? html`${this.GetViewData()}`: nothing}            
           </div>
@@ -162,7 +213,7 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
       `
     }
     loadDialogs(){
-      //console.log('loadDialogs')
+      //alert('loadDialogs')
       return html`
       ${this.credentialsDialog()}
       ${this.genericFormDialog()}
@@ -179,138 +230,11 @@ export class DrapBox extends TrazitTakePictureDialog(TrazitCredentialsDialogs(Au
       }  
       ${this.decisionTemplate()}
     `}
-  topCompositionBlock(){
-      return html`
-      ${this.viewModelFromProcModel.topCompositions ?
-        html`${this.viewModelFromProcModel.topCompositions.map(c => 
-          html`<templates- id="topComp"
-            .windowOpenable=${this.windowOpenable}
-            .sopsPassed=${this.sopsPassed}
-            .templateName=${c.templateName} .buttons=${c.buttons} .lang=${this.lang}
-            .viewName=${this.viewName} .filterName=${this.filterName}
-            .viewModelFromProcModel=${this.viewModelFromProcModel}
-            .procInstanceName=${this.procInstanceName}
-            @program-changedzzzz=${e=>this.gridItems=e.detail}
-            @program-changed=${this.programChangedAction}
-            @template-event=${this.templateEvent}></templates->           
-          `
-        )}` :
-        nothing
-      }
-      `
-  }
 
   setReady(){
     this.ready=true
   }
-  programChangedAction(e){
-    if (e===undefined){return}
-    this.ready=true
-    this.gridItems=e.detail
 
-  }
-  bottomCompositionBlock(){
-  return html`
-  ${this.viewModelFromProcModel.bottomCompositions ?
-      html`${this.viewModelFromProcModel.bottomCompositions.map(c =>                             
-      html`
-          ${c.elementName=='envmonit-batch-sampleincubation' ? html`                               
-          <div class="layout flex">
-          <gridmodel-bottomcomp-sampleincubation id=${c.filter} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName}
-              .lang=${this.lang}
-              .windowOpenable=${this.windowOpenable}
-              .sopsPassed=${this.sopsPassed}
-              .model=${c} .config=${this.config} .batchName=${this.batchName}
-              @reload-samples=${e=>this[e.detail.method]()}
-              @selected-incub=${this.filteringBatch}
-              @selected-batch=${this.filteringIncub}
-              @set-grid=${e=>this.setGrid(e.detail)}></gridmodel-bottomcomp-sampleincubation>
-          </div>
-          ` : nothing} 
-          ${c.elementName=='chart' ? html`      
-          <div class="layout flex">
-          <gridmodel-bottomcomp-chart id=${c.filter} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName}
-          .selectedItems=${this.selectedItems} .lang=${this.lang}
-          .model=${c} .config=${this.config}></gridmodel-bottomcomp-chart>
-          </div>
-      ` : nothing} 
-      `
-      )}` :
-      html``
-  }
-  `
-  }
-  activeItemChanged(e){    
-    if (e===undefined){return}
-    let d=true
-    d=this.disabledByCertification(this.viewModelFromProcModel.langConfig.gridActionOnClick)     
-    if (d) {
-       //alert('View in read only mode')
-      return
-    }
-    this.selectedItems=e.detail.value ? [e.detail.value] : []
-    if (this.selectedItems.length>0&&this.viewModelFromProcModel.langConfig.gridActionOnClick!==undefined){
-      //alert(this.viewModelFromProcModel.langConfig.gridActionOnClick.actionName)
-      this.GetAlternativeViewData(this.viewModelFromProcModel.langConfig.gridActionOnClick)
-    }
-
-  }
-  abstractBlock(){
-    //console.log('abstractBlock')
-    let addContextMenu=this.addContextMenu()    
-  return html`
-  ${this.loadDialogs()} 
-  ${this.abstract ? 
-      nothing :
-      html`
-        ${this.viewModelFromProcModel.topCompositions!==undefined ? nothing: html`${this.getTitle()}`}
-      
-        <div class="layout horizontal flex wrap">
-            <div class="layout flex">          
-            <div class="layout horizontal center flex wrap">
-              ${this.getButton()}
-            </div>
-            ${this.ready ? 
-              html`
-              ${addContextMenu!==undefined&&addContextMenu===true?html`
-                <vaadin-context-menu .items=${this.contextMenuItems} @item-selected="${this.contextMenuAction}">
-                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-                  @active-item-changed=${this.activeItemChanged}
-                  .items=${this.gridItems} .selectedItems="${this.selectedItems}"
-                  ${gridRowDetailsRenderer(this.detailRenderer)}
-                  ${this.setCellListener()}                  
-                >
-                  ${this.gridList(this.viewModelFromProcModel)}
-                </vaadin-grid>
-                </vaadin-context-menu>`
-              :html`
-                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-                @active-item-changed=${this.activeItemChanged}
-                .items=${this.gridItems} .selectedItems="${this.selectedItems}"
-                ${gridRowDetailsRenderer(this.detailRenderer)}
-                ${this.setCellListener()}                
-                >
-                ${this.gridList(this.viewModelFromProcModel)}
-              </vaadin-grid>`
-              }
-              
-              <div id="rowTooltip">&nbsp;</div>
-              ` :
-              html``
-          }
-          </div>   
-          <audit-dialog @sign-audit=${this.setAudit} .actionBeingPerformedModel=${this.actionBeingPerformedModel} 
-          .filterName=${this.filterName} .lang=${this.lang} .windowOpenable=${this.windowOpenable}
-          .sopsPassed=${this.sopsPassed} .procInstanceName=${this.procInstanceName} .viewName=${this.viewName} 
-          .viewModelFromProcModel=${this.viewModelFromProcModel}
-          .selectedItems=${this.selectedItems} .config=${this.config}></audit-dialog>
-
-
-        </div>
-      `
-  }    
-  `
-  }
   contextMenuAction(e){
     //console.log(e.target)
     let selectedItem=e.target
