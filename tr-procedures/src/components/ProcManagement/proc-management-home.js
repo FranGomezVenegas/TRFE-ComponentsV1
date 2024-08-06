@@ -1320,9 +1320,9 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
     return combinedValues; 
   }
   testingcardSomeElementsRepititiveObjects(elem, data, flag, index) {
-    data = this.localGetDataFromRoot(elem.view_definition.detail, data);
-    //console.log('testingcardSomeElementsRepititiveObjects', 'elem', elem, 'getDataFromRoot', data)
-    //console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
+    data = this.TRAZiTgetDataFromRoot (elem.view_definition.detail, data);
+    //console.log('testingcardSomeElementsRepititiveObjects', 'elem', elem, 'TRAZiTgetDataFromRoot', data)
+    //console.log('cardSomeElementsRepititiveObjects >> TRAZiTgetDataFromRoot', 'elem', elem, 'data', data)
     if (data === undefined) {
       return html``;
     }
@@ -1567,7 +1567,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
       : fld.name;
   }
 
-  localGetDataFromRoot(elem, data) {
+  localgetxxxDataFromRoot(elem, data) {
     if (data === undefined) {
       return undefined;
     }

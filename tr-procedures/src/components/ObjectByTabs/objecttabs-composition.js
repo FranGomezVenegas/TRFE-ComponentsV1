@@ -451,7 +451,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
   treeElement(elem, data){
     //console.log('treeElement', elem, data)    
     let dataArr=[]
-      dataArr = this.getDataFromRoot(elem, data);
+      dataArr = this.TRAZiTgetDataFromRoot(elem, data);
     //console.log('dataArr', dataArr)  
     return html`<tree-view .specification=${elem.view_definition} .data=${dataArr}></tree-view>`
   }

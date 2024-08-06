@@ -6,8 +6,8 @@ export function CardMultipleElementsView(base) {
         cardMultipleElementsView(elem, data) {
           
             //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
-            //data = this.getDataFromRoot(elem, data);
-            console.log('CardMultipleElementsView >> getDataFromRoot', 'elem', elem, 'data', data)
+            //data = this.TRAZiTgetDataFromRoot(elem, data);
+            console.log('CardMultipleElementsView >> TRAZiTgetDataFromRoot', 'elem', elem, 'data', data)
             return html`
               ${Array.isArray(data) && data.length > 0
           ? html`

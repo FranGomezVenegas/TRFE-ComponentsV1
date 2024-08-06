@@ -1,6 +1,7 @@
+import { ActionsFunctions } from "../Actions/ActionsFunctions";
 export function ViewDownloadable(base) {
-return class extends  (base) {
-    getDataFromRoot(elem, data) {
+return class extends  ActionsFunctions(base) {
+    getxxxDataFromRoot(elem, data) {
         if (elem!==undefined&&elem.contextVariableName!==undefined){
           if (this[elem.contextVariableName]!==undefined){
             data=this[elem.contextVariableName]
@@ -92,7 +93,7 @@ return class extends  (base) {
         let csvContent = "data:text/csv;charset=utf-8;"
         let header = [], contents = []
         contents = this.getTraceabilityInfo()
-        let data=this.getDataFromRoot(this.viewModelFromProcModel.download.elements[0], this.selectedItem)
+        let data=this.TRAZiTgetDataFromRoot (this.viewModelFromProcModel.download.elements[0], this.selectedItem)
         for (let i=0; i<data.length; i++) {
           //if (data[i].spec_code) {
             if (!header.length) {

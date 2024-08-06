@@ -7,7 +7,15 @@ export const styles = css`
   * {
     box-sizing: border-box;
   }
-
+  .black {
+    color: black;
+  }
+  .yellow {
+    color: yellow;
+  }
+  .red {
+    color: red;
+  }
   .structuredbox-content {
     width: fit-content;
     border-radius: 4px;

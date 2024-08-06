@@ -32,7 +32,7 @@ export const template = (props, data, lang, thisComponent) => {
 }
 
 function myTable(elem, dataArr, lang, props, thisComponent) {  
-  dataArr=getDataFromRoot(elem, dataArr)
+  dataArr=TRAZiTgetDataFromRoot(elem, dataArr)
  if(dataArr && Object.keys(elem.smartFilter.filterValues).length != 0){
     dataArr=applyFilterToTheData(dataArr,elem.smartFilter.filterValues);
  }
@@ -167,11 +167,11 @@ function handleClear(elem,thisComponent){
 function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent) {
   //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
   
-  data = getDataFromRoot(elem, data);
+  data = TRAZiTgetDataFromRoot(elem, data);
   if(data && Object.keys(elem.smartFilter.filterValues).length != 0){
     data=applyFilterToTheData(data,elem.smartFilter.filterValues);
  }
-  console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
+  console.log('cardSomeElementsRepititiveObjects >> TRAZiTgetDataFromRoot', 'elem', elem, 'data', data)
   return html`
       <div style="flex:1;">
       <!-- Smart Filter UI -->

@@ -31,12 +31,8 @@ class NewparentReadOnlyTable extends ReadOnlyTableParts(ButtonsFunctions(ApiFunc
 
   updated(changedProperties) {
     if (changedProperties.has('directData')) {
-      this.dataArr = this.getDataFromRoot(this.elem, this.directData);
+      this.dataArr = this.TRAZiTgetDataFromRoot(this.elem, this.directData);
     }
-  }
-
-  getDataFromRoot(elem, data) {
-    return getDataFromRoot(elem, data);
   }
 
   handleFilter(event, p, elem, idx) {

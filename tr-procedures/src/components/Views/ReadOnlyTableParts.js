@@ -3,12 +3,13 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
 import { FeaturesDynamicFieldValue } from '../../features/dynamicFieldValue';
+import { ApiFunctions } from '../Api/ApiFunctions';
 import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 
 export function ReadOnlyTableParts(base) {
     let contextMenu = undefined;
-    return class extends FeaturesDynamicFieldValue(GridFunctions(ButtonsFunctions(base))) {
+    return class extends ApiFunctions(FeaturesDynamicFieldValue(GridFunctions(ButtonsFunctions(base)))) {
         popupFilterElement(elem, dataArr){
           elem.filterElements=[{"name": "lot_name", "type": "text"}, 
           {"name": "references", "type": "multilist", "list properties":"blablabla"}]
@@ -48,7 +49,7 @@ export function ReadOnlyTableParts(base) {
               if (directData !== undefined) {
                 dataArr = directData;
               } else {
-                dataArr = this.getDataFromRoot(elem, dataArr);
+                dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr);
               }
               let cleanArr=[]
               if (!this.dataContainsRequiredProperties(elem, dataArr)) {
