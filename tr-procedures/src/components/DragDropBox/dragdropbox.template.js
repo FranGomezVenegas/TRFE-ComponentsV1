@@ -77,7 +77,7 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
                 html ``}
             </div>
             <div class="col"> <!-- Añadir margen izquierdo y height: 100% -->
-                ${viewModel.objectsToDragColumns === undefined ? html`` : html`${dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data, componentRef)}`}
+                ${viewModel.objectsToDragColumns === undefined ? html`` : html`${componentRef._dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data, componentRef)}`}
             </div>
         </div>
     </div>        
@@ -234,52 +234,7 @@ function printItemByViewFilter(selItem, tmpLogic, boxPosicsViews, contentStructu
     `;
 }
 
-function dragObjectsTable(tmpLogic, elem, data, componentRef) {
-    let dataArr = componentRef.TRAZiTgetDataFromRoot(elem, data)
-    return html`
-    <div style="flex: 1; display: flex; flex-direction: column; height: 100%;"> <!-- Añadido display: flex y height: 100% para ocupar todo el espacio -->
-        <div id="toggleDisplayDroggableTable" style="display:flex; flex-direction:row; gap: 4px; align-items: center;">
-            <div class="accept-btn" @click=${() => tmpLogic.setViewTable()}> ${tmpLogic.setViewTableButtonLabel()}</div>
-        </div>
-        ${tmpLogic.viewTable ? html`
-            <div style="flex: 1; overflow-y: auto;"> <!-- Añadido overflow-y: auto para el scroll vertical -->
-                ${elem.columns === undefined ? html`` : html`
-                    <table class="dragdropable TRAZiT-DefinitionArea" style="width: 100%;"> 
-                        <thead>
-                            ${elem.columns.map((column) => html`<th>${column.label_en}</th>`)}
-                        </thead>
-                        <tbody>
-                            ${dataArr === undefined || !Array.isArray(dataArr) ? html`No Data` : 
-                            html`  
-                                ${dataArr.map((p, idx) => html`
-                                <tr class="dragdropabletr" draggable="true" @dragstart=${(e) => tmpLogic.dragTableTr(e, elem, p)}>
-                                    ${elem.columns.map((fld, index) => fld.is_icon !== undefined && fld.is_icon == true ? 
-                                        fld.icon_class ?
-                                            html`<div class="left-area">
-                                                ${this.iconRenderer(p, fld.name, idx, fld)}
-                                                <mwc-icon-button class="icon ${p[fld.icon_class]}" icon="${p[fld.icon_name]}" alt="${fld.name}"></mwc-icon-button>
-                                            </div>` :
-                                            html`${this.iconRenderer(p, fld.name, idx, fld)}
-                                                <img src="${tmpLogic.iconRendererSrc(p, fld.name, idx, fld)}" style="width:20px">` 
-                                        :     
-                                        html`<td @click="${() => componentRef.shadowRoot.querySelector('#detail' + idx).toggle()}">${p[fld.name]}</td>`                    
-                                    )}
-                                    ${elem.row_buttons === undefined ? html`` : html`<td><div class="layout horizontal center flex wrap">${componentRef.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>`}
-                                </tr>
-                                <table-row-detail id="detail${idx}">
-                                <div slot="details">
-                                    <!-- Aquí puedes poner el contenido detallado para esta fila -->
-                                </div>
-                                </table-row-detail>`)}
-                            `}
-                        </tbody>
-                    </table>
-                `}
-            </div>
-        ` : null}
-    </div> 
-    `
-}
+
 
 
   

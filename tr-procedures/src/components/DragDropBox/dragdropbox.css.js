@@ -276,7 +276,7 @@ table.dragdropable tr {
 }
 
 table.dragdropable.TRAZiT-UsersArea tr:nth-child(even) {
-  background-color: white;
+  background-color: rgb(214, 233, 248);
 }
 
 table.dragdropable.TRAZiT-UsersArea tr:last-child {
