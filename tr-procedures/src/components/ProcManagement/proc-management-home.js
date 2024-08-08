@@ -1238,7 +1238,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
 
   }
   genericList(elem, data, flag, index) {
-    data = this.localGetDataFromRoot(elem.view_definition.detail, data);
+    data = this.TRAZiTgetDataFromRoot(elem.view_definition.detail, data);
     if (data === undefined) {
       return html``;
     }

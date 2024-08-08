@@ -2831,7 +2831,7 @@ export function DataViews(base) {
   
     const endPointResponseObject = elem.endPointResponseObject;
     const selectedIdx = undefined
-    if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined){    
+    if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined&& Object.keys(this.selectedTableIndex).length > 0){    
       selectedIdx = this.selectedTableIndex[endPointResponseObject];  
     }
   

@@ -92,7 +92,7 @@ return class extends (base) {
       }
     }
   }
-  getDataFromRoot(elem, curDataForThisCard, filterValues) {
+  getxxxDataFromRoot(elem, curDataForThisCard, filterValues) {
     if (elem !== undefined && elem.contextVariableName !== undefined) {
       if (this[elem.contextVariableName] !== undefined) {
         curDataForThisCard = this[elem.contextVariableName];
