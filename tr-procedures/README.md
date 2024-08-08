@@ -96,3 +96,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.51 export to csv, all data when nothing selected fixed]
 [- v0.2.52 the refreshable, printable, downloadable enabled by default should be only for tables]
 [- v0.2.53 Moving from getDataFromRoot to TRAZiTgetDataFromRoot to make all components point to ApiFunctions instead of local instances]
+[- v0.2.54 Moving from getDataFromRoot to TRAZiTgetDataFromRoot to make all components point to ApiFunctions instead of local instances, rev2]
