@@ -93,13 +93,13 @@ export function ExportTableToCsv(base) {
             if (selectedData === undefined || selectedData.length > 0) {
                 dataArr = selectedData;
             }
-
+        
             let allFieldsInDataArrSet = new Set();
             dataArr.forEach(item => {
                 Object.keys(item).forEach(key => allFieldsInDataArrSet.add(key));
             });
             const allFieldsInDataArr = Array.from(allFieldsInDataArrSet);
-
+        
             const allNamesInColumns = new Set();
             downloadElements.columns.forEach(column => {
                 if (column.hasOwnProperty('name')) {
@@ -108,17 +108,17 @@ export function ExportTableToCsv(base) {
             });
             const tableColumnsArray = Array.from(allNamesInColumns);
             this.fieldsToDownload = tableColumnsArray;
-
+        
             console.log('downloadElements', downloadElements);
-
+        
             if (downloadElements.downloadable !== undefined && downloadElements.downloadable.allowUserSelectColumns !== undefined && downloadElements.downloadable.allowUserSelectColumns === true) {
                 await this.showDialog(lang, allFieldsInDataArr, this.fieldsToDownload);
                 this.fieldsToDownload = this.updateFieldsToDownload(); // Actualizar después de la selección
             }
-
-            let csvContent = "data:text/csv;charset=utf-8;";
+        
+            let csvContent = "data:text/csv;charset=utf-8,"; // Cambiado a coma en lugar de punto y coma
             let contents = this.getTraceabilityInfo();
-
+        
             let headers = this.fieldsToDownload.map(key => key[`label_${lang}`] || key);
             contents.push(headers.join(";"));
             if (dataArr !== undefined) {
@@ -129,44 +129,40 @@ export function ExportTableToCsv(base) {
                     contents.push(row);
                 });
             }
-            // Joining all rows with newline to form the final CSV content
+            
             csvContent += contents.join("\r\n");
+        
             let encodedUri = encodeURI(csvContent);
             let link = document.createElement("a");
-
-            // Date formatting with leading zeros for single digits
-            let currentDate = new Date();
-            let cDay = ('0' + currentDate.getDate()).slice(-2);
-            let cMonth = ('0' + (currentDate.getMonth() + 1)).slice(-2);
-            let cYear = currentDate.getFullYear();
-
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `export_${cYear}${cMonth}${cDay}.csv`); // Simplified filename
+            link.setAttribute("download", `export_${new Date().toISOString().slice(0, 10)}.csv`); // Simplified filename
             document.body.appendChild(link); // Append link to the body to ensure it can be clicked
             link.click();
             document.body.removeChild(link); // Clean up link after clicking
         }
-
+        
         getTraceabilityInfo() {
             let trackInfo = [];
             let userSession = JSON.parse(sessionStorage.getItem("userSession"));
-            trackInfo.push(['Traceability Info: ']);
-            trackInfo.push(['This file was created on', new Date(), 'by', userSession.header_info.first_name + ' ' + userSession.header_info.last_name]);
-            trackInfo.push(['system', this.dbName, 'Procedure', this.procName]);
-            trackInfo.push(['Data: ']);
+            let procInstanceName = sessionStorage.getItem("currentProcInstanceName");
+            trackInfo.push('Traceability Info:; TRAZiT');
+            trackInfo.push('Exported by:;' + userSession.header_info.first_name + ' ' + userSession.header_info.last_name);
+            trackInfo.push('Exported on:;' + String(new Date()));
+            trackInfo.push('System:;' + userSession.dbName + ';Procedure:;' + procInstanceName);
             return trackInfo;
         }
+        
 
         showDialog(lang, unselectedList, selectedList) {
             return new Promise((resolve, reject) => {
                 this.cleanupDialog(); // Clean up any existing dialog elements before creating new ones
-
+        
                 const dialogContainer = document.createElement('div');
                 dialogContainer.id = 'dialog-container';
                 dialogContainer.style.display = 'none';
                 dialogContainer.style.zIndex = '1000';
                 dialogContainer.style.position = 'relative';
-
+        
                 const dialogBackground = document.createElement('div');
                 dialogBackground.id = 'dialog-background';
                 dialogBackground.style.position = 'fixed';
@@ -175,7 +171,7 @@ export function ExportTableToCsv(base) {
                 dialogBackground.style.width = '100%';
                 dialogBackground.style.height = '100%';
                 dialogBackground.style.background = 'rgba(0, 0, 0, 0.5)';
-
+        
                 const dialogBox = document.createElement('div');
                 dialogBox.id = 'dialog-box';
                 dialogBox.style.position = 'fixed';
@@ -185,13 +181,16 @@ export function ExportTableToCsv(base) {
                 dialogBox.style.background = 'white';
                 dialogBox.style.padding = '20px';
                 dialogBox.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-
+        
                 const selectedColumnsContainer = document.createElement('div');
                 const selectedColumnsTitle = document.createElement('h4');
                 selectedColumnsTitle.textContent = lang === 'es' ? 'Columnas seleccionadas' : 'Selected Columns';
                 const selectedListElement = document.createElement('ul');
                 selectedListElement.id = 'selected-list';
                 selectedListElement.classList.add('list');
+                selectedListElement.style.fontFamily = 'Montserrat';
+                selectedListElement.style.color = '#808080';
+                selectedListElement.style.fontSize = '20px';
 
                 const unselectedColumnsContainer = document.createElement('div');
                 const unselectedColumnsTitle = document.createElement('h4');
@@ -199,43 +198,73 @@ export function ExportTableToCsv(base) {
                 const unselectedListElement = document.createElement('ul');
                 unselectedListElement.id = 'unselected-list';
                 unselectedListElement.classList.add('list');
-
+                unselectedListElement.style.fontFamily = 'Montserrat';
+                unselectedListElement.style.color = '#808080';
+                unselectedListElement.style.fontSize = '20px';
+                
                 selectedColumnsContainer.appendChild(selectedColumnsTitle);
                 selectedColumnsContainer.appendChild(selectedListElement);
                 unselectedColumnsContainer.appendChild(unselectedColumnsTitle);
                 unselectedColumnsContainer.appendChild(unselectedListElement);
+        
 
                 const okButton = document.createElement('button');
                 okButton.id = 'dialog-ok';
                 okButton.textContent = 'OK';
+                okButton.classList.add('sp-button'); // Aplicar la clase sp-button
+                okButton.style.background = '#1473e6';
+                okButton.style.borderColor = 'inherit';
+                okButton.style.borderRadius = '35px';
+                okButton.style.fontFamily = 'Montserrat';
+                okButton.style.fontWeight = 'bold';
+                okButton.style.fontSize = '19px';
+                okButton.style.color = '#FFFFFF';                
                 okButton.onclick = () => {
                     this.fieldsToDownload = this.updateFieldsToDownload(); // Actualizar después de cerrar el diálogo
                     dialogContainer.style.display = 'none';
                     resolve();
                 };
-
+        
                 const cancelButton = document.createElement('button');
                 cancelButton.id = 'dialog-cancel';
                 cancelButton.textContent = 'Cancel';
+                cancelButton.classList.add('sp-button'); // Aplicar la clase sp-button
+                cancelButton.style.background = '#1473e6';
+                cancelButton.style.borderColor = 'inherit';
+                cancelButton.style.borderRadius = '35px';
+                cancelButton.style.fontFamily = 'Montserrat';
+                cancelButton.style.fontWeight = 'bold';
+                cancelButton.style.fontSize = '19px';
+                cancelButton.style.color = '#FFFFFF';                
                 cancelButton.onclick = () => {
                     dialogContainer.style.display = 'none';
                     reject('Dialog cancelled');
                 };
-                                
+        
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.display = 'flex';
+                buttonContainer.style.justifyContent = 'center';
+                buttonContainer.style.gap = '10px'; // Espacio entre los botones
+                buttonContainer.style.marginTop = '20px'; // Margen superior para separar de las listas
+                
+                buttonContainer.appendChild(okButton);
+                buttonContainer.appendChild(cancelButton);
+
                 dialogBox.appendChild(selectedColumnsContainer);
                 dialogBox.appendChild(unselectedColumnsContainer);
-                dialogBox.appendChild(okButton);
-                dialogBox.appendChild(cancelButton);
-
+                dialogBox.appendChild(buttonContainer);
+                // dialogBox.appendChild(okButton);
+                // dialogBox.appendChild(cancelButton);
+        
                 dialogBackground.appendChild(dialogBox);
                 dialogContainer.appendChild(dialogBackground);
-
+        
                 document.body.appendChild(dialogContainer);
                 dialogContainer.style.display = 'block';
-
+        
                 // Llamar a populateLists después de que el diálogo esté en el DOM
                 this.populateLists(selectedList, unselectedList);
-
+        
                 dialogBackground.addEventListener('click', (event) => {
                     if (event.target === dialogBackground) {
                         dialogContainer.style.display = 'none';
@@ -244,6 +273,7 @@ export function ExportTableToCsv(base) {
                 });
             });
         }
+        
 
         populateLists(selected, unselected) {
             const selectedList = document.getElementById('selected-list');

@@ -34,7 +34,7 @@
     "@spectrum-web-components/split-view": "^0.4.3",
     "@spectrum-web-components/tabs": "^0.8.1",
     "@spectrum-web-components/tooltip": "^0.9.0",
-    "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",    
+    "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
     "@vaadin/accordion": "^24.3.13",
     "@vaadin/vaadin-accordion": "^23.5.1",
     "@vaadin/vaadin-context-menu": "^21.0.5",
@@ -47,7 +47,8 @@
     "lit": "^2.0.2",
     "lit-element-router": "^2.0.3",
     "lit-vaadin-helpers": "^0.2.1",
-    "qrcode": "^1.5.3"
+    "qrcode": "^1.5.3",
+    "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.6.1",

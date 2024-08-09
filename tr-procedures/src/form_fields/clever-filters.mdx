@@ -1,0 +1,90 @@
+import { Meta, Story, Canvas, Preview } from '@storybook/addon-docs';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+<Meta title="TRAZiT Views/Parent Read Only Table/Clever Filters" />
+
+# Clever Filters
+
+- This section explains the concepts related to clever filters
+- The main purpose is to enable the filter of data by some criterias.
+<video width="640" height="480" controls  style={{ top:"-140px", position:"relative", marginBottom: "40px" }}>
+  <source src="./TRAZiTViews/ParentReadOnlyTable/CleverFilter/overview.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+<h2 style={{ marginTop: "-100px" }}>Concept Overview</h2>
+
+By default the Clever Filter is disabled, it is on adding the proper property to any column when it will enable it.
+
+### How to configure
+#### 1. smartFilter
+	In this moment the table should include this property below and with this definition.
+	```Json example
+		"smartFilter":{
+			"filterValues":[]
+		}
+	```
+#### 2. addToSmartFilter
+	For each column you need to add to the smart filter this property and set to true is mandatory
+	```Json example
+		{
+			"name": "name",
+			"label_en": "Name",
+			"label_es": "Nombre",
+			<span style='color: blue;'>"addToSmartFilter":true</span>
+		}
+	```
+### How it works
+
+	- It is **not case sensitive** what means that does not matter if written in lower or upper case
+	- **Includes** It will return any entry that includes this pattern
+	- **OR** If two or more fields are present in the clever filter and some with pattern for searching then all those patterns are managed as or. <br />
+	**Example:**<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;Category: A & Family B. In this case any entry where category contains the letter A or a or has a family containing B or b will be consider a match
+
+### Entire table element example
+
+
+```Json example
+	{ 
+		"type": "readOnlyTable", 
+	  	"endPointResponseObject": "uoms_dictionary",
+		"smartFilter":{
+			"filterValues":[]
+		},
+	"columns": [
+		{
+		"name": "name",
+		"label_en": "Name",
+		"label_es": "Nombre",
+		<span style='color: blue;'>"addToSmartFilter":true</span>
+		},
+		{
+		"name": "measurement_family",
+		"label_en": "Family",
+		"label_es": "Familia",
+		**"addToSmartFilter":true**
+		},
+		{
+		"name": "is_base",
+		"label_en": "Is the base unit?",
+		"label_es": "¿Es la unidad base?",
+		"is_icon": true
+		},
+		{
+		"name": "factor_value",
+		"label_en": "Factor",
+		"label_es": "Factor"
+		},
+		{
+		"name": "offset_value",
+		"label_en": "Offset",
+		"label_es": "Offset"
+		}
+	],
+	"actions":[],
+	"row_buttons":[]	
+	}
+ ```
+	

@@ -1,6 +1,6 @@
 import { Meta, Story, Canvas } from '@storybook/addon-docs';
 
-<Meta title="Frontend Concepts/Header area/TwoList Linked" />
+<Meta title="TRAZiT Actions/Dialogs/Generic Dialog/TwoList Linked" />
 
 # Two List Linked
 
@@ -20,32 +20,65 @@ Linked lists will help link related values ​​to organize better display of i
 
 ```Json example
 {"twoListsLinked": {
-				"listLinked1": {
-				  "label_en": "Category", "label_es": "Categoría", "optional": true,
-				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-                  "xxxitems": [
-                        { "keyName": '1', "keyValue_en":"Option 1", "keyValue_es":"Opción 1", "label": 'Option 1' },
-                        { "keyName": '2', "keyValue_en":"Option 2", "keyValue_es":"Opción 2", "label": 'Option 2' }		
-                        ]		 					  
-				},
-				"listLinked2": {
-				  "label_en": "Reference", "label_es": "Referencia",
-				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-				  "valuesFromMasterData": {
-					"propertyNameContainer": "category_and_references",
-					"propertyNameContainerLevelPropertyKeyName": "name",
-					"filterDependency": ["list1"],
-					"selectedEntryFromFilterPropertyName": "inv_reference",
-					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
-					}					  
-				}
-			  }		
-			}
- ```			
+	"listLinked1": {
+		"label_en": "Category", 
+		"label_es": "Categoría", 
+		"optional": true,
+		"addBlankValueOnTop": true, 
+		"addBlankValueAtBottom": false,	 					  
+	},
+	"listLinked2": {
+		"label_en": "Reference", 
+		"label_es": "Referencia",
+		"addBlankValueOnTop": true, 
+		"addBlankValueAtBottom": false,
+		"valuesFromMasterData": {
+			"propertyNameContainer": "category_and_references",
+			"propertyNameContainerLevelPropertyKeyName": "name",
+			"filterDependency": ["list1"],
+			"selectedEntryFromFilterPropertyName": "inv_reference",
+			"propertyKeyName": "name", 
+			"propertyKeyValueEn": "name", 
+			"propertyKeyValueEs": "name"				
+		}					  
+	}
+	}		
+}
+ ```
+	### Data Sources
+	#### 1. Items 
+	It is a static list of entries where each entry has:
+		label: The element label
+		keyName: The value to be assign to the html element
+		keyValue_en: The value (in English) displayed to the user
+		keyValue_es: The value (in Spanish) displayed to the user
+		```Json example
+			"items": [
+				{ "label": 'Option 1',
+					"keyName": '1', 
+					"keyValue_en":"Option 1", 
+					"keyValue_es":"Opción 1" },
+					
+				{ "label": 'Option 2',
+					"keyName": '2', 
+					"keyValue_en":"Option 2", 
+					"keyValue_es":"Opción 2" 
+				}		
+			]	
+		```			
 
- #### Master Data
-
-    - **propertyNameContainer**: The entry in master data where all entries for the list1 values are.
-    - **propertyNameContainerLevelPropertyKeyName**: The property by which filter from the list1 value.
-    - **selectedEntryFromFilterPropertyName**: The property were the array of entries is located into propertyNameContainer
-    - **propertyKeyName** / propertyKeyValueEn / propertyKeyValueEs: The key and the two labels (en/es) to push into the list of entries.
+ 	#### 2. Master Data
+	Each procedure has its own master data and there is a diversity way build the list getting data from the master data, see the properties related to this feature below:
+		- **propertyNameContainer**: The entry in master data where all entries for the list1 values are.
+		- **propertyNameContainerLevelPropertyKeyName**: The property by which filter from the list1 value.
+		- **selectedEntryFromFilterPropertyName**: The property were the array of entries is located into propertyNameContainer
+		- **propertyKeyName** / propertyKeyValueEn / propertyKeyValueEs: The key and the two labels (en/es) to push into the list of entries.
+		```Json example
+			"valuesFromMasterData": {
+				"propertyNameContainer": "category_and_references",
+				"propertyNameContainerLevelPropertyKeyName": "name",
+				"filterDependency": ["list1"],
+				"selectedEntryFromFilterPropertyName": "inv_reference",
+				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
+			}	
+		```		

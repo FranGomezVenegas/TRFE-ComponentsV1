@@ -338,11 +338,6 @@
     "filterName" :  "SampleLot" 
   },  
   "localDefaultView": {
-    "procName":  "stock", 
-    "viewName": "MasterData", 
-    "filterName" :  "MasterData" 
-  },
-  "localDefaultView": {
     "procName":  "fake-developers", 
     "viewName": "prototype-elements-view-main", 
     "filterName" :  "prototype-elements-view-main" 
@@ -393,6 +388,11 @@
     "viewName": "drag-box", 
     "filterName" :  "drag-box" 
   },  
+  "localDefaultView": {
+    "procName":  "stock", 
+    "viewName": "MasterData", 
+    "filterName" :  "MasterData" 
+  },
 
   "fakeEnd":{
   }  

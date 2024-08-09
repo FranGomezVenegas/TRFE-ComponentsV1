@@ -1071,11 +1071,23 @@ export function DataViews(base) {
           }
 
         table.TRAZiT-DefinitionArea thead tr th {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 16px;
+          font-family: Montserrat;
+          padding: 8px; /* Ajusta el relleno según sea necesario */        
           background-color: #2989d8;
           color: white !important;
         }
 
         table.TRAZiT-UsersArea thead tr th {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 16px;
+          font-family: Montserrat;
+          padding: 8px; /* Ajusta el relleno según sea necesario */        
           background-color: white;
           color: gray;
         }
@@ -2830,7 +2842,7 @@ export function DataViews(base) {
     sessionStorage.setItem('tableTheme', tmp);
   
     const endPointResponseObject = elem.endPointResponseObject;
-    const selectedIdx = undefined
+    let selectedIdx = undefined
     if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined&& Object.keys(this.selectedTableIndex).length > 0){    
       selectedIdx = this.selectedTableIndex[endPointResponseObject];  
     }
@@ -3139,13 +3151,15 @@ export function DataViews(base) {
                               </th>`;
                           }
                           return html`
-                            <th>
+                            <th >
+                            <div style="display:flex;">
                               ${fld["label_" + this.lang]}
                               <span class="resize-handle"></span>
                               <div class="sort-icons">
                                 <span class="sort-icon sort-asc" data-tooltip="${this.lang==="es"?`Orden ascendente`:`Sort ascending`}" @click=${() => sortData(fieldName, true)}></span>
                                 <span class="sort-icon sort-desc" data-tooltip="${this.lang==="es"?`Orden descendente`:`Sort descending`}" @click=${() => sortData(fieldName, false)}></span>
                               </div>
+                            </div>
                             </th>`;
                         })}
                         ${elem.row_buttons === undefined ? nothing : html`<th>${this.lang === "en" ? "Actions" : "Acciones"} <span class="resize-handle"></span></th>`}

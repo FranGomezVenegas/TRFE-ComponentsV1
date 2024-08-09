@@ -2518,16 +2518,21 @@ export const Stock =
 				]
 			  },
 			  { "type": "readOnlyTable", "endPointResponseObject": "uoms_dictionary",
+				"smartFilter":{
+					"filterValues":[]
+				},
 				"columns": [
 				  {
 					"name": "name",
 					"label_en": "Name",
-					"label_es": "Nombre"
+					"label_es": "Nombre",
+					"addToSmartFilter":true
 				  },
 				  {
 					"name": "measurement_family",
 					"label_en": "Family",
-					"label_es": "Familia"					
+					"label_es": "Familia",
+					"addToSmartFilter":true					
 				  },
 				  {
 					"name": "is_base",

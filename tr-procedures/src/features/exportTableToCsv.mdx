@@ -1,0 +1,61 @@
+import { Meta, Story, Canvas, Preview } from '@storybook/addon-docs';
+
+
+<Meta title="TRAZiT Views/Parent Read Only Table/Export to CSV" />
+
+# Export to CSV
+
+This feature provides the ability to downloas in a CSV file the data from a table.
+
+
+![Example of Image](./TRAZiTViews/ParentReadOnlyTable/ExportToCSV/ButtonToPerformTheAction.jpg)
+
+![Example of Image](./TRAZiTViews/ParentReadOnlyTable/ExportToCSV/csvExample.jpg)
+
+## Concept Overview
+
+### Download ALL or the SELECTED ones
+
+There are two kind of tables for single and multi record selection.
+For multi-record selection if no record is selected then all rows in the table will be exported, In case the use made a selection of rows then just the ones selected will be exported.
+
+### allowUserSelectColumns
+
+![Example of Image](./TRAZiTViews/ParentReadOnlyTable/ExportToCSV/ExportToCSV-allowUserSelectColumns.JPG)
+
+<video width="640" height="480" controls>
+  <source src="./TRAZiTViews/ParentReadOnlyTable/ExportToCSV/DemoAllUserSelection.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+This property, set to true, provides the ability to the user to decides which fields to download.
+By default, the 'selected columns' are the ones displayed in the table. The unselected columns are the ones not visible in the table but related to this same entity.
+
+By clicking one entry from the selected columns section it will be moved down to the unselected columns section and vice versa.
+
+By drag-drop one entry from the selected columns the user can move this column up or down to change the order or position where this column will be located into the CSV file.
+
+
+```Json example
+{"downloadable": {				
+	"enable": "true",
+	"allowUserSelectColumns": true	
+}
+ ```			
+## The CSV file content
+
+The file has a header for traceability purpose about the environment, procedure and user and date of creation.
+
+Traceability Info:, TRAZiT
+Exported by:, I'm admin for superuser
+Exported on:, Thu Aug 08 2024 18:55:22 GMT+0200 (Central European Summer Time)
+System:, demo_v0_9_2
+Procedure:, mb_em
+location_name,spec_code,spec_variation_name,spec_analysis_variation,person_ana_definition,requires_tracking_sampling_end
+"C01","LlenadoViales","GradoA","Contacto-Contacto","","false"
+"C01-grB","LlenadoViales","GradoB","Contacto-Contacto","","false"
+"E01","LlenadoViales","GradoA","AirePasivo-Pasivo","Guante Izquierdo|Guante Derecho","false"
+"E02","LlenadoViales","GradoA","AirePasivo-Pasivo","","true"
+"E03","LlenadoViales","GradoA","AirePasivo-Pasivo","","false"
+"V03F","LlenadoViales","GradoA","AireActivo-Activo","","false"
+"V03F-samplingTracking","LlenadoViales","GradoA","AireActivo-Activo","Guante Izquierdo|Guante Derecho","true"

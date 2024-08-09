@@ -78,7 +78,7 @@ export const MbEm=
         },
         "downloadable": {
           "enable": true,
-          "icon": "download_2",
+          "icon": "download_2",          
           "title": {
             "label_en": "Download", "label_es": "Descargar"
           }
@@ -208,7 +208,7 @@ export const MbEm=
               "allowMultiSelection": false, 
               "refreshable":{ "enable": true}, 
               "printable":{ "enable": true}, 
-              "downloadable":{"enable": true}, 
+              "downloadable":{"enable": true, "allowUserSelectColumns": true}, 
               "endPointPropertyArray": ["sample_points"],		              
               "columns" : [                                
                   {"name":"location_name", "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "20%"},
