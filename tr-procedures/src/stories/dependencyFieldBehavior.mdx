@@ -1,0 +1,44 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { DependencyFieldBehavior } from './DependencyFieldBehavior';
+
+<Meta title="Frontend Concepts/Dialogs/Generic Dialog/DependencyFieldBehavior"/>
+
+# DependencyFieldBehavior
+
+The `DependencyFieldBehavior` component is used to link two fields in a dialog so that one depends on the other. This behavior allows you to hide certain elements if a prior condition is not met, such as when a field has not been filled in.
+
+## Basic Example
+
+In the following example, a dependent field behavior is configured where the `text1` field is hidden if the list is empty. If the `list1` field is not filled in, the `hide` action will be automatically triggered, hiding the dependent field.
+
+<Canvas>
+  <Story name="Basic Example">
+    <DependencyFieldBehavior
+      list1={{
+        label_en: "Ingredients List",
+        label_es: "Lista de ingredientes",
+        addBlankValueOnTop: true,
+        addBlankValueAtBottom: false,
+        valuesFromMasterData: {
+          propertyNameContainer: "ingredients",
+          propertyNameContainerLevelPropertyKeyName: "name",
+          propertyKeyName: "name",
+          propertyKeyValueEn: "name",
+          propertyKeyValueEs: "name"
+        }
+      }}
+      dependencyFieldBehavior={[
+        {
+          field: "text1",
+          rule: "whenEmpty",
+          resetValue: true,
+          action: "hide"
+        }
+      ]}
+    />
+  </Story>
+</Canvas>
+
+### Usage Cases
+
+The usages cases can vary in function if the user need to show or hide, ADD AN EXAMPLE OF SHOW AND OTHER VARIABLES (looking for the video of evidence)
