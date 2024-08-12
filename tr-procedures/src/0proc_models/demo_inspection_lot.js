@@ -5643,14 +5643,393 @@ export const DemoInspectionLot =
 	},
     "actions": [],
     "tabs": [
-      { "tabLabel_en": "Summary", "tabLabel_es": "Inicio", "view": "summary",
+      { "tabLabel_en": "Spec Limits", "tabLabel_es": "Limites del Spec", "view": "SpecLimits",
         "view_definition": [
 		  {   
             "actions": [
             ]
           },
           { "type": "readOnlyTable", "endPointResponseObject": "spec_limits",
+            "actions": [
+              {
+                "actionName": "SPEC_NEW",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "add",
+                  "title": {
+                    "label_en": "New Add Specification",
+                    "label_es": "Añadir especificación"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "text1": {
+                        "label_en": "Specification Code",
+                        "label_es": "Código de especificación"
+                      }
+                    },                  
+                    {
+                      "multilist1": {
+                        "label_en": "Analyses",
+                        "label_es": "Análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "analysis_method",
+                          "propertyKeyName": "analysis",
+                          "propertyKeyValueEn": [
+                            "analysis"
+                          ],
+                          "propertyKeyValueEs": [
+                            "analysis"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "text2": {
+                        "label_en": "Variation Name",
+                        "label_es": "Nombre variación",
+                        "optional": true
+                      }
+                    },
+                    {
+                      "number1": {
+                        "label_en": "Total sample required",
+                        "label_es": "Cantidad de muestra necesaria",
+                        "optional": true
+                      }
+                    },
+                    {
+                      "list1": {
+                        "label_en": "UOM",
+                        "label_es": "UDM",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "units_of_measurement",
+                          "propertyKeyName": "name",
+                          "propertyKeyValueEn": "name",
+                          "propertyKeyValueEs": "name"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "element": "text1",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "analyses",
+                    "element": "multilist1",
+                    "addToFieldNameAndValue": true,
+                    "notAddWhenValueIsBlank": true
+                  },
+                  {
+                    "argumentName": "variation_name",
+                    "element": "text2",
+                    "addToFieldNameAndValue": true,
+                    "notAddWhenValueIsBlank": true
+                  },
+                  {
+                    "argumentName": "total_sample_required_quantity",
+                    "element": "number1",
+                    "addToFieldNameAndValue": true,
+                    "notAddWhenValueIsBlank": true
+                  },
+                  {
+                    "argumentName": "total_sample_required_quantity",
+                    "element": "list1",
+                    "addToFieldNameAndValue": true,
+                    "notAddWhenValueIsBlank": true
+                  }
+                ]
+              },
+              { //creo que falta un argumento para la variante, o fieldNameandValue
+                "actionName": "SPEC_ADD_ANALYSIS",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "add_circle",
+                  "title": {
+                    "label_en": "Add Analysis",
+                    "label_es": "Añadir análisis"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [   
+                    {
+                      "list1": {
+                        "label_en": "Analyses",
+                        "label_es": "Análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "analysis_method",
+                          "propertyKeyName": "analysis",
+                          "propertyKeyValueEn": [
+                            "analysis"
+                          ],
+                          "propertyKeyValueEs": [
+                            "analysis"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "list2": {
+                        "label_en": "Variation Name to add",
+                        "label_es": "Nombre de variante al que añadir",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromSelectedItem": {
+                          "internalVariableSingleObjName": "selectedItem",
+                          "internalVariableSingleObjProperty": "spec_limits",
+                          "propertyKeyName": "variation_name",
+                          "propertyKeyValueEn": [
+                            "variation_name"
+                          ],
+                          "propertyKeyValueEs": [
+                            "variation_name"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "analysisName",
+                    "element": "list1",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "variation_name",
+                    "element": "list2",
+                    "defaultValue": ""
+                  }
+                ]
+              },
+              { //"requiresGridItemSelected": true no aparece el botón ni al seleccionar
+                "actionName": "SPEC_REMOVE_ANALYSIS",
+                "notGetViewData": true,
+                "requiresDialog": false,
+                "certificationException": true,
+                "button": {
+                  "icon": "remove_circle",
+                  "title": {
+                    "label_en": "Remove Analysis",
+                    "label_es": "Eliminar análisis"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "analysisName",
+                    "selObjectPropertyName": "analysis"
+                  }
+                ]
+              },
+              { //"requiresGridItemSelected": true no aparece el botón ni al seleccionar, falta los argumentos
+                "actionName": "SPEC_UPDATE",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "edit",
+                  "title": {
+                    "label_en": "Update Specification",
+                    "label_es": "Actualizar especificación"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "multilist1": {
+                        "label_en": "Analyses",
+                        "label_es": "Análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": true,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "analysis_method",
+                          "propertyKeyName": "analysis",
+                          "propertyKeyValueEn": [
+                            "analysis"
+                          ],
+                          "propertyKeyValueEs": [
+                            "analysis"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "number1": {
+                        "label_en": "Total sample required",
+                        "label_es": "Cantidad de muestra necesaria",
+                        "optional": true
+                      }
+                    },
+                    {
+                      "list1": {
+                        "label_en": "UOM",
+                        "label_es": "UDM",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "units_of_measurement",
+                          "propertyKeyName": "pretty_name",
+                          "propertyKeyValueEn": "pretty_name",
+                          "propertyKeyValueEs": "pretty_name"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "analyses",
+                    "element": "multilist1",
+                    "addToFieldNameAndValue": true,
+                    "notAddWhenValueIsBlank": true
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "specFieldName",
+                    "element": "text3",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "specFieldValue",
+                    "element": "text4",
+                    "defaultValue": ""
+                  }
+                ]
+              },
+              { //falta al menos fieldName y value para añadir mas info, faltaria poner tb rule_type y rule_variables
+                "actionName": "SPEC_LIMIT_NEW",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "add_box",
+                  "title": {
+                    "label_en": "New limit",
+                    "label_es": "Nuevo límite"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [        
+                    {
+                      "list1": {
+                        "label_en": "Method",
+                        "label_es": "Método",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "methods",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": [
+                            "code"
+                          ],
+                          "propertyKeyValueEs": [
+                            "code"
+                          ]
+                        }
+                      }
+                    },                
+                    {
+                      "multilist1": {
+                        "label_en": "Analyses",
+                        "label_es": "Análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "analysis_method",
+                          "propertyKeyName": "analysis",
+                          "propertyKeyValueEn": [
+                            "analysis"
+                          ],
+                          "propertyKeyValueEs": [
+                            "analysis"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "text2": {
+                        "label_en": "Variation Name",
+                        "label_es": "Nombre variación",
+                        "optional": true
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "methodName",
+                    "element": "list1"
+                  },
+                  {
+                    "argumentName": "variationName",
+                    "element": "text2"
+                  }
+                ]
+              }
+            ],
             "columns": [
+              {
+                "name": "code",
+                "label_en": "Code",
+                "label_es": "Código"
+              },
+              {
+                "name": "category",
+                "label_en": "Category",
+                "label_es": "Categoría"
+              },
               {
                 "name": "variation_name",
                 "label_en": "Variation",
@@ -5679,14 +6058,14 @@ export const DemoInspectionLot =
                 "label_es": "Parámetro"
               },
 			  {
-				"name": "rule_representation",
+				"name": "rule_variables",
 				"label_en": "Rule",
 				"label_es": "Regla"
 			  },
               {
-                "name": "pretty_spec",
-                "label_en": "Specification",
-                "label_es": "Especificación"
+                "name": "rule_type",
+                "label_en": "Rule type",
+                "label_es": "Tipo regla"
               }
             ]
           }
