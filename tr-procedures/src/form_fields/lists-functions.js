@@ -577,7 +577,8 @@ export function ListsFunctions(base) {
                     filterPropertyName=fldMDDef.filterPropertyName
                 }
                 if (filterValue===undefined){return entries}
-                let result = data[fldMDDef.propertyNameContainer].find(item => item[filterPropertyName] === filterValue);
+                //let result = data[fldMDDef.propertyNameContainer].find(item => item[filterPropertyName] === filterValue);
+                let result = data.find(item => item[filterPropertyName] === filterValue);
                 if (result===undefined){return entries}
                 //alert(filterValue)
                 // if (fldMDDef.propertyNameContainerLevel2fixValue!==undefined&&fldMDDef.propertyNameContainerLevel3){
