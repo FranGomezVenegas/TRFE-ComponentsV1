@@ -99,3 +99,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.54 Moving from getDataFromRoot to TRAZiTgetDataFromRoot to make all components point to ApiFunctions instead of local instances, rev2]
 [- v0.2.55 some look'n'feel for dragdropbox]
 [- v0.2.56 fix for requirements solution, add solution dialog]
+[- v0.2.57 tree-view as view retired and selectedData for actions fix]

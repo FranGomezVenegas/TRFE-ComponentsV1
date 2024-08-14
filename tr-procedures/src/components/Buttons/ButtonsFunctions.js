@@ -9,8 +9,8 @@ import { ListsFunctions } from '../../form_fields/lists-functions';
 export function ButtonsFunctions(base) {
   return class extends ListsFunctions(PrintableTable(ExportTableToCsv(ProcManagementMethods(ClientMethod(ActionsFunctions(ApiFunctions(base))))))) {   
 
-    getButtonForRows(actions, data, isProcManagement, parentData) {
-      //console.log('getButtonForRows', 'actions', actions, 'data', data, 'parentData', parentData)
+    getButtonForRows(actions, selRowData, isProcManagement, parentData) {
+      //console.log('getButtonForRows', 'actions', actions, 'selRowData', selRowData, 'parentData', parentData)
       if (actions === undefined) { actions = this.viewModelFromProcModel }
       return html`
         <style>
@@ -97,7 +97,7 @@ export function ButtonsFunctions(base) {
         </style>
           ${actions !== undefined && actions.map(action =>
         html`
-          ${this.btnHiddenForRows(action, data) ? nothing :
+          ${this.btnHiddenForRows(action, selRowData) ? nothing :
             html`${action.button ?
               html`${action.button.icon ?
                 html`<mwc-icon-button
@@ -105,23 +105,23 @@ export function ButtonsFunctions(base) {
                   icon="${action.button.icon}" id="${action.actionName}"
                   title="${action.button.title['label_' + this.lang]}"
                   ?disabled=${this.btnDisabled(action, actions)}
-                  ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, data, isProcManagement, parentData)}></mwc-icon-button>` :
+                  ?hidden=${this.btnHiddenForRows(action, selRowData)}
+                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, selRowData, isProcManagement, parentData)}></mwc-icon-button>` :
                 html`${action.button.img ?
                   html`<mwc-icon-button
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   title="${action.button.title['label_' + this.lang]}" id="${action.actionName}"
                   ?disabled=${this.btnDisabled(action, actions)}
-                  ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, data, isProcManagement, parentData)}>
+                  ?hidden=${this.btnHiddenForRows(action, selRowData)}
+                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, selRowData, isProcManagement, parentData)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
                   html`<mwc-button dense raised
                   label="${action.button.title['label_' + this.lang]}" id="${action.actionName}"
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
-                  ?hidden=${this.btnHiddenForRows(action, data)}
-                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, data, isProcManagement, parentData)}></mwc-button>`
+                  ?hidden=${this.btnHiddenForRows(action, selRowData)}
+                  @click=${(e) => this.trazitButtonsMethod(e, true, action, actions, null, null, selRowData, isProcManagement, parentData)}></mwc-button>`
                   }`
                 }` :
               nothing
@@ -347,7 +347,7 @@ export function ButtonsFunctions(base) {
                       ?hidden=${this.btnHidden(action, selectedItems)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
-                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, selectedItems, isProcManagement)}></mwc-icon-button>` :
                       html`${action.button.img ?
                         html`<mwc-icon-button  id="${action.actionName}"
                       class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
@@ -356,7 +356,7 @@ export function ButtonsFunctions(base) {
                       ?hidden=${this.btnHidden(action, selectedItems)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
-                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}>
+                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, selectedItems, isProcManagement)}>
                           <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                       </mwc-icon-button>` :
                         html`<mwc-button dense raised id="${action.actionName}"
@@ -365,7 +365,7 @@ export function ButtonsFunctions(base) {
                       ?hidden=${this.btnHidden(action , selectedItems)}
                       style="${action.button.style !== undefined ? action.button.style : ''}"
                       .data=${data}
-                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+                      @click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, selectedItems, isProcManagement)}></mwc-button>`
                         }`
                       }` :
                     nothing
@@ -483,7 +483,7 @@ export function ButtonsFunctions(base) {
 					?disabled=${this.btnDisabled(action, sectionModel)}
 					?hidden=${this.btnHidden(action)}
 					style="${action.button.style !== undefined ? action.button.style : ''}"
-					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, selectedItems, isProcManagement)}></mwc-icon-button>` :
 					html`${action.button.img ?
 					  html`<mwc-icon-button  id="${action.actionName}"
 					class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
@@ -491,7 +491,7 @@ export function ButtonsFunctions(base) {
 					?disabled=${this.btnDisabled(action, sectionModel)}
 					?hidden=${this.btnHidden(action)}
 					style="${action.button.style !== undefined ? action.button.style : ''}"
-					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}>
+					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, selectedItems, isProcManagement)}>
 						<img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
 					</mwc-icon-button>` :
 					  html`<mwc-button dense raised id="${action.actionName}"
@@ -499,7 +499,7 @@ export function ButtonsFunctions(base) {
 					?disabled=${this.btnDisabled(action, sectionModel)}
 					?hidden=${this.btnHidden(action)}
 					style="${action.button.style !== undefined ? action.button.style : ''}"
-					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+					@click=${(e) => this.trazitButtonsMethod(e, false, action, sectionModel, null, null, selectedItems, isProcManagement)}></mwc-button>`
 					  }`
 					}` :
 				  nothing
