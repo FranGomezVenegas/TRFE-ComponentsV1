@@ -1,0 +1,79 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { TreeElement } from './tree-element';
+
+<Meta title="TRAZiT Actions/Dialogs/Generic Dialog/TreeElement/Master Data Example"/>
+
+# Master Data example
+
+![Example of Image](./TRAZiTActions/TreeElement/MasterDataExample.jpg)
+
+## How it works
+
+Two are the required properties.
+1. **valuesFromMasterData.propertyNameContainer** 
+  - **valuesFromMasterData** is to indicate that the source data is stored in the Master Data.
+  - **propertyNameContainer** to specify the entry into the Master Data we want to get
+
+2. **treeElementSpecification**
+  The key is the value to be got and the label is the value to be displayed to the user, mostly both are set to the same property.
+  - children+children_definition. Add as many children as sublevels required.
+  - In case one children does not exist then the logic will stop on this point showing the data captured properly and previously.
+  
+
+```json
+{
+  "valuesFromMasterData":{
+   "propertyNameContainer": "category_and_references",							
+  },
+  "treeElementSpecification":{
+    "key": "name",
+    "label": "name",
+    "children": "inv_reference",
+    "children_definition":{
+      "key": "name",
+      "label": "name",
+      "children": "level3",
+      "children_definition":{
+        "key": "otro",
+        "label": "otro",
+      }	
+    },
+  }
+}
+```
+
+```javascript
+import { TreeElement } from './tree-element';
+
+const data = [
+  {
+    name: "hola lvl1",
+    level2: [
+      { otro: "hola lvl2", otrolabel: "hola lbl lvl2", level3: [{ otro: "holaa lvl3" }] },
+      { otro: "holaa lvl2" },
+      { otro: "holaaa lvl2" },
+      { otro: "holaaaaa lvl2" },
+      { otro: "adios lvl2" }
+    ]
+  },
+  {
+    name: "adios lvl1"
+  }
+];
+
+const specification = {
+  key: "name",
+  label: "name",
+  children: "level2",
+  children_definition: {
+    key: "otro",
+    label: "otrolabel",
+    children: "level3",
+    children_definition: {
+      key: "otro",
+      label: "otro"
+    }
+  }
+};
+
+<TreeElement .data={data} .specification={specification} label="Select an item" expanded={false} />

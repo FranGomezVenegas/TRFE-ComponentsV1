@@ -2,8 +2,10 @@ import { LitElement, html, css } from 'lit';
 import '@material/mwc-icon-button';
 import '@material/mwc-list/mwc-list';
 import '@material/mwc-list/mwc-list-item';
+import { TreeFunctions } from './tree-functions';
+import { DialogsFeatures } from '../GenericDialogs/CommonFunctions/DialogsFeatures';
 
-class TreeViewFran extends LitElement {
+class TreeElement extends TreeFunctions(DialogsFeatures(LitElement)) {
   static get properties() {
     return {
       data: { type: Array },
@@ -12,26 +14,36 @@ class TreeViewFran extends LitElement {
       showChildren: { type: Object },
       value: { type: String },
       label: { type: String },
-      expanded:{type: Boolean}
+      expanded:{type: Boolean},
+      lang: { type: String },
+      config: { type: Object },
+      labelWhenNoSelection: { type: Object },
     };
   }
 
   constructor() {
     super();
     this.data = [];
+    this.config = {};
     this.specification = {};
     this.selectedItems = {};
     this.showChildren = {};
     this.expanded=false
     this.value = '';
     this.label = 'Select an item';
+    this.labelWhenNoSelection ={
+      label_en:'Select an item',
+      label_es:'Selecciona valor'
+    }
+    
   }
 
   static get styles() {
     return css`
       :host {
         display: block;
-        font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        font-family: 'Montserrat', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        color: rgba(49, 130, 189, 1);
       }
 
       .main {
@@ -64,8 +76,13 @@ class TreeViewFran extends LitElement {
         cursor: pointer;
         background-color: #fff;
         height: 56px;
+        font-family: 'Montserrat', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        color: rgba(49, 130, 189, 1);
       }
-
+      .list-item-label{
+        font-family: 'Montserrat', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        color: rgba(49, 130, 189, 1);
+      }
       .value.selected {
         border-color: #24c0eb;
       }
@@ -150,10 +167,15 @@ class TreeViewFran extends LitElement {
     this.showChildren = { ...this.showChildren, [key]: !this.showChildren[key] };
     this.requestUpdate();
   }
+  setClosed() {
+    this.expanded = false;
+    this.requestUpdate();
+  }
 
   handleClearSelection(event) {
     event.stopPropagation();
     this.value = '';
+    this.label = this.labelWhenNoSelection["label_"+this.lang];
     this.selectedItems = {};
     this.requestUpdate();
   }
@@ -204,7 +226,12 @@ class TreeViewFran extends LitElement {
   render() {
     const hasValue = !!this.value;
     const selectedItem = this.findSelectedItem(this.data, this.specification, this.value);
-    const selectedLabel = selectedItem ? selectedItem[this.specification.label] || selectedItem[this.specification.key] : '';    
+    const selectedLabel = selectedItem ? selectedItem[this.specification.label] || selectedItem[this.specification.key] : '';        
+    let fieldLabel = this.fieldLabel(this.config)
+    if (fieldLabel===undefined){
+      fieldLabel="Select an item"
+    }
+    this.data=this.treeListEntries(this.config, this.data)
     return html`
       <div class="main">
         <div class="value ${hasValue ? 'selected' : ''}" @click=${this.handleToggleDropdown}>
@@ -219,7 +246,7 @@ class TreeViewFran extends LitElement {
               `
             : ''}
         </div>
-        <div class="label ${hasValue ? 'selected' : ''}">${this.label}</div>
+        <div class="label ${hasValue ? 'selected' : ''}">${fieldLabel}</div>
         ${this.expanded?html`
           <div class="dropdown ${this.showChildren ? 'show' : ''}">
             <mwc-list>
@@ -249,4 +276,4 @@ class TreeViewFran extends LitElement {
   }
 }
 
-customElements.define('tree-viewfran', TreeViewFran);
+customElements.define('tree-element', TreeElement);

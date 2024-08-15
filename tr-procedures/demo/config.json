@@ -362,11 +362,6 @@
     "viewName": "ck-editor", 
     "filterName" :  "ck-editor" 
   },
-  "localDefaultView": {
-    "procName":  "stock", 
-    "viewName": "InventoryLotsGeneral", 
-    "filterName" :  "InventoryLots.1" 
-  },  
 	"localDefaultView": {
 		"procName": "instruments",
 		"viewName": "PlatformInstruments",
@@ -393,6 +388,11 @@
     "viewName": "MasterData", 
     "filterName" :  "MasterData" 
   },
+  "localDefaultView": {
+    "procName":  "stock", 
+    "viewName": "InventoryLotsGeneral20240729", 
+    "filterName" :  "" 
+  },  
 
   "fakeEnd":{
   }  

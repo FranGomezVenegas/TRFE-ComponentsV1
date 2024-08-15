@@ -5,7 +5,7 @@ import '../cameraview/index';
 import "../codeview/index";
 // import "../qrcode-scanner/index";
 import '../Calendar/index';
-import '../Tree/treeview/index';
+//import '../Tree/treeview/index';
 import '../MolecularEditor/molecular-editor';
 import '../flipcard/flipcard';
 import '../serialPort/serial-port';
@@ -170,7 +170,7 @@ export const template = (props) => {
       <flip-card .lang=${lang} .config=${flipCardConfig2} .data=${flipCardDataGroup2}></flip-card>
       
       <molecular-editor></molecular-editor>
-      <tree-view id="mytree" .data=${props.treeElementData} .specification=${props.treeElementSpecification} @item-selected=${props.treeSelection}></tree-view>
+<!--      <tree-view id="mytree" .data=${props.treeElementData} .specification=${props.treeElementSpecification} @item-selected=${props.treeSelection}></tree-view> -->
       <calendar-component></calendar-component>
       <div class="section">
           <div 

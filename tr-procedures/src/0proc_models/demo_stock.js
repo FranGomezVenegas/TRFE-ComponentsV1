@@ -4401,7 +4401,7 @@ export const Stock =
 					{"qrcode":{}},
 					{"tree1":{
 						"label_en": "Tree", "label_es": "Arbol",
-						"treeElementData":[
+						"xxxitems":[
 							{
 								"name": "hola lvl1",
 								"level2":[
@@ -4433,6 +4433,10 @@ export const Stock =
 								"name": "adios lvl1"
 							}
 						],
+						"valuesFromMasterData":{
+							"propertyNameContainer": "category_and_references",
+							"xxpropertyNameContainerLevelPropertyKeyName": "name",
+						},
 						"treeElementSpecification":
 							{
 								"key": "name",
@@ -4443,19 +4447,19 @@ export const Stock =
 								"') '",
 								"name"
 								],
-								"children": "level2",
+								"children": "inv_reference",
 								"children_definition":{
-								"key": "otro",
-								"label": "otrolabel",
-								"label2": [
-									"'('",
-									"otro",
-									"') '",
-									"otro"
-								],
-								"children": "level3",
-								"children_definition":{
-									"key": "otro",
+									"key": "name",
+									"label": "name",
+									"label2": [
+										"'('",
+										"otro",
+										"') '",
+										"otro"
+									],
+									"children": "level3",
+									"children_definition":{
+										"key": "otro",
 									"label": "otro",
 									"label2": [
 										"'('",

@@ -9,16 +9,16 @@ import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../MultiSelect';
-//import '../Tree/treeview/index';
-import '../Tree/tree-viewfran';
+import '../Tree/tree-element';
 import '../speclimitquantitative/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
+import { TreeFunctions } from '../Tree/tree-functions'; 
 import '../../form_fields/twolistslinked'
 import {DialogsFunctions} from './DialogsFunctions';
 import { DialogsFeatures } from './CommonFunctions/DialogsFeatures';
 export function TrazitGenericDialogs(base) {
 
-  return class extends DialogsFeatures(ListsFunctions(GridFunctions(DialogsFunctions(base)))) {
+  return class extends TreeFunctions(DialogsFeatures(ListsFunctions(GridFunctions(DialogsFunctions(base))))) {
     static get properties() {
       return {
         selectedResults: { type: Array },
@@ -289,13 +289,7 @@ export function TrazitGenericDialogs(base) {
                         <speclimit-quantitative id="acceptancecriteria" .fld=${fld.acceptancecriteria} ></speclimit-quantitative>         
                 `}          
 
-                ${!fld.tree1 ?
-                    html``: html`     
-  <tree-viewfran    id="tree1" .data="${fld.tree1.treeElementData}"   label="${this.fieldLabel(fld.tree1)}" .specification="${fld.tree1.treeElementSpecification}"    
-    @item-selected=${fld.tree1.treeSelection}    .level="${0}"  ></tree-viewfran>                       
-               <!--         <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} 
-               @item-selected=${fld.tree1.treeSelection}></tree-view>         -->
-                `}          
+       
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
@@ -628,7 +622,12 @@ export function TrazitGenericDialogs(base) {
                 `}                
                 ${!fld.twoListsLinked ?html``: html`                
                     <two-lists-linked .procInstanceName=${this.procInstanceName} lang=${this.lang} .fld=${fld.twoListsLinked}></two-lists-linked>
-                `}      
+                `} 
+                ${!fld.tree1 ?
+                    html``: html`     
+                        <tree-element    id="tree1" .data="${this.treeListEntries(fld.tree1)}"  .lang=${this.lang} .specification="${fld.tree1.treeElementSpecification}"    
+                        @item-selected=${fld.tree1.treeSelection}    .level="${0}"  ></tree-element>                       
+                `}                       
                 ${!fld.list1 ?html``: html`       
                 <div class="layout horizontal flex center-center"> 
                     <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list1, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list1)} .definition=${fld.list1}
@@ -1005,6 +1004,9 @@ export function TrazitGenericDialogs(base) {
                 }else if (keyName[0].includes('multi')){
                     fldObj.defaultValue ? this[keyName[0]].activeOptions=this.selectedItem[fldObj.defaultValue] : this[keyName[0]].activeOptions={}
                     this[keyName[0]].setClosed()                    
+                }else if (keyName[0].includes('tree')){
+                    //fldObj.defaultValue ? this[keyName[0]].activeOptions=this.selectedItem[fldObj.defaultValue] : this[keyName[0]].activeOptions={}
+                    this[keyName[0]].setClosed()                    
                 }else{
                     if (this[keyName]!==undefined&&this[keyName[0]]!==undefined){
                         this[keyName[0]].value=""
@@ -1037,7 +1039,7 @@ export function TrazitGenericDialogs(base) {
       }
     
 
-    get tree1() {    return this.shadowRoot.querySelector("tree-viewfran#tree1")    }        
+    get tree1() {    return this.shadowRoot.querySelector("tree-element#tree1")    }        
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
     get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        

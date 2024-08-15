@@ -33,7 +33,7 @@ import '../../components/jsonViewer/jsonViewer.main.js';
 import { CardMultipleElementsView } from '../Views/CardMultipleElementsView';
 
 import {CoaView} from '../../components/Views/CoaView';
-import "../Tree/treeview/index";
+//import "../Tree/treeview/index";
 import '../ParentReadOnlyTable/ParentReadOnlyTable.js';
 //import "../ParentReadOnlyTable/ParentReadOnlyTable";
 

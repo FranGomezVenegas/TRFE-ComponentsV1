@@ -1,0 +1,62 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { TreeElement } from './tree-element';
+
+<Meta title="TRAZiT Actions/Dialogs/Generic Dialog/TreeElement/Doc1"/>
+
+# TreeElement Documentation
+
+The `TreeElement` component is used to represent hierarchical data in a tree structure, allowing for selection and expansion of items.
+
+## Select / Deselect data
+- Only one value can be selected
+- The selected value is highlighted in blue in the tree as well as for a Reference
+- There are two ways to unselect the current selected value, the icon to clean the selection that appears on the right side or by clicking this same entry in the tree.
+
+## Properties
+### **lang:** 
+-The language for the labels en/es
+### Data source 
+There are three options to pass data to this component and hierarchically in this order:
+- **config.valuesFromMasterData**: This property will include the settings as to get the data for a source in the master data
+- **config.items**: This property will have the data into the config itself and build in the same way than the example below for data property
+- **data**: passing the values using the data property, it will be the array of data where to get the info to build the tree
+### **specification:** 
+-The object to define each key for each level and whether or not children for sublevels is required
+
+## Usage
+
+```javascript
+import { TreeElement } from './tree-element';
+
+const data = [
+  {
+    name: "hola lvl1",
+    level2: [
+      { otro: "hola lvl2", otrolabel: "hola lbl lvl2", level3: [{ otro: "holaa lvl3" }] },
+      { otro: "holaa lvl2" },
+      { otro: "holaaa lvl2" },
+      { otro: "holaaaaa lvl2" },
+      { otro: "adios lvl2" }
+    ]
+  },
+  {
+    name: "adios lvl1"
+  }
+];
+
+const specification = {
+  key: "name",
+  label: "name",
+  children: "level2",
+  children_definition: {
+    key: "otro",
+    label: "otrolabel",
+    children: "level3",
+    children_definition: {
+      key: "otro",
+      label: "otro"
+    }
+  }
+};
+
+<TreeElement .data={data} .specification={specification} label="Select an item" expanded={false} />
