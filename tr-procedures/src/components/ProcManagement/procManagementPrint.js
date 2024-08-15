@@ -3,12 +3,11 @@ import { html } from "lit"
 export function PrintViews(base) {
   return class extends (base) {
     print() {
-      this.printCoa({})
+      this.printScreen({})
     }
 
-    printCoa(data) {
-      let coaData = data
-      this.setPrintContentCoa(data)
+    printScreen(data) {
+      this.setPrintContentScreen(data)
       let printWindow = window.open('', '_blank');
       printWindow.document.write(this.printObj.contentWithFooter);
       printWindow.document.title = 'Title Hear';
@@ -18,18 +17,18 @@ export function PrintViews(base) {
       }, 500);
     }
     documentFooter(data) {
-      let coaData = data
+      let screenData = data
       let session = JSON.parse(sessionStorage.getItem("userSession"))
       let sessionDate = session.appSessionStartDate
       let sessionUser = session.header_info.first_name + " " + session.header_info.last_name + " (" + session.userRole + ")"
       let footerText = `${sessionUser} on ${sessionDate} `
-      if (coaData == undefined && coaData.report_info !== undefined && coaData.report_info.report_information !== undefined) {
-        footerText += `${coaData.report_info["report_information_" + this.lang]}`
+      if (screenData == undefined && screenData.report_info !== undefined && screenData.report_info.report_information !== undefined) {
+        footerText += `${screenData.report_info["report_information_" + this.lang]}`
       }
       return footerText
     }
 
-    setPrintContentCoa(data) {
+    setPrintContentScreen(data) {
       let headerData = ''
       let headerDataDiv = this.shadowRoot.querySelectorAll(".title-banner .title")
       if (headerDataDiv !== undefined) {
@@ -60,7 +59,13 @@ export function PrintViews(base) {
               const headers = clonedTable.querySelectorAll('th');
               let actionsColumnIndex = -1;
 
+                            
               headers.forEach((header, index) => {
+                const sortIconsDiv = header.querySelector('.sort-icons');
+                if (sortIconsDiv) {
+                    sortIconsDiv.remove();
+                }
+  
                 if (header.textContent.trim() === "Actions") {
                   actionsColumnIndex = index;
                 }

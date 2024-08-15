@@ -1071,7 +1071,6 @@ export function DataViews(base) {
           }
 
         table.TRAZiT-DefinitionArea thead tr th {
-          display: flex;
           align-items: center;
           justify-content: space-between;
           font-size: 16px;
@@ -1082,7 +1081,6 @@ export function DataViews(base) {
         }
 
         table.TRAZiT-UsersArea thead tr th {
-          display: flex;
           align-items: center;
           justify-content: space-between;
           font-size: 16px;
@@ -1099,7 +1097,7 @@ export function DataViews(base) {
           font-size: 16px;
         }
 
-        table.TRAZiT-UsersArea tr {
+        table.TRAZiT-UsersArea-for-rolesandactions tr {
           border: none; 
           border-bottom: 1px solid #dddddd;
         }
@@ -1110,23 +1108,23 @@ export function DataViews(base) {
           color: #808080;
         }
 
-        table.TRAZiT-UsersArea tr:nth-child(even) {
+        table.TRAZiT-UsersArea-for-rolesandactions tr:nth-child(even) {
           background-color: white;
         }
 
-        table.TRAZiT-UsersArea tr:last-child {
+        table.TRAZiT-UsersArea-for-rolesandactions tr:last-child {
           border: none;
         }
      
-        table.TRAZiT-UsersArea thead {
+        table.TRAZiT-UsersArea-for-rolesandactions thead {
           border-bottom: 1px solid #dddddd;
         }
 
-        table.TRAZiT-DefinitionArea tr:nth-child(even) {
+        table.TRAZiT-DefinitionArea-for-rolesandactions tr:nth-child(even) {
           background-color: rgba(214, 233, 248, 0.37) !important;
         }
 
-        table.TRAZiT-DefinitionArea th {
+        table.TRAZiT-DefinitionArea-for-rolesandactions th {
           padding: 5px 5px;
           border: 1px solid #dddddd !important;
         }
@@ -1136,7 +1134,7 @@ export function DataViews(base) {
           border: 1px solid #dddddd !important;
         }
 
-        table.TRAZiT-UsersArea td, th {
+        table.TRAZiT-UsersArea-for-rolesandactions td, th {
           border: none !important;
         }
 
@@ -2994,12 +2992,14 @@ export function DataViews(base) {
                     border-right: 7px solid transparent;
                     margin-left: 5px;
                     position: relative;
+                    width: 20px;
+                    height: 20px;                    
                   }
                   .sort-asc {
-                    border-bottom: 10px solid #4c7fad;
+                    border-bottom: 10px solid white;
                   }
                   .sort-desc {
-                    border-top: 10px solid #4c7fad;
+                    border-top: 10px solid white;
                   }
                   .sort-icon:hover::after {
                     content: attr(data-tooltip);

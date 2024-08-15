@@ -2290,7 +2290,7 @@ printWindow.print();
         thead {display: table-header-group;} 
         tfoot {display: table-footer-group;}
       }
-      .styled-table {
+      .styled-table-datamining {
         display: -webkit-inline-box;
         margin-top: 0px;
         margin-bottom: 3px;
@@ -2302,26 +2302,26 @@ printWindow.print();
         min-width: 400px;
         box-shadow: 0 0 20px #44cbe6;
       }            
-      .styled-table thead tr {
+      .styled-table-datamining thead tr {
         background-color: #2989d8;
         color: #ffffff;
         text-align: left;
       }   
-      .styled-table th,
-      .styled-table td {
+      .styled-table-datamining th,
+      .styled-table-datamining td {
         color: #032bbc; 
         padding: 12px 15px;
       }  
-      .styled-table tbody tr {
+      .styled-table-datamining tbody tr {
         border-bottom: 1px solid #207cca;
       }
-      .styled-table tbody tr:nth-of-type(even) {
+      .styled-table-datamining tbody tr:nth-of-type(even) {
         background-color: #c2f2ff5c;
       }
-      .styled-table tbody tr:last-of-type {
+      .styled-table-datamining tbody tr:last-of-type {
         border-bottom: 2px solid #009879;
       }      
-      .styled-table tbody tr.active-row {
+      .styled-table-datamining tbody tr.active-row {
         font-weight: bold;
         color: #009879;
       }
@@ -2407,7 +2407,7 @@ eeee
     if (dataContentTables!==undefined){
       for (let i=0;i<dataContentTables.length;i++){
 //        strContent += `<table border="1" cellpadding="3" style="border-collapse: collapse; width: 100%;">`
-        strContent += `<table class="styled-table" >`
+        strContent += `<table class="styled-table-datamining" >`
         strContent += `<tr>`
         dataContentTables[i].headers.forEach(f => {
           if (f.innerText) {

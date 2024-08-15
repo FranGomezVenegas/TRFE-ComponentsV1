@@ -487,7 +487,7 @@ export class DataMiningData extends DataViews(LitElement) {
     if (dataContentTables!==undefined){
       for (let i=0;i<dataContentTables.length;i++){
 //        strContent += `<table border="1" cellpadding="3" style="border-collapse: collapse; width: 100%;">`
-        strContent += `<table class="styled-table" >`
+        strContent += `<table class="styled-table-datamining" >`
         strContent += `<tr>`
         dataContentTables[i].headers.forEach(f => {
           if (f.innerText) {
@@ -556,7 +556,7 @@ export class DataMiningData extends DataViews(LitElement) {
         thead {display: table-header-group;} 
         tfoot {display: table-footer-group;}
       }
-      .styled-table {
+      .styled-table-datamining {
         display: -webkit-inline-box;
         color: #4285f4;
         font-size: 2vmin;
@@ -566,54 +566,54 @@ export class DataMiningData extends DataViews(LitElement) {
         table-layout: fixed;
       }
       @media screen and (min-width: 992px) {
-        .styled-table {
+        .styled-table-datamining {
           font-size: 1.8vmin;
           margin: 2px 10px;
         }
       }
-      .styled-table thead tr {
+      .styled-table-datamining thead tr {
         background-color: #2989d8;
         color: #ffffff;
         text-align: center;
         border: 1px solid #c2edf9;
       }
-      .styled-table thead tr headercolumns {
+      .styled-table-datamining thead tr headercolumns {
         background-color: 2989d870;
         color: white;
       }
 
-      .styled-table th {
+      .styled-table-datamining th {
         color: white;
       }
-      .styled-table tbody tr:hover td {
+      .styled-table-datamining tbody tr:hover td {
         color: white;
         background-color: #2989d8;
       }
 
-      .styled-table td {
+      .styled-table-datamining td {
         color: rgba(0, 0, 0, 0.71);
         padding: 8px 15px;
         // border: 1px solid #c2edf9;
         word-break: break-word;
         font-size: 1.6vmin;
       }
-      .styled-table tr td:first-of-type,
-      .styled-table tr td:nth-of-type(2),
-      .styled-table tr td:nth-of-type(3) {
+      .styled-table-datamining tr td:first-of-type,
+      .styled-table-datamining tr td:nth-of-type(2),
+      .styled-table-datamining tr td:nth-of-type(3) {
         white-space: nowrap;
       }
-      .styled-table tbody tr {
+      .styled-table-datamining tbody tr {
         position: relative;
         cursor: pointer;
         border-bottom: 1px solid #c2edf9;
       }
-      .styled-table tbody tr:nth-of-type(even) {
+      .styled-table-datamining tbody tr:nth-of-type(even) {
         background-color: #c2f2ff5c;
       }
-      .styled-table tbody tr:last-of-type {
+      .styled-table-datamining tbody tr:last-of-type {
         border-bottom: 2px solid #009879;
       }
-      .styled-table tbody tr.active-row {
+      .styled-table-datamining tbody tr.active-row {
         font-weight: bold;
         color: #009879;
       }
