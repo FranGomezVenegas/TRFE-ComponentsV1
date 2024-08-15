@@ -4434,8 +4434,7 @@ export const Stock =
 							}
 						],
 						"valuesFromMasterData":{
-							"propertyNameContainer": "category_and_references",
-							"xxpropertyNameContainerLevelPropertyKeyName": "name",
+							"propertyNameContainer": "category_and_references",							
 						},
 						"treeElementSpecification":
 							{

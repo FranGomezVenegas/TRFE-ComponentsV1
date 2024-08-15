@@ -75,6 +75,7 @@ Default.args = {
     items:[
       {
         name: "items hola lvl1",
+        description: "description for items hola lvl1",
         level2: [
           { otro: "hola lvl2", otrolabel: "hola lbl lvl2", level3: [{ otro: "holaa lvl3" }] },
           { otro: "holaa lvl2" },
@@ -90,15 +91,19 @@ Default.args = {
   },
   specification: {
     key: "name",
-    label: "name",
+    labelByConcatenateFields:{
+      fields:['name', 'description'],
+      separator: '-'
+    },
+    labelSingleField: "description",
     children: "level2",
     children_definition: {
       key: "otro",
-      label: "otrolabel",
+      labelSingleField: "otrolabel",
       children: "level3",
       children_definition: {
         key: "otro",
-        label: "otro"
+        labelSingleField: "otro"
       }
     }
   },

@@ -1,6 +1,9 @@
 import { html } from "lit";
+import { GetDataFromContextFunctions } from "../0TRAZiT-Paradigm/GetDataFromContext";
+import { BuildLabelsFunctions } from '../0TRAZiT-Paradigm/BuildLabels';
+
 export function ListsFunctions(base) {
-    return class extends (base) {
+    return class extends BuildLabelsFunctions(GetDataFromContextFunctions(base)) {
         actionWhenListValueSelected(event, fld, dialogInfo){
             if (fld===undefined){return}
             if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
@@ -465,45 +468,47 @@ export function ListsFunctions(base) {
         }    
         listEntriesFromSelectedItem(fldMDDef){     
             
-            let data=[]
+            // let data=[]
             
-            if (fldMDDef!==null&&fldMDDef.defval!==undefined&&fldMDDef.defval!==null){
-                alert(fldMDDef.defval)
-            }    
-            if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.default_value!==undefined&&fldMDDef.default_value!==null){
-                data=fldMDDef.default_value
-            }
-            if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.selObjectPropertyName!==undefined&&fldMDDef.selObjectPropertyName!==null&&fldMDDef!==null){
-                data=this.selectedItems[0][fldMDDef.selObjectPropertyName]
-            }
-            if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.internalVariableObjName!==undefined&&fldMDDef.internalVariableObjName!==null&&
-                fldMDDef.internalVariableObjProperty!==undefined&&fldMDDef.internalVariableObjProperty!==null){
-                data=this[fldMDDef.internalVariableObjName][0][fldMDDef.internalVariableObjProperty]
-            }
-            if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.internalVariableSingleObjName!==undefined&&fldMDDef.internalVariableSingleObjName!==null&&
-                fldMDDef.internalVariableSingleObjProperty!==undefined&&fldMDDef.internalVariableSingleObjProperty!==null){
-                data=this[fldMDDef.internalVariableSingleObjName][fldMDDef.internalVariableSingleObjProperty]
-            }
+            // if (fldMDDef!==null&&fldMDDef.defval!==undefined&&fldMDDef.defval!==null){
+            //     alert(fldMDDef.defval)
+            // }    
+            // if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.default_value!==undefined&&fldMDDef.default_value!==null){
+            //     data=fldMDDef.default_value
+            // }
+            // if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.selObjectPropertyName!==undefined&&fldMDDef.selObjectPropertyName!==null&&fldMDDef!==null){
+            //     data=this.selectedItems[0][fldMDDef.selObjectPropertyName]
+            // }
+            // if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.internalVariableObjName!==undefined&&fldMDDef.internalVariableObjName!==null&&
+            //     fldMDDef.internalVariableObjProperty!==undefined&&fldMDDef.internalVariableObjProperty!==null){
+            //     data=this[fldMDDef.internalVariableObjName][0][fldMDDef.internalVariableObjProperty]
+            // }
+            // if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.internalVariableSingleObjName!==undefined&&fldMDDef.internalVariableSingleObjName!==null&&
+            //     fldMDDef.internalVariableSingleObjProperty!==undefined&&fldMDDef.internalVariableSingleObjProperty!==null){
+            //     data=this[fldMDDef.internalVariableSingleObjName][fldMDDef.internalVariableSingleObjProperty]
+            // }
     
             let entries=[]
+            let data = this.dataFromSelectedItem(fldMDDef)
             if (data!==undefined){
                 data.forEach(item =>{
                     console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
                     let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
                     blankEmpty.keyName=item[fldMDDef.propertyKeyName]
     
-                    let valEn=''
-                    fldMDDef.propertyKeyValueEn.forEach(item2=>{
-                        if (valEn.length>0){valEn=valEn+'-'}
-                        valEn=valEn+item[item2]
-                    })
-                    blankEmpty.keyValue_en=valEn
-                    let valEs=''
-                    fldMDDef.propertyKeyValueEn.forEach(item2=>{
-                        if (valEs.length>0){valEs=valEs+'-'}
-                        valEs=valEs+item[item2]
-                    })
-                    blankEmpty.keyValue_es=valEs
+                    // let valEn='' 
+                    // fldMDDef.propertyKeyValueEn.forEach(item2=>{
+                    //     if (valEn.length>0){valEn=valEn+'-'}
+                    //     valEn=valEn+item[item2]
+                    // })
+                    
+                    // let valEs=''
+                    // fldMDDef.propertyKeyValueEn.forEach(item2=>{
+                    //     if (valEs.length>0){valEs=valEs+'-'}
+                    //     valEs=valEs+item[item2]
+                    // })
+                    blankEmpty.keyValue_en=this.buildLabel('En', fldMDDef, item)
+                    blankEmpty.keyValue_es=this.buildLabel('Es', fldMDDef, item)
                     console.log('blankEmpty', blankEmpty)
                     entries.push(blankEmpty)
                 })
@@ -540,8 +545,10 @@ export function ListsFunctions(base) {
                     // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
                         let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
                         blankEmpty.keyName=item[fldMDDef.propertyKeyName]
-                        blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
-                        blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                        blankEmpty.keyValue_en=this.buildLabel('En', fldMDDef, item)
+                        blankEmpty.keyValue_es=this.buildLabel('Es', fldMDDef, item)    
+                        //blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
+                        //blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
                         blankEmpty.allRecord=item
                         //console.log('blankEmpty', blankEmpty)
                         entries.push(blankEmpty)
@@ -589,8 +596,10 @@ export function ListsFunctions(base) {
                     console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
                     let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
                     blankEmpty.keyName=item[fldMDDef.propertyKeyName]
-                    blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
-                    blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                    blankEmpty.keyValue_en=this.buildLabel('En', fldMDDef, item)
+                    blankEmpty.keyValue_es=this.buildLabel('Es', fldMDDef, item)    
+                    //blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
+                    //blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
                     blankEmpty.allRecord=item
                     console.log('blankEmpty', blankEmpty)
                     entries.push(blankEmpty)
@@ -650,14 +659,17 @@ export function ListsFunctions(base) {
         }
         
 
+
         getListInLevel3(fldMDDef, level2Arr){
             let level3Arr = level2Arr.filter(p => p[propertyNameContainerLevel2PropertyKeyName] == fldMDDef.propertyNameContainerLevel2fixValue)
             level3Arr[fldMDDef.propertyNameContainerLevel3].forEach(item =>{
                 console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyNameContainerLevel2PropertyKeyName)
                 let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
                 blankEmpty.keyName=item[fldMDDef.propertyKeyName]
-                blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
-                blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                blankEmpty.keyValue_en=this.buildLabel('En', fldMDDef, item)
+                blankEmpty.keyValue_es=this.buildLabel('Es', fldMDDef, item)    
+                //blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
+                //blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
                 console.log('blankEmpty', blankEmpty)
                 entries.push(blankEmpty)
             })

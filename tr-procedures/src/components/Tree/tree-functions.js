@@ -1,17 +1,17 @@
 import { html } from "lit";
 import { ListsFunctions } from "../../form_fields/lists-functions";
+import { GetDataFromContextFunctions } from "../../0TRAZiT-Paradigm/GetDataFromContext";
 export function TreeFunctions(base) {
-    return class extends ListsFunctions(base) {
+    return class extends GetDataFromContextFunctions(ListsFunctions(base)) {
         treeListEntries(fld, data){            
             if (fld.valuesFromMasterData!==undefined){                
                 this.getProcMasterData()
                 console.log(fld, this.masterData)
-                let MDentriesArr = this.dataFromMasterData(fld.valuesFromMasterData, this.masterData);
-                return MDentriesArr
-                // if (MDentriesArr.length > 0) {
-                //     newList = [...newList, ...MDentriesArr];
-                // }    
-            }            
+                return this.dataFromMasterData(fld.valuesFromMasterData, this.masterData);
+            }
+            if (fld.valuesFromSelectedItem) {
+                return this.dataFromSelectedItem(fld.valuesFromSelectedItem)
+            }
             if (fld.items!==undefined){
                 return fld.items
             }            
@@ -20,21 +20,6 @@ export function TreeFunctions(base) {
             }
             return []
         } 
-        dataFromMasterData(fldMDDef, data){
-            if (fldMDDef.propertyNameContainer===undefined){
-                alert('Property propertyNameContainer not found in this field definition, check console.log')
-                console.log('Property propertyNameContainer not found in this field definition, check console.log', fldMDDef)
-                return []
-            }
-            if (String(fldMDDef.propertyNameContainer).toUpperCase()==="ROOT"){
-                return data
-            }else{
-                if (data[fldMDDef.propertyNameContainer]===undefined){
-                    alert('Property '+fldMDDef.propertyNameContainer+' not found in Master Data')
-                    return []
-                }
-                return data[fldMDDef.propertyNameContainer]
-            }
-        }  
+   
 }}
 

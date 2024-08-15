@@ -4,8 +4,8 @@ import '@material/mwc-list/mwc-list';
 import '@material/mwc-list/mwc-list-item';
 import { TreeFunctions } from './tree-functions';
 import { DialogsFeatures } from '../GenericDialogs/CommonFunctions/DialogsFeatures';
-
-class TreeElement extends TreeFunctions(DialogsFeatures(LitElement)) {
+import { BuildLabelsFunctions } from '../../0TRAZiT-Paradigm/BuildLabels';
+class TreeElement extends BuildLabelsFunctions(TreeFunctions(DialogsFeatures(LitElement))) {
   static get properties() {
     return {
       data: { type: Array },
@@ -184,7 +184,8 @@ class TreeElement extends TreeFunctions(DialogsFeatures(LitElement)) {
     const childrenKey = specification.children;
     const children = data[childrenKey];
     const key = data[specification.key];
-    const label = data[specification.label] || data[specification.key];
+    //const label = data[specification.label] || data[specification.key];
+    const label = this.buildLabel(this.lang, specification, data) || data[specification.key];
     const hasChildren = children && children.length > 0;
     const isSelected = this.value === key;
     const isExpanded = this.showChildren[key];
@@ -226,7 +227,7 @@ class TreeElement extends TreeFunctions(DialogsFeatures(LitElement)) {
   render() {
     const hasValue = !!this.value;
     const selectedItem = this.findSelectedItem(this.data, this.specification, this.value);
-    const selectedLabel = selectedItem ? selectedItem[this.specification.label] || selectedItem[this.specification.key] : '';        
+    const selectedLabel = selectedItem ? this.buildLabel(this.lang, this.specification, this.data) || selectedItem[this.specification.key] : '';        
     let fieldLabel = this.fieldLabel(this.config)
     if (fieldLabel===undefined){
       fieldLabel="Select an item"
