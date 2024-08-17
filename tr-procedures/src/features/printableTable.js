@@ -1,11 +1,12 @@
+import { ReportingFunctions } from "../0TRAZiT-Paradigm/reporting";
 export function PrintableTable(base) {
-    return class extends (base) {
+    return class extends ReportingFunctions(base) {
 
         printTable(index) {
             this.setPrintContentTable(index);
             let printWindow = window.open('', '_blank');
             printWindow.document.write(this.printObj.contentWithFooter);
-            printWindow.document.title = '';
+            printWindow.document.title = this.printObj.header;
             setTimeout(function () {
                 printWindow.print();
                 printWindow.close();
@@ -15,10 +16,31 @@ export function PrintableTable(base) {
         setPrintContentTable(index) {
             const styles = this._getAllStyles();
             const { header, content } = this._getPrintableContent(index);
-        
+            
+            let pagerFooter = ''
+            let tbody = this.shadowRoot.querySelector(".table-container-results tbody");
+            if (tbody===null){
+                tbody = this.shadowRoot.querySelector(".table-container");
+            }        
+            let itemsPerPage=14    
+            const tableItems = tbody.querySelectorAll('tr');    
+            const totalPages = Math.ceil(tableItems.length / itemsPerPage);
+
+
+            const pageStr = this.lang === "en" ? "Page" : "Página";
+            const ofStr = this.lang === "en" ? "of" : "de";
+            let data=content;
             const printStyles = `
                 <style>
                     @media print {
+                        /* Esto elimina el paginado 'por defecto' del browser. */
+                        @page { 
+                            margin: 0;
+                        }
+                        /* Esto quita los stamps que genera por defecto el browser*/
+                        body {
+                            margin: 0;
+                        }
                         th {
                             background-color: #b6d6f3 !important;
                             color: rgb(0 0 0 / 55%) !important;
@@ -34,6 +56,52 @@ export function PrintableTable(base) {
                             border: 1px solid #000;
                             padding: 8px;
                         }
+                        /* Estilos para el header */
+                        #print-document-header {
+                            position: fixed;
+                            top: 0;
+                            width: 100%;
+                            background-color: #f4f4f4; /* Color de fondo del header */
+                            padding: 10px; /* Espacio interno del header */
+                            text-align: center; /* Centrar el contenido del header */
+                            font-size: 14px; /* Tamaño de la fuente en el header */
+                            border-bottom: 1px solid #000; /* Línea inferior para separar el header del contenido */
+                        }
+
+                        /* Asegúrate de que el contenido no se superponga con el header */
+                        #print-content {
+                            margin-top: 100px; /* Ajusta este valor según la altura del header */
+                        }
+
+                        #print-document-footer {
+                            position: fixed;
+                            bottom: 0;
+                            width: 100%;
+                            text-align: center; /* Ajusta esto si quieres el contenido centrado o alineado a la izquierda/derecha */
+                        }
+            
+                        /* Incrementa el contador en la primera página */
+                        body {
+                            counter-reset: page_index 0;
+                        }
+
+                        body:first-of-type {
+                            counter-increment: page_index 1;
+                        }
+
+                        #print-document-footer::before {
+                            display: block;
+                            font-style: italic;
+                            content: "${this.documentFooter(data)}";
+                            padding-left: 20px;
+                        }
+
+                        #print-document-footer::after {
+                            display: block;
+                            content: "${pageStr} " counter(page_index, decimal) " ${ofStr} ${totalPages}";
+                            padding-right: 20px;
+                            text-align: right;
+                        }                               
                     }
                 </style>
             `;
@@ -47,9 +115,13 @@ export function PrintableTable(base) {
                             ${printStyles}
                         </head>
                         <body>
+                            <div id="print-document-header" class="print-document-header">
+                                ${header}
+                            </div>                        
                             <div id="print-content" style="display: flex; flex-wrap: wrap; padding-left: 30px; gap: 10px">
                             ${content}
                             </div>
+                            <div id="print-document-footer" class="print-document-footer">${pagerFooter}</div>                    
                         </body>
                     </html>
                 `
@@ -74,12 +146,21 @@ export function PrintableTable(base) {
         }
 
         _getTableHTML(table, index) {
-            let getAllHeader = this.shadowRoot.querySelectorAll('#mainDiv > div > p');
+            let getAllHeader = []
+            getAllHeader = this.shadowRoot.querySelectorAll('#mainDiv > div > p');
+            if (getAllHeader.length==0){
+                getAllHeader = this.shadowRoot.querySelectorAll('#mainDiv > div > div > div > div > p');
+            }
             let headerElement = getAllHeader[index];
             if (!headerElement) {
                 headerElement = getAllHeader[0];
             }
-            const headerTitle = headerElement.querySelector('span') ? headerElement.querySelector('span').textContent.trim() : '';
+            let headerTitle = ""
+            if (headerElement!==undefined){
+                headerTitle = headerElement.innerText //headerElement.querySelector('span') ? headerElement.querySelector('span').textContent.trim() : '';
+            }else{
+
+            }
             console.log(headerTitle);
             const clonedTable = table.cloneNode(true);
             const headers = clonedTable.querySelectorAll('th');
