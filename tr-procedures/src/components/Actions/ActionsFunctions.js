@@ -173,7 +173,7 @@ export function ActionsFunctions(base) {
       this.justificationList = null
       let pArr = []
       let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-      if (isProcManagement!==undefined&&isProcManagement===true){
+      if (this.isProcManagement!==undefined&&this.isProcManagement===true){
         pArr = procList.filter(p => p.procInstanceName == 'app')
       }else{
         pArr = procList.filter(p => p.procInstanceName == this.procInstanceName)

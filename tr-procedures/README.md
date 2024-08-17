@@ -103,3 +103,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.58 tree-element for dialogs and sort storybook sections]
 [- v0.2.59 table styles and printable for procManagement to remove the sort icons here too]
 [- v0.2.60 fixed ONE_PROCEDURE_DEFINITION, added endpointParams]
+[- v0.2.61 fix in trazitCheckProcList, isProcManagement from this instead of sessionStorage]
