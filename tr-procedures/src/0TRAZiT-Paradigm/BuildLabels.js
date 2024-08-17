@@ -3,7 +3,7 @@ import { html } from "lit";
 export function BuildLabelsFunctions(base) {
     return class extends (base) {
     
-
+    // Función pública
     buildLabel(lang, model, dataObj){
         if (lang===undefined){
             lang=this.lang
@@ -21,20 +21,27 @@ export function BuildLabelsFunctions(base) {
             return 'buildLabel-N/D' 
         }
         if (model.labelByConcatenateFields!==undefined){
-            return this.buildLabelFromArrayOfItems(model.labelByConcatenateFields, dataObj)
+            return this._buildLabelFromArrayOfItems(model.labelByConcatenateFields, dataObj)
         }
         if (model["propertyKeyValue"+lang]!==undefined){
             return dataObj[model["propertyKeyValue"+lang]]
         }
-        if (model["keyValue_"+lang]!==undefined){
-            return dataObj[model["keyValue_"+lang]]
-        }        
+        if (model[labelSingleField+"_"+lang]!==undefined){
+            return dataObj[model[labelSingleField+"_"+lang]]
+        }
         if (model.labelSingleField!==undefined){
             return dataObj[model.labelSingleField]
         }
+        if (model["fixLabel_"+lang]!==undefined){
+            return model["fixLabel_"+lang]
+        }
+        if (model.fixLabel!==undefined){
+            return model.fixLabel
+        }        
     }
 
-    buildLabelFromArrayOfItems(property, row){
+    // Función privada
+    _buildLabelFromArrayOfItems(property, row){
         let separator='-'
         if (property.separator!==undefined){
             separator=property.separator
@@ -49,4 +56,5 @@ export function BuildLabelsFunctions(base) {
         })
         return entireLabel
     }        
-}}
+}
+}
