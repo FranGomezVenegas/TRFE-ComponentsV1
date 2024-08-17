@@ -50,6 +50,11 @@ const Template = ({ data, specification, config, expanded, lang }) => html`
     .config="${config}"
     ?expanded="${expanded}">
   </tree-element>
+
+  <div class="storybook-labels">
+    <a href="#/docs/BuildLabels--default" class="storybook-label">Usa BuildLabels</a>
+    <a href="#/docs/OtroLabel--default" class="storybook-label">Otro Label</a>
+  </div>  
 `;
 
 export const Default = Template.bind({});
