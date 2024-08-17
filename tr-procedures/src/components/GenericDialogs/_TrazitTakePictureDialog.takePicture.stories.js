@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
 
 export default {
   title: 'TRAZiT Actions/Dialogs/TrazitTakePictureDialog/TAKEPICTUREDIALOG',
@@ -13,12 +14,28 @@ export default {
 };
 
 const Template = ({ lang, actionModel, recordData }) => html`
+  <div>
+    <button @click=${openDialog}>Launch Dialog</button>
+    ${loadDialogs({ lang, actionModel, recordData })}
+  </div>
+`;
+
+const loadDialogs = ({ lang, actionModel, recordData }) => html`
   <trazit-take-picture-dialog id="thedialog"
     .lang=${lang}
     .actionModel=${actionModel}
     .recordData=${recordData}
   ></trazit-take-picture-dialog>
 `;
+
+const openDialog = () => {
+  const dialogElement = document.getElementById('thedialog');
+  if (dialogElement) {
+    dialogElement.show(dialogElement.actionModel, dialogElement.actionModel, dialogElement.recordData);
+  } else {
+    console.error('El componente no está disponible o el método show no existe');
+  }
+};
 
 export const TakePictureDialog = Template.bind({});
 TakePictureDialog.args = {
@@ -37,9 +54,5 @@ TakePictureDialog.play = async ({ canvasElement, args }) => {
   console.log('Elemento del diálogo:', dialogElement);
   console.log('Propiedades del diálogo:', dialogElement.actionModel, dialogElement.recordData);
 
-  if (typeof dialogElement.show === 'function') {
-    dialogElement.show(args.actionModel, args.actionModel, args.recordData);
-  } else {
-    console.error('El método show no está disponible en el componente');
-  }
+  dialogElement.show(args.actionModel, args.actionModel, args.recordData);
 };

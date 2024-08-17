@@ -121,10 +121,13 @@ export function DataViews(base) {
                 }
               }
             }
-            return [];
+            return undefined;
           }
+          
           let subViewFilter=isFilterNameDefined(elem.subViewFilter, filterName) 
-          elem=subViewFilter
+          if (subViewFilter!==undefined){
+            elem=subViewFilter
+          }
       }
       return html`    
         <p style="text-align: center;">

@@ -1,4 +1,4 @@
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 import {template} from './dragdroptable.template';
 import {styles} from './dragdroptable.css';
 import { navigator } from "lit-element-router";
@@ -7,8 +7,8 @@ import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
 import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 //import {DataViews} from '../../components/Views/DataViews';
-
-export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement)))))) {
+import { ApiFunctions } from '../Api/ApiFunctions';
+export class DragDropTable extends ApiFunctions(TrazitGenericDialogs(GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement)))))) {
   static get styles() {
     return styles;
   }

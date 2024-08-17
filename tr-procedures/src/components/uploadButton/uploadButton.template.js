@@ -1,4 +1,4 @@
-import { html } from "lit-element";
+import { html } from "lit";
 import '@vaadin/vaadin-context-menu';
 
 export const template = (props) => {

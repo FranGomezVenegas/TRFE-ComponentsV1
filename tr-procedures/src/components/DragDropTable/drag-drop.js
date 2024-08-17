@@ -32,10 +32,10 @@ import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialo
 import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
 
 import '../DragDropTable';
-
+import { ApiFunctions } from "../Api/ApiFunctions";
 
 import '../Audit/audit-dialog';
-export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement))))))))))))) {
+export class DrapDrop extends ApiFunctions(TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(TrazitReactivateObjectsDialog(TrazitGenericDialogs(ModuleEnvMonitClientMethods(GridFunctions(ButtonsFunctions(LitElement))))))))))))) {
     static get styles() {
       return [
         Layouts, Alignment,

@@ -1,4 +1,4 @@
-import { html } from "lit-element";
+import { html } from "lit";
 
 export const template = (props, lang) => {
   return html`

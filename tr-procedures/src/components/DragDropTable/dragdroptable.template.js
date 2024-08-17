@@ -1,4 +1,4 @@
-import { html } from "lit-element";
+import { html } from "lit";
 import '@material/mwc-icon';
 
 export const template = (props, data, lang, thisComponent) => {    
@@ -32,7 +32,7 @@ export const template = (props, data, lang, thisComponent) => {
 }
 
 function myTable(elem, dataArr, lang, props, thisComponent) {  
-  dataArr=TRAZiTgetDataFromRoot(elem, dataArr)
+  dataArr=thisComponent.TRAZiTgetDataFromRoot(elem, dataArr)
  if(dataArr && Object.keys(elem.smartFilter.filterValues).length != 0){
     dataArr=applyFilterToTheData(dataArr,elem.smartFilter.filterValues);
  }
@@ -167,7 +167,7 @@ function handleClear(elem,thisComponent){
 function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent) {
   //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
   
-  data = TRAZiTgetDataFromRoot(elem, data);
+  data = thisComponent.TRAZiTgetDataFromRoot(elem, data);
   if(data && Object.keys(elem.smartFilter.filterValues).length != 0){
     data=applyFilterToTheData(data,elem.smartFilter.filterValues);
  }
