@@ -106,3 +106,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.61 fix in trazitCheckProcList, isProcManagement from this instead of sessionStorage]
 [- v0.2.62 fix for new test script, using lit-element when should be lit for compatibility reasons]
 [- v0.2.63 fix when no subfilter for kpiReportTitle + use lit instead of lit-element]
+[- v0.2.64 Added locked reason to (parent)readOnlyTable]

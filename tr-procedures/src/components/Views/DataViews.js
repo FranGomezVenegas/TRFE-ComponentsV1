@@ -29,6 +29,7 @@ import '@material/mwc-button';
 import '@material/mwc-textfield';
 
 import { ReadOnlyTableParts } from "./ReadOnlyTableParts";
+import { ReadOnlyTableIsLockedFunctions } from "../ParentReadOnlyTable/isLocked";
 
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
@@ -38,7 +39,7 @@ import { FeaturesDynamicFieldValue } from "../../features/dynamicFieldValue";
 
 export function DataViews(base) {
   let contextMenu = undefined;
-  return class extends FeaturesDynamicFieldValue(TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
+  return class extends ReadOnlyTableIsLockedFunctions(FeaturesDynamicFieldValue(TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(ApiFunctions
         (
@@ -58,7 +59,7 @@ export function DataViews(base) {
         )
       )
     )
-  ))))) {
+  )))))) {
     kpiChartFran1(elem, data) {
       if (elem === undefined) { return html`` }
       if (elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage === true && data === undefined) { return html`` }
@@ -2933,6 +2934,7 @@ export function DataViews(base) {
     }
     let smartFilterVisible=false
     smartFilterVisible=elem.columns.some(column => column.addToSmartFilter === true);
+    let tableName=elem.endPointResponseObject===undefined?'table':elem.endPointResponseObject
     return html`
       ${styles}
       <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline; width: 100%;">
@@ -3135,8 +3137,9 @@ export function DataViews(base) {
                     `
                 }
                 <div class="table-container">
-                  <table data-index="${elem.index}" id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
-                    <thead>
+                  <table data-index="${elem.index}" id=${tableName} class="styled-table read-only ${tmp}">
+                    
+                  <thead>
                       <tr>
                         ${elem.allowMultiSelection ? html`<th><input type="checkbox" @change=${handleSelectAll}></th>` : nothing}
                         ${elem.columns.map((fld, idx) => {
@@ -3186,10 +3189,12 @@ export function DataViews(base) {
                                       }
                                     }
                                     this.handleTableRowClick(event, p, elem);
+
                                   }}
                                   @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
                                   class="${isSelected ? 'selected-row' : ''}"
-                                >
+                                  
+                                >${this.setCellListener(tableName, dataArr)}
                                   ${elem.allowMultiSelection ? html`<td><input type="checkbox" ?checked=${isSelected}></td>` : nothing}
                                   ${this.getRowsInfo(elem, p, rowIndex, this.lang, parentData, handler)}
                                 </tr>
@@ -3204,8 +3209,9 @@ export function DataViews(base) {
                             })}
                           `}
                     </tbody>
-                  </table>
+                  </table>                  
                 </div>
+                <div id="rowTooltip">&nbsp;</div>
               `}
         </div>
       </div>
