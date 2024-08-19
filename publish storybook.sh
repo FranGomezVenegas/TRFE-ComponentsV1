@@ -2,7 +2,7 @@
 
 # Configuración
 profile='default'
-bucket='demov0.9.2.testing'
+bucket='trazit.website'
 storybook_dir='tr-procedures/storybook-static'
 technical_manual_dir='Technical_Manual'
 bucket_images_dir='Technical_Manual/storybook_images'
