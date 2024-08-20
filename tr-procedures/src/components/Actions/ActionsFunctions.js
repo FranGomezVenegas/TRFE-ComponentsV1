@@ -151,16 +151,16 @@ export function ActionsFunctions(base) {
      * set the justification type, generate justification list for non text type
      */
      trazitCheckProcList(isProcManagement) {
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===null||this.procInstanceName===undefined||this.procInstanceName.length==0){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
         if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
           this.procInstanceName=currentTabView.procInstanceName
         }
       }
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===null||this.procInstanceName===undefined||this.procInstanceName.length==0){
         this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
       }      
-      if (isProcManagement===undefined){
+      if (isProcManagement===null||isProcManagement===undefined){
         let userSession=JSON.parse(sessionStorage.getItem("userSession"))
         isProcManagement=userSession.isProcManagement
       }        
@@ -178,7 +178,7 @@ export function ActionsFunctions(base) {
       }else{
         pArr = procList.filter(p => p.procInstanceName == this.procInstanceName)
       }
-      if (isProcManagement&&(pArr===undefined||pArr.length==0)){
+      if (isProcManagement&&(pArr===null||pArr===undefined||pArr.length==0)){
         return true
       }
       let p = pArr[0]
@@ -210,7 +210,7 @@ export function ActionsFunctions(base) {
           --idx // the object is on the previous index
           if (p.actions_with_justification_phrase[idx][this.actionName].type) {
             this.justificationType = p.actions_with_justification_phrase[idx][this.actionName].type
-            if (this.justificationType===undefined||this.justificationType.length==0||this.justificationType.length==='LABPLANET_FALSE'){
+            if (this.justificationType===null||this.justificationType===undefined||this.justificationType.length==0||this.justificationType.length==='LABPLANET_FALSE'){
               console.log('In procedure business rules, for action '+this.actionName+', No confirmDialogDetail specified, it will use TEXT then')
               this.justificationType="TEXT"
             }

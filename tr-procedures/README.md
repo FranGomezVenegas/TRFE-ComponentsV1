@@ -108,3 +108,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.63 fix when no subfilter for kpiReportTitle + use lit instead of lit-element]
 [- v0.2.64 Added locked reason to (parent)readOnlyTable]
 [- v0.2.65 for reactivate element, display notification when no objects found by the criteria]
+[- v0.2.66 fix in trazitCheckProcList, handle nulls as undefineds]
