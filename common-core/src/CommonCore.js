@@ -49,7 +49,7 @@ export class CommonCore extends LitElement {
     }, true);
     this.updateComplete.then(() => {
       this.resizeElements()
-      if (this.config.local != false && !window.process) {
+      //if (this.config.local != false && !window.process) {
         this.localToast = document.createElement("div")
         this.localToast.style.position = 'fixed'
         this.localToast.style.bottom = '10px'
@@ -62,9 +62,9 @@ export class CommonCore extends LitElement {
         this.localToast.style.display = "none"
         this.localToast.style.zIndex = "999"
         this.shadowRoot.appendChild(this.localToast)
-      }
+      //}
     })
-    if (this.config.local != false && !window.process) {
+    //if (this.config.local != false && !window.process) {
       this.addEventListener('success', e => {
         // alert('addEventListener for success')
 
@@ -83,7 +83,7 @@ export class CommonCore extends LitElement {
         this.showNotif(e)
         this.localToast.style.backgroundColor = '#a33'
       })
-    }
+    //}
   }
 
   showNotifOld(e) {
