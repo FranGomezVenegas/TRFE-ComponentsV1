@@ -393,8 +393,9 @@
     "viewName": "InventoryLotsGeneral20240729", 
     "filterName" :  "" 
   },  
-
+  
   "fakeEnd":{
+    "fake": ""
   }  
  
 }

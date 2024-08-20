@@ -111,3 +111,7 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.66 fix in trazitCheckProcList, handle nulls as undefineds]
 [- v0.2.67 use this.procInstanceName when userSession.currentProcInstanceName undefined]
 [- v0.2.68 handle in btnHidden when selItems is undefined]
+[- v0.2.69 some issues:
+    - (related to v0.2.66) fix in getAPICommonParams, handle nulls as undefineds
+    - fix to not add arrays of arrays in selectedItems    
+]

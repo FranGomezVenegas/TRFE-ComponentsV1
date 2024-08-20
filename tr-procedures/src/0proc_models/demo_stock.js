@@ -3090,8 +3090,1223 @@ export const Stock =
 		]
 	  }
 	]
-  },  
+  }, 
+  
   "InventoryLotsGeneral":{
+	"component": "SingleView",
+	"hideLeftPane": true,
+	"hasOwnComponent": true,
+	"viewQuery": {
+	  "actionName": "ALL_INVENTORY_LOTS",
+	  "dataResponse": "ArrayInRoot",
+	  "endPointParams": []
+	},
+	"view_definition": [
+	  {
+		"type": "reportTitle",
+		"title": {
+		  "label_en": "All active lots",
+		  "label_es": "Todos los lotes activos"
+		}
+	  },
+	  {
+		"type": "parentReadOnlyTable",
+		"allowMultiSelection": true,
+		"refreshable": {
+		  "enable": true
+		},
+		"printable": {
+		  "enable": true
+		},
+		"downloadable": {
+		  "enable": true
+		},
+		"columns": [
+		  {
+			"name": "category",
+			"label_en": "Category",
+			"label_es": "Categoría",
+			"addToSmartFilter": true
+		  },
+		  {
+			"name": "reference",
+			"label_en": "Reference",
+			"label_es": "Referencia",
+			"addToSmartFilter": true
+		  },
+		  {
+			"name": "lot_name",
+			"label_en": "Name",
+			"label_es": "lot_id",
+			"filter": true,
+			"addToSmartFilter": true
+		  },
+		  {
+			"name": "status",
+			"label_en": "Status",
+			"label_es": "Estado",
+			"addToSmartFilter": true
+		  },
+		  {
+			"name": "quantity",
+			"label_en": "Quantity",
+			"label_es": "Cantidad",
+			"addToSmartFilter": true
+		  },
+		  {
+			"name": "quantity_uom",
+			"label_en": "uom",
+			"label_es": "uom",
+			"addToSmartFilter": true
+		  }
+		],
+		"enableContextMenu": true,
+		"addActionsInContextMenu": true,
+		"actions": [
+		  {
+			"actionName": "CONFIG_ADD_REFERENCE",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "note_add",
+			  "title": {
+				"label_en": "New reference",
+				"label_es": "Nueva referencia"
+			  },
+			  "requiresGridItemSelected": false
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "text1": {
+					"label_en": "New Reference Name",
+					"label_es": "Nombre nueva Referencia"
+				  }
+				},
+				{
+				  "list1": {
+					"label_en": "Category",
+					"label_es": "Categoría",
+					"addBlankValueOnTop": true,
+					"addBlankValueAtBottom": false,
+					"valuesFromMasterData": {
+					  "propertyNameContainer": "category_and_references",
+					  "propertyNameContainerLevelPropertyKeyName": "name",
+					  "propertyKeyName": "name",
+					  "propertyKeyValueEn": "name",
+					  "propertyKeyValueEs": "name"
+					}
+				  }
+				},
+				{
+				  "checkbox1": {
+					"label_en": "Requires Qualification?",
+					"label_es": "¿Requiere Cualificación?",
+					"defaultValue": true
+				  }
+				},
+				{
+				  "number1": {
+					"label_en": "Min Stock",
+					"label_es": "Stock Mínimo",
+					"optional": true
+				  }
+				},
+				{
+				  "list2": {
+					"label_en": "UOM",
+					"label_es": "UDM",
+					"addBlankValueOnTop": true,
+					"addBlankValueAtBottom": false,
+					"valuesFromMasterData": {
+					  "propertyNameContainer": "units_of_measurement",
+					  "propertyKeyName": "pretty_name",
+					  "propertyKeyValueEn": "pretty_name",
+					  "propertyKeyValueEs": "pretty_name"
+					},
+					"dependencyFieldBehavior": [
+					  {
+						"field": "multilist1",
+						"rule": "whenEmpty",
+						"resetValue": true,
+						"action": "hide"
+					  }
+					]
+				  }
+				},
+				{
+				  "multilist1": {
+					"label_en": "Other Allowed UOMs",
+					"label_es": "Otras UDM aceptadas",
+					"addBlankValueOnTop": true,
+					"addBlankValueAtBottom": false,
+					"valuesFromMasterData": {
+					  "propertyNameContainer": "units_of_measurement",
+					  "propertyKeyName": "pretty_name",
+					  "propertyKeyValueEn": [
+						"pretty_name"
+					  ],
+					  "propertyKeyValueEs": [
+						"pretty_name"
+					  ]
+					}
+				  }
+				},
+				{
+				  "list3": {
+					"label_en": "min Stock Type",
+					"label_es": "Tipo Stock Mínimo",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					"items": [
+					  {
+						"keyName": "QUANTITY",
+						"keyValue_en": "Quantity",
+						"keyValue_es": "Cantidad"
+					  },
+					  {
+						"keyName": "PB ITEMS",
+						"keyValue_en": "Items",
+						"keyValue_es": "Items"
+					  }
+					]
+				  }
+				},
+				{
+				  "checkbox2": {
+					"label_en": "Requires control for Available for use",
+					"label_es": "¿Requiere control disponible para uso?",
+					"optional": true
+				  }
+				},
+				{
+				  "number2": {
+					"label_en": "Min Available for use",
+					"label_es": "Minimo en Disponible para uso",
+					"optional": false
+				  }
+				},
+				{
+				  "list3": {
+					"label_en": "Type",
+					"label_es": "Tipo",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					"items": [
+					  {
+						"keyName": "QUANTITY",
+						"keyValue_en": "Quantity",
+						"keyValue_es": "Cantidad"
+					  },
+					  {
+						"keyName": "PB ITEMS",
+						"keyValue_en": "Items",
+						"keyValue_es": "Items"
+					  }
+					]
+				  }
+				},
+				{
+				  "checkbox3": {
+					"label_en": "Allow Some open at a time?",
+					"label_es": "¿Permitir abrir varios a la vez?",
+					"optional": true
+				  }
+				},
+				{
+				  "list5": {
+					"label_en": "Qualification Variables Set",
+					"label_es": "Conjunto Variables para Cualificación",
+					"optional": true,
+					"addBlankValueOnTop": true,
+					"addBlankValueAtBottom": false,
+					"valuesFromMasterData": {
+					  "propertyNameContainer": "variables_set",
+					  "propertyNameContainerLevelPropertyKeyName": "name",
+					  "propertyKeyName": "name",
+					  "propertyKeyValueEn": "name",
+					  "propertyKeyValueEs": "name"
+					}
+				  }
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "name",
+				"element": "text1"
+			  },
+			  {
+				"argumentName": "category",
+				"element": "list1"
+			  },
+			  {
+				"argumentName": "lotRequiresQualif",
+				"element": "checkbox1"
+			  },
+			  {
+				"argumentName": "minStock",
+				"element": "number1"
+			  },
+			  {
+				"argumentName": "minStockUom",
+				"element": "list2"
+			  },
+			  {
+				"argumentName": "allowedUoms",
+				"element": "multilist1",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "minStockType",
+				"element": "list3"
+			  },
+			  {
+				"argumentName": "requiresAvailableForUse",
+				"element": "checkbox2"
+			  },
+			  {
+				"argumentName": "minAvailablesForUse",
+				"element": "number2"
+			  },
+			  {
+				"argumentName": "minAvailablesForUseType",
+				"element": "list3"
+			  },
+			  {
+				"argumentName": "allowedOpeningSomeAtaTime",
+				"element": "checkbox3"
+			  },
+			  {
+				"argumentName": "qualificationVariablesSet",
+				"element": "list5"
+			  }
+			]
+		  },
+		  {
+			"actionName": "NEW_INVENTORY_LOT",
+			"requiresDialog": true,
+			"endPointParams": [
+			  {
+				"argumentName": "category",
+				"element": "listLinked1",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "reference",
+				"element": "listLinked2",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "lotName",
+				"element": "text2",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "quantity",
+				"element": "number1",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "quantityUom",
+				"fixValue": "mL"
+			  },
+			  {
+				"argumentName": "expiryDate",
+				"element": "date1",
+				"defaultValue": "",
+				"optional": true
+			  },
+			  {
+				"argumentName": "expiryDateInUse",
+				"element": "date2",
+				"defaultValue": "",
+				"optional": true
+			  },
+			  {
+				"argumentName": "retestDate",
+				"element": "date3",
+				"defaultValue": "",
+				"optional": true
+			  },
+			  {
+				"argumentName": "vendor",
+				"element": "text3",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "vendorReference",
+				"element": "text5",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "vendorLot",
+				"element": "text4",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "purity",
+				"element": "text6",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "conservationCondition",
+				"element": "list7",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "numEntries",
+				"element": "number2",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "cas",
+				"element": "text7",
+				"defaultValue": "",
+				"addToFieldNameAndValue": true,
+				"notAddWhenValueIsBlank": true
+			  }
+			],
+			"button": {
+			  "icon": "create_new_folder",
+			  "title": {
+				"label_en": "New lot",
+				"label_es": "Nuevo lote"
+			  },
+			  "requiresGridItemSelected": false
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "twoListsLinked": {
+					"listLinked1": {
+					  "label_en": "Category",
+					  "label_es": "Categoría",
+					  "optional": true,
+					  "addBlankValueOnTop": true,
+					  "addBlankValueAtBottom": false,
+					  "xxxitems": [
+						{
+						  "keyName": "1",
+						  "keyValue_en": "Option 1",
+						  "keyValue_es": "Opción 1",
+						  "label": "Option 1"
+						},
+						{
+						  "keyName": "2",
+						  "keyValue_en": "Option 2",
+						  "keyValue_es": "Opción 2",
+						  "label": "Option 2"
+						}
+					  ],
+					  "valuesFromMasterData": {
+						"propertyNameContainer": "category_and_references",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"filterDependency": [
+						  "list1"
+						],
+						"selectedEntryFromFilterPropertyName": "inv_reference",
+						"propertyKeyName": "name",
+						"propertyKeyValueEn": "name",
+						"propertyKeyValueEs": "name"
+					  }
+					},
+					"listLinked2": {
+					  "label_en": "Reference",
+					  "label_es": "Referencia",
+					  "addBlankValueOnTop": true,
+					  "addBlankValueAtBottom": false,
+					  "xxxitems": [
+						{
+						  "keyName": "a",
+						  "keyValue_en": "Option 1-A",
+						  "keyValue_es": "Opción 1-A",
+						  "label": "Option A",
+						  "parentValue": "1"
+						},
+						{
+						  "keyName": "b",
+						  "keyValue_en": "Option 2-B",
+						  "keyValue_es": "Opción 2-B",
+						  "label": "Option B",
+						  "parentValue": "2"
+						}
+					  ],
+					  "valuesFromMasterData": {
+						"propertyNameContainer": "category_and_references",
+						"propertyNameContainerLevelPropertyKeyName": "name",
+						"filterDependency": [
+						  "list1"
+						],
+						"selectedEntryFromFilterPropertyName": "inv_reference",
+						"propertyKeyName": "name",
+						"propertyKeyValueEn": "name",
+						"propertyKeyValueEs": "name"
+					  }
+					}
+				  }
+				},
+				{
+				  "text2": {
+					"label_en": "lot id",
+					"label_es": "id Lote"
+				  }
+				},
+				{
+				  "number1": {
+					"label_en": "Quantity",
+					"label_es": "Cantidad",
+					"optional": true,
+					"min_allowed": 0,
+					"max_dp": 2
+				  }
+				},
+				{
+				  "date1": {
+					"label_en": "Expiry Date",
+					"label_es": "Fecha Caducidad",
+					"optional": true
+				  }
+				},
+				{
+				  "date2": {
+					"label_en": "Expiry Date In Use",
+					"label_es": "Fecha Caducidad En Uso",
+					"optional": true
+				  }
+				},
+				{
+				  "date3": {
+					"label_en": "Retest Date",
+					"label_es": "Fecha Retest",
+					"optional": true
+				  }
+				},
+				{
+				  "text3": {
+					"label_en": "Vendor",
+					"label_es": "Proveedor",
+					"optional": true
+				  }
+				},
+				{
+				  "text4": {
+					"label_en": "Vendor Lot",
+					"label_es": "Lote de Proveedor",
+					"optional": true
+				  }
+				},
+				{
+				  "text5": {
+					"label_en": "Vendor Reference",
+					"label_es": "Referencia de Proveedor",
+					"optional": true
+				  }
+				},
+				{
+				  "text6": {
+					"label_en": "Purity",
+					"label_es": "Pureza",
+					"optional": true
+				  }
+				},
+				{
+				  "list7": {
+					"label_en": "Conservation Condition",
+					"label_es": "Condición de Conservación",
+					"optional": true,
+					"items": [
+					  {
+						"keyName": "ROOM_TEMP",
+						"keyValue_en": "Room temperature",
+						"keyValue_es": "Temperatura del recinto"
+					  },
+					  {
+						"keyName": "15-25ºC",
+						"keyValue_en": "15-25ºC",
+						"keyValue_es": "15-25ºC"
+					  },
+					  {
+						"keyName": "NMT 30ºc",
+						"keyValue_en": "NMT 30ºc",
+						"keyValue_es": "NMT 30ºc"
+					  },
+					  {
+						"keyName": "2-8ºc",
+						"keyValue_en": "2-8ºc",
+						"keyValue_es": "2-8ºc"
+					  },
+					  {
+						"keyName": "Freezer (-20ºC)",
+						"keyValue_en": "Freezer (-20ºC)",
+						"keyValue_es": "Congelador (-20ºC)"
+					  }
+					]
+				  }
+				},
+				{
+				  "number2": {
+					"label_en": "Number of Entries",
+					"label_es": "Unidades recepcionadas",
+					"optional": true,
+					"default_value": 1
+				  }
+				},
+				{
+				  "text7": {
+					"label_en": "CAS number",
+					"label_es": "Número CAS",
+					"optional": true
+				  }
+				}
+			  ]
+			}
+		  },
+		  {
+			"actionName": "AUDIT_FOR_GIVEN_INVENTORY_LOT",
+			"endPoint": "/app/procs/InvTrackingAPIqueries",
+			"parentAuditBusinessRuleName": "inventoryAuditRevisionMode",
+			"childAuditBusinessRuleName": "inventoryAuditChildRevisionRequired",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "rule",
+			  "title": {
+				"label_en": "Lot Audit",
+				"label_es": "Auditoría de Lote"
+			  },
+			  "requiresGridItemSelected": true
+			},
+			"clientMethod": "getObjectAuditInfo",
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  }
+			],
+			"dialogInfo": {
+			  "name": "auditDialog",
+			  "automatic": true,
+			  "action": [
+				{
+				  "actionName": "LOTAUDIT_SET_AUDIT_ID_REVIEWED",
+				  "requiresDialog": false,
+				  "notGetViewData": true,
+				  "secondaryActionToPerform": {
+					"name": "getObjectAuditInfo",
+					"endPointParams": [
+					  {
+						"argumentName": "lotName",
+						"selObjectPropertyName": "lot_name"
+					  }
+					]
+				  },
+				  "clientMethod": "signAudit",
+				  "endPointParams": [
+					{
+					  "argumentName": "lotName",
+					  "selObjectPropertyName": "lot_name"
+					},
+					{
+					  "argumentName": "auditId",
+					  "targetValue": true
+					}
+				  ]
+				}
+			  ]
+			}
+		  },
+		  {
+			"actionName": "TURN_LOT_AVAILABLE",
+			"requiresDialog": false,
+			"button": {
+			  "img": "activate.svg",
+			  "title": {
+				"label_en": "Turn Available",
+				"label_es": "Poner Disponible"
+			  },
+			  "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": [
+				{
+				  "column": "is_locked",
+				  "value": false
+				},
+				{
+				  "column": "status",
+				  "value": "NEW|QUARANTINE"
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  }
+			]
+		  },
+		  {
+			"actionName": "TURN_LOT_UNAVAILABLE",
+			"requiresDialog": false,
+			"button": {
+			  "img": "deactivate.svg",
+			  "title": {
+				"label_en": "Turn Unavailable",
+				"label_es": "Poner NO Disponible"
+			  },
+			  "requiresGridItemSelected": true,
+			  "hideWhenSelectedItem": [
+				{
+				  "column": "status",
+				  "value": "AVAILABLE_FOR_USE"
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  }
+			]
+		  },
+		  {
+			"actionName": "COMPLETE_QUALIFICATION",
+			"requiresDialog": true,
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "list8": {
+					"label_en": "Decision",
+					"label_es": "Decisión",
+					"items": [
+					  {
+						"keyName": "ACCEPTED",
+						"keyValue_en": "Accepted",
+						"keyValue_es": "Aceptado"
+					  },
+					  {
+						"keyName": "ACCEPTED_WITH_RESTRICTIONS",
+						"keyValue_en": "Accepted with restrictions",
+						"keyValue_es": "Aceptado con restricciones"
+					  },
+					  {
+						"keyName": "REJECTED",
+						"keyValue_en": "Rejected",
+						"keyValue_es": "Rechazado"
+					  }
+					]
+				  }
+				}
+			  ]
+			},
+			"button": {
+			  "icon": "alarm_on",
+			  "title": {
+				"label_en": "Complete Qualification",
+				"label_es": "Completar Cualificación"
+			  },
+			  "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": {
+				"column": "status",
+				"value": "QUARANTINE"
+			  }
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "decision",
+				"element": "list8"
+			  }
+			]
+		  },
+		  {
+			"actionName": "COMPLETE_QUALIFICATION",
+			"requiresDialog": true,
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "list9": {
+					"label_en": "Decision",
+					"label_es": "Decisión",
+					"items": [
+					  {
+						"keyName": "ACCEPTED",
+						"keyValue_en": "Accepted",
+						"keyValue_es": "Aceptado"
+					  },
+					  {
+						"keyName": "ACCEPTED_WITH_RESTRICTIONS",
+						"keyValue_en": "Accepted with restrictions",
+						"keyValue_es": "Aceptado con restricciones"
+					  },
+					  {
+						"keyName": "REJECTED",
+						"keyValue_en": "Rejected",
+						"keyValue_es": "Rechazado"
+					  }
+					]
+				  }
+				}
+			  ]
+			},
+			"button": {
+			  "icon": "alarm_on",
+			  "title": {
+				"label_en": "Complete Qualification + Available",
+				"label_es": "Completar Cualificación + Disponible"
+			  },
+			  "requiresGridItemSelected": true,
+			  "showWhenSelectedItem": {
+				"column": "status",
+				"value": "QUARANTINE"
+			  }
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "decision",
+				"element": "list9"
+			  },
+			  {
+				"argumentName": "turn_available_lot",
+				"fixValue": "true"
+			  }
+			]
+		  },
+		  {
+			"actionName": "CONSUME_INV_LOT_QUANTITY",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "indeterminate_check_box",
+			  "title": {
+				"label_en": "Consume",
+				"label_es": "Consumir"
+			  },
+			  "requiresGridItemSelected": true,
+			  "hideWhenSelectedItem": {
+				"column": "status",
+				"value": "RETIRED"
+			  }
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "number1": {
+					"label_en": "Quantity to consume",
+					"label_es": "Cantidad a consumir",
+					"min_allowed": 0,
+					"max_dp": 2
+				  }
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "quantityUom",
+				"selObjectPropertyName": "quantity_uom"
+			  },
+			  {
+				"argumentName": "quantity",
+				"element": "number1",
+				"defaultValue": ""
+			  }
+			]
+		  },
+		  {
+			"actionName": "ADJUST_INV_LOT_QUANTITY",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "open_in_new",
+			  "title": {
+				"label_en": "Adjust",
+				"label_es": "Ajustar"
+			  },
+			  "requiresGridItemSelected": true,
+			  "hideWhenSelectedItem": {
+				"column": "status",
+				"value": "RETIRED"
+			  }
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "number1": {
+					"label_en": "Adjust (new)quantity",
+					"label_es": "(Nuevo)Cantidad a ajustar",
+					"min_allowed": 0,
+					"max_dp": 2
+				  }
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "quantityUom",
+				"selObjectPropertyName": "quantity_uom"
+			  },
+			  {
+				"argumentName": "quantity",
+				"element": "number1",
+				"defaultValue": ""
+			  }
+			]
+		  },
+		  {
+			"actionName": "ADD_INV_LOT_QUANTITY",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "add_box",
+			  "title": {
+				"label_en": "Add",
+				"label_es": "Añadir"
+			  },
+			  "requiresGridItemSelected": true,
+			  "hideWhenSelectedItem": {
+				"column": "status",
+				"value": "RETIRED"
+			  }
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "number1": {
+					"label_en": "Quantity to add",
+					"label_es": "Cantidad a añadir",
+					"min_allowed": 0,
+					"max_dp": 2
+				  }
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "quantityUom",
+				"selObjectPropertyName": "quantity_uom"
+			  },
+			  {
+				"argumentName": "quantity",
+				"element": "number1",
+				"defaultValue": ""
+			  }
+			]
+		  },
+		  {
+			"actionName": "ADD_ATTACHMENT",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "add_link",
+			  "title": {
+				"label_en": "Add Attachment",
+				"label_es": "Añadir Adjunto"
+			  },
+			  "requiresGridItemSelected": true
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "text1": {
+					"label_en": "Doc Url",
+					"label_es": "Vínculo"
+				  }
+				},
+				{
+				  "text2": {
+					"label_en": "Title",
+					"label_es": "Título",
+					"optional": true
+				  }
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "fileUrl",
+				"element": "text1",
+				"defaultValue": ""
+			  },
+			  {
+				"argumentName": "briefSummary",
+				"element": "text2",
+				"defaultValue": ""
+			  }
+			]
+		  },
+		  {
+			"actionName": "LOT_ADDAWSATTACHMENT",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "add_link",
+			  "title": {
+				"label_en": "Add Attachment AWS",
+				"label_es": "Añadir Adjunto AWS"
+			  },
+			  "requiresGridItemSelected": true
+			},
+			"dialogInfo": {
+			  "name": "uploadFileDialog",
+			  "fields": []
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  },
+			  {
+				"argumentName": "qualifId",
+				"selObjectPropertyName": "qualif_id"
+			  },
+			  {
+				"argumentName": "file",
+				"selObjectPropertyName": "aws_file"
+			  }
+			]
+		  },
+		  {
+			"actionName": "OPEN_ATTACHMENTS",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "attach_file",
+			  "title": {
+				"label_en": "Open Attachments",
+				"label_es": "Abrir Adjuntos"
+			  },
+			  "requiresGridItemSelected": true
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "filesListContent": true,
+			  "dialogQuery": {
+				"actionName": "GET_LOT_ATTACHMENTS",
+				"variableForData": "",
+				"endPointParams": [
+				  {
+					"argumentName": "lotName",
+					"internalVariableObjName": "selectedItems",
+					"internalVariableObjProperty": "lot_name"
+				  }
+				]
+			  },
+			  "xfields": [
+				{
+				  "text1": {
+					"label_en": "Doc Url prueba texto",
+					"label_es": "Vínculo"
+				  }
+				},
+				{
+				  "text2": {
+					"label_en": "Title",
+					"label_es": "Título",
+					"optional": true
+				  }
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "fileUrl",
+				"element": "text1",
+				"defaultValue": ""
+			  }
+			]
+		  },
+		  {
+			"actionName": "REMOVE_ATTACHMENT",
+			"requiresDialog": true,
+			"button": {
+			  "icon": "link_off",
+			  "title": {
+				"label_en": "Remove Attachment",
+				"label_es": "Eliminar Adjunto"
+			  },
+			  "requiresGridItemSelected": true
+			},
+			"dialogInfo": {
+			  "name": "genericDialog",
+			  "gridContent": true,
+			  "dialogQuery": {
+				"actionName": "GET_LOT_ATTACHMENTS",
+				"variableForData": "",
+				"endPointParams": [
+				  {
+					"argumentName": "lotName",
+					"internalVariableObjName": "selectedItems",
+					"internalVariableObjProperty": "lot_name"
+				  },
+				  {
+					"argumentName": "category",
+					"selObjectPropertyName": "category"
+				  },
+				  {
+					"argumentName": "reference",
+					"selObjectPropertyName": "reference"
+				  }
+				]
+			  },
+			  "langConfig": {
+				"gridHeader": [
+				  {
+					"fldName": "file_link",
+					"label_en": "Link",
+					"label_es": "Vínculo",
+					"width": "40%",
+					"sort": false,
+					"filter": true,
+					"align": "left"
+				  },
+				  {
+					"fldName": "brief_summary",
+					"label_en": "Title",
+					"label_es": "Título",
+					"width": "40%",
+					"sort": false,
+					"filter": true,
+					"align": "left"
+				  }
+				]
+			  },
+			  "automatic": true
+			},
+			"dialogInfo2": {
+			  "name": "genericDialog",
+			  "fields": [
+				{
+				  "text1": {
+					"label_en": "Doc Url",
+					"label_es": "Vínculo"
+				  }
+				}
+			  ]
+			},
+			"endPointParams": [
+			  {
+				"argumentName": "lotName",
+				"selObjectPropertyName": "lot_name"
+			  },
+			  {
+				"argumentName": "attachmentId",
+				"selObjectPropertyName": "id",
+				"getFromGrid": true
+			  },
+			  {
+				"argumentName": "category",
+				"selObjectPropertyName": "category"
+			  },
+			  {
+				"argumentName": "reference",
+				"selObjectPropertyName": "reference"
+			  }
+			]
+		  }
+		],
+		"row_buttons": []
+	  }
+	]
+  },
+  "InventoryLotsGeneral20240820":{
 	"component": "SingleView",
 	"hideLeftPane": true,
 	"hasOwnComponent": true,
@@ -4323,7 +5538,7 @@ export const Stock =
 	  },	   
 	"view_definition": [
 		{"type": "reportTitle",
-		 "title":{"label_en":"Active Inventory Lots", "label_en":"Lotes de inventario activos"}
+		 "title":{"label_en":"Active Inventory Lots qrcode", "label_en":"Lotes de inventario activos qrcode"}
 		},
 		{"type": "parentReadOnlyTable", 
 			"allowMultiSelection": true,

@@ -76,6 +76,7 @@ export function TrazitGenericDialogs(base) {
         });
     }
     renderQRCodeScanner(actionModel) {
+        if (actionModel.dialogInfo.fields===undefined){return nothing}
         const qrCodeField = actionModel.dialogInfo.fields.find(field => field.qrcode);
         if (qrCodeField) {
             return html`

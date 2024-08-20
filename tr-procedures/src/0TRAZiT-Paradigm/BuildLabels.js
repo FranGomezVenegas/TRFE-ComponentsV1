@@ -26,7 +26,7 @@ export function BuildLabelsFunctions(base) {
         if (model["propertyKeyValue"+lang]!==undefined){
             return dataObj[model["propertyKeyValue"+lang]]
         }
-        if (model[labelSingleField+"_"+lang]!==undefined){
+        if (model["labelSingleField"+"_"+lang]!==undefined){
             return dataObj[model[labelSingleField+"_"+lang]]
         }
         if (model.labelSingleField!==undefined){

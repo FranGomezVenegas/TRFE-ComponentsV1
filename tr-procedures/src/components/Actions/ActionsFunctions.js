@@ -10,11 +10,15 @@ export function ActionsFunctions(base) {
           selectedItemPropertyName = selectedItemPropertyName || 'selectedItems'
           console.log('actionMethod', this.selectedProcInstance, isProcManagement)
           //this.loadDialogs()
-          if (data !== undefined) {
-              if (Object.keys(data).length > 0) {
-              this.selectedItems = []
-              this.selectedItems.push(data)
-              }
+          if (data !== undefined && this.selectedItems === undefined) {
+            this.selectedItems = [];        
+            if (Array.isArray(data)) {
+                // Si data es un array, clona el array en selectedItems
+                this.selectedItems = [...data];
+            } else if (typeof data === 'object' && Object.keys(data).length > 0) {
+                // Si data es un objeto, empuja el objeto en selectedItems
+                this.selectedItems.push(data);
+            }
           }
           let targetValue={}
           if (selectedItemPropertyName!==undefined){
