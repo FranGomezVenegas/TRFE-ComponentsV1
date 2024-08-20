@@ -597,7 +597,7 @@ export function ButtonsFunctions(base) {
       //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)
       let d = false
       if (selRow !== undefined && selRow["No Data"] !== undefined) { return true }
-      if (action.button !== undefined&&action.button.showWhenSelectedItem !== undefined&&selItems.length===1) {
+      if (action.button !== undefined&&action.button.showWhenSelectedItem !== undefined&&selItems!==undefined&&selItems.length===1) {
         //console.log('btnHidden')
         if (selRow === undefined || selRow === undefined) { return true } // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {
@@ -640,7 +640,7 @@ export function ButtonsFunctions(base) {
             return false
           }
         }
-      } else if (action.button !== undefined&&action.button.hideWhenSelectedItem !== undefined&&selItems.length===1) {
+      } else if (action.button !== undefined&&action.button.hideWhenSelectedItem !== undefined&&selItems!==undefined&&selItems.length===1) {
         if (selRow === undefined || selRow === undefined) { return true } // keep shown when no selection
         if (Array.isArray(action.button.hideWhenSelectedItem)) {
           action.button.hideWhenSelectedItem.forEach(rowArray => {
@@ -688,7 +688,7 @@ export function ButtonsFunctions(base) {
     btnHidden(action, selItems) {
       // let selRow=selItems[0]      
       if (selItems!==undefined){
-        if (selItems.length>1
+        if (selItems!==undefined&&selItems.length>1
           &&(action.button===undefined||action.button.requiresGridItemSelected===undefined||action.button.requiresGridItemSelected===true)
           &&(action.actionForMultiSelect===undefined||action.actionForMultiSelect!==true)){
           return true
@@ -697,7 +697,7 @@ export function ButtonsFunctions(base) {
       }
       let d = false
       if (action===undefined||action.button===undefined){return d}
-      if (action.button.showWhenSelectedItem !== undefined&&selItems.length===1) {
+      if (action.button.showWhenSelectedItem !== undefined&&selItems!==undefined&&selItems.length===1) {
         //console.log('btnHidden')
         if (this.selectedItems === undefined || this.selectedItems[0] === undefined) { return true } // keep hide when no selection
         if (Array.isArray(action.button.showWhenSelectedItem)) {
@@ -739,7 +739,7 @@ export function ButtonsFunctions(base) {
             return false
           }
         }
-      } else if (action.button.hideWhenSelectedItem !== undefined&&selItems.length===1) {
+      } else if (action.button.hideWhenSelectedItem !== undefined&&selItems!==undefined&&selItems.length===1) {
         if (this.selectedItems === undefined || this.selectedItems[0] === undefined) { return true } // keep shown when no selection
         if (Array.isArray(action.button.hideWhenSelectedItem)) {
           action.button.hideWhenSelectedItem.forEach(rowArray => {
