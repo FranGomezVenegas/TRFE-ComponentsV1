@@ -1,6 +1,8 @@
 import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-<Meta title="Frontend Concepts/Dialogs/Generic Dialog/DependencyFieldBehavior"/>
+<Meta title="Trazit Actions/Dialogs/Generic Dialog/DependencyFieldBehavior"/>
 
 # DependencyFieldBehavior
 
@@ -9,10 +11,7 @@ The `DependencyFieldBehavior` component is used to link two fields in a dialog s
 ## Basic Example
 
 In the following example, a dependent field behavior is configured where the `text1` field is hidden if the list is empty. If the `list1` field is not filled in, the `hide` action will be automatically triggered, hiding the dependent field.
-
-<Canvas>
-  <Story name="Basic Example">
-    <DependencyFieldBehavior
+	```Json example
       list1={{
         label_en: "Ingredients List",
         label_es: "Lista de ingredientes",
@@ -35,8 +34,7 @@ In the following example, a dependent field behavior is configured where the `te
         }
       ]}
     />
-  </Story>
-</Canvas>
+```
 
 ### Usage Cases
 
