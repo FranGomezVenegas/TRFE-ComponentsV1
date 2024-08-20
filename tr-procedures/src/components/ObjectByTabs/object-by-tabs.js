@@ -313,15 +313,29 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       if (changedProperties.has('ready') && this.ready) {
         this.refreshView();
       }
+      if (changedProperties.has('viewModelFromProcModel')) {
+        this.refreshView();  // Ensure the view is updated based on the new model
+      }      
     }
     refreshView(){
-      //alert('refreshView')
       if (this.viewModelFromProcModel.hideLeftPane!==undefined){
         this.hideLeftPane=this.viewModelFromProcModel.hideLeftPane
         this.filterPerformAction()
+        this.requestUpdate();
       }
     }
+    changeModel(newViewModel) {
+      this.viewModelFromProcModel = newViewModel;
+      this.filterPerformAction();
+      this.requestUpdate();  // Request an update to trigger reactivity
+    }
 
+    updated(changedProperties) {
+      if (changedProperties.has('viewModelFromProcModel')) {
+          // Logic to handle the model update
+          this.refreshView();
+      }
+    }
     firstUpdated() {
       //alert(this.viewModelFromProcModel.hideLeftPane)
       if (this.viewModelFromProcModel.hideLeftPane!==undefined){

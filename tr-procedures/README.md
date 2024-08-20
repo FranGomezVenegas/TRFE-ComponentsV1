@@ -115,3 +115,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
     - (related to v0.2.66) fix in getAPICommonParams, handle nulls as undefineds
     - fix to not add arrays of arrays in selectedItems    
 ]
+[- v0.2.70 Tabs component using object-by-tabs]

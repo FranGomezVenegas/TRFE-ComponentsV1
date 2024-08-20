@@ -4,17 +4,21 @@ import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 export function GridFunctions(base) {
     return class extends ButtonsFunctions(base) {
 
-        getTitle(sectionModel = this.viewModelFromProcModel) {
-            
+        getTitle(sectionModel = this.viewModelFromProcModel) {            
             let textToDisplay=this.filterName
-            if (this.filterName===undefined||this.filterName==='undefined'){
+            if (this.filterName===undefined||this.filterName==='undefined'||this.filterName===''){
+                if (sectionModel.filter!==undefined){
+                    this.filterName=sectionModel.filter
+                }
+            }
+            if (this.filterName===undefined||this.filterName==='undefined'||this.filterName===''){                
                 textToDisplay=sectionModel.langConfig.title["label_"+this.lang]
             }else{
                 if (sectionModel.langConfig&&sectionModel.langConfig.title[this.filterName]) {
                     textToDisplay=sectionModel.langConfig.title[this.filterName]["label_"+this.lang]
                 }
             }
-            if (textToDisplay===undefined||textToDisplay==='undefined'){
+            if (textToDisplay===undefined||textToDisplay==='undefined'||textToDisplay===''){
                 textToDisplay=''
             }
                 let viewDisabled=this.disabledByCertification({})
@@ -39,7 +43,7 @@ export function GridFunctions(base) {
             this.gridItems = []
             this.ready = true
         }
-        setGrid(j) {
+        xxxsetGrid(j) {
             //return
             //console.log('setGrid')
             this.selectedItems = []
@@ -89,7 +93,7 @@ export function GridFunctions(base) {
         }
         gridList(viewModelFromProcModel ={}) {
             if (viewModelFromProcModel===undefined){return} 
-            if (this.gridItems===undefined||this.gridItems.length==0){return       }
+            if (this.requestData===undefined||this.requestData.length==0){return       }
             return Object.entries(viewModelFromProcModel.langConfig.gridHeader).map(
                 ([key, value], i) => html`
                 ${viewModelFromProcModel.langConfig.gridHeader[key].is_icon ?

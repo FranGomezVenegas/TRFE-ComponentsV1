@@ -1,6 +1,5 @@
 import { html, css, nothing, LitElement } from 'lit';
-import('../grid_with_buttons/grid-with-buttons');
-import './tabs-composition';
+import '../ObjectByTabs/object-by-tabs';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 
 export class TabsMainView extends DialogsFunctions(LitElement) {
@@ -19,17 +18,69 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
         background-color: #03a9f4;
       }
       mwc-button.tabBtn {
-        background-color: #24C0EB;
-        font-family : Myriad Pro;
-        border-radius : 11px;        
-        -moz-border-radius : 11px;
-        -webkit-border-radius : 11px;
-        border-style:outset;
-        border-color:rgb(48, 116, 135);
-        border-width: 0px 3px 3px 0px;
-        --mdc-typography-button-text-transform: none;
-        --mdc-typography-button-font-size: 19px;
-        --mdc-theme-primary: rgb(3, 169, 244);       
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        min-width: 64px;
+        padding: 12px 24px;
+        border: none;
+        outline: none;
+        line-height: inherit;
+        user-select: none;
+        appearance: none;
+        overflow: hidden;
+        vertical-align: middle;
+        background: linear-gradient(79deg, #4668db, #9d70cd); /* Gradient background */
+        color: #fff; /* White text */
+        font-size: 16px; /* Font size */
+        font-weight: 600; /* Font weight */
+        border-radius: 50px; /* Rounded corners */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        cursor: pointer; /* Pointer cursor */
+        transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+        --mdc-theme-primary: transparent;
+        --mdc-typography-button-font-family: Montserrat;
+        /* Or use general CSS */
+        font-family: Montserrat;        
+      }
+          
+      mwc-button.tabBtn:hover {
+        transform: translateY(-3px); /* Slight lift effect on hover */
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+        --mdc-theme-primary: transparent;
+      }
+      
+      mwc-button.tabBtn.selected {
+        transform: translateY(0); /* Reset lift effect */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Reduced shadow on active */
+        background: linear-gradient(79deg, #384c8e, #29064e); /* Gradient background */
+        --mdc-theme-primary: transparent;
+        
+      }
+      
+      mwc-button.tabBtn:focus {
+        outline: none; /* Remove default focus outline */
+        box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.5); /* Custom focus outline */
+      }
+      
+      mwc-button.tabBtn::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.5s;
+      }
+      
+      mwc-button.tabBtn:active::before {
+        transform: translate(-50%, -50%) scale(1);
+        transition: transform 0s;
       }
     `;
   }
@@ -48,20 +99,18 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
             procInstanceName:{type: String},
             masterData:{ type: Object},
             selectedItems: { type: Array },
+            selectedTab: {type: Object}
         }
     }
     constructor() {
         super()
         this.viewModelFromProcModel={} 
         this.tabsMainViewModelFromProcModel={}
-
+        this.selectedTab={}
         this.ready=false;
         this.config={}
         this.masterData={} 
         this.selectedItems=[]
-        //if (this.viewModelFromProcModel===undefined||Object.keys(this.viewModelFromProcModel).length==0){
-//          this.viewModelFromProcModel=this.tabsMainViewModelFromProcModel.tabs[0]
-  //      }                  
     }
     render() {        
         return html`        
@@ -71,7 +120,6 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
         `: nothing}`
     }
     tabsBlock(){
-        this.resetView()
         return html`
         ${this.tabsMainViewModelFromProcModel.tabs ?
           html`
@@ -79,75 +127,44 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
               <div class="layout horizontal flex">
                 ${this.tabsMainViewModelFromProcModel.tabs.map(t => 
                   html`
-                    <mwc-button class="tabBtn" dense unelevated 
+                  <mwc-button
+                    class="tabBtn ${this.selectedTab === t ? 'selected' : ''}"
+
+                    dense unelevated 
                       .label=${t.langConfig.tab["label_"+ this.lang]}
-                      @click=${()=>this.selectTab(t)}></mwc-button>
+                      @click=${()=>this.loadSelectTab(t)}></mwc-button>
                   `
                 )}
               </div>
-              <tabs-composition 
-                .lang=${this.lang} .masterData=${this.masterData}
-                .windowOpenable=${this.windowOpenable}
-                .sopsPassed=${this.sopsPassed}
-                .procInstanceName=${this.procInstanceName}             
-                .viewName=${this.viewName}  .viewModelFromProcModel=${this.viewModelFromProcModel!==undefined&&Object.keys(this.viewModelFromProcModel).length>0 ? this.viewModelFromProcModel : this.tabsMainViewModelFromProcModel.tabs[0]}
-                .config=${this.config}>${this.tabOnOpenView()}</tabs-composition>
+              <object-by-tabs .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+                .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+                .model=${this.tabsMainViewModelFromProcModel}
+                .config=${this.config}></object-by-tabs>               
             </div>
-            
           ` : nothing
         }
         `
     }
-    tabOnOpenView() {
-      return
-    }
-    selectTab(tab) {
-      this.viewModelFromProcModel=tab
-      this.tabsComposition.resetView()
-    }
-
-    resetView() {
-      //console.log('resetView', 'tabs', this.tabsMainViewModelFromProcModel.tabs, 'master data', this.masterData)
-      if (this.tabsComposition!==null){
-        this.tabsComposition.render()
+    firstUpdated() {
+      if (this.objectByTabs) {
+          const initialTab = this.tabsMainViewModelFromProcModel.tabs[0];
+          if (initialTab) {
+              this.objectByTabs.changeModel(initialTab);
+          }
       }
-      return
-      this.viewModelFromProcModel=this.tabsMainViewModelFromProcModel.tabs[0]
-        if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.component===undefined){return}
-        switch(this.viewModelFromProcModel.component){
-          case 'GridWithButtons':
-          case 'TableWithButtons':        
-            import('../grid_with_buttons/grid-with-buttons')            
-            if (this.GridWithButtons!==null){
-              this.GridWithButtons.ready=false
-            }        
-            //alert('grid')
-            return
-        //   case 'Tabs':
-        //     import('./components/Tabs/tabs-main-view')
-        //     return
-        //   case 'ModuleEnvMonitProgramProc':
-        //     import('./module_env_monit/program-proc')
-        //     return
-        //   case 'EnvMonitBrowser':
-        //     import('./browser/browser-view')
-        //     return
-        //   case 'DataMining':
-        //     import('./data_mining/datamining-mainview')
-        //     return
-        //   case 'ModuleGenomaProjectWindow':
-        //     import('./module_genoma/genoma-project')
-        //     return
-        //   case 'ModuleSampleLogSample':
-        //     import('./module_sample/log-sample-module-sample')
-        //     return
-          default:
-            alert('In tabs-main-view component, Not found component '+this.viewModelFromProcModel.component)
-            return
-        }
+    }
+    loadSelectTab(tab) {
+      this.selectedTab = tab;
+      this.requestUpdate();
+      this.viewModelFromProcModel = tab;
+      this.dispatchEvent(new CustomEvent('tab-selected', {        
+          bubbles: true,
+          composed: true
+      }));
+      if (this.objectByTabs !== null) {
+          this.objectByTabs.changeModel(tab);  // Use the changeModel method to update the model
       }
-    
-      get tabsComposition() {return this.shadowRoot.querySelector("tabs-composition")}  
-      get GridWithButtons() {return this.shadowRoot.querySelector("grid-with-buttons")}  
+    }      
+    get objectByTabs() {return this.shadowRoot.querySelector("object-by-tabs")}  
 }
 window.customElements.define('tabs-main-view', TabsMainView);

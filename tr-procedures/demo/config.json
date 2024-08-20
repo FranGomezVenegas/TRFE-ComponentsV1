@@ -390,12 +390,12 @@
   },
   "localDefaultView": {
     "procName":  "stock", 
-    "viewName": "InventoryLotsGeneral20240729", 
+    "viewName": "Deviation", 
     "filterName" :  "" 
   },  
   
   "fakeEnd":{
-    "fake": ""
+    "fake": "InventoryLotsGeneral20240729"
   }  
  
 }
