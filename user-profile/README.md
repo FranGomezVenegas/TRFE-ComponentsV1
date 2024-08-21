@@ -50,3 +50,4 @@ This area want to track the bugs identified for this Web Component that were alr
 ## Versioning track
 
 v0.0.2 compatible with new credentials dialog artifact
+[- v0.0.3 use lit instead of lit-element]
