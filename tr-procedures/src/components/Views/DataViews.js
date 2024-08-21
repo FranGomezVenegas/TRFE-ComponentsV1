@@ -315,7 +315,7 @@ export function DataViews(base) {
                   <span class="title ${isSecondLevel}">${elem.title}</span>
                 </p>`}
             <div class="layout horizontal center flex wrap">
-              ${this.getButton(elem, dataArr, true)}
+              ${this.getButton(elem, dataArr, dataArr, true)}
             </div>
             ${elem.columns === undefined
           ? html`No columns defined`
@@ -623,7 +623,7 @@ export function DataViews(base) {
             style="display: flex; flex-direction: row; text-align: center; flex-wrap:wrap; "
           >
             <div class="layout horizontal center flex wrap">
-              ${this.getButton(elem, dataArr, true)}
+              ${this.getButton(elem, dataArr, dataArr, true)}
             </div>
             ${elem.columns === undefined
           ? html`No columns defined`
@@ -1410,7 +1410,7 @@ export function DataViews(base) {
               >`
         }
                 <div style="flex-basis: auto; width: auto;">
-                  ${this.getButton(elem, data, false)}
+                  ${this.getButton(elem, data, data, false)}
                 </div>
               </div>
             `;
@@ -1597,7 +1597,7 @@ export function DataViews(base) {
                 style="${elem.style !== undefined ? elem.style : ""}"
               >
                 <div style="flex-basis: auto; width: auto;">
-                  ${this.getButton(elem, data, true)}
+                  ${this.getButton(elem, data, data, true)}
                 </div>
                 <ul
                   style="align-items: baseline;"
@@ -1935,11 +1935,7 @@ export function DataViews(base) {
                                     <div
                                       class="layout horizontal center flex wrap"
                                     >
-                                      ${this.getButton(
-                      elem,
-                      curData,
-                      isProcManagement
-                    )}
+                                      ${this.getButton(elem, curData, curData, isProcManagement)}
                                     </div>
                                     ${elem.fieldsToDisplay === undefined
                   ? nothing

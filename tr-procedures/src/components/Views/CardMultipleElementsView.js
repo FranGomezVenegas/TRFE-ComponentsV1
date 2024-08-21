@@ -482,7 +482,7 @@ export function CardMultipleElementsView(base) {
                     <div id="main${elem.add_border !== undefined && elem.add_border == true ? "addborder" : ""}"
                       class="layout vertical flex wrap" style="${elem.style !== undefined ? elem.style : ""}">
                       <div style="flex-basis: auto; width: auto;">
-                        ${this.getButton(elem, data, true)}
+                        ${this.getButton(elem, data, data, true)}
                       </div>
                       <ul
                         style="align-items: baseline;"
