@@ -146,32 +146,40 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     // Reset table or perform other actions based on the selected tab
     this.dispatchEvent(new CustomEvent('tab-selected', {bubbles: true,composed: true}));  
   }
+
+  _renderDialogs() {
+    return html`
+
+
+    ${this.genericFormDialog()}
+    ${this.reactivateObjectsDialog()}
+    ${this.testScriptNewStepFormDialog()}
+
+    ${this.credentialsDialog()}        
+    ${this.moduleEnvMonitMicroorganismsDialogAdd()}
+    ${this.moduleEnvMonitMicroorganismsDialogRemove()}
+
+    ${this.takePictureFormDialog()}
+   
+    ${this.pointTemplate()} 
+    ${this.resultTemplate(this.procInstanceName)}
+    ${this.decisionTemplate(this.actionBeingPerformedModel)}   
+
+    `;
+  }
+
   render(){
     //this.selectedItem=this.selectedItemInView
     //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
+    
     return html`
       <div id="mainDiv">
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
           ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItemInView, this.selectedItem)}
         `}
       </div>
-      ${this.genericFormDialog()}
-      ${this.reactivateObjectsDialog()}
-      ${this.testScriptNewStepFormDialog()}
-
-      ${this.credentialsDialog()}  
-      ${this.reactivateObjectsDialog()}
-      ${this.moduleEnvMonitMicroorganismsDialogAdd()}
-      ${this.moduleEnvMonitMicroorganismsDialogRemove()}
-
-      ${this.takePictureFormDialog()}
-     
-      ${this.pointTemplate()} ${this.resultTemplate(this.procInstanceName)}
-      ${this.investigationTemplate()}
-      ${this.filterName == "open"
-        ? html`${this.decisionTemplate()}`
-        : nothing}
-      ${this.decisionTemplate()}      
+      
+    ${this._renderDialogs()}      
       ${super.render()}
       <audit-dialog @sign-audit=${this.setAudit} .actionBeingPerformedModel=${this.actionBeingPerformedModel} 
           .filterName=${this.filterName} .lang=${this.lang} .windowOpenable=${this.windowOpenable}
@@ -271,12 +279,14 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       tables.forEach((table) => {
         this.resetTableSize(table);
         this.initTableResize(table)
+        this.requestUpdate();
       });    
     }
     if(changedProperties.has('selectedTableIndex')) {
       const tables = this.shadowRoot.querySelectorAll("table");
       tables.forEach((table) => {
         this.initTableResize(table)
+        this.requestUpdate();
       });  
     }
   }

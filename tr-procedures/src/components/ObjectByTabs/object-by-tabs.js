@@ -666,7 +666,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                                       ? nothing
                                       : html`
                                           <div style="flex-basis: auto; width: auto;">
-                                            ${this.getButton(this.viewModelFromProcModel.left_panel, {}, true)}
+                                            ${this.getButton(this.viewModelFromProcModel.left_panel, {}, {}, true)}
                                           </div>
                                         `}
                                   </div>
