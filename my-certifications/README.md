@@ -41,4 +41,5 @@ that are simpler or more complex and even depending on the current stage it shou
   endpoint_name: The name of the action to be performed, as said above, the level is just the type but      depending on the current stage the next action might be one or another. Again, it is the Backend which determines that, the Frontend should just use it to generate the request/action.
   label_en/es: the label to display.
 
-
+## Versioning Tracking
+[- v0.0.2 use lit instead of lit-element]
