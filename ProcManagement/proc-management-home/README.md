@@ -36,3 +36,4 @@ To run a local development server that serves the basic demo located in `demo/in
 ## Versioning track
 Version 0.0.1 is considered the draft
 Version 0.1 is the version by applying QA refactor
+[- v0.1.1 use lit instead of lit-element]
