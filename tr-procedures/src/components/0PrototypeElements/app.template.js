@@ -14,7 +14,8 @@ import '../TablesDiagram/tables.diagram.main'
 //import '../FlowDiagram/main'
 import '../diagram/main';
 import '../LabelPrinter/zpl-previewer';
-import '../GoogleMaps/main';
+//import '../GoogleMaps/main';
+import '../HelpPane/my-pdf-viewer';
 
 import { generateLabel, previewLabel } from '../GenericDialogs/labelGenerator';
 
@@ -82,6 +83,30 @@ export const template = (props) => {
   let buttonForDownloadAwsFileUrl = "http://localhost:8081/TRAZiT-API/app/procs/InvTrackingAPIqueries?finalToken=eyJ1c2VyREIiOiJyJmQiLCJkYXRldGltZUZvcm1hdEF0UGxhdGZvcm1MZXZlbCI6IkRJU0FCTEVEIiwicHJvY3NNb2R1bGVOYW1lIjoiUmFuZEQqUmFuZEQgUFJPSkVDVFMiLCJkYk5hbWUiOiJkZW1vX3YwXzlfMiIsInR5cCI6IkpXVCIsInVzZXJfcHJvY2VkdXJlX2hhc2hjb2RlcyI6IlJhbmREKjEqMTIzODQ1ODM2NSIsImVTaWduIjoiZmlybWFkZW1vIiwidXNlckRCUGFzc3dvcmQiOiJ0cmF6aXQ0ZXZlciIsInVzZXJNYWlsIjoiaW5mb0B0cmF6aXQubmV0IiwidXNlcl9wcm9jZWR1cmVzIjoiW1JhbmREXSIsImFwcFNlc3Npb25JZCI6IjYyOTgiLCJhcHBTZXNzaW9uU3RhcnRlZERhdGUiOiJGcmkgTWF5IDE3IDA5OjA3OjU3IFVUQyAyMDI0IiwidXNlclJvbGUiOiJyJmQgc3VwZXJ1c2VyIiwiYWxnIjoiSFMyNTYiLCJpbnRlcm5hbFVzZXJJRCI6IjExMDgzMiJ9.eyJpc3MiOiJMYWJQTEFORVRkZXN0cmFuZ2lzSW5UaGVOaWdodCJ9.gZmJzwaOGQOxGW-rJH_vUvAsGOUZxUBeSI7SsOwaQ0o&dbName=demo_v0_9_2&actionName=GET_LOT_AWS_ATTACHMENT&procInstanceName=stock&lotName=123456%205%2F10&qualifId=1";
 
   return html`
+  
+  <my-pdf-viewer
+  .pdfs="${[
+    {
+      name: 'Sample PDF 1',
+      description_en: 'This is an English description.',
+      description_es: 'Esta es una descripción en español.',
+      url: 'https://1drv.ms/b/s!Ah1ARh7IPhH8gcZcRp3lz43kjTZ8vQ?e=naYJuw/view?usp=sharing',
+      url2: 'https://drive.google.com/file/d/1a2B3C4d5eF6gH7i8J9kL0mN1OpQRsTu/view?usp=sharing',
+      isGoogleDrive:true
+    },
+    {
+      name: 'Sample PDF 2',
+      description_en: 'This is another English description.',
+      description_es: 'Esta es otra descripción en español.',
+      url: 'https://1drv.ms/b/s!Ah1ARh7IPhH8gcZcRp3lz43kjTZ8vQ?e=YTWdCO',
+      isGoogleDrive:true
+    },
+  ]}"
+  lang="en"
+  selectedPdfUrl="https://www.renfe.com/content/dam/renfe/es/General/PDF-y-otros/Ejemplo-de-descarga-pdf.pdf"
+  selectedSection="2"
+></my-pdf-viewer>
+
   <google-map></google-map>
   <zpl-previewer></zpl-previewer>
   <serial-port-component lang=${props.lang} .sendEnabled="${true}" .isTimeoutEditable="${false}" .showAlert="${false}"></serial-port-component>
@@ -164,7 +189,7 @@ export const template = (props) => {
       <button @click=${handleGenerateLabel}>Generate Label Preview</button>
       <button @click=${() => window.print()}>Print</button>
       <div id="labelPreviewContainer" style="border: 1px solid #000; width: 400px; height: 600px;"></div>
-<!--      <preview-file></preview-file> -->
+      <preview-file></preview-file> 
       <flip-card .lang=${lang} .config=${flipCardConfig1} .data=${flipCardDataGroup1}></flip-card>
       
       <flip-card .lang=${lang} .config=${flipCardConfig2} .data=${flipCardDataGroup2}></flip-card>

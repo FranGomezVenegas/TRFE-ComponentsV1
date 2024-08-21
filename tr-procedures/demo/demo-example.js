@@ -243,24 +243,18 @@ class DemoExample extends LitElement {
         this.shadowRoot.appendChild(this.localToast)
       // }
     //if (this.config.local != false && !window.process) {
+    if (!this.hasEventListener('success')) {
       this.addEventListener('success', e => {
-        // alert('addEventListener for success')
-
-        // if (e.is_error===undefined){
-        //   return
-        // }
         this.showNotif(e)
-        // if (e.is_error===true){
-        //   this.localToast.style.backgroundColor = '#0085ff'
-        // }else{
-        //   this.localToast.style.backgroundColor = '#b22222'
-        // }
       })
+    }
+    if (!this.hasEventListener('error')) {
       this.addEventListener('error', e => {
         // alert('addEventListener for error')
         this.showNotif(e)
         this.localToast.style.backgroundColor = '#a33'
       })
+    }
     //}
   }
   showNotif(e) {

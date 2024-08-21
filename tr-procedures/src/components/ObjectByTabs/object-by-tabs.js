@@ -311,10 +311,10 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
     }
     updated(changedProperties) {
       if (changedProperties.has('ready') && this.ready) {
-        this.refreshView();
+        //this.refreshView();
       }
       if (changedProperties.has('viewModelFromProcModel')) {
-        this.refreshView();  // Ensure the view is updated based on the new model
+        //this.refreshView();  // Ensure the view is updated based on the new model
       }      
     }
     refreshView(){
@@ -791,18 +791,6 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       `;
     }
     
-    tabOnOpenView() {
-      // <objecttabs-composition 
-      // .lang=${this.lang} .masterData=${this.masterData}
-      // .windowOpenable=${this.windowOpenable}
-      // .sopsPassed=${this.sopsPassed}
-      // .procInstanceName=${this.procInstanceName}             
-      // .viewName=${this.viewName}  .viewModelFromProcModel=${this.viewModelFromProcModel!==undefined&&Object.keys(this.viewModelFromProcModel).length>0 ? this.viewModelFromProcModel : this.viewModelFromProcModel.tabs[0]}
-      // .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
-      // .selectedItem=${this.selectedItem}
-      // .config=${this.config}>${this.tabOnOpenView()}</objecttabs-composition>        
-      return
-    }
     selectTab(tab) {
       this.selectedTab = tab;
       this.requestUpdate();

@@ -10555,11 +10555,9 @@ export const Stock =
 	"component": "Tabs",
 	"tabs": [
 		{
-			"langConfig": {
-				"tab": {
-				  "label_en": "Pending Decision", 
-				  "label_es": "Decisión pendiente"
-				},
+			"tabLabel": {
+				"label_en": "Pending Decision", 
+				"label_es": "Decisión pendiente"
 			},
 			"component": "SingleView",
 			"hideLeftPane": true,
@@ -11775,12 +11773,9 @@ export const Stock =
 			]
 		},
 		{
-			"soyYo":"si",
-			"langConfig": {
-				"tab": {
-				  "label_en": "Pending Decision 2", 
-				  "label_es": "Decisión pendiente 2"
-				},
+			"tabLabel": {
+				"label_en": "Pending Decision 2", 
+				"label_es": "Decisión pendiente 2"
 			},
 			"component": "SingleView",
 			"hideLeftPane": true,

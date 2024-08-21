@@ -131,7 +131,7 @@ export class TabsMainView extends DialogsFunctions(LitElement) {
                     class="tabBtn ${this.selectedTab === t ? 'selected' : ''}"
 
                     dense unelevated 
-                      .label=${t.langConfig.tab["label_"+ this.lang]}
+                      .label=${t.tabLabel["label_"+ this.lang]}
                       @click=${()=>this.loadSelectTab(t)}></mwc-button>
                   `
                 )}

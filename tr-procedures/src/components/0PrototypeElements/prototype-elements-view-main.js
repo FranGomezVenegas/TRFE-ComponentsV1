@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import { template } from './app.template';
 import { styles } from './app.css';
 import { generateLabel, previewLabel } from '../GenericDialogs/labelGenerator';

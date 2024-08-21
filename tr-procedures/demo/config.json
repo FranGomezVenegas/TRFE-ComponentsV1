@@ -337,11 +337,7 @@
     "viewName": "ProductionLots", 
     "filterName" :  "SampleLot" 
   },  
-  "localDefaultView": {
-    "procName":  "fake-developers", 
-    "viewName": "prototype-elements-view-main", 
-    "filterName" :  "prototype-elements-view-main" 
-  },
+
   "localDefaultView1": {
     "procName":  "stock", 
     "viewName": "Home", 
@@ -393,7 +389,11 @@
     "viewName": "Deviation", 
     "filterName" :  "" 
   },  
-  
+  "localDefaultView2": {
+    "procName":  "fake-developers", 
+    "viewName": "prototype-elements-view-main", 
+    "filterName" :  "prototype-elements-view-main" 
+  },
   "fakeEnd":{
     "fake": "InventoryLotsGeneral20240729"
   }  
