@@ -159,7 +159,9 @@ export function TrazitGenericDialogs(base) {
                 this.area=actionModel.area
             }
         }
-        
+        if (actionModel === undefined||actionModel.dialogInfo===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
+            return
+        }          
 
          // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi 
          //     otherwise it is not compatible with actions requiring credentials dialog.
@@ -942,6 +944,9 @@ export function TrazitGenericDialogs(base) {
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
             return
         }
+        if (this.actionBeingPerformedModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
+            return
+        }        
         for (let element of dlgFlds){
             let fldObj=element
             let keyName=Object.keys(fldObj)
@@ -953,13 +958,28 @@ export function TrazitGenericDialogs(base) {
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
                 this[keyName].value=fldObj[keyName].default_value
             }
-            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
-                if (this.selectedItem[0]===undefined){return}
-                this[keyName].value=this.selectedItem[0][fldObj[keyName].selObjectPropertyName]
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].defaultValue!==undefined&&fldObj[keyName].defaultValue!==null){
+                if (Array.isArray(this.selectedItem)){
+                    this[keyName].value=this.selectedItem[0][fldObj[keyName].defaultValue]
+                }else{
+                    this[keyName].value=this.selectedItem[fldObj[keyName].defaultValue]
+                }                
+                //if (this.selectedItem[0]===undefined){return}
+                //this[keyName].value=this.selectedItem[fldObj[keyName].defaultValue]
             }            
-            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj.selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
-                if (this.selectedItem[0]===undefined){return}
-                this[keyName].value=this.selectedItem[0][fldObj.selObjectPropertyName]
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null){
+                if (this.selectedItem!==undefined)
+                if (Array.isArray(this.selectedItem)){
+                    this[keyName].value=this.selectedItem[0][fldObj[keyName].selObjectPropertyName]
+                }else{
+                    this[keyName].value=this.selectedItem[fldObj[keyName].selObjectPropertyName]
+                }                
+                // if (this.selectedItem[0]===undefined){return}
+                // this[keyName].value=this.selectedItem[fldObj[keyName].selObjectPropertyName]
+            // }            
+            // if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj.selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+            //     if (this.selectedItem[0]===undefined){return}
+            //     this[keyName].value=this.selectedItem[fldObj.selObjectPropertyName]
             }            
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&                
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
@@ -991,6 +1011,9 @@ export function TrazitGenericDialogs(base) {
         }
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
+            return
+        }
+        if (this.actionBeingPerformedModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
             return
         }
         for (const element of dlgFlds){
