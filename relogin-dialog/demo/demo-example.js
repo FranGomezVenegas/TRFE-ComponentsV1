@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../relogin-dialog';
