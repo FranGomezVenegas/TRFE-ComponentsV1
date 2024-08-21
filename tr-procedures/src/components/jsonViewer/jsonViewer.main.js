@@ -1,7 +1,7 @@
-//import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import { template } from './jsonViewer.template.js';
 import { styles } from './jsonViewer.css.js';
-import { LitElement } from 'lit';
+
 
 export class JsonViewer extends LitElement {
   static get styles() {

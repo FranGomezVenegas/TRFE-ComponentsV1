@@ -1,4 +1,4 @@
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 import {template} from './stagesview.template';
 import { styles } from './stagesview.css';
 import { navigator } from "lit-element-router";

@@ -432,7 +432,7 @@ export class DragDropBox extends TrazitGenericDialogs(ListsFunctions(ApiFunction
     return html`
       ${this.genericFormDialog()}
       <div id="boxesTableMainArea">
-        ${this.getButton(elem, data, false, undefined)}
+        ${this.getButton(elem, data, data, false, undefined)}
         <table class="dragdropable TRAZiT-DefinitionArea">
           <thead>
             ${elem.columns.map((column, i) => html`<th>${column.label_en}</th>`)}

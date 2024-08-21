@@ -116,3 +116,5 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
     - fix to not add arrays of arrays in selectedItems    
 ]
 [- v0.2.70 Tabs component using object-by-tabs]
+[- v0.2.71 defaultValue added and selObjectPropertyName should get it from selectedItem{} and not selectedItem[0]
+[- v0.2.72 use lit instead of lit-element]

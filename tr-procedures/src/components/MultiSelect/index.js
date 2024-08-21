@@ -1,4 +1,4 @@
-import {LitElement} from 'lit-element';
+import {LitElement} from 'lit';
 import {template} from './multiselect.template';
 import { styles } from './multiselect.css';
 import { navigator } from "lit-element-router";

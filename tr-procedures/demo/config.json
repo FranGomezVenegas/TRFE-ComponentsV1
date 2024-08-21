@@ -389,7 +389,7 @@
     "viewName": "Deviation", 
     "filterName" :  "" 
   },  
-  "localDefaultView2": {
+  "localDefaultView222": {
     "procName":  "fake-developers", 
     "viewName": "prototype-elements-view-main", 
     "filterName" :  "prototype-elements-view-main" 

@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import '../components/flipcard/flipcard';
 import { template } from './proc-homes.template';
 import { styles } from './proc-homes.styles';

@@ -256,7 +256,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props,thisCompo
             style="${elem.style !== undefined ? elem.style : ""}"
             class="dragdropabletr" draggable="${elem.dragEnable}"  @dragstart=${(e) => props.dragTableTr(e, elem, curDataForThisCard)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, elem, curDataForThisCard)}>
             <div style="flex-basis: auto; width: auto;">
-             <!-- this.getButton(elem, curDataForThisCard, true)} -->
+             <!-- this.getButton(elem, curDataForThisCard, curDataForThisCard, true)} -->
             </div>
             <ul
               style="align-items: baseline;"

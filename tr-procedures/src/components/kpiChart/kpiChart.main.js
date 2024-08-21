@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import { template } from './kpiChart.template.js';
 import { styles } from './kpiChart.css.js';
 

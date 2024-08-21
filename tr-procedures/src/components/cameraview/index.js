@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import { styles } from './cameraview.css';
 import { template } from './cameraview.template';
 import { ApiFunctions } from '../Api/ApiFunctions';
