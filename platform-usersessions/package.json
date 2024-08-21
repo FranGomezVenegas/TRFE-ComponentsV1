@@ -3,7 +3,7 @@
   "description": "Component to display the list of user sessions and the actions performed in each one",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
