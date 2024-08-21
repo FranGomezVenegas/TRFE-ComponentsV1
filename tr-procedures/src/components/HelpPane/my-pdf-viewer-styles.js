@@ -27,4 +27,26 @@ export const pdfViewerStyles = css`
     height: 600px;
     border: 1px solid #ccc;
   }
+#my-iframe {
+                  width: 100%;
+                  height: 100%;
+                  border: none;
+                  flex: 1;
+                }
+                @keyframes slidein {
+                  from {
+                    margin-left: 30%;
+                  }
+                  to {
+                    margin-left: 0%;
+                  }
+                }
+                @media (max-width: 460px) {
+                }
+                iframe::shadow
+                  .pdf-viewer::content
+                  #controls
+                  ::slotted(.SwitchToReadingMode-Small14) {
+                  display: none;
+                }    
 `;
