@@ -34,3 +34,6 @@ npm start
 ```
 
 To run a local development server that serves the basic demo located in `demo/index.html`
+
+## Versioning Tracking
+[- v2.0.4 use lit instead of lit-element]
