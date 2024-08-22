@@ -100,3 +100,23 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.55 some look'n'feel for dragdropbox]
 [- v0.2.56 fix for requirements solution, add solution dialog]
 [- v0.2.57 tree-view as view retired and selectedData for actions fix]
+[- v0.2.58 tree-element for dialogs and sort storybook sections]
+[- v0.2.59 table styles and printable for procManagement to remove the sort icons here too]
+[- v0.2.60 fixed ONE_PROCEDURE_DEFINITION, added endpointParams]
+[- v0.2.61 fix in trazitCheckProcList, isProcManagement from this instead of sessionStorage]
+[- v0.2.62 fix for new test script, using lit-element when should be lit for compatibility reasons]
+[- v0.2.63 fix when no subfilter for kpiReportTitle + use lit instead of lit-element]
+[- v0.2.64 Added locked reason to (parent)readOnlyTable]
+[- v0.2.65 for reactivate element, display notification when no objects found by the criteria]
+[- v0.2.66 fix in trazitCheckProcList, handle nulls as undefineds]
+[- v0.2.67 use this.procInstanceName when userSession.currentProcInstanceName undefined]
+[- v0.2.68 handle in btnHidden when selItems is undefined]
+[- v0.2.69 some issues:
+    - (related to v0.2.66) fix in getAPICommonParams, handle nulls as undefineds
+    - fix to not add arrays of arrays in selectedItems    
+]
+[- v0.2.70 Tabs component using object-by-tabs]
+[- v0.2.71 defaultValue added and selObjectPropertyName should get it from selectedItem{} and not selectedItem[0]
+[- v0.2.72 use lit instead of lit-element]
+[- v0.2.73 removed @vaadin/vertical-layout and vaadin-accordion due to they use different vaadin-lumo-styles version than the rest and even those vaadin components are not longer in use"
+[- v0.2.74 ObjectByTabs tab label responsive. proc-management-home banner fixed]

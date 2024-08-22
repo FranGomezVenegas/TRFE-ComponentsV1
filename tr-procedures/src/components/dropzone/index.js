@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import { template } from './dropzone.template';
 import { styles } from './dropzone.css';
 import { ApiFunctions } from '../Api/ApiFunctions';

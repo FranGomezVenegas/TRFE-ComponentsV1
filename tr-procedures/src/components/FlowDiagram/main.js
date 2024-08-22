@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import { graphStyles } from './styles.js';
 import { graphTemplate } from './template.js';
 import * as d3 from 'd3';

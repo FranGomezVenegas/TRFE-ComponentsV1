@@ -145,6 +145,9 @@ export function ExportTableToCsv(base) {
             let trackInfo = [];
             let userSession = JSON.parse(sessionStorage.getItem("userSession"));
             let procInstanceName = sessionStorage.getItem("currentProcInstanceName");
+            if (procInstanceName===null||procInstanceName===undefined){
+                procInstanceName=this.procInstanceName
+            }
             trackInfo.push('Traceability Info:; TRAZiT');
             trackInfo.push('Exported by:;' + userSession.header_info.first_name + ' ' + userSession.header_info.last_name);
             trackInfo.push('Exported on:;' + String(new Date()));

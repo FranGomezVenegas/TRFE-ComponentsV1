@@ -90,7 +90,7 @@ export class ParameterLimits extends CoreView {
     return [Layouts,
       super.styles,
       css`
-      .styled-table {
+      .styled-table-parameterlimits {
         display: -webkit-inline-box;
         margin-top: 0px;
         margin-bottom: 3px;
@@ -102,26 +102,26 @@ export class ParameterLimits extends CoreView {
         min-width: 400px;
         box-shadow: 0 0 20px #44cbe6;
       }            
-      .styled-table thead tr {
+      .styled-table-parameterlimits thead tr {
         background-color: #2989d8;
         color: #ffffff;
         text-align: left;
       }   
-      .styled-table th,
-      .styled-table td {
+      .styled-table-parameterlimits th,
+      .styled-table-parameterlimits td {
         color: #032bbc; 
         padding: 12px 15px;
       }  
-      .styled-table tbody tr {
+      .styled-table-parameterlimits tbody tr {
         border-bottom: 1px solid #207cca;
       }
-      .styled-table tbody tr:nth-of-type(even) {
+      .styled-table-parameterlimits tbody tr:nth-of-type(even) {
         background-color: #c2f2ff5c;
       }
-      .styled-table tbody tr:last-of-type {
+      .styled-table-parameterlimits tbody tr:last-of-type {
         border-bottom: 2px solid #009879;
       }      
-      .styled-table tbody tr.active-row {
+      .styled-table-parameterlimits tbody tr.active-row {
         font-weight: bold;
         color: #009879;
       }
@@ -164,7 +164,7 @@ export class ParameterLimits extends CoreView {
     console.log(this.tableFieldsDefinition)
     return html`
       <h2>${langConfig.limitView.header["label_"+ this.lang]} ${this.selectedProgram&&this.selectedProgram.name}</h2>
-      <table class="styled-table">
+      <table class="styled-table-parameterlimits">
         <thead>          
           <tr>
             ${this.tableFieldsDefinition.map(fld =>

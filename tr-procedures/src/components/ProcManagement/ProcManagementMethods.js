@@ -136,6 +136,12 @@ export function ProcManagementMethods(base) {
         endPoint: "/appProcMgr/RequirementsProcedureDefinitionAPIQueries",
         notUseGrid: true,
         variableName: "selectedProcInstance",
+        "endPointParams": [
+          {
+            "argumentName": "procInstanceName",
+            "contextVariableName": "procedureName",
+          }
+        ],        
         endPointResponseVariableName: "all_platform_procedures_list",
       };
       await this.GetViewData(false, viewQuery);

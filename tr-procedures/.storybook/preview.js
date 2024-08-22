@@ -15,5 +15,6 @@ const preview = {
 };
 
 import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
+import './storybook-labels.css';
 
 export default preview;

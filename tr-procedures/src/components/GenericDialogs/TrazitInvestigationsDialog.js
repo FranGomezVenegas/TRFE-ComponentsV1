@@ -23,76 +23,44 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
         this.openInvests=[]
         this.capaRequired=false
         this.targetValue={}
+        this.actionBeingPerformedModel={}
     }
-    openGenericDialog(actionModel = this.actionBeingPerformedModel){
-      if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
-          return false
-      }    
 
-//        if (!actionModel||!actionModel.dialogInfo||!actionModel.dialogInfo.fields){
-//        //alert(false)
-//        return false
-//       } 
-     // alert(true)
-     this.formDefaultValue()
-     //this.resetFields()
-     return true 
-  }
-    investigationTemplate() {
-      //console.log('viewModelFromProcModel', this.viewModelFromProcModel, 'this.openInvests', this.openInvests)
-      //?open=${this.openInvests.length}        
-      if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined
-        ||this.viewModelFromProcModel.langConfig.gridHeader===undefined||this.viewModelFromProcModel.langConfig.gridHeader.created_on===undefined
-        ||this.viewModelFromProcModel.filter!=="pending"){
-          
-          return html``
+//    @opened=${() => this.capaRequired = this.capaCheck.checked}
+//    @closed=${e => { if (e.target === this.decisionDialog) this.grid.activeItem = null }}
+
+    decisionTemplate(actionModel) {
+      if (actionModel === undefined) {
+        actionModel = this.actionBeingPerformedModel
+        if (actionModel!==undefined){
+            this.area=actionModel.area
         }
-      return html`
-      <tr-dialog id="investigationDialog" 
-        @closed=${e => { if (e.target === this.investigationDialog) { this.openInvests = []; this.grid.activeItem = null } }}
+      }      
+      if (actionModel===undefined||actionModel.dialogInfo===undefined||actionModel.dialogInfo.fields===undefined
+        ||actionModel.dialogInfo.name.toString().toUpperCase()!=="DECISIONDIALOG"        
+        ){
+         // alert('not loaded')
+          return html`      <tr-dialog id="decisionDialog" 
         heading=""
         hideActions=""
         scrimClickAction="">
-        <div class="layout vertical flex center-justified" style="width:450px;">
-          <div style="height:55vh;overflow:auto">
-            <vaadin-grid .items=${this.openInvests} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
-              @active-item-changed=${e => this.selectedInvestigations = e.detail.value ? [e.detail.value] : []}
-              .selectedItems="${this.selectedInvestigations}" all-rows-visible>
-              <vaadin-grid-sort-column width="40%" resizable text-align="center" path="id" header="Id"></vaadin-grid-sort-column>
-              <vaadin-grid-filter-column width="60%" resizable text-align="center" path="created_on" .header="${this.viewModelFromProcModel.langConfig.gridHeader.created_on["label_" + this.lang]}"></vaadin-grid-filter-column>
-            </vaadin-grid>
-          </div>
-          <div style="margin-top:10px;text-align:center">
-            <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
-              ${commonLangConfig.cancelDialogButton["label_" + this.lang]}</sp-button>
-            <sp-button size="xl" slot="primaryAction" dialogAction="accept" 
-              @click=${this.addInvestigationAction}
-              ?disabled=${!this.selectedInvestigations.length}>
-              ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
-          </div>
-        </div>
-      </tr-dialog>
-      `
-    }
-    decisionTemplate() {
-      if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined||this.viewModelFromProcModel.langConfig.fieldText===undefined
-        ||this.viewModelFromProcModel.filter!=="open"
-        ){return html``}
-      
+        </tr-dialog>`
+      }
+      //alert('loaded')
       return html`
+       
       <tr-dialog id="decisionDialog" 
-        @opened=${() => this.capaRequired = this.capaCheck.checked}
-        @closed=${e => { if (e.target === this.decisionDialog) this.grid.activeItem = null }}
+      @opened=${() => this.capaRequired = this.capaCheck.checked}
         heading=""
         hideActions=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
-          <mwc-textfield id="systemName" label="${this.viewModelFromProcModel.langConfig.fieldText.systemName["label_" + this.lang]}" 
+          <mwc-textfield id="systemName" label="${actionModel.dialogInfo.fields.systemName["label_" + this.lang]}" 
             .value=${this.selectedItems.length && this.selectedItems[0].capa_external_system_name}
             dialogInitialFocus></mwc-textfield>
-          <mwc-textfield id="systemId" label="${this.viewModelFromProcModel.langConfig.fieldText.systemId["label_" + this.lang]}"
+          <mwc-textfield id="systemId" label="${actionModel.dialogInfo.fields.systemId["label_" + this.lang]}"
             .value=${this.selectedItems.length && this.selectedItems[0].capa_external_system_id}></mwc-textfield>
-          <mwc-formfield label="${this.viewModelFromProcModel.langConfig.fieldText.capa["label_" + this.lang]}">
+          <mwc-formfield label="${actionModel.dialogInfo.fields.capa["label_" + this.lang]}">
             <mwc-checkbox id="capaCheck" 
               ?checked=${this.selectedItems.length && this.selectedItems[0].capa_required}
               @change=${e => {                
@@ -101,10 +69,10 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
                 this.capaName.value = "";
             }}></mwc-checkbox>
           </mwc-formfield>
-          <mwc-textfield id="capaName" label="${this.viewModelFromProcModel.langConfig.fieldText.capaName["label_" + this.lang]}"
+          <mwc-textfield id="capaName" label="${actionModel.dialogInfo.fields.capaName["label_" + this.lang]}"
             .value=${this.selectedItems.length && this.selectedItems[0].external_system_name}
             ?hidden=${!this.capaRequired}></mwc-textfield>
-          <mwc-textfield id="capaId" label="${this.viewModelFromProcModel.langConfig.fieldText.capaId["label_" + this.lang]}"
+          <mwc-textfield id="capaId" label="${actionModel.dialogInfo.fields.capaId["label_" + this.lang]}"
             .value=${this.selectedItems.length && this.selectedItems[0].external_system_id}
             ?hidden=${!this.capaRequired}></mwc-textfield>
           <div style="margin-top:30px;text-align:center">
@@ -118,7 +86,6 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
       </tr-dialog>
       `
     }
-    get investigationDialog() {return this.shadowRoot.querySelector("tr-dialog#investigationDialog")}
     get decisionDialog() {return this.shadowRoot.querySelector("tr-dialog#decisionDialog")}
     get systemName() {return this.shadowRoot.querySelector("mwc-textfield#systemName")}
     get systemId() {return this.shadowRoot.querySelector("mwc-textfield#systemId")}
@@ -164,68 +131,6 @@ return class extends ActionsFunctions(DialogsFunctions(base)) {
         this.selectedItems[0], targetValue, false, this.selectedItems[0], null, null, null)
       //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, 
       //  this.selectedItems[0], targetValue)
-    }
-    addInvestigationAction() {
-      let targetValue = {
-        "investigationId": this.selectedInvestigations[0].id,        
-      }
-      if (this.selectedItems[0].result_id!==undefined){
-        targetValue.objectsToAdd= "sample_analysis_result*" + this.selectedItems[0].result_id
-      }
-      this.trazitNoDialogRequired(this.actionBeingPerformedModel, 
-        this.selectedItems[0], targetValue, false, this.selectedItems[0], null, null, null)
-//      this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel.dialogInfo.action[0], this.selectedItems[0], targetValue, undefined, this.selectedInvestigations[0])
-    }
-    newInvestigationAction() {
-//      console.log('newInvestigationAction')
-      if (this.selectedItems[0].result_id!==undefined){
-        this.reqParams.fieldValue = "Investigation for " + this.selectedItems[0].result_id + "*String"
-        this.reqParams.objectsToAdd= "sample_analysis_result*" + this.selectedItems[0].result_id
-      }
-      let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)    
-      let endPointUrl=this.getActionAPIUrl(this.actionBeingPerformedModel)
-      if (String(endPointUrl).toUpperCase().includes("ERROR")){
-          alert(endPointUrl)
-          return
-      }
-      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
-      let params = serviceAPIurl + endPointUrl   
-        + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams)
-      this.fetchApi(params).then(() => {
-        this.reload()
-      })
-    }
-
-    getOpenInvestigations() {
-      alert('getOpenInvestigations')
-      //this.actionBeingPerformedModel.dialogInfo.viewQuery  
-      let APIParams=this.getAPICommonParams(this.actionBeingPerformedModel)    
-      let endPointUrl=this.getQueryAPIUrl(this.actionBeingPerformedModel)
-      if (String(endPointUrl).toUpperCase().includes("ERROR")){
-          alert(endPointUrl)
-          return
-      }
-      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
-      let params = serviceAPIurl + endPointUrl        
-        + '?' + new URLSearchParams(APIParams) //+ '&'+ new URLSearchParams(extraParams)
-console.log('getOpenInvestigations', 'params', params)        
-      this.fetchApi(params).then(j => {
-        if (j && !j.is_error) {
-          this.openInvests = j
-          this.requestUpdate()
-        }
-      })
-    }
-
-    addInvestObjects() {
-      let serviceAPIurl=this.getServiceAPIUrl(this.actionBeingPerformedModel)  
-      let params = serviceAPIurl + this.selectedDialogAction.endPoint
-        + '?' + new URLSearchParams(this.reqParams)
-      this.fetchApi(params).then(() => {
-        this.investigationDialog.close()
-        this.resetDialogThings()
-        this.reload()
-      })
     }
 
     capaDecisionAction() {

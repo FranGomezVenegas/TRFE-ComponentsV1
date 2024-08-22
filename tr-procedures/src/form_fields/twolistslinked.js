@@ -3,7 +3,8 @@ import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
 import { ListsFunctions } from './lists-functions';
 import { DialogsFeatures } from '../components/GenericDialogs/CommonFunctions/DialogsFeatures';
-class TwoListsLinked extends ListsFunctions(DialogsFeatures(LitElement)) {
+
+class TwoListsLinked extends (ListsFunctions(DialogsFeatures(LitElement))) {
   static properties = {
     lang: { type: String},
     procInstanceName: { type: String},
@@ -127,8 +128,11 @@ class TwoListsLinked extends ListsFunctions(DialogsFeatures(LitElement)) {
     if (entries.length === 0) {
     return html``;
     }
-    return entries.map(item => html`<mwc-list-item value="${item.keyName}">${item["keyValue_" + this.lang]}</mwc-list-item>`);
+    return entries.map(item => html`<mwc-list-item value="${item.keyName}">
+      ${item["keyValue_" + this.lang]}</mwc-list-item>`);
   }
+  
+
   
   actionWhenListValueSelected(event) {
     this.listLinked2.value=''

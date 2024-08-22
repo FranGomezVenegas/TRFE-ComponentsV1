@@ -1,0 +1,20 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="TRAZiT Actions/Dialogs/TrazitTakePictureDialog/1-Intro" />
+
+# TrazitTakePictureDialog
+
+Este componente es un diálogo que puede presentar dos tipos de contenido: `TAKEPICTUREDIALOG` y `UPLOADFILEDIALOG`.
+
+## Propiedades
+
+- **lang**: `String` - Determina el idioma del contenido mostrado. Ejemplo: `"en"` o `"es"`.
+- **actionModel**: `Object` - Modelo de acción que contiene la información del diálogo que se va a mostrar.
+- **recordData**: `Object` - Datos asociados al registro actual, que pueden influir en la lógica del diálogo.
+
+Las funciones principales del componente incluyen:
+
+- **show(viewModel, actionModel, data)**: Muestra el diálogo con los modelos y datos proporcionados.
+- **openTakePictureDialog(actionModel)**: Verifica si el diálogo debe abrirse para tomar una foto.
+- **resetView(actionModel)**: Resetea la vista del diálogo dependiendo del tipo de acción.
+- **close()**: Cierra el diálogo abierto.

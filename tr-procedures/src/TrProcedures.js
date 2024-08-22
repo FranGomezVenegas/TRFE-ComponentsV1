@@ -228,10 +228,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         this.windowOpenable=true
         import('./components/0PrototypeElements/prototype-elements-view-main')
         return    
-      case 'TreeView':        
-        this.windowOpenable=true
-        import('./components/Tree/app/tree-view-main')
-        return    
       case 'CalendarData':
         import('./components/Calendar/calendar-data')
         return  
@@ -406,9 +402,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitCultureMedium' ? html`
         <culture-medium></culture-medium>
       `:html``}
-      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'TreeView' ? html`
-        <tree-view-main></tree-view-main>
-      `:html``}
+
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'PrototypeElementsViewMain' ? html`
         <prototype-elements-view-main .config=${this.config} .lang=${this.lang}></prototype-elements-view-main>
       `:html``}

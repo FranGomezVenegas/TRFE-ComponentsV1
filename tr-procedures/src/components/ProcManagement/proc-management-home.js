@@ -1703,7 +1703,12 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
           font-weight: bold;
           margin: 0;
         }
-        
+        .title-banner {
+          position: fixed; 
+          top: 0; 
+          left: 0; 
+          z-index: 1000;
+        }
         .title-banner .right-text {
           display: none;
           font-size: 12px;

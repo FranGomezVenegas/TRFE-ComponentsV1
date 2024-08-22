@@ -1,10 +1,12 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../tr-procedures';
 import '../src/components/ProcManagement/proc-management-home';
 import '@material/mwc-icon-button';
-import '@material/mwc-ripple';
+//import '@material/mwc-ripple';
+import '@material/mwc-snackbar';
+
 import { DemoViews } from '../src/ProceduresModel';
 
 
@@ -94,6 +96,9 @@ class DemoExample extends LitElement {
     return this.showAllButtonsStatus===false
   }
 
+  get toast() {
+    return this.shadowRoot.querySelector("mwc-snackbar")
+  }
   render() {
     return html`
     <style>
@@ -121,7 +126,7 @@ class DemoExample extends LitElement {
           }
         }
       }}></platform-login>
-
+      <mwc-snackbar></mwc-snackbar>
       <div ?hidden="${!this.auth}">
         <h1 @click=${this.toggleHideAllButtonsStatus}>Hi ${this.getUser()}, you are authorized</h1>
         <button class="language" @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button>
@@ -222,8 +227,57 @@ class DemoExample extends LitElement {
       //this.trProc.render()
     }
 
-  }
 
+      // if (this.config.local != false && !window.process) {
+        this.localToast = document.createElement("div")
+        this.localToast.style.position = 'fixed'
+        this.localToast.style.bottom = '10px'
+        this.localToast.style.left = '10px'
+        this.localToast.style.padding = '5px'
+        this.localToast.style.backgroundColor = 'black'
+        this.localToast.style.color = 'white'
+        this.localToast.style.fontSize = '12px'
+        this.localToast.style.maxWidth = "98vw"
+        this.localToast.style.display = "none"
+        this.localToast.style.zIndex = "999"
+        this.shadowRoot.appendChild(this.localToast)
+      // }
+    //if (this.config.local != false && !window.process) {
+    if (!this.hasEventListener('success')) {
+      this.addEventListener('success', e => {
+        this.showNotif(e)
+      })
+    }
+    if (!this.hasEventListener('error')) {
+      this.addEventListener('error', e => {
+        // alert('addEventListener for error')
+        this.showNotif(e)
+        this.localToast.style.backgroundColor = '#a33'
+      })
+    }
+    //}
+  }
+  showNotif(e) {
+    console.log('showNotif', e)
+    if (e.detail.is_error===undefined){
+      return
+    }
+    let msgContent= e.detail['message_'+ this.lang]!==undefined ? e.detail['message_'+ this.lang] : e.detail.message
+    this.localToast.textContent = msgContent
+    if (this.localToast.textContent&&e.detail.is_error===true) {
+      this.localToast.style.backgroundColor = '#b22222'
+      this.localToast.style.display = 'block' 
+      this.localToast.style.zIndex = '999'
+      setTimeout(() => this.localToast.style.display = 'none', 4000)
+      return
+    }else{
+      this.localToast.style.backgroundColor = '#0085ff'
+      this.localToast.style.display = 'block' 
+      this.localToast.style.zIndex = '999'
+      setTimeout(() => this.localToast.style.display = 'none', 4000)
+      return
+    }
+  }
   getUser() {
     if (this.auth) {
       let session = getUserSession()

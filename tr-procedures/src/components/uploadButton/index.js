@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import { template } from './uploadButton.template';
 import { styles } from './uploadButton.css';
 import { ApiFunctions } from '../Api/ApiFunctions';

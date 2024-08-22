@@ -337,11 +337,7 @@
     "viewName": "ProductionLots", 
     "filterName" :  "SampleLot" 
   },  
-  "localDefaultView": {
-    "procName":  "fake-developers", 
-    "viewName": "prototype-elements-view-main", 
-    "filterName" :  "prototype-elements-view-main" 
-  },
+
   "localDefaultView1": {
     "procName":  "stock", 
     "viewName": "Home", 
@@ -362,11 +358,6 @@
     "viewName": "ck-editor", 
     "filterName" :  "ck-editor" 
   },
-  "localDefaultView": {
-    "procName":  "stock", 
-    "viewName": "InventoryLotsGeneral", 
-    "filterName" :  "InventoryLots.1" 
-  },  
 	"localDefaultView": {
 		"procName": "instruments",
 		"viewName": "PlatformInstruments",
@@ -393,8 +384,18 @@
     "viewName": "MasterData", 
     "filterName" :  "MasterData" 
   },
-
+  "localDefaultView": {
+    "procName":  "stock", 
+    "viewName": "Deviation", 
+    "filterName" :  "" 
+  },  
+  "localDefaultView222": {
+    "procName":  "fake-developers", 
+    "viewName": "prototype-elements-view-main", 
+    "filterName" :  "prototype-elements-view-main" 
+  },
   "fakeEnd":{
+    "fake": "InventoryLotsGeneral20240729"
   }  
  
 }

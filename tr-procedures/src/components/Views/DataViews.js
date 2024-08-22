@@ -29,6 +29,7 @@ import '@material/mwc-button';
 import '@material/mwc-textfield';
 
 import { ReadOnlyTableParts } from "./ReadOnlyTableParts";
+import { ReadOnlyTableIsLockedFunctions } from "../ParentReadOnlyTable/isLocked";
 
 import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { GridFunctions } from "../grid_with_buttons/GridFunctions";
@@ -38,7 +39,7 @@ import { FeaturesDynamicFieldValue } from "../../features/dynamicFieldValue";
 
 export function DataViews(base) {
   let contextMenu = undefined;
-  return class extends FeaturesDynamicFieldValue(TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
+  return class extends ReadOnlyTableIsLockedFunctions(FeaturesDynamicFieldValue(TrazitTestScriptNewStepDialog(ReadOnlyTableParts(GridFunctions(TrazitFormsElements(
     TrazitCredentialsDialogs(
       AuditFunctions(ApiFunctions
         (
@@ -58,7 +59,7 @@ export function DataViews(base) {
         )
       )
     )
-  ))))) {
+  )))))) {
     kpiChartFran1(elem, data) {
       if (elem === undefined) { return html`` }
       if (elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage === true && data === undefined) { return html`` }
@@ -121,10 +122,13 @@ export function DataViews(base) {
                 }
               }
             }
-            return [];
+            return undefined;
           }
+          
           let subViewFilter=isFilterNameDefined(elem.subViewFilter, filterName) 
-          elem=subViewFilter
+          if (subViewFilter!==undefined){
+            elem=subViewFilter
+          }
       }
       return html`    
         <p style="text-align: center;">
@@ -311,7 +315,7 @@ export function DataViews(base) {
                   <span class="title ${isSecondLevel}">${elem.title}</span>
                 </p>`}
             <div class="layout horizontal center flex wrap">
-              ${this.getButton(elem, dataArr, true)}
+              ${this.getButton(elem, dataArr, dataArr, true)}
             </div>
             ${elem.columns === undefined
           ? html`No columns defined`
@@ -619,7 +623,7 @@ export function DataViews(base) {
             style="display: flex; flex-direction: row; text-align: center; flex-wrap:wrap; "
           >
             <div class="layout horizontal center flex wrap">
-              ${this.getButton(elem, dataArr, true)}
+              ${this.getButton(elem, dataArr, dataArr, true)}
             </div>
             ${elem.columns === undefined
           ? html`No columns defined`
@@ -1071,7 +1075,6 @@ export function DataViews(base) {
           }
 
         table.TRAZiT-DefinitionArea thead tr th {
-          display: flex;
           align-items: center;
           justify-content: space-between;
           font-size: 16px;
@@ -1082,7 +1085,6 @@ export function DataViews(base) {
         }
 
         table.TRAZiT-UsersArea thead tr th {
-          display: flex;
           align-items: center;
           justify-content: space-between;
           font-size: 16px;
@@ -1099,7 +1101,7 @@ export function DataViews(base) {
           font-size: 16px;
         }
 
-        table.TRAZiT-UsersArea tr {
+        table.TRAZiT-UsersArea-for-rolesandactions tr {
           border: none; 
           border-bottom: 1px solid #dddddd;
         }
@@ -1110,23 +1112,23 @@ export function DataViews(base) {
           color: #808080;
         }
 
-        table.TRAZiT-UsersArea tr:nth-child(even) {
+        table.TRAZiT-UsersArea-for-rolesandactions tr:nth-child(even) {
           background-color: white;
         }
 
-        table.TRAZiT-UsersArea tr:last-child {
+        table.TRAZiT-UsersArea-for-rolesandactions tr:last-child {
           border: none;
         }
      
-        table.TRAZiT-UsersArea thead {
+        table.TRAZiT-UsersArea-for-rolesandactions thead {
           border-bottom: 1px solid #dddddd;
         }
 
-        table.TRAZiT-DefinitionArea tr:nth-child(even) {
+        table.TRAZiT-DefinitionArea-for-rolesandactions tr:nth-child(even) {
           background-color: rgba(214, 233, 248, 0.37) !important;
         }
 
-        table.TRAZiT-DefinitionArea th {
+        table.TRAZiT-DefinitionArea-for-rolesandactions th {
           padding: 5px 5px;
           border: 1px solid #dddddd !important;
         }
@@ -1136,7 +1138,7 @@ export function DataViews(base) {
           border: 1px solid #dddddd !important;
         }
 
-        table.TRAZiT-UsersArea td, th {
+        table.TRAZiT-UsersArea-for-rolesandactions td, th {
           border: none !important;
         }
 
@@ -1408,7 +1410,7 @@ export function DataViews(base) {
               >`
         }
                 <div style="flex-basis: auto; width: auto;">
-                  ${this.getButton(elem, data, false)}
+                  ${this.getButton(elem, data, data, false)}
                 </div>
               </div>
             `;
@@ -1595,7 +1597,7 @@ export function DataViews(base) {
                 style="${elem.style !== undefined ? elem.style : ""}"
               >
                 <div style="flex-basis: auto; width: auto;">
-                  ${this.getButton(elem, data, true)}
+                  ${this.getButton(elem, data, data, true)}
                 </div>
                 <ul
                   style="align-items: baseline;"
@@ -1933,11 +1935,7 @@ export function DataViews(base) {
                                     <div
                                       class="layout horizontal center flex wrap"
                                     >
-                                      ${this.getButton(
-                      elem,
-                      curData,
-                      isProcManagement
-                    )}
+                                      ${this.getButton(elem, curData, curData, isProcManagement)}
                                     </div>
                                     ${elem.fieldsToDisplay === undefined
                   ? nothing
@@ -2932,6 +2930,7 @@ export function DataViews(base) {
     }
     let smartFilterVisible=false
     smartFilterVisible=elem.columns.some(column => column.addToSmartFilter === true);
+    let tableName=elem.endPointResponseObject===undefined?'table':elem.endPointResponseObject
     return html`
       ${styles}
       <div style="display: flex; flex-direction: row; text-align: center; align-items: baseline; width: 100%;">
@@ -2994,12 +2993,14 @@ export function DataViews(base) {
                     border-right: 7px solid transparent;
                     margin-left: 5px;
                     position: relative;
+                    width: 20px;
+                    height: 20px;                    
                   }
                   .sort-asc {
-                    border-bottom: 10px solid #4c7fad;
+                    border-bottom: 10px solid white;
                   }
                   .sort-desc {
-                    border-top: 10px solid #4c7fad;
+                    border-top: 10px solid white;
                   }
                   .sort-icon:hover::after {
                     content: attr(data-tooltip);
@@ -3132,8 +3133,9 @@ export function DataViews(base) {
                     `
                 }
                 <div class="table-container">
-                  <table data-index="${elem.index}" id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
-                    <thead>
+                  <table data-index="${elem.index}" id=${tableName} class="styled-table read-only ${tmp}">
+                    
+                  <thead>
                       <tr>
                         ${elem.allowMultiSelection ? html`<th><input type="checkbox" @change=${handleSelectAll}></th>` : nothing}
                         ${elem.columns.map((fld, idx) => {
@@ -3183,10 +3185,12 @@ export function DataViews(base) {
                                       }
                                     }
                                     this.handleTableRowClick(event, p, elem);
+
                                   }}
                                   @contextmenu=${(event) => this.handleOpenContextMenu(event, p, elem)}
                                   class="${isSelected ? 'selected-row' : ''}"
-                                >
+                                  
+                                >${this.setCellListener(tableName, dataArr)}
                                   ${elem.allowMultiSelection ? html`<td><input type="checkbox" ?checked=${isSelected}></td>` : nothing}
                                   ${this.getRowsInfo(elem, p, rowIndex, this.lang, parentData, handler)}
                                 </tr>
@@ -3201,8 +3205,9 @@ export function DataViews(base) {
                             })}
                           `}
                     </tbody>
-                  </table>
+                  </table>                  
                 </div>
+                <div id="rowTooltip">&nbsp;</div>
               `}
         </div>
       </div>

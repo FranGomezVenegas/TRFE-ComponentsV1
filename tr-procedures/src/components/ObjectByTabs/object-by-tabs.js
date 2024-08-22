@@ -204,7 +204,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         vertical-align: middle;
         background: linear-gradient(79deg, #4668db, #9d70cd); /* Gradient background */
         color: #fff; /* White text */
-        font-size: 16px; /* Font size */
+        font-size: 0.833vw; /* 16px; */ /* Font size */
         font-weight: 600; /* Font weight */
         border-radius: 50px; /* Rounded corners */
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
@@ -311,17 +311,31 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
     }
     updated(changedProperties) {
       if (changedProperties.has('ready') && this.ready) {
-        this.refreshView();
+        //this.refreshView();
       }
+      if (changedProperties.has('viewModelFromProcModel')) {
+        //this.refreshView();  // Ensure the view is updated based on the new model
+      }      
     }
     refreshView(){
-      //alert('refreshView')
       if (this.viewModelFromProcModel.hideLeftPane!==undefined){
         this.hideLeftPane=this.viewModelFromProcModel.hideLeftPane
         this.filterPerformAction()
+        this.requestUpdate();
       }
     }
+    changeModel(newViewModel) {
+      this.viewModelFromProcModel = newViewModel;
+      this.filterPerformAction();
+      this.requestUpdate();  // Request an update to trigger reactivity
+    }
 
+    updated(changedProperties) {
+      if (changedProperties.has('viewModelFromProcModel')) {
+          // Logic to handle the model update
+          this.refreshView();
+      }
+    }
     firstUpdated() {
       //alert(this.viewModelFromProcModel.hideLeftPane)
       if (this.viewModelFromProcModel.hideLeftPane!==undefined){
@@ -652,7 +666,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                                       ? nothing
                                       : html`
                                           <div style="flex-basis: auto; width: auto;">
-                                            ${this.getButton(this.viewModelFromProcModel.left_panel, {}, true)}
+                                            ${this.getButton(this.viewModelFromProcModel.left_panel, {}, {}, true)}
                                           </div>
                                         `}
                                   </div>
@@ -777,18 +791,6 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       `;
     }
     
-    tabOnOpenView() {
-      // <objecttabs-composition 
-      // .lang=${this.lang} .masterData=${this.masterData}
-      // .windowOpenable=${this.windowOpenable}
-      // .sopsPassed=${this.sopsPassed}
-      // .procInstanceName=${this.procInstanceName}             
-      // .viewName=${this.viewName}  .viewModelFromProcModel=${this.viewModelFromProcModel!==undefined&&Object.keys(this.viewModelFromProcModel).length>0 ? this.viewModelFromProcModel : this.viewModelFromProcModel.tabs[0]}
-      // .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
-      // .selectedItem=${this.selectedItem}
-      // .config=${this.config}>${this.tabOnOpenView()}</objecttabs-composition>        
-      return
-    }
     selectTab(tab) {
       this.selectedTab = tab;
       this.requestUpdate();

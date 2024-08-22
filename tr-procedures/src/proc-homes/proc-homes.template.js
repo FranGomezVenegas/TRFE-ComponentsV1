@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 
 export const template = (props) => {
     if (props.viewModelFromProcModel === undefined || props.viewModelFromProcModel.view_definition === undefined) { return html``; }

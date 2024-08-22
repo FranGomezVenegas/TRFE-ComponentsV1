@@ -1,4 +1,0 @@
-"use strict";(self.webpackChunk_trazit_tr_procedures=self.webpackChunk_trazit_tr_procedures||[]).push([[439],{"./src/stories/GridWithButton.stories.js":(__unused_webpack_module,__webpack_exports__,__webpack_require__)=>{__webpack_require__.r(__webpack_exports__),__webpack_require__.d(__webpack_exports__,{GRIDButton:()=>GRIDButton,__namedExportsOrder:()=>__namedExportsOrder,default:()=>GridWithButton_stories});var lit=__webpack_require__("./node_modules/lit/index.js");const GridWithButton_stories={title:"Example/GRIDButtons",tags:["autodocs"],render:args=>lit.qy`
- 
-  `},GRIDButton={args:{}},__namedExportsOrder=["GRIDButton"];GRIDButton.parameters={...GRIDButton.parameters,docs:{...GRIDButton.parameters?.docs,source:{originalSource:"{\n  args: {}\n}",...GRIDButton.parameters?.docs?.source}}}}}]);
-//# sourceMappingURL=stories-GridWithButton-stories.ad1677c8.iframe.bundle.js.map

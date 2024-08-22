@@ -1,0 +1,23 @@
+.storybook-labels {
+    margin-top: 20px;    
+  }
+  
+  .storybook-label {
+    display: inline-block;
+    background-color: #007bff;
+    color: white !important;
+    padding: 5px 10px;
+    margin-right: 5px !important;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    
+  }
+  
+  .storybook-label:hover {
+    background-color: #0056b3;
+  }
+  :where(.storybook-label) {
+    margin-right: 10px !important;
+}
+  

@@ -147,17 +147,20 @@ return class extends ActionsFunctions(base) {
             if (this.deactivatedObjects.length===0){
               let log=""
               if (this.lang==="en"){
-                log='No records found'
+                log='No records found, change the filter'
+                //alert(log)
               }else{
-                log='No se han encontrado objetos'
+                log='No se han encontrado objetos, cambia el filtro'
+                //alert(log)
               }
-              this.dispatchEvent(
-                new CustomEvent("error", {
-                  detail: { ...e, log: log },
-                  bubbles: true,
-                  composed: true,
-                })  
-              )
+              this.dispatchEvent(new CustomEvent("error", {
+                detail: {
+                  message: log,
+                  is_error: true
+                },
+                bubbles: true,
+                composed: true
+              }))              
             }
           }
         } catch (error) {

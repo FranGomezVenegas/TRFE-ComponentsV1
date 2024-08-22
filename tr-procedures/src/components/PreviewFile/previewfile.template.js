@@ -4,7 +4,7 @@ export const template = (props) => {
   const { fileUrl, fileName, fileType } = props;
 
   const renderFilePreview = () => {
-    alert(fileType)
+    alert(fileUrl)
     if (fileType === 'application/pdf') {
       return html`
         <object data="${fileUrl}" type="application/pdf" width="100%" height="500px">
@@ -18,6 +18,7 @@ export const template = (props) => {
       `;
     } else {
       return html`
+sss      
         <object data="${fileUrl}" type="application/pdf" width="100%" height="500px">
           <embed src="${fileUrl}" type="application/pdf" />
           <p>This browser does not support PDFs. Please download the PDF to view it: <a href="${fileUrl}">Download PDF</a>.</p>

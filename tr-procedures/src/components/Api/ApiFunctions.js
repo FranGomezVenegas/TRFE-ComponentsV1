@@ -356,13 +356,13 @@ return class extends (base) {
     refreshMasterData(endPointResponse, actionModel) {
       //console.log('refresh master data')
       if (this.procInstanceName===null){return}
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
         if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
           this.procInstanceName=currentTabView.procInstanceName
         }
       }
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
         this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
       }
       //console.log(endPointResponse.master_data)
@@ -387,13 +387,13 @@ return class extends (base) {
     }  
 
     getAPICommonParams(action, excludeProcInstanceName = false){
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
         if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
           this.procInstanceName=currentTabView.procInstanceName
         }
       }
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
         this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
       }
 
@@ -498,13 +498,13 @@ return class extends (base) {
     
 
     getActionAPIUrl(action){
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
         if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
           this.procInstanceName=currentTabView.procInstanceName
         }
       }
-      if (this.procInstanceName===undefined||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
         this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
       }
       //console.log('getActionAPIUrl', this.procInstanceName)

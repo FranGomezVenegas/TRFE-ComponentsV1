@@ -1,4 +1,4 @@
-import { html } from "lit-element";
+import { html } from "lit";
 import '@material/mwc-icon';
 
 export const template = (props, data, lang, thisComponent) => {    
@@ -32,7 +32,7 @@ export const template = (props, data, lang, thisComponent) => {
 }
 
 function myTable(elem, dataArr, lang, props, thisComponent) {  
-  dataArr=TRAZiTgetDataFromRoot(elem, dataArr)
+  dataArr=thisComponent.TRAZiTgetDataFromRoot(elem, dataArr)
  if(dataArr && Object.keys(elem.smartFilter.filterValues).length != 0){
     dataArr=applyFilterToTheData(dataArr,elem.smartFilter.filterValues);
  }
@@ -167,7 +167,7 @@ function handleClear(elem,thisComponent){
 function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent) {
   //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
   
-  data = TRAZiTgetDataFromRoot(elem, data);
+  data = thisComponent.TRAZiTgetDataFromRoot(elem, data);
   if(data && Object.keys(elem.smartFilter.filterValues).length != 0){
     data=applyFilterToTheData(data,elem.smartFilter.filterValues);
  }
@@ -256,7 +256,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props,thisCompo
             style="${elem.style !== undefined ? elem.style : ""}"
             class="dragdropabletr" draggable="${elem.dragEnable}"  @dragstart=${(e) => props.dragTableTr(e, elem, curDataForThisCard)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, elem, curDataForThisCard)}>
             <div style="flex-basis: auto; width: auto;">
-             <!-- this.getButton(elem, curDataForThisCard, true)} -->
+             <!-- this.getButton(elem, curDataForThisCard, curDataForThisCard, true)} -->
             </div>
             <ul
               style="align-items: baseline;"

@@ -1,4 +1,4 @@
-import { html } from 'lit-element';
+import { html } from 'lit';
 import '@material/mwc-icon';
 export const template = (props, lang) => {    
     if (props.data.stages===undefined){return html``}

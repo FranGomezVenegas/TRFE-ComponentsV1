@@ -1,4 +1,4 @@
-import { html } from "lit-element";
+import { html } from "lit";
 import { nothing } from "lit-html";
 import '@granite-elements/granite-qrcode-scanner/granite-qrcode-scanner.js';
 import '@cicciosgamino/qr-code-element'

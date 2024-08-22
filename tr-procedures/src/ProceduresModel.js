@@ -239,6 +239,8 @@ export const DemoViews = [
   {"label":"Inventory Management (stock)", "proc_instance_name": "stock", "views":[
     {"proc_instance_name": "stock", "view_name": "Home", "filter_name": "Home", "title": "Home"},
     {"proc_instance_name": "stock", "view_name": "InventoryLotsGeneral", "filter_name": "", "title": "Active Inventory Lots"},
+    {"proc_instance_name": "stock", "view_name": "InventoryLotsGeneral20240729", "filter_name": "", "title": "Active Inventory Lots InventoryLotsGeneral20240729"},
+    
     {"proc_instance_name": "stock", "view_name": "QualificationsInProgress", "filter_name": "QualificationsInProgress.1", "title": "Qualifications In Progress"},
     {"proc_instance_name": "stock", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLotsGeneral", "title": "InventoryLots"},
     {"proc_instance_name": "stock", "view_name": "InventoryLotsReactivos", "filter_name": "InventoryLotsReactivos", "title": "InventoryLotsReactivos"},
