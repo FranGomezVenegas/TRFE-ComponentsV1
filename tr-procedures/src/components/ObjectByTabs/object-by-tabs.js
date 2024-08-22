@@ -204,7 +204,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         vertical-align: middle;
         background: linear-gradient(79deg, #4668db, #9d70cd); /* Gradient background */
         color: #fff; /* White text */
-        font-size: 16px; /* Font size */
+        font-size: 0.833vw; /* 16px; */ /* Font size */
         font-weight: 600; /* Font weight */
         border-radius: 50px; /* Rounded corners */
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */

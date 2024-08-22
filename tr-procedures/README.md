@@ -118,3 +118,5 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.70 Tabs component using object-by-tabs]
 [- v0.2.71 defaultValue added and selObjectPropertyName should get it from selectedItem{} and not selectedItem[0]
 [- v0.2.72 use lit instead of lit-element]
+[- v0.2.73 removed @vaadin/vertical-layout and vaadin-accordion due to they use different vaadin-lumo-styles version than the rest and even those vaadin components are not longer in use"
+[- v0.2.74 ObjectByTabs tab label responsive. proc-management-home banner fixed]
