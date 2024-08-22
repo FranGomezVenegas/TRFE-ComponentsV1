@@ -4,8 +4,6 @@ export function ProcManagementMethods(base) {
       {
         "actionName": "LOCK_PROCEDURE",
         "notGetViewData": true,
-        "clientMethod": "procMngRequirementsMethod",
-        "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
         "selectedItemPropertyName": "selectedItems",
         "requiresDialog": false,
         "certificationException": true,
@@ -42,8 +40,6 @@ export function ProcManagementMethods(base) {
       {
         "actionName": "UNLOCK_PROCEDURE",
         "notGetViewData": true,
-        "clientMethod": "procMngRequirementsMethod",
-        "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
         "selectedItemPropertyName": "selectedItems",
         "requiresDialog": false,
         "certificationException": true,
@@ -97,8 +93,8 @@ export function ProcManagementMethods(base) {
         window.open(this.selectedItems[0][urlVal], "_blank").focus();
       }
     }
-
-    procMngRequirementsMethod(e) {
+    // 20240822-Removed, this has no sense nowadays due to the generic trazitCredsChecker is now compatible with procManagement
+    XXXprocMngRequirementsMethod(e) {
       this.trazitCredsChecker(
         this.actionBeingPerformedModel.actionName,
         null,

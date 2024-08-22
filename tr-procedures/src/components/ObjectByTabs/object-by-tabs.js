@@ -213,7 +213,9 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         --mdc-theme-primary: transparent;
         --mdc-typography-button-font-family: Montserrat;
         /* Or use general CSS */
-        font-family: Montserrat;        
+        font-family: Montserrat;      
+        height: 3vh;
+        width: 14vw;  
     }
     
     mwc-button.tabBtn:hover {

@@ -282,7 +282,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
       this.selectedTabModelFromProcModel = this.selectedViewDefinition;
     } else {
       this.selectedTabModelFromProcModel = this.selectedViewDefinition;
-      this.selectedItem = this.selectedProcInstance.definition;
+      this.selectedItem = this.selectedProcInstance.definition;      
     }
     
     // Get from session storage
@@ -303,7 +303,10 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
     // }
 
     this.isProcManagement = true;
-    // this.objecttabsComposition.render();
+    if (this.objecttabsComposition!==null){
+      this.objecttabsComposition.selectedTabModelFromProcModel=this.selectedViewDefinition
+      this.objecttabsComposition.render();
+    }
 
     // Scroll down to right split on mobile
     if (this.desktop) return;
@@ -979,6 +982,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
           background-color: transparent;
           transition: width 0.5s ease-in-out;
           position: relative;
+          top:60px;
         }
         @media screen and (min-width: 992px) {
           #rightSplit {
@@ -1081,7 +1085,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
               ${this.selectedViewDefinition.tabs !== undefined ? 
                 html`
                 <mwc-icon-button icon="print" @click=${this.print}></mwc-icon-button> 
-                  <object-by-tabs 
+                  <object-by-tabs style="top: -50px; left: 40px; position: relative;"
                     .windowOpenable=true 
                     .sopsPassed=true 
                     .lang=${this.lang}
@@ -1253,7 +1257,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
               color: green;
             }
             li.default {
-              color: #0d0c0c;
+              color: #808080;
             }
             li {
               cursor: pointer;
@@ -1705,9 +1709,10 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
         }
         .title-banner {
           position: fixed; 
-          top: 0; 
-          left: 0; 
+          top: 85px; 
+          left: 310px; 
           z-index: 1000;
+          transition: left 0.3s ease-in-out;
         }
         .title-banner .right-text {
           display: none;
@@ -1716,12 +1721,13 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
         }
         @media screen and (min-width: 992px) {
           .title-banner {
-            width: calc(96vw - 330px);
+            width: calc(99vw - 330px);
             padding: 0 10px; /* Add padding to keep text away from edges */
             justify-content: space-between; /* Add space between left and right text */
           }
           .title-banner.collapsed {
-            width: 93.25vw;
+            width: 98%;
+            left:5px;            
           }
           .title-banner .left-text {
             margin-right: auto; /* Push left text to the very left */

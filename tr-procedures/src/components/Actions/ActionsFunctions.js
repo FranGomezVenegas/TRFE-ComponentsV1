@@ -39,21 +39,46 @@ export function ActionsFunctions(base) {
               alert('The action ' + action.actionName + ' has no requiresDialog property which is mandatory')
               return
           }
+          if (data===undefined){
+            if (this[selectedItemPropertyName] !== undefined) {
+              data=this[selectedItemPropertyName]
+              if (Array.isArray(data)) {
+                // Si es un array, toma el valor de la propiedad del primer objeto
+                if (data.length > 0 && typeof data[0] === 'object' && data[0] !== null) {
+                 data=data[0]
+                } else {
+                  data=null
+                }
+              } else if (typeof data === 'object' && data !== null) {
+                  // Si es un objeto, toma el valor de la propiedad directamente
+                  data=data
+              }
+            }            
+          }
           if (action.requiresDialog === false) {
               if (action.clientMethod !== undefined) {
-              this[action.clientMethod](action, this[selectedItemPropertyName][0])
-              return
+                this[action.clientMethod](action, this[selectedItemPropertyName][0])
+                return
               } else {
-              if (this[selectedItemPropertyName] === undefined) {
-                  if (data === undefined) {
-                  this.trazitNoDialogRequired(action, null, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
-                  } else {
-                  this.trazitNoDialogRequired(action, data, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
-                  }
-              } else {
-                  this.trazitNoDialogRequired(action, this[selectedItemPropertyName][0], targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
-              }
-              return
+                this.trazitNoDialogRequired(action, data, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
+                return
+              // if (data!==undefined){
+              //   this.trazitNoDialogRequired(action, data, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)
+              // }else if (this[selectedItemPropertyName] !== undefined) {
+              //     data=this[selectedItemPropertyName]
+              //     if (Array.isArray(data)) {
+              //       // Si es un array, toma el valor de la propiedad del primer objeto
+              //       if (data.length > 0 && typeof data[0] === 'object' && data[0] !== null) {
+              //         this.trazitNoDialogRequired(action, data[0], targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)                  
+              //       } else {
+              //         this.trazitNoDialogRequired(action, null, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)                  
+              //       }
+              //   } else if (typeof data === 'object' && data !== null) {
+              //       // Si es un objeto, toma el valor de la propiedad directamente
+              //       this.trazitNoDialogRequired(action, data, targetValue, isProcManagement, undefined, parentData, dragEntry, dropEntry)                  
+              //   }
+              // }
+              //return
               }
           }
           if (action.requiresGridItemSelected !== undefined && action.requiresGridItemSelected === true &&
@@ -96,14 +121,14 @@ export function ActionsFunctions(base) {
           }
       }
   
-      trazitNoDialogRequired(action, selectedItem, targetValue, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry) {
-          console.log('trazitNoDialogRequired', 'action', action, 'selectedItem', selectedItem, 'gridSelectedRow', gridSelectedRow, 'parentData', parentData)
+      trazitNoDialogRequired(action, data, targetValue, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry) {
+          console.log('trazitNoDialogRequired', 'action', action, 'data', data, 'gridSelectedRow', gridSelectedRow, 'parentData', parentData)
           this.selectedAction = action
           if (targetValue === undefined) { targetValue = {} }
           if (this.itemId) {
-            this.trazitCredsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
+            this.trazitCredsChecker(action.actionName, this.itemId, this.jsonParam(this.selectedAction, data, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
           } else {
-            this.trazitCredsChecker(action.actionName, selectedItem, this.jsonParam(this.selectedAction, selectedItem, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
+            this.trazitCredsChecker(action.actionName, data, this.jsonParam(this.selectedAction, data, targetValue, gridSelectedRow, parentData, dragEntry, dropEntry), action, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry)
           }
           // Comentado para habilitar confirmDialogsparentData
           // this.trazitPerformAPICall(action, selectedItem)
@@ -280,9 +305,9 @@ export function ActionsFunctions(base) {
         }
       }
       
-      let APIParams = this.getAPICommonParams(action)
       let serviceAPIurl = this.getServiceAPIUrl(action)
       let endPointUrl = this.getActionAPIUrl(action)
+      let APIParams = this.getAPICommonParams(action)
       if (String(endPointUrl).toUpperCase().includes("ERROR")) {
         alert(endPointUrl)
         return

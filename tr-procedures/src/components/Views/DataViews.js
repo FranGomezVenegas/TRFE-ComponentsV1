@@ -107,6 +107,7 @@ export function DataViews(base) {
       `;
     }
     kpiReportTitle(elem, data) {
+      //console.log('kpiReportTile', elem.title)
       //alert(this.filterName)
       if (this.filterName!==undefined&&this.filterName!==''){        
           if (typeof this.filterName !== 'string') {
@@ -132,7 +133,7 @@ export function DataViews(base) {
       }
       return html`    
         <p style="text-align: center;">
-          <span style="color: rgb(20, 115, 230); font-size: 30px; margin-top: 10px; font-weight: bold;" id="reportTitle">
+          <span style="color: rgb(20, 115, 230); font-size: 30px; margin-top: 0px; margin-bottom:-10px; font-weight: bold; " id="reportTitle">
             ${elem.title["label_" + this.lang]}
           </span>
         </p>
@@ -1176,7 +1177,7 @@ export function DataViews(base) {
                 >
               </p>`}
        
-          <table class="styled-table-for-rolesandactions ${tmp}" style="margin-top:24px;">
+          <table class="styled-table-for-rolesandactions ${tmp}" style="margin-top:0px;">
             <thead>
               <tr>
                 ${dataArr === undefined || dataArr[0] === undefined
@@ -1416,7 +1417,7 @@ export function DataViews(base) {
             `;
     }
     kpiCardSomeElementsMain(elem, data) {
-      console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
+      //console.log('kpiCardSomeElementsMain', 'elem', elem, 'data', data)
       if (Array.isArray(data) && data.length > 0) {
         data = data[0]
       }
@@ -2958,6 +2959,7 @@ export function DataViews(base) {
                   .styled-table {
                     width: 100%;
                     border-collapse: collapse;
+                    margin-top: 0px;
                   }
                   .styled-table thead th {
                     position: sticky;

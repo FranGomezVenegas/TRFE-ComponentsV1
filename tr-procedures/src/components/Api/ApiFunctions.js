@@ -210,6 +210,9 @@ return class extends (base) {
       log = true
       urlParams = urlParams.replace(/\|/g, "%7C");
       //console.log('fetchApi, log', log, 'urlParams', urlParams, urlParams.toString().toUpperCase())
+      if (this.config.isForTesting===undefined){
+        if (this.isProcManagement===true){this.config.isForTesting=false}
+      }
       urlParams += "&isForTesting="+ this.config.isForTesting
       this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
       return fetch(urlParams).then(async r => {
@@ -386,7 +389,14 @@ return class extends (base) {
       return
     }  
 
-    getAPICommonParams(action, excludeProcInstanceName = false){
+    getAPICommonParams(action, excludeProcInstanceName){
+      if (excludeProcInstanceName===undefined){
+        if (this.isProcManagement===true){
+          excludeProcInstanceName=true
+        }else{
+          excludeProcInstanceName=false
+        }
+      }
       if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
         if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
@@ -504,8 +514,11 @@ return class extends (base) {
           this.procInstanceName=currentTabView.procInstanceName
         }
       }
-      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===''||this.procInstanceName===null||this.procInstanceName.length==0){
         this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
+      }
+      if ((this.procInstanceName===undefined||this.procInstanceName==='')&&this.isProcManagement!==undefined&&this.isProcManagement===true){
+        this.procInstanceName="procedures-management"
       }
       //console.log('getActionAPIUrl', this.procInstanceName)
       if (action!==undefined&&action.endPoint!==undefined){

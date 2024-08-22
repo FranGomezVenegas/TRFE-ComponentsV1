@@ -120,3 +120,8 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.72 use lit instead of lit-element]
 [- v0.2.73 removed @vaadin/vertical-layout and vaadin-accordion due to they use different vaadin-lumo-styles version than the rest and even those vaadin components are not longer in use"
 [- v0.2.74 ObjectByTabs tab label responsive. proc-management-home banner fixed]
+[- v0.2.75
+    - Refactor: removed clientMethod procMngRequirementsMethod
+    - Refactor: action models for proc definition, removed property clientMethod:procMngRequirementsMethod and endpoint to get the one fron the API module settings
+    - Refactor: apiFunctions, exclude ProcInstanceName for this.isProcManagement
+]

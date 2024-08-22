@@ -135,8 +135,6 @@ export class DragDropTable extends ApiFunctions(TrazitGenericDialogs(GridFunctio
           {
             "actionName": "REMOVE_ROLE",
             "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
             "selectedItemPropertyName": "selectedItems",
             "requiresDialog": false,
             "certificationException": true,
@@ -173,8 +171,6 @@ export class DragDropTable extends ApiFunctions(TrazitGenericDialogs(GridFunctio
           {
             "actionName": "RENAME_ROLE",
             "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
             "selectedItemPropertyName": "selectedItems",
             "requiresDialog": true,
             "certificationException": true,
@@ -228,8 +224,6 @@ export class DragDropTable extends ApiFunctions(TrazitGenericDialogs(GridFunctio
           {
             "actionName": "CLONE_ROLE",
             "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
             "selectedItemPropertyName": "selectedItems",
             "requiresDialog": true,
             "certificationException": true,
@@ -284,8 +278,6 @@ export class DragDropTable extends ApiFunctions(TrazitGenericDialogs(GridFunctio
           {
             "actionName": "ADD_ROLE",
             "notGetViewData": true,
-            "clientMethod": "procMngRequirementsMethod",
-            "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
             "selectedItemPropertyName": "selectedItems",
             "requiresDialog": true,
             "certificationException": true,
