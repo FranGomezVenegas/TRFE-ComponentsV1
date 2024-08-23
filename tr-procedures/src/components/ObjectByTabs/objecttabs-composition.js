@@ -109,8 +109,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       selectedTabModelFromProcModel: { type: Object },
       viewModelFromProcModel: { type: Object },
       lang: {type: String},
-      config: { type: Object },
-      procInstanceName: { type: String },
+      config: { type: Object },      
       selectedItem: { type: Object },
       sopsPassed: { type: Boolean },
       viewName: { type: String },
@@ -314,7 +313,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
             ${elem2.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
             ${elem2.type==="recovery_rate" ? this.kpiRecoveryRate(elem2, true) : nothing}
             ${elem2.type==="grid" ? this.kpiGrid(elem2, data[elem2.endPointResponseObject], true) : nothing}
-            ${elem2.type==="chart" ? this.kpiChartFran(elem2, true) : nothing}   
+            ${elem2.type==="chart" ? this.kpiChartFran(elem2, data, true) : nothing}   
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
@@ -343,6 +342,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
             ${elem2.type==="buttonsOnly" ? this.buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
             ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
             ${elem2.type==="dragDropObjects" ? this.dragDropObjects(elem, data)   : nothing}
+            ${elem2.type==="mapWithIcons" ? this.mapWithIcons(elem2, data)   : nothing}            
           `:nothing}
         `
       })} 
@@ -368,7 +368,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
                 ${elem2.type === "cardSomeElementsRepititiveObjects" ? cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
                 ${elem2.type === "recovery_rate" ? kpiRecoveryRate(elem2, true) : nothing}
                 ${elem2.type === "grid" ? kpiGrid(elem2, data[elem2.endPointResponseObject], true) : nothing}
-                ${elem2.type === "chart" ? kpiChartFran(elem2, true) : nothing}   
+                ${elem2.type === "chart" ? kpiChartFran(elem2, data, true) : nothing}   
   
                 ${elem2.type === "jsonViewer" ? jsonViewer(elem2, data, true): nothing}
                 ${elem2.type === "readOnlyTable" ? readOnlyTable(elem2, data, true): nothing}
@@ -419,7 +419,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem, data) : nothing}    
       ${elem.type==="recovery_rate" ? this.kpiRecoveryRate(elem) : nothing}
       ${elem.type==="grid" ? this.kpiGrid(elem, data[elem.endPointResponseObject]) : nothing}
-      ${elem.type==="chart" ? this.kpiChartFran(elem) : nothing}   
+      ${elem.type==="chart" ? this.kpiChartFran(elem, data) : nothing}   
       ${elem.type==="jsonViewer" ? this.jsonViewer(elem, data, true): nothing}
       ${elem.type==="readOnlyTable" ? this.readOnlyTable(elem, data, true): nothing}
       ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
@@ -454,6 +454,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="buttonsOnly" ? this.buttonsOnly(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="tree" ? this.treeElement(elem, data)   : nothing}
       ${elem.type==="dragDropObjects" ? this.dragDropObjects(elem, data)   : nothing}
+      ${elem.type==="mapWithIcons" ? this.mapWithIcons(elem, data)   : nothing}
       ${elem.type==="Calendar" ? this.calendar(elem, (Object.keys(data).length === 0 && data.constructor === Object) || data === undefined?data2:data)   : nothing}
     `
   }
@@ -498,7 +499,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
   
   handleTabSelected(event) {
     //const { selectedTab } = event.detail;
-    alert('tab selected, objectabs-composition')
+    //alert('tab selected, objectabs-composition')
     // Reset table or perform other actions based on the selected tab
     this.resetTable();  // Assuming resetTable is a method that resets the table
 }
