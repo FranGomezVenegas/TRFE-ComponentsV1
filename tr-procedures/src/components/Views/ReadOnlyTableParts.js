@@ -513,7 +513,7 @@ export function ReadOnlyTableParts(base) {
             html`
                 ${this.cellEditNumeric(fld, data, lang, columnIndex, rowIndex)}
             `:html`
-                ${fld.name === "pretty_spec"==="reportTitle" ? this.cellIsPrettySpec(fld, data, lang) : nothing}
+                ${fld.name === "pretty_spec" ? this.cellIsPrettySpec(fld, data, lang) : nothing}
                 ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? this.cellIsTagList(fld, data, lang) : nothing}
                 ${fld.as_progress !== undefined && fld.as_progress === true ? this.cellIsAsProgress(fld, data, lang) : nothing}
                 ${fld.as_paragraph !== undefined && fld.as_paragraph === true ? this.cellIsParagraph(fld, data, lang) : nothing}
@@ -637,7 +637,7 @@ export function ReadOnlyTableParts(base) {
         }
                         
         cellIsPrettySpec(fld, data, lang){
-            return html`   cellIsPrettySpec             
+            return html`                
                     <span style="color:green">${data["spec_text_green_area_" + lang]}</span>
                     <span style="color:orange">${data["spec_text_yellow_area_" + lang]}</span>
                     <span style="color:red">${data["spec_text_red_area_" + lang]}</span>         
@@ -703,6 +703,7 @@ export function ReadOnlyTableParts(base) {
             `
         }        
         generateRowButtons(elem, curRow, parentData, index, handle, lang) {
+            if (elem.row_buttons ===undefined){return html``}
             return html`
             <td>
             ${elem.expandInfoSection?html`
