@@ -426,6 +426,11 @@ return class extends (base) {
     jsonParam(action, selObject = {}, targetValue = {}, selGridObject = {}, parentElementData, dragEntry, dropEntry) {
       console.log('ApiFunctions>jsonParam', 'action', action, 'selObject', selObject, 'targetValue', targetValue, 'selGridObject', selGridObject)
       
+      if ( (this.procInstanceName===null||this.procInstanceName===undefined||this.procInstanceName.length===0)&&
+            (this.procedureName!==null&&this.procedureName!==undefined&&this.procedureName.length>0) ){
+        this.procInstanceName=sessionStorage.getItem("procInstanceName");
+      }
+
       // const stack = new Error().stack;
       // const stackLines = stack.split('\n');
       // if (stackLines!==null&&stackLines[1]!==null){
@@ -508,17 +513,17 @@ return class extends (base) {
     
 
     getActionAPIUrl(action){
-      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName===null||this.procInstanceName.length==0){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
         if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
           this.procInstanceName=currentTabView.procInstanceName
         }
       }
-      if (this.procInstanceName===undefined||this.procInstanceName===''||this.procInstanceName===null||this.procInstanceName.length==0){
+      if (this.procInstanceName===undefined||this.procInstanceName===null||this.procInstanceName===''||this.procInstanceName===null||this.procInstanceName.length==0){
         this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")          
       }
-      if ((this.procInstanceName===undefined||this.procInstanceName==='')&&this.isProcManagement!==undefined&&this.isProcManagement===true){
-        this.procInstanceName="procedures-management"
+      if (this.isProcManagement!==undefined&&this.isProcManagement===true){
+        this.procInstanceName="proc_management"
       }
       //console.log('getActionAPIUrl', this.procInstanceName)
       if (action!==undefined&&action.endPoint!==undefined){
@@ -526,7 +531,8 @@ return class extends (base) {
       }
       let procInstanceModel={}
       if (this.config!==undefined&&this.config.local!==undefined&&!this.config.local) {
-        let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
+        let usSess=JSON.parse(sessionStorage.getItem("userSession"))
+        let findProc = usSess.procedures_list.procedures.filter(m => m.procInstanceName == this.procInstanceName)
         if (findProc.length) {
           procInstanceModel= findProc[0].procModel
         }

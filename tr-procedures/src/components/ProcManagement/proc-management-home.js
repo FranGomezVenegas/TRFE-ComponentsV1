@@ -1035,10 +1035,9 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
     let selectedItemArr=[]
     selectedItemArr.push(this.selectedItem)
     sessionStorage.setItem('selectedProcedureModuleName', this.moduleName)
-    sessionStorage.setItem('procName', this.procName)
+    sessionStorage.setItem('procedureName', this.procedureName)
     sessionStorage.setItem('procedureVersion', this.procedureVersion)
     sessionStorage.setItem('procInstanceName', this.procInstanceName)
-    
     return html`
       <sp-split-view show-divider=${this.showDivider}>
         <div
@@ -1089,13 +1088,12 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
                     .windowOpenable=true 
                     .sopsPassed=true 
                     .lang=${this.lang}
+                    .procInstanceName=${this.procInstanceName} 
                     .procedureName=${this.procedureName} 
                     .procedureVersion=${this.procedureVersion} 
                     ?isProcManagement=${this.isProcManagement}
                     .moduleName=${this.moduleName} 
                     .moduleVersion=${this.moduleVersion} 
-                    ?isProcManagement=${this.isProcManagement}
-                    .procInstanceName=${this.procInstanceName} 
                     .desktop=${this.desktop} 
                     .viewName=${this.viewName} 
                     .filterName=${this.filterName} 

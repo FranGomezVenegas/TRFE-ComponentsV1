@@ -83,7 +83,7 @@ export function ProcManagementMethods(base) {
       this.render();
     }
 
-    openSop(e) {
+    xxxopenSop(e) {
       if (window) {
         let urlVal="file_link"
         console.log(e)
