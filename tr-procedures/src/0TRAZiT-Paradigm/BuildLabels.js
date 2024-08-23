@@ -20,6 +20,9 @@ export function BuildLabelsFunctions(base) {
             }
             return 'buildLabel-N/D' 
         }
+        if (model["labelByConcatenateFields"+lang]!==undefined){
+            return this._buildLabelFromArrayOfItems(model["labelByConcatenateFields"+lang], dataObj)
+        }
         if (model.labelByConcatenateFields!==undefined){
             return this._buildLabelFromArrayOfItems(model.labelByConcatenateFields, dataObj)
         }
