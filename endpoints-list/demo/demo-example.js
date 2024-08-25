@@ -1,7 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '../endpoints-list';
+//import '../endpoints-list';
+import '../src/endpoints-list-styles-main'
 
 class DemoExample extends LitElement {
   static get styles() {
@@ -31,7 +32,7 @@ class DemoExample extends LitElement {
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
         <button @click=${()=>this.pLogin.logout()}>Logout</button><br><br>
-        <endpoints-list></endpoints-list>
+        <endpoints-list2></endpoints-list2>
       </div>
     `;
   }

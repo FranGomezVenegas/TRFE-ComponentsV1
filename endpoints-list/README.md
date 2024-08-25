@@ -35,3 +35,5 @@ To run a local development server that serves the basic demo located in `demo/in
 
 ## Versioning Tracking
 [- v0.0.2 use lit instead of lit-element]
+
+[- v0.0.3 converted in three files component and try to make it compatible with storybook]
