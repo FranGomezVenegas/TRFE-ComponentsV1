@@ -2,7 +2,6 @@ import { html, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
-
 export class EndpointsList extends CommonCore {
   static get styles() {
     return [
@@ -67,7 +66,8 @@ export class EndpointsList extends CommonCore {
       apis: { type: Array },
       endpoints: { type: Array },
       selectedApis: { type: Array },
-      selectedTxts: { type: Array }
+      selectedTxts: { type: Array },
+      storybook: {type: Boolean}
     };
   }
 
@@ -78,10 +78,16 @@ export class EndpointsList extends CommonCore {
     this.apis = []
     this.selectedApis = []
     this.selectedTxts = []
+    this.callAPI()
+    if (this.storybook!==undefined&&this.storybook===true){
+      alert('storybook...')
+      this.callAPI()
+    }
   }
 
   render() {
     return html`
+    ss
       ${this.desktop ?
         html`
         <sp-split-view resizable splitter-pos="300">
@@ -122,26 +128,55 @@ export class EndpointsList extends CommonCore {
             Last Update <input id="lastDate" type="datetime-local" @change=${this.dateChanged}>
             <hr>
             <label>${this.filterDocs.length} of ${this.docs.length}</label>
-            <div id="endpointName">
-            ${this.filterDocs.map(d =>
-              html`
-                <p class="ed" id="${d.id}" @click=${()=>this.shadowRoot.querySelector("#detail"+d.id).hidden=!this.shadowRoot.querySelector("#detail"+d.id).hidden}>${d.endpoint_name}</p>
-                <div id="detail${d.id}" hidden=true>
-                  <json-viewer>${this.endpointDetail(d)}</json-viewer>
-                </div>
-              `
-            )}
-            </div>
+            ${this.filterDocs!==undefined?
+            html`
+              <div id="endpointName">
+              ${this.filterDocs.map(d =>
+                html`
+                  <p class="ed" id="${d.id}" @click=${()=>this.shadowRoot.querySelector("#detail"+d.id).hidden=!this.shadowRoot.querySelector("#detail"+d.id).hidden}>${d.endpoint_name}</p>
+                  <div id="detail${d.id}" hidden=true>
+                    <json-viewer>${this.endpointDetail(d)}</json-viewer>
+                  </div>
+                `
+              )}
+              </div>
+            `:html``}
           </div>
         </div>
         `
       }
     `;
   }
-
-  async authorized() {
-    super.authorized()
-    await this.fetchApi(this.config.backendUrl + this.config.endpointsDocApiUrl + '?' + new URLSearchParams({
+  firstUpdated(){
+    //alert('open...')
+    this.callAPI()
+  }
+  async   callAPI(){
+    let localVariables={}
+    // fetch("../demo/config.json").then(r => r.json()).then(j => {
+    //   localVariables = j
+    // })    
+    fetch("../demo/config.json")
+    .then((r) => {
+      if (!r.ok) {
+        // Si el código de estado no es 2xx, lanza un error
+        throw new Error(`Error ${r.status}: ${r.statusText}`);
+      }
+      return r.json(); // Parseamos el cuerpo de la respuesta si el fetch fue exitoso
+    })
+    .then((j) => {
+      localVariables = j;
+    })
+    .catch((error) => {
+      console.error("Error fetching config:", error);
+      // Aquí puedes manejar el error, como mostrar un mensaje al usuario
+      alert(`Failed to fetch configuration: ${error.message}`);
+    });    
+    let bckendUrl=this.config.backendUrl!==undefined? this.config.backendUrl: localVariables.backendUrl
+    let endpUrl=this.config.endpointsDocApiUrl!==undefined? this.config.endpointsDocApiUrl: localVariables.endpointsDocApiUrl 
+    await this.fetchApi(bckendUrl
+       + endpUrl
+       + '?' + new URLSearchParams({
       actionName: "GET_DOC_ENDPOINTS",
       apiName: "ALL",
       finalToken: JSON.parse(sessionStorage.getItem("userSession")).finalToken
@@ -164,6 +199,13 @@ export class EndpointsList extends CommonCore {
       apis.unshift(Allarr)
       this.apis=apis
     })
+  }
+
+
+  async authorized() {
+    //alert('authorized')
+    super.authorized()
+    this.callAPI()
     this.requestUpdate()
   }
 
