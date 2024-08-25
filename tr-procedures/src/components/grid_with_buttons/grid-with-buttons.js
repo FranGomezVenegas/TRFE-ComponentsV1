@@ -175,7 +175,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
       ${this.resultTemplate()}
       ${this.takePictureFormDialog()}
       
-      ${this.investigationTemplate()}
+      
       ${this.filterName=="open" ?
         html`${this.decisionTemplate()}` : nothing
       }  

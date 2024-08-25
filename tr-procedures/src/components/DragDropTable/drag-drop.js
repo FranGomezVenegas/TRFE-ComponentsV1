@@ -189,7 +189,7 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
       ${this.resultTemplate()}
       ${this.takePictureFormDialog()}
       
-      ${this.investigationTemplate()}
+      
       ${this.filterName=="open" ?
         html`${this.decisionTemplate()}` : nothing
       }  

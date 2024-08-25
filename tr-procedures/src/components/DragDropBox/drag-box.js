@@ -224,7 +224,7 @@ export class DrapBox extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(A
       ${this.resultTemplate()}
       ${this.takePictureFormDialog()}
       
-      ${this.investigationTemplate()}
+      
       ${this.filterName=="open" ?
         html`${this.decisionTemplate()}` : nothing
       }  
