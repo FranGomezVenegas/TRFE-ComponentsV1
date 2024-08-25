@@ -906,7 +906,9 @@ export function DataViews(base) {
 
     handleKeyDown(event) {
       if (event.key === 'Escape') {
-        contextMenu.style.display = "none";
+        if (contextMenu!==undefined&&contextMenu!==null){
+          contextMenu.style.display = "none";
+        }
       }
     }
     // handleScroll(event) {
@@ -965,16 +967,28 @@ export function DataViews(base) {
     }
 
     resetFilterIndex(elem) {
-      const endPointResponseObject = elem.endPointResponseObject;
+      if (elem===undefined){
+        return
+      }
+      let endPointResponseObject = undefined
+      let endPointPropertyArray = undefined
+      if (elem!==undefined&&elem.endPointResponseObject!==undefined){
+        endPointResponseObject=elem.endPointResponseObject
+      }
+      if (elem!==undefined&&elem.endPointPropertyArray!==undefined){
+        endPointPropertyArray=elem.endPointPropertyArray
+      }
       this.selectedTableIndex = {
         ...this.selectedTableIndex,
-        [endPointResponseObject]: undefined
+        [endPointResponseObject]: undefined,
+        [endPointPropertyArray]: undefined
       }
 
       if (elem.children_definition) {
         const childElement = {
           ...elem.children_definition,
-          endPointResponseObject: elem.children // "_child"
+          endPointResponseObject: elem.children, // "_child"
+          endPointPropertyArray: elem.children // "_child"
         };
         this.resetFilterIndex(childElement);
       }
@@ -1852,7 +1866,7 @@ export function DataViews(base) {
         ${this.moduleEnvMonitMicroorganismsDialogAdd()}
         ${this.moduleEnvMonitMicroorganismsDialogRemove()}
         ${this.pointTemplate()} ${this.resultTemplate()}
-        ${this.investigationTemplate()}
+        
         ${this.filterName == "open"
           ? html`${this.decisionTemplate()}`
           : nothing}
@@ -2167,7 +2181,7 @@ export function DataViews(base) {
           } // iSerie
         } // iData
       }
-      //console.log('getChartData', 'chartData', chartData)
+      console.log('getChartData', 'chartData', chartData)
       return chartData;
     }
     labelPossibleReplacement(elem, labelValue) {
@@ -3216,6 +3230,30 @@ export function DataViews(base) {
     `;
   }
   
+  mapWithIcons(elem, data) {
+    import('../MapWithIcons/map-with-icons-index')
+    let dataArr = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
+    let dataSamplePoints = this.TRAZiTgetDataFromRoot(elem.samplePointsDetail, data, this.viewModelFromProcModel);
+    //console.log('calendar', 'elem', elem, 'data', data, 'dataArr', dataArr)
+    let mapUrl
+    if (elem.mapUrlDataProperty !== undefined) {
+      mapUrl = data[elem.mapUrlDataProperty]
+    } else if (elem.mapUrlFixValue !== undefined) {
+      mapUrl = elem.mapUrlFixValue
+    } else {
+      mapUrl = undefined;
+    }
+    return  html`
+      <map-with-icons .lang=${this.lang} .mapUrl=${mapUrl} .samplePoints=${dataSamplePoints} .action=${elem.action}
+        .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+        .model=${elem}   
+        .actionOnHoverTheIcon=${elem.actionOnHoverTheIcon !== undefined ? elem.actionOnHoverTheIcon : undefined}
+        .actionOnClickTheIcon=${elem.actionOnClickTheIcon !== undefined ? elem.actionOnClickTheIcon : undefined}
+        .actionDisabled=${elem.actionDisabled !== undefined ? elem.actionDisabled : undefined}
+      ></map-with-icons>
+    `
+  }
+
     dragDropBoxes(elem, data) {
       return html`not use the component dragDropBoxes, please ask Fran`
       // import('../DragDropBox/drag-box')

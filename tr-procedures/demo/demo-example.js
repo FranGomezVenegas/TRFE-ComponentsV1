@@ -243,12 +243,16 @@ class DemoExample extends LitElement {
         this.shadowRoot.appendChild(this.localToast)
       // }
     //if (this.config.local != false && !window.process) {
-    if (!this.hasEventListener('success')) {
+    const isMainApp = !!document.querySelector('tr-dashboard');
+
+    if (isMainApp){
+      console.log('TrDashboard present notifications not added due to it is not required then')
+    }else{
+      console.log('TrDashboard NOT present, added notifications')
+
       this.addEventListener('success', e => {
         this.showNotif(e)
       })
-    }
-    if (!this.hasEventListener('error')) {
       this.addEventListener('error', e => {
         // alert('addEventListener for error')
         this.showNotif(e)
@@ -258,7 +262,7 @@ class DemoExample extends LitElement {
     //}
   }
   showNotif(e) {
-    console.log('showNotif', e)
+    //console.log('showNotif', e)
     if (e.detail.is_error===undefined){
       return
     }

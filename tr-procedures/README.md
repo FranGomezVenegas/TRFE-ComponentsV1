@@ -125,3 +125,5 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
     - Refactor: action models for proc definition, removed property clientMethod:procMngRequirementsMethod and endpoint to get the one fron the API module settings
     - Refactor: apiFunctions, exclude ProcInstanceName for this.isProcManagement
 ]
+[- v0.2.76 load notifications for local dev not duplicating with the app ones]
+[- v0.2.77 Removed program-proc]

@@ -432,7 +432,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       ${this.viewModelFromProcModel&&(this.viewModelFromProcModel.component == 'ObjectByTabs'||this.viewModelFromProcModel.component == 'SingleView') ? html`
         <object-by-tabs .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} ?ready="false"
-          .model=${this.viewModelFromProcModel}
+          .model=${this.viewModelFromProcModel} 
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
       `:nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'dragDropBoxes' ? html`

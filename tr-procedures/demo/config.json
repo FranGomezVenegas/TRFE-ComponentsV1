@@ -379,6 +379,9 @@
     "viewName": "drag-box", 
     "filterName" :  "drag-box" 
   },  
+
+
+  
   "localDefaultView": {
     "procName":  "stock", 
     "viewName": "MasterData", 
@@ -394,6 +397,12 @@
     "viewName": "prototype-elements-view-main", 
     "filterName" :  "prototype-elements-view-main" 
   },
+  "localDefaultView": {
+    "procName":  "mb_em", 
+    "viewName": "Programs", 
+    "filterName" :  "" 
+  },  
+
   "fakeEnd":{
     "fake": "InventoryLotsGeneral20240729"
   }  

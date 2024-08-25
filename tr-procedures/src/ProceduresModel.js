@@ -29,7 +29,7 @@ export const ProceduresModel = {
   ['sample-coa-rel1']: SampleCoaRel1,
   ['inv-draft']: InvDraft,
   ['mp-release1']: MpRelease1, 
-  ['procedures-management']: ProceduresManagement,
+  ['proc_management']: ProceduresManagement,
   
   ['mb_em']: MbEm,
 
@@ -196,7 +196,10 @@ export const DemoViews = [
     {"proc_instance_name": "mb_em", "view_name": "SampleIncubation1", "filter_name": "", "title": "Sample Incubation 1"},
     {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismSMP", "title": "Sample Microorganism"},
     {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismPERS", "title": "Personal Microorganism"},
-    {"proc_instance_name": "mb_em", "view_name": "Programs", "filter_name": "Programs", "title": "Programs"},
+    {"proc_instance_name": "mb_em", "view_name": "Programs", "filter_name": "", "title": "Programs"},
+    {"proc_instance_name": "mb_em", "view_name": "ProgramsObjectByTabs", "filter_name": "", "title": "ProgramsObjectByTabs"},
+    
+        
     {"proc_instance_name": "mb_em", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
     {"proc_instance_name": "mb_em", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
     {"proc_instance_name": "mb_em", "view_name": "DataMining", "filter_name": "DataMining", "title": "DataMining"},

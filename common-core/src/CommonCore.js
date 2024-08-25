@@ -96,7 +96,7 @@ export class CommonCore extends LitElement {
   }
 
   showNotif(e) {
-    console.log('showNotif', e)
+    //console.log('showNotif', e)
     if (e.detail.is_error===undefined){
       return
     }
@@ -146,7 +146,7 @@ export class CommonCore extends LitElement {
     console.log(JSON.parse(sessionStorage.getItem("userSession")))
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
     this.headerInfo = JSON.parse(sessionStorage.getItem("userSession")).header_info
-    console.log('this.headerInfo', this.headerInfo)
+    //console.log('this.headerInfo', this.headerInfo)
 
   }
 
@@ -202,7 +202,7 @@ export class CommonCore extends LitElement {
     })
   }
   refreshMasterData(endPointResponse) {
-    console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
+    //console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'endPointResponse', endPointResponse)
     if (this.procInstanceName===undefined||endPointResponse===undefined||endPointResponse.master_data===undefined) {
       return
     }  
