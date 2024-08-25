@@ -241,9 +241,6 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'ModuleEnvMonitHomeWater':
         import('./module_env_monit/home-water')
         return  
-      case 'ModuleEnvMonitProgramProc':
-        import('./module_env_monit/program-proc')
-        return
       case 'ModuleEnvMonitSampleIncubation':
         import('./module_env_monit/sample-incubation-view')
         return
@@ -426,11 +423,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
         </proc-homes>        
       `:html``}
 
-      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitProgramProc' ? html`
-        <program-proc .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
-          .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .model=${this.viewModelFromProcModel}
-          .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></program-proc>      
-      `:html``}
+
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ModuleEnvMonitSampleIncubation' ? html`
         <sample-incubation-view .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
@@ -438,7 +431,7 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       `: nothing} 
       ${this.viewModelFromProcModel&&(this.viewModelFromProcModel.component == 'ObjectByTabs'||this.viewModelFromProcModel.component == 'SingleView') ? html`
         <object-by-tabs .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
-          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} ?ready="false"
           .model=${this.viewModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></object-by-tabs>      
       `:nothing}
