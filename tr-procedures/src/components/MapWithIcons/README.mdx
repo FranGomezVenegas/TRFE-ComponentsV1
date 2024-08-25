@@ -1,0 +1,131 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs';
+import MapWithIcons from './map-with-icons-index.js';
+
+// Meta provides general information about the component
+<Meta title="Components/Map With Icons" component={MapWithIcons} />
+
+# MapWithIcons Component
+
+`MapWithIcons` is a custom LitElement component that displays an interactive map with icons. This component allows user interaction with different points on the map through clicks and hover events.
+
+## Properties
+
+The `MapWithIcons` component uses the following properties:
+
+- **samplePoints**: `{ type: Array }`  
+  A list of points that will be displayed on the map. Each point contains information about its position and appearance.
+
+- **selectedItems**: `{ type: Array }`  
+  Selected items, primarily used to display details in a dialog.
+
+- **targetValue**: `{ type: Object }`  
+  An object that stores target values when an action is performed on a point on the map.
+
+- **procInstanceName**: `{ type: String }`  
+  The name of the process instance, used in the component's internal logic.
+
+- **config**: `{ type: Object }`  
+  General configuration for the component, though it doesn't seem fully implemented.
+
+- **langConfig**: `{ type: Object }`  
+  Language configuration specific to the component, including labels and text in different languages.
+
+- **commonLangConfig**: `{ type: Object }`  
+  Common language configuration used in dialogs and buttons.
+
+- **lang**: `{ type: String }`  
+  The currently selected language for displaying text and labels.
+
+- **action**: `{ type: Object }`  
+  An object that defines the current action being performed.
+
+- **mapUrl**: `{ type: String }`  
+  The URL of the map image to be displayed in the component.
+
+- **actionOnHoverTheIcon**: `{ type: Boolean }`  
+  Defines whether an action should be performed when the user hovers over an icon on the map.
+
+- **actionOnClickTheIcon**: `{ type: Boolean }`  
+  Defines whether an action should be performed when the user clicks an icon on the map.
+
+- **actionDisabled**: `{ type: Boolean }`  
+  Controls whether actions are disabled for the user.
+
+## Methods
+
+### `render()`
+This method renders the component using the `mapWithIconsTemplate` template.
+
+### `handleMapClick(event)`
+Handles the click event on the map image, calculating the click position relative to the image.
+
+### `mapIcon(icon)`
+Extracts and returns the icon name from a given path.
+
+### `pointTemplate()`
+Renders the template for the selected point details.
+
+### `get pointDialog()`
+Retrieves the dialog for displaying the selected point's information.
+
+### `get shiftField()`
+Retrieves the shift selection field.
+
+### `get lotField()`
+Retrieves the lot selection field.
+
+### `get programInput()`
+Retrieves the program name input field.
+
+### `get locationInput()`
+Retrieves the location name input field.
+
+### `setLogSample()`
+Configures and logs a sample using the values from the selected fields.
+
+### `jsonParam()`
+Creates a JSON object with the necessary parameters for an action.
+
+### `setView()`
+Resets the component's view, clearing the sample points and selected items.
+
+## Styles
+
+The styles are defined in the `map-with-icons-styles.js` file and include:
+
+- `.mapWrap`: Map container with relative positioning, defined height, and width.
+- `.mapWrap .mapImg`: Map image with full width.
+- `.mapWrap .mapIcon`: Icons on the map with absolute positioning and pointer cursor.
+
+## Templates
+
+The templates are defined in `map-with-icons-template.js` and `pointTemplate` for the component structure and the selected point dialog.
+
+## Example
+
+```js
+import { html } from 'lit';
+import './map-with-icons';
+
+export default {
+  title: 'MapWithIcons',
+  component: 'map-with-icons',
+};
+
+const Template = ({ samplePoints, mapUrl, lang }) => html`
+  <map-with-icons
+    .samplePoints=${samplePoints}
+    .mapUrl=${mapUrl}
+    .lang=${lang}
+  ></map-with-icons>
+`;
+
+export const Default = Template.bind({});
+Default.args = {
+  samplePoints: [
+    { map_icon: 'icon1.png', map_icon_top: '10px', map_icon_left: '20px', map_icon_w: '30', map_icon_h: '40' },
+    { map_icon: 'icon2.png', map_icon_top: '50px', map_icon_left: '60px', map_icon_w: '70', map_icon_h: '80' },
+  ],
+  mapUrl: 'https://example.com/map.png',
+  lang: 'en',
+};
