@@ -5,6 +5,7 @@ import { mapWithIconsStyles } from './map-with-icons-styles.js';
 import { mapWithIconsTemplate, pointTemplate } from './map-with-icons-template.js';
 //import { actions } from './config'; // Asegúrate de importar las acciones si es necesario
 
+
 //DialogsFunctions
 export class MapWithIcons extends (LitElement) {
   static get styles() {
@@ -15,14 +16,18 @@ export class MapWithIcons extends (LitElement) {
     return {
       samplePoints: { type: Array },
       selectedItems: { type: Array },
-      selectedAction: { type: Object },
+      //selectedAction: { type: Object },
       targetValue: { type: Object },
       procInstanceName: { type: String },
       config: { type: Object },
-      selectedProgram: { type: Array },
       langConfig: { type: Object },
       commonLangConfig: { type: Object },
-      lang: { type: String}
+      lang: { type: String},
+      action: { type: Object },
+      mapUrl: { type: String},
+      actionOnHoverTheIcon: { type: Boolean },
+      actionOnClickTheIcon: { type: Boolean },
+      actionDisabled: { type: Boolean },      
     };
   }
 
@@ -30,8 +35,11 @@ export class MapWithIcons extends (LitElement) {
     super();
     this.samplePoints = [];
     this.selectedItems = [];
-    this.selectedProgram = [];
-    this.selectedAction = [] //actions[0];
+    this.action={}
+    this.actionOnHoverTheIcon = true;  // Acción habilitada al pasar el mouse
+    this.actionOnClickTheIcon = false; // Acción deshabilitada al hacer clic
+    this.actionDisabled = false;     
+    //this.selectedAction = [] //actions[0];
 
     this.langConfig = {
         "title": {
@@ -80,7 +88,16 @@ export class MapWithIcons extends (LitElement) {
     return mapWithIconsTemplate.call(this, this.langConfig, this.commonLangConfig);
   }
 
+  handleMapClick(event) {
+    const imgElement = event.target;
+    const rect = imgElement.getBoundingClientRect();
+    const x = event.clientX - rect.left; // posición X dentro de la imagen
+    const y = event.clientY - rect.top;  // posición Y dentro de la imagen
+
+    console.log(`Top: ${y}px, Left: ${x}px`);
+  }  
   mapIcon(icon) {
+    if (icon===undefined){return ''}
     let path = icon.split("/");
     return path[path.length - 1];
   }
@@ -130,15 +147,15 @@ export class MapWithIcons extends (LitElement) {
       this.targetValue.fieldName = this.targetValue.fieldName + "shift";
       this.targetValue.fieldValue = this.targetValue.fieldValue + this.shiftField.value;
     }
-    this.selectedAction = actions[0];
-    this.reqParams = this.jsonParam(actions[0], {}, this.targetValue);
-    this.nextRequestCommons(actions[0]);
+    //this.selectedAction = actions[0];
+    this.reqParams = this.jsonParam(this.action, {}, this.targetValue);
+    this.nextRequestCommons(this.action);
   }
 
   jsonParam() {
     let jsonParam = {};
-    if (this.selectedAction.apiParams) {
-      this.selectedAction.apiParams.forEach(p => {
+    if (this.action.apiParams) {
+      this.action.apiParams.forEach(p => {
         if (p.element) {
           jsonParam[p.query] = this[p.element].value;
         } else if (p.defaultValue) {
@@ -155,12 +172,10 @@ export class MapWithIcons extends (LitElement) {
 
   setView() {
     this.samplePoints = [];
-    this.selectedItems = [];
-    if (this.selectedProgram === undefined) { return; }
-    this.samplePoints = this.selectedProgram.sample_points;
-    this.selectedAction = actions[0];
-    this.actionMethod(this.selectedAction.subAction);
+    this.selectedItems = [];    
+    this.actionMethod(this.action.subAction);
   }
 }
 
 customElements.define('map-with-icons', MapWithIcons);
+export default MapWithIcons;

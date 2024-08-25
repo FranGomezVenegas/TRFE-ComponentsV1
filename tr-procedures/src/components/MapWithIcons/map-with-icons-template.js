@@ -3,17 +3,20 @@ import { html } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 
 export const mapWithIconsTemplate = function(langConfig) {
+  if (this.samplePoints===undefined||this.samplePoints.length===0){return html``}
   return html`
     <div class="layout horizontal flex wrap">
       <div class="layout flex">
         <h1>${langConfig.title["label_"+this.lang]}</h1>
         <div class="mapWrap">
-          <img class="mapImg" src="/images/clean-room-example.png">
+          <img class="mapImg" src="${this.mapUrl}" @click=${this.handleMapClick}>
           ${this.samplePoints && this.samplePoints.map(point => 
             html`<img class="mapIcon" 
-              src="/images/${this.mapIcon(point.map_icon)}" 
-              style="top:${point.map_icon_top};left:${point.map_icon_left};width:${point.map_icon_w}px;height:${point.map_icon_h}px"
-              @mouseover=${() => this.selectedItems=[point]}>`
+                src="${point.map_icon}" 
+                style="top:${point.map_icon_top};left:${point.map_icon_left};width:${point.map_icon_w}px;height:${point.map_icon_h}px"
+                @mouseover=${this.actionOnHoverTheIcon ? () => this.handleIconAction(point) : null}
+                @click=${this.actionOnClickTheIcon ? () => this.handleIconAction(point) : null}                            
+              >`
           )}
         </div>
       </div>
