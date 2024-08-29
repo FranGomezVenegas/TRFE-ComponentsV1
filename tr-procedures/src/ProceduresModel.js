@@ -194,6 +194,7 @@ export const DemoViews = [
     {"proc_instance_name": "mb_em", "view_name": "SamplePlateReadingSecondEntry", "filter_name": "PlateReadingSecondEntryPERS", "title": "Person-Plate Reading 2nd Entry"},
     {"proc_instance_name": "mb_em", "view_name": "SampleIncubation", "filter_name": "", "title": "Sample Incubation"},
     {"proc_instance_name": "mb_em", "view_name": "SampleIncubation1", "filter_name": "", "title": "Sample Incubation 1"},
+    {"proc_instance_name": "mb_em", "view_name": "SampleIncubation2", "filter_name": "", "title": "Sample Incubation 1"},
     {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismSMP", "title": "Sample Microorganism"},
     {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismPERS", "title": "Personal Microorganism"},
     {"proc_instance_name": "mb_em", "view_name": "Programs", "filter_name": "", "title": "Programs"},

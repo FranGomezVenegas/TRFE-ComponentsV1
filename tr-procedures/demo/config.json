@@ -136,11 +136,7 @@
     "viewName": "SampleIncubation", 
     "filterName" :  "Incubation" 
   },
-  "localDefaultViewsa": {
-    "procName":  "em-demo-a", 
-    "viewName": "SampleIncubation1", 
-    "filterName" :  "Incubation" 
-  },
+
   "localDefaultViewzzzs": {
     "procName":  "em-demo-a", 
     "viewName": "SampleIncubation2", 
@@ -402,7 +398,11 @@
     "viewName": "Programs", 
     "filterName" :  "" 
   },  
-
+  "localDefaultView": {
+    "procName":  "mb_em", 
+    "viewName": "SampleIncubation2", 
+    "filterName" :  "" 
+  },
   "fakeEnd":{
     "fake": "InventoryLotsGeneral20240729"
   }  
