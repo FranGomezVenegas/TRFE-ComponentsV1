@@ -2548,7 +2548,7 @@ export const MbEm=
         ]
       }
   },
-  "SampleIncubation1":{
+  "SampleIncubation120240827":{
     "component": "dragDropBoxes",    
     "viewQuery": {
       "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
@@ -3414,6 +3414,676 @@ export const MbEm=
       }
     ]
   },  
+  "SampleIncubation2":{
+    "component": "dragDropBoxes",    
+    "viewQuery": {
+      "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
+      "endPointParams": [
+        {
+          "argumentName": "includeSplittedByIncubNumber",
+          "fixValue": "true"
+        },
+        {
+          "argumentName": "whereFieldsName",
+          "fixValue": "incub_stage"
+         
+        },
+        {
+          "argumentName": "whereFieldsValue",
+          "fixValue": "2"         
+        }        
+      ]
+    },
+    "forceAllowMoveObjectAsViewRule": true,
+    "boxesTableKeyField":"name",
+    "boxesTableColumns":{
+      "endPointPropertyArray": ["active_batches"],
+      "columns": [
+        {
+          "name": "allow_move_objects",
+          "label_en": "",
+          "label_es": "",
+          "is_icon":true,
+          "image_name":"ACTIVATE_DEACTIVATE",
+          "icon_name": "allow_move_objects",
+          "tooltip":{
+            "text": "111 the box {fld:name} is {fld?allow_move_objects ? open : closed}",
+            "text_en": "the box {fld:name} is {fld?allow_move_objects ? open : close} {fld?name:Box 1? 'result1' :Caja A' ? 'result2' : 'default'}",
+            "text_es": "La caja {fld:name} está {fld?allow_move_objects ? abierta : cerrada}",
+            "text1": "the box {fld:name} is {fld:allow_move_objects}"
+          }
+        },
+        {
+          "name": "name",
+          "label_en": "name",
+          "label_es": "name"
+        },        
+        {
+          "name": "incubation_incubator",
+          "label_en": "Incubator",
+          "label_es": "Incubadora"
+        },
+        {
+          "name": "incubation_start",
+          "label_en": "Start",
+          "label_es": "F. Iniciado"
+        },
+        {
+          "name": "chrono",
+          "fldForTimer":"incubation_start",
+          "startWarning": "20",
+          "startAlert": "40",
+          "label_en": "Duration",
+          "label_es": "Duración"
+        },
+        
+        {
+          "name": "counter",
+          "propertyName": "SAMPLES_ARRAY",
+          "label_en": "Num Samples",
+          "label_es": "Num Muestras"
+        }        
+      ],
+      "actions": [
+        {
+          "actionName": "EM_BATCH_INCUB_CREATE",
+          "requiresDialog": true,
+          "endPointUrl": "Programs",
+          "button": {
+            "icon": "create_new_folder",
+            "title": {
+              "label_en": "New Batch",
+              "label_es": "Nuevo Lote"
+            },
+            "requiresGridItemSelected": false
+          },
+          "dialogInfo": {
+            "name": "genericDialog",
+            "fields": [
+              {
+                "text1": {
+                  "label_en": "New Batch Name",
+                  "label_es": "Nombre para nueva Tanda"
+                }
+              }
+            ]
+          },
+          "endPointParams": [
+            {
+              "argumentName": "batchName",
+              "element": "text1",
+              "defaultValue": ""
+            },
+            {
+              "argumentName": "batchTemplateId",
+              "defaultValue": 1
+            },
+            {
+              "argumentName": "batchTemplateVersion",
+              "defaultValue": 1
+            },
+            {
+              "argumentName": "incubStage",
+              "fixValue": "2"
+            }
+          ]
+        }
+      ],
+      "row_buttons":[
+        {
+          "actionName": "EM_BATCH_ASSIGN_INCUB",
+          "buttonForQuery": false,
+          "requiresDialog": true,
+          "button": {
+            "icon": "link",
+            "title": {
+              "label_en": "Assign Incubator",
+              "label_es": "Asignar Incubadora"
+            },
+            "requiresGridItemSelected": false
+          },
+          "endPointParams": [
+            {
+              "argumentName": "batchName",
+              "selObjectPropertyName": "name"
+            },
+            {
+              "argumentName": "incubatorName",
+              "selObjectPropertyName": "name",
+              "getFromGrid": true
+            },
+            {
+              "argumentName": "incubStage",
+              "selObjectPropertyName": "stage",
+              "getFromGrid": true
+            }            
+          ],
+          "dialogInfo": {
+            "name": "genericDialog",
+            "gridContent": true,
+            "masterDataEntryName": "instrument_incubator",
+            "masterDataFilterPropertyName": "stage",
+            "masterDataFilterPropertyValue": "2",
+            "langConfig": {
+              "gridHeader": [
+                {
+                  "fldName": "name",
+                  "label_en": "Incubator",
+                  "label_es": "Incubadora",
+                  "width": "40%",
+                  "sort": false,
+                  "filter": true,
+                  "align": "left"
+                },
+                {
+                  "fldName": "description",
+                  "label_en": "Description",
+                  "label_es": "Descripción",
+                  "width": "40%",
+                  "sort": true,
+                  "filter": false
+                }
+              ]
+            },
+            "automatic": true
+          }
+        },        
+        {
+          "actionName": "EM_BATCH_INCUB_START",
+          "endPointUrl": "Programs",
+          "requiresDialog": false,
+          "button": {
+            "icon": "play_circle",
+            "title": {
+              "label_en": "Start Incubator",
+              "label_es": "Iniciar Incubadora"
+            },
+            "requiresGridItemSelected": false
+          },          
+          "endPointParams": [
+            {
+              "argumentName": "batchName",              
+              "selObjectPropertyName": "name"
+            },
+            {
+              "argumentName": "batchTemplateId",
+              "selObjectPropertyName": "incub_batch_config_id" 
+            },
+            {
+              "argumentName": "batchTemplateVersion",
+              "selObjectPropertyName": "incub_batch_config_version"
+            }
+          ]          
+        },
+        {
+          "actionName": "EM_BATCH_INCUB_END",
+          "endPointUrl": "Programs",
+          "requiresDialog": false,
+          "button": {
+            "icon": "stop_circle",
+            "title": {              
+              "label_en": "End Incubator",
+              "label_es": "Termina incubadora"
+            },
+            "requiresGridItemSelected": false            
+          },
+          "endPointParams": [
+            {
+              "argumentName": "batchName",              
+              "selObjectPropertyName": "name"
+            },
+            {
+              "argumentName": "batchTemplateId",
+              "selObjectPropertyName": "incub_batch_config_id" 
+            },
+            {
+              "argumentName": "batchTemplateVersion",
+              "selObjectPropertyName": "incub_batch_config_version"
+            }
+          ]
+        }
+      ]
+    }, 
+    "boxesContentColumns":{
+      "endPointPropertyArray": "SAMPLES_ARRAY",
+      "columns": [
+        {
+          "name": "sample_id",
+          "label_en": "name",
+          "label_es": "name"
+        },
+        {
+          "name": "posX",
+          "label_en": "posX",
+          "label_es": "posX"
+        },
+        {
+          "name": "incubation_start",
+          "label_en": "incubation_start",
+          "label_es": "incubation_start"
+        }
+      ]
+    },    
+    "objectsToDragColumns":{
+      "endPointPropertyArray": ["incub_2"],
+      "columns": [
+        {
+          "name": "sample_id",
+          "label_en": "id",
+          "label_es": "id"
+        },
+        {
+          "name": "logged_on",
+          "label_en": "Logged",
+          "label_es": "Creada"
+        },
+        {
+          "name": "location_name",
+          "label_en": "Location",
+          "label_es": "Ubicación"
+        },
+        {
+            "name": "incubation2_start",
+            "label_en": "2nd Start Date",
+            "label_es": "2ª Fecha de Inicio"
+          },
+          {
+            "name": "incubation2_end",
+            "label_en": "2nd End Date",
+            "label_es": "2ª Fecha de Finalización"
+          },
+          {
+            "name": "incubation2_incubator",
+            "label_en": "2nd Incubator",
+            "label_es": "2ª Incubadora"
+          },
+          {
+            "name": "incubation_start",
+            "label_en": "1st Start Date",
+            "label_es": "1ª Fecha de Inicio"
+          },
+          {
+            "name": "incubation_end",
+            "label_en": "1st End Date",
+            "label_es": "1ª Fecha de Finalización"
+          },
+          {
+            "name": "incubation_incubator",
+            "label_en": "1st Incubator",
+            "label_es": "1ª Incubadora"
+          }
+      ]
+    },
+    "dataIntegrityCheck":{
+      "xdropingEntryRequiredProperties":["sample_id", "study", "temperaturezzz"],
+      "xdropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "values", "values": [1, 3]}},
+        {"name": "id", "criteria":{"type": "range", "min": 1, "max": 4}}
+      ],
+      "xxdropingEntryRequiredPropertiesAndMatchValues":[
+        {"name": "id", "criteria":{"type": "selectedBox_value", "selectedBoxPropName": "anyProperty"}}
+      ]
+    },      
+    "boxPosicsViewNumColumnsForInfo": 2,
+    "boxPosicsViews":[
+      ["sample_id", "logged_on", "location_name"],
+      ["sample_id", "logged_on", "location_name", "program_name", "area"],
+      ["sample_id"]
+    ],
+    "dropAction": { 
+      "actionName": "EM_BATCH_INCUB_ADD_SMP",
+      "endPointUrl": "Samples",
+      "requiresDialog": false,
+      "button": {
+        "title": {
+          "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+        },
+        "requiresGridItemSelected": true
+      },
+      "endPointParams": [ 
+        { "argumentName": "sampleId", "dropElement": "sample_id" },
+        { "argumentName": "batchTemplateId", "dragElement": "incub_batch_config_id" },
+        { "argumentName": "batchTemplateVersion", "dragElement": "incub_batch_config_version" },
+        { "argumentName": "batchName", "dragElement": "name" }			  
+      ]
+    }
+},
+"SampleIncubation1":{
+  "component": "dragDropBoxes",    
+  "viewQuery": {
+    "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
+    "endPointParams": [
+      {
+        "argumentName": "includeSplittedByIncubNumber",
+        "fixValue": "true"
+      },
+      {
+        "argumentName": "whereFieldsName",
+        "fixValue": "incub_stage"
+       
+      },
+      {
+        "argumentName": "whereFieldsValue",
+        "fixValue": "1"         
+      }        
+    ]
+  },
+  "forceAllowMoveObjectAsViewRule": true,
+  "boxesTableKeyField":"name",
+  "boxesTableColumns":{
+    "endPointPropertyArray": ["active_batches"],
+    "columns": [
+      {
+        "name": "allow_move_objects",
+        "label_en": "",
+        "label_es": "",
+        "is_icon":true,
+        "image_name":"ACTIVATE_DEACTIVATE",
+        "icon_name": "allow_move_objects",
+        "tooltip":{
+          "text": "111 the box {fld:name} is {fld?allow_move_objects ? open : closed}",
+          "text_en": "the box {fld:name} is {fld?allow_move_objects ? open : close} {fld?name:Box 1? 'result1' :Caja A' ? 'result2' : 'default'}",
+          "text_es": "La caja {fld:name} está {fld?allow_move_objects ? abierta : cerrada}",
+          "text1": "the box {fld:name} is {fld:allow_move_objects}"
+        }
+      },
+      {
+        "name": "name",
+        "label_en": "name",
+        "label_es": "name"
+      },        
+      {
+        "name": "incubation_incubator",
+        "label_en": "Incubator",
+        "label_es": "Incubadora"
+      },
+      {
+        "name": "incubation_start",
+        "label_en": "Start",
+        "label_es": "F. Iniciado"
+      },
+      {
+        "name": "chrono",
+        "fldForTimer":"incubation_start",
+        "startWarning": "20",
+        "startAlert": "40",
+        "label_en": "Duration",
+        "label_es": "Duración"
+      },
+      
+      {
+        "name": "counter",
+        "propertyName": "SAMPLES_ARRAY",
+        "label_en": "Num Samples",
+        "label_es": "Num Muestras"
+      }        
+    ],
+    "actions": [
+      {
+        "actionName": "EM_BATCH_INCUB_CREATE",
+        "requiresDialog": true,
+        "endPointUrl": "Programs",
+        "button": {
+          "icon": "create_new_folder",
+          "title": {
+            "label_en": "New Batch",
+            "label_es": "Nuevo Lote"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "New Batch Name",
+                "label_es": "Nombre para nueva Tanda"
+              }
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "batchName",
+            "element": "text1",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "batchTemplateId",
+            "defaultValue": 1
+          },
+          {
+            "argumentName": "batchTemplateVersion",
+            "defaultValue": 1
+          },
+          {
+            "argumentName": "incubStage",
+            "fixValue": "1"
+          }
+        ]
+      }
+    ],
+    "row_buttons":[
+      {
+        "actionName": "EM_BATCH_ASSIGN_INCUB",
+        "buttonForQuery": false,
+        "requiresDialog": true,
+        "button": {
+          "icon": "link",
+          "title": {
+            "label_en": "Assign Incubator",
+            "label_es": "Asignar Incubadora"
+          },
+          "requiresGridItemSelected": false
+        },
+        "endPointParams": [
+          {
+            "argumentName": "batchName",
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "incubatorName",
+            "selObjectPropertyName": "name",
+            "getFromGrid": true
+          },
+          {
+            "argumentName": "incubStage",
+            "selObjectPropertyName": "stage",
+            "getFromGrid": true
+          }            
+        ],
+        "dialogInfo": {
+          "name": "genericDialog",
+          "gridContent": true,
+          "masterDataEntryName": "instrument_incubator",
+          "masterDataFilterPropertyName": "stage",
+          "masterDataFilterPropertyValue": "1",
+          "langConfig": {
+            "gridHeader": [
+              {
+                "fldName": "name",
+                "label_en": "Incubator",
+                "label_es": "Incubadora",
+                "width": "40%",
+                "sort": false,
+                "filter": true,
+                "align": "left"
+              },
+              {
+                "fldName": "description",
+                "label_en": "Description",
+                "label_es": "Descripción",
+                "width": "40%",
+                "sort": true,
+                "filter": false
+              }
+            ]
+          },
+          "automatic": true
+        }
+      },        
+      {
+        "actionName": "EM_BATCH_INCUB_START",
+        "endPointUrl": "Programs",
+        "requiresDialog": false,
+        "button": {
+          "icon": "play_circle",
+          "title": {
+            "label_en": "Start Incubator",
+            "label_es": "Iniciar Incubadora"
+          },
+          "requiresGridItemSelected": false
+        },          
+        "endPointParams": [
+          {
+            "argumentName": "batchName",              
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "batchTemplateId",
+            "selObjectPropertyName": "incub_batch_config_id" 
+          },
+          {
+            "argumentName": "batchTemplateVersion",
+            "selObjectPropertyName": "incub_batch_config_version"
+          }
+        ]          
+      },
+      {
+        "actionName": "EM_BATCH_INCUB_END",
+        "endPointUrl": "Programs",
+        "requiresDialog": false,
+        "button": {
+          "icon": "stop_circle",
+          "title": {              
+            "label_en": "End Incubator",
+            "label_es": "Termina incubadora"
+          },
+          "requiresGridItemSelected": false            
+        },
+        "endPointParams": [
+          {
+            "argumentName": "batchName",              
+            "selObjectPropertyName": "name"
+          },
+          {
+            "argumentName": "batchTemplateId",
+            "selObjectPropertyName": "incub_batch_config_id" 
+          },
+          {
+            "argumentName": "batchTemplateVersion",
+            "selObjectPropertyName": "incub_batch_config_version"
+          }
+        ]
+      }
+    ]
+  }, 
+  "boxesContentColumns":{
+    "endPointPropertyArray": "SAMPLES_ARRAY",
+    "columns": [
+      {
+        "name": "sample_id",
+        "label_en": "name",
+        "label_es": "name"
+      },
+      {
+        "name": "posX",
+        "label_en": "posX",
+        "label_es": "posX"
+      },
+      {
+        "name": "incubation_start",
+        "label_en": "incubation_start",
+        "label_es": "incubation_start"
+      }
+    ]
+  },    
+  "objectsToDragColumns":{
+    "endPointPropertyArray": ["incub_1"],
+    "columns": [
+      {
+        "name": "sample_id",
+        "label_en": "id",
+        "label_es": "id"
+      },
+      {
+        "name": "logged_on",
+        "label_en": "Logged",
+        "label_es": "Creada"
+      },
+      {
+        "name": "location_name",
+        "label_en": "Location",
+        "label_es": "Ubicación"
+      },
+      {
+          "name": "incubation_start",
+          "label_en": "1st Start Date",
+          "label_es": "1ª Fecha de Inicio"
+        },
+        {
+          "name": "incubation_end",
+          "label_en": "1st End Date",
+          "label_es": "1ª Fecha de Finalización"
+        },
+        {
+          "name": "incubation_incubator",
+          "label_en": "1st Incubator",
+          "label_es": "1ª Incubadora"
+        },
+        {
+          "name": "incubation2_start",
+          "label_en": "2nd Start Date",
+          "label_es": "2ª Fecha de Inicio"
+        },
+        {
+          "name": "incubation2_end",
+          "label_en": "2nd End Date",
+          "label_es": "2ª Fecha de Finalización"
+        },
+        {
+          "name": "incubation2_incubator",
+          "label_en": "2nd Incubator",
+          "label_es": "2ª Incubadora"
+        }
+        
+    ]
+  },
+  "dataIntegrityCheck":{
+    "xdropingEntryRequiredProperties":["sample_id", "study", "temperaturezzz"],
+    "xdropingEntryRequiredPropertiesAndMatchValues":[
+      {"name": "id", "criteria":{"type": "values", "values": [1, 3]}},
+      {"name": "id", "criteria":{"type": "range", "min": 1, "max": 4}}
+    ],
+    "xxdropingEntryRequiredPropertiesAndMatchValues":[
+      {"name": "id", "criteria":{"type": "selectedBox_value", "selectedBoxPropName": "anyProperty"}}
+    ]
+  },      
+  "boxPosicsViewNumColumnsForInfo": 2,
+  "boxPosicsViews":[
+    ["sample_id", "logged_on", "location_name"],
+    ["sample_id", "logged_on", "location_name", "program_name", "area"],
+    ["sample_id"]
+  ],
+  "dropAction": { 
+    "actionName": "EM_BATCH_INCUB_ADD_SMP",
+    "endPointUrl": "Samples",
+    "requiresDialog": false,
+    "button": {
+      "title": {
+        "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+      },
+      "requiresGridItemSelected": true
+    },
+    "endPointParams": [ 
+      { "argumentName": "sampleId", "dropElement": "sample_id" },
+      { "argumentName": "batchTemplateId", "dragElement": "incub_batch_config_id" },
+      { "argumentName": "batchTemplateVersion", "dragElement": "incub_batch_config_version" },
+      { "argumentName": "batchName", "dragElement": "name" }			  
+    ]
+  }
+},
+
   "Programs":{
     "component": "ObjectByTabs",
     "hasOwnComponent": true,
@@ -3803,7 +4473,7 @@ export const MbEm=
 		{"tabLabel_en": "Sampling Points Map", "tabLabel_es": "Puntos de Muestreo Mapa", "view": "sampling-points-map"}
 	  ]
   },
-  "Deviation": {
+  "Deviation20240827": {
 	"component":"Tabs",  
     "abstract": true,
     "tabs": [
@@ -3999,6 +4669,351 @@ export const MbEm=
       }
     ]
   },
+  "Deviation":{
+    "component": "Tabs",
+    "tabs": [
+      {
+        "tabLabel": {
+          "label_es": "Decisión pendiente",
+          "label_en": "Pending Decision"
+        },
+  
+        "component": "SingleView",
+        "hideLeftPane": true,
+        "hasOwnComponent": true,
+        
+        "viewQuery": {
+          "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
+          "endPoint": "/app/InvestigationAPIqueries",
+          "dataResponse": "ArrayInRoot",
+          "endPointParams": []
+        },
+  
+       "view_definition": [
+          {
+            "type": "reportTitle",
+            "title": {
+              "label_en": "Pending Decisions",
+              "label_es": "Decisión pendiente"
+            }
+          },
+          {
+            "type": "parentReadOnlyTable",
+            "allowMultiSelection": false,
+            "refreshable": {
+              "enable": true
+            },
+            "printable": {
+              "enable": true
+            },
+            "downloadable": {
+              "enable": true
+            },
+            "columns": [
+              {
+                "name": "reference",
+                "label_en": "Reference",
+                "label_es": "Referencia",
+                "filter": false,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "location_name",
+                "label_es": "Ubicación",
+                "label_en": "Location",
+                 "filter": true,
+                "addToSmartFilter": true
+              },
+              {  
+                "name": "created_on",
+                "label_es": "Creada",
+                "label_en": "Creation", "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "method_name",
+                "label_es": "Método",
+                "label_en": "Method", "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "result_id",
+                "label_es": "Resultado",
+                "label_en": "Result", "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+              "name":"sample_id",
+              "label_es": "Muestra",
+              "label_en": "Sample", "filter": true,
+              "addToSmartFilter": true
+              },
+              {
+                "name": "spec_eval_detail",
+                "label_es": "Detalle del Problema",
+                "label_en": "Problem Detail", "filter": true,
+                "addToSmartFilter": true
+              },
+              {  
+                "name": "spec_rule_with_detail",
+                "label_es": "Especificación",
+                "label_en": "Spec Rule", "filter": true,
+                "addToSmartFilter": true
+              }
+            ],
+  
+        
+          "actions": [
+          {
+            "button": {
+              "icon": "find_in_page",
+              "requiresGridItemSelected": true,
+              "title": {
+                "label_es": "Crear Investigación",
+                "label_en": "Create Investigation"
+              }
+            },
+            "endPoint": "/app/InvestigationAPIactions",
+            "requiresDialog": false,
+            "alternativeAPIActionMethod": "newInvestigationAction",
+            "endPointParams": [
+              {
+                "argumentName": "fieldName",
+                "value": "description"
+              },
+              {
+                "argumentName": "fieldValue",
+                "targetValue": true
+              },
+              {
+                "argumentName": "objectsToAdd",
+                "targetValue": true
+              }
+            ],
+            "actionName": "NEW_INVESTIGATION"
+          },
+  {"actionName": "ADD_INVEST_OBJECTS",          
+                  "requiresDialog": true,
+                  "button": {
+                    "icon": "loupe",
+                    "title": {
+                      "label_en": "Add to Investigation", "label_es": "Añadir a Investigación"
+                    },
+                    "requiresGridItemSelected": true
+                  },
+                  "endPointParams": [
+                      {"argumentName": "investigationId", "getFromGrid": true, "selObjectPropertyName": "id"},
+                      { "argumentName": "objectToAddObjectType", "selObjectPropertyName": "object_type" },	
+                      { "argumentName": "objectToAddObjectName", "selObjectPropertyName": "result_id" }		
+                  ],			
+                  "dialogInfo": {
+                      "name": "genericDialog",
+                      "gridContent": true,			  
+                      "langConfig": {
+                          "gridHeader": [
+                              {"fldName": "id", "label_en": "Investigation", "label_es": "Investigación", "width": "40%",
+                                  "sort": false, "filter": true, "align": "left"},
+                              {"fldName": "created_on", "label_en": "Created on", "label_es": "F.Creación", "width": "40%",
+                                  "sort": true,"filter": false}			
+                          ]
+                      },			  
+                      "dialogQuery":{
+                              "actionName": "OPEN_INVESTIGATIONS",
+                              "button": {
+                              "icon": "refresh",
+                              "title": {
+                                    "label_en": "Reload", "label_es": "Recargar"
+                              },
+                              "requiresGridItemSelected": true
+                            }
+                      }		  
+                  }
+              }           
+        ]
+      }]
+      },{
+        
+        "tabLabel": {
+          "label_es": "Investigaciones",
+          "label_en": "Investigations"
+        },
+          
+        "component": "SingleView",
+        "hideLeftPane": true,
+        "hasOwnComponent": true,
+        
+        "viewQuery": {
+          "endPoint": "/app/InvestigationAPIqueries",
+          "actionName": "OPEN_INVESTIGATIONS",
+          "dataResponse": "ArrayInRoot",
+          "endPointParams": []
+        },
+  
+         "view_definition": [
+          {
+            "type": "reportTitle",
+            "title": {
+              "label_en": "In Progress Investigations",
+              "label_es": "Investigaciones en curso"
+            }
+          },
+          {
+            "type": "parentReadOnlyTable",
+            "allowMultiSelection": false,
+            "refreshable": {
+              "enable": true
+            },
+            "printable": {
+              "enable": true
+            },
+            "downloadable": {
+              "enable": true
+            },
+            "columns": [
+              {
+                "name": "capa_external_system_id",
+                "label_en": "CAPA System Id",
+                "label_es": "Id en Sistema CAPAs",
+                "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "created_on",
+                "label_es": "Creación",
+                "label_en": "Creation", 
+                "filter": true,
+                "addToSmartFilter": true
+              },
+              { 
+                "name": "capa_external_system_name",
+                "label_es": "Sistema para CAPAs",
+                "label_en": "CAPA System",
+                "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "external_system_id",
+                "label_es": "Id Sistema Externo",
+                "label_en": "External System Id",
+                "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "description",
+                "label_es": "description",
+                "label_en": "description", 
+                "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "id",
+                "label_es": "ID",
+                "label_en": "ID",
+                "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "external_system_name",
+                "label_es": "Nombre Sistema Externo",
+                "label_en": "External System Name",
+                "filter": true,
+                "addToSmartFilter": true
+              },
+              {
+                "name": "capa_required",
+                "label_es": "CAPA Necesario",
+                "label_en": "capa_required", 
+                "filter": true,
+                "addToSmartFilter": true
+            }
+            ],
+  
+          "actions": [
+          {
+            "button": {
+              "icon": "add_box",
+              "requiresGridItemSelected": true,
+              "title": {
+                "icon": "add_box",
+                "label_es": "Decisión",
+                "label_en": "Decision"
+              }
+            },
+            "endPoint": "/app/InvestigationAPIactions",
+            "requiresDialog": true,
+            "dialogInfo": {
+              "name": "decisionDialog",
+              "fields": {
+            "capa": {
+              "label_es": "¿Requiere CAPA?",
+              "label_en": "CAPA Required"
+            },
+            "capaName": {
+              "label_es": "Nombre Sistema CAPA",
+              "label_en": "CAPA System Name"
+            },
+            "capaId": {
+              "label_es": "Id CAPA",
+              "label_en": "CAPA Id"
+            },
+            "systemId": {
+              "label_es": "Id Sistema",
+              "label_en": "System Id"
+            },
+            "systemName": {
+              "label_es": "Nombre Sistema",
+              "label_en": "System Name"
+            }
+          },"endPointParams": [
+              {
+                "selObjectPropertyName": "id",
+                "argumentName": "investigationId"
+              },
+              {
+                "argumentName": "capaRequired",
+                "targetValue": true
+              },
+              {
+                "argumentName": "capaFieldName",
+                "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id"
+              },
+              {
+                "argumentName": "capaFieldValue",
+                "targetValue": true
+              },
+              {
+                "argumentName": "closeInvestigation",
+                "value": false
+              }
+            ],
+            "actionName": "INVESTIGATION_CAPA_DECISION"
+          }},
+          {
+            "clientMethod": "closeInvestigation",
+            "button": {
+              "icon": "cancel",
+              "requiresGridItemSelected": true,
+              "title": {
+                "label_es": "Cerrar",
+                "label_en": "Close"
+              }
+            },
+            "endPoint": "/app/InvestigationAPIactions",
+            "requiresDialog": false,
+            "endPointParams": [
+              {
+                "selObjectPropertyName": "id",
+                "argumentName": "investigationId"
+              }
+            ],
+            "actionName": "CLOSE_INVESTIGATION"
+          }
+        ]
+      }
+    ],
+    "abstract": true
+  }]},
+
   "Incubators": {
 	"component": "TableWithButtons",
     "langConfig": {

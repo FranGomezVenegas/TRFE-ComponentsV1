@@ -1171,6 +1171,11 @@ export function ButtonsFunctions(base) {
         }
         this.genericDialogGridItems = []
         this.genericDialogGridItems = this.masterData[dialogInfo.masterDataEntryName]
+
+        if (this.genericDialogGridItems!==undefined&&dialogInfo.masterDataFilterPropertyName!==undefined&&dialogInfo.masterDataFilterPropertyValue!==undefined){
+          this.genericDialogGridItems=this.genericDialogGridItems.filter(m => m[dialogInfo.masterDataFilterPropertyName] == dialogInfo.masterDataFilterPropertyValue)
+        }
+
         //console.log('new code')
         return this.genericDialogGridItems
       }

@@ -2277,7 +2277,7 @@ export const MonWater= {
     
 	"actions": []
   },
-"Deviation": {
+"Deviation20240827": {
 	"component":"Tabs",  
     "abstract": true,
     "tabs": [
@@ -2473,6 +2473,362 @@ export const MonWater= {
       }
     ]
   },  
+
+"Deviation": {
+  "component": "Tabs",
+  "tabs": [
+    {
+      "tabLabel": {
+        "label_es": "Decisión pendiente",
+        "label_en": "Pending Decision"
+      },
+      "component": "SingleView",
+      "hideLeftPane": true,
+      "hasOwnComponent": true,
+      "viewQuery": {
+        "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
+        "ssclientMethod": "getSamples",
+        "endPoint": "/app/InvestigationAPIqueries",
+        "dataResponse": "ArrayInRoot",
+        "requiresGridItemSelected": true,
+        "endPointParams": []
+      },
+      "view_definition": [
+        {
+          "type": "reportTitle",
+          "title": {
+            "label_en": "Pending Decisions",
+            "label_es": "Decisión pendiente"
+          }
+        },
+        {
+          "type": "parentReadOnlyTable",
+          "allowMultiSelection": false,
+          "refreshable": {
+            "enable": true
+          },
+          "printable": {
+            "enable": true
+          },
+          "downloadable": {
+            "enable": true
+          },
+          "columns": [
+            {
+              "name": "reference",
+              "label_en": "Reference",
+              "label_es": "Referencia",
+              "filter": false,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "qualif_id",
+              "label_en": "qualif Id",
+              "label_es": "Id qualif",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "object_type",
+              "label_en": "Object Type",
+              "label_es": "Tipo de objeto",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "lot_name",
+              "label_en": "Lot Name",
+              "label_es": "Nombre del lote",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "category",
+              "label_en": "Category",
+              "label_es": "Categoria",
+              "filter": true,
+              "addToSmartFilter": true
+            }
+          ],
+          "actions": [
+            {
+              "button": {
+                "icon": "find_in_page",
+                "requiresGridItemSelected": true,
+                "title": {
+                  "label_es": "Crear Investigación",
+                  "label_en": "Create Investigation"
+                }
+              },
+              "requiresDialog": false,
+              "endPointParams": [
+                {
+                  "selObjectPropertyName": "qualif_id",
+                  "argumentName": "objectToAddObjectName"
+                },
+                {
+                  "selObjectPropertyName": "object_type",
+                  "argumentName": "objectToAddObjectType"
+                }
+              ],
+              "actionName": "NEW_INVESTIGATION"
+            },
+            {
+              "actionName": "ADD_INVEST_OBJECTS",
+              "requiresDialog": true,
+              "button": {
+                "icon": "loupe",
+                "title": {
+                  "label_en": "Add to Investigation",
+                  "label_es": "Añadir a Investigación"
+                },
+                "requiresGridItemSelected": true
+              },
+              "endPointParams": [
+                {
+                  "argumentName": "investigationId",
+                  "getFromGrid": true,
+                  "selObjectPropertyName": "id"
+                },
+                {
+                  "argumentName": "objectToAddObjectType",
+                  "selObjectPropertyName": "object_type"
+                },
+                {
+                  "argumentName": "objectToAddObjectName",
+                  "selObjectPropertyName": "qualif_id"
+                }
+              ],
+              "dialogInfo": {
+                "name": "genericDialog",
+                "gridContent": true,
+                "dialogQuery": {
+                  "actionName": "OPEN_INVESTIGATIONS",
+                  "button": {
+                    "icon": "refresh",
+                    "title": {
+                      "label_en": "Reload",
+                      "label_es": "Recargar"
+                    },
+                    "requiresGridItemSelected": true
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "enableContextMenu": true,
+      "addActionsInContextMenu": true,
+      "row_buttons": []
+    },
+    {
+      "tabLabel": {
+        "label_es": "Investigaciones",
+        "label_en": "Investigations"
+      },
+      "component": "SingleView",
+      "hideLeftPane": true,
+      "hasOwnComponent": true,
+      "viewQuery": {
+        "actionName": "OPEN_INVESTIGATIONS",
+        "sssclientMethod": "getSamples",
+        "endPoint": "/app/InvestigationAPIqueries",
+        "requiresGridItemSelected": true,
+        "dataResponse": "ArrayInRoot",
+        "endPointParams": []
+      },
+      "view_definition": [
+        {
+          "type": "reportTitle",
+          "title": {
+            "label_en": "In Progress Investigations",
+            "label_es": "Investigaciones en curso"
+          }
+        },
+        {
+          "type": "parentReadOnlyTable",
+          "allowMultiSelection": false,
+          "refreshable": {
+            "enable": true
+          },
+          "printable": {
+            "enable": true
+          },
+          "downloadable": {
+            "enable": true
+          },
+          "columns": [
+            {
+              "name": "capa_external_system_id",
+              "label_en": "CAPA System Id",
+              "label_es": "Id en Sistema CAPAs",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "created_on",
+              "label_en": "Creation",
+              "label_es": "Creación",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "capa_external_system_name",
+              "label_en": "CAPA System",
+              "label_es": "Sistema para CAPAs",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "external_system_id",
+              "label_en": "External System Id",
+              "label_es": "Id Sistema Externo",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "description",
+              "label_en": "description",
+              "label_es": "description",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "id",
+              "label_en": "ID",
+              "label_es": "ID",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "external_system_name",
+              "label_en": "External System Name",
+              "label_es": "Nombre Sistema Externo",
+              "filter": true,
+              "addToSmartFilter": true
+            },
+            {
+              "name": "capa_required",
+              "label_en": "capa_required",
+              "label_es": "CAPA Necesario",
+              "filter": true,
+              "addToSmartFilter": true
+            }
+          ],
+          "actions": [
+            {
+              "button": {
+                "icon": "add_box",
+                "requiresGridItemSelected": true,
+                "title": {
+                  "label_es": "Decisión",
+                  "label_en": "Decision"
+                }
+              },
+              "requiresDialog": true,
+              "dialogInfo": {
+                "name": "decisionDialog",
+                "fields": {
+                  "capa": {
+                    "label_es": "¿Requiere CAPA?",
+                    "label_en": "CAPA Required"
+                  },
+                  "capaName": {
+                    "label_es": "Nombre Sistema CAPA",
+                    "label_en": "CAPA System Name"
+                  },
+                  "capaId": {
+                    "label_es": "Id CAPA",
+                    "label_en": "CAPA Id"
+                  },
+                  "systemId": {
+                    "label_es": "Id Sistema",
+                    "label_en": "System Id"
+                  },
+                  "systemName": {
+                    "label_es": "Nombre Sistema",
+                    "label_en": "System Name"
+                  }
+                }
+              },
+              "endPointParams": [
+                {
+                  "selObjectPropertyName": "id",
+                  "argumentName": "investigationId"
+                },
+                {
+                  "argumentName": "capaRequired",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "capaFieldName",
+                  "value": "external_system_name|external_system_id|capa_external_system_name|capa_external_system_id"
+                },
+                {
+                  "argumentName": "capaFieldValue",
+                  "targetValue": true
+                },
+                {
+                  "argumentName": "closeInvestigation",
+                  "value": false
+                }
+              ],
+              "actionName": "INVESTIGATION_CAPA_DECISION"
+            },
+            {
+              "clientMethod": "closeInvestigation",
+              "button": {
+                "icon": "cancel",
+                "requiresGridItemSelected": true,
+                "title": {
+                  "label_es": "Cerrar",
+                  "label_en": "Close"
+                }
+              },
+              "requiresDialog": false,
+              "endPointParams": [
+                {
+                  "selObjectPropertyName": "id",
+                  "argumentName": "investigationId"
+                }
+              ],
+              "actionName": "CLOSE_INVESTIGATION"
+            },
+            {
+              "actionName": "INVESTIGATION_ADDAWSATTACHMENT",
+              "requiresDialog": true,
+              "button": {
+                "icon": "add_link",
+                "title": {
+                  "label_en": "Add Attachment to Investigation",
+                  "label_es": "Añadir Adjunto a investigación"
+                },
+                "requiresGridItemSelected": true
+              },
+              "dialogInfo": {
+                "name": "uploadFileDialog",
+                "fields": []
+              },
+              "endPointParams": [
+                {
+                  "argumentName": "investigationId",
+                  "selObjectPropertyName": "id"
+                },
+                {
+                  "argumentName": "file",
+                  "selObjectPropertyName": "aws_file"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "abstract": true
+},
+
   "Deviation2": {
     "component": "Tabs",
     "abstract": true,
