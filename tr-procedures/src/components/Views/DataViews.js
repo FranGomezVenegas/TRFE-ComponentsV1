@@ -988,14 +988,14 @@ export function DataViews(base) {
         const childElement = {
           ...elem.children_definition,
           endPointResponseObject: elem.children, // "_child"
-          endPointPropertyArray: elem.children // "_child"
+          //endPointPropertyArray: elem.children // "_child"
         };
         this.resetFilterIndex(childElement);
       }
     }
 
     parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme, parentData) {
-      //console.log('elem', elem, 'dataArr', dataArr, 'parentData', parentData)
+      console.log('elem', elem, 'dataArr', dataArr, 'parentData', parentData)
       if (directData !== undefined) {
         dataArr = directData;
       } else {
@@ -1025,11 +1025,14 @@ export function DataViews(base) {
       };
 
       const endPointResponseObject = elem.endPointResponseObject;
-      const selectedIdx = undefined
-      if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined){
-
-//      }else{
-        const selectedIdx = this.selectedTableIndex[endPointResponseObject];
+      const endPointResponseArray = elem.endPointResponseArray;
+      let selectedIdx = undefined
+      //if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined){
+      if (endPointResponseObject!==undefined){
+          selectedIdx = this.selectedTableIndex[endPointResponseObject];
+      }
+      if (endPointResponseArray!==undefined){
+        const selectedIdx = this.selectedTableIndex[endPointResponseArray];
       }
       let childDataArr = undefined
       if (dataArr!==undefined&&dataArr[0]!==undefined){
@@ -1038,6 +1041,7 @@ export function DataViews(base) {
           parentData = selectedIdx !== undefined ? dataArr[0] : undefined;
         }
       }
+      console.log('childDataArr', childDataArr, childElement)
       return html`
         ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme, parentData)}
         ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem, theme, parentData) : nothing}
