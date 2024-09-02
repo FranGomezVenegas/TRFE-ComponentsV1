@@ -9,13 +9,13 @@ export const mapWithIconsTemplate = function(langConfig) {
       <div class="layout flex">
         <h1>${langConfig.title["label_"+this.lang]}</h1>
         <div class="mapWrap">
-          <img class="mapImg" src="${this.mapUrl}" @click=${this.handleMapClick}>
+          <img class="mapImg" src="${this.mapUrl}" @click=${this.handleMapClickForMapPosition}>
           ${this.samplePoints && this.samplePoints.map(point => 
             html`<img class="mapIcon" 
                 src="${point.map_icon}" 
                 style="top:${point.map_icon_top};left:${point.map_icon_left};width:${point.map_icon_w}px;height:${point.map_icon_h}px"
-                @mouseover=${this.actionOnHoverTheIcon ? () => this.handleIconAction(point) : null}
-                @click=${this.actionOnClickTheIcon ? () => this.handleIconAction(point) : null}                            
+                @mouseover=${this.actionOnHoverTheIcon ? () => this.selectedItems=[point] : null}
+                @click=${this.actionOnClickTheIcon ? () => this.selectedItems=[point] : null}                            
               >`
           )}
         </div>

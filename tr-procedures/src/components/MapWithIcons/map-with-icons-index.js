@@ -4,10 +4,11 @@ import { html , LitElement} from 'lit';
 import { mapWithIconsStyles } from './map-with-icons-styles.js';
 import { mapWithIconsTemplate, pointTemplate } from './map-with-icons-template.js';
 //import { actions } from './config'; // Asegúrate de importar las acciones si es necesario
-
-
+import { ActionsFunctions } from '../Actions/ActionsFunctions.js';
+import { ApiFunctions } from '../Api/ApiFunctions.js';
+import { ButtonsFunctions } from '../Buttons/ButtonsFunctions.js';
 //DialogsFunctions
-export class MapWithIcons extends (LitElement) {
+export class MapWithIcons extends ButtonsFunctions(ApiFunctions(ActionsFunctions(LitElement))) {
   static get styles() {
     return [mapWithIconsStyles];
   }
@@ -40,7 +41,7 @@ export class MapWithIcons extends (LitElement) {
     this.actionOnClickTheIcon = false; // Acción deshabilitada al hacer clic
     this.actionDisabled = false;     
     //this.selectedAction = [] //actions[0];
-
+this.config={}
     this.langConfig = {
         "title": {
           "label_en": "Program Sampling Points", 
@@ -88,7 +89,7 @@ export class MapWithIcons extends (LitElement) {
     return mapWithIconsTemplate.call(this, this.langConfig, this.commonLangConfig);
   }
 
-  handleMapClick(event) {
+  handleMapClickForMapPosition(event) {
     const imgElement = event.target;
     const rect = imgElement.getBoundingClientRect();
     const x = event.clientX - rect.left; // posición X dentro de la imagen
@@ -102,8 +103,13 @@ export class MapWithIcons extends (LitElement) {
     return path[path.length - 1];
   }
 
-  pointTemplate() {
-    return pointTemplate.call(this, this.langConfig, this.commonLangConfig);
+  handleIconAction(point){
+   // alert('handleIconAction')
+    this.pointTemplate(point)
+    this.pointDialog.show()
+  }
+  pointTemplate(point) {
+    return pointTemplate.call(this, this.langConfig, point);
   }
 
   get pointDialog() {
@@ -115,6 +121,14 @@ export class MapWithIcons extends (LitElement) {
   }
 
   get lotField() {
+    return this.shadowRoot.querySelector("mwc-select#lot");
+  }
+
+  get list1() {
+    return this.shadowRoot.querySelector("mwc-select#shift");
+  }
+
+  get list2() {
     return this.shadowRoot.querySelector("mwc-select#lot");
   }
 
@@ -148,11 +162,11 @@ export class MapWithIcons extends (LitElement) {
       this.targetValue.fieldValue = this.targetValue.fieldValue + this.shiftField.value;
     }
     //this.selectedAction = actions[0];
-    this.reqParams = this.jsonParam(this.action, {}, this.targetValue);
-    this.nextRequestCommons(this.action);
+    //this.reqParams = this.jsonParam(this.action, {}, this.targetValue);
+    this.trazitNextRequest(this.model.action, this.jsonParam(this.model.action, this.selectedItems[0], this.targetValue, undefined, undefined, undefined, undefined));
   }
 
-  jsonParam() {
+  xxxjsonParam() {
     let jsonParam = {};
     if (this.action.apiParams) {
       this.action.apiParams.forEach(p => {
