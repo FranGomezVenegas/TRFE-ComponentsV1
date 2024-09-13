@@ -2,8 +2,6 @@ import { html } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
-import '@material/mwc-checkbox';
-import '@material/mwc-formfield';
 
 export function GenericDialogTemplate(base) {
   return class extends base {

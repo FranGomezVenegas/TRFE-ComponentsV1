@@ -181,7 +181,7 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
       //console.log('loadDialogs')
       return html`
       ${this.credentialsDialog()}
-      ${this.genericFormDialog()}
+      ${this.genericFormDialogTemplate()}
       ${this.reactivateObjectsDialog()}
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}

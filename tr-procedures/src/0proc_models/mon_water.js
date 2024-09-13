@@ -82,7 +82,6 @@ export const MonWater= {
     },
     "viewQuery": {
       "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-      "clientMethodssss": "getSamples",
       "endPoint": "/moduleenvmon/EnvMonAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -1261,7 +1260,6 @@ export const MonWater= {
     "viewQuery": {
       "actionName": "SAMPLES_INPROGRESS_LIST",
       "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "xxxclientMethod": "getSamples",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -1545,7 +1543,6 @@ export const MonWater= {
     "viewQuery": {
       "actionName": "SAMPLEANALYSIS_PENDING_REVISION",
       "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "xxxclientMethod": "getSamples",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -2319,8 +2316,7 @@ export const MonWater= {
           }
         },
         "viewQuery":{
-            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "ssclientMethod": "getSamples",
+            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",            
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -2423,8 +2419,7 @@ export const MonWater= {
           }
         },
         "viewQuery":{
-            "actionName": "OPEN_INVESTIGATIONS",
-            "sssclientMethod": "getSamples",
+            "actionName": "OPEN_INVESTIGATIONS",            
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -2486,8 +2481,7 @@ export const MonWater= {
       "hideLeftPane": true,
       "hasOwnComponent": true,
       "viewQuery": {
-        "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-        "ssclientMethod": "getSamples",
+        "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",        
         "endPoint": "/app/InvestigationAPIqueries",
         "dataResponse": "ArrayInRoot",
         "requiresGridItemSelected": true,
@@ -2631,8 +2625,7 @@ export const MonWater= {
       "hideLeftPane": true,
       "hasOwnComponent": true,
       "viewQuery": {
-        "actionName": "OPEN_INVESTIGATIONS",
-        "sssclientMethod": "getSamples",
+        "actionName": "OPEN_INVESTIGATIONS",        
         "endPoint": "/app/InvestigationAPIqueries",
         "requiresGridItemSelected": true,
         "dataResponse": "ArrayInRoot",
@@ -2900,8 +2893,7 @@ export const MonWater= {
           }
         },
         "viewQuery": {
-          "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-          "ssclientMethod": "getSamples",
+          "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",          
           "endPoint": "/app/InvestigationAPIqueries",
           "button": {
             "icon": "refresh",
@@ -3073,8 +3065,7 @@ export const MonWater= {
           }
         },
         "viewQuery": {
-          "actionName": "OPEN_INVESTIGATIONS",
-          "sssclientMethod": "getSamples",
+          "actionName": "OPEN_INVESTIGATIONS",          
           "endPoint": "/app/InvestigationAPIqueries",
           "button": {
             "icon": "refresh",

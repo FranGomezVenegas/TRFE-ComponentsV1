@@ -1,0 +1,2 @@
+@trazit/common-core: 0.0.2
+@trazit/platform-login: 2.0.4

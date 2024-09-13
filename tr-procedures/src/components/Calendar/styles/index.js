@@ -10,12 +10,17 @@ export const styles = css`
 .month {
     width: 300px;
     padding: 20px;
-    background: #fff;
+    background: rgb(255 255 255 / 36%);
     position: relative;
     overflow: hidden;
     float: left;
     margin: 20px;
     height: 350px;
+     width: calc(100% / 4 - 10px); /* Ajusta para que quepan más meses por fila (4 por fila en este ejemplo) */
+  margin: 10px; /* Ajuste de espacio entre los meses */
+  border: solid 1px; /* Añade borde */
+  border-radius: 10px; /* Añade esquinas redondeadas */
+  box-sizing: border-box;
 }
 .month h3 {
     text-align: center;
@@ -46,6 +51,9 @@ export const styles = css`
     color: #333;
     cursor: pointer;
     box-shadow: inset 0 0 0 1px #eee;
+
+    position: relative;  /* Asegura que el badge se posicione correctamente */
+    background-color: #f0f0f0; 
 }
 .day.weekend {
     background: #fafaff;
@@ -167,16 +175,31 @@ export const styles = css`
 
 /* Panthil */
 
-.full-month {
+.full-month2 {
     width: 100%;
     height: 100%;
-    height: 100vh;
-    margin: 0;
+    height: 40vh;
+    margin: 0px;
+    border: solid 1px;
+    border-radius: 10px;
+    /* width: 300px; */
 }
+.full-month {
+    width: calc((70vw - 40px) );
+    height: 50vh;
+    background: rgb(255 255 255 / 36%);
+    position: relative;
+    overflow: hidden;
+    float: left;
+    margin: 20px;
+    border: solid 1px; /* Añade borde */
+    border-radius: 10px; /* Añade esquinas redondeadas */
+    box-sizing: border-box;
+}    
 
 .tabs-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between;s
     width: 100%;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -375,21 +398,8 @@ button:hover {
 
 
 
-  .event-list-container {
-    padding: 20px;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
-.event-item {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    list-style:none;
-}
+
 
 .event-date {
     font-weight: bold;
@@ -417,9 +427,84 @@ button:hover {
     margin-top: 10px;
 }
 
-  
+.conflict-day {
+background: linear-gradient(to bottom, rgb(220, 53, 69), rgb(70, 104, 219));
+}
+
+.holiday-conflict {
+background: linear-gradient(to bottom, gray, rgb(220, 53, 69));
+}  
+
+.event-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #ff6f61; /* Color del fondo del badge */
+  color: white; /* Color del texto */
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+    .event-list-container {
+        display: flex;
+        flex-wrap: wrap; /* Para que las tarjetas que no quepan salten a la siguiente línea */
+        gap: 16px; /* Espacio entre las tarjetas */
+        padding: 20px;
+        background-color: rgb(245 245 245 / 14%);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+.event-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    list-style:none;
+    display: block;
+    width: auto; /* El ancho se adapta al contenido */
+    max-width: 300px; /* Puedes ajustar el máximo ancho para controlar el tamaño de las tarjetas */
+    background-color: #f5f5f5; /* Ejemplo de fondo para las tarjetas */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word; /* Ajusta el texto dentro del card si es demasiado largo */
+}
 
 
+/* Contenedor de los eventos en el hover */
+.event-dropdown {
+    display: flex;
+    flex-wrap: wrap;  /* Los elementos se ajustarán a la siguiente fila si no caben */
+    gap: 10px; /* Añade un pequeño espacio entre los elementos */
+    max-width: 400px; /* Puedes ajustar este valor según el espacio disponible */
+    padding: 10px;
+}
+
+/* Cada evento dentro del hover */
+.event-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    min-width: 150px; /* Ancho mínimo para cada tarjeta de evento */
+    max-width: 200px; /* Ancho máximo para controlar el tamaño */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word; /* Ajusta el texto dentro del card si es demasiado largo */
+}
+
+/* Para garantizar que los eventos se adapten al ancho disponible en la lista */
+.event-list-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que las tarjetas se ajusten y no se rompa el layout */
+    gap: 16px; /* Espacio entre las tarjetas */
+    padding: 20px;
+}
   
 
   `;

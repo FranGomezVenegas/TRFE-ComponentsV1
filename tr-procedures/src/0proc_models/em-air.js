@@ -45,8 +45,7 @@ export const EmAir = {
     },
     "actions": [
       {
-        "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-        "clientMethod": "getSamples",
+        "actionName": "GET_ACTIVE_PRODUCTION_LOTS",        
         "endPoint": "/moduleenvmon/frontend/EnvMonAPIfrontend",
         "button": {
           "icon": "refresh",
@@ -364,8 +363,7 @@ export const EmAir = {
     },
     "actions": [
       {
-        "actionName": "SAMPLES_BY_STAGE",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLES_BY_STAGE",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -571,8 +569,7 @@ export const EmAir = {
     },
     "actions": [
       {
-        "actionName": "SAMPLES_BY_STAGE",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLES_BY_STAGE",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -859,8 +856,7 @@ export const EmAir = {
     },
     "actions": [
       {
-        "actionName": "SAMPLES_BY_STAGE",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLES_BY_STAGE",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -1079,8 +1075,7 @@ export const EmAir = {
     },
     "actions": [
       {
-        "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
-        "clientMethod": "getSamples",
+        "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -1241,8 +1236,7 @@ export const EmAir = {
     "abstract": true,
     "actions": [
       {
-        "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
-        "clientMethod": "getSamples",
+        "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",        
         "apiParams": [
           {
             "query": "incub1_whereFieldsName",
@@ -1361,8 +1355,7 @@ export const EmAir = {
         },
         "actions": [
           {
-            "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
-            "clientMethod": "getSamples",
+            "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",            
             "button": {
               "icon": "refresh",
               "title": {
@@ -1653,8 +1646,7 @@ export const EmAir = {
         },
         "actions": [
           {
-            "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
-            "clientMethod": "getSamples",
+            "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",            
             "button": {
               "icon": "refresh",
               "title": {
@@ -1974,8 +1966,7 @@ export const EmAir = {
         },
         "actions": [
           {
-            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "clientMethod": "getSamples",
+            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",            
             "endPoint": "/frontend/InvestigationAPIfrontend",
             "button": {
               "icon": "refresh",
@@ -2134,8 +2125,7 @@ export const EmAir = {
         },
         "actions": [
           {
-            "actionName": "OPEN_INVESTIGATIONS",
-            "clientMethod": "getSamples",
+            "actionName": "OPEN_INVESTIGATIONS",            
             "endPoint": "/frontend/InvestigationAPIfrontend",
             "button": {
               "icon": "refresh",

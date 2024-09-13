@@ -332,7 +332,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
     //console.log('loadDialogs')
     //${this.credentialsDialog()}
     return html`    
-      ${this.genericFormDialog()}
+      ${this.genericFormDialogTemplate()}
       ${this.testScriptNewStepFormDialog()}
     `
   }

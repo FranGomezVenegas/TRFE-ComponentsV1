@@ -2,11 +2,10 @@ import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
-import '@material/mwc-checkbox';
-import '@material/mwc-formfield';
+import { ActionsFunctions } from '../../components/Actions/ActionsFunctions';
 
 export function ModuleEnvMonitDialogsMicroorganism(base) {
-return class extends base {
+return class extends ActionsFunctions(base) {
     static get properties() {
         return {
           microorganismList:{type: Array},
@@ -27,7 +26,16 @@ return class extends base {
       return html`
         <tr-dialog id="microorganismDialogAdd" ?open=${this.openAddDialog()}
           @opened=${e => { if (e.target === this.microorganismDialog) this.fromGrid = false }}
-          @closing=${e => { if (e.target === this.microorganismDialog) { this.microorganismList = []; this.reload(); } }}
+          @closing=${e => { 
+            if (e.target === this.microorganismDialog) { 
+              // Check if keepTheDialogOpen is true, if not, close the dialog
+              if (!this.actionBeingPerformedModel.dialogInfo.keepTheDialogOpen) {
+                //e.stopPropagation();
+                this.microorganismList = [];
+                this.reload();
+              }
+            }
+          }}          
           heading=""
           hideActions=""
           scrimClickAction="">
@@ -58,7 +66,15 @@ openRemoveDialog(){
       return html`
         <tr-dialog id="microorganismDialogRemove" ?open=${this.openRemoveDialog()}
           @opened=${e => { if (e.target === this.microorganismDialog) this.fromGrid = false }}
-          @closing=${e => { if (e.target === this.microorganismDialog) { this.microorganismList = []; this.reload(); } }}
+          @closing=${e => {
+            if (e.target === this.microorganismDialog) { 
+              // Check if keepTheDialogOpen is true, if not, close the dialog
+              if (!this.actionBeingPerformedModel.dialogInfo.keepTheDialogOpen) {
+                this.microorganismList = [];
+                this.reload();
+              }
+            }
+          }}
           heading=""
           hideActions=""
           scrimClickAction="">
@@ -102,8 +118,8 @@ openRemoveDialog(){
           <vaadin-grid theme="row-dividers" multi-sort
             .items=${this.gridDialogItems}
             @active-item-changed="${this.selectMicroOrg}">
-            <vaadin-grid-sort-column resizable auto-width path="name" header="${this.actionBeingPerformedModel.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
-            <vaadin-grid-sort-column resizable auto-width path="items" header="${this.actionBeingPerformedModel.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
+            <vaadin-grid-sort-column resizable auto-width path="name" header="${this.actionBeingPerformedModel.dialogInfo.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
+            <vaadin-grid-sort-column resizable auto-width path="items" header="${this.actionBeingPerformedModel.dialogInfo.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
           </vaadin-grid>
         </div>
       `
@@ -194,15 +210,15 @@ openRemoveDialog(){
     }
 
     viewForRemove() {
-      if (this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.microorganismHeader===undefined){return html``}      
+      if (this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo.microorganismHeader===undefined){return html``}      
       if (this.actionBeingPerformedModel.dialogInfo.name!=="microorganismDialogRemove"){return html``}
       return html`        
         <div id='microGrid'>
           <vaadin-grid theme="row-dividers" all-rows-visible multi-sort
             .items=${this.gridDialogItems}
             @active-item-changed="${this.selectMicroOrg}">
-            <vaadin-grid-sort-column resizable auto-width path="name" header="${this.actionBeingPerformedModel.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
-            <vaadin-grid-sort-column resizable auto-width path="items" header="${this.actionBeingPerformedModel.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
+            <vaadin-grid-sort-column resizable auto-width path="name" header="${this.actionBeingPerformedModel.dialogInfo.microorganismHeader.name['label_' + this.lang]}"></vaadin-grid-sort-column>
+            <vaadin-grid-sort-column resizable auto-width path="items" header="${this.actionBeingPerformedModel.dialogInfo.microorganismHeader.items['label_' + this.lang]}"></vaadin-grid-sort-column>
           </vaadin-grid>
         </div>
         ${this.microGrid && this.microGrid.selectedItems.length ?
@@ -266,7 +282,10 @@ openRemoveDialog(){
           microorganismName: this.microName,
           numItems: numItems
         }
-        this.performActionRequestHavingDialogOrNot(this.selectedDialogAction, this.selectedItems[0], this.targetValue)
+        this.trazitNoDialogRequired(this.actionBeingPerformedModel, 
+          this.selectedItems[0], this.targetValue, false, this.selectedItems[0], null, null, null)
+  
+//        this.performActionRequestHavingDialogOrNot(this.selectedDialogAction, this.selectedItems[0], this.targetValue)
       }
     }
     reload() {
@@ -290,6 +309,7 @@ openRemoveDialog(){
           this.microorganismList = j
           this.gridDialogItems = this.selectedItems[0].microorganism_list_array
           this.fromGrid = false
+          this.microorganismDialogAdd.show()
           this.requestUpdate()
         }
       })
@@ -317,17 +337,17 @@ openRemoveDialog(){
       console.log('getMicroorganismToRemove')
       this.moduleEnvMonitMicroorganismsDialogRemove()
       let queryDefinition=this.actionBeingPerformedModel.dialogInfo.viewQuery
-      let APIParams=this.getAPICommonParams(queryDefinition)      
-      this.reqParams.whereFieldsName = "sample_id"
-      this.reqParams.whereFieldsValue = this.selectedItems[0].sample_id + "*Integer"
+      let APIParams=this.getAPICommonParams(queryDefinition)  
+      let viewParams=this.jsonParam(queryDefinition, this.selectedItems[0])    
       let params = this.config.backendUrl + this.config.frontEndEnvMonitSampleUrl
-        + '?' + new URLSearchParams(this.reqParams) + '&'+ new URLSearchParams(APIParams) 
+        + '?' + new URLSearchParams(viewParams) + '&'+ new URLSearchParams(APIParams) 
       this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.microName = null
           this.microorganismList = j
           this.gridDialogItems = this.selectedItems[0].microorganism_list_array
-          this[this.actionBeingPerformedModel.dialogInfo.name].show()
+          //this[this.actionBeingPerformedModel.dialogInfo.name].show()
+          this.microorganismDialogRemove.show()
           this.requestUpdate()
         }
       })

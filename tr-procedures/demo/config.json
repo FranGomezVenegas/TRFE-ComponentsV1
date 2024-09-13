@@ -388,10 +388,10 @@
     "viewName": "Deviation", 
     "filterName" :  "" 
   },  
-  "localDefaultView222": {
+  "localDefaultView": {
     "procName":  "fake-developers", 
-    "viewName": "prototype-elements-view-main", 
-    "filterName" :  "prototype-elements-view-main" 
+    "viewName": "LabelDesigner", 
+    "filterName" :  "" 
   },
   "localDefaultView": {
     "procName":  "mb_em", 
@@ -403,6 +403,11 @@
     "viewName": "SampleIncubation2", 
     "filterName" :  "" 
   },
+  "localDefaultView": {
+    "procName":  "mb_em", 
+    "viewName": "SampleMicroorganism", 
+    "filterName" :  "LOCATION" 
+  },  
   "fakeEnd":{
     "fake": "InventoryLotsGeneral20240729"
   }  

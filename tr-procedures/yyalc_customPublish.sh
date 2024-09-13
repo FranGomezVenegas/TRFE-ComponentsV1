@@ -20,9 +20,15 @@ else
   echo "No se encontró $yalc_lock_file, se omite la generación de versiones."
 fi
 
-# Pausa opcional antes de publicar (si deseas agregarla)
-# echo "Presiona Enter para continuar con yalc publish..."
-# read -r
 
 # Ejecutar yalc publish después de generar component-versions.txt
 yalc publish
+# Opcional: Puedes agregar un mensaje final o una pausa si es necesario
+# Mensaje para el usuario
+echo "Presiona cualquier tecla para continuar..."
+
+# Leer un solo carácter (sin esperar a Enter)
+read -n 1 -s
+
+# Continuar con el siguiente comando
+echo "Continuando con la ejecución del script..."

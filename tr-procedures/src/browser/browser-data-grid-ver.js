@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { gridRowDetailsRenderer } from 'lit-vaadin-helpers';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-column';
-import '@alenaksu/json-viewer';
+import '@alenaksu/json-viewer/json-viewer.js';
 
 export class BrowserData extends LitElement {
   static get styles() {

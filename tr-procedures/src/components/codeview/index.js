@@ -1,7 +1,7 @@
 import { LitElement } from 'lit';
 import { template } from './code.template';
 import { styles } from './code.css';
-
+//import * as QRCode from 'qrcode';
 
 export class CodeView extends LitElement {
   static get styles() {
@@ -49,6 +49,20 @@ export class CodeView extends LitElement {
   }
 
   _generateQRCode = (text) => {
+    QRCode.toCanvas(text, { errorCorrectionLevel: 'H' }, (err, canvas) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      // Replace or append the generated QR code canvas
+      if (this.qrCodeContainer.lastChild)
+        this.qrCodeContainer.replaceChild(canvas, this.qrCodeContainer.lastChild);
+      else
+        this.qrCodeContainer.appendChild(canvas);
+    });
+  }
+  
+  _generateQRCodeOriginal = (text) => {
     const qrCodeElement = showQRCode(text);
     if(this.qrCodeContainer.lastChild)
       this.qrCodeContainer.replaceChild(qrCodeElement, this.qrCodeContainer.lastChild);

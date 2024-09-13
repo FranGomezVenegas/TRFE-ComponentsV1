@@ -2,7 +2,7 @@ import { html, css, nothing } from 'lit';
 
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-//import '@alenaksu/json-viewer';
+//import '@alenaksu/json-viewer/json-viewer.js';
 import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
 import '../Audit/audit-dialog';
@@ -150,7 +150,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     return html`
 
 
-    ${this.genericFormDialog()}
+    ${this.genericFormDialogTemplate()}
     ${this.reactivateObjectsDialog()}
     ${this.testScriptNewStepFormDialog()}
 

@@ -10408,7 +10408,6 @@ export const Stock =
       }
     },
     "viewQuery":{ "actionName": "QUALIFICATIONS_INPROGRESS",	  
-      "xxxclientMethod": "getSamples",
       "endPoint": "/app/procs/InvTrackingAPIqueries",
       "addRefreshButton": true,
       "button": {

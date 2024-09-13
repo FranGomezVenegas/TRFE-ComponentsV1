@@ -61,7 +61,6 @@ export const EmDemoA =
     "viewQuery":
       {
         "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-        "clientMethodssss": "getSamples",
         "endPoint": "/moduleenvmon/EnvMonAPIqueries",
         "addRefreshButton": true,
         "button": {
@@ -904,7 +903,6 @@ export const EmDemoA =
       }
     },
     "viewQuery":    { "actionName": "SAMPLES_BY_STAGE",
-      "xxxclientMethod": "getSamples",
 	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -2080,7 +2078,6 @@ export const EmDemoA =
         },
         "viewQuery":{
             "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "ssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -2184,7 +2181,6 @@ export const EmDemoA =
         },
         "viewQuery":{
             "actionName": "OPEN_INVESTIGATIONS",
-            "sssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",

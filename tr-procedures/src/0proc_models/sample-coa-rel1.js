@@ -93,7 +93,6 @@ export const SampleCoaRel1 = {
     },
     "viewQuery":    
     { "actionName": "SAMPLES_INPROGRESS_LIST",
-      "xxxclientMethod": "getSamples",
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -349,7 +348,6 @@ export const SampleCoaRel1 = {
   },
   "viewQuery": {
     "actionName": "SAMPLEANALYSIS_PENDING_REVISION",    
-    "xxxclientMethod": "getSamples",
     "addRefreshButton": true,
     "button": {
       "icon": "refresh",

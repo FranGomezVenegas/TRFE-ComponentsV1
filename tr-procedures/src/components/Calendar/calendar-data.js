@@ -234,7 +234,7 @@ export class CalendarData extends DataViews(TrazitGenericDialogs(TrazitFormsElem
 
     render() {      
       return html`    
-      ${this.genericFormDialog()}
+      ${this.genericFormDialogTemplate()}
         ${this.desktop ?
           html`                  
           <sp-split-view show-divider=${this.showDivider}>

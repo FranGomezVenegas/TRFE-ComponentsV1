@@ -37,3 +37,5 @@ To run a local development server that serves the basic demo located in `demo/in
 
 ## Versioning Tracking
 [- v2.0.4 use lit instead of lit-element]
+[- v2.1.0 Upgrade for material design]
+[- v2.2.0 Implemented  recommendations for performance]

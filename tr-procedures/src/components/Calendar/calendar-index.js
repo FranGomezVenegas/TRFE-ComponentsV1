@@ -2,118 +2,502 @@ import { LitElement, html, css } from 'lit';
 import { styles } from './styles/index';
 //import { events } from './data/event';
 import { createEventDescription, getDayNames, formatTime, formatDate, formatDateString } from './utils';
+import '../event-badge';
+import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
+import '@material/mwc-icon-button';
+import '@material/mwc-button';
+import { TrazitGenericDialogs } from '../GenericDialogs/TrazitGenericDialogs';
+import { MiniMapMain } from './MiniMap/mini-map-main';
 
-class CalendarComponent extends LitElement {
+class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunctions(LitElement))) {
   static properties = {
-    dataAllInOneData: { type: Object },
+    data: { type: Object },
+    calendarInfo: { type: Object },
+    eventsInfo: {type: Array},
     config:{ type: Object},
+    eventsConfig:{ type: Object},
+    calendarConfig:{ type: Object},
     showWeekView:{type: Boolean},
-    lang: {type: String}
+    lang: {type: String},
+    calendarStartDate: {type: Date},
+    calendarEndDate: {type: Date}
+    
     // Otras propiedades que ya tienes...
   };
 
   static styles = [styles, css``];
   constructor() {
     super();
+    this.data={}
     this.showWeekView=false // This view does not work and then it cannot displayed
-    this.dataAllInOneData={}
+    this.calendarConfig={}
+    this.calendarInfo={}
+    this.eventsConfig={}
+    this.eventsInfo=[]
+    this.calendarStartDate=new Date()
+    this.calendarEndDate=new Date()
     this.config={}
   }
+
+  initializeCalendarConfigVariablesWhenMissingProperties(){
+    if (this.calendarInfo===undefined){
+      this.calendarInfo={}
+    }    
+    if (this.calendarConfig===undefined){
+      this.calendarConfig={}
+    }    
+    if (this.calendarConfig.startDate===undefined){
+      this.calendarConfig.startDate="start_date" // La fecha de inicio del programa, las fechas anteriores estarán deshabilitadas o directamente no visibles.
+    }
+    if (this.calendarConfig.endDate===undefined){
+      this.calendarConfig.endDate="end_date" // La fecha de inicio del programa, las fechas anteriores estarán deshabilitadas o directamente no visibles.
+    }
+    
+    if (this.calendarConfig.scheduleSizeUnit===undefined){
+      this.calendarConfig.scheduleSizeUnit="MONTHS" // Puede ser MONTHS, DAYS, YEARS
+    }
+    if (this.calendarConfig.firstDayOfWeek===undefined){
+      this.calendarConfig.firstDayOfWeek="MONDAY" // Puede ser lunes o domingo, segun el calendario escogido
+    }    
+    if (this.calendarConfig.viewCurrentDate===undefined){
+      this.calendarConfig.viewCurrentDate="today" // El día que se ve seleccionado al abrir la pantalla
+    }      
+  }
+  
   firstUpdated() {
     super.firstUpdated();
-    if (this.dataAllInOneData.program_calendar===undefined){
-      this.dataAllInOneData.program_calendar={}
+    this.refreshView()    
+    this.showMonthView();
+  }
+  
+  showMonthView() {
+    // Limpiar otras pestañas activas
+    this.shadowRoot.querySelectorAll('.tab-item').forEach((btn) => {
+      btn.classList.remove('active');
+    });
+  
+    // Añadir la clase 'active' a la pestaña de "Month"
+    this.shadowRoot.getElementById('showCurrentMonth').classList.add('active');
+  
+    // Mostrar la vista del mes
+    this.shadowRoot.getElementById('calendar').innerHTML = ''; // Limpia el calendario
+    const currentMonth = this.calendarStartDate
+      ? new Date(this.calendarStartDate).getMonth()
+      : new Date().getMonth();
+    const currentYear = this.calendarStartDate
+      ? new Date(this.calendarStartDate).getFullYear()
+      : new Date().getFullYear();
+    
+    const $monthNode = this.buildMonth(
+      currentMonth,
+      currentYear,
+      this.eventsInfo,
+      this.holidays_calendar,
+      this.calendarStartDate,
+      this.calendarEndDate, false
+    );
+  
+    this.shadowRoot.getElementById('calendar').appendChild($monthNode);
+    $monthNode.classList.remove('month')
+    $monthNode.classList.add('full-month');
+    this.showCalendarView();
+    this.currentButton.innerText = 'Month'; // Actualiza el botón de navegación
+  }
+
+  updated(changedProperties) {
+    if(changedProperties.has('calendarConfig')) {
+      this.refreshView()
     }
+    if(changedProperties.has('calendarInfo')) {
+      this.refreshView()
+    }
+    if(changedProperties.has('eventsConfig')) {
+      this.refreshView()
+    }
+    if(changedProperties.has('eventInfo')) {
+      this.refreshView()
+    }
+    const conflictTab = this.shadowRoot.getElementById('showConflicts');
+    if (conflictTab && conflictTab.style.display !== 'none') {
+      conflictTab.addEventListener('click', () => {
+        this.allEvents.innerHTML = '';
+        this.allEvents.style.display = 'none';
+        this.conflictEvents.innerHTML = '';
+        this.conflictEvents.style.display = 'block';
+        this.calendar.style.display = 'none';
+        
+        const conflictContainer = document.createElement('div');
+        conflictContainer.classList.add('event-list-container');
+        const conflictEvents = this.eventsInfo.filter(event => event.conflict);
+  
+        conflictEvents.forEach((event) => {
+          let listItem = document.createElement('li');
+          listItem.classList.add('event-item');
+          
+          const dateField = this.eventsConfig?.datesDateField || 'date';
+          let eventDate = document.createElement('p');
+          eventDate.textContent = `Date: ${event[dateField]}`;
+          listItem.appendChild(eventDate);
+  
+          let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
+          listItem.appendChild(eventDescription);
+  
+          let conflictDetail = document.createElement('p');
+          conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
+          listItem.appendChild(conflictDetail);
+  
+          conflictContainer.appendChild(listItem);
+        });
+  
+        this.conflictEvents.appendChild(conflictContainer);
+      });
+    }    
+  }  
+  
+  refreshView() {
+    console.log('refreshView');
+    this.initializeCalendarConfigVariablesWhenMissingProperties();
+  
+    this.holidays_calendar = [];
+    if (this.calendarInfo && this.calendarInfo.holidays_calendar) {
+      this.holidays_calendar = this.calendarInfo.holidays_calendar;
+    }
+    
+    this.firstDayOfWeek = this.calendarInfo?.[this.calendarConfig.firstDayOfWeek] || "MONDAY";
+    this.schedule_size_unit = this.calendarInfo?.[this.calendarConfig.scheduleSizeUnit] || "MONTHS";
+    
+    this.currentDate = this.calendarInfo.viewCurrentDate?.toLowerCase() === "today" ? 
+      new Date() : 
+      new Date(this.calendarInfo?.[this.calendarConfig.startDate] || new Date());
+  
+    this.firstDateOfWeek = new Date(
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth(),
+      this.currentDate.getDate() - (this.firstDayOfWeek === "MONDAY" ? (this.currentDate.getDay() === 0 ? 6 : this.currentDate.getDay() - 1) : this.currentDate.getDay())
+    );
+    
+    if (this.calendarInfo === undefined || this.calendarConfig === undefined || this.calendarInfo[this.calendarConfig.startDate] === undefined) {
+      this.calendarInfo[this.calendarConfig.startDate] = this.currentDate;
+    }
+  
+    console.log('date for calendarStartDate', this.calendarInfo[this.calendarConfig.startDate]);
+    this.calendarStartDate = new Date(new Date(this.calendarInfo[this.calendarConfig.startDate]).setHours(0, 0, 0));
+    this.calendarEndDate = new Date(new Date(this.calendarInfo[this.calendarConfig.endDate]).setHours(0, 0, 0));
+  
+    if (isNaN(this.calendarStartDate.getTime()) || isNaN(this.calendarEndDate.getTime())) {    
+      console.error('this.calendarStartDate', this.calendarStartDate, 'this.calendarEndDate', this.calendarEndDate, 'this.calendarInfo', this.calendarInfo, 'this.calendarConfig.startDate', this.calendarConfig.startDate, 'this.calendarConfig.endDate', this.calendarConfig.endDate);  
+      this.calendarStartDate = new Date(new Date().getFullYear(), 0, 1);
+      this.calendarEndDate = new Date(new Date().getFullYear(), 11, 31);
+    }
+  
+    this.currentDisplayedYear = this.calendarInfo[this.calendarConfig.startDate]
+      ? new Date(this.calendarInfo[this.calendarConfig.startDate]).getFullYear()
+      : new Date().getFullYear();
+    this.currentDisplayedMonth = this.calendarInfo[this.calendarConfig.startDate]
+      ? new Date(this.calendarInfo[this.calendarConfig.startDate]).getMonth()
+      : new Date().getMonth();
+    this.currentYear = this.calendarInfo[this.calendarConfig.startDate]
+      ? new Date(this.calendarInfo[this.calendarConfig.startDate]).getFullYear()
+      : new Date().getFullYear();      
+    
+    let logInfo = {
+      'firstDateOfWeek': this.firstDateOfWeek,
+      'currentDate': this.currentDate, 
+      'currentDisplayedYear': this.currentDisplayedYear,
+      'currentDisplayedMonth': this.currentDisplayedMonth,
+      'calendarStartDate': this.calendarStartDate, 
+      'calendarEndDate': this.calendarEndDate,
+      'calendarConfig': this.calendarConfig,
+      'eventsConfig': this.eventsConfig
+    };
+    console.log('calendar config and main data info', logInfo);
+  
+    this.setDayBasedOnStartWeek = (this.firstDayOfWeek.toLowerCase() || 'SUNDAY') === 'monday' ? 1 : 2;
+    this.dayNames = getDayNames(this.firstDayOfWeek || 'SUNDAY');
+    this.calendar = this.shadowRoot.getElementById('calendar');
+    this.allEvents = this.shadowRoot.getElementById('allEvents');
+    this.conflictEvents = this.shadowRoot.getElementById('conflictEvents');
+    this.selectedDateView = this.shadowRoot.getElementById('selectedDateView');
+    this.dayGridView = this.shadowRoot.getElementById('dayGridView');
+    this.weekGridView = this.shadowRoot.getElementById('weekGridView');
+    this.previousButton = this.shadowRoot.getElementById('previous');
+    this.nextButton = this.shadowRoot.getElementById('next');
+    this.currentButton = this.shadowRoot.getElementById('current');
+    this.previousButton.addEventListener('click', this.handlePrevious);
+    this.nextButton.addEventListener('click', this.handleNext);
+    this.showCurrentMonthButton = this.shadowRoot.getElementById('showCurrentMonth');
+    this.showAllMonthsButton = this.shadowRoot.getElementById('showAllMonths');
+    this.showDayViewButton = this.shadowRoot.getElementById('showDayView');
+    this.showWeekViewButton = this.shadowRoot.getElementById('showWeekView');
+    this.weekHourGrid = this.shadowRoot.getElementById('weekHourGrid');
+    this.showAllEvents = this.shadowRoot.getElementById('showAllEvents');
+    this.selectedWeekTitle = this.shadowRoot.getElementById('selectedWeekTitle');
+    this.selectedDateTitleGrid = this.shadowRoot.getElementById('selectedDateTitleGrid');
+    this.addEvent = this.shadowRoot.getElementById('addEvent');
+    this.hourGrid = this.shadowRoot.getElementById('hourGrid');
+    this.eventName = this.shadowRoot.getElementById('eventName');
+    this.eventStartTime = this.shadowRoot.getElementById('eventStartTime');
+    this.eventEndTime = this.shadowRoot.getElementById('eventEndTime');
+    this.selectedDateTitle = this.shadowRoot.getElementById('selectedDateTitle');
+    this.eventPopup = this.shadowRoot.getElementById('eventPopup');
+    this.days = this.shadowRoot.querySelectorAll('.day');
+    this.hours = this.shadowRoot.querySelectorAll('.hour');
+    this.sidebarButtons = this.shadowRoot.querySelectorAll('.tab-item');
+    this.currentButton.addEventListener('click', this.handleCurrent);
+  
+    this.showAllEvents.addEventListener('click', () => {
+      this.allEvents.innerHTML = '';
+      this.allEvents.style.display = 'block';
+      this.calendar.style.display = 'none';
+      this.selectedDateView.style.display = 'none';
+      this.dayGridView.style.display = 'none';
+      this.weekGridView.style.display = 'none';
+      this.conflictEvents.style.display = 'none';      
+  
+      const allEventsContainer = document.createElement('div');
+      allEventsContainer.classList.add('event-list-container');
+      
+      if (this.eventsInfo !== undefined) {
+        this.eventsInfo.forEach((event) => {
+          let listItem = document.createElement('li');
+          listItem.classList.add('event-item');
+  
+          let eventDate = document.createElement('p');
+          const dateField = this.eventsConfig?.datesDateField || 'date';
+          eventDate.textContent = `Date: ${event[dateField]}`;
+          listItem.appendChild(eventDate);
+  
+          let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
+          listItem.appendChild(eventDescription);
+  
+          if (event.is_holidays) {
+            let holidayLabel = document.createElement('span');
+            holidayLabel.textContent = 'Holiday';
+            holidayLabel.classList.add('event-label');
+            listItem.appendChild(holidayLabel);
+          }
+  
+          if (event.conflict) {
+            let conflictDetail = document.createElement('p');
+            conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
+            conflictDetail.classList.add('conflict-detail');
+            listItem.appendChild(conflictDetail);
+          }
+  
+          allEventsContainer.appendChild(listItem);
+        });
+      }
+  
+      this.allEvents.appendChild(allEventsContainer);
+    });
+  
+    this.sidebarButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        this.sidebarButtons.forEach((btn) => {
+          btn.classList.remove('active');
+        });
+        button.classList.add('active');
+      });
+    });
+  
+    this.addEvent.addEventListener('click', this.addEventFunction);
+  
+    this.hours.forEach((hour) => {
+      hour.addEventListener('drop', this.handleHourDrop);
+      hour.addEventListener('dragover', (event) => {
+        event.preventDefault();
+      });
+    });
+  
+    this.showCurrentMonthButton.addEventListener('click', () => {
+      console.log('click Month', this.currentDisplayedMonth);
+      this.conflictEvents.style.display = 'none';      
+      this.shadowRoot.getElementById('calendar').innerHTML = '';
+      const currentMonth = this.calendarStartDate ? new Date(this.calendarStartDate).getMonth() : new Date().getMonth();
+      const currentYear = this.calendarStartDate ? new Date(this.calendarStartDate).getFullYear() : new Date().getFullYear();
+      const $monthNode = this.buildMonth(currentMonth, currentYear, this.eventsInfo, this.holidays_calendar, this.calendarStartDate, this.calendarEndDate);
+      this.shadowRoot.getElementById('calendar').appendChild($monthNode);
+      $monthNode.classList.add('full-month');
+      this.showCalendarView();
+      this.currentButton.innerText = 'Month';
+    });
+  
+    this.showAllMonthsButton.addEventListener('click', () => {
+      this.conflictEvents.style.display = 'none';      
+      this.shadowRoot.getElementById('calendar').innerHTML = '';
+      const currentYear = this.calendarStartDate ? new Date(this.calendarStartDate).getFullYear() : new Date().getFullYear();
+      this.buildYearCalendar(this.calendar, currentYear, this.eventsInfo, this.holidays_calendar, this.calendarStartDate, this.calendarEndDate);
+      this.showCalendarView();
+      this.currentButton.innerText = 'Year';
+    });
+  
+    this.showDayViewButton.addEventListener('click', () => {
+      let selectedDate;
+      if (new Date() >= new Date(this.calendarStartDate) && new Date() <= new Date(this.calendarEndDate)) {
+        selectedDate = new Date();
+      } else {
+        selectedDate = new Date(this.calendarStartDate);
+      }
+  
+      this.showDayGridView(selectedDate);
+      this.currentButton.innerText = 'Day';
+    });
+  
+    this.shadowRoot.getElementById('showConflicts').addEventListener('click', () => {
+      this.allEvents.innerHTML = '';
+      this.allEvents.style.display = 'none';
+      this.conflictEvents.innerHTML = '';
+      this.conflictEvents.style.display = 'block';
+      this.calendar.style.display = 'none';
+      
+      const conflictContainer = document.createElement('div');
+      conflictContainer.classList.add('event-list-container');
+      const conflictEvents = this.eventsInfo.filter(event => event.conflict);
+  
+      conflictEvents.forEach((event) => {
+        let listItem = document.createElement('li');
+        listItem.classList.add('event-item');
+  
+        const dateField = this.eventsConfig?.datesDateField || 'date';
+        let eventDate = document.createElement('p');
+        eventDate.textContent = `Date: ${event[dateField]}`;
+        listItem.appendChild(eventDate);
+  
+        let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
+        listItem.appendChild(eventDescription);
+  
+        let conflictDetail = document.createElement('p');
+        conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
+        conflictDetail.classList.add('conflict-detail');
+        listItem.appendChild(conflictDetail);
+  
+        conflictContainer.appendChild(listItem);
+      });
+  
+      this.conflictEvents.appendChild(conflictContainer);
+    });
+  
+    this.monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+  
+    if (this.schedule_size_unit === 'MONTHS') {
+      this.currentButton.innerText = 'Month';
+      this.shadowRoot.getElementById('calendar').innerHTML = '';
+      const currentMonth = this.calendarStartDate ? new Date(this.calendarStartDate).getMonth() : new Date().getMonth();
+      const currentYear = this.calendarStartDate ? new Date(this.calendarStartDate).getFullYear() : new Date().getFullYear();
+      const $monthNode = this.buildMonth(currentMonth, currentYear, this.eventsInfo, this.holidays_calendar, this.calendarStartDate, this.calendarEndDate);
+      this.shadowRoot.getElementById('calendar').appendChild($monthNode);
+      $monthNode.classList.add('full-month');
+      if (this.showWeekView) {
+        this.showWeekViewButton.addEventListener('click', () => {
+          console.log('click Week');
+          this.showWeekGridView();
+          this.addDoubleClickEventToWeekHours();
+          this.currentButton.innerText = 'Week';
+        });
+      }
+      this.showCalendarView();
+    } else if (this.schedule_size_unit === 'DAYS') {
+      let selectedDate;
+      if (new Date() >= new Date(this.calendarStartDate) && new Date() <= new Date(this.calendarEndDate)) {
+        selectedDate = new Date();
+      } else {
+        selectedDate = new Date(this.calendarStartDate);
+      }
+  
+      this.showDayGridView(selectedDate);
+      this.currentButton.innerText = 'Day';
+    } else if (this.schedule_size_unit === 'WEEKS') {
+      this.showWeekGridView();
+      this.addDoubleClickEventToWeekHours();
+      this.currentButton.innerText = 'Week';
+    } else {
+      this.buildYearCalendar(this.calendar, this.currentYear, this.eventsInfo, this.holidays_calendar, this.calendarStartDate, this.calendarEndDate);
+    }
+  }
+  
+
+  refreshViewV1(){
+    console.log('refreshView')
+    this.initializeCalendarConfigVariablesWhenMissingProperties()
     //this.dataAllInOneData=this.data
-    if (this.fakeData){
-      this.events = this.dataAllInOneData.program_calendar.dates;
-      this.holidays_calendar = this.dataAllInOneData.program_calendar.holidays_calendar;
-      this.firstDayOfWeek = this.dataAllInOneData.program_calendar.day_of_week;
-      this.schedule_size_unit = this.dataAllInOneData.program_calendar.schedule_size_unit
-      if (this.dataAllInOneData.program_calendar.viewCurrentDate.toLowerCase()=="today"){
-        this.currentDate = new Date()
-      }else{
-        this.currentDate = this.dataAllInOneData.program_calendar.start_date
-          ? new Date(this.dataAllInOneData.program_calendar.start_date)
-          : new Date();        
-      }
-      console.log('currentDate', this.currentDate)
-      this.firstDateOfWeek = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth(),
-        this.currentDate.getDate() - (this.firstDayOfWeek === "MONDAY" ? (this.currentDate.getDay() === 0 ? 6 : this.currentDate.getDay() - 1) : this.currentDate.getDay())
-      );
-      console.log(this.firstDateOfWeek)
-      this.calendarStartDate = new Date(
-        new Date(this.dataAllInOneData.program_calendar.start_date).setHours(0, 0, 0)
-      );
-      this.calendarEndDate = new Date(
-        new Date(this.dataAllInOneData.program_calendar.end_date).setHours(0, 0, 0)
-      );
-      this.currentDisplayedYear = this.dataAllInOneData.program_calendar.start_date
-        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
-        : new Date().getFullYear();
-      this.currentDisplayedMonth = this.dataAllInOneData.program_calendar.start_date
-        ? new Date(this.dataAllInOneData.program_calendar.start_date).getMonth()
-        : new Date().getMonth();
-      this.currentYear = this.dataAllInOneData.program_calendar.start_date
-        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
-        : new Date().getFullYear();
-    }else{
-      this.events = []
-      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.dates!==undefined){
-        this.events = this.dataAllInOneData.program_calendar.dates;
-      }
-      this.holidays_calendar = []
-      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.holidays_calendar!==undefined){
-        this.holidays_calendar = this.dataAllInOneData.program_calendar.holidays_calendar;
-      }
-      this.firstDayOfWeek = "MONDAY"
-      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.day_of_week!==undefined){
-        this.firstDayOfWeek = this.dataAllInOneData.program_calendar.day_of_week;
-      }
-      this.schedule_size_unit = "MONTHS"
-      if (this.dataAllInOneData!==undefined&&this.dataAllInOneData.program_calendar!==undefined&&this.dataAllInOneData.program_calendar.schedule_size_unit!==undefined){
-        this.schedule_size_unit = this.dataAllInOneData.program_calendar.schedule_size_unit
-      }
-      if (this.dataAllInOneData.program_calendar.viewCurrentDate===undefined){
-        this.dataAllInOneData.program_calendar.viewCurrentDate="today"
-      }
-      if (this.dataAllInOneData.program_calendar.viewCurrentDate.toLowerCase()=="today"){
-        this.currentDate = new Date()
-      }else{
-        this.currentDate = this.dataAllInOneData.program_calendar.start_date
-          ? new Date(this.dataAllInOneData.program_calendar.start_date)
-          : new Date();        
-      }
-      console.log('currentDate', this.currentDate)
-      this.firstDateOfWeek = new Date(
-        this.currentDate.getFullYear(),
-        this.currentDate.getMonth(),
-        this.currentDate.getDate() - (this.firstDayOfWeek === "MONDAY" ? (this.currentDate.getDay() === 0 ? 6 : this.currentDate.getDay() - 1) : this.currentDate.getDay())
-      );
-      console.log(this.firstDateOfWeek)
-      this.calendarStartDate = new Date(
-        new Date(this.dataAllInOneData.program_calendar.start_date).setHours(0, 0, 0)
-      );
-      this.calendarEndDate = new Date(
-        new Date(this.dataAllInOneData.program_calendar.end_date).setHours(0, 0, 0)
-      );
-      this.currentDisplayedYear = this.dataAllInOneData.program_calendar.start_date
-        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
-        : new Date().getFullYear();
-      this.currentDisplayedMonth = this.dataAllInOneData.program_calendar.start_date
-        ? new Date(this.dataAllInOneData.program_calendar.start_date).getMonth()
-        : new Date().getMonth();
-      this.currentYear = this.dataAllInOneData.program_calendar.start_date
-        ? new Date(this.dataAllInOneData.program_calendar.start_date).getFullYear()
-        : new Date().getFullYear();      
+
+
+    this.holidays_calendar = []
+    if (this.calendarInfo!==undefined&&this.calendarInfo.holidays_calendar!==undefined){
+      this.holidays_calendar = this.calendarInfo.holidays_calendar;
     }
+    this.firstDayOfWeek = "MONDAY"
+    if (this.calendarInfo!==undefined&&this.calendarInfo[this.calendarConfig.firstDayOfWeek]!==undefined){
+      this.firstDayOfWeek = this.calendarInfo[this.calendarConfig.firstDayOfWeek];
+    }
+    this.schedule_size_unit = "MONTHS"
+    if (this.calendarInfo!==undefined&&this.calendarInfo[this.calendarConfig.scheduleSizeUnit]!==undefined){
+      this.schedule_size_unit = this.calendarInfo[this.calendarConfig.scheduleSizeUnit]
+    }
+    if (this.calendarInfo.viewCurrentDate===undefined){
+      this.calendarInfo.viewCurrentDate="today"
+    }
+    if (this.calendarInfo.viewCurrentDate.toLowerCase()=="today"){
+      this.currentDate = new Date()
+    }else{
+      this.currentDate = this.calendarInfo[this.calendarConfig.startDate]
+        ? new Date(this.calendarInfo[this.calendarConfig.startDate])
+        : new Date();        
+    }      
+    this.firstDateOfWeek = new Date(
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth(),
+      this.currentDate.getDate() - (this.firstDayOfWeek === "MONDAY" ? (this.currentDate.getDay() === 0 ? 6 : this.currentDate.getDay() - 1) : this.currentDate.getDay())
+    );    
+    
+    
+    if (this.calendarInfo===undefined||this.calendarConfig===undefined||this.calendarInfo[this.calendarConfig.startDate]===undefined){
+      this.calendarInfo[this.calendarConfig.startDate]=this.currentDate
+    }
+    console.log('date for calendarStartDate', this.calendarInfo[this.calendarConfig.startDate])
+    this.calendarStartDate = new Date(
+      new Date(this.calendarInfo[this.calendarConfig.startDate]).setHours(0, 0, 0)
+    );
+    this.calendarEndDate = new Date(
+      new Date(this.calendarInfo[this.calendarConfig.endDate]).setHours(0, 0, 0)
+    );
+
+    if ( isNaN(this.calendarStartDate.getTime())|| isNaN(this.calendarEndDate.getTime())){    
+      //alert("Start or end date are wrong, please review the console.log")
+      console.error('this.calendarStartDate', this.calendarStartDate, 'this.calendarEndDate', this.calendarEndDate, 'this.calendarInfo', this.calendarInfo, 'this.calendarConfig.startDate', this.calendarConfig.startDate, 'this.calendarConfig.endDate', this.calendarConfig.endDate)  
+      this.calendarStartDate=new Date(new Date().getFullYear(), 0, 1);
+      this.calendarEndDate=new Date(new Date().getFullYear(), 11, 31);
+    }
+    this.currentDisplayedYear = this.calendarInfo[this.calendarConfig.startDate]
+      ? new Date(this.calendarInfo[this.calendarConfig.startDate]).getFullYear()
+      : new Date().getFullYear();
+    this.currentDisplayedMonth = this.calendarInfo[this.calendarConfig.startDate]
+      ? new Date(this.calendarInfo[this.calendarConfig.startDate]).getMonth()
+      : new Date().getMonth();
+    this.currentYear = this.calendarInfo[this.calendarConfig.startDate]
+      ? new Date(this.calendarInfo[this.calendarConfig.startDate]).getFullYear()
+      : new Date().getFullYear();      
+    
+    let logInfo={
+      'firstDateOfWeek':this.firstDateOfWeek,
+      'currentDate': this.currentDate, 
+      'currentDisplayedYear': this.currentDisplayedYear,
+      'currentDisplayedMonth': this.currentDisplayedMonth,
+      'calendarStartDate': this.calendarStartDate, 
+      'calendarEndDate': this.calendarEndDate,
+      'calendarConfig': this.calendarConfig,
+      'eventsConfig': this.eventsConfig
+    }
+    console.log('calendar config and main data info', logInfo)
     this.setDayBasedOnStartWeek =
       (this.firstDayOfWeek.toLowerCase() || 'SUNDAY') === 'monday' ? 1 : 2;
     this.dayNames = getDayNames(this.firstDayOfWeek || 'SUNDAY');
     this.calendar = this.shadowRoot.getElementById('calendar');
     this.allEvents = this.shadowRoot.getElementById('allEvents');
+    this.conflictEvents = this.shadowRoot.getElementById('conflictEvents');
     this.selectedDateView = this.shadowRoot.getElementById('selectedDateView');
     this.dayGridView = this.shadowRoot.getElementById('dayGridView');
     this.weekGridView = this.shadowRoot.getElementById('weekGridView');
@@ -153,19 +537,28 @@ class CalendarComponent extends LitElement {
       this.selectedDateView.style.display = 'none';
       this.dayGridView.style.display = 'none';
       this.weekGridView.style.display = 'none';
+      this.conflictEvents.style.display = 'none';      
 
       const allEventsContainer = document.createElement('div');
       allEventsContainer.classList.add('event-list-container'); // Add a class for container styling
-      if (this.events!==undefined){
-        this.events.forEach((event, index) => {
+      //console.log('this.eventsInfo', this.eventsInfo)
+      if (this.eventsConfig===undefined){
+        //alert('eventsInfo is undefined')
+      }
+      if (this.eventsInfo!==undefined){
+        this.eventsInfo.forEach((event, index) => {
           let listItem = document.createElement('li');
           listItem.classList.add('event-item');
 
           let eventDate = document.createElement('p');
-          eventDate.textContent = `Date: ${event[this.config.datesDateField]}}`;
+          if(this.eventsConfig.datesDateField!==undefined){
+            eventDate.textContent = `Date: ${event[this.eventsConfig.datesDateField]}}`;
+          }else{
+            eventDate.textContent = `Date: ${event.date}}`;
+          }
           listItem.appendChild(eventDate);
 
-          let eventDescription = createEventDescription(event, this.config.eventListsFields, this.lang);
+          let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
 /*          let eventDescription = document.createElement('p');
           eventDescription.textContent = `${event.description_en}`;
           eventDescription.classList.add('event-description');*/
@@ -208,7 +601,7 @@ class CalendarComponent extends LitElement {
     this.showCurrentMonthButton.addEventListener('click', () => {
       console.log('click Month', this.currentDisplayedMonth);
       this.shadowRoot.getElementById('calendar').innerHTML = '';
-      console.log(this.calendarStartDate);
+      console.log('refreshView', 'this.calendarStartDate', this.calendarStartDate, 'this.calendarEndDate', this.calendarEndDate);
       const currentMonth = this.calendarStartDate
         ? new Date(this.calendarStartDate).getMonth()
         : new Date().getMonth();
@@ -218,7 +611,7 @@ class CalendarComponent extends LitElement {
       const $monthNode = this.buildMonth(
         currentMonth,
         currentYear,
-        this.events,
+        this.eventsInfo,
         this.holidays_calendar,
         this.calendarStartDate,
         this.calendarEndDate
@@ -236,7 +629,7 @@ class CalendarComponent extends LitElement {
       this.buildYearCalendar(
         this.calendar,
         currentYear,
-        this.events,
+        this.eventsInfo,
         this.holidays_calendar,
         this.calendarStartDate,
         this.calendarEndDate
@@ -250,10 +643,10 @@ class CalendarComponent extends LitElement {
         new Date() >= new Date(this.calendarStartDate) &&
         new Date() <= new Date(this.calendarEndDate)
       ) {
-        console.log('in');
+        //console.log('in');
         selectedDate = new Date();
       } else {
-        console.log('else');
+        //console.log('else');
         selectedDate = new Date(this.calendarStartDate);
       }
 
@@ -261,6 +654,37 @@ class CalendarComponent extends LitElement {
       this.currentButton.innerText = 'Day';
     });
 
+    this.shadowRoot.getElementById('showConflicts').addEventListener('click', () => {
+      this.allEvents.innerHTML = '';
+      this.allEvents.style.display = 'none';
+      this.conflictEvents.innerHTML = '';
+      this.conflictEvents.style.display = 'block';
+      this.calendar.style.display = 'none';
+    
+      const conflictContainer = document.createElement('div');
+      conflictContainer.classList.add('event-list-container');
+      const conflictEvents = this.eventsInfo.filter(event => event.conflict);
+    
+      conflictEvents.forEach((event) => {
+        let listItem = document.createElement('li');
+        listItem.classList.add('event-item');
+        let eventDate = document.createElement('p');
+        eventDate.textContent = `Date: ${event[this.eventsConfig.datesDateField]}`;
+        listItem.appendChild(eventDate);
+    
+        let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
+        listItem.appendChild(eventDescription);
+    
+        let conflictDetail = document.createElement('p');
+        conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
+        listItem.appendChild(conflictDetail);
+        conflictContainer.appendChild(listItem);
+      });
+    
+      this.conflictEvents.appendChild(conflictContainer);
+    });
+
+    
     this.monthNames = [
       'January',
       'February',
@@ -289,7 +713,7 @@ class CalendarComponent extends LitElement {
       const $monthNode = this.buildMonth(
         currentMonth,
         currentYear,
-        this.events,
+        this.eventsInfo,
         this.holidays_calendar,
         this.calendarStartDate,
         this.calendarEndDate
@@ -328,16 +752,16 @@ class CalendarComponent extends LitElement {
       this.buildYearCalendar(
         this.calendar,
         this.currentYear,
-        this.events,
+        this.eventsInfo,
         this.holidays_calendar,
         this.calendarStartDate,
         this.calendarEndDate
       );
-    }
+    }    
   }
   handleCurrent = () => {
-    console.log(this.calendarStartDate);
-    console.log(this.calendarEndDate);
+    console.log('handleCurrent', 'this.calendarStartDate', this.calendarStartDate);
+    console.log('handleCurrent', 'this.calendarEndDate', this.calendarEndDate);
     const innerText = this.currentButton.innerText;
     if (innerText === 'Year') {
       const currentYear = new Date(this.calendarStartDate).getFullYear();
@@ -351,7 +775,7 @@ class CalendarComponent extends LitElement {
       var $monthNode = this.buildMonth(
         currentMonth,
         currentYear,
-        this.events,
+        this.eventsInfo,
         this.holidays_calendar,
         this.calendarStartDate,
         this.calendarEndDate
@@ -390,11 +814,9 @@ class CalendarComponent extends LitElement {
       if (this.shadowRoot.querySelector('.full-month')) {
         const currentMonthDate = new Date(this.currentYear, this.currentDisplayedMonth);
         currentMonthDate.setMonth(currentMonthDate.getMonth() - 1);
-        const calendarStartDate = new Date(this.calendarStartDate);
-        const calendarEndDate = new Date(this.calendarEndDate);
         if (
-          currentMonthDate >= calendarStartDate &&
-          currentMonthDate <= calendarEndDate
+          currentMonthDate >= this.calendarStartDate &&
+          currentMonthDate <= this.calendarEndDate
         ) {
           this.changeMonth(-1);
         }
@@ -411,13 +833,11 @@ class CalendarComponent extends LitElement {
     }
     if (dateValue === 'block') {
       var selectedDate = new Date(this.selectedDateTitleGrid.innerText);
-      const calendarStartDate = new Date(this.calendarStartDate);
-      const calendarEndDate = new Date(this.calendarEndDate);
       let DayDate = new Date(this.selectedDateTitleGrid.innerText)
       DayDate.setDate(selectedDate.getDate() - 1)
       if (
-        DayDate >= calendarStartDate &&
-        DayDate <= calendarEndDate
+        DayDate >= this.calendarStartDate &&
+        DayDate <= this.calendarEndDate
       ) {
         selectedDate.setDate(selectedDate.getDate() - 1);
         this.showDayGridView(selectedDate);
@@ -425,13 +845,11 @@ class CalendarComponent extends LitElement {
     }
     if (weekValue === 'block') {
       var currentDate = new Date(this.firstDateOfWeek);
-      const calendarStartDate = new Date(this.calendarStartDate);
-      const calendarEndDate = new Date(this.calendarEndDate);
       let weekDate = new Date(this.firstDateOfWeek);
       weekDate.setDate(weekDate.getDate() - 1);
       if (
-        weekDate >= calendarStartDate &&
-        weekDate <= calendarEndDate
+        weekDate >= this.calendarStartDate &&
+        weekDate <= this.calendarEndDate
       ) {
         currentDate.setDate(this.firstDateOfWeek.getDate() - 7);
         this.firstDateOfWeek = currentDate;
@@ -453,11 +871,9 @@ class CalendarComponent extends LitElement {
       if (this.shadowRoot.querySelector('.full-month')) {
         const currentMonthDate = new Date(this.currentYear, this.currentDisplayedMonth);
         currentMonthDate.setMonth(currentMonthDate.getMonth() + 1);
-        const calendarStartDate = new Date(this.calendarStartDate);
-        const calendarEndDate = new Date(this.calendarEndDate);
         if (
-          currentMonthDate >= calendarStartDate &&
-          currentMonthDate <= calendarEndDate
+          currentMonthDate >= this.calendarStartDate &&
+          currentMonthDate <= this.calendarEndDate
         ) {
           this.changeMonth(1);
         }
@@ -474,13 +890,11 @@ class CalendarComponent extends LitElement {
     }
     if (dateValue === 'block') {
       var selectedDate = new Date(this.selectedDateTitleGrid.innerText);
-      const calendarStartDate = new Date(this.calendarStartDate);
-      const calendarEndDate = new Date(this.calendarEndDate);
       let DayDate = new Date(this.selectedDateTitleGrid.innerText)
       DayDate.setDate(selectedDate.getDate() + 1)
       if (
-        selectedDate >= calendarStartDate &&
-        selectedDate <= calendarEndDate
+        selectedDate >= this.calendarStartDate &&
+        selectedDate <= this.calendarEndDate
       ) {
         selectedDate.setDate(selectedDate.getDate() + 1);
         this.showDayGridView(selectedDate);
@@ -488,13 +902,11 @@ class CalendarComponent extends LitElement {
     }
     if (weekValue === 'block') {
       var currentDate = new Date(this.firstDateOfWeek);
-      const calendarStartDate = new Date(this.calendarStartDate);
-      const calendarEndDate = new Date(this.calendarEndDate);
       let weekDate = new Date(this.firstDateOfWeek);
       weekDate.setDate(weekDate.getDate() + 7);
       if (
-        weekDate >= calendarStartDate &&
-        weekDate <= calendarEndDate
+        weekDate >= this.calendarStartDate &&
+        weekDate <= this.calendarEndDate
       ) {
         currentDate.setDate(this.firstDateOfWeek.getDate() + 7);
         this.firstDateOfWeek = currentDate;
@@ -516,7 +928,7 @@ class CalendarComponent extends LitElement {
     var $monthNode = this.buildMonth(
       this.currentDisplayedMonth,
       this.currentYear,
-      this.events,
+      this.eventsInfo,
       this.holidays_calendar,
       this.calendarStartDate,
       this.calendarEndDate
@@ -525,12 +937,46 @@ class CalendarComponent extends LitElement {
     $monthNode.classList.add('full-month');
     this.showCalendarView();
   }
+
+  handleDayHoverGPT = (event) => {
+    var hoveredDate = event.currentTarget.getAttribute('data-date');
+    var eventsForHoveredDate = this.eventsInfo.filter(function (event) {
+        return (
+            new Date(event.date).toDateString() === new Date(hoveredDate).toDateString()
+        );
+    });
+
+    var existingDropdown = document.querySelector('.event-dropdown');
+    if (existingDropdown) {
+        existingDropdown.parentNode.removeChild(existingDropdown);
+    }
+
+    if (eventsForHoveredDate.length > 0) {
+        var dropdown = document.createElement('div');
+        dropdown.classList.add('event-dropdown');
+
+        // Aquí se ajusta la posición del hover
+        var rect = event.currentTarget.getBoundingClientRect();
+        dropdown.style.position = 'absolute';
+        dropdown.style.top = rect.top + window.scrollY + 'px';
+        
+        // Verificar si hay espacio suficiente hacia la derecha, si no, mover a la izquierda
+        if (rect.left + dropdown.offsetWidth > window.innerWidth) {
+            dropdown.style.left = rect.left - dropdown.offsetWidth + 'px';  // Mueve el dropdown a la izquierda si no cabe
+        } else {
+            dropdown.style.left = rect.left + 'px';  // Posición normal a la derecha
+        }
+
+        document.body.appendChild(dropdown);
+    }
+};
+
   handleDayHover = (event) => {
     var hoveredDate = event.currentTarget.getAttribute('data-date');
     var eventsForDate = []  
-    if (this.events!==undefined){    
-      let dateFieldName=this.config.datesDateField
-      var eventsForHoveredDate = this.events.filter(function (event) {
+    if (this.eventsInfo!==undefined){    
+      let dateFieldName=this.eventsConfig.datesDateField
+      var eventsForHoveredDate = this.eventsInfo.filter(function (event) {
         return (
           new Date(event[dateFieldName]).toDateString() ===
           new Date(hoveredDate).toDateString()
@@ -564,12 +1010,12 @@ class CalendarComponent extends LitElement {
         let eventTitle = document.createElement('p');
         eventTitle.style.margin = '0';
 
-        if (this.config.hoverDateDialog.entryTitleFld!==undefined){
-          eventTitle.textContent=event[this.config.hoverDateDialog.entryTitleFld];
+        if (this.eventsConfig.hoverDateDialog.entryTitleFld!==undefined){
+          eventTitle.textContent=event[this.eventsConfig.hoverDateDialog.entryTitleFld];
         }else{
           eventTitle.textContent=""
         }
-        let eventDescription = createEventDescription(event, this.config.hoverDateDialog.eventListsFields, this.lang);
+        let eventDescription = createEventDescription(event, this.eventsConfig.hoverDateDialog.eventListsFields, this.lang);
 
         //listItem.appendChild(eventTitle);
 
@@ -590,9 +1036,9 @@ class CalendarComponent extends LitElement {
           const selector = `[data-date="${hoveredDate}"]`;
           const $dateNode = this.shadowRoot.querySelector(selector);
           if ($dateNode) {
-            console.log(this.events);
-            let dateFieldName=this.config.datesDateField
-            let matchedEvents = this.events.filter(
+            console.log(this.eventsInfo);
+            let dateFieldName=this.eventsConfig.datesDateField
+            let matchedEvents = this.eventsInfo.filter(
               (e) => e.date === event[dateFieldName]
             );
             if (matchedEvents.length === 1) {
@@ -606,12 +1052,12 @@ class CalendarComponent extends LitElement {
           }
           eventList.removeChild(ListContent);
 
-          var indexToRemove = this.events.findIndex(function (evt) {
+          var indexToRemove = this.eventsInfo.findIndex(function (evt) {
             return evt === event;
           });
 
           if (indexToRemove !== -1) {
-            this.events.splice(indexToRemove, 1);
+            this.eventsInfo.splice(indexToRemove, 1);
           }
         });
         listItem.appendChild(crossIcon);
@@ -655,8 +1101,8 @@ class CalendarComponent extends LitElement {
       dropdown.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
       dropdown.style.padding = '5px';
       dropdown.style.zIndex = '9999';
-      dropdown.style.maxWidth = this.config.hoverDateDialog.dialogWidth || '400px';
-      dropdown.style.maxHeight = this.config.hoverDateDialog.dialogHeight || '400px';
+      dropdown.style.maxWidth = this.eventsConfig.hoverDateDialog.dialogWidth || '400px';
+      dropdown.style.maxHeight = this.eventsConfig.hoverDateDialog.dialogHeight || '400px';
       dropdown.style.overflowY = 'auto';
 
       header.style.fontWeight = 'bold';
@@ -730,7 +1176,7 @@ class CalendarComponent extends LitElement {
     var eventEndTime = this.eventEndTime.value;
     var selectedDate = this.selectedDateTitle.innerText;
     var newEvent = {
-      id: this.events.length + 1,
+      id: this.eventsInfo.length + 1,
       date: formatDateString(selectedDate),
       description_en: eventName,
       description_es: '',
@@ -741,7 +1187,7 @@ class CalendarComponent extends LitElement {
       start_time: eventStartTime,
       end_time: eventEndTime,
     };
-    this.events.push(newEvent);
+    this.eventsInfo.push(newEvent);
     this.closeModal();
     localStorage.setItem('events', JSON.stringify(events));
     this.updateCalendar(new Date(selectedDate));
@@ -770,7 +1216,7 @@ class CalendarComponent extends LitElement {
     var draggedDate = event.dataTransfer.getData('text/plain');
     var newDate = event.target.dataset.date;
     console.log('Move event from', draggedDate, 'to', newDate);
-    let dateFieldName=this.config.datesDateField
+    let dateFieldName=this.eventsConfig.datesDateField
     var draggedEvent = this.this.dataAllInOneData.find(function (event) {
       return (
         new Date(event[dateFieldName]).toDateString() ===
@@ -781,21 +1227,21 @@ class CalendarComponent extends LitElement {
     this.updateEventDate(draggedEvent, newDate);
   };
   updateEventDate = (event, newDate) => {
-    const index = this.events.program_calendar.dates.findIndex(
+    const index = this.eventsInfo.findIndex(
       (obj) => obj.id === event.id
     );
 
     if (index !== -1) {
-      event[this.config.datesDateField] = new Date(newDate).toISOString().split('T')[0];
-      this.events.program_calendar.dates[index] = {
-        ...this.events.program_calendar.dates[index],
+      event[this.eventsConfig.datesDateField] = new Date(newDate).toISOString().split('T')[0];
+      this.eventsInfo[index] = {
+        ...this.eventsInfo[index],
         ...event,
       };
       console.log(
         'Object updated successfully:',
-        this.events.program_calendar.dates[index]
+        this.eventsInfo[index]
       );
-      this.updateDateColor(event[this.config.datesDateField]);
+      this.updateDateColor(event[this.eventsConfig.datesDateField]);
     } else {
       console.log('Object with ID', 'id', 'not found.');
     }
@@ -823,43 +1269,32 @@ class CalendarComponent extends LitElement {
   };
   buildYearCalendar = (
     el,
-    year,
-    events = this.events,
+    year,    
+    eventsInfo = this.eventsInfo,
     holidays_calendar = this.holidays_calendar,
     calendarStartDate,
     calendarEndDate
   ) => {
-    console.log('start');
+    console.log('buildYearCalendar', 'start', 'calendarStartDate', calendarStartDate, 'calendarEndDate', calendarEndDate);
     var months = this.getMonthsInYear(year);
     // Calendar for check start_date and end_date
     months.forEach((a, b) => {
       let loadedYear = new Date(a).getFullYear();
       let loadedMonth = new Date(a).getMonth() + 1;
 
-      if (
-        loadedYear >= new Date(this.calendarStartDate).getFullYear() &&
-        loadedYear <= new Date(this.calendarEndDate).getFullYear()
-      ) {
-        if (
-          loadedMonth >= new Date(this.calendarStartDate).getMonth() + 1 &&
-          loadedMonth <= new Date(this.calendarEndDate).getMonth() + 1
-        ) {
-          console.log(loadedYear, loadedMonth);
-          console.log(
-            new Date(this.calendarStartDate).getFullYear(),
-            new Date(this.calendarStartDate).getMonth() + 1
-          );
-          console.log(
-            new Date(this.calendarEndDate).getFullYear(),
-            new Date(this.calendarEndDate).getMonth() + 1
-          );
-        }
-      }
+      const currentDate = new Date(loadedYear, loadedMonth - 1); // loadedMonth-1 ya que Date() usa base 0 para los meses
+
+// Comprobar si currentDate está fuera del rango
+if (currentDate < this.calendarStartDate || currentDate > this.calendarEndDate) {
+  if (this.calendarConfig.yearView !== undefined && this.calendarConfig.yearView.hideOutOfBoundsMonths === true) {
+    return;
+  }
+}
 
       var $monthNode = this.buildMonth(
         b,
         year,
-        events,
+        this.eventsInfo,
         holidays_calendar,
         calendarStartDate,
         calendarEndDate
@@ -967,13 +1402,14 @@ class CalendarComponent extends LitElement {
     this.buildYearCalendar(
       this.calendar,
       this.currentDisplayedYear,
-      this.events,
+      this.eventsInfo,
       this.holidays_calendar,
       this.calendarStartDate,
       this.calendarEndDate
     );
     this.showCalendarView();
   };
+
   showDayGridView = (selectedDate) => {
     var selectedDateTitleGrid = this.selectedDateTitleGrid;
     var hourGrid = this.hourGrid;
@@ -987,8 +1423,8 @@ class CalendarComponent extends LitElement {
     selectedDateTitleGrid.innerText = selectedDate.toDateString();
     const date = formatDateString(selectedDate);
     let eventsData = []
-    if (this.events!==undefined){    
-      eventsData = this.events.filter((e) => e.date === date);
+    if (this.eventsInfo!==undefined){    
+      eventsData = this.eventsInfo.filter((e) => e.date === date);
     }
     if (eventsData.length > 0) {
       eventsData.forEach((event) => {
@@ -999,14 +1435,27 @@ class CalendarComponent extends LitElement {
         eventElement.style.borderRadius = '5px';
 
         const dateElement = document.createElement('div');
-        dateElement.innerText = event[this.config.datesDateField];
+        dateElement.innerText = event[this.eventsConfig.datesDateField];
         dateElement.style.fontWeight = 'bold';
         eventElement.appendChild(dateElement);
 
+        // const descriptionEnElement = document.createElement('div');
+        // let eventDetail= createEventDescription(event, this.calendarConfig.dayView.eventListsFields, this.lang);
+        
+        // descriptionEnElement.appendChild(eventDescription);
+        // descriptionEnElement.innerText = eventDetail
+
+        // descriptionEnElement.innerText = event.description_en;
+        // descriptionEnElement.style.marginTop = '5px';
+        // eventElement.appendChild(descriptionEnElement);
+
         const descriptionEnElement = document.createElement('div');
-        descriptionEnElement.innerText = event.description_en;
+        let eventDetail= createEventDescription(event, this.calendarConfig.dayView.eventListsFields, this.lang);
+        
         descriptionEnElement.style.marginTop = '5px';
-        eventElement.appendChild(descriptionEnElement);
+        descriptionEnElement.style.display = 'flex';
+        eventElement.appendChild(eventDetail);
+                
         dayHeader.appendChild(eventElement);
       });
     } else {
@@ -1026,7 +1475,19 @@ class CalendarComponent extends LitElement {
     this.weekGridView.style.display = 'none';
   };
   populateHourGrid = (hourGrid) => {
-    for (var i = 0; i < 24; i++) {
+    let startHour=1
+    let endHour=24
+    if (this.calendarConfig.dayView!==undefined&&this.calendarConfig.dayView.startHour!==undefined){
+      startHour=this.calendarConfig.dayView.startHour
+    }
+    if (this.calendarConfig.dayView!==undefined&&this.calendarConfig.dayView.endHour!==undefined){
+      endHour=this.calendarConfig.dayView.endHour
+    }
+    var hourNode = document.createElement('div');
+    hourNode.classList.add('hour');
+    hourNode.innerText = 0 + ':00 - ' + (1) + ':00';
+    hourGrid.appendChild(hourNode);
+    for (var i = startHour; i < endHour; i++) {
       var hourNode = document.createElement('div');
       hourNode.classList.add('hour');
       hourNode.innerText = i + ':00 - ' + (i + 1) + ':00';
@@ -1058,7 +1519,7 @@ class CalendarComponent extends LitElement {
         ' ' +
         currentDay.getDate();
 
-      const eventsData = this.events.filter(
+      const eventsData = this.eventsInfo.filter(
         (e) => e.date === formatDateString(new Date(currentDay))
       );
       // let holidays = [];
@@ -1078,7 +1539,7 @@ class CalendarComponent extends LitElement {
           eventElement.style.borderRadius = '5px';
 
           const dateElement = document.createElement('div');
-          dateElement.innerText = event[this.config.datesDateField];
+          dateElement.innerText = event[this.eventsConfig.datesDateField];
           dateElement.style.fontWeight = 'bold';
           eventElement.appendChild(dateElement);
 
@@ -1148,23 +1609,133 @@ class CalendarComponent extends LitElement {
     this.weekGridView.style.display = 'none';
     this.allEvents.style.display = 'none';
   };
-  buildMonth = (
+  
+  buildMonth(monthNum, year, events = this.eventsInfo, holidays_calendar = this.holidays_calendar, calendarStartDate, calendarEndDate, isAllMonthsView) {
+    const firstDayOfMonth = new Date(year, monthNum, this.setDayBasedOnStartWeek).getDay();
+    const startingDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+    const daysInMonth = this.getDaysInMonth(monthNum, year);
+    const $monthNode = document.createElement('div');
+if (isAllMonthsView) {
+  $monthNode.classList.add('full-month');  // Añade solo en la vista AllMonths
+} else {
+  $monthNode.classList.add('month');  // Otras vistas pueden usar la clase 'month'
+}    
+    //$monthNode.classList.add('month');
+    const $titleNode = document.createElement('h4');
+    $titleNode.innerText = this.monthNames[monthNum] + ' ' + year;
+    $monthNode.appendChild($titleNode);
+
+    // Añadimos los nombres de los días
+    this.dayNames.forEach(function (dayName) {
+      const $dayNode = document.createElement('div');
+      $dayNode.classList.add('dow');
+      $dayNode.innerText = dayName;
+      $monthNode.appendChild($dayNode);
+    });
+
+    const $daysContainer = document.createElement('div');
+    $daysContainer.classList.add('days-container');
+
+    // Crear los días vacíos antes del primer día del mes
+    for (let i = 0; i < startingDay; i++) {
+      const $emptyDayNode = document.createElement('div');
+      $emptyDayNode.classList.add('day', 'empty');
+      $daysContainer.appendChild($emptyDayNode);
+    }
+
+    daysInMonth.forEach((c, d) => {
+      const $dayNode = document.createElement('div');
+      $dayNode.classList.add('day');
+      $dayNode.setAttribute('data-date', c);
+      $dayNode.innerText = d + 1;
+
+      if (c >= calendarStartDate && c <= calendarEndDate) {
+        $dayNode.addEventListener('dblclick', this.handleDayClick);
+        $dayNode.addEventListener('mouseover', this.handleDayHover);
+        let eventsForDate=undefined
+        if (this.eventsInfo!==undefined){
+          let eventsForDate = this.eventsInfo.filter((event) => {
+            const dateFieldName = this.eventsConfig.datesDateField;
+            return (
+              new Date(event[dateFieldName]).getDate() === d + 1 &&
+              new Date(event[dateFieldName]).getMonth() === monthNum &&
+              new Date(event[dateFieldName]).getFullYear() === year
+            );
+          });
+        
+          eventsForDate.forEach((event) => {
+            let hasConflict = false;
+            let isHoliday = false;
+            let eventCount = 0;
+          
+            // Iteramos todos los eventos del día para evaluar el conflicto o si es festivo
+            eventsForDate.forEach((event) => {
+              if (event.conflict) {
+                hasConflict = true;
+              }
+              if (event.is_holidays) {
+                isHoliday = true;
+              }
+              eventCount++;  // Contamos el número de eventos para el badge
+            });
+          
+            // Una vez evaluados todos los eventos, aplicamos la clase correspondiente
+            if (hasConflict) {
+              if (isHoliday) {
+                $dayNode.classList.add('holiday-conflict');
+              } else {
+                $dayNode.classList.add('conflict-day');
+              }
+            } else if (isHoliday) {
+              $dayNode.classList.add('holidayEvent');
+            } else if (eventCount > 0) {
+              $dayNode.classList.add('activeEvent');
+            }
+          
+            // Eliminar badges duplicados si ya existen
+            const existingBadge = $dayNode.querySelector('event-badge');
+            if (existingBadge) {
+              existingBadge.remove();
+            }
+          
+            // Si hay eventos, agregamos el badge
+            if (eventCount > 0) {
+              const badge = document.createElement('event-badge');
+              badge.setAttribute('label', eventCount);
+              $dayNode.appendChild(badge);  // Añadimos el badge al dayNode
+            }
+          });
+        }
+
+        $dayNode.setAttribute('draggable', true);
+        $dayNode.addEventListener('dragstart', this.handleDragStart);
+      } else {
+        $dayNode.classList.add('privMonthDate');
+      }
+
+      $daysContainer.appendChild($dayNode);
+    });
+
+    $monthNode.appendChild($daysContainer);
+
+    return $monthNode;
+  }  
+  buildMonthV1 = (
     monthNum,
     year,
-    events = this.events,
+    events=this.eventsInfo,
     holidays_calendar = this.holidays_calendar,
     calendarStartDate,
     calendarEndDate
   ) => {
-    var firstDayOfMonth = new Date(
-      year,
-      monthNum,
-      this.setDayBasedOnStartWeek
-    ).getDay();
+    console.log('monthNum', monthNum)
+    var firstDayOfMonth = new Date(year, monthNum, this.setDayBasedOnStartWeek).getDay();
+    console.log('calendarStartDate', calendarStartDate, 'calendarEndDate', calendarEndDate)
+    //console.log('this.eventsInfo', this.eventsInfo, 'events', events)
     var startingDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
     var daysInMonth = this.getDaysInMonth(monthNum, year);
     var $monthNode = document.createElement('div');
-    $monthNode.classList.add('month');
+    //$monthNode.classList.add('month');
     var $titleNode = document.createElement('h4');
     $titleNode.innerText = this.monthNames[monthNum] + ' ' + year;
     $monthNode.appendChild($titleNode);
@@ -1206,12 +1777,13 @@ class CalendarComponent extends LitElement {
           currentDate.getMonth() === monthNum &&
           currentDate.getFullYear() === year
         ) {
+          console.log('iscurrentDate', 'd', d, 'monthNum', monthNum, 'year', year, 'eventsForDate.length', eventsForDate===undefined?-1:eventsForDate.length)
           $dayNode.classList.add('currentDate');
         }
         var eventsForDate = []  
-        if (this.events!==undefined){
-          let dateFieldName=this.config.datesDateField
-          eventsForDate = this.events.filter(function (event) {
+        if (this.eventsInfo!==undefined){
+          let dateFieldName=this.eventsConfig.datesDateField
+          eventsForDate = this.eventsInfo.filter(function (event) {
             return (
               new Date(event[dateFieldName]).getDate() === d + 1 &&
               new Date(event[dateFieldName]).getMonth() === monthNum &&
@@ -1228,6 +1800,10 @@ class CalendarComponent extends LitElement {
           //   });
           //   return acc.concat(holidaysForDate);
           // }, []);
+          console.log('d', d, 'monthNum', monthNum, 'year', year, 'eventsForDate.length', eventsForDate.length)
+          if (year==2024&&monthNum==9&&d==6){
+            //alert("te pillo")
+          }
           if (eventsForDate.length > 0) {
             console.log(eventsForDate)
             eventsForDate.forEach(e => {
@@ -1306,8 +1882,18 @@ class CalendarComponent extends LitElement {
   };
 
   render() {
-    
+    let totalConflicts = 0
+    let totalEvents = 0
+    if (this.eventsInfo!==undefined){
+      totalConflicts = this.eventsInfo.filter(event => event.conflict).length;
+      totalEvents = this.eventsInfo.length;
+    }
+
     return html`
+    ${this.genericFormDialogTemplate()}
+    ${this.minimapTemplate()}
+    
+${super.render()}    
       <div class="body">
         <div class="tabs-container">
           <ul class="tab-list">
@@ -1331,8 +1917,22 @@ class CalendarComponent extends LitElement {
             <li class="tab-item" id="showAllEvents">
               <span class="tab-separator"></span
               ><button class="tab-button">Event Lists</button>
+              <event-badge label="${totalEvents}"></event-badge>
+            </li>
+            ${totalConflicts > 0 ? html`
+              <li class="tab-item" id="showConflicts">
+                <span class="tab-separator"></span
+                ><button class="tab-button">Conflicts</button>
+                <event-badge label="${totalConflicts}"></event-badge>
+              </li>
+            ` : html`<li class="tab-item" style="display:none;" id="showConflicts"></li>`}            
+            <li class="tab-item" id="actions">
+            ${this.calendarConfig===undefined||this.calendarConfig.actions===undefined?html``:html`
+              ${this.getButtonForRows(this.calendarConfig.actions, this.data, false, {})}                   
+            `}
             </li>
           </ul>
+          
           <ul class="tab-list">
             <li class="tab-item" id="previous">
               <button class="tab-button">
@@ -1349,7 +1949,8 @@ class CalendarComponent extends LitElement {
                 <span class="previous round">&#8250;</span>
               </button>
             </li>
-          </ul>
+          </ul>  
+          
         </div>
 
         <div id="selectedDateView">
@@ -1367,7 +1968,18 @@ class CalendarComponent extends LitElement {
         </div>
 
         <div id="calendar"></div>
-        <div id="allEvents" style="display: none;"></div>
+        <div id="allEvents" style="display: none;">   
+        
+       ${this.currentView === 'year' ? html`
+          <div class="year-view">
+            <!-- Botones para la vista de Year -->
+            ${this.getButton(this.calendarConfig.yearView, this.data, this.data, true)}
+            
+          </div>
+        ` : ''}        
+          
+        </div>
+        <div id="conflictEvents" style="display: none;"></div>
 
         <div id="eventModal" class="modal">
           <div class="modal-content">

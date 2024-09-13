@@ -1,5 +1,5 @@
 import { html } from "lit";
-import '@vaadin/vaadin-context-menu';
+
 
 export const template = (props) => {
   const { name, label,this:thisComponent , handleUpload } = props;
@@ -34,16 +34,6 @@ export const template = (props) => {
         ${thisComponent.selectedFile ? html`<p>${thisComponent.selectedFile.name}</p> <span @click=${removeFile}>&#x2716</span>` : ''}
       </div>
     </div>
-    <vaadin-context-menu .items=${[{ text: 'View' }, { text: 'Edit' }, { text: 'Delete' }]}>
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>First menu item</vaadin-item>
-          <vaadin-item>Second menu item</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-context-menu>
-    <vaadin-context-menu .items=${[{ text: 'View' }, { text: 'Edit' }, { text: 'Delete' }]}>
-    </vaadin-context-menu>
   `
   };
   return html`<div id="file-container">${renderTemplate()}</div>`;

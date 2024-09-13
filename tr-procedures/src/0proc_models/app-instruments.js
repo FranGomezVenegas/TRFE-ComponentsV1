@@ -75,7 +75,6 @@ export const AppProc = {
       }
     },
     "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
-      "clientMethodxxx": "getSamples",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -375,7 +374,6 @@ export const AppProc = {
       }
     },
     "viewQuery":{ "actionName": "INSTRUMENT_EVENTS_INPROGRESS",	  
-      "xxxclientMethod": "getSamples",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
       "addRefreshButton": true,
       "button": {

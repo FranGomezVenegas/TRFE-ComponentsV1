@@ -24,8 +24,7 @@ export const ProcDeploy = {
     },
     "actions": [
       {
-        "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-        "clientMethod": "getSamples",
+        "actionName": "GET_ACTIVE_PRODUCTION_LOTS",        
         "endPoint": "/moduleenvmon/frontend/EnvMonAPIfrontend",
         "button": {
           "icon": "refresh",
@@ -221,8 +220,7 @@ export const ProcDeploy = {
     },
     "actions": [
       {
-        "actionName": "SAMPLES_INPROGRESS_LIST",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLES_INPROGRESS_LIST",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -374,8 +372,7 @@ export const ProcDeploy = {
     },
     "actions": [
       {
-        "actionName": "SAMPLES_INPROGRESS_LIST",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLES_INPROGRESS_LIST",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -529,8 +526,7 @@ export const ProcDeploy = {
     },
     "actions": [
       {
-        "actionName": "SAMPLEANALYSIS_PENDING_REVISION",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLEANALYSIS_PENDING_REVISION",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -679,8 +675,7 @@ export const ProcDeploy = {
     },
     "actions": [
       {
-        "actionName": "SAMPLES_PENDING_TESTINGGROUP_REVISION",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLES_PENDING_TESTINGGROUP_REVISION",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -856,8 +851,7 @@ export const ProcDeploy = {
     },
     "actions": [
       {
-        "actionName": "SAMPLES_PENDING_SAMPLE_REVISION",
-        "clientMethod": "getSamples",
+        "actionName": "SAMPLES_PENDING_SAMPLE_REVISION",        
         "button": {
           "icon": "refresh",
           "title": {
@@ -1000,8 +994,7 @@ export const ProcDeploy = {
         },
         "actions": [
           {
-            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "clientMethod": "getSamples",
+            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",            
             "endPoint": "/frontend/InvestigationAPIfrontend",
             "button": {
               "icon": "refresh",
@@ -1101,8 +1094,7 @@ export const ProcDeploy = {
         },
         "actions": [
           {
-            "actionName": "OPEN_INVESTIGATIONS",
-            "clientMethod": "getSamples",
+            "actionName": "OPEN_INVESTIGATIONS",            
             "endPoint": "/frontend/InvestigationAPIfrontend",
             "button": {
               "icon": "refresh",

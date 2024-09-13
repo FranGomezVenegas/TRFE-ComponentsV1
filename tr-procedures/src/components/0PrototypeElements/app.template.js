@@ -4,20 +4,21 @@ import '../dropzone/index';
 import '../cameraview/index';
 import "../codeview/index";
 // import "../qrcode-scanner/index";
-import '../Calendar/index';
+//import '../Calendar/calendar-index';
 //import '../Tree/treeview/index';
 //import '../MolecularEditor/molecular-editor';
 import '../flipcard/flipcard';
-import '../serialPort/serial-port';
+//import '../serialPort/serial-port';
 //import '../PreviewFile/previewfile';
 import '../TablesDiagram/tables.diagram.main'
 //import '../FlowDiagram/main'
 import '../diagram/main';
-import '../LabelPrinter/zpl-previewer';
+//import '../LabelPrinter/zpl-previewer';
 //import '../GoogleMaps/main';
 import '../HelpPane/my-pdf-viewer';
-
-import { generateLabel, previewLabel } from '../GenericDialogs/labelGenerator';
+import '../SqlEditor/sql-editor';
+import '../javascriptEcma5Editor/javascript-ecma5-checker-editor';
+//import { generateLabel, previewLabel } from '../GenericDialogs/labelGenerator';
 
 export const template = (props) => {
   const { selectedItems, lang, handleSelectItem, getSelectedItems, handleGenerateLabel } = props;
@@ -82,8 +83,81 @@ export const template = (props) => {
 
   let buttonForDownloadAwsFileUrl = "http://localhost:8081/TRAZiT-API/app/procs/InvTrackingAPIqueries?finalToken=eyJ1c2VyREIiOiJyJmQiLCJkYXRldGltZUZvcm1hdEF0UGxhdGZvcm1MZXZlbCI6IkRJU0FCTEVEIiwicHJvY3NNb2R1bGVOYW1lIjoiUmFuZEQqUmFuZEQgUFJPSkVDVFMiLCJkYk5hbWUiOiJkZW1vX3YwXzlfMiIsInR5cCI6IkpXVCIsInVzZXJfcHJvY2VkdXJlX2hhc2hjb2RlcyI6IlJhbmREKjEqMTIzODQ1ODM2NSIsImVTaWduIjoiZmlybWFkZW1vIiwidXNlckRCUGFzc3dvcmQiOiJ0cmF6aXQ0ZXZlciIsInVzZXJNYWlsIjoiaW5mb0B0cmF6aXQubmV0IiwidXNlcl9wcm9jZWR1cmVzIjoiW1JhbmREXSIsImFwcFNlc3Npb25JZCI6IjYyOTgiLCJhcHBTZXNzaW9uU3RhcnRlZERhdGUiOiJGcmkgTWF5IDE3IDA5OjA3OjU3IFVUQyAyMDI0IiwidXNlclJvbGUiOiJyJmQgc3VwZXJ1c2VyIiwiYWxnIjoiSFMyNTYiLCJpbnRlcm5hbFVzZXJJRCI6IjExMDgzMiJ9.eyJpc3MiOiJMYWJQTEFORVRkZXN0cmFuZ2lzSW5UaGVOaWdodCJ9.gZmJzwaOGQOxGW-rJH_vUvAsGOUZxUBeSI7SsOwaQ0o&dbName=demo_v0_9_2&actionName=GET_LOT_AWS_ATTACHMENT&procInstanceName=stock&lotName=123456%205%2F10&qualifId=1";
 
+  let sqlEditorData={
+    "tables":[ "sample", "analysis"]
+  }
   return html`
-  
+  <style>
+  .mainContainer {
+  display: flex;
+  flex-direction: row; /* o column si quieres que se apilen uno sobre otro */
+  flex-wrap: wrap; /* Permite que los elementos que no caben en una fila bajen a la siguiente */
+  justify-content: space-between; /* O usa 'space-around' o 'center' si prefieres un espaciado diferente */
+  gap: 20px; /* Añade espacio entre los elementos */
+}
+.section {
+  flex: 1;
+  min-width: 200px; /* Ajusta este valor según sea necesario */
+  max-width: 400px; /* Esto limitará el tamaño máximo de los elementos */
+}
+</style>
+${1==1?html`
+  <div style="display: flex; gap: 20px;"> 
+    <table-diagram lang=${lang}
+      .nodeDataArray=${[
+        {
+          key: 'Sample',
+          label_en: 'Sample', label_es: 'Muestra',
+          fields: [
+            { name: 'sample_id', info: '', color: '#f7b84b66', figure: 'Ellipse' },
+            { name: 'status_current', info: 'the second one', color: '', figure: 'Ellipse' },
+            { name: 'config_code', info: '3rd', color: '' },
+          ],
+          loc: '0 0',
+        },
+        {
+          key: 'Sample_Analysis',
+          label_en: 'Sample Analysis', label_es: 'Análisis de la muestra',
+          fields: [
+            { name: 'sample_id', info: '', color: '#00bcf242', figure: 'Diamond', info: 'diamond' },
+            { name: 'test_id', info: '', color: '#f7b84b66', figure: 'Circle', info: 'circle' },
+            { name: 'name', info: '', color: '', figure: 'Triangle', info: 'triangle' }          
+          ],
+          loc: '250 0',
+        },
+        {
+          key: 'Sample_Analysis_Result',
+          label_en: 'Sample Analysis Result', label_es: 'Resultados del análisis de la muestra',
+          fields: [
+            { name: 'sample_id', info: '', color: '#00bcf242', figure: 'Ellipse' },
+            { name: 'test_id', info: 'example', color: '#00bcf242', figure: 'Ellipse' },
+            { name: 'result_id', info: 'example', color: '', figure: 'Ellipse' },
+            { name: 'param_name', info: 'example', color: '', figure: 'Ellipse' },
+            { name: 'raw_value', info: 'example', color: '', figure: 'Ellipse' },
+          ],
+          loc: '500 0',
+        },
+      ]}
+      .links=${[
+        { from: { key: 'Sample', field: 'sample_id' }, to: { key: 'Sample_Analysis', field: 'sample_id' } },
+        { from: { key: 'Sample_Analysis', field: 'sample_id' }, to: { key: 'Sample_Analysis_Result', field: 'sample_id' } },
+        { from: { key: 'Sample_Analysis', field: 'test_id' }, to: { key: 'Sample_Analysis_Result', field: 'test_id' } },
+      ]}
+    ></table-diagram>
+    </div>
+`:html``}
+${1==2?html`
+  <javascript-ecma5-checker-editor></javascript-ecma5-checker-editor>
+  `:
+  html`  
+    <div class="mainContainer">
+      <div class="section">
+        <h3>QRCode & BarCode</h3>
+        <qrcode-scanner></qrcode-scanner>
+        <code-view></code-view>
+      </div>  
+  </div>  
+  <sql-editor lang=${lang} .data=${sqlEditorData}></sql-editor>
   <my-pdf-viewer
   .pdfs="${[
     {
@@ -110,8 +184,8 @@ export const template = (props) => {
 ></my-pdf-viewer>
 
   <google-map></google-map>
-  <zpl-previewer></zpl-previewer>
-  <serial-port-component lang=${props.lang} .sendEnabled="${true}" .isTimeoutEditable="${false}" .showAlert="${false}"></serial-port-component>
+<!--  <zpl-previewer></zpl-previewer> -->
+<!--  <serial-port-component lang=${props.lang} .sendEnabled="${true}" .isTimeoutEditable="${false}" .showAlert="${false}"></serial-port-component> -->
     <diagram-component></diagram-component>
     <graph-flow-component .model="${{
     "class": "GraphLinksModel",
@@ -151,46 +225,12 @@ export const template = (props) => {
     ]}}">
   </graph-flow-component>
 
-     <table-diagram
-    .nodeDataArray=${[
-      {
-        key: 'Record1',
-        fields: [
-          { name: 'field1', info: '', color: '#F7B84B', figure: 'Ellipse' },
-          { name: 'field2', info: 'the second one', color: '#F25022', figure: 'Ellipse' },
-          { name: 'fieldThree', info: '3rd', color: '#00BCF2' },
-        ],
-        loc: '0 0',
-      },
-      {
-        key: 'Record2',
-        fields: [
-          { name: 'fieldA', info: '', color: '#FFB900', figure: 'Diamond', info: 'diamond' },
-          { name: 'fieldB', info: '', color: 'green', figure: 'Circle', info: 'circle' },
-          { name: 'fieldC', info: '', color: 'red', figure: 'Triangle', info: 'triangle' },
-          { name: 'fieldD', info: '', figure: 'XLine', info: 'X' },
-        ],
-        loc: '250 0',
-      },
-      {
-        key: 'Sample',
-        fields: [
-          { name: 'sampleField1', info: '', color: '#00BCF2', figure: 'Ellipse' },
-          { name: 'sampleField2', info: 'example', color: '#F25022', figure: 'Ellipse' },
-        ],
-        loc: '500 0',
-      },
-    ]}
-    .links=${[
-      { from: { key: 'Record1', field: 'field2' }, to: { key: 'Record2', field: 'fieldD' } },
-      { from: { key: 'Record1', field: 'field1' }, to: { key: 'Sample', field: 'sampleField1' } },
-      { from: { key: 'Record2', field: 'fieldA' }, to: { key: 'Sample', field: 'sampleField2' } },
-    ]}
-  ></table-diagram>
+   
 
-      <button @click=${handleGenerateLabel}>Generate Label Preview</button>
+<!--      <button @click=${handleGenerateLabel}>Generate Label Preview</button>
       <button @click=${() => window.print()}>Print</button>
       <div id="labelPreviewContainer" style="border: 1px solid #000; width: 400px; height: 600px;"></div>
+-->      
       <!-- <preview-file></preview-file>  -->
       <flip-card .lang=${lang} .config=${flipCardConfig1} .data=${flipCardDataGroup1}></flip-card>
       
@@ -221,10 +261,7 @@ export const template = (props) => {
         <h3>Camera</h3>
         <camera-view></camera-view>
       </div>
-      <div class="section">
-        <h3>QRCode & BarCode</h3>
-        <qrcode-scanner></qrcode-scanner>
-        <code-view></code-view>
-      </div>
+
+  `}
   `;
 };

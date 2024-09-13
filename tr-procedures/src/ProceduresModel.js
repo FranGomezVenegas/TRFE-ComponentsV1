@@ -62,8 +62,8 @@ export const DemoViews = [
     {"proc_instance_name": "em-demo-a", "view_name": "SampleIncubation1", "filter_name": "Incubation", "title": "Sample Incubation 1"},
     {"proc_instance_name": "em-demo-a", "view_name": "SampleIncubation2", "filter_name": "Incubation", "title": "Sample Incubation 2"},
 	
-    {"proc_instance_name": "em-demo-a", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismSMP", "title": "Sample Microorganism"},
-    {"proc_instance_name": "em-demo-a", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismPERS", "title": "Personal Microorganism"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SampleMicroorganism", "filter_name": "LOCATION", "title": "Sample Microorganism"},
+    {"proc_instance_name": "em-demo-a", "view_name": "SampleMicroorganism", "filter_name": "PERSONAL", "title": "Personal Microorganism"},
     {"proc_instance_name": "em-demo-a", "view_name": "Programs", "filter_name": "Programs", "title": "Programs"},
     {"proc_instance_name": "em-demo-a", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
     {"proc_instance_name": "em-demo-a", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
@@ -132,7 +132,9 @@ export const DemoViews = [
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "stability", "filter_name": "stability", "title": "stability"},
     
     {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "prototype-elements-view-main", "filter_name": "prototype-elements-view-main", "title": "Prototype Elements"},
-	  {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "ck-editor", "filter_name": "ck-editor", "title": "ck-editor"}
+	  {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "ck-editor", "filter_name": "ck-editor", "title": "ck-editor"},
+	  {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "LabelDesigner", "filter_name": "", "title": "Label Designer"},
+	  {"proc_instance_name2": "fake-developers", "proc_instance_name": "RandD", "view_name": "SqlEditor", "filter_name": "", "title": "Sql Editor"}
   ]},      
   {"label":"genoma (genoma-1)", "proc_instance_name": "genoma-1", "views":[
     {"proc_instance_name": "genoma-1", "view_name": "InventoryLotsGeneral", "filter_name": "InventoryLots.1", "title": "Active Inventory Lots"},
@@ -195,8 +197,8 @@ export const DemoViews = [
     {"proc_instance_name": "mb_em", "view_name": "SampleIncubation", "filter_name": "", "title": "Sample Incubation"},
     {"proc_instance_name": "mb_em", "view_name": "SampleIncubation1", "filter_name": "", "title": "Sample Incubation 1"},
     {"proc_instance_name": "mb_em", "view_name": "SampleIncubation2", "filter_name": "", "title": "Sample Incubation 1"},
-    {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismSMP", "title": "Sample Microorganism"},
-    {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "MicroOrganismPERS", "title": "Personal Microorganism"},
+    {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "LOCATION", "title": "Sample Microorganism"},
+    {"proc_instance_name": "mb_em", "view_name": "SampleMicroorganism", "filter_name": "PERSONAL", "title": "Personal Microorganism"},
     {"proc_instance_name": "mb_em", "view_name": "Programs", "filter_name": "", "title": "Programs"},
     {"proc_instance_name": "mb_em", "view_name": "ProgramsObjectByTabs", "filter_name": "", "title": "ProgramsObjectByTabs"},
     

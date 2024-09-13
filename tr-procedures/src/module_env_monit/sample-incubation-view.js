@@ -163,7 +163,7 @@ render(){
       .viewModelFromProcModel=${this.viewModelFromProcModel}
     .selectedItems=${this.selectedItems} .config=${this.config}></audit-dialog>    
 
-    ${this.genericFormDialog()}
+    ${this.genericFormDialogTemplate()}
     ${this.assignTemplate()}
     ${super.render()}    
   `: nothing

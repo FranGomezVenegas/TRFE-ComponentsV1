@@ -5189,7 +5189,6 @@ export const DiseaseStudy = {
         },
         "viewQuery":{
             "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "ssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -5296,7 +5295,6 @@ export const DiseaseStudy = {
         },
         "viewQuery":{
             "actionName": "OPEN_INVESTIGATIONS",
-            "sssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",

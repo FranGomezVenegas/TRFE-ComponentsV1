@@ -3,18 +3,20 @@
   "description": "Dialog for relogin of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
+    "@material/web": "^2.1.0",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
+    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
+    "@vaadin/vaadin-combo-box": "^23.5.3",
     "lit": "^2.0.2"
   },
   "devDependencies": {
-    "@spectrum-web-components/theme": "^0.8.14",
     "@web/dev-server": "^0.1.25"
   }
 }

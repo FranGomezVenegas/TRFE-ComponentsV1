@@ -51,7 +51,6 @@ export const App = {
       }
     },	
     "viewQuery":{ "actionName": "GET_WHITE_IP_LIST",
-      "xxxclientMethod": "getSamples",
       "addRefreshButton": true,
       "endPoint": "/app/PlatformAdminAPIqueries",
       "button": {

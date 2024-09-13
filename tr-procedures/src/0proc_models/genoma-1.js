@@ -53,7 +53,6 @@ export const Genoma1 = {
         },
         "viewQuery":{
             "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "ssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -160,7 +159,6 @@ export const Genoma1 = {
         },
         "viewQuery":{
             "actionName": "OPEN_INVESTIGATIONS",
-            "sssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",

@@ -75,6 +75,7 @@ export function TrazitGenericDialogs(base) {
             }
         });
     }
+     
     renderQRCodeScanner(actionModel) {
         if (actionModel.dialogInfo.fields===undefined){return nothing}
         const qrCodeField = actionModel.dialogInfo.fields.find(field => field.qrcode);
@@ -99,6 +100,7 @@ export function TrazitGenericDialogs(base) {
         `;
     }
 
+    
     openGenericDialog(actionModel = this.actionBeingPerformedModel){
         //alert('openGenericDialog')
         if (actionModel===undefined||actionModel.dialogInfo===undefined){
@@ -151,8 +153,19 @@ export function TrazitGenericDialogs(base) {
         }
     }
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    genericFormDialog(actionModel, procInstanceName) {
-        this.procInstanceName=procInstanceName
+
+
+    show(actionBeingPerformedModel, action, data) {
+        if (this.genericFormDialogTemplate(actionBeingPerformedModel)) {
+            console.log('Mostrando el diálogo con datos:', actionBeingPerformedModel, action, data);
+        } else {
+            console.error('Error: No se pudo abrir el diálogo');
+        }
+    }
+    genericFormDialogTemplate(actionModel, procInstanceName) {
+        if (procInstanceName!==undefined){
+            this.procInstanceName=procInstanceName
+        }
         if (actionModel === undefined) {
             actionModel = this.actionBeingPerformedModel
             if (actionModel!==undefined){
@@ -160,7 +173,9 @@ export function TrazitGenericDialogs(base) {
             }
         }
         if (actionModel === undefined||actionModel.dialogInfo===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
-            return
+            return html`
+            <tr-dialog id="genericDialog"></tr-dialog>
+            `;           
         }          
 
          // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi 
@@ -832,6 +847,9 @@ export function TrazitGenericDialogs(base) {
         </tr-dialog>
     `
     }
+
+
+    
     addTheDynamicElement(fld){
         if (fld.rule===undefined||this.selectedItems[0]===undefined){return}
         let selObj=this.selectedItems[0]
@@ -866,6 +884,9 @@ export function TrazitGenericDialogs(base) {
         }
         return html``         
     }
+    get genericFormDialog() {
+        return this.shadowRoot.querySelector('tr-dialog#genericDialog');
+    }    
     get genericDialog() {return this.shadowRoot.querySelector("tr-dialog#genericDialog")}
     get dateDialog() {return this.shadowRoot.querySelector("tr-dialog#dateDialog")}
     get dateInput() {return this.shadowRoot.querySelector("input#dateInput")}

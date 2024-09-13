@@ -1,3 +1,3 @@
-import { EndpointsList } from './src/EndpointsList.js';
+import { EndpointsListByModule } from './src/endpoints-list-main.js';
 
-window.customElements.define('endpoints-list', EndpointsList);
+//window.customElements.define('endpoints-list-bymodule', EndpointsListByModule);

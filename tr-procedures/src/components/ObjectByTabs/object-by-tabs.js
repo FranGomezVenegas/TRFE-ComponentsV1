@@ -603,7 +603,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
     
     render() {
       return html`
-        ${this.genericFormDialog()}
+        ${this.genericFormDialogTemplate()}
 
         ${this.desktop
           ? html`

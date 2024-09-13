@@ -1,11 +1,9 @@
 import { html, css, nothing } from 'lit';
 import { CommonCore, commonLangConfig } from '@trazit/common-core';
-import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-textfield';
-import '@vaadin/vaadin-combo-box/vaadin-combo-box';
-import '@spectrum-web-components/button/sp-button';
-import '@trazit/tr-dialog/tr-dialog';
-
+import '@material/web/select/outlined-select.js';
+import '@material/web/button/filled-button.js';
+import '@trazit/tr-dialog/custom-md-dialog.js';
+import { credDialogStyles } from './CredDialogStyles.js'; 
 
 const langConfig = {
   "pwdWindowTitle": {
@@ -58,47 +56,7 @@ const langConfig = {
 
 export class CredDialog extends CommonCore {
   static get styles() {
-    return [
-      Layouts, 
-      css`
-      :host {
-        display: block;
-      }
-      :host([hidden]) {
-        display: none;
-      }
-      tr-dialog {
-        --mdc-dialog-heading-ink-color: blue;
-        --mdc-typography-headline6-font-size: 35px;
-        --mdc-dialog-z-index:9999999;
-      }
-      .content {
-        opacity: 0.9;
-        --mdc-dialog-z-index:9999999;
-      }
-      .content * {
-        margin: 5px 0;
-      }
-      p.attemptsphraseblue {
-        color: #464dbb;
-      }
-      p.attemptsphrasered {
-        color: #f3371680;
-        animation-duration: 2s;
-        animation-name: slidein;
-      }
-      @keyframes slidein {
-        from {
-          margin-left: 30%;
-        }
-        to {
-          margin-left: 0%;
-        }
-      }           
-      @media (max-width: 460px) {
-      }
-      `
-    ];
+    return [credDialogStyles];
   }
 
   static get properties() {

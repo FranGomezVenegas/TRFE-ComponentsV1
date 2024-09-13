@@ -3,7 +3,7 @@
   "description": "Component video tutorial of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "module": "index.js",
   "scripts": {

@@ -1,96 +1,92 @@
-import { html } from 'lit';
+import { html, css } from 'lit';
 
 export const EndpointsListTemplate = (context) => {
+  //alert(context.config.theme)
   return html`
     ${context.desktop
       ? html`
-      adsaadas
-          <sp-split-view resizable splitter-pos="300">
-            <div id="leftSplit">
-              <select @change=${context.apiChanged}>
-                <option value="">-- Filter by API Name --</option>
-                ${context.apis.map(
-                  (a) =>
-                    html`<option value=${a.api_name}>
-                      ${a.api_url !== undefined && a.api_url.length > 0
-                        ? a.api_url
-                        : a.api_name}
-                    </option>`
+          <div class="split-container">
+            <div id="leftSplit" class="resizable">
+              <md-outlined-icon-button style="color: #148cfa;" icon="refresh" id="refresh" title="Refresh" 
+                @click=${() => context.firstUpdated()}>d</md-outlined-icon-button>
+              <select @click=${context.moduleClicked} multiple>
+                <option class="labelModule" value="">-- Filter by Module --</option>
+                ${context.modules.map(
+                  (m) => html`<option value=${m} ?selected=${m === context.currentModule}>${m}</option>`
                 )}
               </select>
               <br />
-              <label> Last Update</label>
-              <input
-                id="lastDate"
-                type="datetime-local"
-                @change=${context.dateChanged}
-              />
-              <hr />
-              <label>${context.filterDocs.length} of ${context.docs.length}</label>
-              <div id="endpointName">
-                ${context.filterDocs.map(
-                  (d) =>
-                    html`
-                      <p
-                        class="ed"
-                        id="${d.id}"
-                        @click=${(e) => context.endpointSelect(e, d)}
-                      >
-                        ${d.endpoint_name}
-                      </p>
-                    `
+              <select @click=${context.apiClicked} multiple>
+                <option class="labelApi" value="">-- Filter by API Name --</option>
+                ${context.filteredApis.map(
+                  (a) => html`<option value=${a} ?selected=${a === context.currentApi}>${a}</option>`
                 )}
-              </div>
+              </select>
+              <br />
+              <input style="height: 30px; width: 300px; background-color: #1473e614; font-size:16px;" type="text"
+                @input=${context.searchEndpoints} placeholder="Search in Endpoints..."
+              />
+              <br />
             </div>
-            <div id="rightSplit">
+            <div class="divider"></div>
+            <div id="rightSplit" class="resizable">
               ${context.selectedApis.map(
                 (s) => html`<json-viewer>${JSON.stringify(s)}</json-viewer>`
               )}
             </div>
-          </sp-split-view>
+          </div>
         `
       : html`
           <div id="mobile">
             <div id="leftSplit">
-              <select @change=${context.apiChanged}>
-                <option value="">-- Filter by API Name --</option>
-                ${context.apis.map(
-                  (a) =>
-                    html`<option value=${a.api_name}>
-                      ${a.api_url !== undefined && a.api_url.length > 0
-                        ? a.api_url
-                        : a.api_name}
-                    </option>`
-                )}
-              </select>
-              <br />
-              Last Update
-              <input
-                id="lastDate"
-                type="datetime-local"
-                @change=${context.dateChanged}
-              />
+              <div style="display:flex; height: 200px; gap: 10px">
+                <md-filled-icon-button style="color: #148cfa;" icon="refresh" id="refresh"
+                  title="" @click=${() => context.firstUpdated(undefined)}><md-icon>refresh</md-icon></md-filled-icon-button>                
+                <select @click=${context.moduleClicked} multiple>
+                  <option class="labelModule" value="">-- Filter by Module --</option>
+                  ${context.modules.map(
+                    (m) => html`<option value=${m} ?selected=${m === context.currentModule}>${m}</option>`
+                  )}
+                </select>
+                <br />
+                  <select @click=${context.apiClicked} multiple>
+                    <option class="labelApi" value="">-- Filter by API Name --</option>
+                    ${context.filteredApis.map(
+                      (a) => html`<option value=${a} ?selected=${a === context.currentApi}>${a}</option>`
+                    )}
+                  </select>
+                <br />
+                <input style="height: 30px; width: 300px; background-color: #1473e614; font-size:16px;" type="text" 
+                  @input=${context.searchEndpoints} placeholder="Search in Endpoints..."
+                />
+                <br />
+              </div>
               <hr />
-              <label>${context.filterDocs.length} of ${context.docs.length}</label>
+              <div style="display:flex;">
+                <label style="margin:5px; padding-right:20px;">${context.filterDocs.length} of ${context.docs.length}</label>
+                <button @click=${context.toggleAllEndpoints}>
+                  ${context.areAllEndpointsVisible ? 'Collapse All' : 'Expand All'}
+                </button>
+              </div>
               <div id="endpointName">
                 ${context.filterDocs.map(
-                  (d) =>
+                  (d, index) =>
                     html`
                       <p
                         class="ed"
                         id="${d.id}"
-                        @click=${() =>
-                          context.shadowRoot.querySelector(
-                            "#detail" + d.id
-                          ).hidden = !context.shadowRoot.querySelector(
-                            "#detail" + d.id
-                          ).hidden}
                       >
-                        ${d.endpoint_name}
+                        <span @click=${() => context.toggleEndpointDetails(index)}>
+                          ${context.isEndpointVisible(index) ? '▼' : '▶'} 
+                        </span>
+                        <span class="labelModule">${d.module_pretty_name}</span> -- 
+                        <span class="labelApi">${d.api_name}</span> -- 
+                        <span class="labelEndpoint">${d.endpoint_name}</span> 
+                        
                       </p>
-                      <div id="detail${d.id}" hidden>
-                        <json-viewer>${context.endpointDetail(d)}</json-viewer>
-                      </div>
+                      ${context.isEndpointVisible(index)
+                        ? html`<div class="endpoint-details"><json-viewer>${context.endpointDetail(d)}</json-viewer></div>`
+                        : ''}
                     `
                 )}
               </div>

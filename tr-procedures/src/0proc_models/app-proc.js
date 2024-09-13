@@ -214,7 +214,6 @@ export const AppProc ={
       }
     },
     "viewQuery":{ "actionName": "ACTIVE_INSTRUMENTS_LIST",
-      "clientMethodxxx": "getSamples",
       "endPoint": "/app/procs/InstrumentsAPIqueries",
       "addRefreshButton": true,
       "button": {

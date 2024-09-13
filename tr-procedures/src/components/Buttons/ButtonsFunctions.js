@@ -6,6 +6,9 @@ import { ActionsFunctions } from '../Actions/ActionsFunctions';
 import { ExportTableToCsv } from '../../features/exportTableToCsv';
 import { PrintableTable } from '../../features/printableTable';
 import { ListsFunctions } from '../../form_fields/lists-functions';
+
+import { buttonStyles } from './trazit-buttons-styles.js';
+
 export function ButtonsFunctions(base) {
   return class extends ListsFunctions(PrintableTable(ExportTableToCsv(ProcManagementMethods(ClientMethod(ActionsFunctions(ApiFunctions(base))))))) {   
 
@@ -14,86 +17,7 @@ export function ButtonsFunctions(base) {
       if (actions === undefined) { actions = this.viewModelFromProcModel }
       return html`
         <style>
-          mwc-icon-button#lang {        
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-          }
-          mwc-button {
-            background-color: #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family: Montserrat;
-            font-weight: bold;
-            font-size: 19px;
-            --mdc-theme-primary:#1473e6; /* rgba(36, 192, 235, 1); */
-            border-radius: 12px;
-          }
-          mwc-button.button {        
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-            background: rgb(36, 192, 235) none repeat scroll 0% 0%;
-            font-family: Montserrat;
-            font-weight: bold;
-            font-size: 19px;
-            color: white;
-            border-color: transparent !important;
-            --mdc-button-fill-color: red;
-            --mdc-button-ink-color: blue;
-            border-radius: 12px;
-          }            
-          mwc-icon-button {        
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-          }
-          mwc-icon-button.disabledtrue{
-            color : red;
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-          }
-          mwc-icon-button#video {
-            color : #FFFFFF;
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-          }
-          sp-button {
-            background : #24C0EB;
-            background : rgba(36, 192, 235, 1);
-            border-color : inherit !important;
-            border-radius : 35px;
-            -moz-border-radius : 35px;
-            -webkit-border-radius : 35px;
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-            color : #FFFFFF;
-            color : rgb(255, 255, 255);
-          }
-          mwc-textfield {
-            border-style : Solid;
-            border-color : #999999;
-            border-color : rgba(153, 153, 153, 1);
-            border-width : 1px;
-            border-radius : 7px;
-            -moz-border-radius : 7px;
-            -webkit-border-radius : 7px;
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-            background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);
-            background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
-          }
-          mwc-textfield.mdc-text-field {
-            background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);
-          }
-          mwc-textfield.mdc-textfield.mdc-floating-label {
-            color: red;
-          }
+          ${buttonStyles}
         </style>
           ${actions !== undefined && actions.map(action =>
         html`
@@ -214,95 +138,9 @@ export function ButtonsFunctions(base) {
         printable.enable=false
         downloadable.enable=false
       }
-																																											 
-															
-									 
-			   
-											  
-						   
-		  
       return html`
         <style>
-          mwc-icon-button#lang {        
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-          }
-          mwc-button {
-            background-color: #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family: Montserrat;
-            font-weight: bold;
-            font-size: 19px;
-            --mdc-theme-primary:#1473e6; /* rgba(36, 192, 235, 1); */
-            border-radius: 12px;
-          }
-          mwc-button.button {        
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-            background: rgb(36, 192, 235) none repeat scroll 0% 0%;
-            font-family: Montserrat;
-            font-weight: bold;
-            font-size: 19px;
-            color: white;
-            border-color: transparent !important;
-            --mdc-button-fill-color: red;
-            --mdc-button-ink-color: blue;
-            border-radius: 12px;
-          }            
-          mwc-icon-button {        
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-          }
-          mwc-icon-button.disabledtrue{
-            color : red;
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-          }
-          mwc-icon-button#video {
-            color : #FFFFFF;
-            color : #1473e6; /* rgba(36, 192, 235, 1); */
-          }
-          sp-button {
-            background : #24C0EB;
-            background : #1473e6; /* rgba(36, 192, 235, 1); */
-            border-color : inherit !important;
-            border-radius : 35px;
-            -moz-border-radius : 35px;
-            -webkit-border-radius : 35px;
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-            color : #FFFFFF;
-            color : rgb(255, 255, 255);
-          }
-          mwc-textfield {
-            border-style : Solid;
-            border-color : #999999;
-            border-color : rgba(153, 153, 153, 1);
-            border-width : 1px;
-            border-radius : 7px;
-            -moz-border-radius : 7px;
-            -webkit-border-radius : 7px;
-            font-family : Montserrat;
-            font-weight : bold;
-            font-size : 19px;
-            background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);
-            background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
-          }
-          mwc-textfield.mdc-text-field {
-            background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);
-          }
-          mwc-textfield.mdc-textfield.mdc-floating-label {
-            color: red;
-          }
+          ${buttonStyles}        
         </style>
           ${refreshable.enable===true ?html`
           <mwc-icon-button
@@ -383,86 +221,7 @@ export function ButtonsFunctions(base) {
 		console.log('getButtondata', data)
 		return html`
 		  <style>
-			mwc-icon-button#lang {
-			  color : rgba(36, 192, 235, 1);
-			  font-family : Montserrat;
-			  font-weight : bold;
-			  font-size : 19px;
-			}
-			mwc-button {
-			  background-color: rgba(36, 192, 235, 1);
-			  font-family: Montserrat;
-			  font-weight: bold;
-			  font-size: 19px;
-			  --mdc-theme-primary:rgba(36, 192, 235, 1);
-			  border-radius: 12px;
-			}
-			mwc-button.button {
-			  color : rgba(36, 192, 235, 1);
-			  font-family : Montserrat;
-			  font-weight : bold;
-			  font-size : 19px;
-			  background: rgb(36, 192, 235) none repeat scroll 0% 0%;
-			  font-family: Montserrat;
-			  font-weight: bold;
-			  font-size: 19px;
-			  color: white;
-			  border-color: transparent !important;
-			  --mdc-button-fill-color: red;
-			  --mdc-button-ink-color: blue;
-			  border-radius: 12px;
-			}
-			mwc-icon-button {
-			  color : rgba(36, 192, 235, 1);
-			  font-family : Montserrat;
-			  font-weight : bold;
-			  font-size : 19px;
-			}
-			mwc-icon-button.disabledtrue{
-			  color : red;
-			  font-family : Montserrat;
-			  font-weight : bold;
-			  font-size : 19px;
-			}
-			mwc-icon-button#video {
-			  color : #FFFFFF;
-			  color : rgba(36, 192, 235, 1);
-			}
-			sp-button {
-			  background : #24C0EB;
-			  background : rgba(36, 192, 235, 1);
-			  border-color : inherit !important;
-			  border-radius : 35px;
-			  -moz-border-radius : 35px;
-			  -webkit-border-radius : 35px;
-			  font-family : Montserrat;
-			  font-weight : bold;
-			  font-size : 19px;
-			  color : #FFFFFF;
-			  color : rgb(255, 255, 255);
-			}
-			mwc-textfield {
-			  border-style : Solid;
-			  border-color : #999999;
-			  border-color : rgba(153, 153, 153, 1);
-			  border-width : 1px;
-			  border-radius : 7px;
-			  -moz-border-radius : 7px;
-			  -webkit-border-radius : 7px;
-			  font-family : Montserrat;
-			  font-weight : bold;
-			  font-size : 19px;
-			  background-color :  #FFFFFF;
-			  background-color : rgb(255, 255, 255);
-			  background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
-			}
-			mwc-textfield.mdc-text-field {
-			  background-color :  #FFFFFF;
-			  background-color : rgb(255, 255, 255);
-			}
-			mwc-textfield.mdc-textfield.mdc-floating-label {
-			  color: red;
-			}
+			${buttonStyles}    
 		  </style>
       ${refreshable.enable===true ?html`
         <mwc-icon-button

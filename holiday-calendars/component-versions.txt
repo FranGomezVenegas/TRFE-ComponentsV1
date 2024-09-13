@@ -1,0 +1,3 @@
+@trazit/apis-forplatform: null
+@trazit/platform-login: 2.2.0
+@trazit/common-core: 1.0.0

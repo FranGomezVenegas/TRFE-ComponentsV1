@@ -1,4 +1,4 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
 import './stagesview.css.js';
 import './stagesview.template.js';
 import './index.js';

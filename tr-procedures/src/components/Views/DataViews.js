@@ -415,6 +415,7 @@ export function DataViews(base) {
                                                           0.94
                                                         ) !important;
                                                         background-color: #2196f3 !important;
+                                                        align-content: center;
                                                       }
                                                       .w3-background,
                                                       .w3-hover-blue:hover {
@@ -424,7 +425,8 @@ export function DataViews(base) {
                                                           22,
                                                           0.94
                                                         ) !important;
-                                                        background-color: #ffdedd !important;
+                                                        background-color: #dc354559 !important;
+                                                        border: #6c757d 1px solid;
                                                       }
                                                       .title {
                                                         font-size: 8px;
@@ -1859,13 +1861,14 @@ export function DataViews(base) {
     }
     dialogs() {
       console.log('DataViews dialogs')
-      return html` ${this.credentialsDialog()} ${this.genericFormDialog()}  ${this.reactivateObjectsDialog()}`;
+      return html` ${this.credentialsDialog()} ${this.genericFormDialogTemplate()}  ${this.reactivateObjectsDialog()}`;
     }
 
     loadDialogs() {
       console.log('DataViews loadDialogs')
       return html`
-        ${this.credentialsDialog()} ${this.genericFormDialog()}
+        ${this.credentialsDialog()} 
+        ${this.genericFormDialogTemplate()}
         ${this.reactivateObjectsDialog()}
         ${this.moduleEnvMonitMicroorganismsDialogAdd()}
         ${this.moduleEnvMonitMicroorganismsDialogRemove()}
@@ -3281,11 +3284,19 @@ export function DataViews(base) {
       `
     }    
     calendar(elem, data) {
-      import('../Calendar/index')
-      let dataArr = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
-      console.log('calendar', 'elem', elem, 'data', data, 'dataArr', dataArr)
+      import('../Calendar/calendar-index')
+      if (data===undefined){return}
+      
+      let calendarConfig={}
+      if (elem.calendarConfig!==undefined){
+        calendarConfig=elem.calendarConfig
+      }
+      let calendarInfo = this.TRAZiTgetDataFromRoot(elem.calendarConfig, data, this.viewModelFromProcModel);
 
-      let events={"program_calendar": {
+      let eventsInfo = this.TRAZiTgetDataFromRoot(elem.eventsConfig, data, this.viewModelFromProcModel);
+     
+
+      let fakeCalendarInfo={
         "calendar_id": 1,
         "program_name": "LlenadoViales",
         "program_config_version": 1,
@@ -3321,15 +3332,16 @@ export function DataViews(base) {
             "purpose_es": "Todos los viernes de Enero"
           }
         ],
-      }}    
-      if (dataArr!==undefined){  
-        let holidayDay={created_on:"2023-11-01", instrument:"All saints", is_holidays:true}
-        dataArr.push(holidayDay)
-        let holidayDay2={created_on:"2023-11-16", instrument:"Invented holidays", is_holidays:true}
-        dataArr.push(holidayDay2)
-        events.program_calendar.dates=dataArr
       }
-      let calendarConfig={
+       
+      // if (dataArr!==undefined){  
+      //   let holidayDay={created_on:"2023-11-01", instrument:"All saints", is_holidays:true}
+      //   dataArr.push(holidayDay)
+      //   let holidayDay2={created_on:"2023-11-16", instrument:"Invented holidays", is_holidays:true}
+      //   dataArr.push(holidayDay2)
+      //   events.program_calendar.dates=dataArr
+      // }
+      let fakeCalendarConfig={
         "datesDateField":"created_on",
         "eventListsFields":[
           {"field": "instrument", "label_en": "Instrument", "label_es": "Instrumento"},
@@ -3345,12 +3357,15 @@ export function DataViews(base) {
           "dialogHeight": "300px" // Añade estas líneas        
         }
       }
-
+      console.log('calendar', 'elem', elem, 'data', data, 'calendarInfo', calendarInfo, 'eventsInfo', eventsInfo)
+      //.dataAllInOneData=${events}
       return html`
         <calendar-component .fakeData=${false} .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
-          .model=${elem} ?ready="true" .dataAllInOneData=${events}
-          .viewModelFromProcModel=${elem} .config=${calendarConfig}></calendar-component>      
+          .model=${elem} ?ready="true" .data=${data}
+          .calendarConfig=${elem.calendarConfig} .calendarInfo=${calendarInfo} 
+          .eventsConfig=${elem.eventsConfig} .eventsInfo=${eventsInfo}
+          .viewModelFromProcModel=${elem} .config=${this.config}></calendar-component>      
       `
     }    
   };

@@ -16,6 +16,9 @@ export const FakeDevelopers = {
   "ck-editor":{
     "component": "ckEditor",
   },  
+  "LabelDesigner":{
+    "component": "LabelDesigner",
+  },
   "stability":{
     "component": "dragDropBoxes",    
     "boxesTableColumns":{
@@ -1369,7 +1372,6 @@ export const FakeDevelopers = {
       }
     },	
     "viewQuery":{ "actionName": "GET_WHITE_IP_LIST",
-      "xxxclientMethod": "getSamples",
       "addRefreshButton": true,
       "endPoint": "/app/PlatformAdminAPIqueries",
       "button": {

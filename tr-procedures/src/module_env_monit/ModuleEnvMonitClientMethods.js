@@ -17,7 +17,7 @@ export function ModuleEnvMonitClientMethods(base) {
             //console.log(this.headerInfo)
             this.prodLotList=[]
         }
-        async getProgramList() {
+        async xxxgetProgramList() {
           // alert('getProgramList')
             let queryDefinition=this.viewModelFromProcModel.viewQuery
             this.samplesReload = true
@@ -44,7 +44,7 @@ export function ModuleEnvMonitClientMethods(base) {
 
             if (this.viewModelFromProcModel===undefined||this.viewModelFromProcModel.langConfig===undefined||this.viewModelFromProcModel.langConfig.fieldText===undefined
                 ||this.selectedItems===undefined||this.selectedItems[0]===undefined||this.selectedItems[0].card_info===undefined) {
-                //alert('genericFormDialog has no dialogInfo')
+                //alert('genericFormDialogTemplate has no dialogInfo')
                 return nothing
             }
 

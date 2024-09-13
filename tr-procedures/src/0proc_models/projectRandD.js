@@ -2742,9 +2742,6 @@ export const ProjectRandD=
                   "actionName": "NEW_DAILY_ENTRY",
                   "notGetViewData": true,
                   "requiresDialog": true,
-                  "secondaryActionToPerform": {
-                    "name": "refreshObjectByTab"
-                  },                  
                   "certificationException": true,
                   "button": {
                     "icon": "add",
@@ -2939,9 +2936,6 @@ export const ProjectRandD=
                       "notGetViewData": true,
                       "requiresDialog": false,
                       "certificationException": true,
-                      "secondaryActionToPerform": {
-                        "name": "refreshObjectByTab"
-                      },                       
                       "button": {
                         "icon": "remove",
                         "title": {
@@ -13674,9 +13668,6 @@ export const ProjectRandD=
                   "actionName": "NEW_DAILY_ENTRY",
                   "notGetViewData": true,
                   "requiresDialog": true,
-                  "secondaryActionToPerform": {
-                    "name": "refreshObjectByTab"
-                  },                  
                   "certificationException": true,
                   "button": {
                     "icon": "add",
@@ -13871,9 +13862,6 @@ export const ProjectRandD=
                       "notGetViewData": true,
                       "requiresDialog": false,
                       "certificationException": true,
-                      "secondaryActionToPerform": {
-                        "name": "refreshObjectByTab"
-                      },                       
                       "button": {
                         "icon": "remove",
                         "title": {

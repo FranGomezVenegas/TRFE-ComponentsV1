@@ -114,8 +114,37 @@ export class DrapBox extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(A
       super.connectedCallback();
       window.addEventListener('dragdropboxdata-changed', this._onDragdropboxdataChanged.bind(this));
       this._checkSessionStorage();
+
+      const draggableItems = this.shadowRoot.querySelectorAll('.draggable');
+      draggableItems.forEach(item => {
+        item.addEventListener('touchstart', this.handleTouchStart.bind(this), false);
+        item.addEventListener('touchmove', this.handleTouchMove.bind(this), false);
+        item.addEventListener('touchend', this.handleTouchEnd.bind(this), false);
+      });      
     }
   
+    handleTouchStart(event) {
+      this.draggedElement = event.target;
+      // Ajustar la posición inicial según la ubicación táctil
+      const touch = event.touches[0];
+      this.draggedElement.style.position = 'absolute';
+      this.draggedElement.style.left = `${touch.clientX}px`;
+      this.draggedElement.style.top = `${touch.clientY}px`;
+    }
+  
+    handleTouchMove(event) {
+      event.preventDefault();  // Prevenir el scroll
+      if (!this.draggedElement) return;
+      
+      const touch = event.touches[0];
+      this.draggedElement.style.left = `${touch.clientX}px`;
+      this.draggedElement.style.top = `${touch.clientY}px`;
+    }
+  
+    handleTouchEnd(event) {
+      this.draggedElement = null;
+    }
+        
     disconnectedCallback() {
       window.removeEventListener('dragdropboxdata-changed', this._onDragdropboxdataChanged.bind(this));
       super.disconnectedCallback();
@@ -173,9 +202,10 @@ export class DrapBox extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(A
     }
   
     refreshView() {
-      this.dragdropbox.data=this.data      
-      this.dragdropbox.refreshTables()
-      //alert('refreshView');
+      if (this.dragdropbox!==null){
+        this.dragdropbox.data=this.data      
+        this.dragdropbox.refreshTables()
+      }      
     }
 
     render(){
@@ -214,9 +244,9 @@ export class DrapBox extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(A
     }
     loadDialogs(){
       //alert('loadDialogs')
-      return html`
+      return html` 
       ${this.credentialsDialog()}
-      ${this.genericFormDialog()}
+      ${this.genericFormDialogTemplate()}
       ${this.reactivateObjectsDialog()}
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}
@@ -224,10 +254,6 @@ export class DrapBox extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(A
       ${this.resultTemplate()}
       ${this.takePictureFormDialog()}
       
-      
-      ${this.filterName=="open" ?
-        html`${this.decisionTemplate()}` : nothing
-      }  
       ${this.decisionTemplate()}
     `}
 

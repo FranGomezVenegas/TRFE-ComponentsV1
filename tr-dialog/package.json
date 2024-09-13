@@ -1,24 +1,19 @@
 {
   "name": "@trazit/tr-dialog",
-  "description": "Dialog element of trazit platform, customize from mwc-dialog",
+  "description": "Dialog element of trazit platform, customize from md-dialog",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "@material/mwc-dialog": "^0.27.0",
-    "@material/mwc-icon": "^0.27.0",
-    "lit": "^2.0.2"
+    "@material/web": "^2.1.0",
+    "lit": "^2.8.0"
   },
   "devDependencies": {
-    "@collaborne/lit-flexbox-literals": "^0.2.2",
-    "@material/mwc-textfield": "^0.25.3",
-    "@spectrum-web-components/button": "^0.15.0",
-    "@spectrum-web-components/theme": "^0.8.14",
     "@web/dev-server": "^0.1.26"
   }
 }

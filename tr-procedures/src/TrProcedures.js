@@ -182,6 +182,9 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
       case 'ckEditor':
           import('./components/ckeditor/ckeditor')  
           return
+      case 'LabelDesigner':
+        import('./components/LabelPrinter/zpl-previewer')  
+        return
       case 'dragDropBoxes':
         import('./components/DragDropBox/drag-box')  
         return
@@ -442,7 +445,10 @@ export class TrProcedures extends (((((((ApiFunctions(CredDialog)))))))) {
           .viewModelFromProcModel=${this.viewModelFromProcModel} .config=${this.config}></drag-box>      
       `:nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'ckEditor' ? html`
-        <lit-ckeditor ></lit-ckeditor>      
+        <lit-ckeditor ></lit-ckeditor>
+      `:nothing}
+      ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'LabelDesigner' ? html`
+        <zpl-previewer></zpl-previewer>
       `:nothing}
       ${this.viewModelFromProcModel&&this.viewModelFromProcModel.component == 'dragDropObjects' ? html`
         <drag-drop .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}

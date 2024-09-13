@@ -1,48 +1,31 @@
-import { html, css } from 'lit';
-import { CommonCore } from '@trazit/common-core';
-import '@spectrum-web-components/accordion/sp-accordion';
-import '@spectrum-web-components/accordion/sp-accordion-item';
+import { LitElement } from 'lit';
+import { platformNotifStyles } from './PlatformNotifStyles.js';
+import { platformNotifTemplate } from './PlatformNotifTemplate.js';
+import { Accordion, AccordionItem } from '@spectrum-web-components/accordion';
+import '@spectrum-web-components/accordion/sp-accordion-item.js';
+import '@spectrum-web-components/accordion/sp-accordion.js';
 
-export class PlatformNotif extends CommonCore {
+export class PlatformNotif extends LitElement {
   static get styles() {
-    return css`
-      :host {
-        display: block;
-      }
-      :host([hidden]) {
-        display: none;
-      }
-    `;
+    return [platformNotifStyles];
   }
 
   static get properties() {
     return {
-      notifs: { type: Array }
+      notifs: { type: Array },
+      lang: { type: String }
     };
   }
 
   constructor() {
     super();
     this.notifs = [];
+    this.lang = 'en';
   }
 
   render() {
-    return html`
-      ${this.notifs.map(n=>
-        html`
-        <sp-accordion allow-multiple style="--spectrum-accordion-text-color: ${n.is_error?'#a33':'#0085ff'}; --spectrum-accordion-text-color-hover: ${n.is_error?'#a33':'#0085ff'}">
-          <sp-accordion-item label=${n["message_"+ this.lang]}>
-            <p style="overflow-wrap: break-word;">${n["message_"+ this.lang]}</p>
-          </sp-accordion-item>
-        </sp-accordion>
-        `
-      )}
-    `;
-  }
-
-  notifDetail(n) {
-    return Object.entries(n).map(
-      ([key, value]) => html`${key}: ${JSON.stringify(value)}<br />`
-    )
+    return platformNotifTemplate(this.notifs, this.lang);
   }
 }
+
+customElements.define('platform-notif', PlatformNotif);

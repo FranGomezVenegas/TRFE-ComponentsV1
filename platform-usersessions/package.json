@@ -3,14 +3,13 @@
   "description": "Component to display the list of user sessions and the actions performed in each one",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "@alenaksu/json-viewer": "^0.3.4",
     "@spectrum-web-components/split-view": "^0.4.3",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@trazit/tr-procedures": "file:.yalc/@trazit/tr-procedures",

@@ -1,5 +1,6 @@
 export function ActionsFunctions(base) {
   return class extends (base) {
+    
       trazitButtonsMethod(e, isRowButton, action, replace = true, actionNumIdx, selectedItemPropertyName, data, isProcManagement, parentData, dragEntry, dropEntry) {
           e.stopPropagation();
           if (isRowButton!==true&&this.selectedItems!==undefined&&this.selectedItems.length>1){
@@ -89,6 +90,8 @@ export function ActionsFunctions(base) {
           this.GetQueriesForDialog(action)
           this.getGenericDialogGridItems(action.dialogInfo)
   
+this.requestUpdate();
+
           //this.loadDialogs()
           console.log("action.dialogInfo.name", action.dialogInfo.name);
           if (action.dialogInfo!==undefined&&action.dialogInfo.name === "auditDialog") {
@@ -108,7 +111,9 @@ export function ActionsFunctions(base) {
                   this[action.dialogInfo.name].show(this.actionBeingPerformedModel, action, this[selectedItemPropertyName][0]);
                 }
               }
+              this.requestUpdate();              
           }
+          
           else if (action.dialogInfo!==undefined&&action.dialogInfo.name == "testScriptUpdateStepDialog") {
               this["testScriptNewStepDialog"].show();
           }

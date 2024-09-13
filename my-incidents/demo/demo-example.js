@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
-import '@trazit/relogin-dialog/relogin-dialog';
+//import '@trazit/relogin-dialog/relogin-dialog';
 import '../my-incidents';
 
 class DemoExample extends LitElement {
@@ -35,10 +35,10 @@ class DemoExample extends LitElement {
       }}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>
-        <my-incidents></my-incidents><br>
         <button @click=${this.changeLang}><img .src="/images/${this.flag}.png" style="width:30px"></button><br><br>
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
-        <relogin-dialog @logout=${()=>this.pLogin.logout()}></relogin-dialog>
+        <my-incidents></my-incidents><br>
+        <!-- <relogin-dialog @logout=${()=>this.pLogin.logout()}></relogin-dialog> -->
       </div>
     `;
   }
@@ -51,9 +51,9 @@ class DemoExample extends LitElement {
     return this.shadowRoot.querySelector("my-incidents")
   }
 
-  get rLogin() {
-    return this.shadowRoot.querySelector("relogin-dialog")
-  }
+  // get rLogin() {
+  //   return this.shadowRoot.querySelector("relogin-dialog")
+  // }
 
   /**
    * Lifecycle called after DOM updated on the first time

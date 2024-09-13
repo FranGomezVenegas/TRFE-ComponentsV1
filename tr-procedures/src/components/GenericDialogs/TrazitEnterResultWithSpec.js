@@ -7,6 +7,10 @@ import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../uploadButton/index';
+import '@material/mwc-icon';
+import '@material/mwc-icon';
+
+
 import { ActionsFunctions } from '../Actions/ActionsFunctions';
 
 export function TrazitEnterResultWithSpec(LitElement) {
@@ -80,7 +84,51 @@ return class extends ActionsFunctions(LitElement) {
             --mdc-dialog-min-width: 100vw;
           }
         }
-<style>
+         
+    .icon {
+      height: 24px;
+      width: 24px;
+    }
+
+  /* Color verde */
+  .green-icon {
+    color: green;
+  }
+
+  /* Color amarillo */
+  .yellow-icon {
+    color: yellow;
+  }
+
+  /* Color rojo */
+  .red-icon {
+    color: red;
+  }
+    .orange-icon {
+      color: orange;
+    }    
+    .img {
+      height: 24px;
+      width: 24px;
+    }
+
+<!-- Ejemplos de SVG con diferentes colores -->
+<svg class="green-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+    <circle cx="50" cy="50" r="40" fill="currentColor"/>
+    <path d="M35 35 L65 50 L35 65 Z" fill="white"/>
+</svg>
+
+<svg class="yellow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+    <circle cx="50" cy="50" r="40" fill="currentColor"/>
+    <path d="M35 35 L65 50 L35 65 Z" fill="white"/>
+</svg>
+
+<svg class="red-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24">
+    <circle cx="50" cy="50" r="40" fill="currentColor"/>
+    <path d="M35 35 L65 50 L35 65 Z" fill="white"/>
+</svg>
+ 
+
             input {
               border-style: solid;
               border-color: #999999;
@@ -103,7 +151,7 @@ return class extends ActionsFunctions(LitElement) {
               /* font-size: 19px; */
               margin: 0 4px;
             }          
-          </style>          
+                
       `
     ];
   }  
@@ -251,7 +299,7 @@ return class extends ActionsFunctions(LitElement) {
       }
       return html`
         <div style="text-align:center;font-size:12px">
-          <p>${result.spec_eval ?
+          <p>${1==2&&result.spec_eval ?
           html`${result.spec_eval == 'IN' || (result.spec_eval!==undefined&&result.spec_eval.toUpperCase().includes("NO_SPEC_LIMIT")) ?
             html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>` :
             html`${result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC") ?
@@ -503,8 +551,8 @@ return class extends ActionsFunctions(LitElement) {
           return html` 
           <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
             name="upload"  label="File"></upload-button>
-<!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
-          <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
+<!--          <mwc-icon icon="print" @click=${this.printCoa}></mwc-icon>   
+          <mwc-icon icon="print" @click=${() => {this.openFile(result)}}></mwc-icon>   
           -->
           `
         } else if (result.param_type.toUpperCase() == "TEXT" || result.param_type.toUpperCase() == "QUALITATIVE") {
@@ -589,8 +637,8 @@ return class extends ActionsFunctions(LitElement) {
           return html` 
           <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
             name="upload"  label="File"></upload-button>
-<!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
-          <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
+<!--          <mwc-icon icon="print" @click=${this.printCoa}></mwc-icon>   
+          <mwc-icon icon="print" @click=${() => {this.openFile(result)}}></mwc-icon>   
           -->
           `
         }else if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
@@ -745,14 +793,18 @@ return class extends ActionsFunctions(LitElement) {
       }
       if (result.spec_eval) {
         if (result.spec_eval == 'IN') {
-          return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
+          return html`<img style="height:24px; width: 24px;" class="icon" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg" style="filter: hue-rotate(90deg) saturate(2);">`
         } else {
           if (result.spec_eval.toUpperCase().includes("OUT") && result.spec_eval.toUpperCase().includes("SPEC")) {
-            return html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
+//            return html`<mwc-icon style="color:red">radio_button_checked</mwc-icon>`
+            return html` <img style="height:24px; width: 24px;" class="icon" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg" style="filter: hue-rotate(0deg) saturate(2);">`
           }else if (result.spec_eval.toUpperCase().includes("NO_SPEC_LIMIT") ) {
-            return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
+            return html`<img style="height:24px; width: 24px;" class="icon" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg" style="filter: hue-rotate(90deg) saturate(2);">`
+        //    return html`<mwc-icon style="color:green">radio_button_checked</mwc-icon>`
+            return html`<img style="height:24px; width: 24px;" src="path_to_green_version.svg">`
           } else {
-            return html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
+        //    return html`<mwc-icon style="color:orange">radio_button_checked</mwc-icon>`
+            return html`<img style="height:24px; width: 24px;" class="icon" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Button_Icon_White.svg" style="filter: hue-rotate(30deg) saturate(3);">`
           }
         }
       } else {

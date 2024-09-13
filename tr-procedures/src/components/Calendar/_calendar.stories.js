@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { Meta } from '@storybook/web-components';
 import { calendarConfig, dataAllInOneData } from './_calendar.stories.fakeData';
 
-import './index'; // Importa tu componente
+import './calendar-index'; // Importa tu componente
 
 // Importa el contenido del README.md
 import readme from './README.md';

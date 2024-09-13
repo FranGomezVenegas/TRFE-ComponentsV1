@@ -2,8 +2,6 @@ import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
-import '@material/mwc-checkbox';
-import '@material/mwc-formfield';
 import { ActionsFunctions } from '../Actions/ActionsFunctions';
 export function TrazitReactivateObjectsDialog(base) {
 return class extends ActionsFunctions(base) {

@@ -1,1 +1,1 @@
-export { EndpointsList } from './src/EndpointsList.js';
+export { EndpointsListByModule } from './src/endpoints-list-main.js';

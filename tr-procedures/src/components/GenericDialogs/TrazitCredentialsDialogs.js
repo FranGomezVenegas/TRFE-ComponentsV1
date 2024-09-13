@@ -4,9 +4,8 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
-import '@material/mwc-checkbox';
-import '@material/mwc-formfield';
 import {DialogsFunctions} from './DialogsFunctions';
+
 
 const langConfig = {
     "pwdWindowTitle": {
@@ -173,7 +172,20 @@ export function TrazitCredentialsDialogs(base) {
     this.reqParams = {};    
     this.reset();
   }
-
+  firstUpdated(){
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('vaadin-combo-box').forEach(comboBox => {
+          const originalAddEventListener = comboBox.addEventListener;
+  
+          comboBox.addEventListener = function(type, listener, options) {
+              if (type === 'touchstart' && !options) {
+                  options = { passive: true };
+              }
+              originalAddEventListener.call(comboBox, type, listener, options);
+          };
+      });
+  });
+  }
   reset() {
     this.type = "";
     this.changing = false;

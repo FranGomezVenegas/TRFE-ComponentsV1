@@ -2183,7 +2183,6 @@ export const MpRelease1 = {
     },
     "viewQuery": {
       "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-      "clientMethodssss": "getSamples",
       "endPoint": "/moduleenvmon/EnvMonAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -3487,8 +3486,7 @@ export const MpRelease1 = {
       }
     },
     "viewQuery": {
-      "actionName": "SAMPLES_BY_STAGE",
-      "xxxclientMethod": "getSamples",
+      "actionName": "SAMPLES_BY_STAGE",      
       "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -4126,7 +4124,6 @@ export const MpRelease1 = {
     "viewQuery": {
       "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
       "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "xxxxclientMethod": "getSamples",
       "endPointParams": [
         {
           "argumentName": "incub1_whereFieldsName",
@@ -4877,7 +4874,6 @@ export const MpRelease1 = {
         },
         "viewQuery": {
           "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-          "ssclientMethod": "getSamples",
           "endPoint": "/app/InvestigationAPIqueries",
           "button": {
             "icon": "refresh",
@@ -5049,7 +5045,6 @@ export const MpRelease1 = {
         },
         "viewQuery": {
           "actionName": "OPEN_INVESTIGATIONS",
-          "sssclientMethod": "getSamples",
           "endPoint": "/app/InvestigationAPIqueries",
           "button": {
             "icon": "refresh",

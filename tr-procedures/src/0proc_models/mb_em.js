@@ -66,7 +66,6 @@ export const MbEm=
     "viewQuery":
       {
         "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-        "clientMethodssss": "getSamples",
         "endPoint": "/moduleenvmon/EnvMonAPIqueries",
         "addRefreshButton": true,        
         "printable": {
@@ -1445,7 +1444,6 @@ export const MbEm=
       }
     },
     "viewQuery":    { "actionName": "SAMPLES_BY_STAGE",
-      "xxxclientMethod": "getSamples",
 	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -1592,247 +1590,295 @@ export const MbEm=
     ]
   },
   "SampleMicroorganism": {
-	"component": "TableWithButtons",
-    "langConfig": {
-      "title": {
-        "MicroOrganismSMP": {
-          "label_en": "Samples Pending Microorganism Identification", 
-          "label_es": "Muestras pendientes de la identificación de microorganismos"
-        },
-        "MicroOrganismPERS": {
-          "label_en": "Personnel Samples Pending Microorganism Identification", 
-          "label_es": "Muestras de personal pendientes de la identificación de microorganismos"
-        }
-      },
-      "gridHeader": {
-        "sample_id": {
-          "label_en": "Sample ID", "label_es": "ID Muestra", "sort": false, "filter": true, "width":  "12px"
-        },
-        "identification_progress_percentage": {
-          "label_en": "", "label_es": "", "is_icon": true, "as_progress": true, "title":{"label_en": "Identification %", "label_es": "% Identificados"}, "sort": false, "filter": true, "width":  "12px"
-        },
-        "program_name": {
-          "label_en": "Project", "label_es": "Programa", "sort": false, "filter": true, "width": "20px"
-        },
-        "location_name": {
-          "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "30px"
-        },
-        "sampling_date": {
-          "label_en": "sampling Date", "label_es": "ID Fecha de Muestreo", "sort": false, "filter": true, "width": "20px"
-        },
-        "raw_value": {
-          "label_en": "Reading Result", "label_es": "Recuento", "sort": false, "filter": true, "width": "20px"
-        },
-        "microorganism_count": {
-          "label_en": "# Organism Ident.", "label_es": "Num. MicroOrg. Detectados", "sort": false, "filter": true, "width": "20px"
-        },
-        "microorganism_list": {
-          "label_en": "Microorganisms", "label_es": "Microorganismos", "sort": false, "filter": true, "width": "20px"
-        }
-      },
-      "microorganismHeader": {
-        "name": {
-          "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
-        },
-        "items": {
-          "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
-        }
-      }
-    },
-    "viewQuery":
-    { "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
-	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "addRefreshButton": true,
-      "button": {
-        "icon": "refresh",
-        "title": {
-          "label_en": "Reload", "label_es": "Recargar"
-        },
-        "requiresGridItemSelected": true
-      },
+    "component": "SingleView",
+    "hideLeftPane": true,
+    
+    "viewQuery": {
+      "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
+      "dataResponse": "ArrayInRoot",
       "endPointParams": [
-        { "argumentName": "sampleFieldToRetrieve", "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name" }
-        
-      ],
-      "subViewFilter": {
-        "MicroOrganismSMP": [
-			{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code" },
-			{ "argumentName": "whereFieldsValue", "value": "MicroorganismIdentification|program_smp_template" }
-		],
-        "MicroOrganismPERS": [
-			{ "argumentName": "whereFieldsName", "value": "current_stage|sample_config_code" },
-			{ "argumentName": "whereFieldsValue", "value": "MicroorganismIdentification|prog_pers_template" }
-		]
-      }
-    },
-    "actions": [
-      { "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
-		"requiresDialog": false,
-		"endPointUrl": "Samples",
-        "button": {
-          "icon": "skip_previous",
-          "title": {
-            "label_en": "Previous", "label_es": "Previo"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-        ]
-      },
-      { "actionName": "SAMPLESTAGE_MOVETONEXT",
-		"requiresDialog": false,
-		"endPointUrl": "Samples",
-        "button": {
-          "icon": "skip_next",
-          "title": {
-            "label_en": "Next", "label_es": "Siguiente"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-        ]
-      },
-      { "actionName": "GET_SAMPLE_AUDIT",	  
-		"requiresDialog": true,
-		"endPoint": "/modulesample/SampleAPIqueries",
-        "button": {
-          "icon": "rule",
-          "title": {
-            "label_en": "Sample Audit", "label_es": "Auditoría de Muestra"
-          },
-          "requiresGridItemSelected": true
-        },
-        "clientMethod": "getObjectAuditInfo",
-        "endPointParams": [
-          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-        ],        
-        "dialogInfo": { 
-		  "name": "auditDialog",
-          "automatic": true,
-          "action": [
-            {
-              "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
-			  "requiresDialog": false,
-			  "notGetViewData": true,
-			  "endPointUrl": "Samples",
-              "clientMethod": "signAudit",
-              "endPointParams": [
-                { "argumentName": "auditId", "targetValue": true }
-              ]
-            }
-          ]
+        {
+          "argumentName": "sampleFieldToRetrieve",
+          "value": "sample_id|current_stage|status|status_previous|sampling_comment|sample_config_code|program_name|location_name|spec_code|spec_variation_name"
         }
-      },
-      { "actionName": "GET_MICROORGANISM_LIST",
-        "clientMethod": "getMicroorganism",
-		"requiresDialog": true,
-        "button": {
-          "icon": "add",
-          "title": {
-            "label_en": "Add Microorganism", "label_es": "Añadir Microorganismo"
-          },
-          "requiresGridItemSelected": true
-        },
-        "endPointParams": [
-          { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-        ],
-		"microorganismHeader": {
-			"name": {
-			  "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
-			},
-			"items": {
-			  "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
-			}
-		},		
-        "dialogInfo": { 
-          "automatic": true,
-		  "name": "microorganismDialogAdd",
-		  "clientMethod": "getMicroorganismToAdd",
-		  "subQueryName": "getMicroorganismToAdd",
-		  "viewQuery": {
-			  "actionName": "GET_MICROORGANISM_LIST",
-				"endPointParams": [				  
-				  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
-				]
-		  },		  
-          "fieldText": {
-            "addhocInput": { "label_en": "Ad-hoc microorganism name", "label_es": "Nombre Ad-hoc" },
-            "addhocBtn": { "label_en": "Add Addhoc", "label_es": "Añadir Nuevo" },
-            "addBtn": { "label_en": "Add", "label_es": "Añadir" }
-          },
-              "action": [
+      ],
+      "subViewFilter": [
+        {
+          "LOCATION": [
             {
-              "actionName": "ADD_SAMPLE_MICROORGANISM",
-              "clientMethod": "addSampleMicroorganism",
-			  "endPointUrl": "Samples",
-              "endPointParams": [
-                { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-                { "argumentName": "microorganismName", "targetValue": true },
-                { "argumentName": "numItems", "targetValue": true }
-              ]
+              "argumentName": "whereFieldsName",
+              "value": "current_stage|sample_config_code in*"
             },
             {
-              "actionName": "ADD_ADHOC_SAMPLE_MICROORGANISM",
-              "clientMethod": "addSampleMicroorganism",
-			  "endPointUrl": "Samples",
-			  "requiresDialog": false,
-              "endPointParams": [
-                { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
-                { "argumentName": "microorganismName", "targetValue": true },
-                { "argumentName": "numItems", "targetValue": true }
-              ]
+              "argumentName": "whereFieldsValue",
+              "value": "MicroorganismIdentification|location"
             }
           ]
-        }
-      },
-      { "actionNamexxx": "GET_SAMPLE_MICROORGANISM_VIEW",
-        "clientMethod": "getMicroorganismItem",
-		"requiresDialog": true,
-        "button": {
-          "icon": "remove",
-          "title": {
-            "label_en": "Remove Microorganism", "label_es": "Borrar Microorganismo"
-          },
-          "requiresGridItemSelected": true
         },
-        "zzzendPointParams": [
-          { "argumentName": "whereFieldsName", "value": "sample_id" },
-          { "argumentName": "whereFieldsValue", "targetValue": true }
-        ],
-      "microorganismHeader": {
-        "name": {
-          "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
-        },
-        "items": {
-          "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
-        }
-      },		
-        "dialogInfo": { 
-          "automatic": true,
-		  "name": "microorganismDialogRemove",
-		  "subQueryName": "getMicroorganismToRemove",
-		  "viewQuery": {
-			  "actionName": "GET_SAMPLE_MICROORGANISM_VIEW",
-				"endPointParams": [
-				  { "argumentName": "whereFieldsName", "value": "sample_id" },
-				  { "argumentName": "whereFieldsValue", "targetValue": true }
-				]
-		  },
-          "action": [
+        {
+          "PERSONAL": [
             {
-              "actionName": "REMOVE_SAMPLE_MICROORGANISM",
-              "endPointUrl": "Samples",
-              "clientMethod": "removeSampleMicroorganism",
-              "endPointParams": [
-                { "argumentName": "sampleId", "targetValue": true },
-                { "argumentName": "microorganismName", "targetValue": true },
-                { "argumentName": "numItems", "targetValue": true }
-              ]
+              "argumentName": "whereFieldsName",
+              "value": "current_stage|sample_config_code in*"
+            },
+            {
+              "argumentName": "whereFieldsValue",
+              "value": "MicroorganismIdentification|personal"
             }
           ]
         }
+      ]
+    },
+    "view_definition": [
+      {
+        "type": "reportTitle",
+        "subViewFilter": [
+          {
+            "LOCATION": {
+              "title": {
+                "label_en": "Microorganism identification Location",
+                "label_es": "Identificación de la Ubicación de Microorganismos"
+              }
+            }
+          },
+          {
+            "PERSONAL": {
+              "title": {
+                "label_en": "Microorganism identification Personal",
+                "label_es": "Identificación de Microorganismos Personal"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "parentReadOnlyTable",
+        "allowMultiSelection": false,
+        "refreshable": {
+          "enable": true
+        },
+        "printable": {
+          "enable": true
+        },
+        "downloadable": {
+          "enable": true
+        },
+        "columns": [
+          {
+            "name": "sample_id",
+            "label_en": "Sample ID",
+            "label_es": "ID Muestra"
+          },
+          {
+            "name": "identification_progress_percentage",
+            "label_en": "Identification %",
+            "label_es": "% Identificados",
+            "as_progress": true
+          },
+          {
+            "name": "program_name",
+            "label_en": "Project",
+            "label_es": "Programa"
+          },
+          {
+            "name": "location_name",
+            "label_en": "Location",
+            "label_es": "Ubicación"
+          },
+          {
+            "name": "sampling_date",
+            "label_en": "Sampling Date",
+            "label_es": "Fecha de Muestreo"
+          },
+          {
+            "name": "raw_value",
+            "label_en": "Reading Result",
+            "label_es": "Recuento"
+          },
+          {
+            "name": "microorganism_count",
+            "label_en": "Organism Ident.",
+            "label_es": "Num. MicroOrg. Detectados"
+          },
+          {
+            "name": "microorganism_list",
+            "label_en": "Microorganisms",
+            "label_es": "Microorganismos"
+          }
+        ],
+        "actions": [
+          {
+            "actionName": "SAMPLESTAGE_MOVETOPREVIOUS",
+            "requiresDialog": false,
+            "button": {
+              "icon": "skip_previous",
+              "title": {
+                "label_en": "Previous",
+                "label_es": "Previo"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "selObjectPropertyName": "sample_id"
+              }
+            ]
+          },
+          {
+            "actionName": "SAMPLESTAGE_MOVETONEXT",
+            "requiresDialog": false,
+            "button": {
+              "icon": "skip_next",
+              "title": {
+                "label_en": "Next",
+                "label_es": "Siguiente"
+              },
+              "requiresGridItemSelected": true
+            },
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "selObjectPropertyName": "sample_id"
+              }
+            ]
+          },
+          {
+            "actionName": "ADD_SAMPLE_MICROORGANISM",
+            "clientMethod": "addSampleMicroorganism",
+            "requiresDialog": true,
+            "dialogInfo": { 
+              "automatic": true,
+              "name": "microorganismDialogAdd",
+              "clientMethod": "getMicroorganismToAdd",
+              "subQueryName": "getMicroorganismToAdd",
+              "keepTheDialogOpen":true,
+              "viewQuery": {
+                "actionName": "GET_MICROORGANISM_LIST",
+                "endPointParams": [				  
+                  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+                ]
+              },		  
+              "fieldText": {
+                "addhocInput": { "label_en": "Ad-hoc microorganism name", "label_es": "Nombre Ad-hoc" },
+                "addhocBtn": { "label_en": "Add Addhoc", "label_es": "Añadir Nuevo" },
+                "addBtn": { "label_en": "Add", "label_es": "Añadir" }
+              },
+              "microorganismHeader": {
+                "name": {
+                  "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
+                },
+                "items": {
+                  "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
+                }
+              },              
+              "action": [
+                {
+                  "actionName": "ADD_SAMPLE_MICROORGANISM",
+                  "clientMethod": "addSampleMicroorganism",
+                  "endPointUrl": "Samples",
+                  "endPointParams": [
+                    { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+                    { "argumentName": "microorganismName", "targetValue": true },
+                    { "argumentName": "numItems", "targetValue": true }
+                  ]
+                },
+                {
+                  "actionName": "ADD_ADHOC_SAMPLE_MICROORGANISM",
+                  "clientMethod": "addSampleMicroorganism",
+            "endPointUrl": "Samples",
+            "requiresDialog": false,
+                  "endPointParams": [
+                    { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+                    { "argumentName": "microorganismName", "targetValue": true },
+                    { "argumentName": "numItems", "targetValue": true }
+                  ]
+                }
+              ]
+            },
+            "button": {
+              "icon": "add",
+              "title": {
+                "label_en": "Add microorganisms",
+                "label_es": "Añadir microorganismos"
+              },
+              "requiresGridItemSelected": true
+            },            
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "selObjectPropertyName": "sample_id"
+              },
+              {
+                "argumentName": "microorganismName",
+                "targetValue": true
+              },
+              {
+                "argumentName": "numItems",
+                "targetValue": true
+              }
+            ]
+          },        
+          {
+            "actionName": "REMOVE_SAMPLE_MICROORGANISM",
+            "clientMethod": "removeSampleMicroorganism",
+            "requiresDialog": true,
+            "dialogInfo":{
+              "name": "microorganismDialogRemove",
+              "subQueryName": "getMicroorganismToRemove",
+              "keepTheDialogOpen":true,
+              "viewQuery": {
+                "actionName": "GET_MICROORGANISM_LIST",
+                "endPointParams": [				  
+                  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" }
+                ]
+              },	              
+              "microorganismHeader": {
+                "name": {
+                  "label_en": "Name", "label_es": "Nombre", "sort": true, "filter": false 
+                },
+                "items": {
+                  "label_en": "Items", "label_es": "Elementos", "sort": true, "filter": false 
+                }
+              },
+              "action": [
+                {
+                  "actionName": "REMOVE_SAMPLE_MICROORGANISM",
+                  "endPointUrl": "Samples",
+                  "clientMethod": "removeSampleMicroorganism",
+                  "endPointParams": [
+                    { "argumentName": "sampleId", "targetValue": true },
+                    { "argumentName": "microorganismName", "targetValue": true },
+                    { "argumentName": "numItems", "targetValue": true }
+                  ]
+                }
+              ]                            
+            },
+            "button": {
+              "icon": "delete",
+              "title": {
+                "label_en": "Remove microorganisms",
+                "label_es": "Quitar microorganismos"
+              },
+              "requiresGridItemSelected": true
+            },            
+            "endPointParams": [
+              {
+                "argumentName": "sampleId",
+                "targetValue": true
+              },
+              {
+                "argumentName": "microorganismName",
+                "targetValue": true
+              },
+              {
+                "argumentName": "numItems",
+                "targetValue": true
+              }
+            ],
+            "row_buttons": []
+          }
+        ]
       }
     ]
   },
@@ -2113,7 +2159,6 @@ export const MbEm=
 	},
     "viewQuery":{ "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
 	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "xxxxclientMethod": "getSamples",
       "endPointParams": [
         { "argumentName": "incub1_whereFieldsName", "value": "current_stage|incubation_passed" },
         { "argumentName": "incub1_whereFieldsValue", "value": "Incubation|false" },
@@ -4083,8 +4128,512 @@ export const MbEm=
     ]
   }
 },
-
   "Programs":{
+    "component": "ObjectByTabs",
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "All my projects",
+      "fix_text_es": "Todos mis proyectos",
+      "name": "name"
+    },
+    "viewQuery": {
+      "actionName": "PROGRAMS_LIST",
+      "notUseGrid": true,
+      "responseArray": true,
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        {
+          "argumentName": "name",
+          "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"
+        },
+        {
+          "argumentName": "type",
+          "fixValue": "Product Development"
+        }
+      ]
+    },
+    "left_panel": {
+      "actions": []
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+      {
+        "filtertext1": {
+          "label_en": "Project",
+          "label_es": "Proyecto",
+          "fixValue": "ALL"
+        }
+      }
+    ],
+    "filterResultDetail": {
+      "type": "list",
+      "detail": [
+        {
+          "field": "name"
+        }
+      ]
+    },
+    "actions": [],
+    "tabs": [
+      {
+        "tabLabel_en": "Calendar",
+        "tabLabel_es": "Calendario",
+        "view_definition": [
+          {
+            "type": "Calendar",
+           
+            "calendarConfig":{
+              "endPointResponseObject": "program_calendar",
+              "actions":[
+                {
+                  "actionName": "PROGRAM_ADD_HOLIDAYS_CALENDAR",
+                  "buttonForQuery": false,
+                  "requiresDialog": true,
+                  "button": {
+                    "icon": "add_task",
+                    "title": {
+                      "label_en": "Add Holidays Calendar",
+                      "label_es": "Añadir Calendario de Festivos"
+                    },
+                    "requiresGridItemSelected": false
+                  },
+                  "endPointParams": [
+                    {
+                      "argumentName": "programName",
+                      "selObjectPropertyName": "name"
+                    },
+                    {
+                      "argumentName": "holidayCalendarCode",
+                      "element": "text1"
+                    }
+                  ],
+                  "dialogInfo": {
+                    "name": "genericDialog",
+                    "gridContent": false,
+                    "xmasterDataEntryName": "analysis_method",
+                    "langConfig": {
+                      "gridHeader": [
+                        {
+                          "fldName": "analysis",
+                          "label_en": "Analysis",
+                          "label_es": "Ensayo",
+                          "width": "40%",
+                          "sort": false,
+                          "filter": true,
+                          "align": "left"
+                        },
+                        {
+                          "fldName": "method_name",
+                          "label_en": "Method",
+                          "label_es": "Método",
+                          "width": "40%",
+                          "sort": true,
+                          "filter": false
+                        },
+                        {
+                          "fldName": "method_version",
+                          "label_en": "Version",
+                          "label_es": "Versión",
+                          "width": "20%",
+                          "sort": true,
+                          "filter": false
+                        }
+                      ]
+                    },
+                    "fields": [   
+                      {"text1": { "label_en":"Code", "label_es":"Código", "selObjectPropertyName": "name" }}
+                    ],
+                    "automatic": true
+                  }
+                },
+                {
+                  "actionName": "PROGRAM_ADD_RECURSIVE_DATES",
+                  "buttonForQuery": false,
+                  "requiresDialog": true,
+                  "button": {
+                    "icon": "add_task",
+                    "title": {
+                      "label_en": "Add recursive dates",
+                      "label_es": "Añadir fechas recursivas"
+                    },
+                    "requiresGridItemSelected": false
+                  },
+                  "endPointParams": [
+                    {
+                      "argumentName": "programName",
+                      "selObjectPropertyName": "name"
+                    },
+                    {
+                      "argumentName": "ruleName",
+                      "fixValue": "datesList"
+                    },
+                    {
+                      "argumentName": "datesList",
+                      "targetValue": "datesList"
+                    }
+                  ],
+                  "dialogInfo": {
+                    "name": "miniMapDialog",
+                    "gridContent": false,
+                    "xmasterDataEntryName": "analysis_method",
+                    "automatic": true
+                  }
+                }                                    
+              ],               
+              "dayView":{
+                "startHour":6,
+                "endHour":18,
+                "eventListsFields":[
+                  {"field": "location_name", "label_en": "Location", "label_es": "Ubicación"},
+                  {"field": "sample_id", "label_en": "Sample", "label_es": "Muestra"},
+                  {"field": "source", "label_en": "Source", "label_es": "Origen"}
+                ]
+              },
+              "yearView":{
+                "hideOutOfBoundsMonths": true,
+                "eventListsFields":[
+                  {"field": "location_name", "label_en": "Location", "label_es": "Ubicación"},
+                  {"field": "sample_id", "label_en": "Samplessss", "label_es": "Muestra"},
+                  {"field": "source", "label_en": "Source", "label_es": "Origen"}
+                ]
+              }
+            },
+            "eventsConfig":{
+              "endPointResponseObject": "config_scheduled_calendar",
+              "datesDateField":"date",
+              "eventListsFields":[
+                {"field": "location_name", "label_en": "Location", "label_es": "Ubicación"},
+                {"field": "spec_variation_name", "label_en": "Grade", "label_es": "Grado"},
+                {"field": "sample_id", "label_en": "Sample", "label_es": "Muestra"},
+                {"field": "source", "label_en": "Source", "label_es": "Origen"}
+              ],
+              "hoverDateDialog":{
+                "entryTitleFld":"location_name",
+                "eventListsFields":[
+                  {"field": "location_name", "label_en": "Location", "label_es": "Ubicación"},
+                  {"field": "spec_variation_name", "label_en": "Grade", "label_es": "Grado"},
+                  {"field": "sample_id", "label_en": "Sample", "label_es": "Muestra"},
+                  {"field": "source", "label_en": "Source", "label_es": "Origen"}
+                ],  
+                "dialogWidth": "500px", 
+                "dialogHeight": "300px" 
+              }                           
+            },
+            "smartFilter": true
+          }
+        ]
+      },      
+      {
+        "tabLabel_en": "Summary",
+        "tabLabel_es": "Resumen",
+        "view_definition": [
+          {
+            "type": "calendarMonthlyEvents"
+
+          },
+          {
+            "type": "zzzchart", 
+            "endPointPropertyArray":["ROOT"],
+            "elementName": "samples_summary_by_stage",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"samples_summary_by_stage",
+            "chart_title":{"label_en": "Samples by stage", "label_es":"Muestras por etapa"},
+            "counter_field_name":"Counter",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": "transparent",
+              "is3D": true,
+              "colors": ["#dfa942", "#d33737", "#bf120f"]              
+            },
+            "grouper_field_name":"samples_summary_by_stage",
+            "label_values_replacement":{
+              "IN":{"label_es": "In Range", "label_en": "Dentro de Range"},
+              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
+              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
+              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
+            },
+            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
+            "label_item":{"label_en":"Statussss", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          }          
+        ]
+      },
+      {
+        "tabLabel_en": "Specification",
+        "tabLabel_es": "Especificación",
+        "view_definition": [
+          {
+            "type": "readOnlyTable",
+            "endPointPropertyArray": ["spec_definition", "spec_limits"],
+            "columns": [
+              {
+                "name": "parameter",
+                "label_en": "Parameter",
+                "label_es": "Parámetro"
+              },
+              {
+                "name": "variation_name",
+                "label_en": "Grade",
+                "label_es": "Grado"
+              },
+              {
+                "name": "pretty_spec",
+                "label_en": "Range",
+                "label_es": "Rango"
+              }
+            ],
+            "xactions": [],
+            "xrow_buttons": []
+          }          
+        ]
+      },
+
+      {
+        "tabLabel_en": "Sampling Points",
+        "tabLabel_es": "Puntos de Muestreo",
+        "view_definition": [
+          {"type": "reportTitle", 
+            "title":{
+              "label_en": "Program Sampling Points", 
+              "label_es": "Puntos de muestro del programa"
+            }
+          },   
+          {"type": "parentReadOnlyTable",  
+            "allowMultiSelection": false, 
+            "refreshable":{ "enable": true}, 
+            "printable":{ "enable": true}, 
+            "downloadable":{"enable": true, "allowUserSelectColumns": true}, 
+            "endPointPropertyArray": ["sample_points"],		              
+            "columns" : [                                
+                {"name":"location_name", "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"spec_code", "label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"spec_variation_name", "label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"spec_analysis_variation", "label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"person_ana_definition", "label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"},
+                {"name":"requires_tracking_sampling_end", "label_en": "Sampling Static?", "label_es": "Muestreo Estático?", "sort": false, "filter": true, "width": "40%"}                   
+            ],             
+            "actions": [
+              {
+                "actionName": "LOGSAMPLE",
+                "requiresGridItemSelected": true,
+                "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                "requiresDialog": true,
+                "button": {
+                  "icon": "add_location",
+                  "title": {
+                    "label_en": "Log samples",
+                    "label_es": "Registrar muestras"
+                  }
+                },
+                "xclientMethod": "logSampleDialog",
+                "dialogQueries":[
+                  {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                    "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                    "variableForData": "prodLotList"		  
+                  }
+                ],  
+                "endPointParams": [
+                  { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                  { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                  { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                  { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                  { "argumentName": "shift", "element": "list1", "addToFieldNameAndValue": true},
+                  { "argumentName": "production_lot", "element": "list2", "addToFieldNameAndValue": true},
+                  { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                ],                              
+                "dialogInfo":{
+                  "name": "genericDialog",
+                  "fields": [   
+                    {"text1": { "label_en":"Program", "label_es":"Programa", "disabled": true, "selObjectPropertyName": "program_name" }},
+                    {"text2": { "label_en":"Location", "label_es":"Ubicación", "disabled": true, "selObjectPropertyName": "location_name" }},
+                    {"list1": { 
+                      "items": [
+                      { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+                      { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+                      { "keyName": "NIGHT", "keyValue_en": "Night", "keyValue_es": "Nocturno" }
+                      ],    
+                      "label_en": "Shift", "label_es": "Turno" 
+                    }},                      
+                    {"list2": {    
+                      "label_en": "Production lot", "label_es": "Lote de producción", "optional": true,
+                      "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                      "valuesFromProperty": {
+                        "fixItemsOnTop": [
+                          { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+                        ],
+                        "selObjectPropertyName":"prodLotList",
+                        "propertyKeyName": "lot_name", "propertyKeyValueEn": "lot_name", "propertyKeyValueEs": "lot_name"
+                      }			
+                    }},                      
+                    {"number1": { "label_en":"Num Samples to log", "label_es":"Num muestras a crear", "argumentName": "numSamplesToLog", "default_value": 1 } }                              
+                    
+                  ],  		                               
+                  "xname" : "pointDialog",
+                  "action": { "actionName": "LOGSAMPLE",
+                    "requiresDialog": false,
+                    "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                    "zzzclientMethod": "logSample",
+                    "endPointParams": [
+                      { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                      { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                      { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                      { "argumentName": "fieldValue", "targetValue": true },
+                      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                    ]
+                  }
+                }
+              }                
+            ],
+            "gridActionOnClick":
+              {
+                "actionName": "LOGSAMPLE",
+                "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                "requiresDialog": true,
+                "clientMethod": "logSampleDialog",
+                "dialogQueries":[
+                  {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                    "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                    "variableForData": "prodLotList"		  
+                  }
+                ],
+            
+                "dialogInfo":{
+                  "name" : "pointDialog",
+                  "action": { "actionName": "LOGSAMPLE",
+                    "requiresDialog": false,
+                    "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                    "clientMethod": "logSample",
+                    "endPointParams": [
+                      { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                      { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                      { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                      { "argumentName": "fieldValue", "targetValue": true },
+                      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                    ]
+                  }
+                }
+              }          
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Sampling Points Map",
+        "tabLabel_es": "Puntos de Muestreo Mapa",
+        "view_definition": [
+          {
+            "type": "mapWithIcons",
+            "actionOnHoverTheIcon": true,
+            "actionOnClickTheIcon": false,
+            "actionDisabled": false,             
+            "mapUrlFixValue":"/images/clean-room-example.png",
+            "mapUrlDataProperty":"map_image",
+            "endPointPropertyArray": ["spec_definition", "spec_limits"],
+            "samplePointsDetail":{
+              "endPointPropertyArray": ["sample_points"]            
+            },
+            "action":{
+                "actionName": "LOGSAMPLE",
+                "requiresGridItemSelected": true,
+                "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                "requiresDialog": true,
+                "button": {
+                  "icon": "rule",
+                  "title": {
+                    "label_en": "Log samples",
+                    "label_es": "Registrar muestras"
+                  }
+                },
+                "xclientMethod": "logSampleDialog",
+                "dialogQueries":[
+                  {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                    "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                    "variableForData": "prodLotList"		  
+                  }
+                ],  
+                "endPointParams": [
+                  { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                  { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                  { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                  { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                  { "argumentName": "shift", "element": "list1", "addToFieldNameAndValue": true},
+                  { "argumentName": "production_lot", "element": "list2", "addToFieldNameAndValue": true},
+                  { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                ],                              
+                "dialogInfo":{
+                  "name": "genericDialog",
+                  "fields": [   
+                    {"text1": { "label_en":"Program", "label_es":"Programa", "disabled": true, "selObjectPropertyName": "program_name" }},
+                    {"text2": { "label_en":"Location", "label_es":"Ubicación", "disabled": true, "selObjectPropertyName": "location_name" }},
+                    {"list1": { 
+                      "items": [
+                      { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+                      { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+                      { "keyName": "NIGHT", "keyValue_en": "Night", "keyValue_es": "Nocturno" }
+                      ],    
+                      "label_en": "Shift", "label_es": "Turno" 
+                    }},                      
+                    {"list2": {    
+                      "label_en": "Production lot", "label_es": "Lote de producción", "optional": true,
+                      "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                      "valuesFromProperty": {
+                        "fixItemsOnTop": [
+                          { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+                        ],
+                        "selObjectPropertyName":"prodLotList",
+                        "propertyKeyName": "lot_name", "propertyKeyValueEn": "lot_name", "propertyKeyValueEs": "lot_name"
+                      }			
+                    }},                      
+                    {"number1": { "label_en":"Num Samples to log", "label_es":"Num muestras a crear", "argumentName": "numSamplesToLog", "default_value": 1 } }                              
+                    
+                  ],  		                               
+                  "xname" : "pointDialog",
+                  "action": { "actionName": "LOGSAMPLE",
+                    "requiresDialog": false,
+                    "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                    "zzzclientMethod": "logSample",
+                    "endPointParams": [
+                      { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                      { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                      { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                      { "argumentName": "fieldValue", "targetValue": true },
+                      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                    ]
+                  }
+                }
+              }                              
+          }
+        ]
+      }                  
+    ]    
+  },
+  "Programs20240903":{
     "component": "ObjectByTabs",
     "hasOwnComponent": true,
     "showTitleOnTop": true,
@@ -4516,7 +5065,6 @@ export const MbEm=
         },
         "viewQuery":{
             "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "ssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -4620,7 +5168,6 @@ export const MbEm=
         },
         "viewQuery":{
             "actionName": "OPEN_INVESTIGATIONS",
-            "sssclientMethod": "getSamples",
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",

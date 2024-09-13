@@ -10,7 +10,7 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "@alenaksu/json-viewer": "^0.3.4",
+    "@alenaksu/json-viewer": "^1.0.1",
     "@doubletrade/lit-datatable": "^2.0.0",
     "@google-web-components/google-chart": "^5.0.2",
     "@material/mwc-button": "^0.27.0",
@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@spectrum-web-components/theme": "^0.8.14",
-    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
     "@web/dev-server": "^0.1.25"
   }
 }

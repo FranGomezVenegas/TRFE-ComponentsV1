@@ -4,7 +4,8 @@ import { CalendarUtilities } from './CalendarUtilities';
 import { CalendarActions } from './CalendarActions';
 import { CalendarDialogTemplate} from './CalendarDialogTemplate';
 import { TrazitReactivateObjectsDialog} from './TrazitReactivateObjectsDialog';
-import { ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions';
+import { ApiFunctionsForPlatform} from '@trazit/apis-forplatform/ApiFunctionsForPlatform';
+//import { ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions';
 import '@google-web-components/google-chart';
 import '@material/mwc-select';
 import '@material/mwc-list/mwc-list-item';
@@ -150,7 +151,7 @@ const viewInfoDefinition = {
 };
 
  
-export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunctions(CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore))))))) {
+export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunctionsForPlatform(CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore))))))) {
   static get styles() {
     return [
       css`

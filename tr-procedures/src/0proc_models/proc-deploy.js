@@ -67,7 +67,6 @@ export const ProcDeploy = {
     },
     "viewQuery": {
       "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-      "clientMethodssss": "getSamples",
       "endPoint": "/moduleenvmon/EnvMonAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -392,8 +391,7 @@ export const ProcDeploy = {
       }
     },
     "viewQuery": {
-      "actionName": "SAMPLES_INPROGRESS_LIST",
-      "xxxclientMethod": "getSamples",
+      "actionName": "SAMPLES_INPROGRESS_LIST",      
       "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
       "button": {
@@ -604,8 +602,7 @@ export const ProcDeploy = {
     },
     "viewQuery": {
       "actionName": "SAMPLES_INPROGRESS_LIST",
-      "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "xxxclientMethod": "getSamples",
+      "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",      
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -888,8 +885,7 @@ export const ProcDeploy = {
     },
     "viewQuery": {
       "actionName": "SAMPLEANALYSIS_PENDING_REVISION",
-      "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-      "xxxclientMethod": "getSamples",
+      "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",      
       "addRefreshButton": true,
       "button": {
         "icon": "refresh",
@@ -1663,8 +1659,7 @@ export const ProcDeploy = {
           }
         },
         "viewQuery":{
-            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-            "ssclientMethod": "getSamples",
+            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",            
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -1767,8 +1762,7 @@ export const ProcDeploy = {
           }
         },
         "viewQuery":{
-            "actionName": "OPEN_INVESTIGATIONS",
-            "sssclientMethod": "getSamples",
+            "actionName": "OPEN_INVESTIGATIONS",            
             "endPoint": "/app/InvestigationAPIqueries",
             "button": {
               "icon": "refresh",
@@ -1888,8 +1882,7 @@ export const ProcDeploy = {
           }
         },
         "viewQuery": {
-          "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-          "ssclientMethod": "getSamples",
+          "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",          
           "endPoint": "/app/InvestigationAPIqueries",
           "button": {
             "icon": "refresh",
@@ -2061,8 +2054,7 @@ export const ProcDeploy = {
           }
         },
         "viewQuery": {
-          "actionName": "OPEN_INVESTIGATIONS",
-          "sssclientMethod": "getSamples",
+          "actionName": "OPEN_INVESTIGATIONS",          
           "endPoint": "/app/InvestigationAPIqueries",
           "button": {
             "icon": "refresh",

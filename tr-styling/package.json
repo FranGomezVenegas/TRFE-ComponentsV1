@@ -1,0 +1,15 @@
+{
+    "name": "@trazit/tr-styling",
+    "version": "1.0.0",
+    "description": "Component to manage styles and themes for the application.",
+    "main": "tr-styling.js",
+    "scripts": {
+        "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+    },
+    "dependencies": {
+        "@material/web": "^2.1.0",
+        "lit": "^2.0.0"
+    },
+    "author": "Fran Gómez",
+    "license": "MIT"
+}

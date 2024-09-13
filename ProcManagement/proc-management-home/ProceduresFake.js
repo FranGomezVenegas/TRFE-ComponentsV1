@@ -2763,8 +2763,7 @@ export const ProceduresFake = [
                                     }
                                 },
                                 "viewQuery": {
-                                    "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-                                    "clientMethodssss": "getSamples",
+                                    "actionName": "GET_ACTIVE_PRODUCTION_LOTS",                                    
                                     "endPoint": "/moduleenvmon/EnvMonAPIqueries",
                                     "addRefreshButton": true,
                                     "button": {
@@ -4071,8 +4070,7 @@ export const ProceduresFake = [
                                     }
                                 },
                                 "viewQuery": {
-                                    "actionName": "SAMPLES_BY_STAGE",
-                                    "xxxclientMethod": "getSamples",
+                                    "actionName": "SAMPLES_BY_STAGE",                                    
                                     "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
                                     "addRefreshButton": true,
                                     "button": {
@@ -4710,7 +4708,6 @@ export const ProceduresFake = [
                                 "viewQuery": {
                                     "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
                                     "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-                                    "xxxxclientMethod": "getSamples",
                                     "endPointParams": [
                                         {
                                             "argumentName": "incub1_whereFieldsName",
@@ -5461,8 +5458,7 @@ export const ProceduresFake = [
                                             }
                                         },
                                         "viewQuery": {
-                                            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-                                            "ssclientMethod": "getSamples",
+                                            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",                                            
                                             "endPoint": "/app/InvestigationAPIqueries",
                                             "button": {
                                                 "icon": "refresh",
@@ -5634,7 +5630,6 @@ export const ProceduresFake = [
                                         },
                                         "viewQuery": {
                                             "actionName": "OPEN_INVESTIGATIONS",
-                                            "sssclientMethod": "getSamples",
                                             "endPoint": "/app/InvestigationAPIqueries",
                                             "button": {
                                                 "icon": "refresh",
@@ -8884,8 +8879,7 @@ export const ProceduresFake = [
                                     }
                                 },
                                 "viewQuery": {
-                                    "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-                                    "clientMethodssss": "getSamples",
+                                    "actionName": "GET_ACTIVE_PRODUCTION_LOTS",                                    
                                     "endPoint": "/moduleenvmon/EnvMonAPIqueries",
                                     "addRefreshButton": true,
                                     "button": {
@@ -9244,8 +9238,7 @@ export const ProceduresFake = [
                                     }
                                 },
                                 "viewQuery": {
-                                    "actionName": "SAMPLES_INPROGRESS_LIST",
-                                    "xxxclientMethod": "getSamples",
+                                    "actionName": "SAMPLES_INPROGRESS_LIST",                                    
                                     "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
                                     "addRefreshButton": true,
                                     "button": {
@@ -9485,8 +9478,7 @@ export const ProceduresFake = [
                                 },
                                 "viewQuery": {
                                     "actionName": "SAMPLES_INPROGRESS_LIST",
-                                    "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-                                    "xxxclientMethod": "getSamples",
+                                    "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",                                    
                                     "addRefreshButton": true,
                                     "button": {
                                         "icon": "refresh",
@@ -9815,8 +9807,7 @@ export const ProceduresFake = [
                                 },
                                 "viewQuery": {
                                     "actionName": "SAMPLEANALYSIS_PENDING_REVISION",
-                                    "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
-                                    "xxxclientMethod": "getSamples",
+                                    "xxxendPoint": "/moduleenvmon/EnvMonSampleAPIqueries",                                    
                                     "addRefreshButton": true,
                                     "button": {
                                         "icon": "refresh",
@@ -10604,8 +10595,7 @@ export const ProceduresFake = [
                                             }
                                         },
                                         "viewQuery": {
-                                            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",
-                                            "ssclientMethod": "getSamples",
+                                            "actionName": "INVESTIGATION_RESULTS_PENDING_DECISION",                                            
                                             "endPoint": "/app/InvestigationAPIqueries",
                                             "button": {
                                                 "icon": "refresh",
@@ -10777,7 +10767,6 @@ export const ProceduresFake = [
                                         },
                                         "viewQuery": {
                                             "actionName": "OPEN_INVESTIGATIONS",
-                                            "sssclientMethod": "getSamples",
                                             "endPoint": "/app/InvestigationAPIqueries",
                                             "button": {
                                                 "icon": "refresh",
@@ -11625,7 +11614,6 @@ export const ProceduresFake = [
                                 },
                                 "viewQuery": {
                                     "actionName": "ACTIVE_INSTRUMENTS_LIST",
-                                    "clientMethodxxx": "getSamples",
                                     "endPoint": "/app/procs/InstrumentsAPIqueries",
                                     "addRefreshButton": true,
                                     "button": {
@@ -15259,8 +15247,7 @@ export const ProceduresFake = [
                                     }
                                 },
                                 "viewQuery": {
-                                    "actionName": "INSTRUMENT_EVENTS_INPROGRESS",
-                                    "xxxclientMethod": "getSamples",
+                                    "actionName": "INSTRUMENT_EVENTS_INPROGRESS",                                    
                                     "endPoint": "/app/procs/InstrumentsAPIqueries",
                                     "addRefreshButton": true,
                                     "button": {
@@ -22383,8 +22370,7 @@ export const ProceduresFake = [
                                     }
                                 },
                                 "viewQuery": {
-                                    "actionName": "QUALIFICATIONS_INPROGRESS",
-                                    "xxxclientMethod": "getSamples",
+                                    "actionName": "QUALIFICATIONS_INPROGRESS",                                    
                                     "endPoint": "/app/procs/InvTrackingAPIqueries",
                                     "addRefreshButton": true,
                                     "button": {

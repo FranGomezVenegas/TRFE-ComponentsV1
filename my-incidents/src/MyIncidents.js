@@ -14,9 +14,9 @@ import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
-import '@trazit/tr-dialog/tr-dialog';
+// import '@trazit/tr-dialog/tr-dialog';
 import './history-item';
-import {ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions.js';
+import { ApiFunctionsForPlatform } from '@trazit/apis-forplatform/ApiFunctionsForPlatform';
 
 const langConfig = {
   field: {
@@ -86,7 +86,7 @@ const langConfig = {
   }
 };
 
-export class MyIncidents extends ApiFunctions(CommonCore) {
+export class MyIncidents extends ApiFunctionsForPlatform(CommonCore) {
   static get styles() {
     return [
       Layouts, Alignment,
@@ -502,3 +502,4 @@ export class MyIncidents extends ApiFunctions(CommonCore) {
     }
   }
 }
+window.customElements.define('my-incidents', MyIncidents);
