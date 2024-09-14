@@ -134,3 +134,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.82 Calendar draft]
 [- v0.2.83 Calendar with actions]
 [- v0.2.84 microorganisms and fix to open the dialog for the second time]
+[- v0.2.85 fix left pane on object by tabs and tabs display/hide by config for Calendar"

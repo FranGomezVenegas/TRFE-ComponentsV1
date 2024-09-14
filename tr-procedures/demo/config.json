@@ -108,11 +108,7 @@
     "viewName": "Home", 
     "filterName" :  "Home" 
   },
-  "localDefaultView12312": {
-    "procName":  "app-proc", 
-    "viewName": "EventsCalendar", 
-    "filterName" :  "EventsCalendar" 
-  },
+
   "localDefaultView1231": {
     "procName":  "mp-release1", 
     "viewName": "SpecView", 
@@ -344,11 +340,7 @@
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
-	"localDefaultView2": {
-		"procName": "instruments",
-		"viewName": "EventsCalendar",
-		"filterName": "EventsCalendar"
-	},
+
   "localDefaultView22": {
     "procName":  "fake-developers", 
     "viewName": "ck-editor", 
@@ -407,7 +399,12 @@
     "procName":  "mb_em", 
     "viewName": "SampleMicroorganism", 
     "filterName" :  "LOCATION" 
-  },  
+  },
+	"localDefaultView": {
+		"procName": "instruments",
+		"viewName": "EventsCalendar",
+		"filterName": "EventsCalendar"
+	},    
   "fakeEnd":{
     "fake": "InventoryLotsGeneral20240729"
   }  
