@@ -17,7 +17,11 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
     config:{ type: Object},
     eventsConfig:{ type: Object},
     calendarConfig:{ type: Object},
-    showWeekView:{type: Boolean},
+    showWeekViewTab:{type: Boolean},
+    showMonthViewTab:{type: Boolean},
+    showDayViewTab:{type: Boolean},
+    showYearViewTab:{type: Boolean},
+    showEventsViewTab:{type: Boolean},
     lang: {type: String},
     calendarStartDate: {type: Date},
     calendarEndDate: {type: Date}
@@ -29,7 +33,11 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
   constructor() {
     super();
     this.data={}
-    this.showWeekView=false // This view does not work and then it cannot displayed
+    this.showWeekViewTab=false // This view does not work and then it cannot displayed
+    this.showDayViewTab=false
+    this.showMonthViewTab=false
+    this.showYearViewTab=false
+    this.showEventsViewTab=false    
     this.calendarConfig={}
     this.calendarInfo={}
     this.eventsConfig={}
@@ -66,19 +74,22 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
   
   firstUpdated() {
     super.firstUpdated();
-    this.refreshView()    
-    this.showMonthView();
+    this.refreshView()   
+
+    //this.showMonthView();
   }
   
   showMonthView() {
     // Limpiar otras pestañas activas
-    this.shadowRoot.querySelectorAll('.tab-item').forEach((btn) => {
-      btn.classList.remove('active');
-    });
+    // this.shadowRoot.querySelectorAll('.tab-item').forEach((btn) => {
+    //   btn.classList.remove('active');
+    // });
   
-    // Añadir la clase 'active' a la pestaña de "Month"
-    this.shadowRoot.getElementById('showCurrentMonth').classList.add('active');
-  
+    // // Añadir la clase 'active' a la pestaña de "Month"
+    // let monthObj=this.shadowRoot.getElementById('showCurrentMonth')
+    // if (monthObj!==null){
+    //   monthObj.classList.add('active');
+    // }
     // Mostrar la vista del mes
     this.shadowRoot.getElementById('calendar').innerHTML = ''; // Limpia el calendario
     const currentMonth = this.calendarStartDate
@@ -101,7 +112,9 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
     $monthNode.classList.remove('month')
     $monthNode.classList.add('full-month');
     this.showCalendarView();
-    this.currentButton.innerText = 'Month'; // Actualiza el botón de navegación
+    if (this.currentButton!==undefined){
+      this.currentButton.innerText = 'Month'; // Actualiza el botón de navegación
+    }
   }
 
   updated(changedProperties) {
@@ -154,10 +167,119 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
     }    
   }  
   
-  refreshView() {
+  setDefaultView(){
+    this.showDayViewTab=this.calendarConfig.dayView!==undefined&&this.calendarConfig.dayView.hide!==undefined&&this.calendarConfig.dayView.hide!==true
+    this.showMonthViewTab=this.calendarConfig.monthView!==undefined&&this.calendarConfig.monthView.hide!==undefined&&this.calendarConfig.monthView.hide!==true
+    this.showYearViewTab=this.calendarConfig.yearView!==undefined&&this.calendarConfig.yearView.hide!==undefined&&this.calendarConfig.yearView.hide!==true
+    this.showEventsViewTab=this.eventsConfig!==undefined&&this.eventsConfig.eventListsFields!==undefined
+
+
+    this.shadowRoot.querySelectorAll('.tab-item').forEach((btn) => {
+      btn.classList.remove('active');
+    });
+    if (this.calendarConfig.defaultTab===undefined){
+      if (this.showMonthViewTab){
+        this.calendarConfig.defaultTab='month'
+      }else if (this.showYearViewTab){
+        this.calendarConfig.defaultTab='year'
+      }else if (this.showEventsViewTab){
+        this.calendarConfig.defaultTab='events'
+      }else if (this.showDayViewTab){
+        this.calendarConfig.defaultTab='day'
+      }else{
+        return
+      }
+    }
+    let monthObj=undefined
+    switch(this.calendarConfig.defaultTab.toLowerCase()){      
+      case 'month':
+        monthObj=this.shadowRoot.getElementById('showCurrentMonth')
+        if (monthObj!==null){
+          monthObj.classList.add('active');
+        }   
+        this.showMonthView()
+        break
+      case 'year':
+        monthObj=this.shadowRoot.getElementById('showAllMonths')
+        if (monthObj!==null){
+          monthObj.classList.add('active');
+        }          
+        break
+      case 'day':
+        monthObj=this.shadowRoot.getElementById('showDayView')
+        if (monthObj!==null){
+          monthObj.classList.add('active');
+        }   
+        //this.showDayGridView()
+        break
+      case 'events':
+        monthObj=this.shadowRoot.getElementById('showAllEvents')
+        if (monthObj!==null){
+          monthObj.classList.add('active');
+        }   
+        this.showAllEventsView()
+        break
+      case 'week':
+        monthObj=this.shadowRoot.getElementById('showWeekView')
+        if (monthObj!==null){
+          monthObj.classList.add('active');
+        }   
+        this.showCalendarView()
+        break                        
+      default:        
+    }
+    // Añadir la clase 'active' a la pestaña de "Month"
+  }
+  showAllEventsView(){
+    this.allEvents.innerHTML = '';
+    this.allEvents.style.display = 'block';
+    this.calendar.style.display = 'none';
+    this.selectedDateView.style.display = 'none';
+    this.dayGridView.style.display = 'none';
+    this.weekGridView.style.display = 'none';
+    this.conflictEvents.style.display = 'none';      
+
+    const allEventsContainer = document.createElement('div');
+    allEventsContainer.classList.add('event-list-container');
+    
+    if (this.eventsInfo !== undefined) {
+      this.eventsInfo.forEach((event) => {
+        let listItem = document.createElement('li');
+        listItem.classList.add('event-item');
+
+        let eventDate = document.createElement('p');
+        const dateField = this.eventsConfig?.datesDateField || 'date';
+        eventDate.textContent = `Date: ${event[dateField]}`;
+        listItem.appendChild(eventDate);
+
+        let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
+        listItem.appendChild(eventDescription);
+
+        if (event.is_holidays) {
+          let holidayLabel = document.createElement('span');
+          holidayLabel.textContent = 'Holiday';
+          holidayLabel.classList.add('event-label');
+          listItem.appendChild(holidayLabel);
+        }
+
+        if (event.conflict) {
+          let conflictDetail = document.createElement('p');
+          conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
+          conflictDetail.classList.add('conflict-detail');
+          listItem.appendChild(conflictDetail);
+        }
+
+        allEventsContainer.appendChild(listItem);
+      });
+    }
+
+    this.allEvents.appendChild(allEventsContainer);    
+  }
+  refreshView() {    
     console.log('refreshView');
     this.initializeCalendarConfigVariablesWhenMissingProperties();
-  
+      
+ 
     this.holidays_calendar = [];
     if (this.calendarInfo && this.calendarInfo.holidays_calendar) {
       this.holidays_calendar = this.calendarInfo.holidays_calendar;
@@ -185,7 +307,7 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
     this.calendarEndDate = new Date(new Date(this.calendarInfo[this.calendarConfig.endDate]).setHours(0, 0, 0));
   
     if (isNaN(this.calendarStartDate.getTime()) || isNaN(this.calendarEndDate.getTime())) {    
-      console.error('this.calendarStartDate', this.calendarStartDate, 'this.calendarEndDate', this.calendarEndDate, 'this.calendarInfo', this.calendarInfo, 'this.calendarConfig.startDate', this.calendarConfig.startDate, 'this.calendarConfig.endDate', this.calendarConfig.endDate);  
+      //console.error('this.calendarStartDate', this.calendarStartDate, 'this.calendarEndDate', this.calendarEndDate, 'this.calendarInfo', this.calendarInfo, 'this.calendarConfig.startDate', this.calendarConfig.startDate, 'this.calendarConfig.endDate', this.calendarConfig.endDate);  
       this.calendarStartDate = new Date(new Date().getFullYear(), 0, 1);
       this.calendarEndDate = new Date(new Date().getFullYear(), 11, 31);
     }
@@ -243,54 +365,13 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
     this.days = this.shadowRoot.querySelectorAll('.day');
     this.hours = this.shadowRoot.querySelectorAll('.hour');
     this.sidebarButtons = this.shadowRoot.querySelectorAll('.tab-item');
+    
     this.currentButton.addEventListener('click', this.handleCurrent);
-  
-    this.showAllEvents.addEventListener('click', () => {
-      this.allEvents.innerHTML = '';
-      this.allEvents.style.display = 'block';
-      this.calendar.style.display = 'none';
-      this.selectedDateView.style.display = 'none';
-      this.dayGridView.style.display = 'none';
-      this.weekGridView.style.display = 'none';
-      this.conflictEvents.style.display = 'none';      
-  
-      const allEventsContainer = document.createElement('div');
-      allEventsContainer.classList.add('event-list-container');
-      
-      if (this.eventsInfo !== undefined) {
-        this.eventsInfo.forEach((event) => {
-          let listItem = document.createElement('li');
-          listItem.classList.add('event-item');
-  
-          let eventDate = document.createElement('p');
-          const dateField = this.eventsConfig?.datesDateField || 'date';
-          eventDate.textContent = `Date: ${event[dateField]}`;
-          listItem.appendChild(eventDate);
-  
-          let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
-          listItem.appendChild(eventDescription);
-  
-          if (event.is_holidays) {
-            let holidayLabel = document.createElement('span');
-            holidayLabel.textContent = 'Holiday';
-            holidayLabel.classList.add('event-label');
-            listItem.appendChild(holidayLabel);
-          }
-  
-          if (event.conflict) {
-            let conflictDetail = document.createElement('p');
-            conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
-            conflictDetail.classList.add('conflict-detail');
-            listItem.appendChild(conflictDetail);
-          }
-  
-          allEventsContainer.appendChild(listItem);
-        });
-      }
-  
-      this.allEvents.appendChild(allEventsContainer);
-    });
-  
+    if (this.showAllEvents!==null){
+      this.showAllEvents.addEventListener('click', () => {
+        this.showAllEventsView()
+      });
+    }
     this.sidebarButtons.forEach((button) => {
       button.addEventListener('click', () => {
         this.sidebarButtons.forEach((btn) => {
@@ -308,7 +389,7 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
         event.preventDefault();
       });
     });
-  
+    if (this.showMonthViewTab&&this.showCurrentMonthButton!==null){
     this.showCurrentMonthButton.addEventListener('click', () => {
       console.log('click Month', this.currentDisplayedMonth);
       this.conflictEvents.style.display = 'none';      
@@ -321,28 +402,30 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
       this.showCalendarView();
       this.currentButton.innerText = 'Month';
     });
-  
-    this.showAllMonthsButton.addEventListener('click', () => {
-      this.conflictEvents.style.display = 'none';      
-      this.shadowRoot.getElementById('calendar').innerHTML = '';
-      const currentYear = this.calendarStartDate ? new Date(this.calendarStartDate).getFullYear() : new Date().getFullYear();
-      this.buildYearCalendar(this.calendar, currentYear, this.eventsInfo, this.holidays_calendar, this.calendarStartDate, this.calendarEndDate);
-      this.showCalendarView();
-      this.currentButton.innerText = 'Year';
-    });
-  
-    this.showDayViewButton.addEventListener('click', () => {
-      let selectedDate;
-      if (new Date() >= new Date(this.calendarStartDate) && new Date() <= new Date(this.calendarEndDate)) {
-        selectedDate = new Date();
-      } else {
-        selectedDate = new Date(this.calendarStartDate);
-      }
-  
-      this.showDayGridView(selectedDate);
-      this.currentButton.innerText = 'Day';
-    });
-  
+    }
+    if (this.showYearViewTab&&this.showAllMonthsButton!==null){    
+      this.showAllMonthsButton.addEventListener('click', () => {
+        this.conflictEvents.style.display = 'none';      
+        this.shadowRoot.getElementById('calendar').innerHTML = '';
+        const currentYear = this.calendarStartDate ? new Date(this.calendarStartDate).getFullYear() : new Date().getFullYear();
+        this.buildYearCalendar(this.calendar, currentYear, this.eventsInfo, this.holidays_calendar, this.calendarStartDate, this.calendarEndDate);
+        this.showCalendarView();
+        this.currentButton.innerText = 'Year';
+      });
+    }
+    if (this.showDayViewTab&&this.showDayViewButton!==null){
+      this.showDayViewButton.addEventListener('click', () => {
+        let selectedDate;
+        if (new Date() >= new Date(this.calendarStartDate) && new Date() <= new Date(this.calendarEndDate)) {
+          selectedDate = new Date();
+        } else {
+          selectedDate = new Date(this.calendarStartDate);
+        }
+    
+        this.showDayGridView(selectedDate);
+        this.currentButton.innerText = 'Day';
+      });
+    }
     this.shadowRoot.getElementById('showConflicts').addEventListener('click', () => {
       this.allEvents.innerHTML = '';
       this.allEvents.style.display = 'none';
@@ -382,7 +465,7 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
   
-    if (this.schedule_size_unit === 'MONTHS') {
+    if (this.calendarConfig.defaultTab === 'month') {
       this.currentButton.innerText = 'Month';
       this.shadowRoot.getElementById('calendar').innerHTML = '';
       const currentMonth = this.calendarStartDate ? new Date(this.calendarStartDate).getMonth() : new Date().getMonth();
@@ -399,7 +482,7 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
         });
       }
       this.showCalendarView();
-    } else if (this.schedule_size_unit === 'DAYS') {
+    } else if (this.calendarConfig.defaultTab === 'day') {
       let selectedDate;
       if (new Date() >= new Date(this.calendarStartDate) && new Date() <= new Date(this.calendarEndDate)) {
         selectedDate = new Date();
@@ -409,13 +492,15 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
   
       this.showDayGridView(selectedDate);
       this.currentButton.innerText = 'Day';
-    } else if (this.schedule_size_unit === 'WEEKS') {
+    } else if (this.calendarConfig.defaultTab === 'week') {
       this.showWeekGridView();
       this.addDoubleClickEventToWeekHours();
       this.currentButton.innerText = 'Week';
     } else {
       this.buildYearCalendar(this.calendar, this.currentYear, this.eventsInfo, this.holidays_calendar, this.calendarStartDate, this.calendarEndDate);
     }
+
+    this.setDefaultView()    
   }
   
 
@@ -530,59 +615,60 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
     this.hours = this.shadowRoot.querySelectorAll('.hour');
     this.sidebarButtons = this.shadowRoot.querySelectorAll('.tab-item');
     this.currentButton.addEventListener('click', this.handleCurrent);
-    this.showAllEvents.addEventListener('click', () => {
-      this.allEvents.innerHTML = ''
-      this.allEvents.style.display = 'block';
-      this.calendar.style.display = 'none';
-      this.selectedDateView.style.display = 'none';
-      this.dayGridView.style.display = 'none';
-      this.weekGridView.style.display = 'none';
-      this.conflictEvents.style.display = 'none';      
+    if (this.showEventsViewTab) {
+      this.showAllEvents.addEventListener('click', () => {
+        this.allEvents.innerHTML = ''
+        this.allEvents.style.display = 'block';
+        this.calendar.style.display = 'none';
+        this.selectedDateView.style.display = 'none';
+        this.dayGridView.style.display = 'none';
+        this.weekGridView.style.display = 'none';
+        this.conflictEvents.style.display = 'none';      
 
-      const allEventsContainer = document.createElement('div');
-      allEventsContainer.classList.add('event-list-container'); // Add a class for container styling
-      //console.log('this.eventsInfo', this.eventsInfo)
-      if (this.eventsConfig===undefined){
-        //alert('eventsInfo is undefined')
-      }
-      if (this.eventsInfo!==undefined){
-        this.eventsInfo.forEach((event, index) => {
-          let listItem = document.createElement('li');
-          listItem.classList.add('event-item');
+        const allEventsContainer = document.createElement('div');
+        allEventsContainer.classList.add('event-list-container'); // Add a class for container styling
+        //console.log('this.eventsInfo', this.eventsInfo)
+        if (this.eventsConfig===undefined){
+          //alert('eventsInfo is undefined')
+        }
+        if (this.eventsInfo!==undefined){
+          this.eventsInfo.forEach((event, index) => {
+            let listItem = document.createElement('li');
+            listItem.classList.add('event-item');
 
-          let eventDate = document.createElement('p');
-          if(this.eventsConfig.datesDateField!==undefined){
-            eventDate.textContent = `Date: ${event[this.eventsConfig.datesDateField]}}`;
-          }else{
-            eventDate.textContent = `Date: ${event.date}}`;
-          }
-          listItem.appendChild(eventDate);
+            let eventDate = document.createElement('p');
+            if(this.eventsConfig.datesDateField!==undefined){
+              eventDate.textContent = `Date: ${event[this.eventsConfig.datesDateField]}}`;
+            }else{
+              eventDate.textContent = `Date: ${event.date}}`;
+            }
+            listItem.appendChild(eventDate);
 
-          let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
-/*          let eventDescription = document.createElement('p');
-          eventDescription.textContent = `${event.description_en}`;
-          eventDescription.classList.add('event-description');*/
-          listItem.appendChild(eventDescription);
+            let eventDescription = createEventDescription(event, this.eventsConfig.eventListsFields, this.lang);
+  /*          let eventDescription = document.createElement('p');
+            eventDescription.textContent = `${event.description_en}`;
+            eventDescription.classList.add('event-description');*/
+            listItem.appendChild(eventDescription);
 
-          if (event.is_holidays) {
-            let holidayLabel = document.createElement('span');
-            holidayLabel.textContent = 'Holiday';
-            holidayLabel.classList.add('event-label');
-            listItem.appendChild(holidayLabel);
-          }
+            if (event.is_holidays) {
+              let holidayLabel = document.createElement('span');
+              holidayLabel.textContent = 'Holiday';
+              holidayLabel.classList.add('event-label');
+              listItem.appendChild(holidayLabel);
+            }
 
-          if (event.conflict) {
-            let conflictDetail = document.createElement('p');
-            conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
-            conflictDetail.classList.add('conflict-detail');
-            listItem.appendChild(conflictDetail);
-          }        
-          allEventsContainer.appendChild(listItem);
-        });
-      }
-      this.allEvents.appendChild(allEventsContainer);
-    });
-
+            if (event.conflict) {
+              let conflictDetail = document.createElement('p');
+              conflictDetail.textContent = `Conflict Detail: ${event.conflict_detail}`;
+              conflictDetail.classList.add('conflict-detail');
+              listItem.appendChild(conflictDetail);
+            }        
+            allEventsContainer.appendChild(listItem);
+          });
+        }
+        this.allEvents.appendChild(allEventsContainer);
+      });
+    }
     this.sidebarButtons.forEach((button) => {
       button.addEventListener('click', () => {
         this.sidebarButtons.forEach((btn) => {
@@ -598,62 +684,67 @@ class CalendarComponent extends MiniMapMain(TrazitGenericDialogs(ButtonsFunction
         event.preventDefault();
       });
     });
-    this.showCurrentMonthButton.addEventListener('click', () => {
-      console.log('click Month', this.currentDisplayedMonth);
-      this.shadowRoot.getElementById('calendar').innerHTML = '';
-      console.log('refreshView', 'this.calendarStartDate', this.calendarStartDate, 'this.calendarEndDate', this.calendarEndDate);
-      const currentMonth = this.calendarStartDate
-        ? new Date(this.calendarStartDate).getMonth()
-        : new Date().getMonth();
-      const currentYear = this.calendarStartDate
-        ? new Date(this.calendarStartDate).getFullYear()
-        : new Date().getFullYear();
-      const $monthNode = this.buildMonth(
-        currentMonth,
-        currentYear,
-        this.eventsInfo,
-        this.holidays_calendar,
-        this.calendarStartDate,
-        this.calendarEndDate
-      );
-      this.shadowRoot.getElementById('calendar').appendChild($monthNode);
-      $monthNode.classList.add('full-month');
-      this.showCalendarView();
-      this.currentButton.innerText = 'Month';
-    });
-    this.showAllMonthsButton.addEventListener('click', () => {
-      this.shadowRoot.getElementById('calendar').innerHTML = '';
-      const currentYear = this.calendarStartDate
-        ? new Date(this.calendarStartDate).getFullYear()
-        : new Date().getFullYear();
-      this.buildYearCalendar(
-        this.calendar,
-        currentYear,
-        this.eventsInfo,
-        this.holidays_calendar,
-        this.calendarStartDate,
-        this.calendarEndDate
-      );
-      this.showCalendarView();
-      this.currentButton.innerText = 'Year';
-    });
-    this.showDayViewButton.addEventListener('click', () => {
-      let selectedDate;
-      if (
-        new Date() >= new Date(this.calendarStartDate) &&
-        new Date() <= new Date(this.calendarEndDate)
-      ) {
-        //console.log('in');
-        selectedDate = new Date();
-      } else {
-        //console.log('else');
-        selectedDate = new Date(this.calendarStartDate);
-      }
+    if (this.showMonthViewTab) {
+      this.showCurrentMonthButton.addEventListener('click', () => {
+        console.log('click Month', this.currentDisplayedMonth);
+        this.shadowRoot.getElementById('calendar').innerHTML = '';
+        console.log('refreshView', 'this.calendarStartDate', this.calendarStartDate, 'this.calendarEndDate', this.calendarEndDate);
+        const currentMonth = this.calendarStartDate
+          ? new Date(this.calendarStartDate).getMonth()
+          : new Date().getMonth();
+        const currentYear = this.calendarStartDate
+          ? new Date(this.calendarStartDate).getFullYear()
+          : new Date().getFullYear();
+        const $monthNode = this.buildMonth(
+          currentMonth,
+          currentYear,
+          this.eventsInfo,
+          this.holidays_calendar,
+          this.calendarStartDate,
+          this.calendarEndDate
+        );
+        this.shadowRoot.getElementById('calendar').appendChild($monthNode);
+        $monthNode.classList.add('full-month');
+        this.showCalendarView();
+        this.currentButton.innerText = 'Month';
+      });
+    }
+    if (this.showYearViewTab) {    
+      this.showAllMonthsButton.addEventListener('click', () => {
+        this.shadowRoot.getElementById('calendar').innerHTML = '';
+        const currentYear = this.calendarStartDate
+          ? new Date(this.calendarStartDate).getFullYear()
+          : new Date().getFullYear();
+        this.buildYearCalendar(
+          this.calendar,
+          currentYear,
+          this.eventsInfo,
+          this.holidays_calendar,
+          this.calendarStartDate,
+          this.calendarEndDate
+        );
+        this.showCalendarView();
+        this.currentButton.innerText = 'Year';
+      });
+    }
+    if (this.showDayViewTab) {
+      this.showDayViewButton.addEventListener('click', () => {
+        let selectedDate;
+        if (
+          new Date() >= new Date(this.calendarStartDate) &&
+          new Date() <= new Date(this.calendarEndDate)
+        ) {
+          //console.log('in');
+          selectedDate = new Date();
+        } else {
+          //console.log('else');
+          selectedDate = new Date(this.calendarStartDate);
+        }
 
-      this.showDayGridView(selectedDate);
-      this.currentButton.innerText = 'Day';
-    });
-
+        this.showDayGridView(selectedDate);
+        this.currentButton.innerText = 'Day';
+      });
+    }
     this.shadowRoot.getElementById('showConflicts').addEventListener('click', () => {
       this.allEvents.innerHTML = '';
       this.allEvents.style.display = 'none';
@@ -1414,17 +1505,21 @@ if (currentDate < this.calendarStartDate || currentDate > this.calendarEndDate) 
     var selectedDateTitleGrid = this.selectedDateTitleGrid;
     var hourGrid = this.hourGrid;
     const dayHeader = this.shadowRoot.getElementById('dayHeader');
-    hourGrid.innerHTML = '';
+    if (hourGrid!==undefined){
+      hourGrid.innerHTML = '';
+    }
     var previouslySelectedHour = document.querySelector('.hour.selected');
     if (previouslySelectedHour) {
       previouslySelectedHour.classList.remove('selected');
     }
-    // console.log(selectedDate);
-    selectedDateTitleGrid.innerText = selectedDate.toDateString();
-    const date = formatDateString(selectedDate);
     let eventsData = []
-    if (this.eventsInfo!==undefined){    
-      eventsData = this.eventsInfo.filter((e) => e.date === date);
+    // console.log(selectedDate);
+    if (selectedDate!==undefined){
+      selectedDateTitleGrid.innerText = selectedDate.toDateString();
+      const date = formatDateString(selectedDate);    
+      if (this.eventsInfo!==undefined){    
+        eventsData = this.eventsInfo.filter((e) => e.date === date);
+      }
     }
     if (eventsData.length > 0) {
       eventsData.forEach((event) => {
@@ -1468,11 +1563,18 @@ if (currentDate < this.calendarStartDate || currentDate > this.calendarEndDate) 
     hourNodes.forEach((hourNode) => {
       hourNode.addEventListener('dblclick', this.handleDayClick);
     });
-
-    this.calendar.style.display = 'none';
-    this.selectedDateView.style.display = 'block';
-    this.dayGridView.style.display = 'block';
-    this.weekGridView.style.display = 'none';
+    if (this.calendar!==null&&this.calendar!==undefined){
+      this.calendar.style.display = 'none';
+    }
+    if (this.selectedDateView!==null&&this.selectedDateView!==undefined){
+      this.selectedDateView.style.display = 'block';
+    }
+    if (this.dayGridView!==null&&this.dayGridView!==undefined){
+      this.dayGridView.style.display = 'block';
+    }
+    if (this.weekGridView!==null&&this.weekGridView!==undefined){
+      this.weekGridView.style.display = 'none';
+    }
   };
   populateHourGrid = (hourGrid) => {
     let startHour=1
@@ -1486,12 +1588,14 @@ if (currentDate < this.calendarStartDate || currentDate > this.calendarEndDate) 
     var hourNode = document.createElement('div');
     hourNode.classList.add('hour');
     hourNode.innerText = 0 + ':00 - ' + (1) + ':00';
-    hourGrid.appendChild(hourNode);
-    for (var i = startHour; i < endHour; i++) {
-      var hourNode = document.createElement('div');
-      hourNode.classList.add('hour');
-      hourNode.innerText = i + ':00 - ' + (i + 1) + ':00';
+    if (hourGrid!==undefined){
       hourGrid.appendChild(hourNode);
+      for (var i = startHour; i < endHour; i++) {
+        var hourNode = document.createElement('div');
+        hourNode.classList.add('hour');
+        hourNode.innerText = i + ':00 - ' + (i + 1) + ':00';
+        hourGrid.appendChild(hourNode);
+      }
     }
   };
   showWeekGridView = () => {
@@ -1603,11 +1707,21 @@ if (currentDate < this.calendarStartDate || currentDate > this.calendarEndDate) 
     this.weekGridView.style.display = 'block';
   };
   showCalendarView = () => {
-    this.calendar.style.display = 'block';
-    this.selectedDateView.style.display = 'none';
-    this.dayGridView.style.display = 'none';
-    this.weekGridView.style.display = 'none';
-    this.allEvents.style.display = 'none';
+    if (this.calendar!==null&&this.calendar!==undefined){
+      this.calendar.style.display = 'block';
+    }
+    if (this.selectedDateView!==null&&this.selectedDateView!==undefined){
+      this.selectedDateView.style.display = 'none';
+    }
+    if (this.dayGridView!==null&&this.dayGridView!==undefined){
+      this.dayGridView.style.display = 'none';
+    }
+    if (this.weekGridView!==null&&this.weekGridView!==undefined){    
+      this.weekGridView.style.display = 'none';
+    }
+    if (this.allEvents!==null&&this.allEvents!==undefined){
+      this.allEvents.style.display = 'none';
+    }
   };
   
   buildMonth(monthNum, year, events = this.eventsInfo, holidays_calendar = this.holidays_calendar, calendarStartDate, calendarEndDate, isAllMonthsView) {
@@ -1622,17 +1736,20 @@ if (isAllMonthsView) {
 }    
     //$monthNode.classList.add('month');
     const $titleNode = document.createElement('h4');
-    $titleNode.innerText = this.monthNames[monthNum] + ' ' + year;
-    $monthNode.appendChild($titleNode);
+    if (this.monthNames!==undefined){
+      $titleNode.innerText = this.monthNames[monthNum] + ' ' + year;    
+      $monthNode.appendChild($titleNode);
+    }
 
     // Añadimos los nombres de los días
-    this.dayNames.forEach(function (dayName) {
-      const $dayNode = document.createElement('div');
-      $dayNode.classList.add('dow');
-      $dayNode.innerText = dayName;
-      $monthNode.appendChild($dayNode);
-    });
-
+    if (this.dayNames!==undefined){
+      this.dayNames.forEach(function (dayName) {
+        const $dayNode = document.createElement('div');
+        $dayNode.classList.add('dow');
+        $dayNode.innerText = dayName;
+        $monthNode.appendChild($dayNode);
+      });
+    }
     const $daysContainer = document.createElement('div');
     $daysContainer.classList.add('days-container');
 
@@ -1897,28 +2014,38 @@ ${super.render()}
       <div class="body">
         <div class="tabs-container">
           <ul class="tab-list">
-            <li class="tab-item" id="showDayView">
-              <button class="tab-button">Day</button>
-            </li>
-            ${this.showWeekView?html`
-            <li class="tab-item" id="showWeekView">
-              <span class="tab-separator"></span
-              ><button class="tab-button">Week</button>
-            </li>
+            ${this.showDayViewTab||this.defaultTab==='day'?html`  
+              <li class="tab-item" id="showDayView">
+                <button class="tab-button">Day</button>
+              </li>
             `:html``}
-            <li class="tab-item" id="showCurrentMonth">
-              <span class="tab-separator"></span
-              ><button class="tab-button">Month</button>
-            </li>
-            <li class="tab-item active" id="showAllMonths">
-              <span class="tab-separator"></span
-              ><button class="tab-button">Year</button>
-            </li>
-            <li class="tab-item" id="showAllEvents">
-              <span class="tab-separator"></span
-              ><button class="tab-button">Event Lists</button>
-              <event-badge label="${totalEvents}"></event-badge>
-            </li>
+            ${this.showWeekViewTab||this.defaultTab==='week'?html`
+              <li class="tab-item" id="showWeekView">
+                <span class="tab-separator"></span
+                ><button class="tab-button">Week</button>
+              </li>
+            `:html``}
+            ${this.showMonthViewTab||this.defaultTab==='month'?html`
+            ${this.showMonthView?html`            
+              <li class="tab-item" id="showCurrentMonth">
+                <span class="tab-separator"></span
+                ><button class="tab-button">Month</button>
+              </li>
+            `:html``}
+            `:html``}
+            ${this.showYearViewTab||this.defaultTab==='year'?html`            
+              <li class="tab-item active" id="showAllMonths">
+                <span class="tab-separator"></span
+                ><button class="tab-button">Year</button>
+              </li>
+            `:html``}
+            ${this.showEventsViewTab||this.defaultTab==='events'?html`            
+              <li class="tab-item" id="showAllEvents">
+                <span class="tab-separator"></span
+                ><button class="tab-button">Events Lists</button>
+                <event-badge label="${totalEvents}"></event-badge>
+              </li>
+            `:html``}
             ${totalConflicts > 0 ? html`
               <li class="tab-item" id="showConflicts">
                 <span class="tab-separator"></span
@@ -1936,7 +2063,7 @@ ${super.render()}
           <ul class="tab-list">
             <li class="tab-item" id="previous">
               <button class="tab-button">
-                <span class="previous round">&#8249;</span>
+                <span class="previous round" style="font-size: 26px;">&#8249;</span>
               </button>
             </li>
             <li class="tab-item">
@@ -1946,7 +2073,7 @@ ${super.render()}
             <li class="tab-item" id="next">
               <span class="tab-separator"></span
               ><button class="tab-button">
-                <span class="previous round">&#8250;</span>
+                <span class="previous round" style="font-size: 26px;">&#8250;</span>
               </button>
             </li>
           </ul>  
@@ -1968,7 +2095,7 @@ ${super.render()}
         </div>
 
         <div id="calendar"></div>
-        <div id="allEvents" style="display: none;">   
+        <div id="allEvents">   
         
        ${this.currentView === 'year' ? html`
           <div class="year-view">
