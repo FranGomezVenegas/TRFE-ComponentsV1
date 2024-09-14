@@ -63,6 +63,9 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         display: flex;
         flex-direction: column;
         align-items: end;
+        position: sticky; /* Stick the left pane in place */
+        top: 0; /* Keep it from moving while the right pane scrolls */
+        height: 100vh; /* Full height */        
       }
       
       #leftSplit.collapsed {
