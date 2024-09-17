@@ -5593,8 +5593,8 @@ export const DemoInspectionLot =
         ]
       }
     ]
-  },
-  "SpecDesign": {
+  },  
+  "SpecDesign20240913": {
     "component": "ObjectByTabs",
     "hasOwnComponent": true,
     "showTitleOnTop": true,
@@ -6623,6 +6623,2060 @@ export const DemoInspectionLot =
               {
                 "property": "method_name",
                 "header": "Method"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "SpecDesign":{
+    "component": "ObjectByTabs",
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Spec Designer",
+      "fix_text_es": "Diseño de especificaciones",
+      "name": "lot_name"
+    },
+    "viewQuery": {
+      "actionName": "GET_SPECS",
+      "notUseGrid": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        {
+          "argumentName": "specCode",
+          "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"
+        }
+      ]
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+      {
+        "filtertext1": {
+          "label_en": "Spec Name",
+          "label_es": "Especificacion",
+          "fixValue": "Calcium Carbonate"
+        }
+      }
+    ],
+    "filterResultDetail": {
+      "type": "list",
+      "detail": [
+        {
+          "field": "code"
+        }
+      ]
+    },  
+    "left_panel": {  
+      "actions": [
+      {
+        "actionName": "SPEC_NEW",
+        "notGetViewData": true,
+        "requiresDialog": true,
+        "certificationException": true,
+        "button": {
+          "icon": "add",
+          "title": {
+            "label_en": "New Add Specification",
+            "label_es": "Añadir especificación"
+          },
+          "requiresGridItemSelected": false
+        },
+        "dialogInfo": {
+          "name": "genericDialog",
+          "fields": [
+            {
+              "text1": {
+                "label_en": "Specification Code",
+                "label_es": "Código de especificación"
+              }
+            },
+            {
+              "multilist1": {
+                "label_en": "Analyses",
+                "label_es": "Análisis",
+                "addBlankValueOnTop": true,
+                "addBlankValueAtBottom": false,
+                "optional": false,
+                "valuesFromMasterData": {
+                  "propertyNameContainer": "analysis_method",
+                  "propertyKeyName": "analysis",
+                  "propertyKeyValueEn": [
+                    "analysis"
+                  ],
+                  "propertyKeyValueEs": [
+                    "analysis"
+                  ]
+                }
+              }
+            },
+            {
+              "text2": {
+                "label_en": "Variation Name",
+                "label_es": "Nombre variación",
+                "optional": true
+              }
+            },
+            {
+              "number1": {
+                "label_en": "Total sample required",
+                "label_es": "Cantidad de muestra necesaria",
+                "optional": true
+              }
+            },
+            {
+              "list1": {
+                "label_en": "UOM",
+                "label_es": "UDM",
+                "addBlankValueOnTop": true,
+                "addBlankValueAtBottom": false,
+                "valuesFromMasterData": {
+                  "propertyNameContainer": "units_of_measurement",
+                  "propertyKeyName": "name",
+                  "propertyKeyValueEn": "name",
+                  "propertyKeyValueEs": "name"
+                }
+              }
+            }
+          ]
+        },
+        "endPointParams": [
+          {
+            "argumentName": "code",
+            "element": "text1",
+            "defaultValue": ""
+          },
+          {
+            "argumentName": "analyses",
+            "element": "multilist1",
+            "addToFieldNameAndValue": true,
+            "notAddWhenValueIsBlank": true
+          },
+          {
+            "argumentName": "variationNames",
+            "element": "text2",
+            "addToFieldNameAndValue": true,
+            "notAddWhenValueIsBlank": true
+          },
+          {
+            "argumentName": "totalSampleRequiredQuantity",
+            "element": "number1",
+            "addToFieldNameAndValue": true,
+            "notAddWhenValueIsBlank": true
+          },
+          {
+            "argumentName": "totalSampleRequiredQuantityUom",
+            "element": "list1",
+            "addToFieldNameAndValue": true,
+            "notAddWhenValueIsBlank": true
+          }
+        ]
+      }      
+      ]
+    },
+    "tabs": [  
+      {
+        "tabLabel_en": "Information",
+        "tabLabel_es": "Información",
+        "view": "SpecLimits",
+        "view_definition": [
+          {
+            "type": "reportTitle",
+            "title": {
+              "text_en":"{fld:code}",
+              "text_es":"{fld:code}"            
+            }
+          },
+          {
+            "type": "readOnlyTable",
+            "title": {
+              "label_en": "Analysis list",
+              "label_es": "Lista de análisis"
+            },
+            "theme": "TRAZiT-DefinitionArea",
+            "endPointResponseObject": "analysis_list",
+            "columns": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              }
+            ],
+            "row_buttons": [
+              {
+                "actionName": "REMOVE_ROLE",
+                "notGetViewData": true,
+                "zzzclientMethod": "procMngRequirementsMethod",
+                "zzzendPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                "selectedItemPropertyName": "selectedItems",
+                "requiresDialog": false,
+                "certificationException": true,
+                "secondaryActionToPerform": {
+                  "name": "refreshSelProcData"
+                },
+                "button": {
+                  "icon": "person_remove",
+                  "title": {
+                    "label_en": "Remove role",
+                    "label_es": "Borrar perfil"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "procedureName",
+                    "contextVariableName": "procedureName"
+                  },
+                  {
+                    "argumentName": "procedureVersion",
+                    "contextVariableName": "procedureVersion"
+                  },
+                  {
+                    "argumentName": "procInstanceName",
+                    "contextVariableName": "procInstanceName"
+                  },
+                  {
+                    "argumentName": "roleName",
+                    "selObjectPropertyName": "role_name"
+                  }
+                ]
+              },
+              {
+                "actionName": "RENAME_ROLE",
+                "notGetViewData": true,
+                "zzzclientMethod": "procMngRequirementsMethod",
+                "zzzendPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                "selectedItemPropertyName": "selectedItems",
+                "requiresDialog": true,
+                "certificationException": true,
+                "secondaryActionToPerform": {
+                  "name": "refreshSelProcData"
+                },
+                "button": {
+                  "icon": "manage_accounts",
+                  "title": {
+                    "label_en": "Rename role",
+                    "label_es": "Renombrar perfil"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "text1": {
+                        "label_en": "New Role Name",
+                        "label_es": "Nuevo Nombre Perfil",
+                        "selObjectPropertyName": "role_name"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "procedureName",
+                    "contextVariableName": "procedureName"
+                  },
+                  {
+                    "argumentName": "procedureVersion",
+                    "contextVariableName": "procedureVersion"
+                  },
+                  {
+                    "argumentName": "procInstanceName",
+                    "contextVariableName": "procInstanceName"
+                  },
+                  {
+                    "argumentName": "roleName",
+                    "selObjectPropertyName": "role_name"
+                  },
+                  {
+                    "argumentName": "newroleName",
+                    "element": "text1",
+                    "defaultValue": ""
+                  }
+                ]
+              },
+              {
+                "actionName": "CLONE_ROLE",
+                "notGetViewData": true,
+                "zzzclientMethod": "procMngRequirementsMethod",
+                "zzzendPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                "selectedItemPropertyName": "selectedItems",
+                "requiresDialog": true,
+                "certificationException": true,
+                "secondaryActionToPerform": {
+                  "name": "refreshSelProcData"
+                },
+                "button": {
+                  "icon": "file_copy",
+                  "title": {
+                    "label_en": "Clone Role",
+                    "label_es": "Clonar Perfil"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "text1": {
+                        "label_en": "New Role Name",
+                        "label_es": "Nuevo Nombre de Perfil",
+                        "selObjectPropertyName": "role_name"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "procedureName",
+                    "contextVariableName": "procedureName"
+                  },
+                  {
+                    "argumentName": "procedureVersion",
+                    "contextVariableName": "procedureVersion"
+                  },
+                  {
+                    "argumentName": "procInstanceName",
+                    "contextVariableName": "procInstanceName"
+                  },
+                  {
+                    "argumentName": "roleName",
+                    "selObjectPropertyName": "role_name"
+                  },
+                  {
+                    "argumentName": "newroleName",
+                    "element": "text1"
+                  }
+                ]
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "ADD_ROLE",
+                "notGetViewData": true,
+                "zzzclientMethod": "procMngRequirementsMethod",
+                "zzzendPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                "selectedItemPropertyName": "selectedItems",
+                "requiresDialog": true,
+                "certificationException": true,
+                "secondaryActionToPerform": {
+                  "name": "refreshSelProcData"
+                },
+                "button": {
+                  "icon": "person_add",
+                  "title": {
+                    "label_en": "Assign Role",
+                    "label_es": "Asignar Perfil"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "dialogWidth": "500px",
+                  "fields": [
+                    {
+                      "text1": {
+                        "label_en": "New Role name",
+                        "label_es": "Nuevo Nombre de Perfil"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "procedureName",
+                    "contextVariableName": "procedureName"
+                  },
+                  {
+                    "argumentName": "procedureVersion",
+                    "contextVariableName": "procedureVersion"
+                  },
+                  {
+                    "argumentName": "procInstanceName",
+                    "contextVariableName": "procInstanceName"
+                  },
+                  {
+                    "argumentName": "roleName",
+                    "element": "text1",
+                    "defaultValue": ""
+                  }
+                ]
+              }
+            ]
+          },  
+          {
+            "type": "readOnlyTable",
+            "title": {
+              "label_en": "Variations list",
+              "label_es": "Lista de variaciones"
+            },
+            "theme": "TRAZiT-DefinitionArea",
+            "endPointResponseObject": "variations_list",
+            "columns": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              }
+            ]
+          },                  
+          {
+            "type": "cardSomeElementsSingleObject",
+            "endPointPropertyArray": [
+              "ROOT"
+            ],
+            "num_columns": 1,
+            "add_border": true,
+            "fieldsToDisplay": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              },
+              {
+                "name": "purpose",
+                "label_en": "Purpose",
+                "label_es": "Propósito"
+              },
+              {
+                "name": "created_on",
+                "label_en": "Created on",
+                "label_es": "Fecha creación"
+              },
+              {
+                "name": "type",
+                "label_en": "Type",
+                "label_es": "Tipo"
+              },
+              {
+                "name": "responsible",
+                "label_en": "Responsible",
+                "label_es": "Responsable"
+              },
+              {
+                "name": "is_locked",
+                "label_en": "Locked?",
+                "label_es": "¿Bloqueado?",
+                "is_icon": true
+              }
+            ],
+            "actions": []
+          }          
+        ]
+      },
+      {
+        "tabLabel_en": "Spec Limits",
+        "tabLabel_es": "Limites del Spec",
+        "view": "SpecLimits",
+        "view_definition": [
+          {
+            "type": "readOnlyTable",
+            "endPointResponseObject": "spec_limits",
+            "actions": [
+              {
+                "actionName": "SPEC_ADD_ANALYSIS_TO_LIST",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "add_circle",
+                  "title": {
+                    "label_en": "Add Analysis",
+                    "label_es": "Añadir análisis"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Analyses",
+                        "label_es": "Análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "analysis_method",
+                          "propertyKeyName": "analysis",
+                          "labelByConcatenateFieldsEn": {
+                            "fields": [
+                              "method_name",
+                              "analysis"
+                            ],
+                            "separator": "-"
+                          },
+                          "labelByConcatenateFieldsEs": {
+                            "fields": [
+                              "method_name",
+                              "analysis"
+                            ],
+                            "separator": "-"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "analysisName",
+                    "element": "list1",
+                    "defaultValue": ""
+                  }
+                ]
+              },
+              {
+                "actionName": "SPEC_REMOVE_ANALYSIS_FROM_LIST",
+                "notGetViewData": true,
+                "requiresDialog": false,
+                "certificationException": true,
+                "button": {
+                  "icon": "remove_circle",
+                  "title": {
+                    "label_en": "Remove Analysis",
+                    "label_es": "Eliminar análisis"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "analysisName",
+                    "selObjectPropertyName": "analysis"
+                  }
+                ]
+              },
+              {
+                "actionName": "SPEC_UPDATE",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "edit",
+                  "title": {
+                    "label_en": "Update Specification",
+                    "label_es": "Actualizar especificación"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "multilist1": {
+                        "label_en": "Analyses",
+                        "label_es": "Análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": true,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "analysis_method",
+                          "propertyKeyName": "analysis",
+                          "propertyKeyValueEn": [
+                            "analysis"
+                          ],
+                          "propertyKeyValueEs": [
+                            "analysis"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "number1": {
+                        "label_en": "Total sample required",
+                        "label_es": "Cantidad de muestra necesaria",
+                        "optional": true
+                      }
+                    },
+                    {
+                      "list1": {
+                        "label_en": "UOM",
+                        "label_es": "UDM",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "units_of_measurement",
+                          "propertyKeyName": "pretty_name",
+                          "propertyKeyValueEn": "pretty_name",
+                          "propertyKeyValueEs": "pretty_name"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "analyses",
+                    "element": "multilist1",
+                    "addToFieldNameAndValue": true,
+                    "notAddWhenValueIsBlank": true
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "specFieldName",
+                    "element": "text3",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "specFieldValue",
+                    "element": "text4",
+                    "defaultValue": ""
+                  }
+                ]
+              },
+              {
+                "actionName": "SPEC_LIMIT_NEW",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "add_box",
+                  "title": {
+                    "label_en": "New limit",
+                    "label_es": "Nuevo límite"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Method",
+                        "label_es": "Método",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "methods",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": [
+                            "code"
+                          ],
+                          "propertyKeyValueEs": [
+                            "code"
+                          ]
+                        }
+                      },
+                      "acceptancecriteria": {
+                        "label_en": "Range",
+                        "label_es": "Rango",
+                        "optional": false
+                      }                      
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "internalVariableObjName": "selectedItems",
+                    "internalVariableObjProperty": "config_version"
+                  },
+                  {
+                    "argumentName": "methodName",
+                    "element": "list1"
+                  }
+                ]
+              },
+              {
+                "actionName": "SPEC_ADD_VARIATION_TO_LIST",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "add_circle",
+                  "title": {
+                    "label_en": "Add Variation",
+                    "label_es": "Añadir variación"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "text1": {
+                        "label_en": "Variation Name",
+                        "label_es": "Nombre variación"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "variationName",
+                    "element": "text1",
+                    "defaultValue": ""
+                  }
+                ]
+              },
+              {
+                "actionName": "SPEC_REMOVE_VARIATION_FROM_LIST",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "remove",
+                  "title": {
+                    "label_en": "Remove Variation",
+                    "label_es": "Borrar variación"
+                  },
+                  "requiresGridItemSelected": true
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Variation List",
+                        "label_es": "Lista de variaciones",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromSelectedItem": {
+                          "internalVariableSingleObjName": "selectedItemInView",
+                          "internalVariableSingleObjProperty": "method",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": [
+                            "code"
+                          ],
+                          "propertyKeyValueEs": [
+                            "code"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "variationName",
+                    "element": "list1",
+                    "defaultValue": ""
+                  }
+                ]
+              }
+            ],
+            "columns": [
+              {
+                "name": "code",
+                "label_en": "Code",
+                "label_es": "Código"
+              },
+              {
+                "name": "variation_name",
+                "label_en": "Variation",
+                "label_es": "Variación"
+              },
+              {
+                "name": "testing_group",
+                "label_en": "Testing Group",
+                "label_es": "Grupo Analítico"
+              },
+              {
+                "name": "analysis",
+                "label_en": "Analysis",
+                "label_es": "Análisis"
+              },
+              {
+                "name": "method_name",
+                "fix_value2_prefix": "v",
+                "name2": "method_version",
+                "label_en": "Method & Version",
+                "label_es": "Método y Versión"
+              },
+              {
+                "name": "parameter",
+                "label_en": "Parameter",
+                "label_es": "Parámetro"
+              },
+              {
+                "name": "pretty_spec",
+                "label_en": "Range",
+                "label_es": "Rango"
+              }
+            ],
+            "row_buttons":[
+              {
+                "actionName": "SPEC_LIMIT_UPDATE",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "add_box",
+                  "title": {
+                    "label_en": "Update limit",
+                    "label_es": "Modificar límite"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Method",
+                        "label_es": "Método",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "optional": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "methods",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": [
+                            "code"
+                          ],
+                          "propertyKeyValueEs": [
+                            "code"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "internalVariableObjName": "selectedItems",
+                    "internalVariableObjProperty": "config_version"
+                  },
+                  {
+                    "argumentName": "methodName",
+                    "element": "list1"
+                  }
+                ]
+              },
+            ]
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Testing",
+        "tabLabel_es": "Pruebas",
+        "view": "summary",
+        "view_definition": [
+          {
+            "type": "parentReadOnlyTable",
+            "endPointResponseObject": "scripts_detail",
+            "actions": [
+              {
+                "actionName": "SUGGEST_SPEC_LIMITS_TESTING",
+                "requiresDialog": false,
+                "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                "variableToSetResponse": "selectedItemInView",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Build Testing",
+                    "label_es": "Construye una prueba"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "spec",
+                    "internalVariableSimpleObjName": "selectedItemInView",
+                    "internalVariableSimpleObjProperty": "code"
+                    },
+                    {
+                    "argumentName": "specVersion",
+                    "internalVariableSimpleObjName": "selectedItemInView",
+                    "internalVariableSimpleObjProperty": "config_version"
+                    },
+                ]
+              },
+              {
+                "actionName": "SUGGEST_SPEC_LIMITS_TESTING",
+                "requiresDialog": false,
+                "endPoint": "/appProcMgr/RequirementsProcedureDefinitionAPIActions",
+                "variableToSetResponse": "selectedItemInView",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Build Testing & Save",
+                    "label_es": "Construye una prueba y guardar"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "spec",
+                    "internalVariableSimpleObjName": "selectedItemInView",
+                    "internalVariableSimpleObjProperty": "code"
+                  },
+                  {
+                    "argumentName": "specVersion",
+                    "internalVariableSimpleObjName": "selectedItemInView",
+                    "internalVariableSimpleObjProperty": "config_version"
+                  },
+                  {
+                    "argumentName": "saveScript",
+                    "fixValue": "true"
+                  }
+                ]
+              }
+            ],
+            "columns": [
+              {
+                "name": "script_id",
+                "label_en": "Id",
+                "label_es": "Id"
+              },
+              {
+                "name": "run_summary",
+                "label_en": "Summary",
+                "label_es": "Resumen"
+              },
+              {
+                "name": "date_execution",
+                "label_en": "Run on",
+                "label_es": "Ejecutado en"
+              },
+              {
+                "name": "eval_total_tests",
+                "label_en": "Number of Steps",
+                "label_es": "Número de Pasos"
+              },
+              {
+                "label_en": "Sintaxis",
+                "label_es": "Sintáxis",
+                "fix_value_prefix": "Match: ",
+                "name": "eval_syntaxis_match",
+                "fix_value2_prefix": "UNmtch: ",
+                "name2": "eval_syntaxis_unmatch",
+                "fix_value3_prefix": "N/A:",
+                "name3": "eval_syntaxis_undefined"
+              },
+              {
+                "label_en": "Notification",
+                "label_es": "Notificación",
+                "fix_value_prefix": "Match: ",
+                "name": "eval_code_match",
+                "fix_value2_prefix": "UNmtch: ",
+                "name2": "eval_code_unmatch",
+                "fix_value3_prefix": "N/A:",
+                "name3": "eval_code_undefined"
+              },
+              {
+                "label_en": "Duration",
+                "label_es": "Duración",
+                "fix_value_prefix": "",
+                "name": "time_consume",
+                "fix_value2_prefix": " (",
+                " (name2": "time_started",
+                "fix_value3_prefix": " - ",
+                "name3": "time_completed",
+                "fix_value3_suffix": ") "
+              }
+            ],
+            "row_buttons": [
+              {
+                "actionName": "TestingRegressionUAT",
+                "endPoint": "/testing/platform/TestingRegressionUAT",
+                "requiresDialog": false,
+                "secondaryActionToPerform": {
+                  "name": "testScriptPerformed"
+                },
+                "certificationException": true,
+                "button": {
+                  "icon": "date_range",
+                  "title": {
+                    "label_en": "Run Testing",
+                    "label_es": "Ejecutar Prueba"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "scriptId",
+                    "selObjectPropertyName": "script_id"
+                  },
+                  {
+                    "argumentName": "procInstanceName",
+                    "contextVariableName": "procInstanceName"
+                  },
+                  {
+                    "argumentName": "procManagement",
+                    "fixValue": "true"
+                  },
+                  {
+                    "argumentName": "outputFormat",
+                    "fixValue": "JSON"
+                  }
+                ]
+              }
+            ],
+            "children": "steps",
+            "children_definition": {
+              "columns": [
+                {
+                  "name": "analysis",
+                  "label_en": "Analysis",
+                  "label_es": "Análisis"
+                },                
+                {
+                  "name": "parameter",
+                  "label_en": "Parameter",
+                  "label_es": "Parámetro"
+                },                
+                {
+                  "name": "pretty_spec",
+                  "label_en": "Range",
+                  "label_es": "Rango"
+                },                
+                {
+                  "name": "tester_notes",
+                  "label_en": "Purpose",
+                  "label_es": "Objetivo"
+                },                
+                {
+                  "name": "value",
+                  "label_en": "Value",
+                  "label_es": "Valor"
+                },                
+                {
+                  "name": "expected_code",
+                  "label_en": "Expected code",
+                  "label_es": "Código esperado"
+                },                
+                {
+                  "name": "function_code",
+                  "label_en": "Obtained code",
+                  "label_es": "Código obtenido"
+                },                
+              ]
+            }            
+          }
+        ]
+      }
+    ],
+    "zzzztabs": [
+      {
+        "tabLabel_en": "Summary",
+        "tabLabel_es": "Inicio",
+        "view": "summary",
+        "view_definition": [
+          {
+            "type": "cardSomeElementsRepititiveObjects",
+            "endPointResponseObject": "lot_info",
+            "title": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "name",
+                "label_en": "Name",
+                "label_es": "Nombre"
+              },
+              {
+                "name": "created_on",
+                "label_en": "Creation D.",
+                "label_es": "F. Creación"
+              },
+              {
+                "name": "material_name",
+                "label_en": "Material",
+                "label_es": "Material"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "num_containers",
+                "label_en": "Num. Containers",
+                "label_es": "Núm. Contenedores"
+              },
+              {
+                "name": "bulk_decision",
+                "name2": "bulk_decision_by",
+                "name3": "bulk_decision_by",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "sampling_plan",
+                "label_en": "sampling_plan",
+                "label_es": "sampling_plan"
+              },
+              {
+                "name": "analysis_status",
+                "label_en": "analysis_status",
+                "label_es": "analysis_status"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "GET_SAMPLE_AUDIT",
+                "requiresDialog": true,
+                "endPoint": "/modulesample/SampleAPIqueries",
+                "button": {
+                  "icon": "rule",
+                  "title": {
+                    "label_en": "Sample Audit",
+                    "label_es": "Auditoría de Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "clientMethod": "getObjectAuditInfo",
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  }
+                ],
+                "dialogInfo": {
+                  "name": "auditDialog",
+                  "automatic": true,
+                  "action": [
+                    {
+                      "actionName": "SAMPLEAUDIT_SET_AUDIT_ID_REVIEWED",
+                      "requiresDialog": false,
+                      "notGetViewData": true,
+                      "endPointUrl": "Samples",
+                      "clientMethod": "signAudit",
+                      "endPointParams": [
+                        {
+                          "argumentName": "auditId",
+                          "targetValue": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "zzzjsonViewer",
+            "endPointResponseObject": "lot_info"
+          },
+          {
+            "type": "zzjsonViewer",
+            "endPointResponseObject": "spec_definition"
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Bulks",
+        "tabLabel_es": "Bultos",
+        "view": "lot-bulks",
+        "view_definition": [
+          {
+            "type": "cardSomeElementsRepititiveObjects",
+            "endPointResponseObject": "lot_bulk",
+            "title": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "subtitle": {
+              "label_en": "Lot Info",
+              "label_es": "Información del Lote"
+            },
+            "fieldsToDisplay": [
+              {
+                "name": "id",
+                "label_en": "Id",
+                "label_es": "Id"
+              },
+              {
+                "name": "quantity",
+                "name2": "quantity_uom",
+                "label_en": "Quantity",
+                "label_es": "Cantidad"
+              },
+              {
+                "name": "sample_quantity",
+                "name2": "sample_quantity_uom",
+                "label_en": "Sample Quantity",
+                "label_es": "Cantidad de Muestra"
+              },
+              {
+                "name": "decision",
+                "label_en": "Decision",
+                "label_es": "Decisión"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "SETSAMPLINGDATE",
+                "endPointUrl": "Samples",
+                "requiresDialog": false,
+                "button": {
+                  "icon": "date_range",
+                  "title": {
+                    "label_en": "Set Sample Date",
+                    "label_es": "Establecer Fecha Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  }
+                ]
+              },
+              {
+                "actionName": "CHANGESAMPLINGDATE",
+                "requiresDialog": true,
+                "endPointUrl": "Samples",
+                "button": {
+                  "icon": "event",
+                  "title": {
+                    "label_en": "Change Sample Date",
+                    "label_es": "Cambiar Fecha Muestra"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "datetime1": {
+                        "label_en": "new Date",
+                        "label_es": "Nueva Fecha"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "sampleId",
+                    "selObjectPropertyName": "sample_id"
+                  },
+                  {
+                    "argumentName": "newDateTime",
+                    "element": "datetime1",
+                    "selObjectPropertyName": "sampling_date"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Samples",
+        "tabLabel_es": "Muestras",
+        "view": "lot-samples"
+      },
+      {
+        "tabLabel_en": "CoA Preview",
+        "Previa CdA": "Muestras",
+        "view": "lot-coa"
+      },
+      {
+        "tabLabel_en": "Parameter Limits",
+        "tabLabel_es": "Límites",
+        "view": "parameter-limits",
+        "view_definition": [
+          {
+            "type": "readOnlyTable",
+            "endPointResponseObject": "spec_definition",
+            "endPointResponseObject2": "spec_limits",
+            "columns": [
+              {
+                "name": "rule",
+                "label_en": "Rule",
+                "label_es": "Regla"
+              },
+              {
+                "name": "method_and_version",
+                "label_en": "Method & Version",
+                "label_es": "Método y Versión"
+              },
+              {
+                "name": "analysis",
+                "label_en": "Analysis",
+                "label_es": "Análisis"
+              },
+              {
+                "name": "parameter",
+                "label_en": "Parameter",
+                "label_es": "Parámetro"
+              },
+              {
+                "name": "variation",
+                "label_en": "Variation",
+                "label_es": "Variación"
+              },
+              {
+                "name": "testing_group",
+                "label_en": "Testing Group",
+                "label_es": "Grupo Analítico"
+              }
+            ]
+          },
+          {
+            "type": "zzzjsonViewer",
+            "endPointResponseObject": "spec_definition"
+          },
+          {
+            "type": "zzzgrid",
+            "title": {
+              "label_en": "Info Matching Selection Criteria",
+              "label_es": "Información cumpliendo el criterio de selección"
+            },
+            "elementName": "spec_limits",
+            "endPointResponseObject": "spec_definition",
+            "endPointResponseObject2": "spec_limits",
+            "fieldsToDisplay": [
+              {
+                "property": "method_name",
+                "header": "Method"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "AnalysisDesign":{
+    "component": "ObjectByTabs",
+    "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "Analysis Designer",
+      "fix_text_es": "Diseño de análisis",
+      "name": "lot_name"
+    },
+    "viewQuery": {
+      "actionName": "GET_ANALYSIS",
+      "dataResponse": "ArrayInRootForObjects",
+      "notUseGrid": true,
+      "responseArray": true,
+      "addRefreshButton": true,
+      "button": {
+        "icon": "refresh",
+        "title": {
+          "label_en": "Reload",
+          "label_es": "Recargar"
+        },
+        "requiresGridItemSelected": false
+      },
+      "endPointParams": [
+        {
+          "argumentName": "code",
+          "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"
+        },
+        {
+          "argumentName": "includeMethodsCertification",
+          "value": true
+        }
+      ]
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+      {
+        "filtertext1": {
+          "label_en": "Analysis",
+          "label_es": "Análisis",
+          "fixValue": "ALL"
+        }
+      }
+    ],
+    "zzzfilterResultDetail": {
+      "type": "list",
+      "detail": [
+        {
+          "field": "code"
+        }
+      ]
+    },
+    "actions": [],
+    "tabs": [
+      {
+        "tabLabel_en": "Analysis",
+        "tabLabel_es": "Análisis",
+        "view": "summary",
+        "view_definition": [
+          {
+            "actions": []
+          },
+          {
+            "type": "parentReadOnlyTable",
+            "endPointResponseArray": ["queryData", "analysis"],
+            "columns": [
+              {
+                "name": "code",
+                "label_en": "Code",
+                "label_es": "Código"
+              },
+              {
+                "name": "testing_group",
+                "label_en": "Testing Group",
+                "label_es": "Grupo Analítico"
+              }
+            ],
+            "actions": [
+              {
+                "actionName": "ANALYSIS_NEW",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "person_add",
+                  "title": {
+                    "label_en": "Add Analysis",
+                    "label_es": "Añadir análisis"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "text1": {
+                        "label_en": "Analysis Code",
+                        "label_es": "Código de análisis"
+                      }
+                    },
+                    {
+                      "text2": {
+                        "label_en": "Analysis version",
+                        "label_es": "Versión del análisis"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "element": "text1",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "config_version",
+                    "element": "text2",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "fieldName",
+                    "value": "active"
+                  },
+                  {
+                    "argumentName": "fieldValue",
+                    "value": "true*Boolean"
+                  }
+                ]
+              },
+              {
+                "actionName": "ANALYSIS_REACTIVATE",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "toggle_on",
+                  "title": {
+                    "label_en": "Reactivate analysis",
+                    "label_es": "Reactivar análisis"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Analysis Code",
+                        "label_es": "Código de análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromSelectedItem": {
+                          "filterInFirstLevel": true,
+                          "elementName": "list1",
+                          "internalVariableSingleObjName": "selectedItem",
+                          "internalVariableSingleObjProperty": "analysis",
+                          "propertyNameContainerLevelPropertyKeyName": "active",
+                          "propertyNameContainerLevelfixValue": "false",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": [
+                            "code"
+                          ],
+                          "propertyKeyValueEs": [
+                            "code"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "text2": {
+                        "label_en": "Analysis version",
+                        "label_es": "Versión del análisis"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "element": "list1"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "element": "text2"
+                  }
+                ]
+              },
+              {
+                "actionName": "ANALYSIS_DEACTIVATE",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "toggle_off",
+                  "title": {
+                    "label_en": "Deactivate analysis",
+                    "label_es": "Desactivar análisis"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Analysis Code",
+                        "label_es": "Código de análisis",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromSelectedItem": {
+                          "internalVariableSingleObjName": "selectedItem",
+                          "internalVariableSingleObjProperty": "analysis",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": [
+                            "code"
+                          ],
+                          "propertyKeyValueEs": [
+                            "code"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "text2": {
+                        "label_en": "Analysis version",
+                        "label_es": "Versión del análisis"
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "element": "list1"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "element": "text2"
+                  }
+                ]
+              }
+            ],
+            "row_buttons": [
+              {
+                "actionName": "ANALYSIS_ADD_METHOD",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "playlist_add",
+                  "title": {
+                    "label_en": "Add Analysis Method",
+                    "label_es": "Añadir método analítico"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list1": {
+                        "label_en": "Method Code",
+                        "label_es": "Código de método",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromMasterData": {
+                          "propertyNameContainer": "methods",
+                          "filterInFirstLevel": false,
+                          "propertyNameContainerLevelPropertyKeyName": "code",
+                          "propertyKeyName": "code",
+                          "propertyKeyValueEn": "code",
+                          "propertyKeyValueEs": "code"
+                        }
+                      }
+                    },
+                    {
+                      "text2": {
+                        "label_en": "Method version",
+                        "label_es": "Versión del método",
+                        "optional": false
+                      }
+                    },
+                    {
+                      "text3": {
+                        "label_en": "Expiry Interval Info",
+                        "label_es": "Información del intervalo de caducidad",
+                        "optional": true
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "methodName",
+                    "element": "list1"
+                  },
+                  {
+                    "argumentName": "methodVersion",
+                    "element": "text2",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  },
+                  {
+                    "argumentName": "expiryIntervalInfo",
+                    "element": "text3",
+                    "defaultValue": ""
+                  }
+                ]
+              },
+              {
+                "actionName": "ANALYSIS_APPROVAL_FOR_USE",
+                "notGetViewData": true,
+                "requiresDialog": false,
+                "certificationException": true,
+                "requiresGridItemSelected": false,
+                "button": {
+                  "icon": "check_box",
+                  "title": {
+                    "label_en": "Approve analysis for use",
+                    "label_es": "Aprobar análisis para su uso"
+                  }
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "code",
+                    "selObjectPropertyName": "code"
+                  },
+                  {
+                    "argumentName": "configVersion",
+                    "selObjectPropertyName": "config_version"
+                  }
+                ]
+              }
+            ],
+            "children": "analysis_method",
+            "children_definition": {
+              "title": {
+                "label_en": "Analysis Method",
+                "label_es": "Método analítico"
+              },
+              "columns": [
+                {
+                  "name": "method_name",
+                  "label_en": "Method Code",
+                  "label_es": "Código método"
+                },
+                {
+                  "name": "testing_group",
+                  "label_en": "Testing Group",
+                  "label_es": "Grupo Analítico"
+                }
+              ],
+              "row_buttons": [
+                {
+                  "actionName": "ANALYSIS_ADD_PARAM",
+                  "notGetViewData": true,
+                  "requiresDialog": true,
+                  "certificationException": true,
+                  "button": {
+                    "icon": "person_add",
+                    "title": {
+                      "label_en": "Add Analysis Params",
+                      "label_es": "Añadir parámetros de análisis"
+                    },
+                    "requiresGridItemSelected": false
+                  },
+                  "dialogInfo": {
+                    "name": "genericDialog",
+                    "fields": [
+                      {
+                        "text1": {
+                          "label_en": "Param Name",
+                          "label_es": "Nombre del parámetro",
+                          "optional": false
+                        }
+                      },
+                      {
+                        "text2": {
+                          "label_en": "Number of replicas ",
+                          "label_es": "Número de réplicas",
+                          "optional": false
+                        }
+                      },
+                      {
+                        "text3": {
+                          "label_en": "UOM Conversion Mode",
+                          "label_es": "Modo de conversión de UOM",
+                          "optional": true
+                        }
+                      },
+                      {
+                        "text4": {
+                          "label_en": "Linked Calc",
+                          "label_es": "Cálculo enlanzado",
+                          "optional": true
+                        }
+                      },
+                      {
+                        "text5": {
+                          "label_en": "List Entry",
+                          "label_es": "Lista de entradas",
+                          "optional": true
+                        }
+                      },
+                      {
+                        "text6": {
+                          "label_en": "Param Type",
+                          "label_es": "Tipo parámetro",
+                          "optional": false
+                        }
+                      },
+                      {
+                        "text7": {
+                          "label_en": "UOM",
+                          "label_es": "UOM",
+                          "optional": false
+                        }
+                      },
+                      {
+                        "text8": {
+                          "label_en": "Analysis Version",
+                          "label_es": "Versión análisis",
+                          "optional": false
+                        }
+                      }
+                    ]
+                  },
+                  "endPointParams": [
+                    {
+                      "argumentName": "code",
+                      "selObjectPropertyName": "analysis"
+                    },
+                    {
+                      "argumentName": "configVersion",
+                      "element": "text8"
+                    },
+                    {
+                      "argumentName": "methodName",
+                      "selObjectPropertyName": "method_name"
+                    },
+                    {
+                      "argumentName": "paramName",
+                      "element": "text1",
+                      "defaultValue": " "
+                    },
+                    {
+                      "argumentName": "paramType",
+                      "element": "text6",
+                      "defaultValue": " "
+                    },
+                    {
+                      "argumentName": "numReplicas",
+                      "element": "text2",
+                      "defaultValue": "0"
+                    },
+                    {
+                      "argumentName": "uom",
+                      "element": "text7",
+                      "defaultValue": " "
+                    },
+                    {
+                      "argumentName": "uomConversionMode",
+                      "element": "text3",
+                      "defaultValue": " "
+                    },
+                    {
+                      "argumentName": "calcLinked",
+                      "element": "text4",
+                      "defaultValue": " "
+                    },
+                    {
+                      "argumentName": "listEntry",
+                      "element": "text5",
+                      "defaultValue": " "
+                    }
+                  ]
+                },
+                {
+                  "actionName": "ANALYSIS_REMOVE_METHOD",
+                  "notGetViewData": true,
+                  "requiresDialog": true,
+                  "certificationException": true,
+                  "button": {
+                    "icon": "playlist_remove",
+                    "title": {
+                      "label_en": "Remove Analysis Method",
+                      "label_es": "Borrar método analítico"
+                    },
+                    "requiresGridItemSelected": false
+                  },
+                  "dialogInfo": {
+                    "name": "genericDialog",
+                    "fields": [
+                      {
+                        "zzzlist1": {
+                          "label_en": "Analysis Code",
+                          "label_es": "Código de análisis",
+                          "addBlankValueOnTop": true,
+                          "addBlankValueAtBottom": false,
+                          "valuesFromSelectedItem": {
+                            "internalVariableSingleObjName": "selectedItem",
+                            "internalVariableSingleObjProperty": "analysis_method",
+                            "filterInFirstLevel": true,
+                            "propertyKeyName": "method_name",
+                            "propertyKeyValueEn": [
+                              "method_name"
+                            ],
+                            "propertyKeyValueEs": [
+                              "method_name"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "text2": {
+                          "label_en": "Method version",
+                          "label_es": "Versión del método"
+                        }
+                      }
+                    ]
+                  },
+                  "endPointParams": [
+                    {
+                      "argumentName": "methodName",
+                      "selObjectPropertyName": "method_name"
+                    },
+                    {
+                      "argumentName": "code",
+                      "selObjectPropertyName": "analysis"
+                    },
+                    {
+                      "argumentName": "configVersion",
+                      "element": "text2"
+                    }
+                  ]
+                }
+              ],
+              "actions": [],
+              "children": "analysis_method_params",
+              "children_definition": {
+                "title": {
+                  "label_en": "Analysis Params",
+                  "label_es": "Parámetros analíticos"
+                },
+                "columns": [
+                  {
+                    "name": "param_name",
+                    "label_en": "Param Name",
+                    "label_es": "Nombre parámetro"
+                  },
+                  {
+                    "name": "param_type",
+                    "label_en": "Param type",
+                    "label_es": "Tipo parámetro"
+                  },
+                  {
+                    "name": "mandatory",
+                    "label_en": "Mandatory",
+                    "label_es": "Obligatorio"
+                  },
+                  {
+                    "name": "list_entry",
+                    "label_en": "List entry",
+                    "label_es": "Lista de entrada"
+                  },
+                  {
+                    "name": "calc_linked",
+                    "label_en": "Calc linked",
+                    "label_es": "Calculos enlazados"
+                  },
+                  {
+                    "name": "uom",
+                    "label_en": "UOM",
+                    "label_es": "UOM"
+                  },
+                  {
+                    "name": "uom_conversion_mode",
+                    "label_en": "UOM conversion mode",
+                    "label_es": "Modo conversión UOM"
+                  }
+                ],
+                "actions": []
+              }
+            }
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Certification",
+        "tabLabel_es": "Certificación",
+        "view": "summary",
+        "view_definition": [
+          {
+            "type": "rolesAndActions",
+            "title": {
+              "label_en": "Methods by user",
+              "label_es": "Métodos por usuario"
+            },
+            "endPointResponseObject": "certifications_info",
+            "actions": [
+              {
+                "actionName": "CERTIFY_ASSIGN_METHOD_TO_USER",
+                "notGetViewData": true,
+                "requiresDialog": true,
+                "certificationException": true,
+                "button": {
+                  "icon": "person_add",
+                  "title": {
+                    "label_en": "Assign Method Certification to User",
+                    "label_es": "Asignar Certificación de Método a Usuario"
+                  },
+                  "requiresGridItemSelected": false
+                },
+                "dialogInfo": {
+                  "name": "genericDialog",
+                  "fields": [
+                    {
+                      "list2": {
+                        "label_en": "User",
+                        "label_es": "Usuario",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromSelectedItem": {
+                          "internalVariableSingleObjName": "selectedItem",
+                          "internalVariableSingleObjProperty": "procedure_users",
+                          "propertyKeyName": "user_name",
+                          "propertyKeyValueEn": [
+                            "user_name"
+                          ],
+                          "propertyKeyValueEs": [
+                            "user_name"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "list1": {
+                        "label_en": "Method",
+                        "label_es": "Método",
+                        "addBlankValueOnTop": true,
+                        "addBlankValueAtBottom": false,
+                        "valuesFromSelectedItem": {
+                          "internalVariableSingleObjName": "selectedItem",
+                          "internalVariableSingleObjProperty": "procedure_roles",
+                          "propertyKeyName": "role_name",
+                          "propertyKeyValueEn": [
+                            "role_name"
+                          ],
+                          "propertyKeyValueEs": [
+                            "role_name"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                "endPointParams": [
+                  {
+                    "argumentName": "methodName",
+                    "element": "list1",
+                    "defaultValue": ""
+                  },
+                  {
+                    "argumentName": "userName",
+                    "element": "list2",
+                    "defaultValue": ""
+                  }
+                ]
               }
             ]
           }

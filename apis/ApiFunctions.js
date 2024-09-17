@@ -4,6 +4,10 @@ export function ApiFunctions(base) {
 return class extends (base) {
 
   TRAZiTgetDataFromRoot(elem, data, viewModelFromProcModel) {
+    if (data === null || data === undefined) {
+      return undefined;
+    }
+
     if (viewModelFromProcModel!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse==="ArrayInRoot"){
       return data.queryData?data.queryData:''
     }
@@ -11,9 +15,6 @@ return class extends (base) {
       if (this[elem.contextVariableName] !== undefined) {
         data = this[elem.contextVariableName];
       }
-    }
-    if (data === null || data === undefined) {
-      return undefined;
     }
     if (elem.endPointPropertyArray !== undefined) {
       if (elem.endPointPropertyArray.length === 0) {
