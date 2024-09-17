@@ -304,7 +304,7 @@ export function TrazitGenericDialogs(base) {
                 html`   
                 ${!fld.acceptancecriteria ?
                     html``: html`        
-                        <speclimit-quantitative id="acceptancecriteria" .fld=${fld.acceptancecriteria} ></speclimit-quantitative>         
+                        <speclimit-quantitative id="acceptancecriteria" .fld=${fld.acceptancecriteria} lang=${this.lang}></speclimit-quantitative>         
                 `}          
 
        
@@ -1040,10 +1040,10 @@ export function TrazitGenericDialogs(base) {
         for (const element of dlgFlds){
             let fldObj=element            
             let keyName=Object.keys(fldObj)
-            if (this[keyName]!==null){
+            if (this[keyName]!==null&&this[keyName[0]]!==null){
                // console.log(keyName[0])
                 if (keyName[0].includes('list')&&!keyName[0].includes('multi')){
-                    if (!keyName[0].includes('SelectedRow')){
+                    if (!this[keyName[0]].includes('SelectedRow')){
                         this[keyName[0]].value=[]
                     }
                 }else if (keyName[0].includes('multi')){
@@ -1053,7 +1053,7 @@ export function TrazitGenericDialogs(base) {
                     //fldObj.defaultValue ? this[keyName[0]].activeOptions=this.selectedItem[fldObj.defaultValue] : this[keyName[0]].activeOptions={}
                     this[keyName[0]].setClosed()                    
                 }else{
-                    if (this[keyName]!==undefined&&this[keyName[0]]!==undefined){
+                    if (this[keyName[0]]!==undefined&&this[keyName[0]]!==undefined){
                         this[keyName[0]].value=""
                     }
                 }
