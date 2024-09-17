@@ -1049,17 +1049,22 @@ export function DataViews(base) {
         // Revisamos si el registro ya está seleccionado
         const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
       
+        // Si estamos en la última tabla (sin hijos), no ocultamos otras filas al seleccionar
+        const isLastLevel = !elem.children && !elem.children_definition;        
+
         // Si está seleccionado, lo deseleccionamos y mostramos todos los registros
         if (isToggling) {
           this.resetFilterIndex(elem); // Deseleccionar y mostrar todo
           delete this.selectedTableIndex[endPointResponseObject]; // Limpiar solo el índice de este elemento, no todo
           this.requestUpdate(); // Forzar la actualización
         } else {
-          // Si no está seleccionado, se selecciona y mostramos solo los hijos
-          this.selectedTableIndex = {
-            ...this.selectedTableIndex,
-            [endPointResponseObject]: idx
-          };
+          if (!isLastLevel) {
+            // Si no está seleccionado, se selecciona y mostramos solo los hijos
+            this.selectedTableIndex = {
+              ...this.selectedTableIndex,
+              [endPointResponseObject]: idx
+            };
+          }
           this.requestUpdate(); // Forzar la actualización
         }
       }
