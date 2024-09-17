@@ -275,6 +275,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
   updated(changedProperties) {
     if(changedProperties.has('selectedTabModelFromProcModel')) {
       const tables = this.shadowRoot.querySelectorAll("table");
+      this.selectedTableIndex = {}
       tables.forEach((table) => {
         this.resetTableSize(table);
         this.initTableResize(table)
@@ -307,7 +308,10 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
         return html`
           ${elem2.is_translation===undefined||(elem2.is_translation!==undefined&&elem2.is_translation===true&&elem2.lang!==undefined&&elem2.lang===this.lang) ?
           html`              
-            ${elem2.type==="reportTitle" ? this.kpiReportTitleLvl2(elem2, data, true) : nothing}
+            ${elem2.type === "reportTitle"&&elem.endPointResponseObject!==undefined?
+              this.kpiReportTitleLvl2(elem2, data[elem.endPointResponseObject], true) : nothing}
+            ${elem2.type === "reportTitle"&&elem.endPointResponseObject===undefined?
+              this.kpiReportTitleLvl2(elem2, data, true) : nothing}
             ${elem2.type==="card" ? this.kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
             ${elem2.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}
             ${elem2.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
@@ -357,13 +361,16 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       data2 = data;
     }
     return html`    
-      ${elem.type === "reportTitle" ? kpiReportTitle(elem, data) : nothing}
+      ${elem.type === "reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
       <div style="display: flex; flex-wrap: wrap; padding-left: 30px; gap: 10px">        
         ${elem.elements.map((elem2, i) => {
           return html`
             ${elem2.is_translation === undefined || (elem2.is_translation !== undefined && elem2.is_translation === true && elem2.lang !== undefined && elem2.lang === this.lang) ?
               html`              
-                ${elem2.type === "reportTitle" ? kpiReportTitleLvl2(elem2, data[elem.endPointResponseObject], true) : nothing}
+                ${elem2.type === "reportTitle"&&elem.endPointResponseObject!==undefined?
+                  this.kpiReportTitleLvl2(elem2, data[elem.endPointResponseObject], true) : nothing}
+                ${elem2.type === "reportTitle"&&elem.endPointResponseObject===undefined?
+                  this.kpiReportTitleLvl2(elem2, data, true) : nothing}
                 ${elem2.type === "card" ? kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
                 ${elem2.type === "cardSomeElementsSingleObject" ? kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}
                 ${elem2.type === "cardSomeElementsRepititiveObjects" ? cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
@@ -414,7 +421,11 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       data2 = data;
     }    
     return html`    
-      ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
+      ${elem.type === "reportTitle"&&elem.endPointResponseObject!==undefined?
+        this.kpiReportTitle(elem, data[elem.endPointResponseObject], true) : nothing}
+      ${elem.type === "reportTitle"&&elem.endPointResponseObject===undefined?
+        this.kpiReportTitle(elem, data, true) : nothing}
+
       ${elem.type==="card" ? this.kpiCard(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="cardSomeElementsSingleObject" ? this.kpiCardSomeElementsSingleObject(elem, data) : nothing}
       ${elem.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem, data) : nothing}    
