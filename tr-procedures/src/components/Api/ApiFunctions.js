@@ -4,6 +4,9 @@ export function ApiFunctions(base) {
 return class extends (base) {
 
   TRAZiTgetDataFromRoot(elem, data, viewModelFromProcModel) {
+    if (data === null || data === undefined) {
+      return undefined;
+    }    
     if (viewModelFromProcModel!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse==="ArrayInRoot"){
       return data.queryData?data.queryData:''
     }
@@ -12,31 +15,28 @@ return class extends (base) {
         data = this[elem.contextVariableName];
       }
     }
-    if (data === null || data === undefined) {
-      return undefined;
-    }
-    if (elem.endPointPropertyArray !== undefined) {
-      if (elem.endPointPropertyArray.length === 0) {
+    if (elem.endPointResponseArray !== undefined) {
+      if (elem.endPointResponseArray.length === 0) {
         return data;
       }
       if (
-        elem.endPointPropertyArray.length === 1 &&
-        elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
+        elem.endPointResponseArray.length === 1 &&
+        elem.endPointResponseArray[0].toUpperCase() === "ROOT"
       ) {
         return data;
       }
-      //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
-      //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
+      //const numObjectsToSkip = elem.endPointResponseArray.length - 1;
+      //const propertyName = elem.endPointResponseArray[numObjectsToSkip];
       let i = 0;
       let subJSON = {};
-      //data = data[elem.endPointPropertyArray[0]][0]
-      for (i = 0; i < elem.endPointPropertyArray.length; i++) {
+      //data = data[elem.endPointResponseArray[0]][0]
+      for (i = 0; i < elem.endPointResponseArray.length; i++) {
         if (data === null) {
           return undefined;
         }
-        let propertyName = elem.endPointPropertyArray[i];
+        let propertyName = elem.endPointResponseArray[i];
         if (Array.isArray(data[propertyName])) {
-          if (i < elem.endPointPropertyArray.length - 1) {
+          if (i < elem.endPointResponseArray.length - 1) {
             subJSON = data[propertyName][0];
           } else {
             return data[propertyName];
@@ -53,17 +53,17 @@ return class extends (base) {
       return data;
       if (typeof subJSON === "undefined") {
         return undefined;
-      } else if (elem.endPointPropertyArray.length % 2 === 0) {
+      } else if (elem.endPointResponseArray.length % 2 === 0) {
         // If the input array has an even number of elements, skip one more object level before recursing
         return getValueFromNestedJSON(
           subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+          elem.endPointResponseArray.slice(0, numObjectsToSkip)
         );
       } else {
-        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
+        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointResponseArray elements
         return getValueFromNestedJSON(
           subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+          elem.endPointResponseArray.slice(0, numObjectsToSkip)
         );
       }
     } else {

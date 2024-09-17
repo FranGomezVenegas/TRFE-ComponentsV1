@@ -699,6 +699,17 @@ export function ButtonsFunctions(base) {
           }          
           return
         }
+        if (queryDefinition.dataResponse!==undefined&&queryDefinition.dataResponse==="ArrayInRootForObjects"){
+          let arrayToSingleObject={}
+          arrayToSingleObject.queryData=j
+          this.selectedItemInView=arrayToSingleObject
+          
+          if (this.viewModelFromProcModel.component === "dragDropBoxes") {
+            sessionStorage.setItem('dragdropboxdata', JSON.stringify(j));
+            window.dispatchEvent(new CustomEvent('dragdropboxdata-changed'));
+          }          
+          return
+        }        
         queryDefinition.notUseGrid
         if (queryDefinition.notUseGrid !== undefined && queryDefinition.notUseGrid === true) {
           if (queryDefinition.variableName !== undefined) {
@@ -714,23 +725,24 @@ export function ButtonsFunctions(base) {
               sessionStorage.setItem('dragdropboxdata', JSON.stringify(j));
               window.dispatchEvent(new CustomEvent('dragdropboxdata-changed'));  
             }          
-  
-            if (this.selectedItems[0] !== undefined && this.selectedItems[0] !== null) {
-              this.selectedItem = this.selectedItems[0];
+            if (Array.isArray(this.selectedItems)){
+              if (this.selectedItems[0] !== undefined && this.selectedItems[0] !== null) {
+                this.selectedItem = this.selectedItems[0];
 
-              if (this.selectedItemInView) {
-                if (j.length==1){
-                  this.selectedItemInView =j[0]
-                }else{
-                  const uniqueKey = this.viewModelFromProcModel.viewQuery.selectedItemKeyProperty;
-                  const newItem = j.find(item => item[uniqueKey] === this.selectedItemInView[uniqueKey]);
-                  if (newItem) {
-                    this.selectedItemInView = newItem;
+                if (this.selectedItemInView) {
+                  if (j.length==1){
+                    this.selectedItemInView =j[0]
+                  }else{
+                    const uniqueKey = this.viewModelFromProcModel.viewQuery.selectedItemKeyProperty;
+                    const newItem = j.find(item => item[uniqueKey] === this.selectedItemInView[uniqueKey]);
+                    if (newItem) {
+                      this.selectedItemInView = newItem;
+                    }
                   }
                 }
-              }
 
-              this.render();
+                this.render();
+              }
             }
             if (j && !j.is_error) {
               this.requestData = j;
