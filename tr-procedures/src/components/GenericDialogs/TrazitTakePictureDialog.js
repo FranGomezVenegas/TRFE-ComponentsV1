@@ -34,18 +34,28 @@ return class extends ApiFunctions(GridFunctions(DialogsFunctions(base))) {
         }        
 
     }
-    openTakePictureDialog(actionModel = this.actionBeingPerformedModel){   
-        
+    openTakePictureDialog(actionModel = this.actionBeingPerformedModel){           
         if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined){
             return false
         }    
         console.log('openTakePictureDialog.open?', 'name', actionModel.dialogInfo.name)     
-        if (actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"
-                &&actionModel.dialogInfo.name.toString().toUpperCase()!=="UPLOADFILEDIALOG"){
+        if (actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"){
             return false
         }    
         return true 
     }    
+
+    openUploadFileDialog(actionModel = this.actionBeingPerformedModel){           
+        if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined){
+            return false
+        }    
+        console.log('openTakePictureDialog.open?', 'name', actionModel.dialogInfo.name)     
+        if (actionModel.dialogInfo.name.toString().toUpperCase()!=="UPLOADFILEDIALOG"){
+            return false
+        }    
+        return true 
+    }    
+
     resetView(actionModel = this.actionBeingPerformedModel){
         if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined
             ||actionModel.dialogInfo.name.toString().toUpperCase()!=="TAKEPICTUREDIALOG"){
@@ -121,7 +131,7 @@ return class extends ApiFunctions(GridFunctions(DialogsFunctions(base))) {
             </tr-dialog>
         `}
           
-                    <tr-dialog id="uploadDialog" @opened=${this.resetView(actionModel)} ?open=${this.openTakePictureDialog(actionModel)} 
+                    <tr-dialog id="uploadDialog" @opened=${this.resetView(actionModel)} ?open=${this.openUploadFileDialog(actionModel)} 
                 heading="" hideActions="" scrimClickAction="">
                 <p class="title">${this.lang==="en"?html``:html``}</p>
                 <drop-zone id="dropFileZone" .lang=${this.lang} procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .close="${()=>{this.close()}}" .selectedItem="${this.selectedItem}"></drop-zone>
