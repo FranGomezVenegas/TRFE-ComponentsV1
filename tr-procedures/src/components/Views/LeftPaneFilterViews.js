@@ -88,20 +88,24 @@ export function LeftPaneFilterViews(base) {
                 }
               </style>
               <div id="leftpanefilteritems" style="padding-top:5px;">
-              ${dataArr.map(
-                (d, i) =>
-                  html`
-                    <div role="button" class="item ${this.selectedIndex === i ? 'selected' : ''}" 
-                    @click=${() => this.filterElementClicked(i)} .thisitem="${d}" .elementdef="${elem}">
-                      <div class="index ${this.selectedIndex === i ? 'selected' : ''}" > ${i + 1} </div>
-                      <div class="search-item"> 
-                        ${elem.filterResultDetail.detail.map((curFld, index) => html`
-                          ${d[curFld.field]}${index !== elem.filterResultDetail.detail.length - 1 ? ' ,' : ''}
-                        `)}
+              ${dataArr.length&&dataArr[0]!==undefined?html`
+                ${dataArr.map(
+                  (d, i) =>
+                    html`
+                      <div role="button" class="item ${this.selectedIndex === i ? 'selected' : ''}" 
+                      @click=${() => this.filterElementClicked(i)} .thisitem="${d}" .elementdef="${elem}">
+                        <div class="index ${this.selectedIndex === i ? 'selected' : ''}" > ${i + 1} </div>
+                        <div class="search-item"> 
+                        ${elem.filterResultDetail.detail===undefined?nothing:html`
+                            ${elem.filterResultDetail.detail.map((curFld, index) => html`
+                              ${d[curFld.field]}${index !== elem.filterResultDetail.detail.length - 1 ? ' ,' : ''}
+                            `)}
+                        `}
+                        </div>
                       </div>
-                    </div>
-                  `
-              )}
+                    `
+                )}
+              `:nothing}
               </div>
             `
           : nothing}
