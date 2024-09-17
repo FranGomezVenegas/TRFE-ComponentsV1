@@ -924,133 +924,6 @@ export function DataViews(base) {
       }
     }
     
-    handleTableRowClickNEW2(event, rowSelected, elem, tableName, newrowIndex, rowParentIndex) {
-      console.log('tableName', tableName, 'newrowIndex', newrowIndex)
-
-  // // Ocultar todas las filas que no pertenezcan al índice de la tabla seleccionada
-  // const allRows = this.shadowRoot.querySelectorAll(`tr[table-name="${tableName}"]`);
-  // allRows.forEach(row => {
-  //   row.classList.add('hidden'); // Oculta todas las filas de la tabla
-  // });
-
-  // // Muestra solo la fila seleccionada
-  // const selectedRow = this.shadowRoot.querySelector(`tr[data-id="${newrowIndex}"][table-name="${tableName}"]`);
-  // if (selectedRow) {
-  //   selectedRow.classList.remove('hidden'); // Muestra la fila seleccionada
-  // }
-  // return
-
-      function isEqual(obj1, obj2) {
-        return JSON.stringify(obj1) === JSON.stringify(obj2);
-      }
-      // Check if rowSelected exists in selectedItem and remove it if found
-      let rowIndex=-1
-      if (this.selectedItems!==undefined){
-        rowIndex = this.selectedItems.findIndex(item => JSON.stringify(item) === JSON.stringify(rowSelected));
-      }
-      if (rowIndex !== -1) {
-        this.selectedItems.splice(rowIndex, 1);
-      }else{
-        if (elem.allowMultiSelection===undefined||elem.allowMultiSelection===false){
-          this.selectedItems=[]
-        }
-        this.selectedItems.push(rowSelected)
-      }
-
-      // Check if rowSelected exists in selectedItem and remove it if found
-      if (isEqual(this.selectedItem, rowSelected)) {
-        this.selectedItem = {}; // Clear selectedItem if they are the same
-      } else {
-        this.selectedItem=rowSelected
-      }
-      if (rowSelected[elem.children] == 0) {
-        if (elem.openWhenNoData === undefined || elem.openWhenNoData === false) {
-          alert("There is no data");
-          this.selectedItem = [];
-        }
-      } else {
-        // Set selectedItem to rowSelected if it's not already set
-        this.selectedItem = rowSelected;
-      }
-    
-      sessionStorage.setItem('rowSelectedData', JSON.stringify(rowSelected));
-      this.render();
-      const popup = this.shadowRoot.querySelector(".js-context-popup");
-      if (!popup.contains(event.target)) {
-        popup.style.display = "none";
-      }
-    }
-    
-    handleTableRowClickNEW(event, rowSelected, elem, tableName, newrowIndex, rowParentIndex) {
-      console.log('tableName', tableName, 'newrowIndex', newrowIndex);
-    
-      function isEqual(obj1, obj2) {
-        return JSON.stringify(obj1) === JSON.stringify(obj2);
-      }
-    
-      // Revisamos si el registro ya está seleccionado para esta tabla
-      const storedItem = sessionStorage.getItem(`${tableName}-rowSelectedData`);
-      const alreadySelected = storedItem ? isEqual(JSON.parse(storedItem).split('-')[1], rowSelected) : false;
-    
-      if (alreadySelected) {
-        // Si ya está seleccionado, lo deseleccionamos y mostramos todas las filas de la tabla correspondiente
-        this.selectedItem = {}; // Deseleccionamos el elemento
-        const allRows = this.shadowRoot.querySelectorAll(`tr[table-name="${tableName}"]`);
-        allRows.forEach(row => {
-          row.classList.remove('hidden'); // Mostrar todas las filas de la tabla
-        });
-        this.selectedItems = []; // Limpiamos el array de seleccionados
-        sessionStorage.removeItem(`${tableName}-rowSelectedData`); // Eliminamos el item de sessionStorage para esta tabla
-      } else {
-        // Si no está seleccionado, ocultamos el resto de filas y mostramos solo la seleccionada y sus hijos
-        const allRows = this.shadowRoot.querySelectorAll(`tr[table-name="${tableName}"]`);
-        allRows.forEach(row => {
-          row.classList.add('hidden'); // Oculta todas las filas de la tabla
-        });
-    
-        // Muestra solo la fila seleccionada
-        const selectedRow = this.shadowRoot.querySelector(`tr[data-id="${newrowIndex}"][table-name="${tableName}"]`);
-        if (selectedRow) {
-          selectedRow.classList.remove('hidden'); // Muestra la fila seleccionada
-        }
-    
-        // Muestra los hijos si existen
-        const childRows = this.shadowRoot.querySelectorAll(`tr[data-parent-id="${newrowIndex}"][table-name="${tableName}"]`);
-        childRows.forEach(row => {
-          row.classList.remove('hidden'); // Muestra los hijos de la fila seleccionada
-        });
-    
-        // Añadimos el elemento seleccionado a `selectedItems`
-        let rowIndex = -1;
-        if (this.selectedItems !== undefined) {
-          rowIndex = this.selectedItems.findIndex(item => isEqual(item, rowSelected));
-        }
-    
-        if (rowIndex !== -1) {
-          this.selectedItems.splice(rowIndex, 1); // Eliminar si ya estaba seleccionado
-        } else {
-          if (elem.allowMultiSelection === undefined || elem.allowMultiSelection === false) {
-            this.selectedItems = []; // Limpiar selección si no es múltiple
-          }
-          this.selectedItems.push(rowSelected); // Añadir la fila seleccionada
-        }
-    
-        this.selectedItem = rowSelected; // Actualizar el item seleccionado
-    
-        // Guardar el estado de la selección en sessionStorage con el formato `tableName-rowSelectedData`
-        sessionStorage.setItem(`${tableName}-rowSelectedData`, JSON.stringify(`${tableName}-${JSON.stringify(this.selectedItem)}`));
-      }
-    
-      this.render(); // Refrescar la vista
-    
-      // Ocultar el menú contextual si no se clicó en él
-      const popup = this.shadowRoot.querySelector(".js-context-popup");
-      if (!popup.contains(event.target)) {
-        popup.style.display = "none";
-      }
-    }
-    
-    
     connectedCallback() {
       super.connectedCallback();
       document.addEventListener('keydown', this.handleKeyDown);
@@ -1125,31 +998,6 @@ export function DataViews(base) {
       e.style.display = "none";
     }
 
-    resetFilterIndexBuena(elem) {
-      if (elem===undefined){
-        return
-      }
-      let endPointResponseObject = undefined
-      let endPointResponseArray = undefined
-      if (elem!==undefined&&elem.endPointResponseObject!==undefined){
-        endPointResponseObject=elem.endPointResponseObject
-      }
-      if (elem!==undefined&&elem.endPointResponseArray!==undefined){
-        endPointResponseArray=elem.endPointResponseArray
-      }
-      this.selectedTableIndex = {
-        ...this.selectedTableIndex,
-        [endPointResponseObject]: undefined        
-      }
-
-      if (elem.children_definition) {
-        const childElement = {
-          ...elem.children_definition,
-          endPointResponseObject: elem.children // "_child"          
-        };
-        this.resetFilterIndex(childElement);
-      }
-    }
     resetFilterIndex(elem) {
       if (!elem) return; // Condición de salida básica
     
@@ -1177,32 +1025,6 @@ export function DataViews(base) {
       this.requestUpdate();
     }
     
-resetFilterIndexGPT(elem) {
-  if (!elem) return;
-
-  let endPointResponseObject = elem.endPointResponseObject || elem.endPointResponseArray?.[elem.endPointResponseArray.length - 1];
-  
-  // Limpiar el índice seleccionado para este elemento
-  if (endPointResponseObject) {
-    this.selectedTableIndex = {
-      ...this.selectedTableIndex,
-      [endPointResponseObject]: undefined
-    };
-  }
-
-  // Si tiene hijos, reiniciamos también el filtro en ellos
-  if (elem.children_definition) {
-    const childElement = {
-      ...elem.children_definition,
-      endPointResponseObject: elem.children // "_child"
-    };
-    this.resetFilterIndex(childElement);
-  }
-
-  // Forzar actualización
-  this.requestUpdate();
-}
-
     parentReadOnlyTable(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme, parentData) {
       console.log('elem', elem, 'dataArr', dataArr, 'parentData', parentData);
     
@@ -1212,62 +1034,6 @@ resetFilterIndexGPT(elem) {
         dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
       }
     
-      const handleFilterV1 = (event, p, elem, idx) => {
-        let endPointResponseObject = elem.endPointResponseObject;
-        if (elem.endPointResponseObject === undefined) {
-          if (elem.endPointResponseArray !== undefined) {
-            endPointResponseObject = elem.endPointResponseArray[elem.endPointResponseArray.length - 1];
-          }
-          if (elem.endPointPropertyArray !== undefined) {
-            endPointResponseObject = elem.endPointPropertyArray[elem.endPointPropertyArray.length - 1];
-          }
-        }
-    
-        // Revisamos si el registro ya está seleccionado
-        const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
-        
-        // Si está seleccionado, lo deseleccionamos y mostramos todos los registros
-        if (isToggling) {
-          this.resetFilterIndex(elem); // Desseleccionar y mostrar todo
-          this.requestUpdate()
-        } else {
-          // Si no está seleccionado, se selecciona y mostramos solo los hijos
-          this.selectedTableIndex = {
-            ...this.selectedTableIndex,
-            [endPointResponseObject]: idx
-          };
-        }
-      }
-
-      const handleFilterBuena = (event, p, elem, idx) => {
-        let endPointResponseObject = elem.endPointResponseObject;
-        if (elem.endPointResponseObject === undefined) {
-          if (elem.endPointResponseArray !== undefined) {
-            endPointResponseObject = elem.endPointResponseArray[elem.endPointResponseArray.length - 1];
-          }
-          if (elem.endPointPropertyArray !== undefined) {
-            endPointResponseObject = elem.endPointPropertyArray[elem.endPointPropertyArray.length - 1];
-          }
-        }
-      
-        // Revisamos si el registro ya está seleccionado
-        const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
-      
-        // Si está seleccionado, lo deseleccionamos y mostramos todos los registros
-        if (isToggling) {
-          this.resetFilterIndex(elem); // Desseleccionar y mostrar todo
-          this.selectedTableIndex = {}; // Limpiar completamente el índice seleccionado
-          this.requestUpdate(); // Forzar la actualización
-        } else {
-          // Si no está seleccionado, se selecciona y mostramos solo los hijos
-          this.selectedTableIndex = {
-            ...this.selectedTableIndex,
-            [endPointResponseObject]: idx
-          };
-          this.requestUpdate(); // Forzar la actualización
-        }
-      }
-            
       const handleFilter = (event, p, elem, idx) => {
         let endPointResponseObject = elem.endPointResponseObject;
         
@@ -1345,73 +1111,6 @@ resetFilterIndexGPT(elem) {
       `;
     }
     
-    parentReadOnlyTableOrig(elem, dataArr, isSecondLevel, directData, alternativeTitle, parentElement, theme, parentData) {
-      console.log('elem', elem, 'dataArr', dataArr, 'parentData', parentData)
-      if (directData !== undefined) {
-        dataArr = directData;
-      } else {
-        dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
-      }
-      //console.log(elem, dataArr)
-      const handleFilter = (event, p, elem, idx) => {        
-        let endPointResponseObject = elem.endPointResponseObject;
-        if (elem.endPointResponseObject===undefined){
-          if (elem.endPointResponseArray!==undefined){
-            endPointResponseObject = elem.endPointResponseArray[elem.endPointResponseArray.length-1];
-          }
-          if (elem.endPointPropertyArray!==undefined){
-            endPointResponseObject = elem.endPointPropertyArray[elem.endPointPropertyArray.length-1];
-          }
-        }
-        const isToggling = this.selectedTableIndex[endPointResponseObject] === idx;
-        this.resetFilterIndex(elem);
-
-        if (!isToggling) {          
-          this.selectedTableIndex = {
-            ...this.selectedTableIndex,
-            [endPointResponseObject]: idx
-          }
-        }
-      }
-
-      const handleResetParentFilter = (elem) => {
-        this.resetFilterIndex(elem);
-      }
-
-      const childElement = {
-        ...elem.children_definition,
-        endPointResponseObject: elem.children
-      };
-
-      const endPointResponseObject = elem.endPointResponseObject;
-      let endPointResponseArray = elem.endPointResponseArray;
-      if (endPointResponseArray===undefined){
-        endPointResponseArray = elem.endPointPropertyArray;
-      }
-      let selectedIdx = undefined
-      //if (this.selectedTableIndex!==undefined&&endPointResponseObject!==undefined){
-      if (endPointResponseObject!==undefined){
-          selectedIdx = this.selectedTableIndex[endPointResponseObject];
-      }
-      if (endPointResponseArray!==undefined){
-        //let elemName=endPointResponseArray.join(',')
-        let elemName=endPointResponseArray[endPointResponseArray.length-1]; 
-        selectedIdx = this.selectedTableIndex[elemName] 
-      }
-      let childDataArr = undefined
-      if (dataArr!==undefined&&dataArr[0]!==undefined){
-        childDataArr = selectedIdx !== undefined ? dataArr[selectedIdx][elem.children] : undefined;
-        if (parentData === undefined) {
-          parentData = selectedIdx !== undefined ? dataArr[0] : undefined;
-        }
-      }
-      console.log('childDataArr', childDataArr, childElement)
-      return html`
-        ${this.readOnlyTable(elem, undefined, isSecondLevel, dataArr, alternativeTitle, handleFilter, handleResetParentFilter, parentElement, theme, parentData)}
-        ${childDataArr && childDataArr.length > 0 ? this.parentReadOnlyTable(childElement, undefined, isSecondLevel, childDataArr, alternativeTitle, elem, theme, parentData) : nothing}
-      `;
-    }
-
     rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData, theme) {
       let tmp = elem.theme
       if (typeof (tmp) == "undefined") {
