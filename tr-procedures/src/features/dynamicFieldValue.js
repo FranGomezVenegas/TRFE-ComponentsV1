@@ -26,6 +26,7 @@ export function FeaturesDynamicFieldValue(base) {
       }
   
       simpleReplacement(type, key, data, match) {
+        if (data===undefined){return ''}
         if (type === 'fld') {
           return data[key] !== undefined ? data[key] : match;
         }
