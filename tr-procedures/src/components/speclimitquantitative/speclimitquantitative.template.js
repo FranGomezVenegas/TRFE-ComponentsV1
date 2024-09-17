@@ -11,21 +11,25 @@ export const template = (
   errorMessage,
   handleRuleChange,
   handleInputChange1,
-  handleInputChange2
+  handleInputChange2,
+  lang
 ) => {
+  if (lang===undefined){
+    lang="en"
+  }
   return html`
     <div>
-      <label for="rules">Selecciona una regla:</label>
+      <label for="rules">${lang=='es'?`Selecciona una regla`:`Select one rule`}</label>
       <select id="rules" @change="${handleRuleChange}">
         ${rules.map(
-          rule => html`<option value="${rule.id}" ?selected="${rule.id === selectedRule}">${rule.description}</option>`
+          rule => html`<option value="${rule.id}" ?selected="${rule.id === selectedRule}">${rule["description_"+lang]}</option>`
         )}
       </select>
     </div>
     <div>
       <label for="input"></label><br>
       <div class="input-container">
-        <span>${getPrefix(selectedRule)}</span>
+        <span>${getPrefix(selectedRule, lang)}</span>
         ${selectedRule === 1 || selectedRule === 2
           ? html`
               <input
@@ -40,7 +44,7 @@ export const template = (
                 .value="${inputValue2}"
                 maxlength="6"
                 @input="${handleInputChange2}"
-                placeholder="Y"/>  ${selectedRule===1?` incluidos`:``}`
+                placeholder="Y"/>  ${selectedRule===1? `${lang=='es'?  `incluidos`: `included`}`:``}`
           : html`
               <input
                 type="text"
@@ -57,20 +61,44 @@ export const template = (
   `;
 };
 
-function getPrefix(selectedRule) {
+function getPrefix(selectedRule, lang) {
   switch (selectedRule) {
     case 1:
-      return 'Entre ';
+      if (lang=="es"){
+        return 'Entre ';
+      }else{
+        return 'Between ';
+      }
     case 2:
-      return 'Entre ';
+      if (lang=="es"){
+        return 'Entre ';
+      }else{
+        return 'Between ';
+      }
     case 3:
-      return 'Menor de ';
+      if (lang=="es"){
+        return 'Menor de ';
+      }else{
+        return 'Less than ';
+      }
     case 4:
-      return 'Menor o igual a ';
+      if (lang=="es"){
+        return 'Menor o igual a ';
+      }else{
+        return 'Less or equal to ';
+      }
     case 5:
-      return 'Mayor de ';
+      if (lang=="es"){
+        return 'Mayor de ';
+      }else{
+        return 'Greater than ';
+      }
     case 6:
-      return 'Mayor o igual a ';
+      if (lang=="es"){
+        return 'Mayor o igual a ';
+      }else{
+        return 'Greater or equal to ';
+      }
     default:
       return '';
   }

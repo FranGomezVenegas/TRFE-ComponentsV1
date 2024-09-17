@@ -10,6 +10,7 @@ export class SpeclimitQuantitative extends LitElement {
   static get properties() {
     return {
       rules: { type: Array },
+      lang: { type: String},
       selectedRule: { type: Number },
       inputValue1: { type: String },
       inputValue2: { type: String },
@@ -21,12 +22,12 @@ export class SpeclimitQuantitative extends LitElement {
   constructor() {
     super();
     this.rules = [
-      { id: 1, description: 'Entre X y Y incluidos' },
-      { id: 2, description: 'Entre X y Y' },
-      { id: 3, description: 'Menor de X' },
-      { id: 4, description: 'Menor o igual a X' },
-      { id: 5, description: 'Mayor de X' },
-      { id: 6, description: 'Mayor o igual a X' }
+      { id: 1, description_en: 'Between X and Y included', description_es: 'Entre X y Y incluidos' },
+      { id: 2, description_en: 'Between X and Y', description_es: 'Entre X y Y' },
+      { id: 3, description_en: 'Less than X', description_es: 'Menor de X' },
+      { id: 4, description_en: 'Less or equal to X', description_es: 'Menor o igual a X' },
+      { id: 5, description_en: 'Greater than X', description_es: 'Mayor de X' },
+      { id: 6, description_en: 'Greater or equal to X', description_es: 'Mayor o igual a X' }
     ];
     this.selectedRule = 1;
     this.inputValue1 = '';
@@ -152,7 +153,8 @@ export class SpeclimitQuantitative extends LitElement {
       this.errorMessage,
       this.handleRuleChange.bind(this),
       this.handleInputChange1.bind(this),
-      this.handleInputChange2.bind(this)
+      this.handleInputChange2.bind(this),
+      this.lang
     );
   }
 }
