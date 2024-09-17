@@ -184,15 +184,18 @@ export function ReadOnlyTableParts(base) {
             }
   
             .circle {
-              width: 20px;
-              height: 20px;
-              line-height: 20px;
+              min-width: 20px;
+              min-height: 20px;
+              padding: 5px;
+              display: inline-block;
               text-align: center;
               background-color: #24C0EB;
               border-radius: 50%;
               color: white;
-              float: left;
+              line-height: 1;
+              font-size: 14px;
             }
+
             .green {
               color: green;
             }

@@ -174,17 +174,19 @@ export const styles = css`
   padding: 2px; /* Reducimos el padding para que ocupe menos espacio */
 }
 
-.add-circle {
-  margin-top: 10px;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  background-color: white;
+.circle {
+  min-width: 20px;
+  min-height: 20px;
+  padding: 5px;
+  display: inline-block;
   text-align: center;
-  font-weight: bold;
-  font-size: 20px;
-  color: #03A9F4;
+  background-color: #24C0EB;
+  border-radius: 50%;
+  color: white;
+  line-height: 1;
+  font-size: 14px;
 }
+
 
 .accept-btn {
   background-color: rgba(36, 192, 235, 1);
