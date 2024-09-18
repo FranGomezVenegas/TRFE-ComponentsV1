@@ -41,6 +41,18 @@ export function BuildLabelsFunctions(base) {
         }        
     }
 
+    // Función pública
+    labelPossibleReplacement(elem, labelValue) {
+        if (elem.label_values_replacement !== undefined) {
+          let fld = elem.label_values_replacement[labelValue];
+          if (fld !== undefined) {
+            return fld["label_" + this.lang];
+          }
+          //console.log('labelPossibleReplacement', labelValue, 'fld', fld)
+        }
+        return labelValue;
+      }
+
     // Función privada
     _buildLabelFromArrayOfItems(property, row){
         let separator='-'
@@ -56,6 +68,6 @@ export function BuildLabelsFunctions(base) {
             entireLabel=entireLabel+row[item2]
         })
         return entireLabel
-    }        
+    }         
 }
 }
