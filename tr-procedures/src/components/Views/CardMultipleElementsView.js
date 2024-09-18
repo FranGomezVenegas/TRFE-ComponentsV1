@@ -1,6 +1,9 @@
 import { html, nothing } from "lit";
 import '@material/mwc-button';
 
+import '../../components/rolesAndActions/rolesAndActions.main.js';
+import '../GoogleChart/google-chart-main.js'
+
 export function CardMultipleElementsView(base) {
     return class extends base{
         cardMultipleElementsView(elem, data) {
@@ -12,7 +15,7 @@ export function CardMultipleElementsView(base) {
               ${Array.isArray(data) && data.length > 0
           ? html`
                 <mwc-icon-button icon="print" @click=${this.printAllCard}></mwc-icon-button>  
-                <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">                 
+                <div style="display: flex; flex-direction: column; flex-wrap: wrap; padding-left:30px; gap: 10px">                 
                     ${data.map(
                         (d, i) =>html`
                           ${d.json_model===undefined?
@@ -248,10 +251,11 @@ export function CardMultipleElementsView(base) {
     </style>
     <div id="main${elem.add_border !== undefined && elem.add_border == true ? "addborder" : ""}"
         class="${elem.class !== undefined && elem.class === 'vertical' ? 'layout vertical flex wrap' : ''}" style="${elem.style !== undefined ? elem.style : ""}">
-         
-        <mwc-icon-button icon="print" @click=${() => { this.printCard(i) }}></mwc-icon-button> 
-        <mwc-icon-button icon="visibility" @click=${() => { this.hideCard(i) }}></mwc-icon-button> 
-            ${elem.type === "reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
+        
+        ${this.addPrintAndVisibilityButtons(i)}
+
+            ${elem.type === "reportTitle" ?             
+              this.kpiReportTitle(elem, data) : nothing}
             ${elem.cardElements===undefined?nothing:html`        
               ${elem.cardElements.map((elem2, index) => {
                 elem2['index'] = i
@@ -271,7 +275,8 @@ export function CardMultipleElementsView(base) {
                     ${elem2.type === "cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
                     ${elem2.type === "recovery_rate" ? this.kpiRecoveryRate(elem2, true) : nothing}
                     ${elem2.type === "grid" ? this.kpiGrid(elem2, data[elem2.endPointResponseObject], true) : nothing}
-                    ${elem2.type === "chart" ? this.kpiChartFran(elem2, data, true) : nothing}   
+                    ${elem2.type === "chart" ? 
+                      html`<trazit-google-chart .elem=${elem2} .data=${data} lang=${this.lang}></trazit-google-chart>`: nothing}   
         
                     ${elem2.type === "jsonViewer" ? this.jsonViewer(elem2, data, true) : nothing}
                     ${elem2.type === "readOnlyTable" ? this.readOnlyTable(elem2, data, true) : nothing}
@@ -279,10 +284,10 @@ export function CardMultipleElementsView(base) {
                     ${elem2.type === "readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem2, data, true) : nothing}
                     ${elem2.type === "readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true) : nothing}
         
-                    ${elem2.type === "rolesAndActions" && elem2.endPointResponseObject2 !== undefined && data[elem2.endPointResponseObject] !== undefined ?
-                this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true, this.lang) : nothing}
-                    ${elem2.type === "rolesAndActions" && elem2.endPointResponseObject2 === undefined ?
-                this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true, this.lang) : nothing}   
+                    ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2!==undefined&&data[elem2.endPointResponseObject]!==undefined ? 
+                      html`<roles-and-actions .elem=${elem2} .data=${data[elem2.endPointResponseObject][elem2.endPointResponseObject2]} ?isSecondLevel=${false} lang=${this.lang}></roles-and-actions>` : nothing}
+                    ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2===undefined ? 
+                      html`<roles-and-actions .elem=${elem2} .data=${data[elem2.endPointResponseObject]} ?isSecondLevel=${false} lang=${this.lang}></roles-and-actions>` : nothing}
         
                     ${elem2.type === "coa" ? this.coa(elem, data[elem.endPointResponseObject], true) : nothing}
         
@@ -308,6 +313,13 @@ export function CardMultipleElementsView(base) {
             
     </div>
 `
+    }
+
+    addPrintAndVisibilityButtons(i){
+      return html`
+        <mwc-icon-button icon="print" @click=${() => { this.printCard(i) }}></mwc-icon-button> 
+        <mwc-icon-button icon="visibility" @click=${() => { this.hideCard(i) }}></mwc-icon-button> 
+      `
     }
 
     cardMainBlock(elem, data) {

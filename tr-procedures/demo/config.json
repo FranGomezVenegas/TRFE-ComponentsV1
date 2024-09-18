@@ -75,16 +75,6 @@
     "viewName": "stability", 
     "filterName" :  "stability" 
   },  
-  "localDefaultView123": {
-    "procName":  "RandD", 
-    "viewName": "rdprojects", 
-    "filterName" :  "rdprojects" 
-  },
-  "localDefaultViewzzz": {
-    "procName":  "RandD", 
-    "viewName": "methodvalidation", 
-    "filterName" :  "methodvalidation" 
-  },
   
   
   "localDefaultViewqqqq": {
@@ -193,7 +183,21 @@
     "viewName": "AnalysisDesign", 
     "filterName" :  "" 
   },
-
+  "localDefaultView": {
+    "procName":  "RandD", 
+    "viewName": "rdprojects", 
+    "filterName" :  "rdprojects" 
+  },
+  "localDefaultViewzzz": {
+    "procName":  "RandD", 
+    "viewName": "methodvalidation", 
+    "filterName" :  "methodvalidation" 
+  },
+  "localDefaultView": {
+    "procName":  "mon_water", 
+    "viewName": "Programs", 
+    "filterName" :  "" 
+  }, 
   "fakeEnd":{
     "fake": "InventoryLotsGeneral20240729"
   }  

@@ -865,56 +865,59 @@ export function DataViews(base) {
       const storedItem = sessionStorage.getItem(`${tableName}-rowSelectedData`);
       const alreadySelected = storedItem ? isEqual(JSON.parse(storedItem), rowSelected) : false;
       
-    
-      if (alreadySelected) {
-        // Si ya está seleccionado, lo deseleccionamos y mostramos todas las filas de la tabla correspondiente
-        this.selectedItem = {}; // Deseleccionamos el elemento
-        const allRows = this.shadowRoot.querySelectorAll(`tr[table-name="${tableName}"]`);
-        allRows.forEach(row => {
-          row.classList.remove('hidden'); // Mostrar todas las filas de la tabla
-        });
-        this.selectedItems = []; // Limpiamos el array de seleccionados
-        sessionStorage.removeItem(`${tableName}-rowSelectedData`); // Eliminamos el item de sessionStorage para esta tabla
-      } else {
-        // Si no está seleccionado, ocultamos el resto de filas y mostramos solo la seleccionada y sus hijos
-        const allRows = this.shadowRoot.querySelectorAll(`tr[table-name="${tableName}"]`);
-        allRows.forEach(row => {
-          row.classList.add('hidden'); // Oculta todas las filas de la tabla
-        });
-    
-        // Muestra solo la fila seleccionada
-        const selectedRow = this.shadowRoot.querySelector(`tr[data-id="${newrowIndex}"][table-name="${tableName}"]`);
-        if (selectedRow) {
-          selectedRow.classList.remove('hidden'); // Muestra la fila seleccionada
-        }
-    
-        // Muestra los hijos si existen
-        const childRows = this.shadowRoot.querySelectorAll(`tr[data-parent-id="${newrowIndex}"][table-name="${tableName}"]`);
-        childRows.forEach(row => {
-          row.classList.remove('hidden'); // Muestra los hijos de la fila seleccionada
-        });
-    
-        // Añadimos el elemento seleccionado a `selectedItems`
-        let rowIndex = -1;
-        if (this.selectedItems !== undefined) {
-          rowIndex = this.selectedItems.findIndex(item => isEqual(item, rowSelected));
-        }
-    
-        if (rowIndex !== -1) {
-          this.selectedItems.splice(rowIndex, 1); // Eliminar si ya estaba seleccionado
-        } else {
-          if (elem.allowMultiSelection === undefined || elem.allowMultiSelection === false) {
-            this.selectedItems = []; // Limpiar selección si no es múltiple
+      
+        if (alreadySelected) {
+          // Si ya está seleccionado, lo deseleccionamos y mostramos todas las filas de la tabla correspondiente
+          this.selectedItem = {}; // Deseleccionamos el elemento
+          if (elem.children!==undefined){
+            const allRows = this.shadowRoot.querySelectorAll(`tr[table-name="${tableName}"]`);
+            allRows.forEach(row => {
+              row.classList.remove('hidden'); // Mostrar todas las filas de la tabla
+            });
           }
-          this.selectedItems.push(rowSelected); // Añadir la fila seleccionada
+          this.selectedItems = []; // Limpiamos el array de seleccionados
+          sessionStorage.removeItem(`${tableName}-rowSelectedData`); // Eliminamos el item de sessionStorage para esta tabla
+        } else {
+          if (elem.children!==undefined){
+            // Si no está seleccionado, ocultamos el resto de filas y mostramos solo la seleccionada y sus hijos
+            const allRows = this.shadowRoot.querySelectorAll(`tr[table-name="${tableName}"]`);
+            allRows.forEach(row => {
+              row.classList.add('hidden'); // Oculta todas las filas de la tabla
+            });
+          
+            // Muestra solo la fila seleccionada
+            const selectedRow = this.shadowRoot.querySelector(`tr[data-id="${newrowIndex}"][table-name="${tableName}"]`);
+            if (selectedRow) {
+              selectedRow.classList.remove('hidden'); // Muestra la fila seleccionada
+            }
+          
+            // Muestra los hijos si existen
+            const childRows = this.shadowRoot.querySelectorAll(`tr[data-parent-id="${newrowIndex}"][table-name="${tableName}"]`);
+            childRows.forEach(row => {
+              row.classList.remove('hidden'); // Muestra los hijos de la fila seleccionada
+            });
+          }
+          // Añadimos el elemento seleccionado a `selectedItems`
+          let rowIndex = -1;
+          if (this.selectedItems !== undefined) {
+            rowIndex = this.selectedItems.findIndex(item => isEqual(item, rowSelected));
+          }
+      
+          if (rowIndex !== -1) {
+            this.selectedItems.splice(rowIndex, 1); // Eliminar si ya estaba seleccionado
+          } else {
+            if (elem.allowMultiSelection === undefined || elem.allowMultiSelection === false) {
+              this.selectedItems = []; // Limpiar selección si no es múltiple
+            }
+            this.selectedItems.push(rowSelected); // Añadir la fila seleccionada
+          }
+      
+          this.selectedItem = rowSelected; // Actualizar el item seleccionado
+      
+          // Guardar el estado de la selección en sessionStorage con el formato `tableName-rowSelectedData`
+          sessionStorage.setItem(`${tableName}-rowSelectedData`, JSON.stringify(rowSelected));
         }
-    
-        this.selectedItem = rowSelected; // Actualizar el item seleccionado
-    
-        // Guardar el estado de la selección en sessionStorage con el formato `tableName-rowSelectedData`
-        sessionStorage.setItem(`${tableName}-rowSelectedData`, JSON.stringify(rowSelected));
-      }
-    
+      
       this.render(); // Refrescar la vista
     
       // Ocultar el menú contextual si no se clicó en él
@@ -1116,241 +1119,6 @@ export function DataViews(base) {
       `;
     }
     
-    rolesAndActions(elem, dataArr, isSecondLevel = false, lang, directData, theme) {
-      let tmp = elem.theme
-      if (typeof (tmp) == "undefined") {
-        tmp = "TRAZiT-UsersArea";
-      }
-      //console.log('rolesAndActions', 'elem', elem, 'dataArr', dataArr)
-      /*      if (directData !== undefined) {
-              dataArr = directData;
-            } else {
-              dataArr = this.TRAZiTgetDataFromRoot(elem, dataArr, this.viewModelFromProcModel);
-            }
-      */
-      return html`
-        <style>
-          table.styled-table-for-rolesandactions th{
-            color:gray !important;
-          }
-
-          .title {
-            color: #2989d8;
-            font-size: 18px;
-            font-weight: bold;
-          }
-
-          table.styled-table-for-rolesandactions th, td{
-            border: none !important;
-          }
-
-          table.styled-table-for-rolesandactions tr:nth-child(even) {
-            background-color: white !important;
-          }
-
-          table.styled-table-for-rolesandactions tr {
-            border: none;
-            border-bottom: 1px solid #dddddd;
-          }
-          
-          table.styled-table-for-rolesandactions tr:last-child {
-            border: none;
-          }
-
-          * {
-            box-sizing: border-box;
-          }
-
-        table.TRAZiT-DefinitionArea thead tr th {
-          align-items: center;
-          justify-content: space-between;
-          font-size: 16px;
-          font-family: Montserrat;
-          padding: 8px; /* Ajusta el relleno según sea necesario */        
-          background-color: #2989d8;
-          color: white !important;
-        }
-
-        table.TRAZiT-UsersArea thead tr th {
-          align-items: center;
-          justify-content: space-between;
-          font-size: 16px;
-          font-family: Montserrat;
-          padding: 8px; /* Ajusta el relleno según sea necesario */        
-          background-color: white;
-          color: gray;
-        }
-
-        table {
-          border-collapse: collapse;
-          width: 100%;
-          font-family: Montserrat;
-          font-size: 16px;
-        }
-
-        table.TRAZiT-UsersArea-for-rolesandactions tr {
-          border: none; 
-          border-bottom: 1px solid #dddddd;
-        }
-
-        tr {
-          border: 1px solid #dddddd;
-          text-align: center;
-          color: #808080;
-        }
-
-        table.TRAZiT-UsersArea-for-rolesandactions tr:nth-child(even) {
-          background-color: white;
-        }
-
-        table.TRAZiT-UsersArea-for-rolesandactions tr:last-child {
-          border: none;
-        }
-     
-        table.TRAZiT-UsersArea-for-rolesandactions thead {
-          border-bottom: 1px solid #dddddd;
-        }
-
-        table.TRAZiT-DefinitionArea-for-rolesandactions tr:nth-child(even) {
-          background-color: rgba(214, 233, 248, 0.37) !important;
-        }
-
-        table.TRAZiT-DefinitionArea-for-rolesandactions th {
-          padding: 5px 5px;
-          border: 1px solid #dddddd !important;
-        }
-
-        td, th {
-          padding: 5px 5px;
-          border: 1px solid #dddddd !important;
-        }
-
-        table.TRAZiT-UsersArea-for-rolesandactions td, th {
-          border: none !important;
-        }
-
-        tr {
-          cursor: pointer;
-        }
-
-        mwc-icon-button {
-        --mdc-icon-button-size: 35px;
-        --mdc-icon-size: 25px;
-        }
-        
-        td.absent {
-          background-color: #e0121257;
-        }
-        
-        td.present {
-          background-color: #5e80003d;
-        }
-
-        table tr:hover td.title1 {
-          background-color: #2989d830 !important;
-        }
-        table td {
-          font-size: 16px !important;
-          font-family: "Montserrat";
-        }
-        </style>
-        <div style="display: flex; flex-direction: column; text-align: center;">
-          ${elem === undefined || elem.title === undefined
-          ? nothing
-          : html` <p>
-                <span class="title ${isSecondLevel}"
-                  >${elem.title["label_" + this.lang]}</span
-                >
-              </p>`}
-       
-          <table class="styled-table-for-rolesandactions ${tmp}" style="margin-top:0px;">
-            <thead>
-              <tr>
-                ${dataArr === undefined || dataArr[0] === undefined
-          ? html`${this.lang == "en" ? "Not applicable" : "No aplica"}`
-          : html`
-                      ${dataArr[0].map(
-            (fld) =>
-              html`
-                            ${typeof fld === "object"
-                  ? html`${this.fieldsToDiscard(fld) === true
-                    ? nothing
-                    : html`<th
-                                      style="text-align: center; color:white; font-weight:normal;"
-                                    >
-                                      ${fld.label}
-                                    </th>`} `
-                  : html`
-                                  <th style="text-align: center; color:white; font-weight:normal;">
-                                    ${fld}
-                                  </th>
-                                `}
-                          `
-          )}
-                    `}
-              </tr>
-            </thead>
-            <tbody>
-              ${dataArr === undefined || dataArr[0] === undefined
-          ? nothing
-          : html`
-                    ${dataArr.map(
-            (p, iRow) =>
-              html`
-                          ${iRow == 0
-                  ? nothing
-                  : html`
-                                <tr>
-                                  ${p.map(
-                    (fld, iCol) =>
-                      html`
-                                        ${iCol == 0 || iCol == 1
-                          ? html` ${typeof dataArr[0][iCol] ===
-                            "object"
-                            ? html`
-                                                  ${this.fieldsToDiscard(
-                              dataArr[0][iCol]
-                            ) === true
-                                ? nothing
-                                : html`<td
-                                                        class="title1"
-                                                        style="font-size: 1.6vmin; font-weight: unset; font-family: Montserrat;"
-                                                      >
-                                                        ${fld}
-                                                      </td>`}
-                                                `
-                            : html`<td>${fld}</td>`}`
-                          : html`
-                                              ${fld !== undefined &&
-                              fld.length > 0
-                              ? html`<td
-                                                    class="present"
-                                                    title="Assigned"
-                                                  >
-                                                    ${fld === "ALL"
-                                  ? this.lang === "es"
-                                    ? "TODOS"
-                                    : "ALL"
-                                  : fld}
-                                                  </td>`
-                              : html`<td
-                                                    class="absent"
-                                                    title="NOT assigned"
-                                                  ></td>`}
-                                            `}
-                                      `
-                  )}
-                                </tr>
-                              `}
-                        `
-          )}
-                  `}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
     kpiCardSomeElementsSingleObject(elem, data) {
 
       return html`
@@ -1376,7 +1144,7 @@ export function DataViews(base) {
     }
     cardExpandSectionForScriptStep(elem, data) {
       let jsonElem = {}
-      jsonElem.endPointPropertyArray = ["ROOT"]
+      jsonElem.endPointResponseArray = ["ROOT"]
       jsonElem.style = "background-color:white;"
       return html`
         ${this.scriptStepArguments(elem, data)}        
@@ -2101,246 +1869,6 @@ export function DataViews(base) {
         return elem.style;
       }
       return;
-    }
-    kpiChartFran(elem, data) {
-      if (elem === undefined) { return html`` }
-
-      if (elem.endPointPropertyArray !== undefined) {
-        data = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
-      }
-      if (!((elem.grouper_field_name !== undefined && data[elem.grouper_field_name]) ||
-        (elem.counter_field_name !== undefined && data[elem.counter_field_name]))) {
-        return html``
-      }
-
-      if (elem.hideNoDataMessage !== undefined && elem.hideNoDataMessage === true && data === undefined) { return html`` }
-      if (data === undefined && this.data !== undefined) { data = this.data }
-
-      //console.log('kpiChartFran', 'elem', elem, 'data', data)
-      return html`
-        ${elem.display_chart !== true
-          ? nothing
-          : html`
-              ${this.chartStyle(elem.chart_name)}
-              <google-chart
-                id="${elem.chart_name}"
-                title="${elem.chart_title["label_" + this.lang]}"
-                type="${elem.chart_type}"
-                .data="${this.getChartData(elem, data)}"
-                .options="${this.getChartOptions(elem)}"
-              ></google-chart>
-            `}
-      `;
-    }
-    chartStyle(chartName) {
-      let chartObj = this.shadowRoot.querySelector("google-chart#" + chartName);
-      if (chartObj !== undefined && chartObj !== null) {
-        chartObj.style.setProperty("width", "1600px");
-      }
-      //console.log("chartStyle", "chartName", chartName, chartObj);
-    }
-
-    addNumericValue(rule, value) {
-      if (rule == undefined) {
-        return true;
-      }
-      if (value == undefined) {
-        return false;
-      }
-      if (rule.min_allowed != undefined) {
-        if (value <= rule.min_allowed) {
-          return false;
-        }
-      }
-      if (rule.min_allowed_included < undefined) {
-        if (value < rule.min_allowed_included) {
-          return false;
-        }
-      }
-      if (rule.max_allowed != undefined) {
-        if (value >= rule.max_allowed) {
-          return false;
-        }
-      }
-      if (rule.max_allowed_included > undefined) {
-        if (value > rule.max_allowed_included) {
-          return false;
-        }
-      }
-      if (rule.value != undefined) {
-        if (rule.value == value) {
-          return false;
-        }
-      }
-      return true;
-    }
-    getChartData(elem, data) {
-      //console.log('getChartData', elem, 'data', data, 'this.data', this.data, 'chartData')
-      let chartData = [];
-      let fakeData = []
-      if (elem.elementName === 'fakeTrendlineExample') {
-        fakeData = [
-          ['Diameter', 'Age'],
-          [8, 37], [4, 19.5], [11, 52], [4, 22], [3, 16.5], [6.5, 32.8], [14, 72]
-        ]
-        return fakeData
-      }
-      if (elem.elementName === "cdatatable") {
-        fakeData = [
-          ["Day", "Guardians of the Galaxy", "The Avengers", "Transformers: Age of Extinction",],
-          [1, 37.8, 80.8, 41.8], [2, 30.9, 69.5, 32.4], [3, 25.4, 57, 25.7], [4, 11.7, 18.8, 10.5],
-          [5, 11.9, 17.6, 10.4], [6, 8.8, 13.6, 7.7], [7, 7.6, 12.3, 9.6], [8, 12.3, 29.2, 10.6],
-          [9, 16.9, 42.9, 14.8], [10, 12.8, 30.9, 11.6], [11, 5.3, 7.9, 4.7],
-          [12, 6.6, 8.4, 5.2], [13, 4.8, 6.3, 3.6], [14, 4.2, 6.2, 3.4],
-        ];
-        return fakeData;
-      }
-      if (elem.chartModel === "methodValidation") {
-        return this.getChartDataForMethodValidation(elem, data)
-      }
-
-      if (data === undefined && this.data !== undefined) { data = this.data }
-      //data = this.TRAZiTgetDataFromRoot(elem, data, this.viewModelFromProcModel);
-      if (data === undefined && (elem.chart_name === undefined || data[elem.chart_name] === undefined)) {
-        if (this.selectedItem !== undefined) {
-          data = this.selectedItem;
-        } else {
-          if (this.selectedItemInView !== undefined) {
-            data = this.selectedItemInView;
-          }
-        }
-      }
-      //chartData = [[elem.label_item, elem.label_value]];
-
-      if (data !== undefined && data[elem.chart_name] !== undefined) {
-        let dataForChart = data[elem.chart_name];
-
-        let seriesArr = [];
-        if (Array.isArray(elem.counter_field_name)) {
-          seriesArr = elem.counter_field_name;
-        } else {
-          seriesArr.push(elem.counter_field_name);
-        }
-
-        let curchtHeader = [];
-        curchtHeader.push(elem.label_item);
-        for (let iSerie = 0; iSerie < seriesArr.length; iSerie++) {
-          curchtHeader.push(seriesArr[iSerie]);
-        }
-        chartData.push(curchtHeader);
-        for (let iData = 0; iData < dataForChart.length; iData++) {
-          if (!elem.grouper_exclude_items.includes(dataForChart[iData][elem.grouper_field_name])) {
-            for (let iSerie = 0; iSerie < seriesArr.length; iSerie) {
-              if (
-                this.addNumericValue(
-                  elem.counterLimits,
-                  dataForChart[iData][seriesArr[iSerie]]
-                )
-              ) {
-                let curchtval = [];
-                curchtval.push(
-                  this.labelPossibleReplacement(
-                    elem,
-                    dataForChart[iData][elem.grouper_field_name]
-                  )
-                );
-
-                for (let iSerie = 0; iSerie < seriesArr.length; iSerie++) {
-                  curchtval.push(dataForChart[iData][seriesArr[iSerie]]); // Add each value from seriesArr as a column
-                }
-                chartData.push(curchtval);
-              }
-            }
-          } // iSerie
-        } // iData
-      }
-      console.log('getChartData', 'chartData', chartData)
-      return chartData;
-    }
-    labelPossibleReplacement(elem, labelValue) {
-      if (elem.label_values_replacement !== undefined) {
-        let fld = elem.label_values_replacement[labelValue];
-        if (fld !== undefined) {
-          return fld["label_" + this.lang];
-        }
-        //console.log('labelPossibleReplacement', labelValue, 'fld', fld)
-      }
-      return labelValue;
-    }
-    getChartDataForMethodValidationFran(elem, data) {
-      let chartData = []
-      if (data === undefined || elem === undefined) { return chartData }
-
-      //curchtHeader.push(elem.label_item);
-      for (let iSerie = 0; iSerie < data[chartSourceData].length; iSerie++) {
-        let curchtHeader = [];
-        curchtHeader[0] = data[chartSourceData][xAxisSouceData]
-        curchtHeader[1] = data[chartSourceData][sourceData]
-        chartData.push(curchtHeader);
-      }
-      return chartData
-    }
-
-    getChartDataForMethodValidation(elem, data) {
-      let chartData = [];
-      if (data === undefined || elem === undefined) {
-        return chartData;
-      }
-
-      const chartSourceData = data[elem.chartSourceData];
-      if (!chartSourceData || !Array.isArray(chartSourceData)) {
-        return chartData;
-      }
-      let curchtHeader = [];
-      curchtHeader[0] = elem.xAxisSourceData;
-      curchtHeader[1] = elem.sourceData;
-      chartData.push(curchtHeader);
-      for (let iSerie = 0; iSerie < chartSourceData.length; iSerie++) {
-        let curchtHeader = [];
-        let currentData = chartSourceData[iSerie];
-
-        // Make sure xAxisSourceData and sourceData exist in the current data object
-        if (currentData[elem.xAxisSourceData] !== undefined && currentData[elem.sourceData] !== undefined) {
-          curchtHeader[0] = Number(currentData[elem.xAxisSourceData]);
-          curchtHeader[1] = Number(currentData[elem.sourceData]);
-          chartData.push(curchtHeader);
-        }
-      }
-
-      return chartData;
-    }
-
-    getChartOptions(elem) {
-      if (elem.elementName === 'fakeTrendlineExample') {
-        return {
-          title: 'Age of sugar maples vs. trunk diameter, in inches',
-          hAxis: { title: 'Diameter' },
-          vAxis: { title: 'Age' },
-          legend: 'none',
-          trendlines: { 0: {} }    // Draw a trendline for data series 0.
-        };
-      }
-      let defaultChartOptions = {
-        width: "300px",
-        backgroundColor: "transparent",
-        is3D: true,
-      };
-      let chartOptions = {};
-      if (elem.chart_title !== undefined) {
-        chartOptions.title = elem.chart_title["label_" + this.lang];
-      }
-      if (elem.chartStyle === undefined) {
-        Object.entries(defaultChartOptions).map(([key, val]) => {
-          //console.log(key, val)
-          chartOptions[key] = val;
-        });
-      } else {
-        Object.entries(elem.chartStyle).map(([key, val]) => {
-          //console.log(key, val)
-          chartOptions[key] = val;
-        });
-      }
-      return chartOptions;
     }
 
     kpiCharts(elem) {
@@ -3099,7 +2627,7 @@ export function DataViews(base) {
                     left: 10px;
                     background: #b6d6f3;
                     color: white;
-                    padding: 5px;
+                    padding: 2px;
                     border-radius: 5px;
                     white-space: nowrap;
                     z-index: 10;
@@ -3194,6 +2722,12 @@ export function DataViews(base) {
                   .toggle-filter:hover {
                     color: #fff;
                   }
+                  .styled-table td, .styled-table th {
+                    padding: 2px; /* Reduce el padding para ajustar la altura */
+                    line-height: 1.2; /* Ajusta el espacio del texto */
+                    min-height: 20px; /* Establece una altura mínima */
+                  }
+
                 </style>
                 ${elem?.smartFilter?.filterValues && smartFilterVisible &&
                     html`                                         
@@ -3265,7 +2799,7 @@ export function DataViews(base) {
                             ${dataArr.map((p, rowIndex) => {
                               const isSelected = isItemSelected(p);
                               return html`
-                                <tr  data-id="${rowIndex}" data-parent-id=${p.parentId} table-name=${tableName}
+                                <tr style="height: 30px;" data-id="${rowIndex}" data-parent-id=${p.parentId} table-name=${tableName}
                                   @click=${(event) => {
                                     if (handler) {
                                       if (p[elem.children] && p[elem.children].length > 0) {

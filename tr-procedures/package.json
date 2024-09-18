@@ -3,7 +3,7 @@
   "description": "Component core for procedures elements with dynamic model",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.2.87",
+  "version": "0.2.88",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
@@ -34,6 +34,8 @@
     "@spectrum-web-components/card": "^0.10.11",
     "@spectrum-web-components/split-view": "^0.4.3",
     "@spectrum-web-components/tooltip": "^0.9.0",
+    "@trazit/build-label": "file:.yalc/@trazit/build-label",
+    "@trazit/build-numerics": "file:.yalc/@trazit/build-numerics",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
     "@trazit/platform-login": "file:.yalc/@trazit/platform-login",

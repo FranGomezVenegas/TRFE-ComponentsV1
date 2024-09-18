@@ -4,9 +4,13 @@ export function ApiFunctions(base) {
 return class extends (base) {
 
   TRAZiTgetDataFromRoot(elem, data, viewModelFromProcModel) {
+    
     if (data === null || data === undefined) {
       return undefined;
     }    
+    if (elem.endPointPropertyArray!==undefined&&elem.endPointResponseArray === undefined){
+      elem.endPointResponseArray = elem.endPointPropertyArray
+    }
     if (viewModelFromProcModel!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse!==undefined&&viewModelFromProcModel?.viewQuery?.dataResponse==="ArrayInRoot"){
       return data.queryData?data.queryData:''
     }
@@ -87,7 +91,14 @@ return class extends (base) {
           }
           return data;
         } else {
-          return data[elem.endPointResponseObject];
+          if (elem.endPointResponseObject!==undefined){
+            return data[elem.endPointResponseObject];
+          }else{
+            alert('this element has no endPointResponseObject neither endPointResponseArray, please see the console for further details')
+            console.log('this element has no endPointResponseObject neither endPointResponseArray, see the data in context:', 'elem', elem, 'data', data)
+            return []
+          }
+          
         }
       }
     }

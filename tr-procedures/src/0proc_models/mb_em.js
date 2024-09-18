@@ -4189,6 +4189,89 @@ export const MbEm=
     "actions": [],
     "tabs": [
       {
+        "tabLabel_en": "Summary",
+        "tabLabel_es": "Resumen",
+        "view_definition": [
+          {
+            "type": "chart", 
+            "endPointResponseArray":["samples_summary_by_stage"],
+            "elementName": "samples_summary_by_stage",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"samples_summary_by_stage",
+            "chart_title":{"label_en": "Samples by stage", "label_es":"Muestras por etapa"},
+            "grouper_field_name":"current_stage",
+            "counter_field_name":"COUNTER",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": {
+                "fill": "transparent"
+              },
+              "is3D": true,
+              "colors": ["#dfa942", "#d33737", "#bf120f"]              
+            },
+            "label_values_replacement":{
+              "Sampling":{"label_es": "Muestreo", "label_en": "Sampling"},
+              "Incubation": {"label_es": "Incubación", "label_en": "Incubation"},
+              "PlateReading": {"label_es": "Lectura de placas", "label_en": "Plate Reading"},
+              "MicroorganismIdentification": {"label_es": "Identificación micro", "label_en": "Microorganism Identification"},
+              "SampleRevision": {"label_es": "Revisión de muestras", "label_en": "Sample Revision"}
+            },            
+            "grouper_exclude_items":[""],
+            "label_item":{"label_en":"Stage", "label_es":"Etapa"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          },
+          {
+            "type": "chart", 
+            "endPointResponseArray":["samples_summary"],
+            "elementName": "samples_summary",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"samples_summary",
+            "chart_title":{"label_en": "Samples by stage", "label_es":"Muestras por etapa"},
+            "grouper_field_name":"label_en",
+            "counter_field_name":"value",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": {
+                "fill": "transparent"
+              },
+              "is3D": true
+            },
+            "label_values_replacement":{
+              "Sampling":{"label_es": "Muestreo", "label_en": "Sampling"},
+              "Incubation": {"label_es": "Incubación", "label_en": "Incubation"},
+              "PlateReading": {"label_es": "Lectura de placas", "label_en": "Plate Reading"},
+              "MicroorganismIdentification": {"label_es": "Identificación micro", "label_en": "Microorganism Identification"},
+              "SampleRevision": {"label_es": "Revisión de muestras", "label_en": "Sample Revision"}
+            },            
+            "label_values_replacement":{
+              "IN":{"label_es": "In Range", "label_en": "Dentro de Range"},
+              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
+              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
+              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
+            },
+            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
+            "label_item":{"label_en":"Status", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          }                      
+        ]
+      },      
+      {
         "tabLabel_en": "Calendar",
         "tabLabel_es": "Calendario",
         "view_definition": [
@@ -4302,7 +4385,11 @@ export const MbEm=
                   {"field": "source", "label_en": "Source", "label_es": "Origen"}
                 ]
               },
+              "monthView":{
+                "hide":false
+              },   
               "yearView":{
+                "hide":false,
                 "hideOutOfBoundsMonths": true,
                 "eventListsFields":[
                   {"field": "location_name", "label_en": "Location", "label_es": "Ubicación"},
@@ -4336,49 +4423,6 @@ export const MbEm=
           }
         ]
       },      
-      {
-        "tabLabel_en": "Summary",
-        "tabLabel_es": "Resumen",
-        "view_definition": [
-          {
-            "type": "calendarMonthlyEvents"
-
-          },
-          {
-            "type": "zzzchart", 
-            "endPointPropertyArray":["ROOT"],
-            "elementName": "samples_summary_by_stage",
-
-            "display_chart": true,
-            "chart_type":"pie",
-            "chart_name":"samples_summary_by_stage",
-            "chart_title":{"label_en": "Samples by stage", "label_es":"Muestras por etapa"},
-            "counter_field_name":"Counter",
-            "counterLimits":{
-              "xmin_allowed": 3,
-              "xmin_allowed_included":3,
-              "xmax_allowed":100,
-              "xmax_allowed_included":100,
-              "xvalue":0
-            },
-            "chartStyle": {
-              "backgroundColor": "transparent",
-              "is3D": true,
-              "colors": ["#dfa942", "#d33737", "#bf120f"]              
-            },
-            "grouper_field_name":"samples_summary_by_stage",
-            "label_values_replacement":{
-              "IN":{"label_es": "In Range", "label_en": "Dentro de Range"},
-              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
-              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
-              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
-            },
-            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
-            "label_item":{"label_en":"Statussss", "label_es":"Estado"},
-            "label_value":{"label_en":"#", "label_es":"#"}   
-          }          
-        ]
-      },
       {
         "tabLabel_en": "Specification",
         "tabLabel_es": "Especificación",

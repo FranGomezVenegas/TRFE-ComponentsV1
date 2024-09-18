@@ -7035,7 +7035,7 @@ export const DemoInspectionLot =
           },                  
           {
             "type": "cardSomeElementsSingleObject",
-            "endPointPropertyArray": [
+            "endPointResponseArray": [
               "ROOT"
             ],
             "num_columns": 1,

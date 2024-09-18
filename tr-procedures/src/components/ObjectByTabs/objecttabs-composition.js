@@ -20,7 +20,8 @@ import '../../components/jsonViewer/jsonViewer.main.js';
 // import { jsonViewer } from '../../components/jsonViewer/jsonViewer.main.js';
 // //import { parentReadOnlyTable } from '../../components/parentReadOnlyTable/parentReadOnlyTable.main.js';
 // import { readOnlyTable, readOnlyTableByGroup, readOnlyTableByGroupAllInOne } from '../../components/rolesAndActions/rolesAndActions.main.js';
-// import { rolesAndActions } from '../../components/rolesAndActions/rolesAndActions.main.js';
+import '../../components/rolesAndActions/rolesAndActions.main.js';
+import '../GoogleChart/google-chart-main.js';
 // //import { coa, dragDropBoxes, cardMultipleElementsView, ReportController, scripts, specScripts, buttonsOnly, treeElement } from './components/your-other-components.js';
 
 
@@ -317,7 +318,8 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
             ${elem2.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
             ${elem2.type==="recovery_rate" ? this.kpiRecoveryRate(elem2, true) : nothing}
             ${elem2.type==="grid" ? this.kpiGrid(elem2, data[elem2.endPointResponseObject], true) : nothing}
-            ${elem2.type==="chart" ? this.kpiChartFran(elem2, data, true) : nothing}   
+            ${elem2.type==="chart" ? 
+              html`<trazit-google-chart .elem=${elem2} .data=${data} lang=${this.lang}></trazit-google-chart>`: nothing} 
 
             ${elem2.type==="jsonViewer" ? this.jsonViewer(elem2, data, true): nothing}
             ${elem2.type==="readOnlyTable" ? this.readOnlyTable(elem2, data, true): nothing}
@@ -326,9 +328,9 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
             ${elem2.type==="readOnlyTableByGroupAllInOne" ? this.readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
 
             ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2!==undefined&&data[elem2.endPointResponseObject]!==undefined ? 
-              this.rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true, this.lang) : nothing}
+              html`<roles-and-actions .elem=${elem2} .data=${data[elem2.endPointResponseObject][elem2.endPointResponseObject2]} ?isSecondLevel=${false} lang=${this.lang}></roles-and-actions>` : nothing}
             ${elem2.type==="rolesAndActions"&&elem2.endPointResponseObject2===undefined ? 
-              this.rolesAndActions(elem2, data[elem2.endPointResponseObject], true, this.lang) : nothing}   
+              html`<roles-and-actions .elem=${elem2} .data=${data[elem2.endPointResponseObject]} ?isSecondLevel=${false} lang=${this.lang}></roles-and-actions>` : nothing}
 
             ${elem2.type==="coa" ? this.coa(elem, data[elem.endPointResponseObject], true): nothing}
 
@@ -431,7 +433,8 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
       ${elem.type==="cardSomeElementsRepititiveObjects" ? this.cardSomeElementsRepititiveObjects(elem, data) : nothing}    
       ${elem.type==="recovery_rate" ? this.kpiRecoveryRate(elem) : nothing}
       ${elem.type==="grid" ? this.kpiGrid(elem, data[elem.endPointResponseObject]) : nothing}
-      ${elem.type==="chart" ? this.kpiChartFran(elem, data) : nothing}   
+      ${elem.type==="chart" ? 
+        html`<trazit-google-chart .elem=${elem} .data=${data} lang=${this.lang}></trazit-google-chart>`: nothing} 
       ${elem.type==="jsonViewer" ? this.jsonViewer(elem, data, true): nothing}
       ${elem.type==="readOnlyTable" ? this.readOnlyTable(elem, data, true): nothing}
       ${elem.type==="readOnlyTableByGroup" ? this.readOnlyTableByGroup(elem, data, true): nothing}
@@ -443,10 +446,15 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
 
       ${elem.type==="cardMultipleElementsView" ? this.cardMultipleElementsView(elem, data[elem.endPointResponseObject]) : nothing}
       
-
-      ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
-        this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true, this.lang) : nothing}
+      ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2!==undefined&&data[elem.endPointResponseObject]!==undefined ? 
+        html`<roles-and-actions .elem=${elem} .data=${data[elem.endPointResponseObject][elem.endPointResponseObject2]} ?isSecondLevel=${true} lang=${this.lang}></roles-and-actions>` : nothing}
       ${elem.type==="rolesAndActions"&&elem.endPointResponseObject2===undefined ? 
+        html`<roles-and-actions .elem=${elem} .data=${data[elem.endPointResponseObject]} ?isSecondLevel=${true}  lang=${this.lang}></roles-and-actions>` : nothing}
+
+
+      ${elem.type==="xxxrolesAndActions"&&elem.endPointResponseObject2!==undefined ? 
+        this.rolesAndActions(elem, data[elem.endPointResponseObject][elem.endPointResponseObject2], true, this.lang) : nothing}
+      ${elem.type==="xxxrolesAndActions"&&elem.endPointResponseObject2===undefined ? 
         this.rolesAndActions(elem, data[elem.endPointResponseObject], true, this.lang) : nothing}   
 
 

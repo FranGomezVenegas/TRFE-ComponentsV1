@@ -777,7 +777,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       //console.log("this.filterCurrentData", this.filterCurrentData);
       return html`
         <objecttabs-composition 
-          style="padding: 20px; left: 50px; width: 90%; position: relative; display: block; "
+          style="padding: 20px; width: 95%; position: relative; display: block; "
           .selectedTabModelFromProcModel=${this.selectedTabModelFromProcModel}
           .viewModelFromProcModel=${this.viewModelFromProcModel} 
           .lang=${this.lang} 

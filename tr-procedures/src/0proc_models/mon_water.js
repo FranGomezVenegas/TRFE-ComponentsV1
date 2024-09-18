@@ -2251,28 +2251,403 @@ export const MonWater= {
       }
     ]
   },
-  "Programs": {	  
-    "component": "ModuleEnvMonitProgramProc",
+  "Programs":{
+    "component": "ObjectByTabs",
     "hasOwnComponent": true,
+    "showTitleOnTop": true,
+    "title": {
+      "fix_text_en": "All my projects",
+      "fix_text_es": "Todos mis proyectos",
+      "name": "name"
+    },
     "viewQuery": {
       "actionName": "PROGRAMS_LIST",
-      "endPoint": "/moduleenvmon/EnvMonAPIqueries",
-      "clientMethod": "getProgramList",
+      "notUseGrid": true,
+      "responseArray": true,
+      "addRefreshButton": true,
       "button": {
         "icon": "refresh",
         "title": {
           "label_en": "Reload",
           "label_es": "Recargar"
         },
-        "requiresGridItemSelected": true
+        "requiresGridItemSelected": false
       },
-      "subAction": {
-        "actionName": "GET_ACTIVE_PRODUCTION_LOTS",
-        "clientMethod": "getLots"
-      }
+      "endPointParams": [
+        {
+          "argumentName": "name",
+          "internalVariableSimpleObjName": "filterCurrentData",
+          "internalVariableSimpleObjProperty": "filtertext1"
+        },
+        {
+          "argumentName": "type",
+          "fixValue": "Product Development"
+        }
+      ]
     },
-    
-	"actions": []
+    "left_panel": {
+      "actions": []
+    },
+    "filter_button": {
+      "label_en": "Search",
+      "label_es": "Buscar"
+    },
+    "filter": [
+      {
+        "filtertext1": {
+          "label_en": "Project",
+          "label_es": "Proyecto",
+          "fixValue": "ALL"
+        }
+      }
+    ],
+    "filterResultDetail": {
+      "type": "list",
+      "detail": [
+        {
+          "field": "name"
+        }
+      ]
+    },
+    "actions": [],
+    "tabs": [
+      {
+        "tabLabel_en": "Summary",
+        "tabLabel_es": "Resumen",
+        "view_definition": [
+          {
+            "type": "chart", 
+            "endPointResponseArray":["samples_summary_by_status"],
+            "elementName": "samples_summary_by_status",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"samples_summary_by_status",
+            "chart_title":{"label_en": "Samples by status", "label_es":"Muestras por estado"},
+            "grouper_field_name":"status",
+            "counter_field_name":"COUNTER",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": {
+                "fill": "transparent"  
+              },
+              "backgroundColor": "transparent",
+              "is3D": true,
+              "colors": ["#dfa942", "#d33737", "#bf120f"]              
+            },
+            "label_values_replacement":{
+              "LOGGED":{"label_es": "Registrada", "label_en": "Logged"},
+              "Incubation": {"label_es": "Incubación", "label_en": "Incubation"},
+              "PlateReading": {"label_es": "Lectura de placas", "label_en": "Plate Reading"},
+              "MicroorganismIdentification": {"label_es": "Identificación micro", "label_en": "Microorganism Identification"},
+              "SampleRevision": {"label_es": "Revisión de muestras", "label_en": "Sample Revision"}
+            },            
+            "grouper_exclude_items":[""],
+            "label_item":{"label_en":"Status", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          },
+          {
+            "type": "chart", 
+            "endPointResponseArray":["samples_summary"],
+            "elementName": "samples_summary",
+
+            "display_chart": true,
+            "chart_type":"pie",
+            "chart_name":"samples_summary",
+            "chart_title":{"label_en": "Samples by stage", "label_es":"Muestras por etapa"},
+            "grouper_field_name":"label_en",
+            "counter_field_name":"value",
+            "counterLimits":{
+              "xmin_allowed": 3,
+              "xmin_allowed_included":3,
+              "xmax_allowed":100,
+              "xmax_allowed_included":100,
+              "xvalue":0
+            },
+            "chartStyle": {
+              "backgroundColor": {
+                "fill": "transparent"  
+              },
+              "backgroundColor": "transparent",
+              "is3D": true
+            },
+            "label_values_replacement":{
+              "Sampling":{"label_es": "Muestreo", "label_en": "Sampling"},
+              "Incubation": {"label_es": "Incubación", "label_en": "Incubation"},
+              "PlateReading": {"label_es": "Lectura de placas", "label_en": "Plate Reading"},
+              "MicroorganismIdentification": {"label_es": "Identificación micro", "label_en": "Microorganism Identification"},
+              "SampleRevision": {"label_es": "Revisión de muestras", "label_en": "Sample Revision"}
+            },            
+            "label_values_replacement":{
+              "IN":{"label_es": "In Range", "label_en": "Dentro de Range"},
+              "inAlertMax": {"label_es": "Por Encima del límite de alerta", "label_en": "Over the Alert limit"},
+              "outOfSpecMax": {"label_es": "Fuera de Rango", "label_en": "Over the Range"},
+              "outOfSpecMaxStrict": {"label_es": "Fuera de Rango", "label_en": "Over the Range"}
+            },
+            "grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
+            "label_item":{"label_en":"Status", "label_es":"Estado"},
+            "label_value":{"label_en":"#", "label_es":"#"}   
+          }                      
+        ]
+      },          
+      {
+        "tabLabel_en": "Specification",
+        "tabLabel_es": "Especificación",
+        "view_definition": [
+          {
+            "type": "readOnlyTable",
+            "endPointPropertyArray": ["spec_definition", "spec_limits"],
+            "columns": [
+              {
+                "name": "parameter",
+                "label_en": "Parameter",
+                "label_es": "Parámetro"
+              },
+              {
+                "name": "variation_name",
+                "label_en": "Grade",
+                "label_es": "Grado"
+              },
+              {
+                "name": "pretty_spec",
+                "label_en": "Range",
+                "label_es": "Rango"
+              }
+            ],
+            "xactions": [],
+            "xrow_buttons": []
+          }          
+        ]
+      },
+      {
+        "tabLabel_en": "Sampling Points",
+        "tabLabel_es": "Puntos de Muestreo",
+        "view_definition": [
+          {"type": "reportTitle", 
+            "title":{
+              "label_en": "Program Sampling Points", 
+              "label_es": "Puntos de muestro del programa"
+            }
+          },   
+          {"type": "parentReadOnlyTable",  
+            "allowMultiSelection": false, 
+            "refreshable":{ "enable": true}, 
+            "printable":{ "enable": true}, 
+            "downloadable":{"enable": true, "allowUserSelectColumns": true}, 
+            "endPointPropertyArray": ["sample_points"],		              
+            "columns" : [                                
+                {"name":"location_name", "label_en": "Location", "label_es": "Ubicación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"spec_code", "label_en": "Spec", "label_es": "Especificación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"spec_variation_name", "label_en": "Variation", "label_es": "Variación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"spec_analysis_variation", "label_en": "Analysis Variation", "label_es": "Análisis de Variación", "sort": false, "filter": true, "width": "20%"},
+                {"name":"person_ana_definition", "label_en": "Person Sampling Areas", "label_es": "Areas a analizar de Personal", "sort": false, "filter": true, "width": "40%"},
+                {"name":"requires_tracking_sampling_end", "label_en": "Sampling Static?", "label_es": "Muestreo Estático?", "sort": false, "filter": true, "width": "40%"}                   
+            ],             
+            "actions": [
+              {
+                "actionName": "LOGSAMPLE",
+                "requiresGridItemSelected": true,
+                "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                "requiresDialog": true,
+                "button": {
+                  "icon": "add_location",
+                  "title": {
+                    "label_en": "Log samples",
+                    "label_es": "Registrar muestras"
+                  }
+                },
+                "xclientMethod": "logSampleDialog",
+                "dialogQueries":[
+                  {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                    "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                    "variableForData": "prodLotList"		  
+                  }
+                ],  
+                "endPointParams": [
+                  { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                  { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                  { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                  { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                  { "argumentName": "shift", "element": "list1", "addToFieldNameAndValue": true},
+                  { "argumentName": "production_lot", "element": "list2", "addToFieldNameAndValue": true},
+                  { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                ],                              
+                "dialogInfo":{
+                  "name": "genericDialog",
+                  "fields": [   
+                    {"text1": { "label_en":"Program", "label_es":"Programa", "disabled": true, "selObjectPropertyName": "program_name" }},
+                    {"text2": { "label_en":"Location", "label_es":"Ubicación", "disabled": true, "selObjectPropertyName": "location_name" }},
+                    {"list1": { 
+                      "items": [
+                      { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+                      { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+                      { "keyName": "NIGHT", "keyValue_en": "Night", "keyValue_es": "Nocturno" }
+                      ],    
+                      "label_en": "Shift", "label_es": "Turno" 
+                    }},                      
+                    {"list2": {    
+                      "label_en": "Production lot", "label_es": "Lote de producción", "optional": true,
+                      "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                      "valuesFromProperty": {
+                        "fixItemsOnTop": [
+                          { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+                        ],
+                        "selObjectPropertyName":"prodLotList",
+                        "propertyKeyName": "lot_name", "propertyKeyValueEn": "lot_name", "propertyKeyValueEs": "lot_name"
+                      }			
+                    }},                      
+                    {"number1": { "label_en":"Num Samples to log", "label_es":"Num muestras a crear", "argumentName": "numSamplesToLog", "default_value": 1 } }                              
+                    
+                  ],  		                               
+                  "xname" : "pointDialog",
+                  "action": { "actionName": "LOGSAMPLE",
+                    "requiresDialog": false,
+                    "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                    "zzzclientMethod": "logSample",
+                    "endPointParams": [
+                      { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                      { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                      { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                      { "argumentName": "fieldValue", "targetValue": true },
+                      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                    ]
+                  }
+                }
+              }                
+            ],
+            "gridActionOnClick":
+              {
+                "actionName": "LOGSAMPLE",
+                "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                "requiresDialog": true,
+                "clientMethod": "logSampleDialog",
+                "dialogQueries":[
+                  {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                    "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                    "variableForData": "prodLotList"		  
+                  }
+                ],
+            
+                "dialogInfo":{
+                  "name" : "pointDialog",
+                  "action": { "actionName": "LOGSAMPLE",
+                    "requiresDialog": false,
+                    "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                    "clientMethod": "logSample",
+                    "endPointParams": [
+                      { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                      { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                      { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                      { "argumentName": "fieldValue", "targetValue": true },
+                      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                    ]
+                  }
+                }
+              }          
+          }
+        ]
+      },
+      {
+        "tabLabel_en": "Sampling Points Map",
+        "tabLabel_es": "Puntos de Muestreo Mapa",
+        "view_definition": [
+          {
+            "type": "mapWithIcons",
+            "actionOnHoverTheIcon": true,
+            "actionOnClickTheIcon": false,
+            "actionDisabled": false,             
+            "mapUrlFixValue":"/images/clean-room-example.png",
+            "mapUrlDataProperty":"map_image",
+            "endPointPropertyArray": ["spec_definition", "spec_limits"],
+            "samplePointsDetail":{
+              "endPointPropertyArray": ["sample_points"]            
+            },
+            "action":{
+                "actionName": "LOGSAMPLE",
+                "requiresGridItemSelected": true,
+                "endPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                "requiresDialog": true,
+                "button": {
+                  "icon": "rule",
+                  "title": {
+                    "label_en": "Log samples",
+                    "label_es": "Registrar muestras"
+                  }
+                },
+                "xclientMethod": "logSampleDialog",
+                "dialogQueries":[
+                  {	"actionName": "GET_ACTIVE_PRODUCTION_LOTS",				
+                    "endPoint": "/moduleenvmon/EnvMonAPIqueries",
+                    "variableForData": "prodLotList"		  
+                  }
+                ],  
+                "endPointParams": [
+                  { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                  { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                  { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                  { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                  { "argumentName": "shift", "element": "list1", "addToFieldNameAndValue": true},
+                  { "argumentName": "production_lot", "element": "list2", "addToFieldNameAndValue": true},
+                  { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                ],                              
+                "dialogInfo":{
+                  "name": "genericDialog",
+                  "fields": [   
+                    {"text1": { "label_en":"Program", "label_es":"Programa", "disabled": true, "selObjectPropertyName": "program_name" }},
+                    {"text2": { "label_en":"Location", "label_es":"Ubicación", "disabled": true, "selObjectPropertyName": "location_name" }},
+                    {"list1": { 
+                      "items": [
+                      { "keyName": "M1", "keyValue_en": "Morning 1", "keyValue_es": "Mañana 1" },
+                      { "keyName": "M2", "keyValue_en": "Morning 2", "keyValue_es": "Mañana 2" },
+                      { "keyName": "NIGHT", "keyValue_en": "Night", "keyValue_es": "Nocturno" }
+                      ],    
+                      "label_en": "Shift", "label_es": "Turno" 
+                    }},                      
+                    {"list2": {    
+                      "label_en": "Production lot", "label_es": "Lote de producción", "optional": true,
+                      "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+                      "valuesFromProperty": {
+                        "fixItemsOnTop": [
+                          { "keyName": "responsible", "keyValue_en": "responsible", "keyValue_es": "responsible" }
+                        ],
+                        "selObjectPropertyName":"prodLotList",
+                        "propertyKeyName": "lot_name", "propertyKeyValueEn": "lot_name", "propertyKeyValueEs": "lot_name"
+                      }			
+                    }},                      
+                    {"number1": { "label_en":"Num Samples to log", "label_es":"Num muestras a crear", "argumentName": "numSamplesToLog", "default_value": 1 } }                              
+                    
+                  ],  		                               
+                  "xname" : "pointDialog",
+                  "action": { "actionName": "LOGSAMPLE",
+                    "requiresDialog": false,
+                    "zzzendPoint": "/moduleenvmon/EnvMonSampleAPIactions",
+                    "zzzclientMethod": "logSample",
+                    "endPointParams": [
+                      { "argumentName": "programName", "selObjectPropertyName": "program_name" },
+                      { "argumentName": "locationName", "selObjectPropertyName": "location_name" },
+                      { "argumentName": "sampleTemplate", "defaultValue": "program_smp_template" },
+                      { "argumentName": "sampleTemplateVersion", "defaultValue": 1 },
+                      { "argumentName": "fieldName", "defaultValue": "shift|production_lot" },
+                      { "argumentName": "fieldValue", "targetValue": true },
+                      { "argumentName": "numSamplesToLog", "defaultValue": 1 }
+                    ]
+                  }
+                }
+              }                              
+          }
+        ]
+      }                  
+    ]    
   },
 "Deviation20240827": {
 	"component":"Tabs",  
