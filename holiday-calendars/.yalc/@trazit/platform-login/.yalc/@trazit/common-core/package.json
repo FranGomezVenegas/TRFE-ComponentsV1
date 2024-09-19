@@ -1,0 +1,13 @@
+{
+  "name": "@trazit/common-core",
+  "description": "Component for the common business logic",
+  "license": "MIT",
+  "author": "Trazit Team",
+  "version": "1.0.0",
+  "main": "index.js",
+  "module": "index.js",
+  "dependencies": {
+    "lit": "^2.0.2"
+  },
+  "yalcSig": "938b910bcecca93396fddf02063de815"
+}

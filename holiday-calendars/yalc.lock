@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "packages": {
+    "@trazit/apis-forplatform": {
+      "signature": "d6a0cfdd3ec3a94ca060931c27f9a45a",
+      "file": true
+    },
+    "@trazit/platform-login": {
+      "version": "2.2.0",
+      "signature": "c51be079e6decd3f0acf3837822e368a",
+      "file": true
+    },
+    "@trazit/common-core": {
+      "version": "1.0.0",
+      "signature": "938b910bcecca93396fddf02063de815",
+      "file": true
+    }
+  }
+}
