@@ -1,0 +1,20 @@
+{
+  "version": "v1",
+  "packages": {
+    "@trazit/common-core": {
+      "version": "1.0.0",
+      "signature": "938b910bcecca93396fddf02063de815",
+      "file": true
+    },
+    "@trazit/tr-styling": {
+      "version": "1.0.0",
+      "signature": "2fe85c87cf1a23ba3ae61c73cd20c855",
+      "file": true
+    },
+    "@trazit/platform-login": {
+      "version": "2.2.0",
+      "signature": "46fab9cf6c65e4e8d865ec828d8e53a8",
+      "file": true
+    }
+  }
+}

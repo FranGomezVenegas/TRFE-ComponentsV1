@@ -1,0 +1,19 @@
+{
+  "name": "@trazit/platform-login",
+  "description": "Component login of trazit platform",
+  "license": "MIT",
+  "author": "Trazit Team",
+  "version": "2.2.0",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+  },
+  "dependencies": {
+    "@material/web": "^2.1.0",
+    "@spectrum-web-components/button": "^0.15.0",
+    "@trazit/common-core": "file:.yalc/@trazit/common-core",
+    "lit": "^2.0.2"
+  },
+  "yalcSig": "46fab9cf6c65e4e8d865ec828d8e53a8"
+}
