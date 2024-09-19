@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "packages": {
+    "@trazit/tr-dialog": {
+      "version": "1.0.0",
+      "signature": "f3284983189979bcff34781515eb9902",
+      "file": true
+    },
+    "@trazit/common-core": {
+      "version": "1.0.0",
+      "signature": "938b910bcecca93396fddf02063de815",
+      "file": true
+    }
+  }
+}

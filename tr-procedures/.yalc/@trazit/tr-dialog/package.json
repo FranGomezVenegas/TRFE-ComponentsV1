@@ -1,0 +1,17 @@
+{
+  "name": "@trazit/tr-dialog",
+  "description": "Dialog element of trazit platform, customize from md-dialog",
+  "license": "MIT",
+  "author": "Trazit Team",
+  "version": "1.1.0",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+  },
+  "dependencies": {
+    "@material/web": "^2.1.0",
+    "lit": "^2.8.0"
+  },
+  "yalcSig": "3ac1e52ecb2232467cc1f95fec8e0e6a"
+}

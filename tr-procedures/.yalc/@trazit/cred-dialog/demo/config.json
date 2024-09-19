@@ -1,0 +1,7 @@
+{
+  "dbName": "demo_v0_9_2",
+  "isForTesting": false,
+  "fullscreen": false,
+  "backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
+  "appAuthenticateApiUrl": "/app/AuthenticationAPIactions"
+}

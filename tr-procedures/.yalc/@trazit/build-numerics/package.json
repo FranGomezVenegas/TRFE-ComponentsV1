@@ -1,0 +1,13 @@
+{
+    "name": "@trazit/build-numerics",
+    "version": "1.0.0",
+    "description": "Module to set labels by different ways of",
+    "main": "build-numerics.js",
+    "scripts": {
+        "postpublish": "node generateComponentVersions.js"
+    },
+    "keywords": [],
+    "author": "Fran Gómez",
+    "license": "MIT",
+    "yalcSig": "a93ecbb87ab6f87ccbb689ff65332578"
+}
