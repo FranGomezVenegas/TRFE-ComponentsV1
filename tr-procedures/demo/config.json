@@ -198,6 +198,11 @@
     "viewName": "Programs", 
     "filterName" :  "" 
   }, 
+  "localDefaultView": {
+    "procName":  "mb_em", 
+    "viewName": "Browser", 
+    "filterName" :  "" 
+  },   
   "fakeEnd":{
     "fake": "InventoryLotsGeneral20240729"
   }  

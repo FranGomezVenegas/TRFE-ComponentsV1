@@ -5,6 +5,7 @@ import { GoogleChart } from '@google-web-components/google-chart';
 import '@google-web-components/google-chart';
 import {DataViews} from '../components/Views/DataViews';
 import {DataMiningReportModel } from './datamining-reportmodel';
+import { AirSampleReport } from '../reports/airSamples';
 
 class DataMiningGoogleChartExt extends DataMiningReportModel(GoogleChart) {
   redraw() {
@@ -25,7 +26,7 @@ class DataMiningGoogleChartExt extends DataMiningReportModel(GoogleChart) {
 }
 customElements.define('datamining-datamining-google-chart-ext', DataMiningGoogleChartExt);
 
-export class DataMiningData extends DataViews(LitElement) {
+export class DataMiningData extends AirSampleReport(DataViews(LitElement)) {
   static get styles() {
     return [
       Layouts,
@@ -121,7 +122,8 @@ export class DataMiningData extends DataViews(LitElement) {
       html`
         <div style="display: flex; flex-wrap: wrap; padding-left:30px;">
           ${elemDef.map((elem, i) => 
-            html`      
+            html`    
+             
               ${elem.elements!==undefined? html`               
                 ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject], false) : nothing}
                 <div style="display: flex; flex-wrap: wrap; padding-left:30px;">        
@@ -717,6 +719,7 @@ export class DataMiningData extends DataViews(LitElement) {
       return html` No report specified`
     }
     if (this[elem.reportModel]!==undefined){
+      console.log('ReportController', 'elem', elem)
       return this[elem.reportModel]()
     }else{
       alert(elem.reportModel+ ' not found')

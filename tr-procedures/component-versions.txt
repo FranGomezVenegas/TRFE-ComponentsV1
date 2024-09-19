@@ -3,3 +3,5 @@
 @trazit/common-core: 1.0.0
 @trazit/tr-styling: 1.0.0
 @trazit/platform-login: 2.2.0
+@trazit/build-label: 1.0.0
+@trazit/build-numerics: null

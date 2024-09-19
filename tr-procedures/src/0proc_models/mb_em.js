@@ -6492,7 +6492,7 @@ export const MbEm=
             "sampleGroups": "area, spec_code,sample_config_code*counter_by_area_spec_tmp|spec_eval*counter_range_eval|has_invest*counter_investigations|has_pre_invest, has_invest*counter_pre_and_invest"
           },
           "filterFields":[
-            {"text1": { "label_en": "Sample", "label_es": "Muestra", "default_value": "2029" }}
+            {"text1": { "label_en": "Sample", "label_es": "Muestra", "default_value": "74" }}
           ],
           "endPointParams": [
             {"argumentName": "sampleId", "element": "text1"},

@@ -178,14 +178,14 @@ export const template = (props, lang) => {
     </style>
     <div class="stages-bar">
         ${props.data.stages.map((curData, i) => 
-            i != props.data.currentState ? 
-                html `<div class="unactive-bar" style="color: gray;"> ${getLabel(curData, lang)} </div>` :
-                html `<div class="selectedbar" style="color: white;"> ${getLabel(curData, lang)} </div>`
+            (i == props.data.currentState || props.data.currentStageName ===curData.name) ?                 
+                html `<div class="selectedbar" style="color: white;"> ${getLabel(curData, lang)} </div>`:
+                html `<div class="unactive-bar" style="color: gray;"> ${getLabel(curData, lang)} </div>`
         )}
     </div>
     `;
     function getLabel(curData, lang){
-        console.log(lang)
+        console.log('cur stage', curData, lang)
         if (curData["label_"+lang]===undefined){
             return curData.name
         }

@@ -86,7 +86,7 @@ export const DemoViews = [
     
         
     {"proc_instance_name": "mb_em", "view_name": "Deviation", "filter_name": "Deviation", "title": "Deviation"},
-    {"proc_instance_name": "mb_em", "view_name": "Browser", "filter_name": "Browser", "title": "Browser"},
+    {"proc_instance_name": "mb_em", "view_name": "Browser", "filter_name": "", "title": "Browser"},
     {"proc_instance_name": "mb_em", "view_name": "DataMining", "filter_name": "DataMining", "title": "DataMining"},
     {"proc_instance_name": "mb_em", "view_name": "Incubators", "filter_name": "Incubators", "title": "Incubators"},
 	{"proc_instance_name": "mb_em", "view_name": "SchedSamples", "filter_name": "SchedSamples", "title": "SchedSamples"},

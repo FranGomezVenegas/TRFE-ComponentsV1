@@ -11,7 +11,7 @@ export function DataMiningReportModel(base) {
             strContent += `<table border="1" cellpadding="3" style="margin-bottom: 10px; border-collapse: collapse; width: 100%;"><tr><th>${d.current_stage}<br>${d.started_on}${d.ended_on&&` >> ${d.ended_on}`}</th></tr><tr><td>`
             if (d.current_stage == "Sampling") {
               d.data.forEach(data => {
-                strContent += `Sampling Date: ${data.sampling_date}`
+                strContent += ` ffSampling Date: ${data.sampling_date}`
               })
             } else if (d.current_stage == "Incubation") {
               d.data.forEach(data => {
