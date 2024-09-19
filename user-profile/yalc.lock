@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@trazit/cred-dialog": {
+      "version": "0.0.4",
+      "signature": "14d5d4c891c0bcd7750b685b1729d395",
+      "file": true
+    }
+  }
+}
