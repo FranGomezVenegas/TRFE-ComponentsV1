@@ -1,3 +1,6 @@
-import { CredDialog } from './src/CredDialog.js';
+import { TrazitCredentialsDialogs } from './src/CredDialog.js';
 
-window.customElements.define('cred-dialog', CredDialog);
+if (!customElements.get('cred-dialog')) {
+    customElements.define('cred-dialog', TrazitCredentialsDialogs);
+}
+

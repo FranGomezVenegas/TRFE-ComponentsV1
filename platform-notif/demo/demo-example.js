@@ -51,9 +51,11 @@ class DemoExample extends LitElement {
   }
 
   firstUpdated() {
-    fetch("/src/config.json").then(r => r.json()).then(j => {
-      this.pLogin.config = j;
-    });
+    if (this.pLogin!==undefined&&this.pLogin!==null){
+      fetch("/src/config.json").then(r => r.json()).then(j => {
+        this.pLogin.config = j;
+      });
+    }
   }
 
 

@@ -10,16 +10,15 @@
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "@collaborne/lit-flexbox-literals": "^0.2.2",
-    "@material/mwc-dialog": "^0.27.0",
-    "@material/mwc-icon-button": "^0.27.0",
-    "@material/mwc-textfield": "^0.27.0",
-    "@spectrum-web-components/button": "^0.15.0",
+    "@material/web": "^2.2.0",
+    "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
+    "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
+    "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
+    "@trazit/utils-actions-functions": "file:.yalc/@trazit/utils-actions-functions",
     "lit": "^2.0.2"
   },
   "devDependencies": {
-    "@spectrum-web-components/theme": "^0.8.14",
     "@web/dev-server": "^0.1.25"
   }
 }

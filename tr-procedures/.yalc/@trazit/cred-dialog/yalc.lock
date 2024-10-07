@@ -6,14 +6,14 @@
       "signature": "938b910bcecca93396fddf02063de815",
       "file": true
     },
-    "@trazit/tr-dialog": {
-      "version": "1.0.0",
-      "signature": "f3284983189979bcff34781515eb9902",
-      "file": true
-    },
     "@trazit/platform-login": {
       "version": "2.1.0",
-      "signature": "a6fec34fa327a734e0a3a2bc389217f8",
+      "signature": "13c3b890e5c56adb41b5ab8e3def9599",
+      "file": true
+    },
+    "@trazit/tr-dialog": {
+      "version": "1.0.0",
+      "signature": "06fe90e9fdc89971c02c7e480905f92b",
       "file": true
     }
   }

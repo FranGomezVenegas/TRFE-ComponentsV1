@@ -36,3 +36,4 @@ To run a local development server that serves the basic demo located in `demo/in
 ## Versioning tracking
 update material design from 0.25.3 to 0.27.0
 [- v0.0.4 use lit instead of lit-element]
+[- v1.10 review to use material design and refactoring the code]

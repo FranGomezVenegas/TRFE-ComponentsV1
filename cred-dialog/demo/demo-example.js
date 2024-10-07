@@ -2,8 +2,8 @@ import { LitElement, html, css } from 'lit';
 import { getUserSession } from '@trazit/platform-login';
 import '@trazit/platform-login/platform-login';
 import '../cred-dialog';
-
-class DemoExample extends LitElement {
+import {ActionsFunctions} from '@trazit/utils-actions-functions'
+class DemoExample extends ActionsFunctions(LitElement) {
   static get styles() {
     return css`
         div[hidden] {
@@ -38,8 +38,15 @@ class DemoExample extends LitElement {
         <button @click=${()=>this.pLogin.logout()}>Logout</button>
         <hr>
         <input id="objId" type="text" placeholder="id"><br>
-        ${this.procList.map(p => 
-          html`<button @click=${()=>this.action(p)}>${p}</button>`
+        ${this.procList.map(curProc =>           
+          html`
+          <p>
+            ${curProc.name}  
+            ${this.curProcActions(curProc).map(confUser => 
+              html`<button @click=${()=>this.actionToPerform(curProc.name, confUser)}>${confUser}</button>`
+            )}
+          </p>
+          `
         )}
         <hr>
         <button @click=${this.credsChange}>USER_CHANGE_PSWD</button>
@@ -62,32 +69,35 @@ class DemoExample extends LitElement {
     this.action("RELOGIN (LOCK INACTIVITY)")
   }
 
-  authorized(e) {
-    let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures[0]
+  curProcActions(curProc){
     let list = []
-    procList.actions_with_confirm_user.forEach(u => {
+    curProc.actions_with_confirm_user.forEach(u => {
       if (typeof u === 'string') {
         list.push(u)
       }
     })
-    procList.actions_with_esign.forEach(u => {
+    curProc.actions_with_esign.forEach(u => {
       if (typeof u === 'string') {
         list.push(u)
       }
     })
-    procList.actions_with_justification_phrase.forEach(u => {
+    curProc.actions_with_justification_phrase.forEach(u => {
       if (typeof u === 'string') {
         list.push(u)
       }
     })
-    procList.actions_with_action_confirm.forEach(u => {
+    curProc.actions_with_action_confirm.forEach(u => {
       if (typeof u === 'string') {
         list.push(u)
       }
     })
-    this.procList = list;
-    this.auth = e.target.auth;
-    this.cDialog.config = this.pLogin.config;
+    return list
+  }
+  authorized(e) {
+//    alert('authorized')
+    this.procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
+    this.auth = e.target.auth; 
+    return
   }
 
   get pLogin() {
@@ -119,8 +129,15 @@ class DemoExample extends LitElement {
     this.flag = this.cDialog.changeLang()
   }
 
-  action(actionName) {
-    this.cDialog.credsChecker(actionName, this.objId.value)
+  actionToPerform(procInstanceName, actionName) {
+    this.trazitCredsChecker(actionName, procInstanceName, this.objId.value, {}, this.getActionModelFromProcedure(procInstanceName, actionName))
+  }
+
+  getActionModelFromProcedure(procInstanceName, actionName){
+    //let findProc = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures.filter(m => m.procInstanceName == procInstanceName)
+    let actionModel={}
+    actionModel.actionName=actionName
+    return actionModel
   }
 }
 customElements.define('demo-example', DemoExample);

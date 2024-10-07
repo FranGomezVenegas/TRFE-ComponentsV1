@@ -3,8 +3,6 @@ import { html, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { EndpointsListStyles } from './endpoints-list-styles.js';
 import { EndpointsListTemplate } from './endpoints-list-template.js';
-import '@material/web/iconbutton/filled-icon-button.js';
-import '@material/web/iconbutton/filled-tonal-icon-button.js';
 import '@material/web/icon/icon.js';
 import '@alenaksu/json-viewer';
 
@@ -138,7 +136,7 @@ export class EndpointsListByModule extends CommonCore {
       return localVariables
     }
     try {
-      const response = await fetch("/src/config.json");
+      const response = await fetch("/config.json");
       if (!response.ok) {
         let localVariables={}
         localVariables.backendUrl=undefined

@@ -1,3 +1,5 @@
 import { TrDialog } from './src/TrDialog.js';
 
-//window.customElements.define('tr-dialog', TrDialog);
+if (!customElements.get('tr-dialog')) {
+    customElements.define('tr-dialog', TrDialog);
+}

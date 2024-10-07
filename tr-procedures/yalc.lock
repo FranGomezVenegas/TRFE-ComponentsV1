@@ -1,16 +1,6 @@
 {
   "version": "v1",
   "packages": {
-    "@trazit/cred-dialog": {
-      "version": "1.0.0",
-      "signature": "600d7fc9eb7db9b526d7c2c79bb1254f",
-      "file": true
-    },
-    "@trazit/tr-dialog": {
-      "version": "1.1.0",
-      "signature": "3ac1e52ecb2232467cc1f95fec8e0e6a",
-      "file": true
-    },
     "@trazit/common-core": {
       "version": "1.0.0",
       "signature": "938b910bcecca93396fddf02063de815",
@@ -23,16 +13,27 @@
     },
     "@trazit/platform-login": {
       "version": "2.2.0",
-      "signature": "46fab9cf6c65e4e8d865ec828d8e53a8",
+      "signature": "cc6759d018aba253a4920b72504a978a",
       "file": true
     },
     "@trazit/build-label": {
       "version": "1.0.0",
-      "signature": "adfd63511a8dcec90c43d6a01c486ba4",
+      "signature": "55120089a17c89fe9e413a8f8f40bd85",
       "file": true
     },
     "@trazit/build-numerics": {
+      "version": "1.0.0",
       "signature": "a93ecbb87ab6f87ccbb689ff65332578",
+      "file": true
+    },
+    "@trazit/cred-dialog": {
+      "version": "1.0.0",
+      "signature": "c285800172197ef64d6a7040fe820bc5",
+      "file": true
+    },
+    "@trazit/tr-dialog": {
+      "version": "1.1.0",
+      "signature": "85d408d6d72f59c9c3c874ac442feb1a",
       "file": true
     }
   }

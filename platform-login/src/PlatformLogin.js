@@ -9,6 +9,8 @@ import '@material/web/list/list-item.js';
 import '@material/web/button/elevated-button.js';
 import { langConfig, appLogin_authenticationMessage } from './langLabels.js';
 
+
+
 import { MdFilledIconButtonStyles } from './md3-buttons-styles';
 
 export function getUserSession() {
@@ -296,12 +298,55 @@ export class PlatformLogin extends CommonCore {
           backendUrl: this.config.backendUrl,
           isProcManagement: isProcManagement
         }));
+        this.getUserRoleProceduresList(this.user.value, this.role).catch((error) => {
+          console.error("Error fetching procedures list:", error);
+        });        
+        //return this.getUserRoleProceduresList(this.user.value, this.role);
       } else {
         if (document.fullscreenElement) {
           document.exitFullscreen();
         }
         throw {};
       }
+    });
+  }
+
+  getUserRoleProceduresList(userName, userRole) {
+    return
+    let partialToken = JSON.parse(sessionStorage.getItem('partialToken'));
+    let userSessionData = JSON.parse(sessionStorage.getItem("userSession")) || {};
+    let secondUrlParams = this.config.backendUrl + this.config.appAuthenticateApiUrl + '?' + new URLSearchParams({
+      finalToken: userSessionData.finalToken,
+      dbName: this.config.dbName,
+      userName: userName,
+      userRole: userRole,
+      actionName: 'GET_USER_ROLE_PROCEDURES_LIST'
+    });
+  
+    return this.fetchApi(secondUrlParams, false).then(secondResponse => {
+      if (secondResponse && !secondResponse.is_error) {
+        // Guardar datos adicionales en sessionStorage
+        
+        userSessionData.procedures_list = secondResponse.procedures_list; // Asignar proceduresList de la respuesta
+        sessionStorage.setItem("userSession", JSON.stringify(userSessionData));
+        //userSessionData = JSON.parse(sessionStorage.getItem("userSession")
+        console.log("procedures list for user", userName, " and role ", userRole, JSON.parse(sessionStorage.getItem("userSession")).procedures_list)
+
+        const event = new CustomEvent('userSessionUpdated', {
+          detail: { userSession: userSessionData }
+        });
+        window.dispatchEvent(event);
+/*        // Despachar un evento adicional tras la segunda request exitosa
+        this.dispatchEvent(new CustomEvent('secondSuccess', {
+          detail: { ...secondResponse, log: true, waiting: false },
+          bubbles: true,
+          composed: true
+        }));*/
+      } else {
+        throw new Error("Error in second request");
+      }
+    }).catch(error => {
+      console.error("Second request failed:", error);
     });
   }
   logout() {

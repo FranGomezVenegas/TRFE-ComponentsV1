@@ -1,0 +1,90 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+
+<Meta title="TRAZiT Paradigm/Dev Libraries/Build Labels External"/>
+
+# BuildLabelsFunctions
+
+The `BuildLabelsFunctions` JavaScript class is designed to generate labels based on various models and data objects. The primary method to use is `buildLabel`, which offers flexible options for label construction based on the input provided.
+
+## Usage Example
+
+Below is an example of how to use the `buildLabel` function. This method is the main entry point for generating labels and should be utilized over any internal methods.
+
+## API Documentation
+
+- **Purpose**: Generates a label based on the language, model, and data object provided.
+- **The Model**: The key is on which properties are part of the model as to let this feature building the label in one way or another: Options:
+- It is important to be aware that it will run sequentially in this order, in other words, when it finds properties in the model to generate the label for one option then it will not try any other one.
+
+### **fixLabel_(+lang)** (Requires no data)
+  - To get this fix value but by the current app session language
+### **fixLabel** (Requires no data)
+  - To get this fix value   
+### **labelByConcatenateFields**
+  - Tp generate the label as a concatenation of some properties from the row in context separated by one separator that can be specified also.
+  - separator is optional, in case no separator specified then dash(-) will become the separator
+  ```json
+    {
+      fields:['field1', 'fld2', '3rdField'],
+      separator:' '
+    }
+  ```
+   For further details see _buildLabelFromArrayOfItems. 
+
+### **labelSingleField(+_)(+lang)** 
+  - To get this property value from the given row when the row has the same property for different languages, example: description_en / description_es
+
+### **labelSingleField** 
+  - To get this property value from the given row
+
+<span style={{ color: 'red' }}>### **propertyKeyValue(+lang)**</span>
+  - <span style={{ color: 'red' }}>To get this property value from the given row</span>
+  - <span style={{ color: 'red' }}>This will be deprecated, it is in use by the lists **please use labelSingleField instead**.    </span>
+  
+### **fixLabel_(+lang)** (passing data)
+  - To get this fix value but by the current app session language
+    <span style={{ color: 'blue' }}> when passing data this is one option too but the latest priority</span>
+### **fixLabel** (passing data)
+  - To get this fix value   
+    <span style={{ color: 'blue' }}> when passing data this is one option too but the latest priority</span>
+
+
+#### `buildLabel(lang, model, dataObj)`
+
+- **Parameters**:
+  - `lang` (`string`): The language for the label.
+  - `model` (`object`): The data model containing the configuration for the label.
+  - `dataObj` (`object`): The data object from which values are extracted.
+- **Returns**: A `string` representing the generated label.
+
+### Internal Methods
+
+The `BuildLabelsFunctions` class also includes internal methods that support the `buildLabel` function. These are not intended for external use but are documented here for reference.
+
+#### `_buildLabelFromArrayOfItems(property, row)`
+
+- **Purpose**: Concatenates fields into a single label based on the provided property and data row.
+- **Parameters**:
+  - `property` (`object`): The configuration object for the fields and separator.
+  - `row` (`object`): The data row containing values for each field.
+- **Returns**: A `string` representing the concatenated label.
+
+```javascript
+_buildLabelFromArrayOfItems(property, row) {
+  let separator = '-';
+  if (property.separator !== undefined) {
+    separator = property.separator;
+  }
+  let entireLabel = '';
+  if (property.fields === undefined) {
+    return 'buildLabel-labelByConcatenateFields. fields missing';
+  }
+  property.fields.forEach(item2 => {
+    if (entireLabel.length > 0) {
+      entireLabel = entireLabel + separator;
+    }
+    entireLabel = entireLabel + row[item2];
+  });
+  return entireLabel;
+}

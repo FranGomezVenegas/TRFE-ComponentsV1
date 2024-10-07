@@ -7,21 +7,12 @@
   "main": "index.js",
   "module": "index.js",
   "scripts": {
-    "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch",
+    "yalc-install": "node installYalcComponents.js"
   },
   "dependencies": {
-    "@google-web-components/google-chart": "^5.0.2",
-    "@material/mwc-button": "^0.27.0",
-    "@material/mwc-checkbox": "^0.27.0",
-    "@material/mwc-formfield": "^0.27.0",
-    "@material/mwc-icon-button": "^0.27.0",
-    "@material/mwc-list": "^0.27.0",
-    "@material/mwc-select": "^0.27.0",
-    "@material/mwc-textfield": "^0.27.0",
-    "@material/web": "^2.1.0",
-    "@neovici/cosmoz-treenode": "^4.2.0",
-    "@spectrum-web-components/button": "^0.43.0",
-    "@spectrum-web-components/split-view": "^0.4.3",
+    "@google-web-components/google-chart": "^5.1.0",
+    "@material/web": "^2.2.0",
     "@trazit/apis-forplatform": "file:.yalc/@trazit/apis-forplatform",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",

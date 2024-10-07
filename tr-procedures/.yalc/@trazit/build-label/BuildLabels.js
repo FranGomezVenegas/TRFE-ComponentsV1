@@ -51,8 +51,7 @@ export function BuildLabelsFunctions(base) {
           //console.log('labelPossibleReplacement', labelValue, 'fld', fld)
         }
         return labelValue;
-    }
-
+      }
 
     // Función privada
     _buildLabelFromArrayOfItems(property, row){

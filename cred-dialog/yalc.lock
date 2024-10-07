@@ -1,19 +1,24 @@
 {
   "version": "v1",
   "packages": {
-    "@trazit/common-core": {
-      "version": "1.0.0",
-      "signature": "938b910bcecca93396fddf02063de815",
+    "@trazit/tr-dialog": {
+      "version": "1.1.0",
+      "signature": "f24da536f8a0fe54c11213a4fe38d96d",
       "file": true
     },
     "@trazit/platform-login": {
-      "version": "2.1.0",
-      "signature": "13c3b890e5c56adb41b5ab8e3def9599",
+      "version": "2.2.0",
+      "signature": "cc6759d018aba253a4920b72504a978a",
       "file": true
     },
-    "@trazit/tr-dialog": {
+    "@trazit/common-core": {
+      "version": "1.1.0",
+      "signature": "452a0ec4e24e64552857933c4d2caa98",
+      "file": true
+    },
+    "@trazit/utils-actions-functions": {
       "version": "1.0.0",
-      "signature": "8772109945ce69668aa3b9b7f3a5a4e3",
+      "signature": "0ff6de9b7d63dec9a6bc995c7723cd82",
       "file": true
     }
   }

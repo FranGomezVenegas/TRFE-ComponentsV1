@@ -32,6 +32,7 @@ class DemoExample extends LitElement {
       tr-dialog {
         --mdc-dialog-heading-ink-color: blue;
         --mdc-typography-headline6-font-size: 35px;
+        --md-dialog-container-color: white !important;
       }
       .content {
         opacity: 0.9;
@@ -45,6 +46,11 @@ class DemoExample extends LitElement {
         align-items: center;
         justify-content: center;
       }
+      tr-dialog::part(surface) {
+      --md-dialog-container-color: white !important; /* Asegurarse de que el fondo sea blanco */
+      background-color: white; /* Refuerzo del fondo blanco */
+      color: black;
+    }
       `
     ]
   }
@@ -55,20 +61,19 @@ class DemoExample extends LitElement {
       <tr-dialog id="new-dialog"
         .showCloseButton="${this.showCloseButton}"
         .showDoButton="${this.showDoButton}"
-        @do-action="${this.handleDoAction}"      
-      >
-  <form slot="content" id="form-id" method="dialog"> 
-    <div class="content layout vertical">
-      <md-filled-text-field label="User" type="text"></md-filled-text-field>
-      <md-filled-text-field label="Password" type="password"
-        iconTrailing="visibility" @click=${this.showPwd}>
-      </md-filled-text-field>
-      <div style="margin-top:30px">
-        <md-filled-button @click=${() => this.newDialog.close()}>Cancel</md-filled-button>
-        <md-filled-button @click=${() => this.handleDoAction()}>Accept</md-filled-button>
-      </div>
-    </div>
-  </form>
+        @do-action="${this.handleDoAction}">
+      <form slot="content" id="form-id" method="dialog"> 
+        <div class="content layout vertical">
+          <md-filled-text-field label="User" type="text"></md-filled-text-field>
+          <md-filled-text-field label="Password" type="password"
+            iconTrailing="visibility" @click=${this.showPwd}>
+          </md-filled-text-field>
+          <div style="margin-top:30px">
+            <md-filled-button @click=${() => this.newDialog.close()}>Cancel</md-filled-button>
+            <md-filled-button @click=${() => this.handleDoAction()}>Accept</md-filled-button>
+          </div>
+        </div>
+      </form>
   
       ${this.adHocButtons.map(button => html`
         <md-filled-button slot="ad-hoc-buttons" @click=${button.action}>

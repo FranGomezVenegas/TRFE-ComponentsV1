@@ -9,6 +9,8 @@ import '@material/web/list/list-item.js';
 import '@material/web/button/elevated-button.js';
 import { langConfig, appLogin_authenticationMessage } from './langLabels.js';
 
+import { MdFilledIconButtonStyles } from './md3-buttons-styles';
+
 export function getUserSession() {
   if (sessionStorage === undefined) { return ''; }
   let userSession = JSON.parse(sessionStorage.getItem("userSession"));
@@ -21,6 +23,7 @@ export class PlatformLogin extends CommonCore {
     return [
       platformLoginStyles, // Usa los estilos importados
       css`
+      ${MdFilledIconButtonStyles}
         #rolesSelector {
           position: absolute;
           top: 150px;
@@ -83,21 +86,15 @@ export class PlatformLogin extends CommonCore {
             label="${langConfig.user['label_' + this.lang]}"
             @keypress=${(e) => e.keyCode == 13 && this.password.focus()}
           ></md-filled-text-field>
-          <md-filled-text-field
-            id="password"
-            label="${langConfig.password['label_' + this.lang]}"
-            type="password"
-            trailingIcon="visibility"
-            @keypress=${this.checkLogin}
-            @click=${this.showPwd}
-          ></md-filled-text-field>
-          <elevated-button id="access" size="xl" @click=${this.login}
-            >${langConfig.buttonAccess['label_' + this.lang]}</elevated-button
-          >
+          <md-filled-text-field id="password" label="${langConfig.password['label_' + this.lang]}"
+            type="password" trailingIcon="visibility" @keypress=${this.checkLogin}
+            @click=${this.showPwd} ></md-filled-text-field>
+          <md-elevated-button id="access" style="background-color:rgb(157 112 205 / 25%);" size="xl" @click=${this.login}
+            >${langConfig.buttonAccess['label_' + this.lang]}</md-elevated-button>
         </div>
         <div>
           <md-outlined-icon-button
-            id="lang"
+            id="lang" style="padding-top:10px;"
             @click=${this.changeLang}
             title="Language"
             >${this.lang}</md-outlined-icon-button
@@ -170,23 +167,36 @@ export class PlatformLogin extends CommonCore {
         this.authorized();
       } else {
         this.shadowRoot.querySelector("#rolesSelector").show();
-        this.requestUpdate(); // Forzar actualización
+        //this.requestUpdate(); // Forzar actualización 20240828 commented-out due to it updates many times in vain
       }
     } catch (e) {
       this.clearSessionStorage();
     }
   }
-
-  async setRoleFromChip(clickedRole) {
-    //const value = event.target.getAttribute('value');
-    if (clickedRole) {
-      this.role = clickedRole;
-      await this.reqFinalToken();
-      this.authorized();
-    }else{
-      alert('No rol')
+  shouldUpdate(changedProperties) { // 20240828 Added this method due to it updates many times in vain
+    if (changedProperties.has('userRoles') && this.userRoles.length <= 1) {
+        // Evitar actualizar si no hay más de un rol de usuario
+        return false;
     }
+    return super.shouldUpdate(changedProperties);
   }
+  async setRoleFromChip(clickedRole) {
+    if (clickedRole) {
+        this.role = clickedRole;
+
+        // Cierra el modal antes de solicitar el token final para evitar que interfiera
+        this.shadowRoot.querySelector("#rolesSelector").close();
+        
+        // Asegúrate de que el DOM esté actualizado antes de continuar
+        await this.updateComplete;
+
+        // Procede con la solicitud del token final
+        await this.reqFinalToken();
+        this.authorized();
+    } else {
+        alert('No role selected');
+    }
+}
 
   authorized() {
     super.authorized();

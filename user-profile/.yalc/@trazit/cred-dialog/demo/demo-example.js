@@ -63,6 +63,7 @@ class DemoExample extends LitElement {
   }
 
   authorized(e) {
+    alert('authorized')
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures[0]
     let list = []
     procList.actions_with_confirm_user.forEach(u => {

@@ -4,5 +4,8 @@
     "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@trazit/proc-management-home": "file:ProcManagement/proc-management-home",
     "lit": "^3.1.0"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.4.6"
   }
 }

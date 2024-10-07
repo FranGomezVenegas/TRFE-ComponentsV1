@@ -1,72 +1,79 @@
-import { html, css } from 'lit';
+import { html, css, nothing } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { CalendarUtilities } from './CalendarUtilities';
 import { CalendarActions } from './CalendarActions';
-import { CalendarDialogTemplate} from './CalendarDialogTemplate';
-import { TrazitReactivateObjectsDialog} from './TrazitReactivateObjectsDialog';
-import { ApiFunctionsForPlatform} from '@trazit/apis-forplatform/ApiFunctionsForPlatform';
-//import { ApiFunctions} from '@trazit/tr-procedures/src/components/Api/ApiFunctions';
+import { CalendarDialogTemplate } from './CalendarDialogTemplate';
+import { TrazitReactivateObjectsDialog } from './TrazitReactivateObjectsDialog';
+import { ApiFunctionsForPlatform } from '@trazit/apis-forplatform/ApiFunctionsForPlatform';
+
 import '@google-web-components/google-chart';
-import '@material/mwc-select';
-import '@material/mwc-list/mwc-list-item';
+import '@material/web/select/filled-select';
+import '@material/web/select/select-option';
 import '@vaadin/vaadin-grid/vaadin-grid';
 import '@vaadin/vaadin-grid/vaadin-grid-column';
 import '@vaadin/vaadin-grid/vaadin-grid-selection-column';
 import '@vaadin/vaadin-grid/vaadin-grid-sort-column';
 import '@vaadin/vaadin-grid/vaadin-grid-filter-column';
 
+import '@material/web/icon/icon.js';
+import '@material/web/iconbutton/icon-button';
+
+
 
 const viewInfoDefinition = {
   grid: {
-    id: {"label_en": "Id", "label_es": "Id"},
-    date: {"label_en": "Date", "label_es": "Fecha"},
-    day_name: {"label_en":"Name", "label_es": "Nombre"},
-    created_on: {"label_en":"Creation Date", "label_es": "F.Creación"},
-    created_by: {"label_en": "Creator", "label_es": "Creador"}
+    id: { "label_en": "Id", "label_es": "Id" },
+    date: { "label_en": "Date", "label_es": "Fecha" },
+    day_name: { "label_en": "Name", "label_es": "Nombre" },
+    created_on: { "label_en": "Creation Date", "label_es": "F.Creación" },
+    created_by: { "label_en": "Creator", "label_es": "Creador" }
   },
-  selector: { 
-    title: {"label_en": "Calendar Name", "label_es": "Calendario"}
+  selector: {
+    title: { "label_en": "Calendar Name", "label_es": "Calendario" }
   },
   calendarActions: [
-    { "actionName": "NEW_CALENDAR",
-      "selObjectVariableName": "selectedCalendar", 
+    {
+      "actionName": "NEW_CALENDAR",
+      "selObjectVariableName": "selectedCalendar",
       "endPoint": "/app/HolidayCalendarAPIactions",
-      "endPointParams": [ 
+      "endPointParams": [
         { "argumentName": "name", "element": "text1" },
-        {"argumentName": "description", "element": "text2", "addToFieldNameAndValue": true, "fieldType":"STRING"}        
+        { "argumentName": "description", "element": "text2", "addToFieldNameAndValue": true, "fieldType": "STRING" }
       ],
-    "button": {
-      "icon": "create_new_folder",
-      "title": {
-        "label_en": "Create", "label_es": "Crear"
+      "button": {
+        "icon": "create_new_folder",
+        "title": {
+          "label_en": "Create", "label_es": "Crear"
+        },
+        requiresObjectSelected: false
       },
-      requiresObjectSelected : false
-    },   
-    "dialogInfo": {
-      "requiresDialog": true,
-      "name": "genericFormDialog",
-      "fields": {
-        "text1": { "label_en": "New calendar name", "label_es": "Nombre nuevo calendario" },
-        "text2": { "label_en": "Description", "label_es": "Descripción" },
+      "dialogInfo": {
+        "requiresDialog": true,
+        "name": "genericFormDialog",
+        "fields": {
+          "text1": { "label_en": "New calendar name", "label_es": "Nombre nuevo calendario" },
+          "text2": { "label_en": "Description", "label_es": "Descripción" }
+        }
       }
-    }
-    },    
-    { "actionName": "DEACTIVATE_CALENDAR",
-      "selObjectVariableName": "selectedCalendarDate", 
+    },
+    {
+      "actionName": "DEACTIVATE_CALENDAR",
+      "selObjectVariableName": "selectedCalendarDate",
       "endPoint": "/app/HolidayCalendarAPIactions",
-      "endPointParams": [ 
-        { "argumentName": "name", "internalVariableSimpleObjName":"selectedCalendar", "internalVariableSimpleObjProperty":"code"}              
+      "endPointParams": [
+        { "argumentName": "name", "internalVariableSimpleObjName": "selectedCalendar", "internalVariableSimpleObjProperty": "code" }
       ],
       "button": {
         "icon": "alarm_off",
         "title": {
           "label_en": "Deactivate", "label_es": "Desactivar"
         },
-        requiresObjectSelected : false
-      },   
-    },    
-    { "actionName": "REACTIVATE_CALENDAR",
-      "endPoint": "/app/HolidayCalendarAPIactions",  
+        requiresObjectSelected: false
+      }
+    },
+    {
+      "actionName": "REACTIVATE_CALENDAR",
+      "endPoint": "/app/HolidayCalendarAPIactions",
       "endPointParams": [
         { "argumentName": "name", "selObjectPropertyName": "code" }
       ],
@@ -79,16 +86,16 @@ const viewInfoDefinition = {
         "requiresObjectSelected": false
       },
       "requiresDialog": true,
-      "dialogInfo": {          
+      "dialogInfo": {
         "name": "reactivateObjectDialog",
         "fieldsObject": {
           "queryNumDays": { "label_en": "Number of Days", "label_es": "Número de Días" },
           "objectName": { "label_en": "Calendar to reactivate", "label_es": "Calendario a Reactivar" }
-        },    
-        "listDefinition":{
-          "keyFldName":"code",
-          "eachEntryTextGenerator":[
-            {"value": "Name: ", "type":"fix"}, {"value": "code", "type":"field"}, {"value": " (", "type":"fix"}, {"value": "description", "type":"field"}, {"value": ")", "type":"fix"} 
+        },
+        "listDefinition": {
+          "keyFldName": "code",
+          "eachEntryTextGenerator": [
+            { "value": "Name: ", "type": "fix" }, { "value": "code", "type": "field" }, { "value": " (", "type": "fix" }, { "value": "description", "type": "field" }, { "value": ")", "type": "fix" }
           ]
         },
         "viewQuery": {
@@ -99,58 +106,56 @@ const viewInfoDefinition = {
             { "argumentName": "numDays", "element": "queryNumDays", "fixValue": 7 }
           ]
         },
-        "action": [            
-        ]
+        "action": []
       }
     },
-
   ],
   calendarDateActions: [
-    { "actionName": "ADD_DATE_TO_CALENDAR",
-    "requiresDialog": true,
-    "xxxclientMethod": "newStudyIndividual",
-    "selObjectVariableName": "selectedCalendar", 
-    "endPoint": "/app/HolidayCalendarAPIactions",
-    "endPointParams": [ 
-      { "argumentName": "name", "internalVariableSimpleObjName":"selectedCalendar", "internalVariableSimpleObjProperty":"code"},
-      { "argumentName": "dayName", "element": "text1" },
-      { "argumentName": "newDate", "element": "date1" }
-    ],
-    "button": {
-      "icon": "event_available",
-      "title": {
-        "label_en": "Add Date", "label_es": "Añadir Fecha"
-      },
-      requiresObjectSelected : false
-    },   
-    "dialogInfo": {
+    {
+      "actionName": "ADD_DATE_TO_CALENDAR",
       "requiresDialog": true,
-      "name": "genericFormDialog",
-      "fields": {
-        "text1": { "label_en": "Date Name", "label_es": "Nombre" },
-        "date1": { "label_en": "Date", "label_es": "Fecha"}
-      }
-    }
-    },
-    { "actionName": "DELETE_DATE_FROM_GIVEN_CALENDAR",
-      "selObjectVariableName": "selectedCalendarDate", 
+      "selObjectVariableName": "selectedCalendar",
       "endPoint": "/app/HolidayCalendarAPIactions",
-      "endPointParams": [ 
-        { "argumentName": "calendar", "internalVariableObjName":"selectedCalendarDate", "internalVariableObjProperty":"calendar_code", "ZZZselObjectPropertyName": "study"},
-        { "argumentName": "date_id", "internalVariableObjName":"selectedCalendarDate", "internalVariableObjProperty":"id" },        
+      "endPointParams": [
+        { "argumentName": "name", "internalVariableSimpleObjName": "selectedCalendar", "internalVariableSimpleObjProperty": "code" },
+        { "argumentName": "dayName", "element": "text1" },
+        { "argumentName": "newDate", "element": "date1" }
+      ],
+      "button": {
+        "icon": "event_available",
+        "title": {
+          "label_en": "Add Date", "label_es": "Añadir Fecha"
+        },
+        requiresObjectSelected: false
+      },
+      "dialogInfo": {
+        "requiresDialog": true,
+        "name": "genericFormDialog",
+        "fields": {
+          "text1": { "label_en": "Date Name", "label_es": "Nombre" },
+          "date1": { "label_en": "Date", "label_es": "Fecha" }
+        }
+      }
+    },
+    {
+      "actionName": "DELETE_DATE_FROM_GIVEN_CALENDAR",
+      "selObjectVariableName": "selectedCalendarDate",
+      "endPoint": "/app/HolidayCalendarAPIactions",
+      "endPointParams": [
+        { "argumentName": "calendar", "internalVariableObjName": "selectedCalendarDate", "internalVariableObjProperty": "calendar_code" },
+        { "argumentName": "date_id", "internalVariableObjName": "selectedCalendarDate", "internalVariableObjProperty": "id" }
       ],
       "button": {
         "icon": "event_busy",
         "title": {
           "label_en": "Remove Date", "label_es": "Quitar Fecha"
         },
-        requiresObjectSelected : true
-      },   
-    }     
+        requiresObjectSelected: true
+      }
+    }
   ]
 };
 
- 
 export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunctionsForPlatform(CalendarDialogTemplate(CalendarActions(CalendarUtilities((CommonCore))))))) {
   static get styles() {
     return [
@@ -163,7 +168,7 @@ export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunction
       }
       #endpointName {
         height: 100%;
-        overflow-y : auto;
+        overflow-y: auto;
       }
       #leftSplit::-webkit-scrollbar, #rightSplit::-webkit-scrollbar, #endpointName::-webkit-scrollbar {
         display: none;
@@ -182,106 +187,101 @@ export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunction
           height: calc(100vh - 180px);
         }
       }
-      google-chart.calendarchart{
-        height:180px;
+      google-chart.calendarchart {
+        height: 180px;
       }
-      mwc-icon-button#lang {        
-        color : rgba(36, 192, 235, 1);
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
+  
+      md-filled-icon-button#lang {
+        color: rgba(36, 192, 235, 1);
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
       }
-      mwc-button {        
-        color : rgba(36, 192, 235, 1);
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
-        background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+      md-filled-icon-button {
+        color: rgba(36, 192, 235, 1);
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        background: transparent;
+        color: rgba(49, 130, 189, 1);
+        border-color: transparent !important;
+        --mdc-button-fill-color: red;
+        --mdc-button-ink-color: blue;
+      }
+      md-icon-button {
+        color: rgba(36, 192, 235, 1);
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+      }
+      md-icon-button.disabledtrue {
+        color: red;
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+      }
+      sp-button {
+        background: rgba(36, 192, 235, 1);
+        border-color: inherit !important;
+        border-radius: 35px;
         font-family: Montserrat;
         font-weight: bold;
         font-size: 19px;
         color: white;
-        border-color: transparent !important;
-        --mdc-button-fill-color: red;
-        --mdc-button-ink-color: blue;
-      }            
-      mwc-icon-button {        
-        color : rgba(36, 192, 235, 1);
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
-      }        
-      mwc-icon-button.disabledtrue{        
-        color : red;
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
-      }        
-      mwc-icon-button#video {
-        color : #FFFFFF;
-        color : rgba(36, 192, 235, 1);
       }
-      sp-button {
-        background : #24C0EB;
-        background : rgba(36, 192, 235, 1);
-        border-color : inherit !important;
-        border-radius : 35px;
-        -moz-border-radius : 35px;
-        -webkit-border-radius : 35px;
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
-        color : #FFFFFF;
-        color : rgb(255, 255, 255);
+      md-filled-text-field {
+        border-style: solid;
+        border-color: rgba(153, 153, 153, 1);
+        border-width: 1px;
+        border-radius: 7px;
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        background-color: rgb(255, 255, 255);
       }
-      mwc-textfield {
-        border-style : Solid;
-        border-color : #999999;
-        border-color : rgba(153, 153, 153, 1);        
-        border-width : 1px;
-        border-radius : 7px;
-        -moz-border-radius : 7px;
-        -webkit-border-radius : 7px;   
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
-        background-color :  #FFFFFF;
-        background-color : rgb(255, 255, 255);     
-        background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
+      md-filled-text-field.mdc-text-field.mdc-floating-label {
+        color: red;
       }
-      mwc-textfield.mdc-text-field {
-        background-color :  #FFFFFF;
-        background-color : rgb(255, 255, 255);     
-      }
-      mwc-textfield.mdc-textfield.mdc-floating-label {
-        color: red; 
-      }
-      mwc-select {     
-        width: 400px;  
+  
+      md-filled-select {
+        width: 400px;
         padding: 0 6px;
-        --mdc-theme-primary : rgba(36, 192, 235, 1);
-        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+        --mdc-theme-primary: rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background: rgba(49, 130, 189, 1);
         --mdc-select-ink-color: rgb(47, 47, 47);
-        --mdc-select-dropdown-icon-color:rgba(36, 192, 235, 1);
-        --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
+        --mdc-select-dropdown-icon-color: rgba(36, 192, 235, 1);
+        --mdc-select-hover-line-color: rgba(36, 192, 235, 1);
         --mdc-notched-outline-border-color: rgba(186, 235, 248, 0.4);
-        --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
-
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
+        --mdc-select-disabled-dropdown-icon-color: rgba(36, 192, 235, 1);
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
       }
-      mwc-select.outlined {        
-        --mdc-theme-primary : rgba(36, 192, 235, 1);
-        --mdc-theme-text-primary-on-background : rgba(49, 130, 189, 1);
+      md-filled-select.outlined {
+        --mdc-theme-primary: rgba(36, 192, 235, 1);
+        --mdc-theme-text-primary-on-background: rgba(49, 130, 189, 1);
         --mdc-select-ink-color: rgba(36, 192, 235, 1);
-        font-family : Montserrat;
-        font-weight : bold;
-        font-size : 19px;
-        background-color: 4fcad029;
-      }       `
-    ]
+        font-family: Montserrat;
+        font-weight: bold;
+        font-size: 19px;
+        background-color: rgba(79, 202, 208, 0.16);
+      }
+      md-filled-select {
+        --_text-field-container-color: transparent;
+        --_text-field-active-indicator-color: rgba(49, 130, 189, 1);
+          
+      }
+
+      md-select-option {
+        background-color: transparent !important;
+        --_text-field-container-color: transparent;
+      }
+
+
+      `
+    ];
   }
+  
 
   static get properties() {
     return {
@@ -293,8 +293,10 @@ export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunction
       selectedTxts: { type: Array },
       selectedCalendarDate: { type: Array },
       selectedCalendar: { type: Object },
-      actionBeingPerformedModel:{type: Object},
+      actionBeingPerformedModel: { type: Object },
       selectedItems: { type: Array },
+      selectedDate: { type: Object },  // Para guardar la fecha seleccionada
+      allEvents: { type: Array }       // Guardar todos los eventos
     };
   }
 
@@ -307,10 +309,98 @@ export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunction
     this.selectedTxts = []
     this.calendars = []
     this.selectedCalendar = [{}]
-    this.selectedCalendarDate = [],
-    this.actionBeingPerformedModel={}
-    this.selectedItems=[]    
+    this.selectedCalendarDate = []
+    this.actionBeingPerformedModel = {}
+    this.selectedItems = []
+    this.selectedDate = null;  // Inicialmente no hay fecha seleccionada
+    this.allEvents = [];       // Para guardar todos los eventos al cargar un calendario
   }
+  render() {
+    return html`
+    
+      <div class="layout horizontal center flex wrap">      
+
+        <md-filled-icon-button style="color: #148cfa;" icon="refresh" id="refresh" title="Refresh"  
+          @click=${this.getHolidayCalendars}><md-icon slot="icon">refresh</md-icon></md-filled-icon-button>        
+        <md-filled-select style=" width: 600px;" outlined id="calendarsList" label="${this.calendarSelectorTitle()}" @change=${this.calendarChanged} ?hidden=${this.calendars.length<2}>
+          ${this.calendars && this.calendars.map((p, i) => 
+            html`<md-select-option value="${p.code}" ?selected=${i == 0}>${this.listEntryLabel(p)}</md-select-option>`
+          )}
+        </md-filled-select>
+        ${this.getButton(viewInfoDefinition.calendarActions, this.selectedCalendar)}
+      </div>
+      <!-- <h1>${this.getTitle()}</h1> -->
+
+
+      ${this.getButton(viewInfoDefinition.calendarDateActions, this.selectedCalendarDate)}
+      <div class="layout horizontal center flex wrap">  
+        <google-chart class="calendarchart" type="calendar" @google-chart-select=${this.handleCalendarSelect}></google-chart>
+      </div>
+
+      ${this.selectedDate ? html`<h2>Selected Date: ${this.selectedDate.toLocaleDateString()}</h2>` : nothing}
+
+      <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort
+        .items="${this.selectedCalendarDate}" 
+      >
+        <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
+        <vaadin-grid-sort-column path="id" .header="${viewInfoDefinition.grid.id["label_" + this.lang]}"></vaadin-grid-sort-column>
+        <vaadin-grid-sort-column path="date" .header="${viewInfoDefinition.grid.date["label_" + this.lang]}"></vaadin-grid-sort-column>
+        <vaadin-grid-filter-column path="day_name" .header="${viewInfoDefinition.grid.day_name["label_" + this.lang]}"></vaadin-grid-filter-column>
+        <vaadin-grid-filter-column path="created_on" .header="${viewInfoDefinition.grid.created_on["label_" + this.lang]}"></vaadin-grid-filter-column>
+        <vaadin-grid-filter-column path="created_by" .header="${viewInfoDefinition.grid.created_by["label_" + this.lang]}"></vaadin-grid-filter-column>
+      </vaadin-grid>
+
+      ${this.calendarDialogsTemplate()}
+      ${this.reactivateObjectsDialog()} 
+    `;
+  }
+
+  handleCalendarSelect(event) {
+    const chart = this.shadowRoot.querySelector('google-chart');
+    const selection = chart.selection;
+  
+    if (selection.length > 0) {
+      if (selection[0].date===undefined){return}
+      const selectedItem = selection[0];
+      const selectedDate = new Date(selection[0].date);   // Obtener la fecha seleccionada
+  
+      // Si ya hay una fecha seleccionada y se vuelve a hacer clic en la misma fecha, deselecciona
+      if (this.selectedDate && selectedDate.getTime() === this.selectedDate.getTime()) {
+        this.selectedDate = null;
+        this.selectedCalendarDate = [...this.allEvents];  // Restablece todos los eventos
+      } else {
+        this.selectedDate = selectedDate;
+        //console.log('Day', selectedDate.getDate(), 'month', selectedDate.getMonth()+1, 'year', selectedDate.getFullYear())
+        this.selectedCalendarDate = this.allEvents.filter(event => {
+          //const eventDate = new Date(event.date_year, event.date_month, event.date_dayOfMonth);
+          return event.date_year === selectedDate.getFullYear() && event.date_month === selectedDate.getMonth()+1 && event.date_dayOfMonth === selectedDate.getDate();
+        });
+      }  
+      chart.selection=null
+      this.requestUpdate();
+    }else{
+      this.selectedDate = null;
+      this.selectedCalendarDate = this.allEvents
+      chart.selection=null
+      this.requestUpdate();
+    }
+  }
+  
+
+  // Cambia el calendario seleccionado
+  calendarChanged(e) {
+    let program = this.calendars.filter(p => p.code === e.target.value);
+    if (program.length) {
+      this.selectedCalendar = program[0];
+      this.allEvents = [...this.selectedCalendar.holidays_calendar_date];  // Guarda todos los eventos
+      this.selectedCalendarDate = [...this.allEvents];  // Muestra todos los eventos al inicio
+      console.log('selectedCalendarDate', this.selectedCalendarDate)
+      this.setGoogleCalendarChart();
+      this.requestUpdate();
+    }
+  }  
+  // Otras funciones necesarias, como grid(), chart(), selectItem(), etc.
+
   calendarSelectorTitle(){
     return viewInfoDefinition.selector.title["label_"+this.lang]
   }
@@ -321,40 +411,6 @@ export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunction
       return entry.code
     }
   }
-  
-  render() {
-    return html`
-      <div class="layout horizontal center flex wrap">      
-        <mwc-icon-button icon="refresh" @click=${this.getHolidayCalendars}></mwc-icon-button>      
-        <mwc-select style=" width: 600px;" outlined id="calendarsList" label="${this.calendarSelectorTitle()}" @change=${this.calendarChanged} ?hidden=${this.calendars.length<2}>
-            ${this.calendars&&this.calendars.map((p,i) => 
-              html`<mwc-list-item value="${p.code}" ?selected=${i==0}>${this.listEntryLabel(p)}</mwc-list-item>`
-            )}
-          </mwc-select>
-          ${this.getButton(viewInfoDefinition.calendarActions, this.selectedCalendar)}
-      </div>
-      <h1>${this.getTitle()}</h1>
-
-      ${this.getButton(viewInfoDefinition.calendarDateActions, this.selectedCalendarDate)}
-      <div class="layout horizontal center flex wrap">  
-        <google-chart class="calendarchart" type="calendar"></google-chart>
-      </div>
-      <vaadin-grid @active-item-changed=${this.selectItem} theme="row-dividers" column-reordering-allowed multi-sort
-       .selectedItems="${this.selectedCalendarDate}" 
-      >
-        <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-        <vaadin-grid-sort-column path="id" .header="${viewInfoDefinition.grid.id["label_"+this.lang]}"></vaadin-grid-sort-column>
-        <vaadin-grid-sort-column path="date" .header="${viewInfoDefinition.grid.date["label_"+this.lang]}"></vaadin-grid-sort-column>
-        <vaadin-grid-filter-column path="day_name" .header="${viewInfoDefinition.grid.day_name["label_"+this.lang]}"></vaadin-grid-filter-column>
-        <vaadin-grid-filter-column path="created_on" .header="${viewInfoDefinition.grid.created_on["label_"+this.lang]}"></vaadin-grid-filter-column>
-        <vaadin-grid-filter-column path="created_by" .header="${viewInfoDefinition.grid.created_by["label_"+this.lang]}"></vaadin-grid-filter-column>
-      </vaadin-grid>
-      ${this.calendarDialogsTemplate()}
-      ${this.reactivateObjectsDialog()} 
-    `;
-  }
-    
-
   get grid() {return this.shadowRoot.querySelector("vaadin-grid")}
   get chart() {return this.shadowRoot.querySelector("google-chart")}
   getTitle(){
@@ -365,7 +421,7 @@ export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunction
     }
   }
   selectItem(e) {
-    console.log('selectItem', e.detail.value)
+    //console.log('selectItem', e.detail.value)
     if (!e.detail.value) {
       this.selectedCalendarDate = []
       //this.histories = []
@@ -381,19 +437,6 @@ export class HolidayCalendars extends (TrazitReactivateObjectsDialog(ApiFunction
       this.requestUpdate()
     }
   }  
-  calendarChanged(e) {
-    //console.log('calendarChanged', e.target.value)
-    let program = []
-    this.selectedCalendarDate = []
-    program=this.calendars.filter(p => p.code == e.target.value)
-    if (program.length) {
-      this.selectedCalendar = []
-      this.selectedCalendar=program[0]
-      this.grid.items=program[0].holidays_calendar_date
-      this.setGoogleCalendarChart()
-      this.requestUpdate()
-    }
-  }
 
   setGoogleCalendarChart() {
     let cols=[]

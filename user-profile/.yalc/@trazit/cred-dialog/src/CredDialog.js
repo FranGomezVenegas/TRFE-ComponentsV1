@@ -1,12 +1,10 @@
-import { html, css, nothing } from 'lit';
+import { html, nothing, css, LitElement } from 'lit';
 import { CommonCore, commonLangConfig } from '@trazit/common-core';
-import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-textfield';
-import '@vaadin/vaadin-combo-box/vaadin-combo-box';
-import '@spectrum-web-components/button/sp-button';
+import '@material/web/select/outlined-select.js';
+import '@material/web/button/filled-button.js';
 import '@trazit/tr-dialog/tr-dialog';
-
-
+import { credDialogStyles } from './CredDialogStyles.js'; 
+import { ActionsFunctions } from '@trazit/utils-actions-functions/ActionsFunctions.js';
 const langConfig = {
   "pwdWindowTitle": {
     "label_en": "Please confirm your credentials (user & password)",
@@ -56,49 +54,9 @@ const langConfig = {
   }
 }
 
-export class CredDialog extends CommonCore {
+export class CredDialog extends ActionsFunctions(CommonCore) {
   static get styles() {
-    return [
-      Layouts, 
-      css`
-      :host {
-        display: block;
-      }
-      :host([hidden]) {
-        display: none;
-      }
-      tr-dialog {
-        --mdc-dialog-heading-ink-color: blue;
-        --mdc-typography-headline6-font-size: 35px;
-        --mdc-dialog-z-index:9999999;
-      }
-      .content {
-        opacity: 0.9;
-        --mdc-dialog-z-index:9999999;
-      }
-      .content * {
-        margin: 5px 0;
-      }
-      p.attemptsphraseblue {
-        color: #464dbb;
-      }
-      p.attemptsphrasered {
-        color: #f3371680;
-        animation-duration: 2s;
-        animation-name: slidein;
-      }
-      @keyframes slidein {
-        from {
-          margin-left: 30%;
-        }
-        to {
-          margin-left: 0%;
-        }
-      }           
-      @media (max-width: 460px) {
-      }
-      `
-    ];
+    return [credDialogStyles];
   }
 
   static get properties() {
@@ -142,6 +100,7 @@ export class CredDialog extends CommonCore {
     this.updateComplete.then(() => {
       // manually backgrounding the dialog box
       // password dialog
+      if (this.dialogSurface==null){return}
       this.dialogSurface.style.backgroundImage = "url(/images/abstract.jpg)";
       this.dialogSurface.style.backgroundSize = "cover";
       this.dialogSurface.style.backgroundRepeat = "no-repeat";
@@ -163,7 +122,7 @@ export class CredDialog extends CommonCore {
 
 
   creadDialogs() {
-    //alert('credDialog-popup')
+    alert('credDialog-popup')
     //console.log('credDialog>>render')
     return html`
       <tr-dialog id="credDialog" 
@@ -180,6 +139,7 @@ export class CredDialog extends CommonCore {
           </div>`
         }
         <div class="content layout vertical flex center-justified">
+        credDialog
           ${this.inputField()}
           ${this.changing||this.nonProc ?
             null :
@@ -203,6 +163,7 @@ export class CredDialog extends CommonCore {
         hideXtoClose=""
         scrimClickAction="">
         <div class="layout vertical flex center-justified">
+        confirmDialog
           <div>${commonLangConfig.confirmActionPhrase["label_" + this.lang]} ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName}?</div>
           <div style="margin-top:30px;text-align:center">
             <sp-button size="xl" variant="secondary" slot="secondaryAction" dialogAction="decline">
@@ -224,27 +185,16 @@ export class CredDialog extends CommonCore {
         hideActions=""
         hideXtoClose=""
         scrimClickAction=""
-        .escapeKeyAction="${this.escapeKey?'close':''}">
-        ${this.changing||this.nonProc ?
-          nothing :
-          html`<div style="position:absolute;left:15px;top:8px;font-size:12px;">
-            ${this.actionObj.button ? this.actionObj.button.title["label_"+ this.lang] : this.actionName} (id: ${this.objectId})
-          </div>`
-        }
+        .escapeKeyAction="${this.escapeKey ? 'close' : ''}">
+        
         <div class="content layout vertical flex center-justified">
           ${this.inputField()}
-          ${this.changing||this.nonProc ?
-            null :
-            html`${this.auditField()}`
-          }
           <div style="margin-top:30px">
-            ${this.nonProc ?
-              // closing dialog for non procedures i.e relogin on lock inactivity
-              html`<sp-button size="xl" variant="secondary" @click=${this.failedAttempt}>${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>` :
-              // for procedures
-              html`<sp-button size="xl" variant="secondary" dialogAction="close">${commonLangConfig.cancelDialogButton["label_"+this.lang]}</sp-button>`
-            }
-            <sp-button size="xl" @click=${this.checking}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</sp-button>
+            <md-filled-button 
+              @click=${this.checking}>${commonLangConfig.confirmDialogButton["label_"+this.lang]}</md-filled-button>
+            <md-filled-button 
+              variant="secondary" 
+              @click=${this.failedAttempt}>${commonLangConfig.cancelDialogButton["label_"+this.lang]}</md-filled-button>
           </div>
           ${this.setAttempts()}
         </div>
@@ -494,4 +444,4 @@ export class CredDialog extends CommonCore {
     }
   }
   
-}
+}window.customElements.define('cred-dialog', CredDialog);

@@ -3,17 +3,18 @@
   "description": "Credential dialog including user, esign, & justification-phrase",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "@material/web": "^2.1.0",
+    "@material/web": "^2.2.0",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
     "@trazit/platform-login": "file:.yalc/@trazit/platform-login",
     "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
+    "@trazit/utils-actions-functions": "file:.yalc/@trazit/utils-actions-functions",
     "lit": "^2.0.2"
   },
   "devDependencies": {

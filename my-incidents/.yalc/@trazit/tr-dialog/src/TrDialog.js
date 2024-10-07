@@ -1,375 +1,512 @@
-import { html, css } from 'lit';
-import { cssClasses } from '@material/dialog/constants';
-import { classMap } from 'lit/directives/class-map.js';
-import { Dialog } from '@material/mwc-dialog';
-import '@material/mwc-button';
-import '@material/mwc-icon';
+import { LitElement, html, css, nothing } from 'lit';
+import '@material/web/icon/icon.js';
+import '@material/web/button/filled-button'
 
-export class TrDialog extends Dialog {
-  static get styles() {
-    return [
-      super.styles,
-      css`
-      mwc-icon.corner {
-        cursor: pointer;
-        --mdc-icon-size: 15px;
-        margin: auto 5px;
-        color: rgb(94, 145, 186);
-      }
-      ::slotted(mwc-icon) {
-        cursor: pointer;
-        --mdc-icon-size: 15px;
-      }
-      mwc-icon[hidden] {
-        display: none;
-      }
-      div[hidden] {
-        display: none;
-      }
-      /*Resizeable*/
+const defaultButtonLabels={
+    close:{"label_en":"Close", "label_es":"Cerrar"},
+    do:{"label_en":"Do", "label_es":"Aplicar"}
+}
 
-      .mdc-dialog__surface .resizer-right {
-        width: 5px;
-        height: 100%;
-        background: transparent;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        cursor: e-resize;
-      }
-
-      .mdc-dialog__surface .resizer-bottom {
-        width: 100%;
-        height: 5px;
-        background: transparent;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        cursor: n-resize;
-      }
-
-      .mdc-dialog__surface .resizer-both {
-        width: 5px;
-        height: 5px;
-        background: transparent;
-        z-index: 10;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        cursor: nw-resize;
-      }
-
-      /*NOSELECT*/
-
-      .mdc-dialog__surface * {
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Non-prefixed version, currently
-                                        supported by Chrome and Opera */
-      }
-
-      .mdc-dialog__surface {
-        max-width: 100% !important;
-      }
-
-      .popup-header {
-        cursor: move;
-      }
-      `
-    ];
-  }
-
-  render() {
-    const classes = {
-      [cssClasses.STACKED]: this.stacked,
+export class TrDialog extends LitElement {
+    static properties = {
+        top: { type: Number },
+        left: { type: Number },
+        width: { type: Number },
+        height: { type: Number },
+        isDragging: { type: Boolean },
+        isResizing: { type: Boolean },
+        startX: { type: Number },
+        startY: { type: Number },
+        startWidth: { type: Number },
+        startHeight: { type: Number },
+        zoomLabel: { type: String },
+        expandLabel: { type: String },
+        hideMin: { type: Boolean },
+        hideZoom: { type: Boolean },
+        hideXtoClose: { type: Boolean },
+        isMinimized: { type: Boolean },
+        lang: {type:Boolean},
+        dialogTitle:{type:Object},
+        isOpen:{ type: Boolean }
     };
-    let heading = html``;
-    if (this.heading) {
-      heading = this.renderHeading();
-    }
-    const actionsClasses = {
-      'mdc-dialog__actions': !this.hideActions,
-    };
-    return html`
-    <style>
-      :host {
-        --mdc-shape-medium: ${this.dialogShape};
-        --mdc-dialog-z-index: ${this.zIndex};
-      }
-    </style>
-    <div class="mdc-dialog ${classMap(classes)}" role="alertdialog" aria-modal="true" aria-labelledby="title"
-      aria-describedby="content">
-      <div class="mdc-dialog__container">
-        <div class="mdc-dialog__surface" style="top: 0px; left: 0px">
-          ${heading}
-          <div id="content" class="mdc-dialog__content">
-            <slot id="contentSlot"></slot>
-          </div>
-          <footer id="actions" class="${classMap(actionsClasses)}">
-            <span>
-              <slot name="secondaryAction"></slot>
-            </span>
-            <span>
-              <slot name="primaryAction"></slot>
-            </span>
-          </footer>
-          ${this.cornerButton()}
-        </div>
-      </div>
-      <div class="mdc-dialog__scrim"></div>
-    </div>`;
-  }
 
-  get mdcDialog() {
-    return this.shadowRoot.querySelector(".mdc-dialog")
-  }
-
-  get mdcScrim() {
-    return this.shadowRoot.querySelector(".mdc-dialog__scrim")
-  }
-
-  get dialogSurface() {
-    return this.shadowRoot.querySelector(".mdc-dialog__surface")
-  }
-
-  get dialogContent() {
-    return this.shadowRoot.querySelector("#content")
-  }
-
-  get dialogHeader() {
-    return this.shadowRoot.querySelector(".popup-header");
-  }
-
-  static get properties() {
-    return {
-      dialogShape: { type: String },
-      zoomLabel: { type: String },
-      expandLabel: { type: String },
-      hideMin: { type: Boolean, reflect: true },
-      hideZoom: { type: Boolean, reflect: true },
-      hideXtoClose: { type: Boolean, reflect: true },
-      zIndex: { type: Number }
-    };
-  }
-
-  constructor() {
-    super();
-    this.dialogShape = "5px"
-    this.zoomLabel = "zoom_out_map"
-    this.expandLabel = "expand_more"
-    this.hideMin = false;
-    this.hideZoom = false;
-    this.hideXtoClose = false;
-    this.top = "0px";
-    this.left = "0px";
-    this.width = "0px";
-    this.height = "0px";
-    this.zIndex = 7;
-  }
-
-  firstUpdated() {
-    super.firstUpdated()
-    this.shadowRoot.querySelector(".mdc-dialog__surface").style.padding = "20px"
-    this.initialize();
-  }
-
-  initialize() {
-    this.initResizeElement();
-    this.initDragElement();
-  }
-
-  cornerButton() {
-    //alert('hideXtoClose '+this.hideXtoClose)
-    return html`
-      <div class="popup-header" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 30px;">
-        <div style="position: absolute; top: 10px; left: 10px;">
-          <slot name="topLeft"></slot>
-        </div>
-        <div style="position: absolute; top: 10px; right: 10px;">
-          <slot name="icon1" style="margin-right: 5px;"></slot>
-          <mwc-icon ?hidden=${this.hideMin} class="corner" @click=${this.minimize}>${this.expandLabel}</mwc-icon>
-          <mwc-icon ?hidden=${this.hideZoom} class="corner" @click=${this.zoomOut}>${this.zoomLabel}</mwc-icon>
-          <mwc-icon ?hidden=${this.hideXtoClose} class="corner" dialogAction="decline">close</mwc-icon>
-        </div>
-      </div>
-    `
-  }
-
-  show() {
-    if (this.dialogContent!==undefined&&this.dialogContent!==null){
-      this.dialogContent.style.overflow = "auto";
-    }
-    if (this.dialogSurface!==undefined&&this.dialogSurface!==null){
-      this.dialogSurface.style.overflow = "auto";
-      this.dialogSurface.style.top = "0";
-      this.dialogSurface.style.height = "auto";
-    }
-      this.expandLabel = "expand_more";
-    super.show()
-  }
-
-  initResizeElement() {
-    let parentPopup = null;
-    let resizer = null;
-
-    let startX, startY, startWidth, startHeight;
-
-    let right = document.createElement("div");
-    right.className = "resizer-right";
-    this.dialogSurface.appendChild(right);
-    right.addEventListener("mousedown", initDrag, false);
-    right.parentPopup = this.dialogSurface;
-
-    let bottom = document.createElement("div");
-    bottom.className = "resizer-bottom";
-    this.dialogSurface.appendChild(bottom);
-    bottom.addEventListener("mousedown", initDrag, false);
-    bottom.parentPopup = this.dialogSurface;
-
-    let both = document.createElement("div");
-    both.className = "resizer-both";
-    this.dialogSurface.appendChild(both);
-    both.addEventListener("mousedown", initDrag, false);
-    both.parentPopup = this.dialogSurface;
-
-    function initDrag(e) {
-      parentPopup = this.parentPopup;
-      resizer = this;
-
-      startX = e.clientX;
-      startY = e.clientY;
-      startWidth = parseInt(
-        document.defaultView.getComputedStyle(parentPopup).width,
-        10
-      );
-      startHeight = parseInt(
-        document.defaultView.getComputedStyle(parentPopup).height,
-        10
-      );
-      document.documentElement.addEventListener("mousemove", doDrag, false);
-      document.documentElement.addEventListener("mouseup", stopDrag, false);
+    constructor() {
+        super();
+        this.top = 100;
+        this.left = 100;
+        this.width = 400;
+        this.height = 300;
+        this.isDragging = false;
+        this.isResizing = false;
+        this.zoomLabel = "zoom_out_map";
+        this.expandLabel = "expand_more";
+        this.hideMin = false;
+        this.hideZoom = false;
+        this.hideXtoClose = false;   
+        this.isMinimized = false;   
+        this.lang=""   
+        this.dialogTitle={}
+        this.isOpen=false
     }
 
-    function doDrag(e) {
-      if(resizer.classList.contains('resizer-right') || resizer.classList.contains('resizer-both')) 
-        parentPopup.style.width = startWidth + (e.clientX - startX) * 2 + "px";
-      if(resizer.classList.contains('resizer-bottom') || resizer.classList.contains('resizer-both')) 
-        parentPopup.style.height = startHeight + (e.clientY - startY) * 2 + "px";
-    }
+    static styles = css`
+        :host {
+            --md-icon-size, 14px;
+        }
+        .dialog-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid black;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            max-width: 90vw;  /* Limitar ancho máximo al 90% del viewport */
+            max-height: 90vh; /* Limitar altura máxima al 90% del viewport */
+            width: auto;      /* El ancho se ajusta automáticamente según el contenido */
+            height: auto;     /* La altura se ajusta automáticamente según el contenido */
+            overflow: hidden; /* Esconder cualquier contenido que desborde */
+        }
 
-    function stopDrag() {
-      document.documentElement.removeEventListener("mousemove", doDrag, false);
-      document.documentElement.removeEventListener("mouseup", stopDrag, false);
-    }
-  }
+        .popup-content {
+            padding: 10px;
+            flex-grow: 1;      /* Permitir que el contenido crezca */
+            overflow-y: auto;  /* Permitir scroll si el contenido excede el tamaño máximo */
+            max-height: 80vh;  /* El contenido interno no puede superar el 80% del alto de la pantalla */
+        }
 
-  initDragElement() {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    let element = null;
-    let currentZIndex = 100; //TODO reset z index when a threshold is passed
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgb(94, 145, 186);
+            color: white;
+            padding: 10px;
+            cursor: move;
+        }
+
+
+        .popup-content.minimized {
+            display: none; /* Ocultar contenido cuando está minimizado */
+        }
+
+
+        md-filled-button {
+        --_container-height: 20px;
+            --md-filled-button-padding: 4px 8px; /* Ajustar el padding para reducir el tamaño */
+            --md-filled-button-font-size: 12px; /* Tamaño de la fuente más pequeño */
+            --md-filled-button-height: 32px; /* Altura mínima más baja */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            padding: 4px;
+            background: #fff;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        md-icon, md-filled-button {
+            cursor: pointer;
+            --_container-color: rgb(94, 145, 186);
+        }
+
+        .icon-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .resizer {
+            position: absolute;
+            background-color: transparent;
+        }
+
+        .resizer.corner {
+            width: 15px;
+            height: 15px;
+        }
+
+        .resizer.top-left {
+          z-index: 100;
+          top: -5px;
+          left: -5px;
+          cursor: nwse-resize;
+        }
+
+        .resizer.top-right {
+          z-index: 100;
+          top: -5px;
+          right: -5px;
+          cursor: nesw-resize;
+        }
+
+        .resizer.bottom-left {
+          z-index: 100;
+          bottom: -5px;
+          left: -5px;
+          cursor: nesw-resize;
+        }
+
+        .resizer.bottom-right {
+          z-index: 100;
+          bottom: -5px;
+          right: -5px;
+          cursor: nwse-resize;
+        }
+
+        /* Resizer en los bordes */
+        .resizer.edge {
+            background-color: transparent;
+        }
+
+        /* Aumentar el grosor de las áreas de interacción */
+        .resizer.top,
+        .resizer.bottom {
+            height: 10px;  /* Más área sensible al ratón */
+            left: 0;
+            right: 0;
+            cursor: ns-resize;
+            position: absolute;
+        }
+
+        .resizer.top {
+            top: -5px; /* Colocarlo correctamente encima del borde superior */
+        }
+
+        .resizer.bottom {
+            bottom: -5px; /* Colocarlo correctamente debajo del borde inferior */
+        }
+
+        .resizer.left,
+        .resizer.right {
+            width: 10px;  /* Más área sensible al ratón */
+            top: 0;
+            bottom: 0;
+            cursor: ew-resize;
+            position: absolute;
+        }
+
+        .resizer.left {
+            left: -5px; /* Colocarlo correctamente a la izquierda */
+        }
+
+        .resizer.right {
+            right: -5px; /* Colocarlo correctamente a la derecha */
+        }
+       /* Responsive styles */
+        @media (max-width: 768px) {
+            .dialog-container {
+                max-width: 95vw; /* En pantallas pequeñas, usar casi todo el ancho del viewport */
+                max-height: 95vh; /* En pantallas pequeñas, usar casi todo el alto del viewport */
+            }
+
+            .button-container {
+                flex-direction: column; /* Colocar botones verticalmente en pantallas pequeñas */
+                gap: 20px;
+            }
+        }          
+    `;
+
+    updated(changedProperties) {
+        super.updated(changedProperties);
     
-    this.dialogSurface.onmousedown = function() {
-      this.style.zIndex = "" + ++currentZIndex;
+        // Si la propiedad dialogTitle cambió, forzar una actualización
+        if (changedProperties.has('dialogTitle')) {
+            this.requestUpdate();
+        }
+        if (changedProperties.has('isOpen') && this.isOpen) {
+            this._expandDialog(); // Llamamos a una función para expandir el diálogo completamente
+          }        
+    }  
+    _expandDialog() {
+        const dialogElement = this.shadowRoot.querySelector('.dialog');
+        if (dialogElement) {
+          dialogElement.style.height = 'auto'; // Aseguramos que el tamaño del contenido se ajuste automáticamente
+          dialogElement.style.maxHeight = '100%'; // Evitamos que se quede pequeño
+          dialogElement.style.transition = 'height 0.3s ease'; // Suaviza la transición al abrir
+        }
+      }      
+    render() {
+        return html`
+          <div class="dialog-container" ?open=${this.isOpen}
+              style="top: ${this.top}px; left: ${this.left}px; width: ${this.width}px; height: ${this.height}px;"
+              @mousedown=${this.startDragFromEmptySpace}>
+            <div class="popup-header" @mousedown=${this.startDrag}>
+                <span>
+                    ${this.dialogTitle!==undefined&&this.dialogTitle.icon!==undefined?html`<md-icon src="${this.dialogTitle.icon}">${this.dialogTitle.icon}</md-icon>`:nothing}
+                    ${this.dialogTitle!==undefined&&this.dialogTitle["title_"+this.lang]!==undefined?this.dialogTitle["title_"+this.lang]:nothing}
+                </span>
+                <div class="icon-container">
+                    <md-icon 
+                        ?hidden=${this.hideMin} 
+                        @click=${this.minimize}
+                    >${this.expandLabel}</md-icon>
+                    <md-icon 
+                        ?hidden=${this.hideZoom} 
+                        @click=${this.zoomOut}
+                    >${this.zoomLabel}</md-icon>
+                    <md-icon 
+                        ?hidden=${this.hideXtoClose} 
+                        @click=${this.closeDialog}
+                    >close</md-icon>
+                </div>
+            </div>
+
+            <div class="popup-content ${this.isMinimized ? 'minimized' : ''}">
+                <slot name="content"></slot>
+            </div>
+
+            <div class="button-container">
+                ${this.showCloseButton ? html`
+                    <md-filled-button style="--_container-color:#892a25bf;" @click=${this.closeDialog}>${this.closeButtonLabel===undefined?`${defaultButtonLabels.close["label_"+this.lang]}`:this.closeButtonLabel["label_"+this.lang]}</md-filled-button>
+                ` : ''}
+                
+                ${this.showDoButton ? html`
+                    <md-filled-button @click=${this.handleDoAction}>${this.doButtonLabel===undefined?`${defaultButtonLabels.do["label_"+this.lang]}`:this.doButtonLabel["label_"+this.lang]}</md-filled-button>
+                ` : ''}
+            </div>            
+            <!-- Resizers en las esquinas y bordes -->
+            <div class="resizer corner top-left" @mousedown=${this.startResize}></div>
+            <div class="resizer corner top-right" @mousedown=${this.startResize}></div>
+            <div class="resizer corner bottom-left" @mousedown=${this.startResize}></div>
+            <div class="resizer corner bottom-right" @mousedown=${this.startResize}></div>
+
+            <div class="resizer edge top" @mousedown=${this.startResize}></div>
+            <div class="resizer edge bottom" @mousedown=${this.startResize}></div>
+            <div class="resizer edge left" @mousedown=${this.startResize}></div>
+            <div class="resizer edge right" @mousedown=${this.startResize}></div>
+          </div>
+        `;
+    }
+    firstUpdated() {
+        this.closeDialog()
+        const doButton = this.shadowRoot.querySelector('#do-button');
+        if (doButton) {
+            doButton.focus();
+        }
+        if (this.lang===undefined||this.lang.length==0){
+            this.lang="en"
+        }        
+        // Llamamos a adjustSize al iniciar para ajustar el tamaño según el contenido inicial
+        this.adjustSize();
+      
+        // Creamos un MutationObserver para detectar cambios en el slot
+        const slot = this.shadowRoot.querySelector('slot[name="content"]');
+        const observer = new MutationObserver(() => this.adjustSize());
+        observer.observe(slot, { childList: true, subtree: true });
+      }
+      
+      adjustSize() {
+        // Obtenemos el contenido del slot
+        const slot = this.shadowRoot.querySelector('slot[name="content"]');
+        const assignedElements = slot.assignedElements();
+      
+        if (assignedElements.length === 0) {
+          return; // Si no hay contenido, no hacemos nada
+        }
+      
+        // Obtenemos la altura del contenido dentro del slot
+        const contentHeight = assignedElements.reduce((acc, el) => acc + el.offsetHeight, 0);
+      
+        // Obtenemos las alturas del header y del footer
+        const headerHeight = this.shadowRoot.querySelector('.popup-header').offsetHeight;
+        const footerHeight = this.shadowRoot.querySelector('.button-container').offsetHeight;
+      
+        // Ajustamos la altura total del diálogo sumando header + contenido + footer
+        const totalHeight = headerHeight + contentHeight + footerHeight;
+      
+        // Ajustamos la altura del contenedor del diálogo
+        const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
+        dialogContainer.style.height = `${totalHeight}px`;
+      }
+    
+     
+    handleDoAction() {
+        // Emitir un evento personalizado para que el componente padre pueda manejar la acción
+        this.dispatchEvent(new CustomEvent('do-action', {
+            detail: { message: 'Do action triggered' }
+        }));
+    }
+    // Iniciar arrastre del diálogo
+    startDrag(event) {
+        if (!this.isResizing) {
+            this.isDragging = true;
+            this.startX = event.clientX - this.left;
+            this.startY = event.clientY - this.top;
+            document.addEventListener('mousemove', this.handleDrag);
+            document.addEventListener('mouseup', this.stopDrag);
+        }
+    }
+
+    startDragFromEmptySpace(event) {
+        const clickedElement = event.target;
+        const isInteractiveElement = clickedElement.tagName === 'BUTTON' || clickedElement.closest('md-icon') || clickedElement.closest('slot');
+        
+        if (!isInteractiveElement && !this.isResizing) {
+            this.startDrag(event); // Solo arrastrar si no es un elemento interactivo
+        }
+    }
+
+    handleDrag = (event) => {
+        if (this.isDragging) {
+            this.left = event.clientX - this.startX;
+            this.top = event.clientY - this.startY;
+            this.requestUpdate();
+        }
     };
 
-    if (this.dialogHeader) {
-      this.dialogHeader.parentPopup = this.dialogSurface;
-      this.dialogHeader.onmousedown = dragMouseDown;
-    }
-  
-    function dragMouseDown(e) {
-      element = this.parentPopup;
-      element.style.zIndex = "" + ++currentZIndex;
-  
-      e = e || window.event;
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag;
-    }
-  
-    function elementDrag(e) {
-      if (!element) {
-        return;
-      }
-  
-      e = e || window.event;
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      // set the element's new position:
-      element.style.top = parseInt(element.style.top, 10) - pos2 + "px";
-      element.style.left = parseInt(element.style.left, 10) - pos1 + "px";
-    }
-  
-    function closeDragElement() {
-      /* stop moving when mouse button is released:*/
-      document.onmouseup = null;
-      document.onmousemove = null;
-    }
-  }
+    stopDrag = () => {
+        this.isDragging = false;
+        document.removeEventListener('mousemove', this.handleDrag);
+        document.removeEventListener('mouseup', this.stopDrag);
+    };
 
-  minimize() {
-    this.dialogSurface.style.minWidth = "auto";
-    this.mdcDialog.style.minWidth = "auto";
-    this.dialogShape = "5px";
-    this.dialogSurface.style.height = "auto";
-    this.mdcDialog.style.height = "100%";
-    this.mdcScrim.style.height = "100%";
-    this.zoomLabel = "zoom_out_map"
-
-    if (this.expandLabel == "expand_more") {
-      this.dialogContent.style.overflow = "hidden";
-      this.dialogSurface.style.overflow = "hidden";
-      this.dialogSurface.style.top = "45vh";
-      this.dialogSurface.style.height = "0";
-      this.expandLabel = "expand_less";
-    } else {
-      this.dialogContent.style.overflow = "auto";
-      this.dialogSurface.style.overflow = "auto";
-      this.dialogSurface.style.top = "0";
-      this.dialogSurface.style.height = "auto";
-      this.expandLabel = "expand_more";
+    startResize(event) {
+        this.isResizing = true;
+    
+        // Actualizar las dimensiones y posición inicial cada vez que se empieza a redimensionar
+        this.startX = event.clientX;
+        this.startY = event.clientY;
+        this.startWidth = this.width; // Ancho actual del diálogo
+        this.startHeight = this.height; // Altura actual del diálogo
+    
+        this.resizerType = event.target.classList; // Guarda el tipo de resizer
+    
+        document.addEventListener('mousemove', this.handleResize);
+        document.addEventListener('mouseup', this.stopResize);
     }
-  }
+    
+    handleResize = (event) => {
+        if (this.isResizing) {
+            // Esquinas
+            if (this.resizerType.contains('top-left')) {
+                this.width = this.startWidth - (event.clientX - this.startX);
+                this.height = this.startHeight - (event.clientY - this.startY);
+                this.top = this.startY + (event.clientY - this.startY); // Cambia la posición superior
+                this.left = this.startX + (event.clientX - this.startX); // Cambia la posición izquierda
+            } else if (this.resizerType.contains('top-right')) {
+                this.width = this.startWidth + (event.clientX - this.startX);
+                this.height = this.startHeight - (event.clientY - this.startY);
+                this.top = this.startY + (event.clientY - this.startY); // Cambia la posición superior
+            } else if (this.resizerType.contains('bottom-left')) {
+                this.width = this.startWidth - (event.clientX - this.startX);
+                this.height = this.startHeight + (event.clientY - this.startY);
+                this.left = this.startX + (event.clientX - this.startX); // Cambia la posición izquierda
+            } else if (this.resizerType.contains('bottom-right')) {
+                // Redimensionar desde la esquina inferior derecha (solo cambia el tamaño)
+                this.width = this.startWidth + (event.clientX - this.startX);
+                this.height = this.startHeight + (event.clientY - this.startY);
+                // No cambiamos `top` ni `left` aquí para evitar mover el diálogo
+            }
+    
+            // Bordes
+            if (this.resizerType.contains('top')) {
+                this.height = this.startHeight - (event.clientY - this.startY);
+                this.top = this.startY + (event.clientY - this.startY); // Cambia la posición superior
+            } else if (this.resizerType.contains('bottom')) {
+                this.height = this.startHeight + (event.clientY - this.startY);
+            } else if (this.resizerType.contains('left')) {
+                this.width = this.startWidth - (event.clientX - this.startX);
+                this.left = this.startX + (event.clientX - this.startX); // Cambia la posición izquierda
+            } else if (this.resizerType.contains('right')) {
+                this.width = this.startWidth + (event.clientX - this.startX);
+            }
+    
+            this.requestUpdate();
+        }
+    };
+     
+    
+    
+    
 
-  zoomOut() {
-    if (this.zoomLabel == "zoom_out_map") {
-      this.top = this.dialogSurface.style.top;
-      this.left = this.dialogSurface.style.left;
-      this.width = this.dialogSurface.style.width;
-      this.height = this.dialogSurface.style.height;
-      this.dispatchEvent(new CustomEvent("zoom-out"))
-      this.dialogShape = "0px";
-      this.dialogSurface.style.height = "100vh";
-      this.dialogSurface.style.top = "0px";
-      this.dialogSurface.style.left = "0px";
-      this.mdcDialog.style.height = "auto";
-      this.dialogSurface.style.minWidth = "100vw";
-      this.mdcDialog.style.minWidth = "100vw";
-      this.mdcScrim.style.height = "auto";
-      this.zoomLabel = "zoom_in_map"
-      this.expandLabel = "expand_more";
-    } else {
-      this.dispatchEvent(new CustomEvent("zoom-in"))
-      this.dialogSurface.style.minWidth = "auto";
-      this.mdcDialog.style.minWidth = "auto";
-      this.dialogShape = "5px";
-      this.dialogSurface.style.height = "auto";
-      this.mdcDialog.style.height = "100%";
-      this.mdcScrim.style.height = "100%";
-      this.zoomLabel = "zoom_out_map"
-      this.dialogSurface.style.top = this.top;
-      this.dialogSurface.style.left = this.left;
-      this.dialogSurface.style.width = this.width;
-      this.dialogSurface.style.height = this.height;
+    stopResize = () => {
+        this.isResizing = false;
+        document.removeEventListener('mousemove', this.handleResize);
+        document.removeEventListener('mouseup', this.stopResize);
+    };
+
+    minimize() {
+        const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
+        const headerHeight = this.shadowRoot.querySelector('.popup-header').offsetHeight;
+
+        if (this.isMinimized) {
+            this.height = 300; // Altura original
+            dialogContainer.style.height = `${this.height}px`;
+            this.expandLabel = "expand_more";
+        } else {
+            dialogContainer.style.height = `${headerHeight}px`; // Solo mostrar la cabecera
+            this.expandLabel = "expand_less";
+        }
+
+        this.isMinimized = !this.isMinimized;
+        this.requestUpdate();
     }
-  }
-}window.customElements.define('tr-dialog', TrDialog);
+
+    zoomOut() {
+        if (this.zoomLabel == "zoom_out_map") {
+            this.top = 0;
+            this.left = 0;
+            this.width = window.innerWidth;
+            this.height = window.innerHeight;
+            this.zoomLabel = "zoom_in_map";
+        } else {
+            this.width = 400;
+            this.height = 300;
+            this.top = 100;
+            this.left = 100;
+            this.zoomLabel = "zoom_out_map";
+        }
+        this.requestUpdate();
+    }
+
+    show() {
+        this.isOpen = true;
+        this.adjustSize()
+        const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
+        if (dialogContainer) {
+            dialogContainer.style.display = 'block'; // Mostrar el diálogo nuevamente
+        }
+    }
+    close(){
+        this.closeDialog()
+    }
+    closeDialog() {
+        this.isOpen = false;
+        const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
+        if (dialogContainer) {
+            dialogContainer.style.display = 'none'; // Ocultar el diálogo
+        }
+    }
+    connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('resize', this.adjustDialogSize.bind(this)); // Ajustar cuando la ventana cambie de tamaño
+    }
+    
+    disconnectedCallback() {
+        window.removeEventListener('resize', this.adjustDialogSize.bind(this)); // Limpiar el evento cuando el diálogo se elimine
+        super.disconnectedCallback();
+    }
+    
+    adjustDialogSize() {
+        const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
+        const content = this.shadowRoot.querySelector('.popup-content');
+        
+        // Obtener el tamaño disponible en la ventana
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+    
+        // Ajustar el tamaño del diálogo al contenido
+        const contentWidth = content.scrollWidth;
+        const contentHeight = content.scrollHeight;
+    
+        // Establecer el tamaño del diálogo, con un máximo del 90% del tamaño de la ventana
+        dialogContainer.style.width = Math.min(contentWidth, windowWidth * 0.9) + 'px';
+        dialogContainer.style.height = Math.min(contentHeight, windowHeight * 0.9) + 'px';
+    }
+    
+}customElements.define('tr-dialog', TrDialog);

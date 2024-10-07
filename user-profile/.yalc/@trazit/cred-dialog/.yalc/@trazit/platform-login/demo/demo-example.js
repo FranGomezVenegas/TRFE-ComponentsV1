@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { getUserSession } from '../';
+import { getUserSession} from '../src/PlatformLogin'
 import '../platform-login';
 
 class DemoExample extends LitElement {

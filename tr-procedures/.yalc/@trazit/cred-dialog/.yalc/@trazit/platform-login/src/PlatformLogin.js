@@ -1,59 +1,37 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, css } from 'lit';
 import { CommonCore } from '@trazit/common-core';
 import { platformLoginStyles } from './platform-login-styles.js'; // Importa los estilos
-import '@material/mwc-icon-button';
-import '@material/mwc-textfield';
-import '@material/mwc-select';
-import '@material/mwc-list/mwc-list-item';
-import '@spectrum-web-components/button/sp-button';
-import '@trazit/tr-dialog/tr-dialog';
+import '@material/web/iconbutton/outlined-icon-button.js';
+import '@material/web/textfield/filled-text-field.js';
+import '@material/web/dialog/dialog.js';
+import '@material/web/button/filled-button.js';
+import '@material/web/list/list-item.js';
+import '@material/web/button/elevated-button.js';
+import { langConfig, appLogin_authenticationMessage } from './langLabels.js';
 
 export function getUserSession() {
+  if (sessionStorage === undefined) { return ''; }
   let userSession = JSON.parse(sessionStorage.getItem("userSession"));
+  if (userSession === undefined) { return ''; }
   return userSession;
 }
 
-const langConfig = {
-  title: {
-    label_en: "Trace it !!!",
-    label_es: "¡¡ TRÁZALO !!",
-  },
-  password: {
-    label_en: "Password",
-    label_es: "Contraseña",
-  },
-  user: {
-    label_en: "User",
-    label_es: "Usuario",
-  },
-  buttonAccess: {
-    label_en: "Access",
-    label_es: "Entrar",
-  },
-  role: {
-    label_en: "Role",
-    label_es: "Rol",
-  },
-};
-
-const appLogin_authenticationMessage = {
-  connectedSuccess_singleRole: {
-    message_en: "Valid user, Starting session ... please wait",
-    message_es: "Usuario válido, iniciando sesión ... por favor espere",
-  },
-  connectedSuccess: {
-    message_en: "Valid user, please proceed selecting the role",
-    message_es: "Usuario válido, por favor escoja rol",
-  },
-  connectedFails: {
-    message_en: "I guess there is no user with those credentials",
-    message_es: "Me temo que el usuario o la contraseña no son correctos.",
-  },
-};
-
 export class PlatformLogin extends CommonCore {
   static get styles() {
-    return platformLoginStyles; // Usa los estilos importados
+    return [
+      platformLoginStyles, // Usa los estilos importados
+      css`
+        #rolesSelector {
+          position: absolute;
+          top: 150px;
+          left: 50px;
+          z-index: 1000; 
+          width: 250px; 
+          transform: translate(0, -50%);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+      `
+    ];
   }
 
   static get properties() {
@@ -91,7 +69,7 @@ export class PlatformLogin extends CommonCore {
   }
 
   showElements() {
-    const elements = this.shadowRoot.querySelectorAll('.login-box, .appLoginLogoOnTop, .input mwc-textfield, .input sp-button, mwc-icon-button#lang');
+    const elements = this.shadowRoot.querySelectorAll('.login-box, .appLoginLogoOnTop, .input md-filled-text-field, .input elevated-button, md-outlined-icon-button#lang');
     elements.forEach(el => el.classList.add('visible'));
   }
 
@@ -99,65 +77,67 @@ export class PlatformLogin extends CommonCore {
     return html`
       <div class="login-box layout vertical flex center">
         <img class="appLoginLogoOnTop" src="/images/trazit-removebg.png" />
-        <div class="input layout vertical flex" style="display: flex; flex-direction: column; ">
-          <mwc-textfield
+        <div class="input layout vertical flex" style="gap: 10px; display: flex; flex-direction: column;">
+          <md-filled-text-field
             id="user"
             label="${langConfig.user['label_' + this.lang]}"
             @keypress=${(e) => e.keyCode == 13 && this.password.focus()}
-          ></mwc-textfield>
-          <mwc-textfield
+          ></md-filled-text-field>
+          <md-filled-text-field
             id="password"
             label="${langConfig.password['label_' + this.lang]}"
             type="password"
-            iconTrailing="visibility"
+            trailingIcon="visibility"
             @keypress=${this.checkLogin}
             @click=${this.showPwd}
-          ></mwc-textfield>
-          <sp-button id="access" size="xl" @click=${this.login}
-            >${langConfig.buttonAccess['label_' + this.lang]}</sp-button
+          ></md-filled-text-field>
+          <elevated-button id="access" size="xl" @click=${this.login}
+            >${langConfig.buttonAccess['label_' + this.lang]}</elevated-button
           >
         </div>
         <div>
-          <mwc-icon-button
+          <md-outlined-icon-button
             id="lang"
             @click=${this.changeLang}
             title="Language"
-            >${this.lang}</mwc-icon-button
+            >${this.lang}</md-outlined-icon-button
           >
-          <tr-dialog id="rolesSelector2" @closed=${this.setRoleFromChip}>
-          </tr-dialog>
-          <tr-dialog id="rolesSelector" hideMin hideZoom hideActions>
-            <div class="content layout vertical flex center-justified">
+          <md-dialog id="rolesSelector" @closed=${this.setRoleFromChip}>
+            <div slot="headline">
+            
               ${this.lang === 'en'
                 ? html`<p class="modal-title">Select one role for this session</p>`
                 : html`<p class="modal-title">Selecciona un perfil para esta sesión</p>`}
-              <div class="role-container">
-                ${this.userRoles.map(
-                  (r) => html`
-                    <div
-                      class="role-chip"
-                      @click=${() => this.setRoleFromChip(r)}
-                      value="${r}"
-                    >
-                      ${r.replace(/_/g, ' ')}
-                    </div>
-                  `
-                )}
-              </div>
             </div>
-            <div class="modal-footer"></div>
-          </tr-dialog>
+              <form slot="content" id="form-id" method="dialog">              
+                <div class="role-container">
+                  ${this.userRoles && this.userRoles.length > 0
+                    ? this.userRoles.map(
+                      (r) => html`
+                        <div
+                          class="role-chip"
+                          @click=${() => this.setRoleFromChip(r)}
+                          value="${r}"
+                        >${r.replace(/_/g, ' ')}
+                        </div>
+                      `)
+                    : html`<p>No roles available</p>`
+                  }
+                </div>
+              </form>
+            </div>
+          </md-dialog>
         </div>
       </div>
     `;
   }
 
   get user() {
-    return this.shadowRoot.querySelector("mwc-textfield#user");
+    return this.shadowRoot.querySelector("md-filled-text-field#user");
   }
 
   get password() {
-    return this.shadowRoot.querySelector("mwc-textfield#password");
+    return this.shadowRoot.querySelector("md-filled-text-field#password");
   }
 
   checkLogin(e) {
@@ -183,35 +163,28 @@ export class PlatformLogin extends CommonCore {
 
       await this.reqPartialToken();
       await this.reqUserRoles();
-
+      console.log("User Roles:", this.userRoles); // Verifica si los roles se obtienen correctamente
       if (this.userRoles.length == 1) {
         this.role = this.userRoles[0];
         await this.reqFinalToken();
         this.authorized();
       } else {
-        this.shadowRoot.querySelector("#rolesSelector").open = true;
+        this.shadowRoot.querySelector("#rolesSelector").show();
+        this.requestUpdate(); // Forzar actualización
       }
     } catch (e) {
       this.clearSessionStorage();
     }
   }
 
-  async setRole(e) {
-    if (e.target.value) {
-      try {
-        await this.reqFinalToken();
-        this.authorized();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
-
-  async setRoleFromChip(value) {
-    if (value) {
-      this.role = value;
+  async setRoleFromChip(clickedRole) {
+    //const value = event.target.getAttribute('value');
+    if (clickedRole) {
+      this.role = clickedRole;
       await this.reqFinalToken();
       this.authorized();
+    }else{
+      alert('No rol')
     }
   }
 
@@ -219,7 +192,11 @@ export class PlatformLogin extends CommonCore {
     super.authorized();
     this.auth = true;
     this.hidden = true;
-    this.dispatchEvent(new CustomEvent("authorized", { bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent("authorized", { 
+      bubbles: true, 
+      composed: true,
+      detail: { auth: true }
+    }));
   }
 
   clearSessionStorage() {

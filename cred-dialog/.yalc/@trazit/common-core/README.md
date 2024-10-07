@@ -26,3 +26,4 @@ This area want to track the requirements that made this web component to become 
 ## Versioning track
 
 [v0.0.2 commented out the conditionals for just adding the toast noficiations when not local]
+[v1.1.0 Added DialogsFunctions, Actions and Buttons into]

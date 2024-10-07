@@ -1,0 +1,12 @@
+{
+    "name": "@trazit/utils-actions-functions",
+    "version": "1.0.0",
+    "description": "actions functions utilities",
+    "main": "ActionsFunctions.js",
+    "scripts": {
+        "postpublish": "node generateComponentVersions.js"        
+    },
+    "keywords": [],
+    "author": "Fran Gómez",
+    "license": "MIT"
+  }

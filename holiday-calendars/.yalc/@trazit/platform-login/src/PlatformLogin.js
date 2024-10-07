@@ -9,6 +9,8 @@ import '@material/web/list/list-item.js';
 import '@material/web/button/elevated-button.js';
 import { langConfig, appLogin_authenticationMessage } from './langLabels.js';
 
+import { MdFilledIconButtonStyles } from './md3-buttons-styles';
+
 export function getUserSession() {
   if (sessionStorage === undefined) { return ''; }
   let userSession = JSON.parse(sessionStorage.getItem("userSession"));
@@ -21,6 +23,7 @@ export class PlatformLogin extends CommonCore {
     return [
       platformLoginStyles, // Usa los estilos importados
       css`
+      ${MdFilledIconButtonStyles}
         #rolesSelector {
           position: absolute;
           top: 150px;
@@ -83,21 +86,15 @@ export class PlatformLogin extends CommonCore {
             label="${langConfig.user['label_' + this.lang]}"
             @keypress=${(e) => e.keyCode == 13 && this.password.focus()}
           ></md-filled-text-field>
-          <md-filled-text-field
-            id="password"
-            label="${langConfig.password['label_' + this.lang]}"
-            type="password"
-            trailingIcon="visibility"
-            @keypress=${this.checkLogin}
-            @click=${this.showPwd}
-          ></md-filled-text-field>
-          <elevated-button id="access" size="xl" @click=${this.login}
-            >${langConfig.buttonAccess['label_' + this.lang]}</elevated-button
-          >
+          <md-filled-text-field id="password" label="${langConfig.password['label_' + this.lang]}"
+            type="password" trailingIcon="visibility" @keypress=${this.checkLogin}
+            @click=${this.showPwd} ></md-filled-text-field>
+          <md-elevated-button id="access" style="background-color:rgb(157 112 205 / 25%);" size="xl" @click=${this.login}
+            >${langConfig.buttonAccess['label_' + this.lang]}</md-elevated-button>
         </div>
         <div>
           <md-outlined-icon-button
-            id="lang"
+            id="lang" style="padding-top:10px;"
             @click=${this.changeLang}
             title="Language"
             >${this.lang}</md-outlined-icon-button
