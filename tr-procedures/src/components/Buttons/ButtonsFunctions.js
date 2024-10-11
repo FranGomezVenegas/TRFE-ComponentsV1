@@ -376,9 +376,9 @@ export function ButtonsFunctions(base) {
               }
             } else {
               if (curValue.includes(selRow[rowArray.column])) {
-                d = true
-              } else {
                 d = false
+              } else {
+                d = true
               }
             }
           })
