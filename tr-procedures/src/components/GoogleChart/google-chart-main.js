@@ -27,12 +27,15 @@ export class GoogleChart extends BuildNumericFunctions(BuildLabelsFunctions(ApiF
     if (this.elem === undefined) { 
         return renderKpiChartTemplate(this, undefined); }
 
+    if (this.elem.elementName === 'fakeTrendlineExample'||this.elem.elementName==='cdatatable'){
+      return renderKpiChartTemplate(this, this.elem, this.getChartData(this.elem, this.data), this.lang);
+    }
     if (this.elem.endPointResponseArray !== undefined) {
       this.data = this.TRAZiTgetDataFromRoot(this.elem, this.data, this.viewModelFromProcModel);
     }
 
-    let isGrouperPresent=this.data!==undefined&&this.elem.grouper_field_name !== undefined && this.data[0][this.elem.grouper_field_name]!==undefined
-    let isCounterPresent=this.data!==undefined&&this.elem.counter_field_name !== undefined && this.data[0][this.elem.counter_field_name]!==undefined
+    let isGrouperPresent=this.data!==undefined&&Object.keys(this.data).length > 0&&this.elem.grouper_field_name !== undefined && this.data[0][this.elem.grouper_field_name]!==undefined
+    let isCounterPresent=this.data!==undefined&&Object.keys(this.data).length > 0&&this.elem.counter_field_name !== undefined && this.data[0][this.elem.counter_field_name]!==undefined
 
     if (!isGrouperPresent&&!isCounterPresent) {
         return renderKpiChartTemplate(this, undefined);}
@@ -57,7 +60,7 @@ export class GoogleChart extends BuildNumericFunctions(BuildLabelsFunctions(ApiF
     }
     if (elem.elementName === "cdatatable") {
       fakeData = [
-        ["Day", "Guardians of the Galaxy", "The Avengers", "Transformers: Age of Extinction",],
+        ["Day", "Group User 1", "User 2", "User 3",],
         [1, 37.8, 80.8, 41.8], [2, 30.9, 69.5, 32.4], [3, 25.4, 57, 25.7], [4, 11.7, 18.8, 10.5],
         [5, 11.9, 17.6, 10.4], [6, 8.8, 13.6, 7.7], [7, 7.6, 12.3, 9.6], [8, 12.3, 29.2, 10.6],
         [9, 16.9, 42.9, 14.8], [10, 12.8, 30.9, 11.6], [11, 5.3, 7.9, 4.7],

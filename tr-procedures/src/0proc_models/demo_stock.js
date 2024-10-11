@@ -3111,7 +3111,7 @@ export const Stock =
 	  },
 	  {
 		"type": "parentReadOnlyTable",
-		"allowMultiSelection": true,
+		"allowMultiSelection": false,
 		"refreshable": {
 		  "enable": true
 		},
@@ -3728,12 +3728,8 @@ export const Stock =
 			  "requiresGridItemSelected": true,
 			  "showWhenSelectedItem": [
 				{
-				  "column": "is_locked",
-				  "value": false
-				},
-				{
 				  "column": "status",
-				  "value": "NEW|QUARANTINE"
+				  "value": "NEW|QUARANTINE|NOT_AVAILABLEFOR_USE"
 				}
 			  ]
 			},
@@ -3762,7 +3758,7 @@ export const Stock =
 				"label_es": "Poner NO Disponible"
 			  },
 			  "requiresGridItemSelected": true,
-			  "hideWhenSelectedItem": [
+			  "showWhenSelectedItem": [
 				{
 				  "column": "status",
 				  "value": "AVAILABLE_FOR_USE"

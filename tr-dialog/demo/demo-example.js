@@ -53,9 +53,13 @@ class DemoExample extends LitElement {
     <button @click=${() => this.newDialog.show()}>Open NEW Dialog</button>
     
       <tr-dialog id="new-dialog"
-        .showCloseButton="${this.showCloseButton}"
-        .showDoButton="${this.showDoButton}"
-        @do-action="${this.handleDoAction}"      
+        .showCloseButton="${true}"
+        .showDoButton="${true}"
+        closeButtonLabel="Cancel"
+        doButtonLabel="Confirm"
+        @do-action="${this.handleDoAction}"
+        @close-dialog="${this.handleCloseDialog}"       
+        .dialogTitle="${{title:{"label_en":"hola", "label_es":"Hello"}}}     
       >
   <form slot="content" id="form-id" method="dialog"> 
     <div class="content layout vertical">

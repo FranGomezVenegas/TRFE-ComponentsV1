@@ -39,3 +39,4 @@ To run a local development server that serves the basic demo located in `demo/in
 [- v2.0.4 use lit instead of lit-element]
 [- v2.1.0 Upgrade for material design]
 [- v2.2.0 Implemented  recommendations for performance]
+[- v2.3.0 Split final token in two then we will have one way to set userRoleProceduresList then refresh the list anytime required]

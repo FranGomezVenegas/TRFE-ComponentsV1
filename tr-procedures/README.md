@@ -138,3 +138,4 @@ v0.2.35 Added spinning for GetViewData and all POST actions with files
 [- v0.2.86 tables max-height removed, parent child number of children circle now rounding all number, not just up to 2 digits, spec limit quantitative in both langues, parent child compatible with endpointResponseArray too]
 [- v0.2.87 fix for parent-child structure select/deselect and fix takePicture and upload being open both at the same time]
 [- v0.2.88 started decomposite DataViews in components and trazit-google-chart fixed for programs]
+[- v0.2.89 fixed logic for buttons show, the includes conditional was wrong returning false when it should be true and vice versa

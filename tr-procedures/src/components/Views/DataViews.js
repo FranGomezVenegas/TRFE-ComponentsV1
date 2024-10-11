@@ -1276,12 +1276,6 @@ export function DataViews(base) {
         data = data[0]
       }
       return html`
-        ${elem === undefined || elem.title === undefined
-          ? nothing
-          : html`<span
-              style="color: rgb(20, 115, 230);font-size: 30px;margin-top: 10px;font-weight: bold;"
-              >${elem.title["label_" + this.lang]}</span
-            >`}
         ${data === undefined
           ? html`${elem.hideNoDataMessage !== undefined &&
             elem.hideNoDataMessage
@@ -1451,6 +1445,12 @@ export function DataViews(base) {
                 class="layout vertical flex wrap"
                 style="${elem.style !== undefined ? elem.style : ""}"
               >
+                ${elem === undefined || elem.title === undefined
+                  ? nothing
+                  : html`<span
+                      style="align-self: center; color: rgb(20, 115, 230); font-size: 20px; font-weight: bold;"
+                      >${elem.title["label_" + this.lang]}</span
+                >`}              
                 <div style="flex-basis: auto; width: auto;">
                   ${this.getButton(elem, data, data, true)}
                 </div>

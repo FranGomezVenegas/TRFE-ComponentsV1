@@ -3,5 +3,6 @@
   "isForTesting": false,
   "fullscreen": false,
   "backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
+  "backendUrlLocal": "http://localhost:8081/TRAZiT-API",
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions"
 }

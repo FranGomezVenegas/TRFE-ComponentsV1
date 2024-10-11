@@ -1,11 +1,11 @@
 {
   "dbName": "demo_v0_9_2",
   "isForTesting": false,
-  "backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
+  "backendUrlCloud": "https://platform.trazit.net:8443/TRAZiT-API",
   "dbNameDemo2": "demo_v0_9_2",
   "backendUrlNonSecure": "http://51.75.202.142:8888/TRAZiT-API",
   "backendUrlhttps": "http://51.75.202.142:8888/TRAZiT-API",
-  "backendUrlLocal": "http://localhost:8081/TRAZiT-API",
+  "backendUrl": "http://localhost:8081/TRAZiT-API",
   "backendUrlLabP": "http://platform.trazit.net:8888/LabPLANET-API",
   "backendUrlLocalLabPLANETAPI": "http://localhost:8080/LabPLANET-API",
 
@@ -202,9 +202,23 @@
     "procName":  "mb_em", 
     "viewName": "Browser", 
     "filterName" :  "" 
-  },   
+  }, 
+  "localDefaultView": {
+    "procName":  "DiseaseStudies", 
+    "viewName": "LabDirector", 
+    "filterName" :  "" 
+  },
+  "localDefaultView": {
+    "procName":  "stock", 
+    "viewName": "InventoryLotsGeneral", 
+    "filterName" :  "" 
+  },
+
+  
+
+  
   "fakeEnd":{
-    "fake": "InventoryLotsGeneral20240729"
+    "fake": " CasesManager InventoryLotsGeneral20240729"
   }  
  
 }

@@ -59,6 +59,7 @@ class DemoExample extends LitElement {
       >
   <form slot="content" id="form-id" method="dialog"> 
     <div class="content layout vertical">
+    sss
       <md-filled-text-field label="User" type="text"></md-filled-text-field>
       <md-filled-text-field label="Password" type="password"
         iconTrailing="visibility" @click=${this.showPwd}>
