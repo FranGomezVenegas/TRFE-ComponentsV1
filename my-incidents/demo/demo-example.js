@@ -30,8 +30,7 @@ class DemoExample extends LitElement {
     return html`
       <platform-login @authorized=${e=>{
         this.auth=e.target.auth;
-        this.incidents.config=this.pLogin.config;
-        this.rLogin.config=this.pLogin.config;
+        this.incidents.config=this.pLogin.config;        
       }}></platform-login>
       <div ?hidden="${!this.auth}">
         <h1>Hi ${this.getUser()}, you are authorized</h1>

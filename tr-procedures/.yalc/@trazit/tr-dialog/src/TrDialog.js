@@ -1,295 +1,375 @@
-import { LitElement, html, css } from 'lit';
-import '@material/web/dialog/dialog.js';
-import '@material/web/icon/icon.js';
-import '@material/web/button/text-button';
-export class TrDialog extends LitElement {
-    static properties = {
-        showCloseButton: { type: Boolean },
-        showDoButton: { type: Boolean },
-      };    
-  static styles = [
-    css`
-      :host {
-        display: block;
+import { html, css } from 'lit';
+import { cssClasses } from '@material/dialog/constants';
+import { classMap } from 'lit/directives/class-map.js';
+import { Dialog } from '@material/mwc-dialog';
+import '@material/mwc-button';
+import '@material/mwc-icon';
+
+export class TrDialog extends Dialog {
+  static get styles() {
+    return [
+      super.styles,
+      css`
+      mwc-icon.corner {
+        cursor: pointer;
+        --mdc-icon-size: 15px;
+        margin: auto 5px;
+        color: rgb(94, 145, 186);
       }
-      md-dialog {
-        display: none; /* Asegura que el diálogo esté oculto inicialmente */
+      ::slotted(mwc-icon) {
+        cursor: pointer;
+        --mdc-icon-size: 15px;
       }
-      md-dialog[open] {
-        display: block; /* Mostrar solo cuando esté abierto */
+      mwc-icon[hidden] {
+        display: none;
       }
-      .resizer-top, .resizer-left, .resizer-top-left, .resizer-top-right, .resizer-bottom-left {
+      div[hidden] {
+        display: none;
+      }
+      /*Resizeable*/
+
+      .mdc-dialog__surface .resizer-right {
+        width: 5px;
+        height: 100%;
+        background: transparent;
         position: absolute;
+        right: 0;
+        bottom: 0;
+        cursor: e-resize;
+      }
+
+      .mdc-dialog__surface .resizer-bottom {
+        width: 100%;
+        height: 5px;
+        background: transparent;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        cursor: n-resize;
+      }
+
+      .mdc-dialog__surface .resizer-both {
+        width: 5px;
+        height: 5px;
         background: transparent;
         z-index: 10;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        cursor: nw-resize;
       }
-.resizer-top {
-      height: 5px;
-      width: 100%;
-      top: 0;
-      cursor: n-resize;
-    }
-    .resizer-left {
-      width: 5px;
-      height: 100%;
-      left: 0;
-      cursor: w-resize;
-    }
-    .resizer-top-left {
-      width: 10px;
-      height: 10px;
-      top: 0;
-      left: 0;
-      cursor: nw-resize;
-    }
-    .resizer-top-right {
-      width: 10px;
-      height: 10px;
-      top: 0;
-      right: 0;
-      cursor: ne-resize;
-    }
-    .resizer-bottom-left {
-      width: 10px;
-      height: 10px;
-      bottom: 0;
-      left: 0;
-      cursor: sw-resize;
-    }
-    .resizer-right {
-      width: 5px;
-      height: 100%;
-      right: 0;
-      cursor: e-resize;
-    }
-    .resizer-bottom {
-      height: 5px;
-      width: 100%;
-      bottom: 0;
-      cursor: s-resize;
-    }
-    .resizer-both {
-      width: 10px;
-      height: 10px;
-      right: 0;
-      bottom: 0;
-      cursor: se-resize;
-    } 
-.resizer-top, .resizer-left, .resizer-top-left, .resizer-top-right, .resizer-bottom-left {
-  z-index: 100; /* Asegura que los resizers estén por encima del contenido del diálogo */
-}             
-    `,
-  ];
 
+      /*NOSELECT*/
+
+      .mdc-dialog__surface * {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome and Opera */
+      }
+
+      .mdc-dialog__surface {
+        max-width: 100% !important;
+      }
+
+      .popup-header {
+        cursor: move;
+      }
+      `
+    ];
+  }
+
+  render() {
+    const classes = {
+      [cssClasses.STACKED]: this.stacked,
+    };
+    let heading = html``;
+    if (this.heading) {
+      heading = this.renderHeading();
+    }
+    const actionsClasses = {
+      'mdc-dialog__actions': !this.hideActions,
+    };
+    return html`
+    <style>
+      :host {
+        --mdc-shape-medium: ${this.dialogShape};
+        --mdc-dialog-z-index: ${this.zIndex};
+      }
+    </style>
+    <div class="mdc-dialog ${classMap(classes)}" role="alertdialog" aria-modal="true" aria-labelledby="title"
+      aria-describedby="content">
+      <div class="mdc-dialog__container">
+        <div class="mdc-dialog__surface" style="top: 0px; left: 0px">
+          ${heading}
+          <div id="content" class="mdc-dialog__content">
+            <slot id="contentSlot"></slot>
+          </div>
+          <footer id="actions" class="${classMap(actionsClasses)}">
+            <span>
+              <slot name="secondaryAction"></slot>
+            </span>
+            <span>
+              <slot name="primaryAction"></slot>
+            </span>
+          </footer>
+          ${this.cornerButton()}
+        </div>
+      </div>
+      <div class="mdc-dialog__scrim"></div>
+    </div>`;
+  }
+
+  get mdcDialog() {
+    return this.shadowRoot.querySelector(".mdc-dialog")
+  }
+
+  get mdcScrim() {
+    return this.shadowRoot.querySelector(".mdc-dialog__scrim")
+  }
+
+  get dialogSurface() {
+    return this.shadowRoot.querySelector(".mdc-dialog__surface")
+  }
+
+  get dialogContent() {
+    return this.shadowRoot.querySelector("#content")
+  }
+
+  get dialogHeader() {
+    return this.shadowRoot.querySelector(".popup-header");
+  }
+
+  static get properties() {
+    return {
+      dialogShape: { type: String },
+      zoomLabel: { type: String },
+      expandLabel: { type: String },
+      hideMin: { type: Boolean, reflect: true },
+      hideZoom: { type: Boolean, reflect: true },
+      hideXtoClose: { type: Boolean, reflect: true },
+      zIndex: { type: Number }
+    };
+  }
+
+  constructor() {
+    super();
+    this.dialogShape = "5px"
+    this.zoomLabel = "zoom_out_map"
+    this.expandLabel = "expand_more"
+    this.hideMin = false;
+    this.hideZoom = false;
+    this.hideXtoClose = false;
+    this.top = "0px";
+    this.left = "0px";
+    this.width = "0px";
+    this.height = "0px";
+    this.zIndex = 7;
+  }
 
   firstUpdated() {
+    super.firstUpdated()
+    this.shadowRoot.querySelector(".mdc-dialog__surface").style.padding = "20px"
+    this.initialize();
+  }
+
+  initialize() {
     this.initResizeElement();
     this.initDragElement();
   }
 
-  render() {
+  cornerButton() {
+    //alert('hideXtoClose '+this.hideXtoClose)
     return html`
-      <md-dialog id="new-dialog">
-        <div slot="headline" class="popup-header">
-            <slot name="icon1" style="margin-right: 5px;"></slot>
-<div class="corner" @click=${this.minimize}>Expand</div>
-<div class="corner" @click=${this.zoomOut}>Zoom</div>
-<div class="corner" dialogAction="decline" @click=${this.close}>Close</div>
-            
+      <div class="popup-header" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 30px;">
+        <div style="position: absolute; top: 10px; left: 10px;">
+          <slot name="topLeft"></slot>
         </div>
-        <form slot="content" id="form-id" method="dialog">    
-        <slot name="content"></slot> 
-        </form>
-        <div slot="actions">
-            ${this.showCloseButton 
-            ? html`<md-text-button form="form-id" @click="${this.close}">close</md-text-button>` 
-            : ''}
+        <div style="position: absolute; top: 10px; right: 10px;">
+          <slot name="icon1" style="margin-right: 5px;"></slot>
+          <mwc-icon ?hidden=${this.hideMin} class="corner" @click=${this.minimize}>${this.expandLabel}</mwc-icon>
+          <mwc-icon ?hidden=${this.hideZoom} class="corner" @click=${this.zoomOut}>${this.zoomLabel}</mwc-icon>
+          <mwc-icon ?hidden=${this.hideXtoClose} class="corner" dialogAction="decline">close</mwc-icon>
+        </div>
+      </div>
+    `
+  }
 
-            ${this.showDoButton 
-                ? html`<md-text-button form="form-id" @click="${this.doAction}">Do</md-text-button>` 
-                : ''}
-          <slot name="ad-hoc-buttons"></slot> <!-- Slot para botones adicionales -->
-        </div>
-        <!-- Resizers -->
-        <div class="resizer-top"></div>
-        <div class="resizer-left"></div>
-        <div class="resizer-top-left"></div>
-        <div class="resizer-top-right"></div>
-        <div class="resizer-bottom-left"></div>
-        <div class="resizer-right"></div>
-        <div class="resizer-bottom"></div>
-        <div class="resizer-both"></div>
-      </md-dialog>
-    `;
-  }  
   show() {
-    const dialog = this.shadowRoot.querySelector('md-dialog');
-    if (dialog) {
-      const dialogSurface = dialog.shadowRoot.querySelector('.mdc-dialog__surface');
-      if (dialogSurface) {
-          dialogSurface.style.width = '600px'; // Ancho inicial deseado
-          dialogSurface.style.height = '400px'; // Altura inicial deseada
-          dialogSurface.style.top = '50%'; // Posición inicial deseada
-          dialogSurface.style.left = '50%'; // Posición inicial deseada
-          dialogSurface.style.transform = 'translate(-50%, -50%)'; // Centrar el diálogo
-      }
-      dialog.show(); // Mostrar el diálogo usando el método nativo de `md-dialog`
-    } else {
-      console.error('md-dialog element not found');
+    if (this.dialogContent!==undefined&&this.dialogContent!==null){
+      this.dialogContent.style.overflow = "auto";
     }
-  }
-  
-
-  close() {
-    const dialog = this.shadowRoot.querySelector('md-dialog');
-    if (dialog) {
-      dialog.close(); // Cerrar el diálogo usando el método nativo de `md-dialog`
-    } else {
-      console.error('md-dialog element not found');
+    if (this.dialogSurface!==undefined&&this.dialogSurface!==null){
+      this.dialogSurface.style.overflow = "auto";
+      this.dialogSurface.style.top = "0";
+      this.dialogSurface.style.height = "auto";
     }
+      this.expandLabel = "expand_more";
+    super.show()
   }
 
-  minimize() {
-    const dialogSurface = this.shadowRoot.querySelector('md-dialog'); // Asegúrate de seleccionar el md-dialog
-    if (!dialogSurface) return;
+  initResizeElement() {
+    let parentPopup = null;
+    let resizer = null;
 
-    this.dialogShape = "5px";
-    dialogSurface.style.minWidth = "auto";
-    dialogSurface.style.height = "auto";
-    dialogSurface.style.overflow = "hidden"; // Asegúrate de manejar el overflow correctamente
+    let startX, startY, startWidth, startHeight;
 
-    if (this.expandLabel === "expand_more") {
-        dialogSurface.style.top = "45vh";
-        dialogSurface.style.height = "0";
-        this.expandLabel = "expand_less";
-    } else {
-        dialogSurface.style.top = "0";
-        dialogSurface.style.height = "auto";
-        this.expandLabel = "expand_more";
+    let right = document.createElement("div");
+    right.className = "resizer-right";
+    this.dialogSurface.appendChild(right);
+    right.addEventListener("mousedown", initDrag, false);
+    right.parentPopup = this.dialogSurface;
+
+    let bottom = document.createElement("div");
+    bottom.className = "resizer-bottom";
+    this.dialogSurface.appendChild(bottom);
+    bottom.addEventListener("mousedown", initDrag, false);
+    bottom.parentPopup = this.dialogSurface;
+
+    let both = document.createElement("div");
+    both.className = "resizer-both";
+    this.dialogSurface.appendChild(both);
+    both.addEventListener("mousedown", initDrag, false);
+    both.parentPopup = this.dialogSurface;
+
+    function initDrag(e) {
+      parentPopup = this.parentPopup;
+      resizer = this;
+
+      startX = e.clientX;
+      startY = e.clientY;
+      startWidth = parseInt(
+        document.defaultView.getComputedStyle(parentPopup).width,
+        10
+      );
+      startHeight = parseInt(
+        document.defaultView.getComputedStyle(parentPopup).height,
+        10
+      );
+      document.documentElement.addEventListener("mousemove", doDrag, false);
+      document.documentElement.addEventListener("mouseup", stopDrag, false);
     }
-}
-zoomOut() {
-    const dialogSurface = this.shadowRoot.querySelector('md-dialog'); // Asegúrate de seleccionar el md-dialog
-    if (!dialogSurface) return;
 
-    if (this.zoomLabel === "zoom_out_map") {
-        this.top = dialogSurface.style.top;
-        this.left = dialogSurface.style.left;
-        this.width = dialogSurface.style.width;
-        this.height = dialogSurface.style.height;
-        
-        this.dispatchEvent(new CustomEvent("zoom-out"));
-
-        this.dialogShape = "0px";
-        dialogSurface.style.height = "100vh";
-        dialogSurface.style.top = "0px";
-        dialogSurface.style.left = "0px";
-        dialogSurface.style.minWidth = "100vw";
-        this.zoomLabel = "zoom_in_map";
-        this.expandLabel = "expand_more";
-    } else {
-        this.dispatchEvent(new CustomEvent("zoom-in"));
-
-        dialogSurface.style.minWidth = "auto";
-        this.dialogShape = "5px";
-        dialogSurface.style.height = "auto";
-        dialogSurface.style.top = this.top;
-        dialogSurface.style.left = this.left;
-        dialogSurface.style.width = this.width;
-        dialogSurface.style.height = this.height;
-        this.zoomLabel = "zoom_out_map";
+    function doDrag(e) {
+      if(resizer.classList.contains('resizer-right') || resizer.classList.contains('resizer-both')) 
+        parentPopup.style.width = startWidth + (e.clientX - startX) * 2 + "px";
+      if(resizer.classList.contains('resizer-bottom') || resizer.classList.contains('resizer-both')) 
+        parentPopup.style.height = startHeight + (e.clientY - startY) * 2 + "px";
     }
-}
 
-initDragElement() {
-    const dialog = this.shadowRoot.querySelector('md-dialog');
-    if (!dialog) return;
-  
-    const dialogSurface = dialog.shadowRoot.querySelector('.mdc-dialog__surface');
-    if (!dialogSurface) return; // Verificación adicional para evitar errores
-  
-    const header = this.shadowRoot.querySelector('.popup-header');
+    function stopDrag() {
+      document.documentElement.removeEventListener("mousemove", doDrag, false);
+      document.documentElement.removeEventListener("mouseup", stopDrag, false);
+    }
+  }
+
+  initDragElement() {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  
-    if (header) {
-      header.onmousedown = dragMouseDown;
+    let element = null;
+    let currentZIndex = 100; //TODO reset z index when a threshold is passed
+    
+    this.dialogSurface.onmousedown = function() {
+      this.style.zIndex = "" + ++currentZIndex;
+    };
+
+    if (this.dialogHeader) {
+      this.dialogHeader.parentPopup = this.dialogSurface;
+      this.dialogHeader.onmousedown = dragMouseDown;
     }
   
     function dragMouseDown(e) {
-      e.preventDefault();
-      e.stopPropagation();
+      element = this.parentPopup;
+      element.style.zIndex = "" + ++currentZIndex;
+  
+      e = e || window.event;
+      // get the mouse cursor position at startup:
       pos3 = e.clientX;
       pos4 = e.clientY;
       document.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
       document.onmousemove = elementDrag;
     }
   
     function elementDrag(e) {
-      if (!dialogSurface) return; // Verificación adicional para evitar errores
-      e.preventDefault();
-      dialogSurface.style.top = (dialogSurface.offsetTop - (pos4 - e.clientY)) + "px";
-      dialogSurface.style.left = (dialogSurface.offsetLeft - (pos3 - e.clientX)) + "px";
+      if (!element) {
+        return;
+      }
+  
+      e = e || window.event;
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
       pos3 = e.clientX;
       pos4 = e.clientY;
+      // set the element's new position:
+      element.style.top = parseInt(element.style.top, 10) - pos2 + "px";
+      element.style.left = parseInt(element.style.left, 10) - pos1 + "px";
     }
   
     function closeDragElement() {
+      /* stop moving when mouse button is released:*/
       document.onmouseup = null;
       document.onmousemove = null;
     }
   }
-  
-  initResizeElement() {
-    const dialog = this.shadowRoot.querySelector('md-dialog');
-    if (!dialog) return;
-  
-    const dialogSurface = dialog.shadowRoot.querySelector('.mdc-dialog__surface');
-    if (!dialogSurface) return; // Verificación adicional para evitar errores
-  
-    const resizers = this.shadowRoot.querySelectorAll('.resizer-top, .resizer-left, .resizer-right, .resizer-bottom, .resizer-top-left, .resizer-top-right, .resizer-bottom-left, .resizer-both');
-    let startX, startY, startWidth, startHeight;
-  
-    resizers.forEach(resizer => {
-      resizer.addEventListener('mousedown', (e) => initDrag(e, resizer), false);
-    });
-  
-    const initDrag = (e, resizer) => {
-      startX = e.clientX;
-      startY = e.clientY;
-      startWidth = parseInt(document.defaultView.getComputedStyle(dialogSurface).width, 10);
-      startHeight = parseInt(document.defaultView.getComputedStyle(dialogSurface).height, 10);
-  
-      const doDrag = (e) => {
-        if (resizer.classList.contains('resizer-right') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-top-right') || resizer.classList.contains('resizer-bottom-right')) {
-          dialogSurface.style.width = startWidth + (e.clientX - startX) + 'px';
-        }
-        if (resizer.classList.contains('resizer-bottom') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-bottom-left') || resizer.classList.contains('resizer-bottom-right')) {
-          dialogSurface.style.height = startHeight + (e.clientY - startY) + 'px';
-        }
-        if (resizer.classList.contains('resizer-left') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-top-left') || resizer.classList.contains('resizer-bottom-left')) {
-          dialogSurface.style.width = startWidth - (e.clientX - startX) + 'px';
-          dialogSurface.style.left = dialogSurface.offsetLeft + (e.clientX - startX) + 'px';
-        }
-        if (resizer.classList.contains('resizer-top') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-top-left') || resizer.classList.contains('resizer-top-right')) {
-          dialogSurface.style.height = startHeight - (e.clientY - startY) + 'px';
-          dialogSurface.style.top = dialogSurface.offsetTop + (e.clientY - startY) + 'px';
-        }
-      };
-  
-      const stopDrag = () => {
-        document.documentElement.removeEventListener('mousemove', doDrag, false);
-        document.documentElement.removeEventListener('mouseup', stopDrag, false);
-      };
-  
-      document.documentElement.addEventListener('mousemove', doDrag, false);
-      document.documentElement.addEventListener('mouseup', stopDrag, false);
-    };
-  }
-  
-  doAction() {
-    this.dispatchEvent(new CustomEvent('do-action'));
-  }   
- 
-}
 
-//customElements.define('tr-dialog', TrDialog);
+  minimize() {
+    this.dialogSurface.style.minWidth = "auto";
+    this.mdcDialog.style.minWidth = "auto";
+    this.dialogShape = "5px";
+    this.dialogSurface.style.height = "auto";
+    this.mdcDialog.style.height = "100%";
+    this.mdcScrim.style.height = "100%";
+    this.zoomLabel = "zoom_out_map"
+
+    if (this.expandLabel == "expand_more") {
+      this.dialogContent.style.overflow = "hidden";
+      this.dialogSurface.style.overflow = "hidden";
+      this.dialogSurface.style.top = "45vh";
+      this.dialogSurface.style.height = "0";
+      this.expandLabel = "expand_less";
+    } else {
+      this.dialogContent.style.overflow = "auto";
+      this.dialogSurface.style.overflow = "auto";
+      this.dialogSurface.style.top = "0";
+      this.dialogSurface.style.height = "auto";
+      this.expandLabel = "expand_more";
+    }
+  }
+
+  zoomOut() {
+    if (this.zoomLabel == "zoom_out_map") {
+      this.top = this.dialogSurface.style.top;
+      this.left = this.dialogSurface.style.left;
+      this.width = this.dialogSurface.style.width;
+      this.height = this.dialogSurface.style.height;
+      this.dispatchEvent(new CustomEvent("zoom-out"))
+      this.dialogShape = "0px";
+      this.dialogSurface.style.height = "100vh";
+      this.dialogSurface.style.top = "0px";
+      this.dialogSurface.style.left = "0px";
+      this.mdcDialog.style.height = "auto";
+      this.dialogSurface.style.minWidth = "100vw";
+      this.mdcDialog.style.minWidth = "100vw";
+      this.mdcScrim.style.height = "auto";
+      this.zoomLabel = "zoom_in_map"
+      this.expandLabel = "expand_more";
+    } else {
+      this.dispatchEvent(new CustomEvent("zoom-in"))
+      this.dialogSurface.style.minWidth = "auto";
+      this.mdcDialog.style.minWidth = "auto";
+      this.dialogShape = "5px";
+      this.dialogSurface.style.height = "auto";
+      this.mdcDialog.style.height = "100%";
+      this.mdcScrim.style.height = "100%";
+      this.zoomLabel = "zoom_out_map"
+      this.dialogSurface.style.top = this.top;
+      this.dialogSurface.style.left = this.left;
+      this.dialogSurface.style.width = this.width;
+      this.dialogSurface.style.height = this.height;
+    }
+  }
+}

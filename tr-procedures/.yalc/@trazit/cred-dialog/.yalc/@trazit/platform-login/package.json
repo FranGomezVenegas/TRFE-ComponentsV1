@@ -3,13 +3,14 @@
   "description": "Component login of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "2.1.0",
+  "version": "2.0.4",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
+    "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@material/mwc-icon-button": "^0.27.0",
     "@material/mwc-list": "^0.27.0",
     "@material/mwc-select": "^0.27.0",
@@ -19,5 +20,5 @@
     "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
     "lit": "^2.0.2"
   },
-  "yalcSig": "a6fec34fa327a734e0a3a2bc389217f8"
+  "yalcSig": "cdb983b2eb77196f35460f315723ba35"
 }

@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import '@material/web/icon/icon.js';
 import '@material/web/button/filled-button'
 
@@ -26,7 +26,8 @@ export class TrDialog extends LitElement {
         hideXtoClose: { type: Boolean },
         isMinimized: { type: Boolean },
         lang: {type:Boolean},
-        dialogTitle:{type:Object}
+        dialogTitle:{type:Object},
+        isOpen:{ type: Boolean }
     };
 
     constructor() {
@@ -45,63 +46,54 @@ export class TrDialog extends LitElement {
         this.isMinimized = false;   
         this.lang=""   
         this.dialogTitle={}
+        this.isOpen=false
     }
 
     static styles = css`
-        host {
+        :host {
             --md-icon-size, 14px;
         }
-        .dialog-container {
-            position: absolute;
-            background-color: white;
-            border: 1px solid black;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            overflow: hidden;
-            max-width: 90vw; /* Limitar el tamaño del diálogo a un 90% del ancho de la ventana */
-            max-height: 90vh; /* Limitar el tamaño del diálogo a un 90% de la altura de la ventana */
-            min-width: 300px; /* Establecer un ancho mínimo */
-            min-height: 100px; /* Establecer una altura mínima */
-            resize: both; /* Permitir redimensionar el diálogo manualmente si es necesario */
-        }
+    .dialog-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 1px solid black;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        max-width: 90vw;
+        max-height: 90vh;
+        width: auto;
+        height: auto;
+        overflow: hidden;
+    }
+
 
         .popup-content {
-            overflow-y: auto;
             padding: 10px;
+            flex-grow: 1;      /* Permitir que el contenido crezca */
+            overflow-y: auto;  /* Permitir scroll si el contenido excede el tamaño máximo */
+            max-height: 80vh;  /* El contenido interno no puede superar el 80% del alto de la pantalla */
         }
 
         .popup-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            /* padding: 10px; */
             background-color: rgb(94, 145, 186);
             color: white;
+            padding: 10px;
             cursor: move;
         }
+
 
         .popup-content.minimized {
             display: none; /* Ocultar contenido cuando está minimizado */
         }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 100px;
-            padding: 4px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            box-sizing: border-box;
-            background: #fff;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        md-icon, md-filled-button {
-            cursor: pointer;
-            --_container-color:rgb(94, 145, 186);
-            
-        } 
 
         md-filled-button {
         --_container-height: 20px;
@@ -110,17 +102,23 @@ export class TrDialog extends LitElement {
             --md-filled-button-height: 32px; /* Altura mínima más baja */
         }
 
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            padding: 4px;
+            background: #fff;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        md-icon, md-filled-button {
+            cursor: pointer;
+            --_container-color: rgb(94, 145, 186);
+        }
+
         .icon-container {
             display: flex;
             gap: 8px;
-            right: 5px;
-            position: relative;            
-        }
-
-        /* Estilo de los íconos en la esquina */
-        md-icon {
-            cursor: pointer;
-            color: white;
         }
 
         .resizer {
@@ -200,17 +198,51 @@ export class TrDialog extends LitElement {
         .resizer.right {
             right: -5px; /* Colocarlo correctamente a la derecha */
         }
+       /* Responsive styles */
+        @media (max-width: 768px) {
+            .dialog-container {
+                max-width: 95vw; /* En pantallas pequeñas, usar casi todo el ancho del viewport */
+                max-height: 95vh; /* En pantallas pequeñas, usar casi todo el alto del viewport */
+            }
+
+            .button-container {
+                flex-direction: column; /* Colocar botones verticalmente en pantallas pequeñas */
+                gap: 20px;
+            }
+        }          
     `;
 
+    updated(changedProperties) {
+        super.updated(changedProperties);
+    
+        // Si la propiedad dialogTitle cambió, forzar una actualización
+        if (changedProperties.has('dialogTitle')) {
+            this.requestUpdate();
+        }
+        if (changedProperties.has('isOpen') && this.isOpen) {
+            this._expandDialog(); // Llamamos a una función para expandir el diálogo completamente
+          }        
+    }  
+    _expandDialog() {
+        const dialogElement = this.shadowRoot.querySelector('.dialog-container');
+        if (dialogElement) {
+            dialogElement.style.display = 'block'; // Ensure dialog is visible first
+            this.adjustSize(); // Adjust size after ensuring the dialog is visible
+            dialogElement.style.height = 'auto'; // Aseguramos que el tamaño del contenido se ajuste automáticamente
+            dialogElement.style.maxHeight = '100%'; 
+            dialogElement.style.transition = 'height 0.3s ease';
+        }
+     }
+   
     render() {
         return html`
-          <div class="dialog-container"
+          <div class="dialog-container" ?open=${this.isOpen}
               style="top: ${this.top}px; left: ${this.left}px; width: ${this.width}px; height: ${this.height}px;"
               @mousedown=${this.startDragFromEmptySpace}>
             <div class="popup-header" @mousedown=${this.startDrag}>
                 <span>
-                    ${this.dialogTitle!==undefined&&this.dialogTitle.icon!==undefined?nothing:html`<md-icon>${this.dialogTitle.icon}</md-icon>`}
-                    ${this.dialogTitle!==undefined&&this.dialogTitle["title_"+this.lang]!==undefined?nothing:this.dialogTitle["title_"+this.lang]}
+                    ${this.dialogTitle!==undefined&&this.dialogTitle.icon!==undefined?html`<md-icon src="${this.dialogTitle.icon}">${this.dialogTitle.icon}</md-icon>`:nothing}
+                    ${this.dialogTitle!==undefined&&this.dialogTitle["title_"+this.lang]!==undefined?this.dialogTitle["title_"+this.lang]:nothing}
                 </span>
                 <div class="icon-container">
                     <md-icon 
@@ -229,16 +261,16 @@ export class TrDialog extends LitElement {
             </div>
 
             <div class="popup-content ${this.isMinimized ? 'minimized' : ''}">
-                <slot></slot>
+                <slot name="content"></slot>
             </div>
 
             <div class="button-container">
                 ${this.showCloseButton ? html`
-                    <md-filled-button style="--_container-color:#892a25bf;" @click=${this.closeDialog}>${this.closeButtonLabel===undefined?`${defaultButtonLabels.close["label_"+this.lang]}`:this.closeButtonLabel}</md-filled-button>
+                    <md-filled-button style="--_container-color:#892a25bf;" @click=${this.closeDialog}>${this.closeButtonLabel===undefined?`${defaultButtonLabels.close["label_"+this.lang]}`:this.closeButtonLabel["label_"+this.lang]}</md-filled-button>
                 ` : ''}
                 
                 ${this.showDoButton ? html`
-                    <md-filled-button @click=${this.handleDoAction}>${this.doButtonLabel===undefined?`${defaultButtonLabels.do["label_"+this.lang]}`:this.doButtonLabel}</md-filled-button>
+                    <md-filled-button @click=${this.handleDoAction}>${this.doButtonLabel===undefined?`${defaultButtonLabels.do["label_"+this.lang]}`:this.doButtonLabel["label_"+this.lang]}</md-filled-button>
                 ` : ''}
             </div>            
             <!-- Resizers en las esquinas y bordes -->
@@ -255,15 +287,47 @@ export class TrDialog extends LitElement {
         `;
     }
     firstUpdated() {
-        // Verificar si el botón de acción existe antes de intentar enfocarlo
+        this.closeDialog()
         const doButton = this.shadowRoot.querySelector('#do-button');
         if (doButton) {
             doButton.focus();
         }
         if (this.lang===undefined||this.lang.length==0){
             this.lang="en"
+        }        
+        // Llamamos a adjustSize al iniciar para ajustar el tamaño según el contenido inicial
+        this.adjustSize();
+      
+        // Creamos un MutationObserver para detectar cambios en el slot
+        const slot = this.shadowRoot.querySelector('slot[name="content"]');
+        const observer = new MutationObserver(() => this.adjustSize());
+        observer.observe(slot, { childList: true, subtree: true });
+      }
+      
+      adjustSize() {
+        // Obtenemos el contenido del slot
+        const slot = this.shadowRoot.querySelector('slot[name="content"]');
+        const assignedElements = slot.assignedElements();
+      
+        if (assignedElements.length === 0) {
+          return; // Si no hay contenido, no hacemos nada
         }
-    }
+      
+        // Obtenemos la altura del contenido dentro del slot
+        const contentHeight = assignedElements.reduce((acc, el) => acc + el.offsetHeight, 0);
+      
+        // Obtenemos las alturas del header y del footer
+        const headerHeight = this.shadowRoot.querySelector('.popup-header').offsetHeight;
+        const footerHeight = this.shadowRoot.querySelector('.button-container').offsetHeight;
+      
+        // Ajustamos la altura total del diálogo sumando header + contenido + footer
+        const totalHeight = headerHeight + contentHeight + footerHeight;
+      
+        // Ajustamos la altura del contenedor del diálogo
+        const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
+        dialogContainer.style.height = `${totalHeight}px`;
+      }
+    
      
     handleDoAction() {
         // Emitir un evento personalizado para que el componente padre pueda manejar la acción
@@ -295,9 +359,17 @@ export class TrDialog extends LitElement {
         if (this.isDragging) {
             this.left = event.clientX - this.startX;
             this.top = event.clientY - this.startY;
+    
+            // Asegurarnos de que las dimensiones no cambien durante el arrastre
+            const dialogElement = this.shadowRoot.querySelector('.dialog-container');
+            dialogElement.style.width = `${this.width}px`;  // Mantén el ancho fijo
+            dialogElement.style.height = `${this.height}px`;  // Mantén la altura fija
+    
             this.requestUpdate();
         }
     };
+    
+
 
     stopDrag = () => {
         this.isDragging = false;
@@ -403,15 +475,28 @@ export class TrDialog extends LitElement {
         }
         this.requestUpdate();
     }
-
     show() {
+        this.isOpen = true;
+    
+        // Asegúrate de que el tamaño se ajuste correctamente
+        this.adjustSize();
+    
+        // Mostrar el diálogo
         const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
         if (dialogContainer) {
-            dialogContainer.style.display = 'block'; // Mostrar el diálogo nuevamente
+            dialogContainer.style.display = 'block';
+            dialogContainer.style.top = '50%';   // Usamos valores relativos
+            dialogContainer.style.left = '50%';  // Centramos desde el CSS con transform
+            dialogContainer.style.transform = 'translate(-50%, -50%)';  // Esto asegura el centrado
         }
     }
-
+    
+    
+    close(){
+        this.closeDialog()
+    }
     closeDialog() {
+        this.isOpen = false;
         const dialogContainer = this.shadowRoot.querySelector('.dialog-container');
         if (dialogContainer) {
             dialogContainer.style.display = 'none'; // Ocultar el diálogo
@@ -445,299 +530,3 @@ export class TrDialog extends LitElement {
     }
     
 }customElements.define('tr-dialog', TrDialog);
-
-// import { LitElement, html, css } from 'lit';
-// import '@material/web/dialog/dialog.js';
-// import '@material/web/icon/icon.js';
-// import '@material/web/button/text-button';
-// export class TrDialog extends LitElement {
-//     static properties = {
-//         showCloseButton: { type: Boolean },
-//         showDoButton: { type: Boolean },
-//       };    
-//   static styles = [
-//     css`
-//       :host {
-//         display: block;
-//       }
-//       md-dialog {
-//         display: none; /* Asegura que el diálogo esté oculto inicialmente */
-//       }
-//       md-dialog[open] {
-//         display: block; /* Mostrar solo cuando esté abierto */
-//       }
-//       .resizer-top, .resizer-left, .resizer-top-left, .resizer-top-right, .resizer-bottom-left {
-//         position: absolute;
-//         background: transparent;
-//         z-index: 10;
-//       }
-// .resizer-top {
-//       height: 5px;
-//       width: 100%;
-//       top: 0;
-//       cursor: n-resize;
-//     }
-//     .resizer-left {
-//       width: 5px;
-//       height: 100%;
-//       left: 0;
-//       cursor: w-resize;
-//     }
-//     .resizer-top-left {
-//       width: 10px;
-//       height: 10px;
-//       top: 0;
-//       left: 0;
-//       cursor: nw-resize;
-//     }
-//     .resizer-top-right {
-//       width: 10px;
-//       height: 10px;
-//       top: 0;
-//       right: 0;
-//       cursor: ne-resize;
-//     }
-//     .resizer-bottom-left {
-//       width: 10px;
-//       height: 10px;
-//       bottom: 0;
-//       left: 0;
-//       cursor: sw-resize;
-//     }
-//     .resizer-right {
-//       width: 5px;
-//       height: 100%;
-//       right: 0;
-//       cursor: e-resize;
-//     }
-//     .resizer-bottom {
-//       height: 5px;
-//       width: 100%;
-//       bottom: 0;
-//       cursor: s-resize;
-//     }
-//     .resizer-both {
-//       width: 10px;
-//       height: 10px;
-//       right: 0;
-//       bottom: 0;
-//       cursor: se-resize;
-//     } 
-// .resizer-top, .resizer-left, .resizer-top-left, .resizer-top-right, .resizer-bottom-left {
-//   z-index: 100; /* Asegura que los resizers estén por encima del contenido del diálogo */
-// }             
-//     `,
-//   ];
-
-
-//   firstUpdated() {
-//     this.initResizeElement();
-//     this.initDragElement();
-//   }
-
-//   render() {
-//     return html`
-//       <md-dialog id="new-dialog">
-//         <div slot="headline" class="popup-header">
-//             <slot name="icon1" style="margin-right: 5px;"></slot>
-// <div class="corner" @click=${this.minimize}>Expand</div>
-// <div class="corner" @click=${this.zoomOut}>Zoom</div>
-// <div class="corner" dialogAction="decline" @click=${this.close}>Close</div>
-            
-//         </div>
-//         <form slot="content" id="form-id" method="dialog">    
-//         <slot name="content"></slot> 
-//         </form>
-//         <div slot="actions">
-//             ${this.showCloseButton 
-//             ? html`<md-text-button form="form-id" @click="${this.close}">close</md-text-button>` 
-//             : ''}
-
-//             ${this.showDoButton 
-//                 ? html`<md-text-button form="form-id" @click="${this.doAction}">Do</md-text-button>` 
-//                 : ''}
-//           <slot name="ad-hoc-buttons"></slot> <!-- Slot para botones adicionales -->
-//         </div>
-//         <!-- Resizers -->
-//         <div class="resizer-top"></div>
-//         <div class="resizer-left"></div>
-//         <div class="resizer-top-left"></div>
-//         <div class="resizer-top-right"></div>
-//         <div class="resizer-bottom-left"></div>
-//         <div class="resizer-right"></div>
-//         <div class="resizer-bottom"></div>
-//         <div class="resizer-both"></div>
-//       </md-dialog>
-//     `;
-//   }  
-//   show() {
-//     const dialog = this.shadowRoot.querySelector('md-dialog');
-//     if (dialog) {
-//       const dialogSurface = dialog.shadowRoot.querySelector('.mdc-dialog__surface');
-//       if (dialogSurface) {
-//           dialogSurface.style.width = '600px'; // Ancho inicial deseado
-//           dialogSurface.style.height = '400px'; // Altura inicial deseada
-//           dialogSurface.style.top = '50%'; // Posición inicial deseada
-//           dialogSurface.style.left = '50%'; // Posición inicial deseada
-//           dialogSurface.style.transform = 'translate(-50%, -50%)'; // Centrar el diálogo
-//       }
-//       dialog.show(); // Mostrar el diálogo usando el método nativo de `md-dialog`
-//     } else {
-//       console.error('md-dialog element not found');
-//     }
-//   }
-  
-
-//   close() {
-//     const dialog = this.shadowRoot.querySelector('md-dialog');
-//     if (dialog) {
-//       dialog.close(); // Cerrar el diálogo usando el método nativo de `md-dialog`
-//     } else {
-//       console.error('md-dialog element not found');
-//     }
-//   }
-
-//   minimize() {
-//     const dialogSurface = this.shadowRoot.querySelector('md-dialog'); // Asegúrate de seleccionar el md-dialog
-//     if (!dialogSurface) return;
-
-//     this.dialogShape = "5px";
-//     dialogSurface.style.minWidth = "auto";
-//     dialogSurface.style.height = "auto";
-//     dialogSurface.style.overflow = "hidden"; // Asegúrate de manejar el overflow correctamente
-
-//     if (this.expandLabel === "expand_more") {
-//         dialogSurface.style.top = "45vh";
-//         dialogSurface.style.height = "0";
-//         this.expandLabel = "expand_less";
-//     } else {
-//         dialogSurface.style.top = "0";
-//         dialogSurface.style.height = "auto";
-//         this.expandLabel = "expand_more";
-//     }
-// }
-// zoomOut() {
-//     const dialogSurface = this.shadowRoot.querySelector('md-dialog'); // Asegúrate de seleccionar el md-dialog
-//     if (!dialogSurface) return;
-
-//     if (this.zoomLabel === "zoom_out_map") {
-//         this.top = dialogSurface.style.top;
-//         this.left = dialogSurface.style.left;
-//         this.width = dialogSurface.style.width;
-//         this.height = dialogSurface.style.height;
-        
-//         this.dispatchEvent(new CustomEvent("zoom-out"));
-
-//         this.dialogShape = "0px";
-//         dialogSurface.style.height = "100vh";
-//         dialogSurface.style.top = "0px";
-//         dialogSurface.style.left = "0px";
-//         dialogSurface.style.minWidth = "100vw";
-//         this.zoomLabel = "zoom_in_map";
-//         this.expandLabel = "expand_more";
-//     } else {
-//         this.dispatchEvent(new CustomEvent("zoom-in"));
-
-//         dialogSurface.style.minWidth = "auto";
-//         this.dialogShape = "5px";
-//         dialogSurface.style.height = "auto";
-//         dialogSurface.style.top = this.top;
-//         dialogSurface.style.left = this.left;
-//         dialogSurface.style.width = this.width;
-//         dialogSurface.style.height = this.height;
-//         this.zoomLabel = "zoom_out_map";
-//     }
-// }
-
-// initDragElement() {
-//     const dialog = this.shadowRoot.querySelector('md-dialog');
-//     if (!dialog) return;
-  
-//     const dialogSurface = dialog.shadowRoot.querySelector('.mdc-dialog__surface');
-//     if (!dialogSurface) return; // Verificación adicional para evitar errores
-  
-//     const header = this.shadowRoot.querySelector('.popup-header');
-//     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  
-//     if (header) {
-//       header.onmousedown = dragMouseDown;
-//     }
-  
-//     function dragMouseDown(e) {
-//       e.preventDefault();
-//       e.stopPropagation();
-//       pos3 = e.clientX;
-//       pos4 = e.clientY;
-//       document.onmouseup = closeDragElement;
-//       document.onmousemove = elementDrag;
-//     }
-  
-//     function elementDrag(e) {
-//       if (!dialogSurface) return; // Verificación adicional para evitar errores
-//       e.preventDefault();
-//       dialogSurface.style.top = (dialogSurface.offsetTop - (pos4 - e.clientY)) + "px";
-//       dialogSurface.style.left = (dialogSurface.offsetLeft - (pos3 - e.clientX)) + "px";
-//       pos3 = e.clientX;
-//       pos4 = e.clientY;
-//     }
-  
-//     function closeDragElement() {
-//       document.onmouseup = null;
-//       document.onmousemove = null;
-//     }
-//   }
-  
-//   initResizeElement() {
-//     const dialog = this.shadowRoot.querySelector('md-dialog');
-//     if (!dialog) return;
-  
-//     const dialogSurface = dialog.shadowRoot.querySelector('.mdc-dialog__surface');
-//     if (!dialogSurface) return; // Verificación adicional para evitar errores
-  
-//     const resizers = this.shadowRoot.querySelectorAll('.resizer-top, .resizer-left, .resizer-right, .resizer-bottom, .resizer-top-left, .resizer-top-right, .resizer-bottom-left, .resizer-both');
-//     let startX, startY, startWidth, startHeight;
-  
-//     resizers.forEach(resizer => {
-//       resizer.addEventListener('mousedown', (e) => initDrag(e, resizer), false);
-//     });
-  
-//     const initDrag = (e, resizer) => {
-//       startX = e.clientX;
-//       startY = e.clientY;
-//       startWidth = parseInt(document.defaultView.getComputedStyle(dialogSurface).width, 10);
-//       startHeight = parseInt(document.defaultView.getComputedStyle(dialogSurface).height, 10);
-  
-//       const doDrag = (e) => {
-//         if (resizer.classList.contains('resizer-right') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-top-right') || resizer.classList.contains('resizer-bottom-right')) {
-//           dialogSurface.style.width = startWidth + (e.clientX - startX) + 'px';
-//         }
-//         if (resizer.classList.contains('resizer-bottom') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-bottom-left') || resizer.classList.contains('resizer-bottom-right')) {
-//           dialogSurface.style.height = startHeight + (e.clientY - startY) + 'px';
-//         }
-//         if (resizer.classList.contains('resizer-left') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-top-left') || resizer.classList.contains('resizer-bottom-left')) {
-//           dialogSurface.style.width = startWidth - (e.clientX - startX) + 'px';
-//           dialogSurface.style.left = dialogSurface.offsetLeft + (e.clientX - startX) + 'px';
-//         }
-//         if (resizer.classList.contains('resizer-top') || resizer.classList.contains('resizer-both') || resizer.classList.contains('resizer-top-left') || resizer.classList.contains('resizer-top-right')) {
-//           dialogSurface.style.height = startHeight - (e.clientY - startY) + 'px';
-//           dialogSurface.style.top = dialogSurface.offsetTop + (e.clientY - startY) + 'px';
-//         }
-//       };
-  
-//       const stopDrag = () => {
-//         document.documentElement.removeEventListener('mousemove', doDrag, false);
-//         document.documentElement.removeEventListener('mouseup', stopDrag, false);
-//       };
-  
-//       document.documentElement.addEventListener('mousemove', doDrag, false);
-//       document.documentElement.addEventListener('mouseup', stopDrag, false);
-//     };
-//   }
-  
-//   doAction() {
-//     this.dispatchEvent(new CustomEvent('do-action'));
-//   }   
- 
-// }
-
-// //customElements.define('tr-dialog', TrDialog);

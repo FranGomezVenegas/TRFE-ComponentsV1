@@ -37,3 +37,4 @@ To run a local development server that serves the basic demo located in `demo/in
 [- v0.0.2 use lit instead of lit-element]
 [- v1.0.0 not using old material design]
 [- v1.1.0 added minor_messages]
+[- v1.2.0 fix for notifs undefined and registry duplicated]

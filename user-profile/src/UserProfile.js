@@ -1,9 +1,17 @@
 import { html, css } from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@material/mwc-icon-button';
-import '@material/mwc-textfield';
-import '@spectrum-web-components/button/sp-button';
+import '@material/web/button/text-button'
+import '@material/web/icon/icon.js';
+import '@material/web/iconbutton/icon-button';
+import '@material/web/button/text-button';
+
+import '@material/web/textfield/filled-text-field';
+import '@material/web/select/select-option';
+import '@material/web/select/filled-select';
+
+//import '@material/md-filled-text-field';
+//import '@spectrum-web-components/button/sp-button';
 import { DialogsFunctions } from '../../tr-procedures/src/components/GenericDialogs/DialogsFunctions';
 import {TrazitCredentialsDialogs} from '../../tr-procedures/src/components/GenericDialogs/TrazitCredentialsDialogs';
 const viewInfoDefinition = {
@@ -69,16 +77,16 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
         padding-left:10px;
         
       }
-      mwc-icon-button {
+      md-icon {
         color: blue;
       }
-      mwc-icon-button#lang {
+      md-icon#lang {
         color : rgba(36, 192, 235, 1);
         font-family : Montserrat;
         font-weight : bold;
         font-size : 19px;
       }
-      mwc-button.button {        
+      md-button.button {        
         color : rgba(36, 192, 235, 1);
         font-family : Montserrat;
         font-weight : bold;
@@ -92,19 +100,19 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
         --mdc-button-fill-color: red;
         --mdc-button-ink-color: blue;
       }            
-      mwc-icon-button {        
+      md-icon {        
         color : rgba(36, 192, 235, 1);
         font-family : Montserrat;
         font-weight : bold;
         font-size : 19px;
       }        
-      mwc-icon-button.enabledtrue{        
+      md-icon.enabledtrue{        
         color : red;
         font-family : Montserrat;
         font-weight : bold;
         font-size : 19px;
       }        
-      mwc-icon-button#video {
+      md-icon#video {
         color : #FFFFFF;
         color : rgba(36, 192, 235, 1);
       }
@@ -121,7 +129,7 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
         color : #FFFFFF;
         color : rgb(255, 255, 255);
       }
-      mwc-textfield {
+      md-filled-text-field {
         border-style : Solid;
         border-color : #999999;
         border-color : rgba(153, 153, 153, 1);
@@ -140,11 +148,11 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
         --mdc-text-field-focused-label-color: #148CFA;
         --mdc-theme-primary: #0465FB;
       }
-      nwc-textfield.mdc-text-field {
+      nd-textfield.mdc-text-field {
       background-color :  #FFFFFF;
       background-color : rgb(255, 255, 255);     
       }      
-      mwc-select {
+      md-filled-select {
         border-style : Solid;
         border-color : #999999;
         border-color : rgba(153, 153, 153, 1);
@@ -163,7 +171,7 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
         --mdc-text-field-focused-label-color: #148CFA;
         --mdc-theme-primary: #0465FB;
       }      
-      mwc-list-item {
+      md-select-option {
         background-color :  #FFFFFF;
         background-color : rgb(255, 255, 255);     
         }  
@@ -192,57 +200,75 @@ export class UserProfile extends TrazitCredentialsDialogs(DialogsFunctions(CredD
         .column {
           width: 100%;
         }
-      }        
+      }  
+        md-filled-select {
+          background-color: rgba(255, 255, 255, 1) !important; /* Fondo blanco para las opciones */
+          color: black; /* Color del texto para las opciones */
+        }        
+        /* Estilo para md-select-option (opciones en la lista) */
+        md-select-option {
+          background-color: rgba(255, 255, 255, 1) !important; /* Fondo blanco para las opciones */
+          color: black; /* Color del texto para las opciones */
+        }
+
+        /* Estilo para md-filled-text-field (campo de texto) */
+        md-filled-text-field {
+          --_container-color: rgba(255, 255, 255, 1); /* Fondo blanco */
+          --_text-field-container-color: rgba(255, 255, 255, 1); /* Fondo blanco */
+          --_text-field-active-indicator-color: rgba(49, 130, 189, 1); /* Color del borde activo */
+          --md-comp-filled-text-field-container-background-color: rgba(255, 255, 255, 1); /* Fondo del contenedor */
+        }              
       `      
     ];
   }
   render() {
     return html`
       <div class="row">
+      <div class="icon-button"><md-icon slot="icon" @click=${this.getOpenIncidents}>refresh</md-icon></div>
         <div class="column">
-          <mwc-textfield id="newAlias" ?enabled=${viewInfoDefinition.Alias.enabled} .label="${viewInfoDefinition.Alias["label_" + this.lang]}" type="email" .value=${this.userAlias}
-            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newAlias.value) this.confirmNewVal("USER_CHANGE_ALIAS") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" ?enabled=${viewInfoDefinition.Alias.enabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_ALIAS")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          <md-filled-text-field id="newAlias" ?enabled=${viewInfoDefinition.Alias.enabled} .label="${viewInfoDefinition.Alias["label_" + this.lang]}" type="email" .value=${this.userAlias}
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newAlias.value) this.confirmNewVal("USER_CHANGE_ALIAS") }}></md-filled-text-field>
+          <md-icon title="Confirm" ?enabled=${viewInfoDefinition.Alias.enabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_ALIAS")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}">published_with_changes</md-icon>
         </div>
 
         <div class="column">
-          <mwc-textfield id="newMail" ?enabled=${viewInfoDefinition.Email.enabled} .label="${viewInfoDefinition.Email["label_" + this.lang]}" type="email" .value=${this.userMail}
-            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newMail.value) this.confirmNewVal("USER_CHANGE_MAIL") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" ?enabled=${viewInfoDefinition.Email.enabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_MAIL")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          <md-filled-text-field id="newMail" ?enabled=${viewInfoDefinition.Email.enabled} .label="${viewInfoDefinition.Email["label_" + this.lang]}" type="email" .value=${this.userMail}
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newMail.value) this.confirmNewVal("USER_CHANGE_MAIL") }}></md-filled-text-field>
+          <md-icon title="Confirm" ?enabled=${viewInfoDefinition.Email.enabled} icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_MAIL")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}">published_with_changes</md-icon>
         </div>
 
         <div class="column">
-          <mwc-select label='${viewInfoDefinition.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
+          <md-filled-select label='${viewInfoDefinition.Shift["label_" + this.lang]}' id="newShift" @change=${e=>this.userShift=e.target.value}>
             ${viewInfoDefinition.Shift.items.map(c =>
-              html`<mwc-list-item value="${c.keyName}" 
-                ?selected=${c.keyName == this.userShift}>${c["keyValue_" + this.lang]}</mwc-list-item>`
+              html`<md-select-option value="${c.keyName}" 
+                ?selected=${c.keyName == this.userShift}>${c["keyValue_" + this.lang]}</md-select-option>`
               )}
-          </mwc-select>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_SHIFT")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          </md-filled-select>
+          <md-icon title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("UPDATE_USER_SHIFT")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}">published_with_changes</md-icon>
         </div>
       </div>
       <div class="row">
         <div class="column">
-          <mwc-textfield id="newPwd" .label="${viewInfoDefinition.Password["label_" + this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newPwd.value) this.confirmNewVal("USER_CHANGE_PSWD") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_PSWD")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          <md-filled-text-field id="newPwd" .label="${viewInfoDefinition.Password["label_" + this.lang]}" type="password" iconTrailing="visibility"
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newPwd.value) this.confirmNewVal("USER_CHANGE_PSWD") }}></md-filled-text-field>
+          <md-icon title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_PSWD")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}">published_with_changes</md-icon>
         </div>
         <div class="column">
-          <mwc-textfield id="newEsign" .label="${viewInfoDefinition.Esign["label_" + this.lang]}" type="password" iconTrailing="visibility"
-            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newEsg.value) this.confirmNewVal("USER_CHANGE_ESIGN") }}></mwc-textfield>
-          <mwc-icon-button title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}"></mwc-icon-button>
+          <md-filled-text-field id="newEsign" .label="${viewInfoDefinition.Esign["label_" + this.lang]}" type="password" iconTrailing="visibility"
+            @click=${this.showPwd} @keypress=${e => { if (e.keyCode == 13 && this.newEsg.value) this.confirmNewVal("USER_CHANGE_ESIGN") }}></md-filled-text-field>
+          <md-icon slot="icon" title="Confirm" icon="published_with_changes" @click=${() => this.confirmNewVal("USER_CHANGE_ESIGN")} .label="${viewInfoDefinition.ChangeLabel["label_" + this.lang]}">published_with_changes</md-icon>
         </div>
       </div>
-      <sp-button size="xl" @click=${() => this.dispatchEvent(new CustomEvent('save-tabs'))}>${viewInfoDefinition.TabLogin["label_" + this.lang]}</sp-button>
+      <text-button size="xl" @click=${() => this.dispatchEvent(new CustomEvent('save-tabs'))}>${viewInfoDefinition.TabLogin["label_" + this.lang]}</text-button>
       ${super.render()}
     `;
   }
  
-  get newPwd() {return this.shadowRoot.querySelector("mwc-textfield#newPwd")}
-  get newEsg() {return this.shadowRoot.querySelector("mwc-textfield#newEsign")}
-  get newShift() {return this.shadowRoot.querySelector("mwc-select#newShift")}
-  get newMail() {return this.shadowRoot.querySelector("mwc-textfield#newMail")}
-  get newAlias() {return this.shadowRoot.querySelector("mwc-textfield#newAlias")}
+  get newPwd() {return this.shadowRoot.querySelector("md-filled-text-field#newPwd")}
+  get newEsg() {return this.shadowRoot.querySelector("md-filled-text-field#newEsign")}
+  get newShift() {return this.shadowRoot.querySelector("md-filled-select#newShift")}
+  get newMail() {return this.shadowRoot.querySelector("md-filled-text-field#newMail")}
+  get newAlias() {return this.shadowRoot.querySelector("md-filled-text-field#newAlias")}
   static get properties() {
     return {
       userShift: { type: String },

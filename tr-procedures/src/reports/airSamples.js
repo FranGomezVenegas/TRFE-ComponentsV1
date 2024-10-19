@@ -19,22 +19,12 @@ EnvMonAirSampleBrowser() {
     if (this.data.sampleFieldToRetrieve === undefined) return html``;
     let header = `Report for the `;
     header += `sample ${this.data.sampleFieldToRetrieve.sample_id}`;
-    return html`${this.data.sampleFieldToRetrieve
-        ? html`
-            <sp-card-ext
-            heading="Report for the sample"
-            subheading="${this.data.sampleFieldToRetrieve.sample_id}"
-            >
-            <div slot="footer">
-                ${this.data.sampleFieldsToDisplay.map(
-        (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
-        )}
-            </div>
-            </sp-card-ext>
-            <sp-card-ext heading="Stages" nonSubHeading>
-            <div slot="footer" class="layout vertical">
+    return html`
             <stages-view style="margin:17.6779px;" .stages="${stageData.stages}"
                 .currentstage="${this.data.sampleFieldsToDisplay.current_sage}" .lang="${this.lang}"></stages-view>
+
+    ${this._sampleFieldData()}
+            <div slot="footer" class="layout vertical">
             
                 ${this.data.stages.map(
         (d) =>
@@ -152,7 +142,7 @@ EnvMonAirSampleBrowser() {
             </div>
             </sp-card-ext>
         `
-        : html`Sample ID: ${data.sample_id}`}`;
+       
     }  
     
     _stageTitle(currentStage) {
@@ -169,6 +159,24 @@ EnvMonAirSampleBrowser() {
           </div>
         </div>
       `;          
+    }
+
+    _sampleFieldData(){
+        return html`
+            ${this.data.sampleFieldToRetrieve? html`
+                    <sp-card-ext
+                    heading="Report for the sample"
+                    subheading="${this.data.sampleFieldToRetrieve.sample_id}"
+                    >
+                    <div slot="footer">
+                        ${this.data.sampleFieldsToDisplay.map(
+                (d) => html`<li class="cardItem">${d.field_name}: ${d.field_value}</li>`
+                )}
+                    </div>
+                    </sp-card-ext>
+                    <sp-card-ext heading="Stages" nonSubHeading>        
+            `:html``}
+        `
     }
                 
 }}

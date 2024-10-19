@@ -1,11 +1,12 @@
 {
   "dbName": "demo_v0_9_2",
   "isForTesting": false,
-  "backendUrlCloud": "https://platform.trazit.net:8443/TRAZiT-API",
+  "backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
+  "backendUrlLocal": "http://localhost:8081/TRAZiT-API",
+  
   "dbNameDemo2": "demo_v0_9_2",
   "backendUrlNonSecure": "http://51.75.202.142:8888/TRAZiT-API",
   "backendUrlhttps": "http://51.75.202.142:8888/TRAZiT-API",
-  "backendUrl": "http://localhost:8081/TRAZiT-API",
   "backendUrlLabP": "http://platform.trazit.net:8888/LabPLANET-API",
   "backendUrlLocalLabPLANETAPI": "http://localhost:8080/LabPLANET-API",
 
@@ -208,15 +209,17 @@
     "viewName": "LabDirector", 
     "filterName" :  "" 
   },
-  "localDefaultView": {
+  "localDefaultView22": {
     "procName":  "stock", 
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "" 
   },
+  "localDefaultView": {
+    "procName":  "inspection_lot", 
+    "viewName": "LotView", 
+    "filterName" :  "" 
+  },
 
-  
-
-  
   "fakeEnd":{
     "fake": " CasesManager InventoryLotsGeneral20240729"
   }  

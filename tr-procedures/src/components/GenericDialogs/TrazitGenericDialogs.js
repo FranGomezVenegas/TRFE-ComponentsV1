@@ -975,19 +975,40 @@ export function TrazitGenericDialogs(base) {
             ////if (==null){        
             // if (this[keyName]!==null&&this[keyName].defval!==undefined&&this[keyName].defval!==null){
             //     alert(this[keyName].defval)
-            // }    
+            // }  
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].defaultFixValue!==undefined&&fldObj[keyName].defaultFixValue!==null){
+                this[keyName].value=fldObj[keyName].defaultFixValue
+            }              
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
+                console.error('TRAZiT Model: the field '+keyName+' uses the property default_value and this is not longer supported, please review this definition', 'fldObj', fldObj);
                 this[keyName].value=fldObj[keyName].default_value
             }
-            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].defaultValue!==undefined&&fldObj[keyName].defaultValue!==null){
-                if (Array.isArray(this.selectedItem)){
-                    this[keyName].value=this.selectedItem[0][fldObj[keyName].defaultValue]
-                }else{
-                    this[keyName].value=this.selectedItem[fldObj[keyName].defaultValue]
-                }                
-                //if (this.selectedItem[0]===undefined){return}
-                //this[keyName].value=this.selectedItem[fldObj[keyName].defaultValue]
-            }            
+            // if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].defaultValue!==undefined&&fldObj[keyName].defaultValue!==null){
+            //     if (Array.isArray(this.selectedItem)){
+            //         this[keyName].value=this.selectedItem[0][fldObj[keyName].defaultValue]
+            //     }else{
+            //         this[keyName].value=this.selectedItem[fldObj[keyName].defaultValue]
+            //     }                
+            //     //if (this.selectedItem[0]===undefined){return}
+            //     //this[keyName].value=this.selectedItem[fldObj[keyName].defaultValue]
+            // }
+            if (this[keyName] !== null && this[keyName] !== undefined && fldObj[keyName] !== undefined && fldObj[keyName].defaultValue !== undefined && fldObj[keyName].defaultValue !== null) {
+                if (Array.isArray(this.selectedItem)) {
+                    if (this.selectedItem.length > 0 && this.selectedItem[0] !== undefined) {
+                        this[keyName].value = this.selectedItem[0][fldObj[keyName].defaultValue];
+                    } else {
+                        if (this.actionBeingPerformedModel.button.requiresGridItemSelected===false){
+                            console.error('TRAZiT Model: the field '+keyName+' is part of a dialog that requires no selected item and defaultValue property is to get data from the selected item, please review, probably you are looking for defaultFixValue instead', 'fldObj', fldObj);
+                        }
+                    }
+                } else if (this.selectedItem !== undefined && this.selectedItem !== null) {
+                    this[keyName].value = this.selectedItem[fldObj[keyName].defaultValue];
+                } else {
+                    console.error('TRAZiT Model: the field '+keyName+' is part of a dialog that requires no selected item and defaultValue property is to get data from the selected item, please review, probably you are looking for defaultFixValue instead', 'fldObj', fldObj);
+                }
+            //} else {
+            //    console.error('Invalid key or defaultValue:', {keyName, fldObj: fldObj[keyName]});
+            }                        
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null){
                 if (this.selectedItem!==undefined)
                 if (Array.isArray(this.selectedItem)){
@@ -1042,14 +1063,14 @@ export function TrazitGenericDialogs(base) {
             let keyName=Object.keys(fldObj)
             if (this[keyName]!==null&&this[keyName[0]]!==null){
                // console.log(keyName[0])
-                if (keyName[0].includes('list')&&!keyName[0].includes('multi')){
-                    if (!this[keyName[0]].includes('SelectedRow')){
+                if (String(keyName[0]).includes('list')&&!String(keyName[0]).includes('multi')){
+                    if (!String(this[keyName[0]]).includes('SelectedRow')) {                    
                         this[keyName[0]].value=[]
                     }
-                }else if (keyName[0].includes('multi')){
+                }else if (String(this[keyName[0]]).includes('multi')) {                
                     fldObj.defaultValue ? this[keyName[0]].activeOptions=this.selectedItem[fldObj.defaultValue] : this[keyName[0]].activeOptions={}
                     this[keyName[0]].setClosed()                    
-                }else if (keyName[0].includes('tree')){
+                }else if (String(this[keyName[0]]).includes('tree')) {                
                     //fldObj.defaultValue ? this[keyName[0]].activeOptions=this.selectedItem[fldObj.defaultValue] : this[keyName[0]].activeOptions={}
                     this[keyName[0]].setClosed()                    
                 }else{

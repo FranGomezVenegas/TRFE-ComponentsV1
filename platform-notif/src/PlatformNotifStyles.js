@@ -5,6 +5,11 @@ export const platformNotifStyles = css`
     display: block;
     
   }
+  h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: "#a33";
+  }
 
   sp-accordion {
     --spectrum-accordion-item-heading-text-color: inherit;

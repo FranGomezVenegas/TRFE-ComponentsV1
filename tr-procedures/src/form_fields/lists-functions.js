@@ -4,24 +4,54 @@ import { BuildLabelsFunctions } from '../0TRAZiT-Paradigm/BuildLabels';
 
 export function ListsFunctions(base) {
     return class extends BuildLabelsFunctions(GetDataFromContextFunctions(base)) {
-        actionWhenListValueSelected(event, fld, dialogInfo){
-            if (fld===undefined){return}
-            if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
-                fld.dependencyFieldBehaviorForAll===undefined){return}
-            const selectedItem = event.target.selected;
+        actionWhenListValueSelected(event, fld, dialogInfo) {
+            // Verifica si 'fld' está definido
+            if (!fld) return;
+        
+            // Verifica si 'fld' tiene alguna de las dependencias requeridas
+            const hasDependencies = fld.dependencyActionFields || fld.dependencyFieldBehavior || fld.dependencyFieldBehaviorForAll;
+            if (!hasDependencies) return;
+        
+            // Obtiene el elemento seleccionado
+            const selectedItem = event.target?.selected;
+            if (!selectedItem) {
+                console.error('No selected item found in the event');
+                return;
+            }
+        
+            // Obtiene el índice y verifica si es válido
             const index = selectedItem.getAttribute('data-index');
-            const itemData = JSON.parse(selectedItem.getAttribute('data-item')); 
-            if (fld.dependencyActionFields!==undefined){
+            let itemData = null;
+        
+            // Intenta obtener el atributo 'data-item' y convertirlo a JSON
+            if (index === null) {
+                try {
+                    itemData = JSON.parse(selectedItem.getAttribute('data-item'));
+                } catch (error) {
+                    console.error('Error parsing data-item:', error);
+                    return;
+                }
+            }
+        
+            // Verifica que itemData sea válido y que contenga el registro necesario
+            if (!itemData || !itemData.allRecord) {
+                console.error('itemData or allRecord is not valid');
+                return;
+            }
+        
+            // Ejecuta acciones según las dependencias definidas
+            if (fld.dependencyActionFields) {
                 this.dependencyActionFields(fld, itemData.allRecord);
             }
-            if (fld.dependencyFieldBehavior!==undefined){
+            if (fld.dependencyFieldBehavior) {
                 this.dependencyFieldBehavior(fld.dependencyFieldBehavior, itemData.allRecord, true, itemData.keyName);
             }
-            if (fld.dependencyFieldBehaviorForAll!==undefined){
+            if (fld.dependencyFieldBehaviorForAll) {
                 this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, itemData.allRecord, dialogInfo, true, itemData.keyName);
             }
-            return 
-        }
+        
+            return;
+        }        
         actionWhenOtherThanListValueChanged(event, fld, dialogInfo, itemData){
             if (fld===undefined){return}
             if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
@@ -361,8 +391,8 @@ export function ListsFunctions(base) {
                 }
                 if (fld.the_default_value.selObjectPropertyName!==undefined&&fld.the_default_value.selObjectPropertyName!==null){
                     let val=""
-                    if (this.selectedItems!==undefined&&this.selectedItems.length>0){
-                        val=this.selectedItems[0][fld.the_default_value.selObjectPropertyName]
+                    if (this.selectedItem!==undefined&&this.selectedItem.length>0){
+                        val=this.selectedItem[fld.the_default_value.selObjectPropertyName]
                         const valueArray = val.split("|");
                         valueArray.forEach((item) => {
                             const blankEmpty = {keyName: item, keyValue_en: item, keyValue_es: item}     
@@ -394,7 +424,7 @@ export function ListsFunctions(base) {
                     newList.push(blankEmpty)            
                 }
                 if (fld.list_values.selObjectPropertyName!==undefined&&fld.list_values.selObjectPropertyName!==null){
-                    let val=this.selectedItems[0][fld.list_values.selObjectPropertyName]
+                    let val=this.selectedItem[fld.list_values.selObjectPropertyName]
                     const valueArray = val.split("|");
                     valueArray.forEach((item) => {
                       const blankEmpty = {keyName: item, keyValue_en: item, keyValue_es: item}                
@@ -477,7 +507,7 @@ export function ListsFunctions(base) {
             //     data=fldMDDef.default_value
             // }
             // if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.selObjectPropertyName!==undefined&&fldMDDef.selObjectPropertyName!==null&&fldMDDef!==null){
-            //     data=this.selectedItems[0][fldMDDef.selObjectPropertyName]
+            //     data=this.selectedItem[fldMDDef.selObjectPropertyName]
             // }
             // if (fldMDDef!==null&&fldMDDef!==undefined&&fldMDDef.internalVariableObjName!==undefined&&fldMDDef.internalVariableObjName!==null&&
             //     fldMDDef.internalVariableObjProperty!==undefined&&fldMDDef.internalVariableObjProperty!==null){

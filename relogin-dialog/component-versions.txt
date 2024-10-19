@@ -1,1 +1,2 @@
-@trazit/cred-dialog: 0.0.4
+@trazit/cred-dialog: 1.0.0
+@trazit/platform-login: 2.1.0

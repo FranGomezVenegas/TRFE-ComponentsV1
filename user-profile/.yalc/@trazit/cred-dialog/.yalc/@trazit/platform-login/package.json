@@ -3,22 +3,17 @@
   "description": "Component login of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "2.0.4",
+  "version": "2.2.0",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
     "start": "web-dev-server --root-dir demo --node-resolve --open --watch"
   },
   "dependencies": {
-    "@collaborne/lit-flexbox-literals": "^0.2.2",
-    "@material/mwc-icon-button": "^0.27.0",
-    "@material/mwc-list": "^0.27.0",
-    "@material/mwc-select": "^0.27.0",
-    "@material/mwc-textfield": "^0.27.0",
+    "@material/web": "^2.1.0",
     "@spectrum-web-components/button": "^0.15.0",
     "@trazit/common-core": "file:.yalc/@trazit/common-core",
-    "@trazit/tr-dialog": "file:.yalc/@trazit/tr-dialog",
     "lit": "^2.0.2"
   },
-  "yalcSig": "cdb983b2eb77196f35460f315723ba35"
+  "yalcSig": "cc6759d018aba253a4920b72504a978a"
 }

@@ -2,7 +2,8 @@ import { html, css, nothing} from 'lit';
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts, Alignment } from '@collaborne/lit-flexbox-literals';
 import { ProceduresModel } from './ProceduresModel';
-import '@trazit/tr-dialog/tr-dialog';
+//Refactor2024
+//import '@trazit/tr-dialog/tr-dialog';
 import './components/Audit/audit-dialog';
 
 import {ApiFunctions} from './components/Api/ApiFunctions';

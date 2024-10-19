@@ -3,11 +3,11 @@
   "description": "Component for the common business logic",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "main": "index.js",
   "module": "index.js",
   "dependencies": {
     "lit": "^2.0.2"
   },
-  "yalcSig": "938b910bcecca93396fddf02063de815"
+  "yalcSig": "ea93b7f4d26c94b75e3bed8168f180ec"
 }

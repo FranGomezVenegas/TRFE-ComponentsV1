@@ -9259,9 +9259,346 @@ export const DiseaseStudy = {
 				"grouper_exclude_items":["xxxxoutOfSpecMax", "Samplingzz","Incubationzz","PlateReadingzz","MicroorganismIdentificationzz","zz","END"],
 				"label_item":{"label_en":"Status", "label_es":"Estado"},
 				"label_value":{"label_en":"#", "label_es":"#"}   
-			  }                      
+			  },
+			  {
+				"component": "dragDropObjects",
+				
+				"viewQuery":{ "actionName": "GET_PENDING_INCUBATION_SAMPLES_AND_ACTIVE_BATCHES",
+							  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
+							  //"notUseGrid": true,
+							  "endPointParams": [
+								{ "argumentName": "incub1_whereFieldsName", "value": "current_stage|incubation_passed" },
+								{ "argumentName": "incub1_whereFieldsValue", "value": "Incubation|false" },
+								{ "argumentName": "incub1_sortFieldsName", "value": "sample_id desc" },
+								{ "argumentName": "incub2_whereFieldsName", "value": "current_stage|incubation_passed" },
+								{ "argumentName": "incub2_whereFieldsValue", "value": "Incubation|true" },
+								{ "argumentName": "incub2_sortFieldsName", "value": "sample_id desc" },
+								{ "argumentName": "includeAllWithAnyPendingIncubation", "value": true },
+								{ "argumentName": "samplesWithAnyPendingIncubation", "value": true}
+							  ]
+				},    
+				"objects":[
+				  { "dragEnable": true,
+					"dropEnable": false,
+					"name": "1",
+					"type": "table",
+					smartFilter: {
+					  "filterValues":{},
+					  "applyFilterButton":{
+						"title":{
+						  label_en: 'Apply Filter',
+						  label_es: 'Aplicar Filtro',
+						}
+					  },
+					  "clearFilterButton":{
+						"title":{
+						  label_en: 'Clear Filter',
+						  label_es: 'Limpiar Filtro',
+						}
+					  },
+					  "displayFilterButton":{
+						"title":{
+						  label_en: 'Display Filter',
+						  label_es: 'Mostrar Filtro',
+						}
+					  },
+					  dialogInfo: {
+						name: 'genericDialog',
+			
+						"fields": [
+						  {
+							"name": "sample_id",
+							"label_en": "id",
+							"label_es": "id",
+							"type":"text",
+						  },
+						  {
+							"name": "location_name",
+							"label_en": "location_name",
+							"label_es": "location_name",
+							"type":"text",
+						  },
+						  {
+							"name": "pending_incub",
+							"label_en": "pending_incub",
+							"label_es": "pending_incub",
+							"type":"text",
+						  },
+						  {
+							"name": "location_name",
+							"type":"select",
+							"label_en": "location_name",
+							"label_es": "location_name",
+							"select_options":[
+							  {
+								"name":"E02",
+								"lable_en":"E02",
+								"lable_es":"E02",
+								"value":"E02"
+							  },
+							  {
+								"name":"C01",
+								"lable_en":"C01",
+								"lable_es":"C01",
+								"value":"C01"
+							  }
+							]
+						  }
+						  ],
+					  }
+					},
+					"theme":"TRAZiT-DefinitionArea",
+					"endPointPropertyArray":["samplesWithAnyPendingIncubation"],
+					"columns": [
+					  {
+						"name": "sample_id",
+						"label_en": "id",
+						"label_es": "id"
+					  },
+					  {
+						"name": "location_name",
+						"label_en": "location_name",
+						"label_es": "location_name"
+					  },
+					  {
+						"name": "pending_incub",
+						"label_en": "pending_incub",
+						"label_es": "pending_incub"
+					  }
+					]
+				  },  
+				  { "dragEnable": true,
+					"dropEnable": true,
+					"name": "2",
+					"acceptEntriesOnlyFromObjects":["11", "3"],
+					"type": "cards",
+					smartFilter: {
+					  "filterValues":{},
+					  "applyFilterButton":{
+						"title":{
+						  label_en: 'Apply Filter',
+						  label_es: 'Aplicar Filtro',
+						}
+					  },
+					  "clearFilterButton":{
+						"title":{
+						  label_en: 'Clear Filter',
+						  label_es: 'Limpiar Filtro',
+						}
+					  },
+					  "displayFilterButton":{
+						"title":{
+						  label_en: 'Display Filter',
+						  label_es: 'Mostrar Filtro',
+						}
+					  },
+					  dialogInfo: {
+						name: 'genericDialog',
+			
+						"fields": [
+						  {
+							"name": "name",
+							"label_en": "Name",
+							"label_es": "Nombre",
+							"type":"text",
+						  },
+						  {
+							"name": "incub_stage",
+							"label_en": "Incub Stage",
+							"label_es": "Etapa de incubación",
+							"type":"text",
+						  },
+						  {
+							"name": "incubation_start",
+							"label_en": "Incubation Start",
+							"label_es": "Inicio de incubación",
+							"type":"text",
+						  },
+						  {
+							"name": "incub_stage",
+							"type":"select",
+							"label_en": "Incub Stage",
+							"label_es": "Etapa de incubación",
+							"select_options":[
+							  {
+								"name":"1",
+								"lable_en":"1",
+								"lable_es":"1",
+								"value":"1"
+							  }
+							]
+						  }
+						  ],
+					  }
+					},
+					"title": "Testing Script Coverage",
+					"add_border":true,
+					"num_columns": 1,        
+					"theme":"TRAZiT-DefinitionArea",
+					"endPointPropertyArray":["active_batches"],
+					"dataIntegrityCheck":{
+					  "dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
+					},        
+					"fieldsToDisplay": [
+					  {
+						"name": "name",
+						"label_en": "name",
+						"label_es": "name"
+					  },
+					  {
+						"name": "incub_stage",
+						"label_en": "incub_stage",
+						"label_es": "incub_stage"
+					  },
+					  {
+						"name": "incubation_start",
+						"label_en": "incubation_start",
+						"label_es": "incubation_start"
+					  }
+					],
+					"dropAction": { 
+					  "actionName": "EM_BATCH_INCUB_ADD_SMP",
+					  "endPointUrl": "Samples",
+					  "requiresDialog": false,
+					  "button": {
+						"title": {
+						  "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+						},
+						"requiresGridItemSelected": true,
+					  },
+					  "endPointParams": [
+						{ "argumentName": "sampleId", "dragElement": "sample_id" },
+						{ "argumentName": "batchTemplateId", "dropElement": "name" },
+						{ "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+						{ "argumentName": "batchName", "dropElement": "name" }			  
+					  ]
+					}  
+				  },
+				  { "dragEnable": false,
+				  "dropEnable": false,
+				  "name": "3",
+				  "type": "table",
+				  smartFilter: {
+					"filterValues":{},
+					"applyFilterButton":{
+					  "title":{
+						label_en: 'Apply Filter',
+						label_es: 'Aplicar Filtro',
+					  }
+					},
+					"clearFilterButton":{
+					  "title":{
+						label_en: 'Clear Filter',
+						label_es: 'Limpiar Filtro',
+					  }
+					},
+					"displayFilterButton":{
+					  "title":{
+						label_en: 'Display Filter',
+						label_es: 'Mostrar Filtro',
+					  }
+					},
+					dialogInfo: {
+					  name: 'genericDialog',
+			
+					  "fields": [
+						{
+						  "name": "name",
+						  "label_en": "Name",
+						  "label_es": "Nombre",
+						  "type":"text",
+						},
+						{
+						  "name": "incub_stage",
+						  "label_en": "Incub Stage",
+						  "label_es": "Etapa de incubación",
+						  "type":"text",
+						},
+						{
+						  "name": "incubation_start",
+						  "label_en": "Incubation Start",
+						  "label_es": "Inicio de incubación",
+						  "type":"text",
+						},
+						{
+						  "name": "incub_stage",
+						  "type":"select",
+						  "label_en": "Incub Stage",
+						  "label_es": "Etapa de incubación",
+						  "select_options":[
+							{
+							  "name":"1",
+							  "lable_en":"1",
+							  "lable_es":"1",
+							  "value":"1"
+							}
+						  ]
+						}
+						],
+					}
+				  },
+				  "theme":"TRAZiT-DefinitionArea",
+				  "endPointPropertyArray":["active_batches"],
+				  "dataIntegrityCheck":{
+					"dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
+				  },
+				  "columns": [
+					{
+					  "name": "name",
+					  "label_en": "name",
+					  "label_es": "name"
+					},
+					{
+					  "name": "incub_stage",
+					  "label_en": "incub_stage",
+					  "label_es": "incub_stage"
+					},
+					{
+					  "name": "incubation_start",
+					  "label_en": "incubation_start",
+					  "label_es": "incubation_start"
+					}
+				  ],
+				  "rowbuttons": { 
+					"actionName": "EM_BATCH_INCUB_ADD_SMP",
+					"endPointUrl": "Samples",
+					"requiresDialog": false,          
+					"alternativeItemPropertyName": "selectedSamples",
+					"button": {
+					  "title": {
+						"label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+					  },
+					  "requiresGridItemSelected": true,          
+					},
+					"endPointParams": [
+					  { "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
+					  { "argumentName": "batchTemplateId", "defaultValue": 1 },
+					  { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+					  { "argumentName": "batchName", "internalVariableObjName": "selectedBatches", "internalVariableObjProperty": "name" }			  
+					]
+				  },        
+				  "dropAction": { 
+					"actionName": "EM_BATCH_INCUB_ADD_SMP",
+					"endPointUrl": "Samples",
+					"requiresDialog": false,
+					"button": {
+					  "title": {
+						"label_en": "Add to Batch", "label_es": "Añadir a Tanda"
+					  },
+					  "requiresGridItemSelected": true,
+					},
+					"endPointParams": [
+					  { "argumentName": "sampleId", "dragElement": "sample_id" },
+					  { "argumentName": "batchTemplateId", "dropElement": "name" },
+					  { "argumentName": "batchTemplateVersion", "defaultValue": 1 },
+					  { "argumentName": "batchName", "dropElement": "name" }			  
+					]
+				  }  
+				}        
+				],
+			  }			                        
 			]
 		  }               
 		]    
-	  }
+	}
 }

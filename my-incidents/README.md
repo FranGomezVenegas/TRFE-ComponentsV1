@@ -24,6 +24,8 @@ v0.0.3 label for dialog on closing fixed, should say close it. confirm button is
 v0.0.4 For reopen incident, if the dialog has no note element then it should not be put in context for the endpoint
 v0.0.5 adopted multi-service
 [- v0.0.6 use lit instead of lit-element]
+[- v1.0.0 refactor not using mwc and using md]
+[- v1.1.0 replaced vaadin-grid by our table]
 
 ## Tooling configs
 

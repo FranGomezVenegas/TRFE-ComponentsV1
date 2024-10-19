@@ -1,8 +1,7 @@
 {
-  "dbName": "labplanet",
+  "dbName": "demo_v0_9_2",
   "isForTesting": false,
   "fullscreen": false,
-  "backendUrl": "http://51.75.202.142:8888/LabPLANET-API",
-  "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
+  "backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
   "appAuthenticateApiUrl": "/app/AuthenticationAPIactions"
 }

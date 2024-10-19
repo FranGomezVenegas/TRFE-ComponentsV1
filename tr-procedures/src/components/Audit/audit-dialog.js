@@ -3,7 +3,8 @@ import { Layouts } from '@collaborne/lit-flexbox-literals';
 //import { CredDialog } from '@trazit/cred-dialog';
 import '@material/mwc-icon';
 import '@spectrum-web-components/tooltip/sp-tooltip.js';
-import '@trazit/tr-dialog/tr-dialog';
+//Refactor2024
+//import '@trazit/tr-dialog/tr-dialog';
 import {ButtonsFunctions} from '../Buttons/ButtonsFunctions';
 import { ProceduresModel } from '../../ProceduresModel';
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';

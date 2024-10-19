@@ -49,7 +49,7 @@ export class CommonCore extends LitElement {
     }, true);
     this.updateComplete.then(() => {
       this.resizeElements()
-      //if (this.config.local != false && !window.process) {
+      if (this.config.local != false && !window.process) {
         this.localToast = document.createElement("div")
         this.localToast.style.position = 'fixed'
         this.localToast.style.bottom = '10px'
@@ -62,9 +62,9 @@ export class CommonCore extends LitElement {
         this.localToast.style.display = "none"
         this.localToast.style.zIndex = "999"
         this.shadowRoot.appendChild(this.localToast)
-      //}
+      }
     })
-    //if (this.config.local != false && !window.process) {
+    if (this.config.local != false && !window.process) {
       this.addEventListener('success', e => {
         // alert('addEventListener for success')
 
@@ -83,7 +83,7 @@ export class CommonCore extends LitElement {
         this.showNotif(e)
         this.localToast.style.backgroundColor = '#a33'
       })
-    //}
+    }
   }
 
   showNotifOld(e) {
@@ -96,7 +96,7 @@ export class CommonCore extends LitElement {
   }
 
   showNotif(e) {
-    //console.log('showNotif', e)
+    console.log('showNotif', e)
     if (e.detail.is_error===undefined){
       return
     }
@@ -146,7 +146,7 @@ export class CommonCore extends LitElement {
     console.log(JSON.parse(sessionStorage.getItem("userSession")))
     this.userName = JSON.parse(sessionStorage.getItem("userSession")).userName
     this.headerInfo = JSON.parse(sessionStorage.getItem("userSession")).header_info
-    //console.log('this.headerInfo', this.headerInfo)
+    console.log('this.headerInfo', this.headerInfo)
 
   }
 
@@ -173,7 +173,7 @@ export class CommonCore extends LitElement {
         throw err
       }
     }).then(j => {
-      this.refreshMasterData(j)      
+      this.refreshMasterData(j)
       if (feedback) {
         this.dispatchEvent(new CustomEvent('success', {
           detail: {...j, log: log},

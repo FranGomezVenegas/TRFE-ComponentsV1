@@ -1,5 +1,6 @@
 import { html } from 'lit';
-
+import '@material/web/icon/icon.js';
+import '@material/web/iconbutton/icon-button';
 export function CalendarUtilities(base) {
     return class extends base {
         selectedItem(action){
@@ -11,29 +12,39 @@ export function CalendarUtilities(base) {
         getButton(butArr, selectedItem) {        
             if (butArr===undefined){return}
             return html`
-              ${butArr.map(action =>
+            ${butArr.map(action =>
                 html`${action.button ?
                   html`${action.button.icon ?
-                    html`<mwc-icon-button 
+                    html`<md-filled-icon-button 
                       class="${action.button.class}"
                       icon="${action.button.icon}" 
                       id="${action.actionName}" 
                       title="${action.button.title['label_'+this.lang]}" 
                       ?disabled=${this.buttonDisable(action)}
-                      @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}></mwc-icon-button>` :
+                      @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}>
+                      
+                      <md-icon slot="icon">${action.button.icon}</md-icon>
+                      </md-filled-icon-button>` :
                     html`${action.button.img ?
-                      html`<mwc-icon-button 
+                      html`<md-filled-icon-button 
                         class="${action.button.class} img" id="${action.actionName}" 
                         title="${action.button.title['label_'+this.lang]}" 
                         ?disabled=${this.buttonDisable(action)}
                         ?hidden=${this.btnHidden(action)}
                         @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}>
                           <img class="iconBtn" src="images/${action.button.img}">
-                        </mwc-icon-button>` :
-                      html`<mwc-button dense raised  id="${action.actionName}" 
+
+                          <md-icon slot="icon">${action.button.icon}</md-icon>
+
+                        </md-filled-icon-button>` :
+                      html`<md-filled-icon-button dense raised  id="${action.actionName}" 
                         label="${action.button.title['label_'+this.lang]}" 
                         ?disabled=${this.buttonDisable(action)}
-                        @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}></mwc-button>`
+                        @click=${()=>this.buttonAction(action, this.selectedItem(action), undefined)}>
+                        
+                        <md-icon slot="icon">${action.button.icon}</md-icon>
+
+                        </md-filled-icon-button>`
                     }`
                   }` :
                   nothing

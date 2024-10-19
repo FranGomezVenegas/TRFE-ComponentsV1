@@ -1,14 +1,14 @@
 {
   "version": "v1",
   "packages": {
-    "@trazit/tr-dialog": {
-      "version": "1.0.0",
-      "signature": "f3284983189979bcff34781515eb9902",
+    "@trazit/common-core": {
+      "version": "0.0.1",
+      "signature": "b36407a106dc63a97c7abc9d602aacbb",
       "file": true
     },
-    "@trazit/common-core": {
-      "version": "1.0.0",
-      "signature": "938b910bcecca93396fddf02063de815",
+    "@trazit/tr-dialog": {
+      "version": "0.0.1",
+      "signature": "31b908e21911b92b203b9e595199ac08",
       "file": true
     }
   }
