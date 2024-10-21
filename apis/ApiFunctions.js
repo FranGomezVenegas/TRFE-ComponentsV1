@@ -460,6 +460,10 @@ return class extends (base) {
           const filterName = String(this.filterName);
 
           function isFilterNameDefined(subViewFilter, filterName) {
+            if (!Array.isArray(subViewFilter)) {
+              console.error('TRAZiT Models: subViewFilter should be one array of objects[], be careful of being one object with object {}, if so then convert it in array', subViewFilter)
+              return []
+            }
             for (const filter of subViewFilter) {
               if (filter.hasOwnProperty(filterName)) {
                 return filter[filterName];
